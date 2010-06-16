@@ -35,7 +35,7 @@ OPT_FLAGS += \
 	@echo ' '
 
 # All Target
-all: phyx
+all: phyx_rt phyx_pl
 
 # Tool invocations
 phyx: $(OBJS) $(USER_OBJS)
