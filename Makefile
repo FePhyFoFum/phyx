@@ -38,10 +38,17 @@ OPT_FLAGS += \
 all: phyx_rt phyx_pl
 
 # Tool invocations
-phyx: $(OBJS) $(USER_OBJS)
+phyx_rt: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -o "phyx_rt" $(OBJS) $(USER_OBJS) $(LIBS)
+	@echo 'Finished building target: $@'
+	@echo ' '
+
+phyx_pl: $(OBJS) $(USER_OBJS)
+	@echo 'Building target: $@'
+	@echo 'Invoking: GCC C++ Linker'
+	g++ -o "phyx_pl" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
