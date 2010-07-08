@@ -66,9 +66,8 @@ int main(int argc, char * argv[]){
 
 	map<string,vector<string> >::iterator it;
 	for (it=mrcas.begin(); it!=mrcas.end(); it++){
-		cout << (*it).first << endl;
 		Node * nd = tree->getMRCA((*it).second);
-		cout << nd->get_num_leaves() << endl;
+		cout << (*it).first<<" "<< nd->get_num_leaves() << endl;
 	}
 
 	delete tree;
