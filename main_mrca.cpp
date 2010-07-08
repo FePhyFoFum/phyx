@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
-
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -16,57 +17,60 @@ using namespace std;
 #include "string_node_object.h"
 #include "vector_node_object.h"
 #include "tree.h"
+#include "utils.h"
 
-int main(){
+
+int main(int argc, char * argv[]){
 	TreeReader tr;
-	string test;
-   	test = "((a:2,b:2):3,(c:4,d:4):1):1;";
 
-/*
-	ifstream infile("../../big_geo/final_ml.tre.cn.rr.pr.nw.pathd8.bgstates.tre");
+	if (argc != 3){
+		cout << "usage: phyx_mrca MRCA newickfile" << endl;
+		exit(0);
+	}
+
+	ifstream infile(argv[1]);
 	if (!infile){
-		cerr << "Could not open file." << endl;
+		cerr << "Could not open mrcafile." << endl;
+		return 1;
+	}
+
+	string mrcaline;
+	map<string,vector<string> > mrcas;
+	while (getline(infile, mrcaline)){
+		vector<string> searchtokens;
+		Tokenize(mrcaline, searchtokens, " 	");
+		for(unsigned int j=0;j<searchtokens.size();j++){
+			TrimSpaces(searchtokens[j]);
+		}
+		vector<string> vec;vec.push_back(searchtokens[1]);vec.push_back(searchtokens[2]);
+		mrcas[searchtokens[0]] = vec;
+	}
+	infile.close();
+
+
+
+	ifstream infile2(argv[2]);
+	if (!infile2){
+		cerr << "Could not open treefile." << endl;
 		return 1;
 	}
 	vector<string> lines;
 	string line;
-	while (getline(infile, line)){
+	while (getline(infile2, line)){
 		lines.push_back(line);
 	}
-	infile.close();
+	infile2.close();
 
-	test = lines[0];
-*/
+	Tree * tree = tr.readTree(lines[0]);
+	cout << tree->getExternalNodeCount() << endl;
 
-	Tree * tree = tr.readTree(test);
-	cout << tree->getNodeCount() << endl;
-	cout << tree->getRoot()->getNewick(true) << ";" << endl;
-	cout << tree->getRoot()->getNewick(true,"number") << ";" << endl;
-	string a = "c";
-	tree->pruneExternalNode(tree->getExternalNode(a));
-	cout << tree->getRoot()->getNewick(true) << ";" << endl;
+	map<string,vector<string> >::iterator it;
+	for (it=mrcas.begin(); it!=mrcas.end(); it++){
+		cout << (*it).first << endl;
+		Node * nd = tree->getMRCA((*it).second);
+		cout << nd->get_num_leaves() << endl;
+	}
 
-	StringNodeObject sno("...a node object");
-	tree->getRoot()->assocObject("test",sno);
-	cout << tree->getRoot()->getNewick(true,"test") << ";" << endl;
-
-	cout << *((StringNodeObject*) (tree->getRoot()->getObject("test"))) << endl;
-
-	VectorNodeObject<int> vno;
-	vno.push_back(1);vno.push_back(2);
-	tree->getRoot()->assocObject("testvno",vno);
-
-	cout << ((VectorNodeObject<int> *) (tree->getRoot()->getObject("testvno")))->at(0) << endl;
-
-	a = "b";
-	tree->setHeightFromRootToNodes();
-	cout << tree->getExternalNode(a)->getHeight() << endl;
-	cout << tree->getRoot()->getHeight() << endl;
-	cout << tree->getInternalNode(0)->getHeight() << endl;
-	cout << tree->getInternalNode(1)->getHeight() << endl;
-	//for(int i=0;i<tree->getInternalNodeCount();i++){
-		//cout << tree->getInternalNode(i).getBL() << endl;
-	//}
 	delete tree;
 	return EXIT_SUCCESS;
 }

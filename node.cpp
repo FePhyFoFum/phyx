@@ -11,6 +11,8 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <deque>
+#include <stack>
 
 using namespace std;
 
@@ -216,6 +218,34 @@ int Node::getChildCount(){
 
 void Node::assocObject(string name,NodeObject & obj){
 	assoc[name] = obj.clone();
+}
+
+/*
+ * gets the number of leaves from this node
+ */
+int Node::get_num_leaves(){
+	int retnum = 0;
+	stack<Node*> nodes;
+	nodes.push(this);
+	while(nodes.empty() == false){
+		Node * nd = nodes.top();
+		nodes.pop();
+		if (nd->getChildCount() > 0){
+			for (int i=0;i<nd->getChildCount();i++){
+				nodes.push(nd->getChild(i));
+			}
+		}else{
+			retnum += 1;
+		}
+	}
+	return retnum;
+}
+
+/*
+ * gets the leaves from this node
+ */
+vector<Node*> Node::get_leaves(){
+
 }
 
 /*

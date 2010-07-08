@@ -7,18 +7,21 @@ MRCA_DEP = main_mrca.d
 
 #this should be the basic copper library sources, objects and deps
 CPP_SRCS += \
+./utils.cpp \
 ./node.cpp \
 ./tree.cpp \
 ./tree_reader.cpp \
 ./tree_utils.cpp 
 
 CPP_OBJS += \
+./utils.o \
 ./node.o \
 ./tree.o \
 ./tree_reader.o \
 ./tree_utils.o 
 
 CPP_DEPS += \
+./utils.d \
 ./node.d \
 ./tree.d \
 ./tree_reader.d \

@@ -32,6 +32,10 @@ public:
 	Node(Node * parent);
 	Node(double bl,int number,string name, Node * parent);
 
+
+	int get_num_leaves();
+	vector<Node*> get_leaves();
+
 	vector<Node*> getChildren();
 	bool isExternal();
 	bool isInternal();
