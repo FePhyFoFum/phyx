@@ -1,9 +1,9 @@
 RM := rm -rf
 
 #this is really nothing but for testing the capabilities of the copper library
-TEST_SRC = main.cpp
-TEST_OBJ = main.o
-TEST_DEP = main.d
+MRCA_SRC = main_mrca.cpp
+MRCA_OBJ = main_mrca.o
+MRCA_DEP = main_mrca.d
 
 #this should be the basic copper library sources, objects and deps
 CPP_SRCS += \
