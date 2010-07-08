@@ -42,29 +42,29 @@ all: phyx_rt phyx_pl
 # test target
 test: phyx_test
 
-phyx_test: $(TEST_OBJ) $(OBJS) 
+phyx_test: $(TEST_OBJ) $(CPP_OBJS) 
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_test" $(TEST_OBJ) $(OBJS) $(LIBS)
+	g++ -o "phyx_test" $(TEST_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 	@echo ' '
 
 # Tool invocations
-phyx_rt: $(OBJS)
+phyx_rt: $(CPP_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_rt" $(OBJS) $(LIBS)
+	g++ -o "phyx_rt" $(CPP_OBJS) $(CPP_LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-phyx_pl: $(OBJS)
+phyx_pl: $(CPP_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_pl" $(OBJS) $(LIBS)
+	g++ -o "phyx_pl" $(CPP_OBJS) $(CPP_LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) phyx
+	-$(RM) $(CPP_OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) phyx
 	-@echo ' '
 

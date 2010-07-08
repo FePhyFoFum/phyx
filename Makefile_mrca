@@ -37,34 +37,16 @@ OPT_FLAGS += \
 	@echo ' '
 
 # All Target
-all: phyx_rt phyx_pl
+all: phyx_mrca
 
-# test target
-test: phyx_test
-
-phyx_test: $(TEST_OBJ) $(OBJS) 
+phyx_mrca: $(CPP_OBJS) $(MRCA_OBJ) 
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_test" $(TEST_OBJ) $(OBJS) $(LIBS)
-	@echo ' '
-
-# Tool invocations
-phyx_rt: $(OBJS)
-	@echo 'Building target: $@'
-	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_rt" $(OBJS) $(LIBS)
-	@echo 'Finished building target: $@'
-	@echo ' '
-
-phyx_pl: $(OBJS)
-	@echo 'Building target: $@'
-	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_pl" $(OBJS) $(LIBS)
-	@echo 'Finished building target: $@'
+	g++ -o "phyx_mrca" $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) phyx
+	-$(RM) *.o *.d phyx_mrca
 	-@echo ' '
 
