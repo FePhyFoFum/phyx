@@ -18,6 +18,7 @@ using namespace std;
 #include "vector_node_object.h"
 #include "tree.h"
 #include "utils.h"
+#include "bd_sim.h"
 
 
 int main(int argc, char * argv[]){

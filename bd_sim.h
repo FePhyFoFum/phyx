@@ -26,13 +26,19 @@ private:
 	map<Node*,double> BIRTHTIME;
 	map<Node*,double> DEATHTIME;
 	Node* root;
+	Tree* tree;
 
 	bool check_stop_conditions();
 	double time_to_next_sp_event();
 	void event();
 	void node_death(Node *);
+	void node_birth(Node *);
 	void delete_dead_nodes();
 	void setup_parameters();
+	bool event_is_birth();
+	void delete_a_node(Node *);
+	double get_distance_from_tip(Node *innode);
+	void set_distance_to_tip();
 
 public:
 	BirthDeathSimulator();
@@ -40,7 +46,7 @@ public:
 
 	Tree * make_tree(bool);
 
-	~BirthDeathSimulator();
+	//~BirthDeathSimulator();
 };
 
 #endif

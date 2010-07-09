@@ -62,6 +62,7 @@ public:
 	int getChildCount();
 	void assocObject(string name,NodeObject & obj);
 	NodeObject * getObject(string name);
+
 	~Node();
 
 };
