@@ -11,21 +11,24 @@ CPP_SRCS += \
 ./node.cpp \
 ./tree.cpp \
 ./tree_reader.cpp \
-./tree_utils.cpp 
+./tree_utils.cpp \
+./bd_sim.cpp
 
 CPP_OBJS += \
 ./utils.o \
 ./node.o \
 ./tree.o \
 ./tree_reader.o \
-./tree_utils.o 
+./tree_utils.o \
+./bd_sim.o
 
 CPP_DEPS += \
 ./utils.d \
 ./node.d \
 ./tree.d \
 ./tree_reader.d \
-./tree_utils.d 
+./tree_utils.d \
+./bd_sim.d
 
 OPT_FLAGS += \
 -O3 -ffast-math -ftree-vectorize -g3 -Wall
