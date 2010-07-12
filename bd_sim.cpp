@@ -19,13 +19,13 @@ BirthDeathSimulator::BirthDeathSimulator(double estop,double tstop, double brate
 		maxfailures(1000),birthrate(brate),deathrate(drate),sumrate(brate+drate),relative_birth_rate(brate/(brate+drate)),
 		extantstop(estop),timestop(tstop),numofchanges(0),currenttime(0.0),extantnodes(vector<Node*>()),
 		BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()){
-	srand(time(0));
+	srand(time(NULL));
 }
 
 BirthDeathSimulator::BirthDeathSimulator():failures(0),maxfailures(1000),birthrate(0.1),deathrate(0.05),
 		sumrate(0.1+0.05),relative_birth_rate(0.1/(0.1+0.05)),extantstop(10),timestop(0),numofchanges(0),
 		currenttime(0.0),extantnodes(vector<Node*>()),BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()){
-	srand(time(0));
+	srand(time(NULL));
 }
 
 void BirthDeathSimulator::setup_parameters(){
@@ -64,10 +64,12 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead){
 			//temp_extant_nodes[i]->istip = 1
 		}
 	}
+
 	root->setBL(0);
-		double totallength = 0;
-		int count = 1;
-		tree = new Tree(root);
+	double totallength = 0;
+	int count = 1;
+	tree = new Tree(root);
+	tree->processRoot();
 	if(show_dead == false){
 		delete_dead_nodes();
 	}
@@ -136,8 +138,10 @@ void BirthDeathSimulator::delete_dead_nodes(){
 	vector<Node *> kill;
 	set_distance_to_tip();
 	for (int i=0; i<tree->getExternalNodeCount();i++)
-		if (get_distance_from_tip(tree->getExternalNode(i)) != root->getHeight())
+		if (abs(get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()) > 3.55271e-14){
 			kill.push_back(tree->getExternalNode(i));
+			//cout << get_distance_from_tip(tree->getExternalNode(i)) << " "<< root->getHeight() << " " << get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()<<  endl;
+		}
 	for (unsigned int i=0;i<kill.size();i++)
 		delete_a_node(kill[i]);
 }

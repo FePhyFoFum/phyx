@@ -156,6 +156,7 @@ double OptimizeShift::GetShift_gsl(const gsl_vector * variables, void *obj){
 }
 
 vector<double> OptimizeShift::optimize_shift(){
+	//need to check the performance on this
 	const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2rand;
 	gsl_multimin_fminimizer *s = NULL;
 	gsl_vector *ss, *x;
