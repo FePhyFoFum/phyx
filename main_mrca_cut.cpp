@@ -69,8 +69,8 @@ int main(int argc, char * argv[]){
 	for (it=mrcas.begin(); it!=mrcas.end(); it++){
 		Node * nd = tree->getMRCA((*it).second);
 		ofstream outFile;
-		outFile.open((*it).first, ios::out);
-		outFile << " "<< nd->getNewick(true) << endl;
+		outFile.open((*it).first.c_str(), ios::out);
+		outFile << nd->getNewick(true) << endl;
 		outFile.close();
 	}
 
