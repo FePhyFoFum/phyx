@@ -52,3 +52,11 @@ void TrimSpaces( string& str)  {
 		        str = str.substr( 0, endpos+1 );
 	 */
 }
+
+double calculate_vector_double_sum(vector<double> & in){
+	double sum = 0;
+	for (unsigned int i=0;i<in.size();i++){
+		sum += in[i];
+	}
+	return sum;
+}
