@@ -102,33 +102,33 @@ double StateReconstructor::eval_likelihood(){
 }
 
 void StateReconstructor::prepare_ancstate_reverse(){
-	reverse(*tree->getRoot());
+	reverse(tree->getRoot());
 }
 
-void StateReconstructor::reverse(Node & node){
+void StateReconstructor::reverse(Node * node){
 	rev = true;
 	VectorNodeObject<double> * revconds = new VectorNodeObject<double> (nstates, 0);//need to delete this at some point
-	if (&node == tree->getRoot()) {
+	if (node == tree->getRoot()) {
 		for(int i=0;i<nstates;i++){
 			revconds->at(i) = 1.0;//prior
 		}
-		node.assocObject(revB,*revconds);
+		node->assocObject(revB,*revconds);
 		delete revconds;
-		for(int i = 0;i<node.getChildCount();i++){
-			reverse(*node.getChild(i));
+		for(int i = 0;i<node->getChildCount();i++){
+			reverse(node->getChild(i));
 		}
 	}else{
 	//else if(node.isExternal() == false){
 		//calculate A i
 		//sum over all alpha k of sister node of the parent times the priors of the speciations
 		//(weights) times B of parent j
-		VectorNodeObject<double> * parrev = ((VectorNodeObject<double>*)node.getParent()->getObject(revB));
+		VectorNodeObject<double> * parrev = ((VectorNodeObject<double>*)node->getParent()->getObject(revB));
 		VectorNodeObject<double> sisdistconds;
-		if(node.getParent()->getChild(0) != &node){
-			VectorNodeObject<double>* talph = ((VectorNodeObject<double>*) node.getParent()->getChild(0)->getObject(alphas));
+		if(node->getParent()->getChild(0) != node){
+			VectorNodeObject<double>* talph = ((VectorNodeObject<double>*) node->getParent()->getChild(0)->getObject(alphas));
 			sisdistconds = *talph;
 		}else{
-			VectorNodeObject<double>* talph = ((VectorNodeObject<double>*) node.getParent()->getChild(1)->getObject(alphas));
+			VectorNodeObject<double>* talph = ((VectorNodeObject<double>*) node->getParent()->getChild(1)->getObject(alphas));
 			sisdistconds = *talph;
 		}
 
@@ -136,16 +136,16 @@ void StateReconstructor::reverse(Node & node){
 		//needs to be the same as ancdist_cond_lh
 		for ( int i = 0; i < nstates; i++) {
 			//root has i, curnode has left, sister of cur has right
-			for ( int j = 0; j < nstates; j++) {
-				tempA[i] += (sisdistconds.at(j)*parrev->at(i));
-			}
+			//for ( int j = 0; j < nstates; j++) {
+				tempA[i] += (sisdistconds.at(i)*parrev->at(i));
+			//}
 		}
 		//now calculate node B
 		//VectorNodeObject<BranchSegment>* tsegs = ((VectorNodeObject<BranchSegment>*) node.getObject(seg));
 		vector<double> tempmoveA(tempA);
 		for(int j=0;j<nstates;j++){revconds->at(j) = 0;}
 		//RateModel * rm = tsegs->at(ts).getModel();
-		cx_mat * p = &rm.stored_p_matrices[node.getBL()];
+		cx_mat * p = &rm.stored_p_matrices[node->getBL()];
 		mat * EN = NULL;
 		mat * ER = NULL;
 		VectorNodeObject<double> tempmoveAer(tempA);
@@ -154,8 +154,8 @@ void StateReconstructor::reverse(Node & node){
 			//initialize the segment B's
 			for( int j=0;j<nstates;j++){tempmoveAer[j] = 0;}
 			for( int j=0;j<nstates;j++){tempmoveAen[j] = 0;}
-			EN = &stored_EN_matrices[node.getBL()];
-			ER = &stored_ER_matrices[node.getBL()];
+			EN = &stored_EN_matrices[node->getBL()];
+			ER = &stored_ER_matrices[node->getBL()];
 		}
 		for( int j=0;j < nstates;j++){
 			for ( int i = 0; i < nstates; i++) {
@@ -168,14 +168,14 @@ void StateReconstructor::reverse(Node & node){
 		}
 		for( int j=0;j<nstates;j++){tempmoveA[j] = revconds->at(j);}
 		if(stochastic == true){
-			node.seg_sp_stoch_map_revB_time = tempmoveAer;
-			node.seg_sp_stoch_map_revB_number = tempmoveAen;
+			node->seg_sp_stoch_map_revB_time = tempmoveAer;
+			node->seg_sp_stoch_map_revB_number = tempmoveAen;
 		}
 
-		node.assocObject(revB,*revconds);
+		node->assocObject(revB,*revconds);
 		delete revconds;
-		for(int i = 0;i<node.getChildCount();i++){
-			reverse(*node.getChild(i));
+		for(int i = 0;i<node->getChildCount();i++){
+			reverse(node->getChild(i));
 		}
 	}
 }
@@ -187,13 +187,12 @@ vector<double> StateReconstructor::calculate_ancstate_reverse(Node & node){
 		Node * c2 = node.getChild(1);
 		VectorNodeObject<double>* v1  = ((VectorNodeObject<double>*) c1->getObject(alphas));
 		VectorNodeObject<double>* v2 = ((VectorNodeObject<double>*) c2->getObject(alphas));
-		VectorNodeObject<double> LHOODS (nstates,0);
+		vector<double> LHOODS (nstates,0);
 		for ( int i = 0; i < nstates; i++) {
 			//for ( int j=0;j<nstates;j++){
 			//	LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
 			//}
-			LHOODS[i] = (v1->at(i)*v2->at(i));
-			LHOODS[i] *= Bs->at(i);
+			LHOODS[i] = (v1->at(i)*v2->at(i)) * Bs->at(i);
 		}
 		return LHOODS;
 	}
@@ -269,6 +268,7 @@ vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool 
 				//LHOODS[i] += (v1.at(ind1)*v2.at(ind2)*weight);
 			//}
 			LHOODS[i] = v1->at(i) * v2->at(i) * Bs.at(i);
+			//cout << v1->at(i) << " " <<  v2->at(i)<< " " << Bs.at(i) << endl;
 		}
 		for(int i=0;i<nstates;i++){
 			totalExp[i] = LHOODS[i];
