@@ -15,7 +15,8 @@ CPP_SRCS += \
 ./sequence.cpp \
 ./phylip_reader.cpp \
 ./rate_model.cpp \
-./state_reconstructor.cpp
+./state_reconstructor.cpp \
+./optimize_state_reconstructor.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -26,7 +27,8 @@ CPP_OBJS += \
 ./sequence.o \
 ./phylip_reader.o \
 ./rate_model.o \
-./state_reconstructor.o
+./state_reconstructor.o \
+./optimize_state_reconstructor.o
 
 CPP_DEPS += \
 ./utils.d \
@@ -37,7 +39,8 @@ CPP_DEPS += \
 ./sequence.d \
 ./phylip_reader.d \
 ./rate_model.d \
-./state_reconstructor.d
+./state_reconstructor.d \
+./optimize_state_reconstructor.d
 
 CPP_LIBS = -llapack -lblas -lgfortran -lgsl -lgslcblas -lm -lpthread  
 

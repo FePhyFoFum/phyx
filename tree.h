@@ -39,7 +39,7 @@ public:
 	void addInternalNode(Node * tn);
 	void pruneExternalNode(Node * node);
 	Node * getExternalNode(int num);
-	Node * getExternalNode(string & name);
+	Node * getExternalNode(string name);
 	Node * getInternalNode(int num);
 	Node * getInternalNode(string & name);
 	Node * getNode(int num);

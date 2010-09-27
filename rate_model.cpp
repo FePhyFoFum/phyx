@@ -19,6 +19,18 @@ void RateModel::set_Q_cell(int from, int to, double num){
 	Q(from,to) = num;
 }
 
+void RateModel::set_Q_diag(){
+	for(unsigned int i=0;i<Q.n_rows;i++){
+		double su = 0;
+		for(unsigned int j=0;j<Q.n_cols;j++){
+			if(i!=j){
+				su += Q(i,j);
+			}
+		}
+		Q(i,i) = 0-su;
+	}
+}
+
 void RateModel::setup_Q(){
 	Q.fill(0);
 	for(unsigned int i=0;i<Q.n_rows;i++){
@@ -44,6 +56,15 @@ void RateModel::setup_Q(vector<vector<double> > & inQ){
 	}
 }
 
+void RateModel::setup_Q(mat & inQ){
+	for(unsigned int i=0;i<Q.n_rows;i++){
+		for(unsigned int j=0;j<Q.n_cols;j++){
+			Q(i,j) = inQ(i,j);
+		}
+	}
+	set_Q_diag();
+}
+
 mat & RateModel::get_Q(){
 	return Q;
 }
@@ -59,6 +80,9 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
 	}
     cx_mat C_inv = inv(eigvec);
     cx_mat P = eigvec * eigval * C_inv;
+    if(store_p_matrices == true){
+    	stored_p_matrices[bl] = P;
+    }
     return P;
 }
 

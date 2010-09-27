@@ -6,6 +6,7 @@
 #include <map>
 
 using namespace std;
+
 void Tokenize(const string& str, vector<string>& tokens,const string& delimiters = " ");
 void TrimSpaces( string& str);
 double calculate_vector_double_sum(vector<double> & in);

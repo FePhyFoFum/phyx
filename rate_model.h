@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-
+#include <map>
 using namespace std;
 
 #include <armadillo>
@@ -27,9 +27,11 @@ public:
 	int nstates;
 	map<double, cx_mat> stored_p_matrices;
 
+	void set_Q_diag();
 	void set_Q_cell(int,int,double);
 	void setup_Q();
 	void setup_Q(vector<vector<double> > & inQ);
+	void setup_Q(mat & inQ);
 	mat & get_Q();
 
 	cx_mat setup_P(double,bool);
