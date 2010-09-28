@@ -23,6 +23,7 @@ using namespace std;
 #include "state_reconstructor.h"
 #include "rate_model.h"
 #include "optimize_state_reconstructor.h"
+#include "optimize_nlopt.h"
 
 int main(int argc, char * argv[]){
 	TreeReader tr;
@@ -65,20 +66,6 @@ int main(int argc, char * argv[]){
 	StateReconstructor sr(rm);
 	sr.set_tree(tree);
 	sr.set_tip_conditionals(seqs);
-	rm.set_Q_cell(0,1,0.041233);
-	rm.set_Q_cell(0,2,128.360154);
-	rm.set_Q_cell(0,3,0.009291);
-	rm.set_Q_cell(1,0,0.175947);
-	rm.set_Q_cell(1,2,1.243479);
-	rm.set_Q_cell(1,3,0.);
-	rm.set_Q_cell(2,0,124.763233);
-	rm.set_Q_cell(2,1,3.078737);
-	rm.set_Q_cell(2,3,1.630343);
-	rm.set_Q_cell(3,0,1.009451);
-	rm.set_Q_cell(3,1,0.);
-	rm.set_Q_cell(3,2,0.009433);
-	rm.set_Q_diag();
-	cout << sr.eval_likelihood() << endl;
 
 	mat free_var(nstates,nstates);free_var.fill(0);
 	int ct = 0;
@@ -86,21 +73,26 @@ int main(int argc, char * argv[]){
 		for(int j=0;j<nstates;j++){
 			if(i!=j){
 				free_var(i,j) = ct;
-				//ct += 1;
+				ct += 1;
 			}
 		}
 	}
 	cout << free_var << endl;
 	cout << ct << endl;
 
-	OptimizeStateReconstructor osr(&rm,&sr,&free_var,1);
-	free_var = osr.optimize();
-	rm.setup_Q(free_var);
+//	OptimizeStateReconstructor osr(&rm,&sr,&free_var,1);
+//	free_var = osr.optimize();
+//	rm.setup_Q(free_var);
+//	cout << free_var << endl;
+
+	optimize_sr_nlopt(&rm,&sr,&free_var,ct);
 	cout << free_var << endl;
+	rm.setup_Q(free_var);
+
 	sr.set_store_p_matrices(true);
 	cout << sr.eval_likelihood() << endl;
 
-	sr.prepare_ancstate_reverse();
+/*	sr.prepare_ancstate_reverse();
 	vector<double> lhoods;
 	for(int i=0;i<tree->getInternalNodeCount();i++){
 		cout <<"node: " << tree->getInternalNode(i)->getName() << endl;
@@ -129,6 +121,6 @@ int main(int argc, char * argv[]){
 	sr.prepare_ancstate_reverse();
 	stoch = sr.calculate_reverse_stochmap(*tree->getInternalNode(3),true);
 	cout << calculate_vector_double_sum(stoch)/calculate_vector_double_sum(lhoods) << endl;
-
+*/
 	return EXIT_SUCCESS;
 }

@@ -16,7 +16,8 @@ CPP_SRCS += \
 ./phylip_reader.cpp \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
-./optimize_state_reconstructor.cpp
+./optimize_state_reconstructor.cpp \
+./optimize_nlopt.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -28,7 +29,8 @@ CPP_OBJS += \
 ./phylip_reader.o \
 ./rate_model.o \
 ./state_reconstructor.o \
-./optimize_state_reconstructor.o
+./optimize_state_reconstructor.o \
+./optimize_nlopt.o
 
 CPP_DEPS += \
 ./utils.d \
@@ -40,9 +42,10 @@ CPP_DEPS += \
 ./phylip_reader.d \
 ./rate_model.d \
 ./state_reconstructor.d \
-./optimize_state_reconstructor.d
+./optimize_state_reconstructor.d \
+./optimize_nlopt.d
 
-CPP_LIBS = -llapack -lblas -lgfortran -lgsl -lgslcblas -lm -lpthread  
+CPP_LIBS = -llapack -lblas -lgfortran -lgsl -lgslcblas -lpthread -lnlopt  -lm -lnlopt_cxx
 
 OPT_FLAGS += \
 -O3 -ffast-math -ftree-vectorize -g3 -Wall
