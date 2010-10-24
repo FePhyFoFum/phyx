@@ -2,6 +2,12 @@
 #ifndef TREE_RECONSTRUCTOR_H_
 #define TREE_RECONSTRUCTOR_H_
 
+#include <map>
+#include <string>
+#include <vector>
+
+using namespace std;
+
 #include "tree.h"
 #include "node.h"
 #include "rate_model.h"
@@ -41,13 +47,15 @@ public:
 	StateReconstructor(RateModel &);
 	void set_tree(Tree *);
 	double eval_likelihood();
-	void set_tip_conditionals(vector<Sequence> & distrib_data);
+	bool set_tip_conditionals(vector<Sequence> & distrib_data);
 	void prepare_ancstate_reverse();
 	void reverse(Node *);
 	vector<double> calculate_ancstate_reverse(Node & node);
 	void prepare_stochmap_reverse_all_nodes(int, int);
+	void prepare_stochmap_reverse_all_nodes_all_matrices();
 	vector<double> calculate_reverse_stochmap(Node &, bool);
 	void set_store_p_matrices(bool i);
 	void set_use_stored_matrices(bool i);
+	~StateReconstructor();
 };
 #endif

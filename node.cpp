@@ -217,6 +217,8 @@ int Node::getChildCount(){
 }
 
 void Node::assocObject(string name,NodeObject & obj){
+	if(assoc.count(name) > 0)
+		delete assoc[name];
 	assoc[name] = obj.clone();
 }
 
@@ -245,7 +247,21 @@ int Node::get_num_leaves(){
  * gets the leaves from this node
  */
 vector<Node*> Node::get_leaves(){
-
+	vector<Node*> retnodes;
+	stack<Node*> nodes;
+	nodes.push(this);
+	while(nodes.empty() == false){
+		Node * nd = nodes.top();
+		nodes.pop();
+		if (nd->getChildCount() > 0){
+			for (int i=0;i<nd->getChildCount();i++){
+				nodes.push(nd->getChild(i));
+			}
+		}else{
+			retnodes.push_back(nd);
+		}
+	}
+	return retnodes;
 }
 
 /*

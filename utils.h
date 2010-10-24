@@ -10,5 +10,6 @@ using namespace std;
 void Tokenize(const string& str, vector<string>& tokens,const string& delimiters = " ");
 void TrimSpaces( string& str);
 double calculate_vector_double_sum(vector<double> & in);
+int calculate_vector_int_sum(vector<int> & in);
 
 #endif /* UTILS_H_ */

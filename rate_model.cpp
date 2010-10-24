@@ -10,7 +10,7 @@ using namespace arma;
 inline int signof(double d){return d >= 0 ? 1 : -1;}
 inline double roundto(double in){return floor(in*(1000)+0.5)/(1000);}
 
-RateModel::RateModel(int _nstates):nstates(_nstates),Q(_nstates,_nstates),labels(),Q_mask(){
+RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates){
 	setup_Q();
 }
 
@@ -80,6 +80,13 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
 	}
     cx_mat C_inv = inv(eigvec);
     cx_mat P = eigvec * eigval * C_inv;
+
+    for(int i=0;i<P.n_rows;i++){
+    	for(int j=0;j<P.n_cols;j++){
+    		if (real(P(i,j))<0)
+    			neg_p = true;
+    	}
+    }
     if(store_p_matrices == true){
     	stored_p_matrices[bl] = P;
     }

@@ -1,6 +1,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -12,6 +13,8 @@ using namespace std;
 #include "vector_node_object.h"
 #include "sequence.h"
 
+#define verbose false
+
 StateReconstructor::StateReconstructor(RateModel & _rm):tree(NULL),nstates(_rm.nstates),rm(_rm),dc("dist_conditionals"),
 		store_p_matrices(false),use_stored_matrices(false),revB("revB"),
 		rev(false),rev_exp_number("rev_exp_number"),rev_exp_time("rev_exp_time"),
@@ -22,30 +25,42 @@ StateReconstructor::StateReconstructor(RateModel & _rm):tree(NULL),nstates(_rm.n
 	 */
 void StateReconstructor::set_tree(Tree * tr){
 	tree = tr;
-	cout << "initializing nodes..." << endl;
+	if(verbose)
+		cout << "initializing nodes..." << endl;
 	for(int i=0;i<tree->getNodeCount();i++){
-		if(tree->getNode(i)->getBL()<0.000001)
-			tree->getNode(i)->setBL(0.000001);
+		if(tree->getNode(i)->getBL()<0.00000000001)
+			tree->getNode(i)->setBL(0.00000000001);
 		VectorNodeObject<double> * dcs = new VectorNodeObject<double>(nstates);
 		tree->getNode(i)->assocObject(dc,*dcs);
 		delete dcs;
 	}
 }
 
-void StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
+bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
+	bool allsame = true;
+	string testsame = distrib_data[0].get_sequence();
 	for(unsigned int i=0;i<distrib_data.size();i++){
 		Sequence seq = distrib_data[i];
 		Node * nd = tree->getExternalNode(seq.get_id());
-		cout << nd->getName() << " ";
+		if(verbose)
+			cout << nd->getName() << " ";
 		for(int j=0;j<nstates;j++){
 			if(seq.get_sequence().at(j) == '1')
 				(((VectorNodeObject<double>*) nd->getObject(dc)))->at(j) = 1.0;
 			else
 				(((VectorNodeObject<double>*) nd->getObject(dc)))->at(j) = 0.0;
-			cout << seq.get_sequence().at(j);
+			if(verbose)
+				cout << seq.get_sequence().at(j);
 		}
-		cout << endl;
+		if(verbose)
+			cout << endl;
+		if (testsame != seq.get_sequence())
+			allsame = false;
 	}
+	if (allsame == true){
+		cout << "all the tips have the same characters" << endl;
+	}
+	return allsame;
 }
 
 VectorNodeObject<double> StateReconstructor::conditionals(Node & node){
@@ -142,7 +157,6 @@ void StateReconstructor::reverse(Node * node){
 		}
 		//now calculate node B
 		//VectorNodeObject<BranchSegment>* tsegs = ((VectorNodeObject<BranchSegment>*) node.getObject(seg));
-		vector<double> tempmoveA(tempA);
 		for(int j=0;j<nstates;j++){revconds->at(j) = 0;}
 		//RateModel * rm = tsegs->at(ts).getModel();
 		cx_mat * p = &rm.stored_p_matrices[node->getBL()];
@@ -159,20 +173,20 @@ void StateReconstructor::reverse(Node * node){
 		}
 		for( int j=0;j < nstates;j++){
 			for ( int i = 0; i < nstates; i++) {
-				revconds->at(j) += tempmoveA[i]*real((*p)(i,j));//tempA needs to change each time
+				revconds->at(j) += tempA[i]*real((*p)(i,j));//tempA needs to change each time
 				if(stochastic == true){
-					tempmoveAer[j] += tempmoveA[i]*(((*ER)(i,j)));
-					tempmoveAen[j] += tempmoveA[i]*(((*EN)(i,j)));
+					tempmoveAer[j] += tempA[i]*(((*ER)(i,j)));
+					tempmoveAen[j] += tempA[i]*(((*EN)(i,j)));
 				}
 			}
 		}
-		for( int j=0;j<nstates;j++){tempmoveA[j] = revconds->at(j);}
+		for( int j=0;j<nstates;j++){tempA[j] = revconds->at(j);}
 		if(stochastic == true){
 			node->seg_sp_stoch_map_revB_time = tempmoveAer;
 			node->seg_sp_stoch_map_revB_number = tempmoveAen;
 		}
 
-		node->assocObject(revB,*revconds);
+		node->assocObject(revB,*revconds); // leak
 		delete revconds;
 		for(int i = 0;i<node->getChildCount();i++){
 			reverse(node->getChild(i));
@@ -243,10 +257,76 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes(int from, int to){
 				summedR += (Si * W * Sj * Iijt);
 			}
 		}
-		stored_EN_matrices[dur] = (real(summed));
-		stored_ER_matrices[dur] = (real(summedR));
+		//cout << isImag << endl;
+		//cout << summed << endl;
+		//seems like when these are IMAG, there can sometimes be negative with very small values
+		stored_EN_matrices[dur] = abs(real(summed));//(real(summed));
+		stored_ER_matrices[dur] = abs(real(summedR));;//(real(summedR));
 	}
 }
+
+/*
+ * only for number of changes
+ */
+void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices(){
+	stochastic = true;
+	//calculate and store local expectation matrix for each branch length
+	for(int k = 0; k < tree->getNodeCount(); k++){
+		double dur =  tree->getNode(k)->getBL();
+		cx_mat eigvec(nstates,nstates);eigvec.fill(0);
+		cx_mat eigval(nstates,nstates);eigval.fill(0);
+		bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
+		mat Ql(nstates,nstates);Ql.fill(0);
+		for(int i=0;i<Ql.n_rows;i++){
+			for(int j=0;j<Ql.n_cols;j++){
+				if (i!=j)
+					Ql(i,j) = rm.get_Q()(i,j);
+			}
+		}
+		mat W(nstates,nstates);W.fill(0);W(1,1) = 1;
+		cx_mat summed(nstates,nstates);summed.fill(0);
+		cx_mat summedR(nstates,nstates);summedR.fill(0);
+		for(int i=0;i<nstates;i++){
+			mat Ei(nstates,nstates);Ei.fill(0);Ei(i,i)=1;
+			cx_mat Si(nstates,nstates);
+			Si = eigvec * Ei * inv(eigvec);
+			for(int j=0;j<nstates;j++){
+				cx_double dij = (eigval(i,i)-eigval(j,j)) * dur;
+				mat Ej(nstates,nstates);Ej.fill(0);Ej(j,j)=1;
+				cx_mat Sj(nstates,nstates);
+				Sj = eigvec * Ej * inv(eigvec);
+				cx_double Iijt = 0;
+				if (abs(dij) > 10){
+					Iijt = (exp(eigval(i,i)*dur)-exp(eigval(j,j)*dur))/(eigval(i,i)-eigval(j,j));
+				}else if(abs(dij) < 10e-20){
+					Iijt = dur*exp(eigval(j,j)*dur)*(1.+dij/2.+pow(dij,2.)/6.+pow(dij,3.)/24.);
+				}else{
+					if(eigval(i,i) == eigval(j,j)){
+						//WAS Iijt = dur*exp(eigval(j,j)*dur)*expm1(dij)/dij;
+						if (isImag)
+							Iijt = dur*exp(eigval(j,j)*dur)*(exp(dij)-1.)/dij;
+						else
+							Iijt = dur*exp(eigval(j,j)*dur)*(expm1(real(dij)))/dij;
+					}else{
+						//WAS Iijt = -dur*exp(eigval(i,i)*dur)*expm1(-dij)/dij;
+						if (isImag)
+							Iijt = -dur*exp(eigval(i,i)*dur)*(exp(-dij)-1.)/dij;
+						else
+							Iijt = -dur*exp(eigval(i,i)*dur)*(expm1(real(-dij)))/dij;
+					}
+				}
+				summed += (Si  * Ql * Sj * Iijt);
+				summedR += (Si * W * Sj * Iijt);
+			}
+		}
+		//cout << isImag << endl;
+		//cout << summed << endl;
+		//seems like when these are IMAG, there can sometimes be negative with very small values
+		stored_EN_matrices[dur] = abs(real(summed));//(real(summed));
+		stored_ER_matrices[dur] = abs(real(summedR));;//(real(summedR));
+	}
+}
+
 
 vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool tm){
 	if (node.isExternal()==false){//is not a tip
@@ -300,5 +380,9 @@ void StateReconstructor::set_store_p_matrices(bool i){
 
 void StateReconstructor::set_use_stored_matrices(bool i){
 	use_stored_matrices = i;
+}
+
+StateReconstructor::~StateReconstructor(){
+
 }
 

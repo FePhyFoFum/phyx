@@ -60,3 +60,11 @@ double calculate_vector_double_sum(vector<double> & in){
 	}
 	return sum;
 }
+
+int calculate_vector_int_sum(vector<int> & in){
+	int sum = 0;
+	for (unsigned int i=0;i<in.size();i++){
+		sum += in[i];
+	}
+	return sum;
+}

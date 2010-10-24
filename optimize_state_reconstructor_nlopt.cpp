@@ -5,7 +5,7 @@
  *      Author: smitty
  */
 
-#include "optimize_nlopt.h"
+#include "optimize_state_reconstructor_nlopt.h"
 #include <iostream>
 #include <stdio.h>
 #include <nlopt.hpp>
@@ -38,6 +38,8 @@ double nlopt_sr(unsigned n, const double *x, double *grad, void *my_func_data){
 	double like;
 	nloptrm->set_Q_diag();
 	like = nloptsr->eval_likelihood();
+	if (nloptrm->neg_p == true)
+		like = 100000000;
 	//cout << like << endl;
 	if(like < 0 || like == std::numeric_limits<double>::infinity())
 		like = 100000000;
@@ -49,14 +51,18 @@ void optimize_sr_nlopt(RateModel * _rm,StateReconstructor * _sr, mat * _free_mas
 	nloptrm = _rm;
 	nloptfree_variables = _free_mask;
 
-	//nlopt_opt opt;
-	nlopt::opt opt(nlopt::LN_SBPLX, _nfree);
+	//NEWOUA
+	//SBPLX
+	//PRAXIS
+	//BOBYQA
+	nlopt::opt opt(nlopt::LN_NELDERMEAD, _nfree);
 
 
 	opt.set_lower_bounds(0.0);
 	opt.set_upper_bounds(1000);
 	opt.set_min_objective(nlopt_sr,NULL);
 	opt.set_xtol_rel(0.001);
+	opt.set_maxeval(10000);
 
 	vector<double> x(_nfree,0);
 	for(unsigned int i=0;i<_rm->get_Q().n_rows;i++){

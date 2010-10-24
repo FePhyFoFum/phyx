@@ -26,6 +26,7 @@ public:
 	 */
 	int nstates;
 	map<double, cx_mat> stored_p_matrices;
+	bool neg_p;
 
 	void set_Q_diag();
 	void set_Q_cell(int,int,double);
@@ -35,6 +36,7 @@ public:
 	mat & get_Q();
 
 	cx_mat setup_P(double,bool);
+
 	/*
 	 * get things from stmap
 	 */

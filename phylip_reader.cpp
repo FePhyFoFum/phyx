@@ -21,15 +21,15 @@ bool PhylipReader::readFile(string filen,vector<Sequence>& seqs){
 	bool first = true;
 	while (getline(infile, tline)){
 		vector<string> searchtokens;
-		Tokenize(tline, searchtokens, " 	");
+		Tokenize(tline, searchtokens, "	");
 		for(unsigned int j=0;j<searchtokens.size();j++){
 			TrimSpaces(searchtokens[j]);
 		}
 		if (first == true){ //reading past the first line
 			first = false;
 			try{
-				int nseqs = atoi(searchtokens[0].c_str());
-				int nsites = atoi(searchtokens[1].c_str());
+				//int nseqs = atoi(searchtokens[0].c_str());
+				//int nsites = atoi(searchtokens[1].c_str());
 			}catch( char * str ){
 				return false; //not a phylip
 			}
