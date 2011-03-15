@@ -2,7 +2,11 @@
 #include <vector>
 #include <map>
 #include <string>
-
+#include <fstream>
+#include <numeric>
+#include <algorithm>
+#include <stdlib.h>
+#include <math.h>
 #include "utils.h"
 
 using namespace std;
@@ -67,4 +71,34 @@ int calculate_vector_int_sum(vector<int> & in){
 		sum += in[i];
 	}
 	return sum;
+}
+
+vector<vector<double> > processRateMatrixConfigFile(string filename, int numstates){
+	vector<double> cols(numstates,1);
+	vector<vector<double> >  ratematrix = vector<vector<double> > (numstates,cols);
+	//read file
+	ifstream ifs(filename.c_str());
+	string line;
+	int fromarea = 0;
+	while(getline(ifs,line)){
+		if(line.size() > 3){
+			vector<string> tokens;
+			string del(" ,\t");
+			tokens.clear();
+			Tokenize(line, tokens, del);
+			for(unsigned int j=0;j<tokens.size();j++){
+				TrimSpaces(tokens[j]);
+			}
+			for(unsigned int j=0;j<tokens.size();j++){
+				ratematrix[fromarea][j] = atof(tokens[j].c_str());
+			}
+			if(fromarea < numstates-1){
+				fromarea += 1;
+			}else{
+				fromarea = 0;
+			}
+		}
+	}
+	ifs.close();
+	return ratematrix;
 }

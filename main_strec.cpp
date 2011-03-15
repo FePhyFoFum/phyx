@@ -40,6 +40,9 @@ int main(int argc, char * argv[]){
 	string outfile_stochtime = "";
 	string outfile_stochnum ="";
 	string outfile_stochnum_any ="";
+	string ratematrixfile = "";
+	vector<vector<double> > ratematrix;
+	bool estimate = true;
 	bool datawide = false;
 	map<string,vector<string> > mrcas;
 	vector<string> stochtime;
@@ -82,6 +85,7 @@ int main(int argc, char * argv[]){
 					if(ratematrixfile == "d" || ratematrixfile == "D"){
 						ratematrixfile = "";
 					}
+					estimate =false;
 				}else if(!strcmp(tokens[0].c_str(), "mrca")){
 					vector<string> searchtokens;
 					Tokenize(tokens[1], searchtokens, ", 	");
@@ -188,6 +192,12 @@ int main(int argc, char * argv[]){
 	if(verbose)
 		cout << "total number of states in dataset: " << nstates << endl;
 	
+	//reading ratematrixfile
+	if(ratematrixfile.size() > 1){
+		ratematrix = processRateMatrixConfigFile(ratematrixfile,nstates);
+	}
+	//end ratematrixfile
+
 	ofstream ancout;
 	ofstream stnumout;
 	ofstream sttimeout;
@@ -328,7 +338,21 @@ int main(int argc, char * argv[]){
 			if(verbose)
 				cout << ct << endl;
 			rm.neg_p = false;
-			optimize_sr_nlopt(&rm,&sr,&free_var,ct);
+
+			//estimating the optimal rates
+
+			if(estimate){//optimize
+				optimize_sr_nlopt(&rm,&sr,&free_var,ct);
+			}else{//requires that the ratematrix is available
+
+				for(int i=0;i<nstates_site_n;i++){
+					for(int j=0;j<nstates_site_n;j++){
+						free_var(i,j) = ratematrix[i][j];
+					}
+				}
+			}
+			//end estimating
+
 			if(verbose)
 				cout << free_var << endl;
 			rm.setup_Q(free_var);
@@ -343,34 +367,59 @@ int main(int argc, char * argv[]){
 				cout << "ancestral states" <<endl;
 			sr.prepare_ancstate_reverse();
 			for(unsigned int j=0;j<ancstates.size();j++){
-				vector<double> lhoods;
-				if(verbose)
-					cout <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  endl;
-				ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
-				lhoods = sr.calculate_ancstate_reverse(*tree->getMRCA(mrcas[ancstates[j]]));
-				totlike = calculate_vector_double_sum(lhoods);
-				//cout << totlike << " " << log(totlike) << endl;
-				bool neg = false;
-				int excount = 0;
-				for(int k=0;k<nstates;k++){
-					if(existing_states[k] == 1){
-						if(verbose)
-							cout << lhoods[excount]/totlike << " ";//"(" << lhoods[excount] << ") ";
-						ancout << "\t" << lhoods[excount]/totlike;
-						if (lhoods[excount]/totlike < 0)
-							neg = true;
-						excount += 1;
-					}else{
-						if(verbose)
-							cout << "NA" << " ";
-						ancout << "\t" << "NA";
+				if(ancstates[j] == "_all_"){
+					vector<double> lhoods;
+					for(unsigned int l=0;l<tree->getInternalNodeCount();l++){
+						lhoods = sr.calculate_ancstate_reverse(*tree->getInternalNode(l));
+						totlike = calculate_vector_double_sum(lhoods);
+						bool neg = false;
+						int excount = 0;
+						double highest = 0;
+						int high = 0;
+						for(int k=0;k<nstates;k++){
+							if(existing_states[k] == 1){;
+								if (lhoods[excount]/totlike > highest){
+									highest= lhoods[excount]/totlike;
+									high = k;
+								}
+								excount += 1;
+							}
+						}
+						std::string s;
+						std::stringstream out;
+						out << high;
+						tree->getInternalNode(l)->setName(out.str());
 					}
+				}else{
+					vector<double> lhoods;
+					if(verbose)
+						cout <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  endl;
+					ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
+					lhoods = sr.calculate_ancstate_reverse(*tree->getMRCA(mrcas[ancstates[j]]));
+					totlike = calculate_vector_double_sum(lhoods);
+					//cout << totlike << " " << log(totlike) << endl;
+					bool neg = false;
+					int excount = 0;
+					for(int k=0;k<nstates;k++){
+						if(existing_states[k] == 1){
+							if(verbose)
+								cout << lhoods[excount]/totlike << " ";//"(" << lhoods[excount] << ") ";
+							ancout << "\t" << lhoods[excount]/totlike;
+							if (lhoods[excount]/totlike < 0)
+								neg = true;
+							excount += 1;
+						}else{
+							if(verbose)
+								cout << "NA" << " ";
+							ancout << "\t" << "NA";
+						}
+					}
+					if (neg == true)
+						exit(0);
+					ancout <<endl;
+					if(verbose)
+						cout << endl;
 				}
-				if (neg == true)
-					exit(0);
-				ancout <<endl;
-				if(verbose)
-					cout << endl;
 			}
 			if(verbose)
 				cout << endl;

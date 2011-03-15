@@ -39,10 +39,10 @@ CPP_DEPS += \
 # if 64 bit GSL try CPPFLAGS="-arch x86_64" LDFLAGS="-arch x86_64" ./configure
 # need to install gmp (with ./configure --enable-cxx) and mpfr and gmpfrxx
 #######
-CPP_LIBS = -lgsl -lgslcblas -lm -lgmpxx -lgmp -lmpfr -lgmpfrxx
+CPP_LIBS = -lgsl -lgslcblas -lm -lgmpxx -lgmp -lmpfr -lgmpfrxx -fopenmp
 
 OPT_FLAGS += \
--O3 -ffast-math -ftree-vectorize -g3 -Wall
+-O3 -ffast-math -ftree-vectorize -g3 -Wall -fopenmp
 #-g -O0
 
 # Each subdirectory must supply rules for building sources it contributes

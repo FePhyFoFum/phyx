@@ -10,6 +10,7 @@ private:
 	string id;
 	string seq;
 	bool aligned;
+	string reverse(string );
 
 public:
 	Sequence();
@@ -20,5 +21,6 @@ public:
 	void set_sequence(string seq);
 	void set_id(string id);
 	void set_aligned(bool al);
+	void reverse_complement();
 };
 #endif
