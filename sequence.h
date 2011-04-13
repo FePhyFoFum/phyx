@@ -15,12 +15,14 @@ private:
 public:
 	Sequence();
 	Sequence(string,string,bool);
+	Sequence(string,string);
 	bool is_aligned();
 	string get_sequence();
 	string get_id();
 	void set_sequence(string seq);
 	void set_id(string id);
 	void set_aligned(bool al);
-	void reverse_complement();
+	string reverse_complement();
+	void perm_reverse_complement();
 };
 #endif

@@ -78,19 +78,19 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
 	for(int i=0;i<nstates;i++){
 		eigval(i,i) = exp(eigval(i,i) * bl);
 	}
-    cx_mat C_inv = inv(eigvec);
-    cx_mat P = eigvec * eigval * C_inv;
-
-    for(int i=0;i<P.n_rows;i++){
-    	for(int j=0;j<P.n_cols;j++){
-    		if (real(P(i,j))<0)
-    			neg_p = true;
-    	}
-    }
-    if(store_p_matrices == true){
-    	stored_p_matrices[bl] = P;
-    }
-    return P;
+	cx_mat C_inv = inv(eigvec);
+	cx_mat P = eigvec * eigval * C_inv;
+	neg_p = false;
+	for(int i=0;i<P.n_rows;i++){
+		for(int j=0;j<P.n_cols;j++){
+			if (real(P(i,j))<0)
+				neg_p = true;
+		}
+	}
+	if(store_p_matrices == true){
+		stored_p_matrices[bl] = P;	
+	}
+	return P;
 }
 
 /*

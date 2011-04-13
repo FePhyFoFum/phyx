@@ -13,6 +13,7 @@ using namespace std;
 #include "rate_model.h"
 #include "vector_node_object.h"
 #include "sequence.h"
+#include "superdouble.h"
 
 class StateReconstructor{
 
@@ -34,13 +35,13 @@ private:
 	string rev_exp_time;
 	bool stochastic;
 	//map of period int and then branch length double
-	map<double, mat > stored_EN_matrices;
-	map<double, mat > stored_ER_matrices;
+	map<Superdouble, mat > stored_EN_matrices;
+	map<Superdouble, mat > stored_ER_matrices;
 	//end mapping bits
 	string sp_alphas;
 	string alphas;
 
-	VectorNodeObject<double> conditionals(Node & node);
+	VectorNodeObject<Superdouble> conditionals(Node & node);
 	void ancdist_conditional_lh(Node & node);
 
 public:

@@ -390,6 +390,7 @@ int main(int argc, char * argv[]){
 						out << high;
 						tree->getInternalNode(l)->setName(out.str());
 					}
+					ancout << tree->getRoot()->getNewick(true) << ";"<< endl;
 				}else{
 					vector<double> lhoods;
 					if(verbose)

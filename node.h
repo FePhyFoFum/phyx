@@ -16,6 +16,7 @@ using namespace std;
 
 #include "node_object.h"
 #include "vector_node_object.h"
+#include "superdouble.h"
 
 class Node{
 private:
@@ -65,8 +66,8 @@ public:
 	NodeObject * getObject(string name);
 
 
-	VectorNodeObject<double> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT
-	VectorNodeObject<double> seg_sp_stoch_map_revB_number; //segment specific rev B, combining the tempA and the ENLT
+	VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT
+	VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_number; //segment specific rev B, combining the tempA and the ENLT
 	~Node();
 
 };

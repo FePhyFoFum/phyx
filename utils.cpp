@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "utils.h"
+#include "superdouble.h"
 
 using namespace std;
 
@@ -101,4 +102,14 @@ vector<vector<double> > processRateMatrixConfigFile(string filename, int numstat
 	}
 	ifs.close();
 	return ratematrix;
+}
+
+Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
+	Superdouble sum = 0;
+	for (unsigned int i=0;i<in.size();i++){
+		sum += in[i];
+		//cout << in[i] << " sum:" << sum << endl;
+	}
+	//cout << "endsum:" << sum << endl;
+	return sum;
 }

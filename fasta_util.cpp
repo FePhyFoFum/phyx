@@ -9,13 +9,13 @@
 using namespace std;
 
 #include "sequence.h"
-#include "fasta_reader.h"
+#include "fasta_util.h"
 #include "utils.h"
 
-FastaReader::FastaReader(){}
+FastaUtil::FastaUtil(){}
 
 //return false if not a fasta
-bool FastaReader::readFile(string filen,vector<Sequence>& seqs){
+bool FastaUtil::readFile(string filen,vector<Sequence>& seqs){
 	string tline;
 	ifstream infile(filen.c_str());
 	bool first = true;
@@ -48,4 +48,20 @@ bool FastaReader::readFile(string filen,vector<Sequence>& seqs){
 	seqs.push_back(cur);
 	infile.close();
 	return true;
+}
+
+/*
+ * this is just bare bones, write a vector of sequences to a file
+ */
+bool FastaUtil::writeFileFromVector(string filename, vector<Sequence> & seqs){
+	ofstream outfile;
+	outfile.open(filename.c_str(),ios::out);
+	for (unsigned int i = 0; i < seqs.size(); i++){
+		outfile << ">";
+		outfile << seqs[i].get_id();
+		outfile << "\n";
+		outfile << seqs[i].get_sequence();
+		outfile << "\n";
+	}
+	outfile.close();
 }

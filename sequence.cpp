@@ -21,6 +21,11 @@ Sequence::Sequence(string _id, string _seq, bool _aligned){
 	seq = _seq;
 	aligned = _aligned;
 }
+Sequence::Sequence(string _id, string _seq){
+	id = _id;
+	seq = _seq;
+	aligned = false;
+}
 
 bool Sequence::is_aligned(){
 	return aligned;
@@ -88,7 +93,15 @@ string Sequence::reverse(string charin){
 	return ret;
 }
 
-void Sequence::reverse_complement(){
+string Sequence::reverse_complement(){
+	string rcomp = seq;
+	for (unsigned int i=0 ;i < rcomp.size(); i++){
+		rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));
+	}
+	return rcomp;
+}
+
+void Sequence::perm_reverse_complement(){
 	string rcomp = seq;
 	for (unsigned int i=0 ;i < rcomp.size(); i++){
 		rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));

@@ -12,14 +12,17 @@ using namespace std;
 #include "utils.h"
 #include "vector_node_object.h"
 #include "sequence.h"
+#include "superdouble.h"
 
 #define verbose false
+
+#define MINBL 0.000000001
 
 StateReconstructor::StateReconstructor(RateModel & _rm):tree(NULL),nstates(_rm.nstates),rm(_rm),dc("dist_conditionals"),
 		store_p_matrices(false),use_stored_matrices(false),revB("revB"),
 		rev(false),rev_exp_number("rev_exp_number"),rev_exp_time("rev_exp_time"),
-		stochastic(false),stored_EN_matrices(map<double, mat >()),
-		stored_ER_matrices(map<double, mat >()),sp_alphas("sp_alphas"),alphas("alphas"){}
+		stochastic(false),stored_EN_matrices(map<Superdouble, mat >()),
+		stored_ER_matrices(map<Superdouble, mat >()),sp_alphas("sp_alphas"),alphas("alphas"){}
 	/*
 	 * initialize each node with segments
 	 */
@@ -28,9 +31,10 @@ void StateReconstructor::set_tree(Tree * tr){
 	if(verbose)
 		cout << "initializing nodes..." << endl;
 	for(int i=0;i<tree->getNodeCount();i++){
-		if(tree->getNode(i)->getBL()<0.00000000001)
-			tree->getNode(i)->setBL(0.00000000001);
-		VectorNodeObject<double> * dcs = new VectorNodeObject<double>(nstates);
+		if(tree->getNode(i)->getBL()<MINBL){
+			tree->getNode(i)->setBL(MINBL * 100);
+		}
+		VectorNodeObject<Superdouble> * dcs = new VectorNodeObject<Superdouble>(nstates);
 		tree->getNode(i)->assocObject(dc,*dcs);
 		delete dcs;
 	}
@@ -46,9 +50,9 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
 			cout << nd->getName() << " ";
 		for(int j=0;j<nstates;j++){
 			if(seq.get_sequence().at(j) == '1')
-				(((VectorNodeObject<double>*) nd->getObject(dc)))->at(j) = 1.0;
+				(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
 			else
-				(((VectorNodeObject<double>*) nd->getObject(dc)))->at(j) = 0.0;
+				(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 0.0;
 			if(verbose)
 				cout << seq.get_sequence().at(j);
 		}
@@ -63,9 +67,9 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
 	return allsame;
 }
 
-VectorNodeObject<double> StateReconstructor::conditionals(Node & node){
-	VectorNodeObject<double> distconds = *((VectorNodeObject<double>*) node.getObject(dc));
-	VectorNodeObject<double> * v = new VectorNodeObject<double> (nstates, 0);
+VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node){
+	VectorNodeObject<Superdouble> distconds = *((VectorNodeObject<Superdouble>*) node.getObject(dc));
+	VectorNodeObject<Superdouble> * v = new VectorNodeObject<Superdouble> (nstates, 0);
 	cx_mat p;
 	if(use_stored_matrices == false){
 		p= rm.setup_P(node.getBL(),store_p_matrices);
@@ -89,31 +93,32 @@ VectorNodeObject<double> StateReconstructor::conditionals(Node & node){
 }
 
 void StateReconstructor::ancdist_conditional_lh(Node & node){
-	VectorNodeObject<double> distconds(nstates, 0);
+	VectorNodeObject<Superdouble> distconds(nstates, 0);
 	if (node.isExternal()==false){//is not a tip
 		Node * c1 = node.getChild(0);
 		Node * c2 = node.getChild(1);
 		ancdist_conditional_lh(*c1);
 		ancdist_conditional_lh(*c2);
-		VectorNodeObject<double> v1;
-		VectorNodeObject<double> v2;
+		VectorNodeObject<Superdouble> v1;
+		VectorNodeObject<Superdouble> v2;
 		v1 =conditionals(*c1);
 		v2 =conditionals(*c2);
 		for ( int i=0;i<nstates;i++){
 			distconds.at(i)= v1[i] * v2[i];
 		}
 	}else{
-		distconds = *((VectorNodeObject<double>*)node.getObject(dc));
+		distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
 	}
 	for(unsigned int i=0;i<distconds.size();i++){
-		((VectorNodeObject<double>*)node.getObject(dc))->at(i) = distconds.at(i);
+		((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
 	}
 }
 
 double StateReconstructor::eval_likelihood(){
 	ancdist_conditional_lh(*tree->getRoot());
-	return (-log(calculate_vector_double_sum(*
-			(VectorNodeObject<double>*) tree->getRoot()->getObject(dc))));
+	//return (-log(calculate_vector_double_sum(*
+	//		(VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))));
+	return double(-(calculate_vector_Superdouble_sum(*(VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))).getLn());
 }
 
 void StateReconstructor::prepare_ancstate_reverse(){
@@ -122,7 +127,7 @@ void StateReconstructor::prepare_ancstate_reverse(){
 
 void StateReconstructor::reverse(Node * node){
 	rev = true;
-	VectorNodeObject<double> * revconds = new VectorNodeObject<double> (nstates, 0);//need to delete this at some point
+	VectorNodeObject<Superdouble> * revconds = new VectorNodeObject<Superdouble> (nstates, 0);//need to delete this at some point
 	if (node == tree->getRoot()) {
 		for(int i=0;i<nstates;i++){
 			revconds->at(i) = 1.0;//prior
@@ -137,17 +142,17 @@ void StateReconstructor::reverse(Node * node){
 		//calculate A i
 		//sum over all alpha k of sister node of the parent times the priors of the speciations
 		//(weights) times B of parent j
-		VectorNodeObject<double> * parrev = ((VectorNodeObject<double>*)node->getParent()->getObject(revB));
-		VectorNodeObject<double> sisdistconds;
+		VectorNodeObject<Superdouble> * parrev = ((VectorNodeObject<Superdouble>*)node->getParent()->getObject(revB));
+		VectorNodeObject<Superdouble> sisdistconds;
 		if(node->getParent()->getChild(0) != node){
-			VectorNodeObject<double>* talph = ((VectorNodeObject<double>*) node->getParent()->getChild(0)->getObject(alphas));
+			VectorNodeObject<Superdouble>* talph = ((VectorNodeObject<Superdouble>*) node->getParent()->getChild(0)->getObject(alphas));
 			sisdistconds = *talph;
 		}else{
-			VectorNodeObject<double>* talph = ((VectorNodeObject<double>*) node->getParent()->getChild(1)->getObject(alphas));
+			VectorNodeObject<Superdouble>* talph = ((VectorNodeObject<Superdouble>*) node->getParent()->getChild(1)->getObject(alphas));
 			sisdistconds = *talph;
 		}
 
-		VectorNodeObject<double> tempA (nstates,0);
+		VectorNodeObject<Superdouble> tempA (nstates,0);
 		//needs to be the same as ancdist_cond_lh
 		for ( int i = 0; i < nstates; i++) {
 			//root has i, curnode has left, sister of cur has right
@@ -162,8 +167,8 @@ void StateReconstructor::reverse(Node * node){
 		cx_mat * p = &rm.stored_p_matrices[node->getBL()];
 		mat * EN = NULL;
 		mat * ER = NULL;
-		VectorNodeObject<double> tempmoveAer(tempA);
-		VectorNodeObject<double> tempmoveAen(tempA);
+		VectorNodeObject<Superdouble> tempmoveAer(tempA);
+		VectorNodeObject<Superdouble> tempmoveAen(tempA);
 		if(stochastic == true){
 			//initialize the segment B's
 			for( int j=0;j<nstates;j++){tempmoveAer[j] = 0;}
@@ -185,7 +190,6 @@ void StateReconstructor::reverse(Node * node){
 			node->seg_sp_stoch_map_revB_time = tempmoveAer;
 			node->seg_sp_stoch_map_revB_number = tempmoveAen;
 		}
-
 		node->assocObject(revB,*revconds); // leak
 		delete revconds;
 		for(int i = 0;i<node->getChildCount();i++){
@@ -196,17 +200,17 @@ void StateReconstructor::reverse(Node * node){
 
 vector<double> StateReconstructor::calculate_ancstate_reverse(Node & node){
 	if (node.isExternal()==false){//is not a tip
-		VectorNodeObject<double> * Bs = (VectorNodeObject<double> *) node.getObject(revB);
+		VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
 		Node * c1 = node.getChild(0);
 		Node * c2 = node.getChild(1);
-		VectorNodeObject<double>* v1  = ((VectorNodeObject<double>*) c1->getObject(alphas));
-		VectorNodeObject<double>* v2 = ((VectorNodeObject<double>*) c2->getObject(alphas));
+		VectorNodeObject<Superdouble>* v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+		VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
 		vector<double> LHOODS (nstates,0);
 		for ( int i = 0; i < nstates; i++) {
 			//for ( int j=0;j<nstates;j++){
 			//	LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
 			//}
-			LHOODS[i] = (v1->at(i)*v2->at(i)) * Bs->at(i);
+			LHOODS[i] = double((v1->at(i)*v2->at(i)) * Bs->at(i));
 		}
 		return LHOODS;
 	}
@@ -331,15 +335,15 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices(){
 vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool tm){
 	if (node.isExternal()==false){//is not a tip
 		vector<double> totalExp (nstates,0);
-		vector<double> Bs;
+		vector<Superdouble> Bs;
 		if(tm)
 			Bs = node.seg_sp_stoch_map_revB_time;
 		else
 			Bs =  node.seg_sp_stoch_map_revB_number;
 		Node * c1 = node.getChild(0);
 		Node * c2 = node.getChild(1);
-		VectorNodeObject<double> * v1  = ((VectorNodeObject<double>*) c1->getObject(alphas));
-		VectorNodeObject<double> * v2  = ((VectorNodeObject<double>*) c2->getObject(alphas));
+		VectorNodeObject<Superdouble> * v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+		VectorNodeObject<Superdouble> * v2  = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
 		VectorNodeObject<double> LHOODS (nstates,0);
 		for ( int i = 0; i < nstates; i++) {
 			//for (int j=0;j<nstates;j++){
@@ -347,25 +351,25 @@ vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool 
 				//int ind2 = rightdists[j];
 				//LHOODS[i] += (v1.at(ind1)*v2.at(ind2)*weight);
 			//}
-			LHOODS[i] = v1->at(i) * v2->at(i) * Bs.at(i);
+			LHOODS[i] = double(v1->at(i) * v2->at(i) * Bs.at(i));
 			//cout << v1->at(i) << " " <<  v2->at(i)<< " " << Bs.at(i) << endl;
 		}
 		for(int i=0;i<nstates;i++){
 			totalExp[i] = LHOODS[i];
 		}
-		//not sure if this should return a double or not when doing a bigtree
+		//not sure if this should return a Superdouble or not when doing a bigtree
 		return totalExp;
 	}else{
 		vector<double> totalExp (nstates,0);
-		vector<double> Bs;
+		vector<Superdouble> Bs;
 		if(tm)
 			Bs = node.seg_sp_stoch_map_revB_time;
 		else
 			Bs =  node.seg_sp_stoch_map_revB_number;
 		VectorNodeObject<double> LHOODS (nstates,0);
-		VectorNodeObject<double>* distconds = ((VectorNodeObject<double>*) node.getObject(dc));
+		VectorNodeObject<Superdouble>* distconds = ((VectorNodeObject<Superdouble>*) node.getObject(dc));
 		for (int i = 0; i < nstates; i++) {
-			LHOODS[i] = Bs.at(i) * (distconds->at(i) );
+			LHOODS[i] = double(Bs.at(i) * (distconds->at(i) ));
 		}
 		for(int i=0;i<nstates;i++){
 			totalExp[i] = LHOODS[i];

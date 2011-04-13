@@ -1,16 +1,17 @@
-#ifndef FASTA_READER_H_
-#define FASTA_READER_H_
+#ifndef FASTA_UTIL_H_
+#define FASTA_UTIL_H_
 
 #include <string>
 
 using namespace std;
 
-class FastaReader{
+class FastaUtil{
 private:
 
 public:
-	FastaReader();
+	FastaUtil();
 	bool readFile(string,vector<Sequence>&);
+	bool writeFileFromVector(string, vector<Sequence>&);
 };
 
 #endif
