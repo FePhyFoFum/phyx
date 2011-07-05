@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,6 +25,28 @@ using namespace std;
 #include "state_reconstructor.h"
 #include "rate_model.h"
 #include "optimize_state_reconstructor_nlopt.h"
+
+bool checkdata(Tree * intree, vector<Sequence> runseqs);
+bool checkdata(Tree * intree, vector<Sequence> runseqs){
+	vector<string> ret;
+	set<string> seqnames;
+	set<string> treenames;
+	for (unsigned int i=0;i<intree->getExternalNodeCount(); i++){
+		treenames.insert(intree->getExternalNode(i)->getName());
+	}
+	for(unsigned int i=0;i<runseqs.size();i++){
+		seqnames.insert(runseqs[i].get_id());
+	}
+	vector<string> v(treenames.size()+seqnames.size());
+	vector<string>::iterator it;
+	it=set_difference (seqnames.begin(), seqnames.end(), treenames.begin(), treenames.end(), v.begin());
+	cout << "there are " << int(it - v.begin()) << " taxa that have the wrong names.\n";
+	for ( it=v.begin() ; it != v.end(); it++ ){
+		if((*it).size() > 1)
+			cout << *it << endl;
+	}
+	return seqnames == treenames ;
+}
 
 int main(int argc, char * argv[]){
 	TreeReader tr;
@@ -312,6 +335,12 @@ int main(int argc, char * argv[]){
 				cout << "tips: "<< tree->getExternalNodeCount() << endl;
 
 			sr.set_tree(tree);
+			
+			//checking that the data and the tree have the same names
+			if(	checkdata(tree,runseqs) == 0)
+				exit(0); 
+			
+			
 			bool same = sr.set_tip_conditionals(runseqs);
 			if (same == true){
 				cout << "skipping calculation" <<endl;
