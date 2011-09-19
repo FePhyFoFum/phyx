@@ -12,6 +12,7 @@ CPP_SRCS += \
 ./tree.cpp \
 ./tree_reader.cpp \
 ./tree_utils.cpp \
+./superdouble.cpp \
 ./bd_sim.cpp
 
 CPP_OBJS += \
@@ -20,6 +21,7 @@ CPP_OBJS += \
 ./tree.o \
 ./tree_reader.o \
 ./tree_utils.o \
+./superdouble.o \
 ./bd_sim.o
 
 CPP_DEPS += \
@@ -27,6 +29,7 @@ CPP_DEPS += \
 ./node.d \
 ./tree.d \
 ./tree_reader.d \
+./tree_utils.d \
 ./tree_utils.d \
 ./bd_sim.d
 
