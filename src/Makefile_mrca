@@ -36,18 +36,12 @@ OPT_FLAGS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.cpp
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C++ Compiler'
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
 
 # All Target
 all: phyx_mrca
 
 phyx_mrca: $(CPP_OBJS) $(MRCA_OBJ) 
-	@echo 'Building target: $@'
-	@echo 'Invoking: GCC C++ Linker'
 	g++ -o "phyx_mrca" $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 	@echo ' '
 
