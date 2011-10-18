@@ -1,9 +1,9 @@
 RM := rm -rf
 
 #this is really nothing but for testing the capabilities of the copper library
-MRCA_SRC = main_test.cpp
-MRCA_OBJ = main_test.o
-MRCA_DEP = main_test.d
+MRCA_SRC = main.cpp
+MRCA_OBJ = main.o
+MRCA_DEP = main.d
 
 #this should be the basic copper library sources, objects and deps
 CPP_SRCS += \
@@ -14,6 +14,7 @@ CPP_SRCS += \
 ./tree_utils.cpp \
 ./sequence.cpp \
 ./fasta_util.cpp \
+./superdouble.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -23,6 +24,7 @@ CPP_OBJS += \
 ./tree_utils.o \
 ./sequence.o \
 ./fasta_util.o \
+./superdouble.o
 
 
 CPP_DEPS += \
@@ -33,6 +35,7 @@ CPP_DEPS += \
 ./tree_utils.d \
 ./sequence.d \
 ./fasta_util.d \
+./superdouble.d
 
 
 CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lm 

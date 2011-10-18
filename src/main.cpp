@@ -19,14 +19,17 @@ using namespace std;
 #include "vector_node_object.h"
 #include "tree.h"
 
-int main(){
+int main(int argc, char * argv[]){
 	TreeReader tr;   
 	string test;
-   	test = "((a:2,b:2):3,(c:4,d:4):1):1;";
+   	//test = "((a:2,b:2):3,(c:4,d:4):1):1;";
 
 /*
 	ifstream infile("../../big_geo/final_ml.tre.cn.rr.pr.nw.pathd8.bgstates.tre");
+*/
+	ifstream infile(argv[1]);
 	if (!infile){
+	
 		cerr << "Could not open file." << endl;
 		return 1;
 	}
@@ -38,11 +41,10 @@ int main(){
 	infile.close();
 
 	test = lines[0];
-*/
 
 	Tree * tree = tr.readTree(test);
 	cout << tree->getNodeCount() << endl;
-	cout << tree->getRoot()->getNewick(true) << ";" << endl;
+/*	cout << tree->getRoot()->getNewick(true) << ";" << endl;
 	cout << tree->getRoot()->getNewick(true,"number") << ";" << endl;
 	string a = "c";
 	tree->pruneExternalNode(tree->getExternalNode(a));
@@ -69,6 +71,7 @@ int main(){
 	//for(int i=0;i<tree->getInternalNodeCount();i++){
 		//cout << tree->getInternalNode(i).getBL() << endl;
 	//}
+	*/
 	delete tree;
 	return EXIT_SUCCESS;
 }
