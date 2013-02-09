@@ -47,7 +47,7 @@ CPP_DEPS += \
 ./superdouble.d
 
 
-CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lnlopt  -lm -lnlopt_cxx 
+CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lnlopt  -lm -lnlopt_cxx -larmadillo
 #gsl
 #-lgsl -lgslcblas 
 #profileing
