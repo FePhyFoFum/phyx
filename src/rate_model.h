@@ -16,6 +16,10 @@ private:
 	mat Q;
 	vector<string> labels;
 	vector< vector<double> > Q_mask;
+	bool sameQ;
+	cx_mat * lasteigval;
+	cx_mat * lasteigvec;
+	bool lastImag;
 
 public:
 	RateModel(int);

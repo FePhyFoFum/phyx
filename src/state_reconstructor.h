@@ -51,6 +51,7 @@ public:
 	bool set_tip_conditionals(vector<Sequence> & distrib_data);
 	void prepare_ancstate_reverse();
 	void reverse(Node *);
+	vector<Superdouble> calculate_ancstate_reverse_sd(Node & node);
 	vector<double> calculate_ancstate_reverse(Node & node);
 	void prepare_stochmap_reverse_all_nodes(int, int);
 	void prepare_stochmap_reverse_all_nodes_all_matrices();

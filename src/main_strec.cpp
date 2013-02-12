@@ -401,18 +401,19 @@ int main(int argc, char * argv[]){
 	    sr.prepare_ancstate_reverse();
 	    for(unsigned int j=0;j<ancstates.size();j++){
 		if(ancstates[j] == "_all_"){
-		    vector<double> lhoods;
+		    vector<Superdouble> lhoods;
 		    for(unsigned int l=0;l<tree->getInternalNodeCount();l++){
-			lhoods = sr.calculate_ancstate_reverse(*tree->getInternalNode(l));
-			totlike = calculate_vector_double_sum(lhoods);
+			lhoods = sr.calculate_ancstate_reverse_sd(*tree->getInternalNode(l));
+			Superdouble totlike_sd = calculate_vector_Superdouble_sum(lhoods);
+			
 			bool neg = false;
 			int excount = 0;
 			double highest = 0;
 			int high = 0;
 			for(int k=0;k<nstates;k++){
-			    if(existing_states[k] == 1){;
-				if (lhoods[excount]/totlike > highest){
-				    highest= lhoods[excount]/totlike;
+			    if(existing_states[k] == 1){
+				if (double(lhoods[excount]/totlike_sd) > highest){
+				    highest= double(lhoods[excount]/totlike_sd);
 				    high = k;
 				}
 				excount += 1;
@@ -425,21 +426,20 @@ int main(int argc, char * argv[]){
 		    }
 		    ancout << tree->getRoot()->getNewick(true) << ";"<< endl;
 		}else{
-		    vector<double> lhoods;
+		    vector<Superdouble> lhoods;
 		    if(verbose)
 			cout <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  endl;
 		    ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
-		    lhoods = sr.calculate_ancstate_reverse(*tree->getMRCA(mrcas[ancstates[j]]));
-		    totlike = calculate_vector_double_sum(lhoods);
-		    //cout << totlike << " " << log(totlike) << endl;
+		    lhoods = sr.calculate_ancstate_reverse_sd(*tree->getMRCA(mrcas[ancstates[j]]));
+		    Superdouble totlike_sd = calculate_vector_Superdouble_sum(lhoods);
 		    bool neg = false;
 		    int excount = 0;
 		    for(int k=0;k<nstates;k++){
 			if(existing_states[k] == 1){
 			    if(verbose)
-				cout << lhoods[excount]/totlike << " ";//"(" << lhoods[excount] << ") ";
-			    ancout << "\t" << lhoods[excount]/totlike;
-			    if (lhoods[excount]/totlike < 0)
+				cout << double(lhoods[excount]/totlike_sd) << " ";//"(" << lhoods[excount] << ") ";
+			    ancout << "\t" << double(lhoods[excount]/totlike_sd);
+			    if (double(lhoods[excount]/totlike_sd) < 0)
 				neg = true;
 			    excount += 1;
 			}else{

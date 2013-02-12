@@ -12,11 +12,13 @@ inline double roundto(double in){return floor(in*(1000)+0.5)/(1000);}
 
 RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates){
 	setup_Q();
+	sameQ = false;
 }
 
 
 void RateModel::set_Q_cell(int from, int to, double num){
 	Q(from,to) = num;
+	sameQ = false;
 }
 
 void RateModel::set_Q_diag(){
@@ -29,6 +31,7 @@ void RateModel::set_Q_diag(){
 		}
 		Q(i,i) = 0-su;
 	}
+	sameQ = false;
 }
 
 void RateModel::setup_Q(){
@@ -42,6 +45,7 @@ void RateModel::setup_Q(){
 			}
 		}
 	}
+	sameQ = false;
 }
 
 void RateModel::setup_Q(vector<vector<double> > & inQ){
@@ -54,6 +58,7 @@ void RateModel::setup_Q(vector<vector<double> > & inQ){
 		colvec a = (sum(Q,1));
 		Q(i,i) = -(a(i)-Q(i,i));
 	}
+	sameQ = false;
 }
 
 void RateModel::setup_Q(mat & inQ){
@@ -63,6 +68,7 @@ void RateModel::setup_Q(mat & inQ){
 		}
 	}
 	set_Q_diag();
+	sameQ = false;
 }
 
 mat & RateModel::get_Q(){
@@ -70,6 +76,7 @@ mat & RateModel::get_Q(){
 }
 
 cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
+//	sameQ = false;
 	cx_mat eigvec(nstates,nstates);eigvec.fill(0);
 	cx_mat eigval(nstates,nstates);eigval.fill(0);
 	bool isImag = get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
@@ -100,6 +107,11 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
  * this should use the armadillo library
  */
 bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec){
+	if(sameQ==true){
+		eigval = lasteigval;
+		eigvec = lasteigvec;
+		return lastImag;
+	}
 	mat tQ(nstates,nstates); tQ.fill(0);
 	for(unsigned int i=0;i<Q.n_rows;i++){
 		for(unsigned int j=0;j<Q.n_cols;j++){
@@ -121,5 +133,8 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec){
 				isImag = true;
 		}
 	}
+	lasteigval = eigval;
+	lasteigvec = eigvec;
+	lastImag = isImag;
 	return isImag;
 }

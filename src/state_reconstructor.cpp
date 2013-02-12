@@ -198,6 +198,24 @@ void StateReconstructor::reverse(Node * node){
     }
 }
 
+vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd(Node & node){
+    if (node.isExternal()==false){//is not a tip
+	VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
+	Node * c1 = node.getChild(0);
+	Node * c2 = node.getChild(1);
+	VectorNodeObject<Superdouble>* v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+	VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
+	vector<Superdouble> LHOODS (nstates,0);
+	for ( int i = 0; i < nstates; i++) {
+	    //for ( int j=0;j<nstates;j++){
+	    //	LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
+	    //}
+	    LHOODS[i] = ((v1->at(i)*v2->at(i)) * Bs->at(i));
+	}
+	return LHOODS;
+    }
+}
+
 vector<double> StateReconstructor::calculate_ancstate_reverse(Node & node){
     if (node.isExternal()==false){//is not a tip
 	VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
