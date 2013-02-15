@@ -58,37 +58,37 @@ void Sequence::set_aligned(bool _aligned){
 string Sequence::reverse(string charin){
     string ret;
     if (charin == "-")
-	ret = "-";
+    ret = "-";
     if (charin == " ")
-	ret = " ";
+    ret = " ";
     if (charin == "A" || charin == "a"){
-	ret = "T";
+    ret = "T";
     }else if(charin == "T" || charin == "t"){
-	ret = "A";
+    ret = "A";
     }else if(charin == "C" || charin == "c"){
-	ret = "G";
+    ret = "G";
     }else if (charin == "G" || charin == "g"){
-	ret = "C";
+    ret = "C";
     }else if(charin == "U" || charin == "u"){
-	ret = "A";
+    ret = "A";
     }else if(charin == "m" || charin == "M"){
-	ret = "K";
+    ret = "K";
     }else if(charin == "r" || charin == "R"){
-	ret = "Y";
+    ret = "Y";
     }else if(charin == "y" || charin == "Y"){
-	ret = "R";
+    ret = "R";
     }else if(charin == "k" || charin == "K"){
-	ret = "M";
+    ret = "M";
     }else if(charin == "v" || charin == "V" ){
-	ret = "B";
+    ret = "B";
     }else if(charin == "h" || charin == "H" ){
-	ret = "D";
+    ret = "D";
     }else if(charin == "d" || charin == "D" ){
-	ret = "H";
+    ret = "H";
     }else if(charin == "b" || charin == "B" ){
-	ret = "V";
+    ret = "V";
     }else if (charin == "n" || charin == "N" || charin == "x" || charin == "X"){
-	ret = "N";
+    ret = "N";
     }
     return ret;
 }
@@ -96,7 +96,7 @@ string Sequence::reverse(string charin){
 string Sequence::reverse_complement(){
     string rcomp = seq;
     for (unsigned int i=0 ;i < rcomp.size(); i++){
-	rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));
+    rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));
     }
     return rcomp;
 }
@@ -104,7 +104,7 @@ string Sequence::reverse_complement(){
 void Sequence::perm_reverse_complement(){
     string rcomp = seq;
     for (unsigned int i=0 ;i < rcomp.size(); i++){
-	rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));
+    rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));
     }
     seq = rcomp;
 }
