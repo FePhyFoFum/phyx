@@ -1,11 +1,17 @@
-RM := rm -rf
+RM := rm -f
 
-#this is really nothing but for testing the capabilities of the copper library
-MRCA_SRC = main_strec.cpp
-MRCA_OBJ = main_strec.o
-MRCA_DEP = main_strec.d
+STREC_SRC = main_strec.cpp
+STREC_OBJ = main_strec.o
+STREC_DEP = main_strec.d
 
-#this should be the basic copper library sources, objects and deps
+MRCA_SRC = main_mrca.cpp
+MRCA_OBJ = main_mrca.o
+MRCA_DEP = main_mrca.d
+
+MRCACUT_SRC = main_mrca_cut.cpp
+MRCACUT_OBJ = main_mrca_cut.o
+MRCACUT_DEP = main_mrca_cut.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -47,7 +53,7 @@ CPP_DEPS += \
 ./superdouble.d
 
 
-CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lnlopt  -lm -lnlopt_cxx -larmadillo
+CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lm -lnlopt_cxx -larmadillo
 #gsl
 #-lgsl -lgslcblas 
 #profileing
@@ -63,16 +69,28 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: phyx_stmap
+all: pxstmap pxmrca pxmrcacut
 
-phyx_stmap: $(CPP_OBJS) $(MRCA_OBJ) 
-	@echo 'Building target: $@'
-	@echo 'Invoking: GCC C++ Linker'
-	g++ -o "phyx_strec" $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxstmap: $(CPP_OBJS) $(STREC_OBJ)
+	@echo ' ' 
+	@echo 'building pxstmap'
+	g++ -o "pxstmap" $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
+pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
+	@echo ' ' 
+	@echo 'building pxmrca'
+	g++ -o "pxmrca" $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
+pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
+	@echo ' '
+	@echo 'building pxmrcacut'
+	g++ -o "pxmrca" $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) *.o *.d phyx_strec
+	-$(RM) *.o *.d 
 	-@echo ' '
 
