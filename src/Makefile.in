@@ -16,6 +16,14 @@ MRCACUT_SRC = main_mrca_cut.cpp
 MRCACUT_OBJ = main_mrca_cut.o
 MRCACUT_DEP = main_mrca_cut.d
 
+MRCANAME_SRC = main_mrca_name.cpp
+MRCANAME_OBJ = main_mrca_name.o
+MRCANAME_DEP = main_mrca_name.d
+
+BD_SRC = main_bd.cpp
+BD_OBJ = main_bd.o
+BD_DEP = main_bd.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -23,12 +31,12 @@ CPP_SRCS += \
 ./tree_reader.cpp \
 ./tree_utils.cpp \
 ./sequence.cpp \
-./phylip_reader.cpp \
-./fasta_util.cpp \
+./seq_reader.cpp \
 ./seq_utils.cpp \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
+./bd_sim.cpp \
 ./superdouble.cpp
 
 CPP_OBJS += \
@@ -38,12 +46,12 @@ CPP_OBJS += \
 ./tree_reader.o \
 ./tree_utils.o \
 ./sequence.o \
-./phylip_reader.o \
-./fasta_util.o \
+./seq_reader.o \
 ./seq_utils.o \
 ./rate_model.o \
 ./state_reconstructor.o \
 ./optimize_state_reconstructor_nlopt.o \
+./bd_sim.o \
 ./superdouble.o
 
 
@@ -54,12 +62,12 @@ CPP_DEPS += \
 ./tree_reader.d \
 ./tree_utils.d \
 ./sequence.d \
-./phylip_reader.d \
-./fasta_util.d \
+./seq_reader.d \
 ./seq_utils.d \
 ./rate_model.d \
 ./state_reconstructor.d \
 ./optimize_state_reconstructor_nlopt.d \
+./bd_sim.d \
 ./superdouble.d
 
 
@@ -79,12 +87,12 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstmap pxmrca pxmrcacut pxconseq
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd
 
-pxstmap: $(CPP_OBJS) $(STREC_OBJ)
+pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
-	@echo 'building pxstmap'
-	g++ -o "pxstmap" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo 'building pxstrec'
+	g++ -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
@@ -99,10 +107,22 @@ pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ)
 	g++ -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
+pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ) 
+	@echo ' '
+	@echo 'building pxmrcaname'
+	g++ -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
 pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
 	@echo ' '
 	@echo 'building pxconseq'
 	g++ -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
+pxbd:  $(CPP_OBJS) $(BD_OBJ) 
+	@echo ' '
+	@echo 'building pxbd'
+	g++ -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 # Other Targets

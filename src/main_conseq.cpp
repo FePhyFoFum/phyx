@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#include "fasta_util.h"
+#include "seq_reader.h"
 #include "sequence.h"
 #include "seq_utils.h"
 
