@@ -1,5 +1,9 @@
 RM := rm -f
 
+CONSEQ_SRC = main_conseq.cpp
+CONSEQ_OBJ = main_conseq.o
+CONSEQ_DEP = main_conseq.d
+
 STREC_SRC = main_strec.cpp
 STREC_OBJ = main_strec.o
 STREC_DEP = main_strec.d
@@ -20,6 +24,8 @@ CPP_SRCS += \
 ./tree_utils.cpp \
 ./sequence.cpp \
 ./phylip_reader.cpp \
+./fasta_util.cpp \
+./seq_utils.cpp \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
@@ -33,6 +39,8 @@ CPP_OBJS += \
 ./tree_utils.o \
 ./sequence.o \
 ./phylip_reader.o \
+./fasta_util.o \
+./seq_utils.o \
 ./rate_model.o \
 ./state_reconstructor.o \
 ./optimize_state_reconstructor_nlopt.o \
@@ -47,6 +55,8 @@ CPP_DEPS += \
 ./tree_utils.d \
 ./sequence.d \
 ./phylip_reader.d \
+./fasta_util.d \
+./seq_utils.d \
 ./rate_model.d \
 ./state_reconstructor.d \
 ./optimize_state_reconstructor_nlopt.d \
@@ -59,7 +69,7 @@ CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lm -lnlopt_cxx -larmadillo
 #profileing
 #-pg
 
-OPT_FLAGS = -O3 -ffast-math -ftree-vectorize
+OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 #profiling 
 #-g -pg
 #-O3 -ffast-math -ftree-vectorize 
@@ -69,24 +79,30 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstmap pxmrca pxmrcacut
+all: pxstmap pxmrca pxmrcacut pxconseq
 
 pxstmap: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
 	@echo 'building pxstmap'
-	g++ -o "pxstmap" $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxstmap" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo ' ' 
 	@echo 'building pxmrca'
-	g++ -o "pxmrca" $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
 	@echo ' '
 	@echo 'building pxmrcacut'
-	g++ -o "pxmrca" $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
+pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
+	@echo ' '
+	@echo 'building pxconseq'
+	g++ -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 # Other Targets

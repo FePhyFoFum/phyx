@@ -12,10 +12,8 @@ using namespace std;
 #include "fasta_util.h"
 #include "utils.h"
 
-FastaUtil::FastaUtil(){}
-
 //return false if not a fasta
-bool FastaUtil::readFile(string filen,vector<Sequence>& seqs) {
+bool read_fasta_file(string filen,vector<Sequence>& seqs) {
     string tline;
     ifstream infile(filen.c_str());
     bool first = true;
@@ -53,7 +51,7 @@ bool FastaUtil::readFile(string filen,vector<Sequence>& seqs) {
 /*
  * this is just bare bones, write a vector of sequences to a file
  */
-bool FastaUtil::writeFileFromVector(string filename, vector<Sequence> & seqs){
+bool write_fasta_file(string filename, vector<Sequence> & seqs){
     ofstream outfile;
     outfile.open(filename.c_str(),ios::out);
     for (unsigned int i = 0; i < seqs.size(); i++){

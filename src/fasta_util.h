@@ -2,16 +2,11 @@
 #define FASTA_UTIL_H_
 
 #include <string>
+#include "sequence.h"
 
 using namespace std;
 
-class FastaUtil{
-private:
-
-public:
-	FastaUtil();
-	bool readFile(string,vector<Sequence>&);
-	bool writeFileFromVector(string, vector<Sequence>&);
-};
+bool read_fasta_file(string,vector<Sequence>&);
+bool write_fasta_file(string, vector<Sequence>&);
 
 #endif
