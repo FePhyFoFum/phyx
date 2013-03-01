@@ -24,6 +24,10 @@ BD_SRC = main_bd.cpp
 BD_OBJ = main_bd.o
 BD_DEP = main_bd.d
 
+NNI_SRC = main_nni.cpp
+NNI_OBJ = main_nni.o
+NNI_DEP = main_nni.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -87,7 +91,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
@@ -124,6 +128,13 @@ pxbd:  $(CPP_OBJS) $(BD_OBJ)
 	@echo 'building pxbd'
 	g++ -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
+
+pxnni:  $(CPP_OBJS) $(NNI_OBJ) 
+	@echo ' '
+	@echo 'building pxnni'
+	g++ -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
 
 # Other Targets
 clean:

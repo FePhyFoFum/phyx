@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include <assert.h>
 
 using namespace std;
 
@@ -297,6 +298,19 @@ void Tree::exchangeInfo(Node * node1, Node * node2){
     node1->setBL(node2->getBL());
     node2->setBL(swapd);
 }
+
+
+void Tree::exchangeNodes(Node * node1, Node * node2){
+    Node * par1 = node1->getParent();
+    Node * par2 = node2->getParent();
+    bool bp1 = par1->removeChild(*node1);
+    assert(bp1);
+    bool bp2 = par2->removeChild(*node2);
+    assert(bp2);
+    par1->addChild(*node2);
+    par2->addChild(*node1);
+}
+
 
 void Tree::postOrderProcessRoot(Node * node){
     if (node == NULL)

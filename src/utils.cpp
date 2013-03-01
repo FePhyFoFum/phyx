@@ -113,3 +113,7 @@ Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
 	//cout << "endsum:" << sum << endl;
 	return sum;
 }
+
+int random_int_range(int min, int max){
+    return min + (rand() % (int)(max - min + 1));
+}
