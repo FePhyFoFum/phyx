@@ -24,9 +24,13 @@ int main(int argc, char * argv[]){
     
     if (argc == 1){
 	string retstring;
-	int ft = test_seq_filetype_stream(cin,retstring);
 	Sequence seq;
+	int ft = test_seq_filetype_stream(cin,retstring);
 	while(read_next_seq_from_stream(std::cin,ft,retstring,seq)){
+	    cout << seq.get_fasta();
+	}
+	//fasta has a trailing one
+	if (ft == 2){
 	    cout << seq.get_fasta();
 	}
     }else if(argc == 2){
@@ -34,7 +38,6 @@ int main(int argc, char * argv[]){
 	Sequence seq;
 	ifstream fstr(argv[1]);
 	int ft = test_seq_filetype_stream(fstr,retstring);
-	cout << ft << endl;
 	while(read_next_seq_from_stream(fstr,ft,retstring,seq)){
 	    cout << seq.get_fasta();
 	}
