@@ -158,6 +158,6 @@ pxtofa:  $(CPP_OBJS) $(TOFA_OBJ)
 
 # Other Targets
 clean:
-	-$(RM) *.o *.d 
+	-$(RM) *.o *.d px* 
 	-@echo ' '
 
