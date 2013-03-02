@@ -8,3 +8,8 @@ config.h
 config.log
 config.status
 autom4te.cache
+.cproject
+.project
+.DS_Store
+.DS_Store?
+._*
