@@ -85,9 +85,9 @@ int main(int argc, char * argv[]){
 		vector<string> tokens;
 		string del("=");
 		tokens.clear();
-		Tokenize(line, tokens, del);
+		tokenize(line, tokens, del);
 		for(unsigned int j=0;j<tokens.size();j++){
-		    TrimSpaces(tokens[j]);
+		    trim_spaces(tokens[j]);
 		}
 		if(!strcmp(tokens[0].c_str(), "treefile")){
 		    treefile = tokens[1];
@@ -115,9 +115,9 @@ int main(int argc, char * argv[]){
 		     * that the names are correct
 		     */
 		    vector<string> searchtokens;
-		    Tokenize(tokens[1], searchtokens, ", 	");
+		    tokenize(tokens[1], searchtokens, ", 	");
 		    for(unsigned int j=0;j<searchtokens.size();j++){
-			TrimSpaces(searchtokens[j]);
+			trim_spaces(searchtokens[j]);
 		    }
 		    vector<string> mrc;
 		    for(unsigned int j=1;j<searchtokens.size();j++){
@@ -126,30 +126,30 @@ int main(int argc, char * argv[]){
 		    mrcas[searchtokens[0]] = mrc;
 		}else if(!strcmp(tokens[0].c_str(), "stochtime")){
 		    vector<string> searchtokens;
-		    Tokenize(tokens[1], searchtokens, ", 	");
+		    tokenize(tokens[1], searchtokens, ", 	");
 		    for(unsigned int j=0;j<searchtokens.size();j++){
-			TrimSpaces(searchtokens[j]);
+			trim_spaces(searchtokens[j]);
 			stochtime.push_back(searchtokens[j]);
 		    }
 		}else if(!strcmp(tokens[0].c_str(), "stochnumber")){
 		    vector<string> searchtokens;
-		    Tokenize(tokens[1], searchtokens, ", 	");
+		    tokenize(tokens[1], searchtokens, ", 	");
 		    for(unsigned int j=0;j<searchtokens.size();j++){
-			TrimSpaces(searchtokens[j]);
+			trim_spaces(searchtokens[j]);
 			stochnumber.push_back(searchtokens[j]);
 		    }
 		}else if(!strcmp(tokens[0].c_str(), "stochnumber_any")){
 		    vector<string> searchtokens;
-		    Tokenize(tokens[1], searchtokens, ", 	");
+		    tokenize(tokens[1], searchtokens, ", 	");
 		    for(unsigned int j=0;j<searchtokens.size();j++){
-			TrimSpaces(searchtokens[j]);
+			trim_spaces(searchtokens[j]);
 			stochnumber_any.push_back(searchtokens[j]);
 		    }
 		}else if(!strcmp(tokens[0].c_str(), "ancstates")){
 		    vector<string> searchtokens;
-		    Tokenize(tokens[1], searchtokens, ", 	");
+		    tokenize(tokens[1], searchtokens, ", 	");
 		    for(unsigned int j=0;j<searchtokens.size();j++){
-			TrimSpaces(searchtokens[j]);
+			trim_spaces(searchtokens[j]);
 			ancstates.push_back(searchtokens[j]);
 		    }
 		}else if(!strcmp(tokens[0].c_str(),  "datawide")){
@@ -196,18 +196,18 @@ int main(int argc, char * argv[]){
     }else{
 	int maxstate=1;
 	vector<string> searchtokens;
-	Tokenize(seqs[0].get_sequence(), searchtokens, " ");
+	tokenize(seqs[0].get_sequence(), searchtokens, " ");
 	for(unsigned int j=0;j<searchtokens.size();j++){
-	    TrimSpaces(searchtokens[j]);
+	    trim_spaces(searchtokens[j]);
 	}
 	nsites = searchtokens.size();
 	if(verbose)
 	    cout << "nsites: " << nsites << endl;
 	for(unsigned int se = 0;se<seqs.size();se++){
 	    searchtokens = vector<string> ();
-	    Tokenize(seqs[se].get_sequence(), searchtokens, " 	");
+	    tokenize(seqs[se].get_sequence(), searchtokens, " 	");
 	    for(unsigned int j=0;j<searchtokens.size();j++){
-		TrimSpaces(searchtokens[j]);
+		trim_spaces(searchtokens[j]);
 		int pos = atoi(searchtokens[j].c_str());
 		if (pos > maxstate)
 		    maxstate = pos;
@@ -277,9 +277,9 @@ int main(int argc, char * argv[]){
 	if(datawide == false){
 	    for(unsigned int se = 0;se<seqs.size();se++){
 		vector<string> searchtokens;
-		Tokenize(seqs[se].get_sequence(), searchtokens, " 	");
+		tokenize(seqs[se].get_sequence(), searchtokens, " 	");
 		for(unsigned int j=0;j<searchtokens.size();j++){
-		    TrimSpaces(searchtokens[j]);
+		    trim_spaces(searchtokens[j]);
 		}
 		string tseqs(nstates,'0');
 		if(searchtokens[n]=="?"){

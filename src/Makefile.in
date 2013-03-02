@@ -28,6 +28,10 @@ NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
 NNI_DEP = main_nni.d
 
+SEQT_SRC = main_seq_test.cpp
+SEQT_OBJ = main_seq_test.o
+SEQT_DEP = main_seq_test.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -91,7 +95,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
@@ -134,6 +138,13 @@ pxnni:  $(CPP_OBJS) $(NNI_OBJ)
 	@echo 'building pxnni'
 	g++ -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
+
+pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ) 
+	@echo ' '
+	@echo 'building pxseqtest'
+	g++ -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
 
 
 # Other Targets

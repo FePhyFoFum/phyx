@@ -8,8 +8,9 @@
 
 using namespace std;
 
-void Tokenize(const string& str, vector<string>& tokens,const string& delimiters = " ");
-void TrimSpaces( string& str);
+void tokenize(const string& str, vector<string>& tokens,const string& delimiters = " ");
+void trim_spaces( string& str);
+bool is_number(const string &);
 double calculate_vector_double_sum(vector<double> & in);
 int calculate_vector_int_sum(vector<int> & in);
 vector<vector<double> > processRateMatrixConfigFile(string filename, int numareas);

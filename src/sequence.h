@@ -5,6 +5,8 @@
 
 using namespace std;
 
+
+
 class Sequence{
 private:
     string id;
@@ -22,6 +24,8 @@ public:
     void set_sequence(string seq);
     void set_id(string id);
     void set_aligned(bool al);
+    void set_qualstr();
+    void set_qualarr();
     string reverse_complement();
     void perm_reverse_complement();
 };

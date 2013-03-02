@@ -47,16 +47,16 @@ int main(int argc, char * argv[]){
     map<string,vector<string> > mrcas;
     while (getline(infile, mrcaline)){
 	vector<string> searchtokens;
-	Tokenize(mrcaline, searchtokens, "\t");
+	tokenize(mrcaline, searchtokens, "\t");
 	for(unsigned int j=0;j<searchtokens.size();j++){
-	    TrimSpaces(searchtokens[j]);
+	    trim_spaces(searchtokens[j]);
 	}
 	//first searchtoken is the set of names
 	vector<string> vec;
 	vector<string> searchtokens2;
-	Tokenize(searchtokens[0],searchtokens2," ");
+	tokenize(searchtokens[0],searchtokens2," ");
 	for(unsigned int j=0;j<searchtokens2.size();j++){
-	    TrimSpaces(searchtokens2[j]);
+	    trim_spaces(searchtokens2[j]);
 	    vec.push_back(searchtokens2[j]);
 	}
 //second searchtoken is the set of mrca names

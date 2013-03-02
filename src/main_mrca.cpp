@@ -39,9 +39,9 @@ int main(int argc, char * argv[]){
     map<string,vector<string> > mrcas;
     while (getline(infile, mrcaline)){
 	vector<string> searchtokens;
-	Tokenize(mrcaline, searchtokens, " 	");
+	tokenize(mrcaline, searchtokens, " 	");
 	for(unsigned int j=0;j<searchtokens.size();j++){
-	    TrimSpaces(searchtokens[j]);
+	    trim_spaces(searchtokens[j]);
 	}
 	vector<string> vec;vec.push_back(searchtokens[1]);vec.push_back(searchtokens[2]);
 	mrcas[searchtokens[0]] = vec;
