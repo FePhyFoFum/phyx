@@ -2,7 +2,7 @@
 #define SEQUENCE_H_
 
 #include <string>
-
+#include <vector>
 using namespace std;
 
 
@@ -13,6 +13,7 @@ private:
     string seq;
     bool aligned;
     string reverse(string );
+    vector<double> qualarr;
 
 public:
     Sequence();
@@ -24,9 +25,10 @@ public:
     void set_sequence(string seq);
     void set_id(string id);
     void set_aligned(bool al);
-    void set_qualstr();
-    void set_qualarr();
+    void set_qualstr(string &,int);
+    vector<double> get_qualarr();
     string reverse_complement();
     void perm_reverse_complement();
+    string get_fasta();
 };
 #endif

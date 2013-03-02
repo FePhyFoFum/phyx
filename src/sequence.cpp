@@ -54,7 +54,7 @@ void Sequence::set_aligned(bool _aligned){
 //this one is private
 //it should eventually be generalized for both nucleotide and protein, 
 //but for now it is just nucleotide for simplicity
-//TODO: need to add ambiguity
+//TODO: CHANGE THIS TO A DICTIONARY AND ADD ALPHABET
 string Sequence::reverse(string charin){
     string ret;
     if (charin == "-")
@@ -107,4 +107,22 @@ void Sequence::perm_reverse_complement(){
     rcomp.replace(i,1,reverse(seq.substr(seq.size()-i-1,1)));
     }
     seq = rcomp;
+}
+
+void Sequence::set_qualstr(string & stri,int offset){
+    qualarr.clear();
+    for (int i=0;i<stri.size();i++){
+	qualarr.push_back(((int)stri[i])+offset);
+    }
+}
+
+vector<double> Sequence::get_qualarr(){
+    return qualarr;
+}
+
+string Sequence::get_fasta(){
+    string retstr;
+    retstr.append(">");retstr.append(id);retstr.append("\n");
+    retstr.append(seq);retstr.append("\n");
+    return retstr;
 }

@@ -32,6 +32,10 @@ SEQT_SRC = main_seq_test.cpp
 SEQT_OBJ = main_seq_test.o
 SEQT_DEP = main_seq_test.d
 
+TOFA_SRC = main_tofa.cpp
+TOFA_OBJ = main_tofa.o
+TOFA_DEP = main_tofa.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -95,7 +99,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxtofa
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
@@ -145,6 +149,11 @@ pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ)
 	g++ -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
+pxtofa:  $(CPP_OBJS) $(TOFA_OBJ) 
+	@echo ' '
+	@echo 'building pxtofa'
+	g++ -o "pxtofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
 
 
 # Other Targets
