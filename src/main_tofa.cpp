@@ -88,7 +88,7 @@ int main(int argc, char * argv[]){
         pios = &cin;
     }
     if(outfileset == true){
-        ofstr = new ofstream(seqf);
+        ofstr = new ofstream(outf);
         poos = ofstr;
     }else{
         poos = &cout;

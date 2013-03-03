@@ -30,7 +30,7 @@ void print_help(){
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
 }
 
-string versionline("pxconseq 0.1\nCopyright (C) 2013 FePhyFoFum\nLiscence GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxconseq 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -84,7 +84,7 @@ int main(int argc, char * argv[]){
         pios = &cin;
     }
     if(outfileset == true){
-        ofstr = new ofstream(seqf);
+        ofstr = new ofstream(outf);
         poos = ofstr;
     }else{
         poos = &cout;

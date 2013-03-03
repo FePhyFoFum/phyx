@@ -11,7 +11,7 @@ using namespace std;
 #include "sequence.h"
 
 /**
- * need to make a alphabet guesser
+ * TODO: need to make a alphabet guesser
  */
 
 /**
