@@ -133,7 +133,7 @@ int random_int_range(int min, int max){
     return min + (rand() % (int)(max - min + 1));
 }
 
-void print_error(char * pname, char * arg){
+void print_error(char * pname, char arg){
     cout << pname <<": invalid option -- '"<< arg << "'" << endl;
     cout << "Try `"<<pname<<" --help' for more information." << endl;
 }

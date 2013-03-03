@@ -9,7 +9,6 @@
 #include <fstream>
 #include <string>
 #include <string.h>
-//#include <unistd.h>
 #include <getopt.h>
 
 using namespace std;
@@ -47,7 +46,6 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]){
-    int i=1;
     bool going = true;
     double meanfilt = 30;
     bool fileset = false;
@@ -79,24 +77,24 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],argv[i]);
+                print_error(argv[0],(char)c);
                 exit(0);
         }
     }
-
-
     Sequence seq;
     string retstring;
     istream* pios;
     ostream* poos;
+    ifstream* fstr;
+    ofstream* ofstr;
     if(fileset == true){
-        ifstream * fstr = new ifstream(seqf);
+        fstr = new ifstream(seqf);
         pios = fstr;
     }else{
         pios = &cin;
     }
     if(outfileset == true){
-        ofstream *ofstr = new ofstream(outf);
+        ofstr = new ofstream(outf);
         poos = ofstr;
     }else{
         poos = &cout;
@@ -113,8 +111,10 @@ int main(int argc, char * argv[]){
         }
     }
     if(fileset){
+        fstr->close();
         delete pios;
     }if(outfileset){
+        ofstr->close();
         delete poos;
     }
     return EXIT_SUCCESS;
