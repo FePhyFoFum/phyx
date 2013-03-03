@@ -118,3 +118,45 @@ string consensus_seq(vector<Sequence> & seqs, int alpha){
     }
     return retstring;
 }
+
+/**
+ * Returns a map of DNA
+ *
+ */
+char single_dna_complement(char inc){
+    inc = toupper(inc);
+    if(inc=='A'){
+        return 'T';
+    }else if(inc=='T'){
+        return 'A';
+    }else if(inc=='U'){
+        return 'A';
+    }else if(inc=='G'){
+        return 'C';
+    }else if(inc=='C'){
+        return 'G';
+    }else if(inc=='Y'){
+        return 'R';
+    }else if(inc=='R'){
+        return 'Y';
+    }else if(inc=='S'){
+        return 'S';
+    }else if(inc=='W'){
+        return 'W';
+    }else if(inc=='K'){
+        return 'M';
+    }else if(inc=='M'){
+        return 'K';
+    }else if(inc=='B'){
+        return 'V';
+    }else if(inc=='D'){
+        return 'H';
+    }else if(inc=='H'){
+        return 'D';
+    }else if(inc=='V'){
+        return 'B';
+    }else{
+        return 'N';
+    }
+}
+

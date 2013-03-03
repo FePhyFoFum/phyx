@@ -5,21 +5,23 @@
 #include <vector>
 using namespace std;
 
-
+enum seqAlpha { DNA = 0, AA = 1, BINARY = 2, MULTI = 3 }; 
 
 class Sequence{
 private:
     string id;
     string seq;
     bool aligned;
-    string reverse(string );
     vector<double> qualarr;
     string qualstr;
+    seqAlpha alphabet;
 
 public:
     Sequence();
     Sequence(string,string,bool);
     Sequence(string,string);
+    seqAlpha get_alpha();
+    void set_alpha(seqAlpha);
     bool is_aligned();
     string get_sequence();
     string get_id();
