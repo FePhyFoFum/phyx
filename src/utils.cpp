@@ -73,6 +73,14 @@ double calculate_vector_double_sum(vector<double> & in){
     return sum;
 }
 
+double calculate_vector_double_mean(vector<double> & in){
+    double sum = 0;
+    for (unsigned int i=0;i<in.size();i++){
+	sum += in[i]/in.size();
+    }
+    return sum;
+}
+
 int calculate_vector_int_sum(vector<int> & in){
     int sum = 0;
     for (unsigned int i=0;i<in.size();i++){
@@ -123,4 +131,9 @@ Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
 
 int random_int_range(int min, int max){
     return min + (rand() % (int)(max - min + 1));
+}
+
+void print_error(char * pname, char * arg){
+    cout << pname <<": invalid option -- '"<< arg << "'" << endl;
+    cout << "Try `"<<pname<<" --help' for more information." << endl;
 }

@@ -14,6 +14,7 @@ private:
     bool aligned;
     string reverse(string );
     vector<double> qualarr;
+    string qualstr;
 
 public:
     Sequence();
@@ -27,8 +28,10 @@ public:
     void set_aligned(bool al);
     void set_qualstr(string &,int);
     vector<double> get_qualarr();
+    double get_qualarr_mean();
     string reverse_complement();
     void perm_reverse_complement();
     string get_fasta();
+    string get_fastq();
 };
 #endif

@@ -13,6 +13,7 @@
 using namespace std;
 
 #include "sequence.h"
+#include "utils.h"
 
 Sequence::Sequence():id(),seq(),aligned(){}
 
@@ -111,13 +112,18 @@ void Sequence::perm_reverse_complement(){
 
 void Sequence::set_qualstr(string & stri,int offset){
     qualarr.clear();
+    qualstr = stri;
     for (int i=0;i<stri.size();i++){
-	qualarr.push_back(((int)stri[i])+offset);
+	qualarr.push_back(((int)stri[i])-offset);
     }
 }
 
 vector<double> Sequence::get_qualarr(){
     return qualarr;
+}
+
+double Sequence::get_qualarr_mean(){
+    return calculate_vector_double_mean(qualarr);
 }
 
 string Sequence::get_fasta(){
@@ -126,3 +132,12 @@ string Sequence::get_fasta(){
     retstr.append(seq);retstr.append("\n");
     return retstr;
 }
+
+string Sequence::get_fastq(){
+    string retstr;
+    retstr.append("@");retstr.append(id);retstr.append("\n");
+    retstr.append(seq);retstr.append("\n+\n");
+    retstr.append(qualstr);retstr.append("\n");
+    return retstr;
+}
+
