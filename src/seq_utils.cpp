@@ -160,3 +160,14 @@ char single_dna_complement(char inc){
     }
 }
 
+void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr){
+    int seqlength = seqs[0].get_sequence().length();
+    for(int i=0;i<seqs.size();i++){
+        assert(seqs[i].get_sequence().length() == seqlength);
+    }
+    (*ostr) << seqs.size() << " " << seqlength << endl;
+    for(int i=0;i<seqs.size();i++){
+        (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+    }
+}
+

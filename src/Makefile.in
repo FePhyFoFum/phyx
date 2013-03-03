@@ -32,13 +32,21 @@ SEQT_SRC = main_seq_test.cpp
 SEQT_OBJ = main_seq_test.o
 SEQT_DEP = main_seq_test.d
 
-TOFA_SRC = main_tofa.cpp
-TOFA_OBJ = main_tofa.o
-TOFA_DEP = main_tofa.d
+TOFA_SRC = main_stofa.cpp
+TOFA_OBJ = main_stofa.o
+TOFA_DEP = main_stofa.d
+
+TOPHY_SRC = main_stophy.cpp
+TOPHY_OBJ = main_stophy.o
+TOPHY_DEP = main_stophy.d
 
 FQFILT_SRC = main_fqfilt.cpp
 FQFILT_OBJ = main_fqfilt.o
 FQFILT_DEP = main_fqfilt.d
+
+REVCOMP_SRC = main_revcomp.cpp
+REVCOMP_OBJ = main_revcomp.o
+REVCOMP_DEP = main_revcomp.d
 
 CPP_SRCS += \
 ./utils.cpp \
@@ -103,7 +111,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxtofa pxfqfilt
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxfqfilt pxrevcomp
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
@@ -153,10 +161,16 @@ pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ)
 	g++ -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
-pxtofa:  $(CPP_OBJS) $(TOFA_OBJ) 
+pxstofa:  $(CPP_OBJS) $(TOFA_OBJ) 
 	@echo ' '
-	@echo 'building pxtofa'
-	g++ -o "pxtofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo 'building pxstofa'
+	g++ -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
+pxstophy:  $(CPP_OBJS) $(TOPHY_OBJ) 
+	@echo ' '
+	@echo 'building pxstophy'
+	g++ -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ) 
@@ -165,6 +179,11 @@ pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ)
 	g++ -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
+pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
+	@echo ' '
+	@echo 'building pxrevcomp'
+	g++ -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
 
 # Other Targets
 clean:

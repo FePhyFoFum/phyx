@@ -21,7 +21,7 @@ void print_help(){
     cout << "Convert seqfiles from nexus,phylip, fastq to fasta." << endl;
     cout << "Can read from stdin or file" << endl;
     cout << endl;
-    cout << "Usage: pxtofa [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxstofa [OPTION]... [FILE]..."<<endl;
     cout << endl; 
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
@@ -32,7 +32,7 @@ void print_help(){
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
 }
 
-string versionline("pxtofa 0.1\nCopyright (C) 2013 FePhyFoFum\nLiscence GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxstofa 0.1\nCopyright (C) 2013 FePhyFoFum\nLiscence GPLv2\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

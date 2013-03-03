@@ -14,5 +14,6 @@ using namespace std;
 set<int> get_dna_pos(char);
 string consensus_seq(vector<Sequence> &,int);
 char single_dna_complement(char inc);
+void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr);
 
 #endif
