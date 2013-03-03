@@ -1,6 +1,7 @@
 *~
 *.o
 *.d
+tags
 px*
 Makefile
 configure
