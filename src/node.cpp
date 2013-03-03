@@ -21,20 +21,20 @@ using namespace std;
 #include "string_node_object.h"
 
 Node::Node():BL(0.0),height(0.0),number(0),name(""),parent(NULL),
-         children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
-         comment(""){}
+    children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
+    comment(""){}
 
-Node::Node(Node * inparent):BL(0.0),height(0.0),number(0),name(""),parent(inparent),
-         children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
-         comment(""){}
+    Node::Node(Node * inparent):BL(0.0),height(0.0),number(0),name(""),parent(inparent),
+    children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
+    comment(""){}
 
-Node::Node(double bl,int innumber,string inname, Node * inparent):BL(bl),height(0.0),
-        number(innumber),name(inname),parent(inparent),children(vector<Node *> ()),assoc(map<string,NodeObject *>()),comment(""){}
+    Node::Node(double bl,int innumber,string inname, Node * inparent):BL(bl),height(0.0),
+    number(innumber),name(inname),parent(inparent),children(vector<Node *> ()),assoc(map<string,NodeObject *>()),comment(""){}
 
 
-vector<Node*> Node::getChildren(){
-    return children;
-}
+    vector<Node*> Node::getChildren(){
+        return children;
+    }
 
 bool Node::isExternal(){
     if(children.size()<1)
