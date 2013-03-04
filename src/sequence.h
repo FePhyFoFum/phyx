@@ -5,7 +5,10 @@
 #include <vector>
 using namespace std;
 
-enum seqAlpha { DNA = 0, AA = 1, BINARY = 2, MULTI = 3 }; 
+
+typedef enum {
+DNA = 0, AA = 1, BINARY = 2, MULTI = 3 
+} seqAlpha; 
 
 class Sequence{
 private:
@@ -21,6 +24,7 @@ public:
     Sequence(string,string,bool);
     Sequence(string,string);
     seqAlpha get_alpha();
+    string get_alpha_name();
     void set_alpha(seqAlpha);
     bool is_aligned();
     string get_sequence();
@@ -35,5 +39,6 @@ public:
     void perm_reverse_complement();
     string get_fasta();
     string get_fastq();
+
 };
 #endif

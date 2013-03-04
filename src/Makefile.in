@@ -40,6 +40,10 @@ TOPHY_SRC = main_stophy.cpp
 TOPHY_OBJ = main_stophy.o
 TOPHY_DEP = main_stophy.d
 
+TONEX_SRC = main_stonex.cpp
+TONEX_OBJ = main_stonex.o
+TONEX_DEP = main_stonex.d
+
 FQFILT_SRC = main_fqfilt.cpp
 FQFILT_OBJ = main_fqfilt.o
 FQFILT_DEP = main_fqfilt.d
@@ -111,82 +115,61 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxfqfilt pxrevcomp
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
-	@echo ' ' 
 	@echo 'building pxstrec'
 	g++ -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
-	@echo ' ' 
 	@echo 'building pxmrca'
 	g++ -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
-	@echo ' '
 	@echo 'building pxmrcacut'
 	g++ -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ) 
-	@echo ' '
 	@echo 'building pxmrcaname'
 	g++ -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
-	@echo ' '
 	@echo 'building pxconseq'
 	g++ -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxbd:  $(CPP_OBJS) $(BD_OBJ) 
-	@echo ' '
 	@echo 'building pxbd'
 	g++ -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxnni:  $(CPP_OBJS) $(NNI_OBJ) 
-	@echo ' '
 	@echo 'building pxnni'
 	g++ -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ) 
-	@echo ' '
 	@echo 'building pxseqtest'
 	g++ -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxstofa:  $(CPP_OBJS) $(TOFA_OBJ) 
-	@echo ' '
 	@echo 'building pxstofa'
 	g++ -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxstophy:  $(CPP_OBJS) $(TOPHY_OBJ) 
-	@echo ' '
 	@echo 'building pxstophy'
 	g++ -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
+
+pxstonex:  $(CPP_OBJS) $(TONEX_OBJ) 
+	@echo 'building pxstonex'
+	g++ -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ) 
-	@echo ' '
 	@echo 'building pxfqfilt'
 	g++ -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
-	@echo ' '
 	@echo 'building pxrevcomp'
 	g++ -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
-	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) *.o *.d px* 
-	-@echo ' '
 
