@@ -16,13 +16,13 @@ using namespace std;
 #include "utils.h"
 #include "seq_utils.h"
 
-Sequence::Sequence():id(),seq(),aligned(){}
+Sequence::Sequence():id(),seq(),aligned(),alphabet(DNA){}
 
 Sequence::Sequence(string _id, string _seq, bool _aligned){
     id = _id;
     seq = _seq;
     aligned = _aligned;
-    seqAlpha alphabet = DNA;
+    alphabet = DNA;
 }
 Sequence::Sequence(string _id, string _seq){
     id = _id;
@@ -33,6 +33,22 @@ Sequence::Sequence(string _id, string _seq){
 
 seqAlpha Sequence::get_alpha(){
     return alphabet;
+}
+
+string Sequence::get_alpha_name(){
+	if (alphabet == DNA){
+		return "DNA";
+	}
+	if (alphabet == AA){
+		return "AA";
+	}
+	if (alphabet == BINARY){
+		return "BINARY";
+	}
+	if(alphabet == MULTI){
+		return "MULTI";
+	}
+	return "";
 }
 
 void Sequence::set_alpha(seqAlpha s){

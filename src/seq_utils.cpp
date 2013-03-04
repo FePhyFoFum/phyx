@@ -171,3 +171,24 @@ void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr){
     }
 }
 
+/**
+ * this is not for concatenation. only single gene regions
+ * another one needs to be written for concatenation
+ */
+void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr){
+    int seqlength = seqs[0].get_sequence().length();
+    for(int i=0;i<seqs.size();i++){
+        assert(seqs[i].get_sequence().length() == seqlength);
+    }
+	(*ostr) << "#NEXUS" << endl;
+	(*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
+    (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << endl;
+	(*ostr) << "\tFORMAT DATATYPE="<< seqs[0].get_alpha_name() << " INTERLEAVE=NO GAP=-;"<<endl;
+	(*ostr) << "\tMATRIX\n" << endl;
+    for(int i=0;i<seqs.size();i++){
+        (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+    }
+
+	(*ostr) << ";\nend;\n" << endl;
+}
+

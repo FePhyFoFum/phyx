@@ -40,6 +40,10 @@ TOPHY_SRC = main_stophy.cpp
 TOPHY_OBJ = main_stophy.o
 TOPHY_DEP = main_stophy.d
 
+TONEX_SRC = main_stonex.cpp
+TONEX_OBJ = main_stonex.o
+TONEX_DEP = main_stonex.d
+
 FQFILT_SRC = main_fqfilt.cpp
 FQFILT_OBJ = main_fqfilt.o
 FQFILT_DEP = main_fqfilt.d
@@ -111,7 +115,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxfqfilt pxrevcomp
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo ' ' 
@@ -171,6 +175,12 @@ pxstophy:  $(CPP_OBJS) $(TOPHY_OBJ)
 	@echo ' '
 	@echo 'building pxstophy'
 	g++ -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	@echo ' '
+
+pxstonex:  $(CPP_OBJS) $(TONEX_OBJ) 
+	@echo ' '
+	@echo 'building pxstonex'
+	g++ -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 	@echo ' '
 
 pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ) 
