@@ -1,4 +1,3 @@
-
 #ifndef BD_SIM_H_
 #define BD_SIM_H_
 
@@ -42,11 +41,11 @@ private:
 
 public:
 	BirthDeathSimulator();
-	BirthDeathSimulator(double,double,double,double);
+	BirthDeathSimulator(double,double,double,double,int);
 
 	Tree * make_tree(bool);
 
 	//~BirthDeathSimulator();
 };
 
-#endif
+#endif /* BD_SIM_H_ */
