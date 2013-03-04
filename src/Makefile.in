@@ -52,6 +52,10 @@ REVCOMP_SRC = main_revcomp.cpp
 REVCOMP_OBJ = main_revcomp.o
 REVCOMP_DEP = main_revcomp.d
 
+NW_SRC = main_nw.cpp
+NW_OBJ = main_nw.o
+NW_DEP = main_nw.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -115,7 +119,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -168,6 +172,10 @@ pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ)
 pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
 	@echo 'building pxrevcomp'
 	g++ -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxnw:  $(CPP_OBJS) $(NW_OBJ) 
+	@echo 'building pxnw'
+	g++ -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 # Other Targets
 clean:
