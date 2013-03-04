@@ -81,14 +81,14 @@ int main(int argc, char * argv[]){
                 birth = atof(strdup(optarg));
                 break;
             case 'd':
-                death = atoi(strdup(optarg));
+                death = atof(strdup(optarg));
                 break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
             case 'x':
-                seed = atof(strdup(optarg));
+                seed = atoi(strdup(optarg));
                 break;
             case 'h':
                 print_help();
@@ -101,6 +101,10 @@ int main(int argc, char * argv[]){
                 exit(0);
         }
     }
+    
+//     cout << "death = " << death << endl;
+//     cout << "seed = " << seed << endl;
+    
     if (ext == 0 && time == 0){
         cout << "you have to set -e or -t" << endl;
         exit(0);
