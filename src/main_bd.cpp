@@ -31,7 +31,6 @@ void print_help(){
     cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
     cout << " -b, --birth=DOUBLE  birth rate, default=1." << endl;
     cout << " -d, --death=DOUBLE  death rate, default=0." << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
@@ -50,7 +49,7 @@ static struct option const long_options[] =
     {"birth", required_argument, NULL, 'b'},
     {"death", required_argument, NULL, 'd'},
     {"outf", required_argument, NULL, 'o'},
-    {"seed", required_argument, NULL, 's'},
+    {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
