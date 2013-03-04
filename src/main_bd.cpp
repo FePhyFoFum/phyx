@@ -79,9 +79,17 @@ int main(int argc, char * argv[]){
                 break;
             case 'b':
                 birth = atof(strdup(optarg));
+                if (birth <= 0) {
+                    cout << "Birth rate must be > 0" << endl;
+                    exit(0);
+                }
                 break;
             case 'd':
                 death = atof(strdup(optarg));
+                if (death < 0) {
+                    cout << "Death rate must be >= 0" << endl;
+                    exit(0);
+                }
                 break;
             case 'o':
                 outfileset = true;
