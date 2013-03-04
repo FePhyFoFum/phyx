@@ -19,7 +19,8 @@ using namespace std;
 
 void print_help(){
     cout << "Filter fastq files by mean quality score and send" << endl;
-    cout << "result to standard output. Can read from stdin or file" << endl;
+    cout << "result to standard output. Can read from stdin or file." << endl;
+    cout << "Input is expected to be fastq and output is fastq."<<endl;
     cout << endl;
     cout << "Usage: pxfqfilt [OPTION]... [FILE]..."<<endl;
     cout << endl; 
