@@ -58,6 +58,8 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]){
     bool going = true;
     bool outfileset = false;
+    bool timeset = false;
+    bool extantset = false;
     char * outf;
     double ext;
     double time;
@@ -73,9 +75,11 @@ int main(int argc, char * argv[]){
         switch(c){
             case 'e':
                 ext = atof(strdup(optarg));
+                extantset = true;
                 break;
             case 't':
                 time = atof(strdup(optarg));
+                timeset = true;
                 break;
             case 'b':
                 birth = atof(strdup(optarg));
@@ -117,6 +121,11 @@ int main(int argc, char * argv[]){
         cout << "you have to set -e or -t" << endl;
         exit(0);
     }
+    if (timeset && extantset) {
+    	cout << "Set -e or -t, not both" << endl;
+        exit(0);
+    }
+    
     ostream* poos;
     ofstream* ofstr; 
     if (outfileset == true){
