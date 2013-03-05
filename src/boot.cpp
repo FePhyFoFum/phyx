@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#include "seq_samp.h"
+#include "boot.h"
 #include "utils.h"
 
 SequenceSampler::SequenceSampler(int const& seed, float const& jackfract):jkfract(jackfract), jackknife(false) {

@@ -16,7 +16,7 @@ using namespace std;
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
-#include "seq_samp.h"
+#include "boot.h"
 
 void print_help(){
     cout << "Sequence alignment bootstrap resampling" << endl;

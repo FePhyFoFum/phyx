@@ -56,9 +56,9 @@ NW_SRC = main_nw.cpp
 NW_OBJ = main_nw.o
 NW_DEP = main_nw.d
 
-SEQSAMP_SRC = main_seq_samp.cpp
-SEQSAMP_OBJ = main_seq_samp.o
-SEQSAMP_DEP = main_seq_samp.d
+SEQSAMP_SRC = main_boot.cpp
+SEQSAMP_OBJ = main_boot.o
+SEQSAMP_DEP = main_boot.d
 
 CPP_SRCS += \
 ./utils.cpp \
@@ -76,7 +76,7 @@ CPP_SRCS += \
 ./optimize_state_reconstructor_nlopt.cpp \
 ./bd_sim.cpp \
 ./superdouble.cpp \
-./seq_samp.cpp
+./boot.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -94,7 +94,7 @@ CPP_OBJS += \
 ./optimize_state_reconstructor_nlopt.o \
 ./bd_sim.o \
 ./superdouble.o \
-./seq_samp.o
+./boot.o
 
 
 CPP_DEPS += \
@@ -113,7 +113,7 @@ CPP_DEPS += \
 ./optimize_state_reconstructor_nlopt.d \
 ./bd_sim.d \
 ./superdouble.d \
-./seq_samp.d
+./boot.d
 
 
 CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lm -lnlopt_cxx -larmadillo
@@ -132,7 +132,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxseqsamp
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxboot
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -190,9 +190,9 @@ pxnw:  $(CPP_OBJS) $(NW_OBJ)
 	@echo 'building pxnw'
 	g++ -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
-pxseqsamp:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
-	@echo 'building pxseqsamp'
-	g++ -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
+	@echo 'building pxboot'
+	g++ -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 # Other Targets
 clean:
