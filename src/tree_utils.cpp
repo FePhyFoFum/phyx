@@ -109,3 +109,18 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map){
     }
     return;
 }
+
+// maybe move this elsewhere...
+bool check_names_against_tree(Tree * tr, vector<string> names) {
+	bool allgood = true;
+	
+	for (int i = 0; i < (int)names.size(); i++) {
+	    //cout << "Checking name '" << names[i] << "'." << endl;
+		Node * nd = tr->getExternalNode(names[i]);
+		if (nd == NULL) {
+			cout << "Taxon '" << names[i] << "' not found in tree." << endl;
+			allgood = false;
+		}
+	}
+	return allgood;
+}

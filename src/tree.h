@@ -27,7 +27,7 @@ private:
 	void processReRoot(Node * node);
 	void exchangeInfo(Node * node1, Node * node2);
 	void postOrderProcessRoot(Node * node);
-	Node * getMRCATraverse(Node * curn1,Node * curn2);
+	Node * getMRCATraverse(Node * curn1, Node * curn2);
 	void setHeightFromRootToNode(Node & inNode, double newHeight);
 	double getGreatestDistance(Node * inNode);
 
@@ -54,7 +54,7 @@ public:
 	Node * getMRCA(vector<string> innodes);
 	Node * getMRCA(vector<Node *> innodes);
 	void processRoot();
-	void exchangeNodes(Node * node1,Node * node2);
+	void exchangeNodes(Node * node1, Node * node2);
 
 	void setHeightFromRootToNodes();
 	void setHeightFromTipToNodes();

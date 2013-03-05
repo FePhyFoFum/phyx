@@ -38,7 +38,6 @@ void Tree::addInternalNode(Node * tn){
     nodes.push_back(tn);
 }
 
-
 Node * Tree::getExternalNode(int num){
     return externalNodes.at(num);
 }
@@ -48,9 +47,10 @@ Node * Tree::getExternalNode(int num){
  */
 Node * Tree::getExternalNode(string name){
     Node * ret = NULL;
-    for(unsigned int i=0;i<externalNodes.size();i++){
-        if (externalNodes.at(i)->getName() == name)
+    for (unsigned int i=0; i < externalNodes.size(); i++){
+        if (externalNodes.at(i)->getName() == name) {
             ret = externalNodes.at(i);
+        }
     }
     return ret;
 }
@@ -65,8 +65,9 @@ Node * Tree::getInternalNode(int num){
 Node * Tree::getInternalNode(string & name){
     Node * ret = NULL;
     for(unsigned int i=0;i<internalNodes.size();i++){
-        if (internalNodes.at(i)->getName() == name)
+        if (internalNodes.at(i)->getName() == name) {
             ret = internalNodes.at(i);
+        }
     }
     return ret;
 }
@@ -101,7 +102,6 @@ void Tree::unRoot(Node & inroot){
         tritomyRoot(&inroot);
     }
     processRoot();
-
 }
 
 /*
@@ -181,21 +181,21 @@ void Tree::tritomyRoot(Node * toberoot){
 
 Node * Tree::getMRCA(vector<string> innodes){
     Node * mrca = NULL;
-    if(innodes.size() == 1)
+    if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
-    else{
+    } else {
         vector<string> outgroup;
-        for(unsigned int i=0;i<innodes.size();i++){
+        for (unsigned int i=0; i < innodes.size(); i++){
             outgroup.push_back(innodes.at(i));
         }
         Node * cur1 = this->getExternalNode(outgroup.at(0));
         outgroup.erase(outgroup.begin());
         Node * cur2 = NULL;
         Node * tempmrca = NULL;
-        while(outgroup.size()>0){
+        while (outgroup.size() > 0){
             cur2 = this->getExternalNode(outgroup.at(0));
             outgroup.erase(outgroup.begin());
-            tempmrca = getMRCATraverse(cur1,cur2);
+            tempmrca = getMRCATraverse(cur1, cur2);
             cur1 = tempmrca;
         }
         mrca = cur1;
@@ -205,14 +205,14 @@ Node * Tree::getMRCA(vector<string> innodes){
 
 Node * Tree::getMRCA(vector<Node *> innodes){
     Node * mrca = NULL;
-    if(innodes.size() == 1)
+    if (innodes.size() == 1) {
         return innodes[0];
-    else{
+    }else{
         Node * cur1 = innodes.at(0);
         innodes.erase(innodes.begin());
         Node * cur2 = NULL;
         Node * tempmrca = NULL;
-        while(innodes.size()>0){
+        while (innodes.size()>0){
             cur2 = innodes.at(0);
             innodes.erase(innodes.begin());
             tempmrca = getMRCATraverse(cur1,cur2);
@@ -226,7 +226,6 @@ Node * Tree::getMRCA(vector<Node *> innodes){
 void Tree::setHeightFromRootToNodes(){
     setHeightFromRootToNode(*this->root,this->root->getBL());
 }
-
 
 void Tree::setHeightFromRootToNode(Node & inNode, double newHeight) {
     if (inNode.isRoot() == false) {
@@ -251,7 +250,7 @@ void Tree::setHeightFromTipToNodes(){
         while (cur->getParent() != NULL) {
             curh += cur->getBL();
             cur = cur->getParent();
-            if(cur->getHeight()<curh)
+            if (cur->getHeight()<curh)
                 cur->setHeight(curh);
         }
     }
@@ -266,8 +265,9 @@ void Tree::processRoot(){
     externalNodes.clear();
     internalNodeCount = 0;
     externalNodeCount = 0;
-    if (&root == NULL)
+    if (&root == NULL) {
         return;
+    }
     postOrderProcessRoot(root);
 }
 
@@ -299,7 +299,6 @@ void Tree::exchangeInfo(Node * node1, Node * node2){
     node2->setBL(swapd);
 }
 
-
 void Tree::exchangeNodes(Node * node1, Node * node2){
     Node * par1 = node1->getParent();
     Node * par2 = node2->getParent();
@@ -310,7 +309,6 @@ void Tree::exchangeNodes(Node * node1, Node * node2){
     par1->addChild(*node2);
     par2->addChild(*node1);
 }
-
 
 void Tree::postOrderProcessRoot(Node * node){
     if (node == NULL)
@@ -330,7 +328,7 @@ void Tree::postOrderProcessRoot(Node * node){
 }
 
 void Tree::pruneExternalNode(Node * node){
-    if(node->isInternal()){
+    if (node->isInternal()){
         return;
     }
     /*
@@ -347,18 +345,18 @@ void Tree::pruneExternalNode(Node * node){
     double bl = 0;
     Node * parent = node->getParent();
     Node * other = NULL;
-    for(int i=0;i<parent->getChildCount();i++){
-        if(parent->getChild(i) != node){
+    for (int i=0; i < parent->getChildCount(); i++){
+        if (parent->getChild(i) != node){
             other = parent->getChild(i);
         }
     }
     bl = other->getBL()+parent->getBL();
     Node * mparent = parent->getParent();
-    if(mparent != NULL){
+    if (mparent != NULL){
         mparent->addChild(*other);
         other->setBL(bl);
-        for(int i=0;i<mparent->getChildCount();i++){
-            if(mparent->getChild(i)==parent){
+        for (int i=0; i < mparent->getChildCount(); i++){
+            if (mparent->getChild(i)==parent){
                 mparent->removeChild(*parent);
                 break;
             }
@@ -368,7 +366,7 @@ void Tree::pruneExternalNode(Node * node){
     this->processRoot();
 }
 
-Node * Tree::getMRCATraverse(Node * curn1,Node * curn2){
+Node * Tree::getMRCATraverse(Node * curn1, Node * curn2){
     Node * mrca = NULL;
     //get path to root for first node
     vector<Node *> path1;
@@ -376,10 +374,11 @@ Node * Tree::getMRCATraverse(Node * curn1,Node * curn2){
     path1.push_back(parent);
     while (parent != NULL) {
         path1.push_back(parent);
-        if (parent->getParent() != NULL)
+        if (parent->getParent() != NULL) {
             parent = parent->getParent();
-        else
+        } else {
             break;
+        }
     }
     //find first match between this node and the first one
     parent = curn2;
@@ -403,10 +402,10 @@ Node * Tree::getMRCATraverse(Node * curn1,Node * curn2){
  */
 
 Tree::~Tree(){
-    for(int i=0;i<internalNodeCount;i++){
+    for (int i=0; i < internalNodeCount; i++){
         delete getInternalNode(i);
     }
-    for(int i=0;i<externalNodeCount;i++){
+    for (int i=0; i < externalNodeCount; i++){
         delete getExternalNode(i);
     }
 }
