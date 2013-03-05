@@ -19,9 +19,10 @@ using namespace std;
 #include "boot.h"
 
 void print_help(){
-    cout << "Sequence alignment bootstrap resampling" << endl;
+    cout << "Sequence alignment bootstrap or jackknife resampling" << endl;
+    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
-    cout << "Usage: pxseqsamp [OPTION]... " << endl;
+    cout << "Usage: pxboot [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
