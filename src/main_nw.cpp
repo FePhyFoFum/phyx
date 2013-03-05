@@ -38,6 +38,7 @@ void print_help(){
     cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)"<<endl;
     cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62"<<endl;
     cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << endl;
+    cout << " -v, --verbose       make the output more verbose, turns off parallel" << endl;
     cout << "     --help          display this help and exit"<<endl;
     cout << "     --version       display version and exit"<<endl;
     cout << endl;
@@ -55,6 +56,7 @@ static struct option const long_options[] =
     {"seqtype", required_argument, NULL, 't'},
     {"matrix", required_argument, NULL, 'm'},
     {"nthreads", required_argument, NULL, 'n'},
+    {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -72,9 +74,10 @@ int main(int argc, char * argv[]){
     char * matf;
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
+    bool verbose = false;
     while(going){
         int oi = -1;
-        int c = getopt_long(argc,argv,"s:o:a:t:m:n:hV",long_options,&oi);
+        int c = getopt_long(argc,argv,"s:o:a:t:m:n:vhV",long_options,&oi);
         if (c == -1){
             break;
         }
@@ -105,6 +108,9 @@ int main(int argc, char * argv[]){
             case 'n':
                 num_threads = atoi(strdup(optarg));
                 break;
+            case 'v':
+                verbose = true;
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -119,6 +125,12 @@ int main(int argc, char * argv[]){
     map<char, map<char,int> > sc_mat;
     if(matrixfileset == true){
         read_scoring_matrix(matf,sc_mat);
+    }else{
+        if (seqtype == 0){
+            get_ednafull(sc_mat);
+        }else{//aa
+
+        }
     }
     vector<Sequence> seqs;
     Sequence seq;
@@ -151,15 +163,20 @@ int main(int argc, char * argv[]){
 
     //go all by all
     for(int i=0;i<seqs.size();i++){
-    cout << i << endl;
-    omp_set_num_threads(num_threads);
+        omp_set_num_threads(num_threads);
 #pragma omp parallel for
         for(int j=0;j<seqs.size();j++){
             if(j > i){
                 string aln1;
                 string aln2;
                 double sc = nw(seqs[i],seqs[j],sc_mat,0, aln1, aln2);
-                //cout << sc << "\n";// << aln1 << "\n" << aln2 << endl;
+#pragma omp critical
+                {
+                    cout << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << endl;
+                    if (verbose){
+                        cout << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << endl;
+                    }
+                }
             }
         }
     }
