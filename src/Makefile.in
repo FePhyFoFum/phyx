@@ -52,6 +52,10 @@ REVCOMP_SRC = main_revcomp.cpp
 REVCOMP_OBJ = main_revcomp.o
 REVCOMP_DEP = main_revcomp.d
 
+NW_SRC = main_nw.cpp
+NW_OBJ = main_nw.o
+NW_DEP = main_nw.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -61,6 +65,8 @@ CPP_SRCS += \
 ./sequence.cpp \
 ./seq_reader.cpp \
 ./seq_utils.cpp \
+./seq_models.cpp \
+./pairwise_alignment.cpp \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
@@ -76,6 +82,8 @@ CPP_OBJS += \
 ./sequence.o \
 ./seq_reader.o \
 ./seq_utils.o \
+./seq_models.o \
+./pairwise_alignment.o \
 ./rate_model.o \
 ./state_reconstructor.o \
 ./optimize_state_reconstructor_nlopt.o \
@@ -92,6 +100,8 @@ CPP_DEPS += \
 ./sequence.d \
 ./seq_reader.d \
 ./seq_utils.d \
+./seq_models.d \
+./pairwise_alignment.d \
 ./rate_model.d \
 ./state_reconstructor.d \
 ./optimize_state_reconstructor_nlopt.d \
@@ -105,7 +115,7 @@ CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lm -lnlopt_cxx -larmadillo
 #profileing
 #-pg
 
-OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
+OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g
 #profiling 
 #-g -pg
 #-O3 -ffast-math -ftree-vectorize 
@@ -115,7 +125,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -168,6 +178,10 @@ pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ)
 pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
 	@echo 'building pxrevcomp'
 	g++ -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxnw:  $(CPP_OBJS) $(NW_OBJ) 
+	@echo 'building pxnw'
+	g++ -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 # Other Targets
 clean:
