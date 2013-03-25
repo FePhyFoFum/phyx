@@ -22,6 +22,7 @@ private:
 	int numofchanges;
 	double currenttime;
 	vector<Node*> extantnodes;
+	vector<Node*> dead_nodes;
 	map<Node*,double> BIRTHTIME;
 	map<Node*,double> DEATHTIME;
 	Node* root;

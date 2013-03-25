@@ -15,26 +15,27 @@ using namespace std;
 #include "node.h"
 
 BirthDeathSimulator::BirthDeathSimulator(double estop, double tstop, double brate, double drate, int seed):failures(0),
-		maxfailures(1000),birthrate(brate),deathrate(drate),sumrate(brate+drate),relative_birth_rate(brate/(brate+drate)),
-		extantstop(estop),timestop(tstop),numofchanges(0),currenttime(0.0),extantnodes(vector<Node*>()),
-		BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()){
-    if (seed == -1) {
-        srand(time(NULL));
-    } else {
-        srand(seed);
-    }
-}
+	maxfailures(1000),birthrate(brate),deathrate(drate),sumrate(brate+drate),relative_birth_rate(brate/(brate+drate)),
+	extantstop(estop),timestop(tstop),numofchanges(0),currenttime(0.0),extantnodes(vector<Node*>()),
+	BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()){
+		if (seed == -1) {
+			srand(time(NULL));
+		} else {
+			srand(seed);
+		}
+	}
 
 BirthDeathSimulator::BirthDeathSimulator():failures(0),maxfailures(1000),birthrate(0.1),deathrate(0.05),
-		sumrate(0.1+0.05),relative_birth_rate(0.1/(0.1+0.05)),extantstop(10),timestop(0),numofchanges(0),
-		currenttime(0.0),extantnodes(vector<Node*>()),BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()){
-	srand(time(NULL));
-}
+	sumrate(0.1+0.05),relative_birth_rate(0.1/(0.1+0.05)),extantstop(10),timestop(0),numofchanges(0),
+	currenttime(0.0),extantnodes(vector<Node*>()),BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()){
+		srand(time(NULL));
+	}
 
 void BirthDeathSimulator::setup_parameters(){
 	numofchanges = 0;
 	currenttime = 0.0;
 	extantnodes = vector<Node*>();
+	dead_nodes = vector<Node*>();
 	BIRTHTIME = map<Node*,double>();
 	DEATHTIME = map<Node*,double>();
 }
@@ -97,7 +98,7 @@ bool BirthDeathSimulator::check_stop_conditions(){
 	}
 	if(timestop > 0){
 		if (currenttime >= timestop){
-			currenttime = timestop;
+			//currenttime = timestop;
 			keepgoing = false;
 		}
 	}
@@ -116,6 +117,7 @@ void BirthDeathSimulator::event(){
 		node_birth(extant); // real speciation
 	} else {
 		node_death(extant);
+		dead_nodes.push_back(extant);
 	}
 }
 
@@ -139,16 +141,21 @@ void BirthDeathSimulator::node_birth(Node *innode){
 }
 
 void BirthDeathSimulator::delete_dead_nodes(){
+	for(int i=0;i<dead_nodes.size();i++){
+		delete_a_node(dead_nodes[i]);
+	}
+	/*
 	vector<Node *> kill;
 	set_distance_to_tip();
-	for (int i=0; i<tree->getExternalNodeCount();i++)
+	for (int i=0; i<tree->getExternalNodeCount();i++){
 		if (abs(get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()) > 3.55271e-14){
 			kill.push_back(tree->getExternalNode(i));
-			//cout << get_distance_from_tip(tree->getExternalNode(i)) << " "<< root->getHeight() << " " << get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()<<  endl;
+			cout << get_distance_from_tip(tree->getExternalNode(i)) << " "<< root->getHeight() << " " << get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()<<  endl;
 		}
+	}
 	for (unsigned int i=0;i<kill.size();i++) {
 		delete_a_node(kill[i]);
-	}
+	}*/
 }
 
 void BirthDeathSimulator::set_distance_to_tip(){
@@ -209,10 +216,10 @@ bool BirthDeathSimulator::event_is_birth(){
 double BirthDeathSimulator::get_distance_from_tip(Node *innode){
 	Node * cur = innode;
 	double curh = 0.0;
-    while (cur->hasParent()){
-        curh += cur->getBL();
-        cur = cur->getParent();
-    }
-    curh += cur->getBL();
-    return curh;
+	while (cur->hasParent()){
+		curh += cur->getBL();
+		cur = cur->getParent();
+	}
+	curh += cur->getBL();
+	return curh;
 }
