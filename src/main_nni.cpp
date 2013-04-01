@@ -24,8 +24,8 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     if (argc > 2){
-	cout << "usage: pxnni newickfile" << endl;
-	exit(0);
+        cout << "usage: pxnni newickfile" << endl;
+        exit(0);
     }
 
     srand(time(0));
@@ -34,22 +34,22 @@ int main(int argc, char * argv[]){
 
     //reading from standard input for piping
     if(argc == 1){
-	for (std::string line; std::getline(std::cin, line);) {
-	    lines.push_back(line);
-	}
+        for (std::string line; std::getline(std::cin, line);) {
+            lines.push_back(line);
+        }
     }
     //reading from a file
     if (argc == 2){
-	ifstream infile(argv[1]);
-	if (!infile){
-	    cerr << "Could not open treefile." << endl;
-	    return 1;
-	}
-	string line;
-	while (getline(infile, line)){
-	    lines.push_back(line);
-	}
-	infile.close();
+        ifstream infile(argv[1]);
+        if (!infile){
+            cerr << "Could not open treefile." << endl;
+            return 1;
+        }
+        string line;
+        while (getline(infile, line)){
+            lines.push_back(line);
+        }
+        infile.close();
     }
 
     Tree * tree = tr.readTree(lines[0]);

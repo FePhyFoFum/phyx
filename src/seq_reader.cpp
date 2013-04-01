@@ -155,7 +155,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         }
         if (tline.size() == 0){
             if (!getline(stri,tline)){
-            return false;
+                return false;
             }
         }
         tokens.clear();
@@ -221,6 +221,137 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
     return false;
 }
 
+/*
+ * tests the filetype by checking the first string and guessing based on
+ * # (nexus), num (phylip), > (fasta)
+ * TODO: need to add csv
+ * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
+ */
+int test_char_filetype_stream(istream & stri,string & retstring){
+    if (!getline(stri, retstring)){
+        cout << "ERROR: end of file too soon" << endl;
+    }
+    int ret = 666; // if you get 666, there is no filetype set
+    //NEXUS
+    if (retstring[0] == '#'){
+        ret = 0;
+    }else if (retstring[0] == '>'){
+        ret = 2;
+    }else{    
+        vector<string> tokens;
+        string del(" \t");
+        tokenize(retstring,tokens,del);
+        if (tokens.size() > 1){
+            trim_spaces(tokens[0]);
+            if (is_number(tokens[0])){
+                ret = 1;
+            }
+        }
+    }
+    return ret;
+}
+
+/*
+ * returns the next string in the getline if there is one
+ * TODO: nexus 
+ * TODO: decide if this should just be merged with the above reader
+ */
+bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq){
+    string tline;
+    if (ftype == 1){ // phylip
+        vector<string> tokens;
+        tokens.clear();
+        string del(" \t");
+        string tline;
+        //check to see if we are at the beginning of the file
+        if (retstring.size() > 0){
+            tokenize(retstring,tokens,del);
+            if (tokens.size() > 1){
+                trim_spaces(tokens[0]);
+                if (is_number(tokens[0])){
+                    getline(stri,tline);
+                }else{
+                    tline = retstring;
+                }
+            }
+            retstring = "";
+        }
+        if (tline.size() == 0){
+            if (!getline(stri,tline)){
+                return false;
+            }
+        }
+        tokens.clear();
+        tokenize(tline,tokens,del);
+        for(int i=0;i<tokens.size();i++){
+            trim_spaces(tokens[i]);
+        }
+        if (tokens[0].size() == 0){
+            return false;
+        }
+        seq.set_id(tokens[0]);
+        //split the tokens by spaces
+        for (int i =1 ;i< tokens.size();i++){
+            seq.add_cont_char((double)atof(tokens[i].c_str()));
+        }
+        return true;
+    }else if (ftype == 2){ // fasta
+        bool first = true;
+        bool going = true;
+        vector<string> tokens;
+        string del(" \t");
+        string tline;
+        string curseq = "";
+        while (going){
+            if (first == true && retstring.size() > 0){
+                tline = retstring;
+                retstring = "";
+            }else{
+                if (!getline(stri, tline)){
+                    tokens.clear();
+                    tokenize(curseq,tokens,del);
+                    for(int i=0;i<tokens.size();i++){
+                        trim_spaces(tokens[i]);
+                    }
+                    if (tokens[0].size() == 0){
+                        return false;
+                    }
+                    for (int i =0 ;i< tokens.size();i++){
+                        seq.add_cont_char((double)atof(tokens[i].c_str()));
+                    }
+                    return false;
+                }
+            }
+            if (tline.substr(0,1) == ">"){
+                if (first == true){
+                    string id_ = tline.substr(1,tline.size()-1);
+                    first = false;
+                    seq.set_id(id_);
+                    curseq = "";
+                }else{
+                    //split the tokens by spaces
+                    tokens.clear();
+                    tokenize(curseq,tokens,del);
+                    for(int i=0;i<tokens.size();i++){
+                        trim_spaces(tokens[i]);
+                    }
+                    if (tokens[0].size() == 0){
+                        return false;
+                    }
+                    for (int i =0 ;i< tokens.size();i++){
+                        seq.add_cont_char((double)atof(tokens[i].c_str()));
+                    }
+                    retstring = tline;
+                    return true;
+                }
+            }else{
+                curseq.append(tline);
+            }
+        }
+    }
+    return false;
+}
+
 
 //return false if not a fasta
 bool read_fasta_file(string filen,vector<Sequence>& seqs) {
@@ -272,8 +403,8 @@ bool read_phylip_file(string filen,vector<Sequence>& seqs){
         if (first == true){ //reading past the first line
             first = false;
             try{
-            //int nseqs = atoi(searchtokens[0].c_str());
-            //int nsites = atoi(searchtokens[1].c_str());
+                //int nseqs = atoi(searchtokens[0].c_str());
+                //int nsites = atoi(searchtokens[1].c_str());
             }catch( char * str ){
                 return false; //not a phylip
             }
@@ -303,8 +434,8 @@ bool read_nexus_seqs_file(string filen,vector<Sequence>& seqs){
         if (first == true){ //reading past the first line
             first = false;
             try{
-            //int nseqs = atoi(searchtokens[0].c_str());
-            //int nsites = atoi(searchtokens[1].c_str());
+                //int nseqs = atoi(searchtokens[0].c_str());
+                //int nsites = atoi(searchtokens[1].c_str());
             }catch( char * str ){
                 return false; //not a phylip
             }

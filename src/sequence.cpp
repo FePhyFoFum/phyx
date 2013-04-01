@@ -36,19 +36,19 @@ seqAlpha Sequence::get_alpha(){
 }
 
 string Sequence::get_alpha_name(){
-	if (alphabet == DNA){
-		return "DNA";
-	}
-	if (alphabet == AA){
-		return "AA";
-	}
-	if (alphabet == BINARY){
-		return "BINARY";
-	}
-	if(alphabet == MULTI){
-		return "MULTI";
-	}
-	return "";
+    if (alphabet == DNA){
+        return "DNA";
+    }
+    if (alphabet == AA){
+        return "AA";
+    }
+    if (alphabet == BINARY){
+        return "BINARY";
+    }
+    if(alphabet == MULTI){
+        return "MULTI";
+    }
+    return "";
 }
 
 void Sequence::set_alpha(seqAlpha s){
@@ -65,6 +65,22 @@ string Sequence::get_sequence(){
 
 string Sequence::get_id(){
     return id;
+}
+
+void Sequence::add_cont_char(double _num){
+    cont_chars.push_back(_num);
+}
+
+double Sequence::get_cont_char(int _index){
+    return cont_chars[_index];
+}
+
+int Sequence::get_num_cont_char(){
+    return cont_chars.size();
+}
+
+void Sequence::clear_cont_char(){
+    cont_chars.clear();
 }
 
 void Sequence::set_sequence(string _seq){

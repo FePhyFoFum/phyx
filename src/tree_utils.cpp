@@ -32,6 +32,18 @@ int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2){
 	return count;
 }
 
+/*
+ * calculates the branch lengths to the root
+ */
+double get_length_to_root(Node * n){
+	double length = 0;
+	while (n->getParent() != NULL){
+		length += n->getBL();
+		n = n->getParent();
+	}
+	return length;
+}
+
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map){
     //check if rooted or unrooted
     bool rooted = false;

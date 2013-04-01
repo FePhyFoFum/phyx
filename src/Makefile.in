@@ -60,6 +60,10 @@ SEQSAMP_SRC = main_boot.cpp
 SEQSAMP_OBJ = main_boot.o
 SEQSAMP_DEP = main_boot.d
 
+CONTRATES_SRC = main_contrates.cpp
+CONTRATES_OBJ = main_contrates.o
+CONTRATES_DEP = main_contrates.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -74,8 +78,10 @@ CPP_SRCS += \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
+./optimize_cont_models_nlopt.cpp \
 ./bd_sim.cpp \
 ./superdouble.cpp \
+./cont_models.cpp \
 ./boot.cpp
 
 CPP_OBJS += \
@@ -92,8 +98,10 @@ CPP_OBJS += \
 ./rate_model.o \
 ./state_reconstructor.o \
 ./optimize_state_reconstructor_nlopt.o \
+./optimize_cont_models_nlopt.o \
 ./bd_sim.o \
 ./superdouble.o \
+./cont_models.o \
 ./boot.o
 
 
@@ -111,12 +119,15 @@ CPP_DEPS += \
 ./rate_model.d \
 ./state_reconstructor.d \
 ./optimize_state_reconstructor_nlopt.d \
+./optimize_cont_models_nlopt.d \
 ./bd_sim.d \
 ./superdouble.d \
+./cont_models.d \
 ./boot.d
 
 
-CPP_LIBS = -llapack -lblas -lgfortran -lpthread -lm -lnlopt_cxx -larmadillo
+CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
+#-lgfortran NEED THIS?
 #gsl
 #-lgsl -lgslcblas 
 #profileing
@@ -132,7 +143,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxboot
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxboot pxcontrates
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -193,6 +204,10 @@ pxnw:  $(CPP_OBJS) $(NW_OBJ)
 pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxboot'
 	g++ -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
+	@echo 'building pxcontrates'
+	g++ -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 # Other Targets
 clean:
