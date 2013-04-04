@@ -133,7 +133,7 @@ double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
             exit(0);
         }
         mat U; vec s; mat V;
-        svd(U, s, V, sigma);//, method = "dc") 
+        svd(U, s, V, sigma,"dc");
         mat diagD (s.size(),s.size());
         diagD.zeros();
         diagD.diag() = 1./s;

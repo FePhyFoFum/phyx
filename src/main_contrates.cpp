@@ -90,12 +90,16 @@ int main(int argc, char * argv[]) {
     if (tfileset == true) {
         tfstr = new ifstream(treef);
         poos = tfstr;
-    } 
+    }else{
+        poos = &cin;
+    }
 
     if (cfileset == true) {
         cfstr = new ifstream(charf);
         pios = cfstr;
-    } 
+    }else{
+        cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
+    }
     string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if(ft != 1 && ft != 2){
@@ -106,8 +110,10 @@ int main(int argc, char * argv[]) {
     vector<Sequence> seqs;
     map<string,int> seq_map;
     int y = 0;
+    int nchars = 0 ;
     while (read_next_seq_char_from_stream(*pios,ft,retstring,seq)) {
         seqs.push_back(seq);
+        nchars = seq.get_num_cont_char();
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
         y++;
@@ -120,26 +126,28 @@ int main(int argc, char * argv[]) {
     //read trees
     TreeReader tr;
     vector<Tree *> trees;
-    while(getline(*tfstr,retstring)){
+    while(getline(*poos,retstring)){
         trees.push_back(tr.readTree(retstring));
     }
 
-    //conduct analyses
-    mat vcv;
-    int t_ind = 0;
-    int c_ind = 0;
-    calc_vcv(trees[t_ind],vcv);
-    int n = trees[t_ind]->getExternalNodeCount();
-    rowvec x = rowvec(n);
-    for (int i=0;i<n;i++){
-        x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
-    }
-    vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
-    cout << "state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << endl;;
-    
-    vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
-    cout << "state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << endl;;
+    //conduct analyses for each character
+    for (int c =0;c < nchars;c++){
+        cout << "character: "<< c << endl;
+        mat vcv;
+        int t_ind = 0;//TODO: do this over trees
+        int c_ind = c;
+        calc_vcv(trees[t_ind],vcv);
+        int n = trees[t_ind]->getExternalNodeCount();
+        rowvec x = rowvec(n);
+        for (int i=0;i<n;i++){
+            x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
+        }
+        vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
+        cout << "\tstate: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << endl;;
 
+        vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
+        cout << "\tstate: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << endl;;
+    }
 
     if (cfileset) {
         cfstr->close();
