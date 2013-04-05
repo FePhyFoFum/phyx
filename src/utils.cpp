@@ -133,7 +133,8 @@ int random_int_range(int min, int max){
     return min + (rand() % (int)(max - min + 1));
 }
 
+// arg below is always '?'. besides, getopt prints errors to sterr
 void print_error(char * pname, char arg){
-    cout << pname <<": invalid option -- '"<< arg << "'" << endl;
-    cout << "Try `"<<pname<<" --help' for more information." << endl;
+    // cout << pname <<": invalid option -- '" << arg << "'" << endl;
+    cout << "Try `" << pname << " --help' for more information." << endl;
 }
