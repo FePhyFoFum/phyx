@@ -213,3 +213,6 @@ pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ)
 clean:
 	-$(RM) *.o *.d px* 
 
+distclean:
+	-$(RM) *.o *.d px* configure config.log config.h Makefile
+
