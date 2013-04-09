@@ -13,14 +13,13 @@
 using namespace std;
 
 void tokenize(const string& str, vector<string>& tokens,
-	      const string& delimiters){
+	      const string& delimiters) {
     // Skip delimiters at beginning.
     string::size_type lastPos = str.find_first_not_of(delimiters, 0);
     // Find first "non-delimiter".
     string::size_type pos     = str.find_first_of(delimiters, lastPos);
 
-    while (string::npos != pos || string::npos != lastPos)
-    {
+    while (string::npos != pos || string::npos != lastPos) {
         // Found a token, add it to the vector.
         tokens.push_back(str.substr(lastPos, pos - lastPos));
         // Skip delimiters.  Note the "not_of"
@@ -30,7 +29,7 @@ void tokenize(const string& str, vector<string>& tokens,
     }
 }
 
-void trim_spaces( string& str)  {
+void trim_spaces( string& str) {
     // Trim Both leading and trailing spaces
     size_t startpos = str.find_first_not_of(" \t\r\n"); // Find the first character position after excluding leading blank spaces
     size_t endpos = str.find_last_not_of(" \t\r\n"); // Find the first character position from reverse af
@@ -68,7 +67,7 @@ bool is_number(const string& s){
 double calculate_vector_double_sum(vector<double> & in){
     double sum = 0;
     for (unsigned int i=0;i<in.size();i++){
-	sum += in[i];
+        sum += in[i];
     }
     return sum;
 }
@@ -76,7 +75,7 @@ double calculate_vector_double_sum(vector<double> & in){
 double calculate_vector_double_mean(vector<double> & in){
     double sum = 0;
     for (unsigned int i=0;i<in.size();i++){
-	sum += in[i]/in.size();
+        sum += in[i]/in.size();
     }
     return sum;
 }
@@ -84,7 +83,7 @@ double calculate_vector_double_mean(vector<double> & in){
 int calculate_vector_int_sum(vector<int> & in){
     int sum = 0;
     for (unsigned int i=0;i<in.size();i++){
-	sum += in[i];
+        sum += in[i];
     }
     return sum;
 }
@@ -122,7 +121,7 @@ vector<vector<double> > processRateMatrixConfigFile(string filename, int numstat
 Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
     Superdouble sum = 0;
     for (unsigned int i=0;i<in.size();i++){
-	sum += in[i];
+        sum += in[i];
 	//cout << in[i] << " sum:" << sum << endl;
     }
     //cout << "endsum:" << sum << endl;

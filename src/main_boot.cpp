@@ -1,5 +1,7 @@
 /*
- Bare-bones sequence alignment resampling. Default is bootstrap, alternative is joackknife.
+ Bare-bones sequence alignment resampling. Default is bootstrap, alternative is jackknife.
+ 
+ TODO: add partitioned functionality.
 */
 
 #include <stdio.h>
@@ -26,6 +28,7 @@ void print_help(){
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << " -p, --partf=FILE    file listing empirical partitions: NAME = START-STOP[\\INTERVAL]" << endl;
     cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
@@ -41,6 +44,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
+    {"partf", required_argument, NULL, 'p'},
     {"frac", required_argument, NULL, 'f'},
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
@@ -52,14 +56,17 @@ int main(int argc, char * argv[]) {
     bool going = true;
     bool outfileset = false;
     bool fileset = false;
+    bool partitioned = false;
     float jackfract = 0.0;
     int numchar = 0;
     char * outf;
     char * seqf;
+    string partf = "";
     int seed = -1;
-    while (going) {
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:f:x:hV", long_options, &oi);
+        int curind = optind;
+        int c = getopt_long(argc, argv, "s:o:p:f:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -72,6 +79,10 @@ int main(int argc, char * argv[]) {
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
+            case 'p':
+                partitioned = true;
+                partf = strdup(optarg);
+                break;
             case 'f':
                 jackfract = atof(strdup(optarg));
                 if (jackfract < 0 || jackfract > 1) {
@@ -80,7 +91,7 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'x':
-                seed = atof(strdup(optarg));
+                seed = atoi(strdup(optarg));
                 break;
             case 'h':
                 print_help();
@@ -92,6 +103,11 @@ int main(int argc, char * argv[]) {
                 print_error(argv[0],(char)c);
                 exit(0);
         }
+    }
+    
+    if (argc == 1) {
+    	cout << "no arguments provided" << endl;
+        exit(0);
     }
     
     istream* pios;
@@ -113,7 +129,12 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
     
-    SequenceSampler ss(seed, jackfract);
+    if (partitioned && (jackfract != 0.0)) {
+    	cout << "Partitioned jackknife not implemented. Exiting." << endl;
+    	exit (0);
+    }
+    
+    SequenceSampler ss(seed, jackfract, partf);
     
     Sequence seq;
     string retstring;
@@ -123,7 +144,14 @@ int main(int argc, char * argv[]) {
     
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         if (first) { // need to read in first sequence to get numchar
-            numchar = (int)seq.get_sequence().size();
+            numchar = (int)seq.get_sequence().size(); // check against partition information
+            if (partitioned) {
+            	if (numchar != ss.getNumPartitionedSites()) {
+            		cout << "Error: numSites in sequence (" << numchar <<
+            			") does not match that in partition file (" << ss.getNumPartitionedSites() <<
+            			")." << endl;
+            	}
+            }
             ss.sample_sites(numchar);
             first = false;
         }
