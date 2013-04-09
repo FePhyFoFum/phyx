@@ -15,10 +15,10 @@ using namespace std;
 #include "utils.h"
 
 SequenceSampler::SequenceSampler(int const& seed, float const& jackfract, string & partf)
-:jkfract(jackfract), jackknife(false), partitioned(false), numPartitionedSites(0)
+:jkfract(jackfract), jackknife(false), partitioned(false), numPartitionedSites(0), numPartitions(0)
 {
     if (seed == -1) {
-        srand(time(NULL));
+        srand((unsigned)time(NULL));
     } else {
         srand(seed);
     }
@@ -36,7 +36,6 @@ vector <int> SequenceSampler::get_sampled_sites () {
     return samplesites;
 }
 
-// maybe sort sequences, keep track of duplicate sites?
 string SequenceSampler::get_resampled_seq (string const& origseq) {
     string seq;
     for (int i = 0; i < (int)samplesites.size(); i++) {
@@ -60,7 +59,7 @@ void SequenceSampler::sample_sites (int const& numchar) {
     }
 }
 
-// sample with replacement. no partitioning.
+// sample with replacement.
 vector <int> SequenceSampler::get_bootstrap_sites (int const& numchar) {
     vector <int> randsites (numchar); // numchar zero-initialized elements
     int randnum = 0;
@@ -74,15 +73,17 @@ vector <int> SequenceSampler::get_bootstrap_sites (int const& numchar) {
     return randsites;
 }
 
-// getting one-off error
+// set up so same composition as original
 vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
-	vector <int> master;
-	for (int i = 0; i < (int)partitions.size(); i++) {
+	vector <int> master(numPartitionedSites, 0);
+	
+	for (int i = 0; i < numPartitions; i++) {
 		int curNum = (int)partitions[i].size();
 		//cout << "Partition #" << i << " contains " << curNum << " sites." << endl;
 		vector <int> randsites = get_bootstrap_sites(curNum);
 		for (int j = 0; j < curNum; j ++) {
-			master.push_back(partitions[i][randsites[j]]);
+		// put partitions back in same spot as original, so partition file does not need to change
+			master[partitions[i][j]] = partitions[i][randsites[j]];
 		}
 	}
 	
@@ -120,7 +121,6 @@ vector <int> SequenceSampler::get_jackknife_sites (int const& numchar) {
 
 /*
 grab partition information from separate file. example:
-
 mtDNA_1st = 1-2066\3
 TGFb2 = 5059-5721
 */
@@ -140,6 +140,7 @@ void SequenceSampler::parsePartitions (string & partf) {
 	}
 	infile.close();
 	
+	numPartitions = (int)partitions.size();
 	calNumPartitionedSites();
 	
 	// do error-checking here:
@@ -170,6 +171,20 @@ vector <int> SequenceSampler::getPartitionSites (string const& part) {
 	return sites;
 }
 
+// opposite of getPartitionSites. want single vector listing site-specific partitions. e.g.
+// 1231231231231234444444444444
+// not used
+void SequenceSampler::getSitePartitions () {
+	vector <int> sites(numPartitionedSites, 0);
+	
+	for (int i = 0; i < numPartitions; i++) {
+		for (int j = 0; j < (int)partitions[i].size(); j++) {
+			sites[partitions[i][j]] = i;
+		}
+	}
+	sitePartitions = sites;
+}
+
 // GADPH = 2991-3406\3
 // after being tokenized, should be of length 3 or 4 (latter when interval)
 // convert from 1-start to 0-start
@@ -196,11 +211,10 @@ void SequenceSampler::getPartitionParameters (vector <string> & tokens, int & st
 	//cout << endl;
 }
 
-
 void SequenceSampler::calNumPartitionedSites () {
 	numPartitionedSites = 0;
 	
-	for (int i = 0; i < (int)partitions.size(); i++) {
+	for (int i = 0; i < numPartitions; i++) {
 		numPartitionedSites += (int)partitions[i].size();
 // 		cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << endl;
 // 		for (int j = 0; j < (int)partitions[i].size(); j++) {
@@ -217,7 +231,7 @@ int SequenceSampler::getNumPartitionedSites () {
 // should do some error-checking e.g. for 1) missing sites, 2) overlapping partitions
 void SequenceSampler::checkValidPartitions () {
 	vector <int> allSites = partitions[0];
-	for (int i = 1; i < (int)partitions.size(); i++) {
+	for (int i = 1; i < numPartitions; i++) {
 		allSites.insert(allSites.end(), partitions[i].begin(), partitions[i].end());
 	}
 	sort(allSites.begin(), allSites.end());

@@ -9,10 +9,12 @@ private:
     vector <int> samplesites;
     vector < vector <int> > partitions;
     vector <string> partitionNames;
+    vector <int> sitePartitions; // not used
     int numPartitionedSites;
+    int numPartitions;
     
-    vector <int> get_bootstrap_sites (int const&);
-    vector <int> get_jackknife_sites (int const&);
+    vector <int> get_bootstrap_sites (int const& numchar);
+    vector <int> get_jackknife_sites (int const& numchar);
     vector <int> get_partitioned_bootstrap_sites ();
     
     void parsePartitions (string & partf);
@@ -20,14 +22,15 @@ private:
 	vector <int> getPartitionSites (string const& part);
 	void checkValidPartitions ();
 	void calNumPartitionedSites ();
+	void getSitePartitions (); // not used
 	
 	void findDuplicatesMissing (vector <int> const& allSites);
 
 
 public:
-    SequenceSampler (int const&, float const&, string &);
+    SequenceSampler (int const& seed, float const& jackfract, string & partf);
     vector <int> get_sampled_sites ();
-    void sample_sites (int const&);
+    void sample_sites (int const& numchar);
     string get_resampled_seq (string const& origseq);
     int getNumPartitionedSites ();
     //~SequenceResampler();

@@ -1,7 +1,6 @@
 /*
  Bare-bones sequence alignment resampling. Default is bootstrap, alternative is jackknife.
- 
- TODO: add partitioned functionality.
+ Conserved-partition bootstrap now implemented.
 */
 
 #include <stdio.h>
