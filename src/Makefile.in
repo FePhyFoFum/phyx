@@ -56,6 +56,10 @@ NW_SRC = main_nw.cpp
 NW_OBJ = main_nw.o
 NW_DEP = main_nw.d
 
+SW_SRC = main_sw.cpp
+SW_OBJ = main_sw.o
+SW_DEP = main_sw.d
+
 SEQSAMP_SRC = main_boot.cpp
 SEQSAMP_OBJ = main_boot.o
 SEQSAMP_DEP = main_boot.d
@@ -200,6 +204,10 @@ pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ)
 pxnw:  $(CPP_OBJS) $(NW_OBJ) 
 	@echo 'building pxnw'
 	g++ -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxsw:  $(CPP_OBJS) $(SW_OBJ) 
+	@echo 'building pxsw'
+	g++ -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxboot'
