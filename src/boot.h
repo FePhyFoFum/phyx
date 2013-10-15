@@ -18,14 +18,13 @@ private:
     vector <int> get_partitioned_bootstrap_sites ();
     
     void parsePartitions (string & partf);
-	void getPartitionParameters (vector <string> & tokens, int & start, int & stop, int & interval);
-	vector <int> getPartitionSites (string const& part);
-	void checkValidPartitions ();
-	void calNumPartitionedSites ();
-	void getSitePartitions (); // not used
-	
-	void findDuplicatesMissing (vector <int> const& allSites);
-
+    void getPartitionParameters (vector <string> & tokens, int & start, int & stop, int & interval);
+    vector <int> getPartitionSites (string const& part);
+    void checkValidPartitions ();
+    void calNumPartitionedSites ();
+    void getSitePartitions (); // not used
+    
+    void findDuplicatesMissing (vector <int> const& allSites);
 
 public:
     SequenceSampler (int const& seed, float const& jackfract, string & partf);

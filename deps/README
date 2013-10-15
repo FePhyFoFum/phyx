@@ -28,7 +28,7 @@ MAC
 Make sure you have compilers (e.g. from XCode, homebrew, or MacPorts) installed.
 Installation will be from source code (provided in the deps directory).
 
-### LAPACK (optional)
+### LAPACK (optional) - this can take a while
 
 tar -xvzf lapack-3.4.2.tgz
 cd lapack-3.4.2

@@ -68,6 +68,10 @@ CONTRATES_SRC = main_contrates.cpp
 CONTRATES_OBJ = main_contrates.o
 CONTRATES_DEP = main_contrates.d
 
+SEQRECODE_SRC = main_recode.cpp
+SEQRECODE_OBJ = main_recode.o
+SEQRECODE_DEP = main_recode.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -86,7 +90,8 @@ CPP_SRCS += \
 ./bd_sim.cpp \
 ./superdouble.cpp \
 ./cont_models.cpp \
-./boot.cpp
+./boot.cpp \
+./recode.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -106,7 +111,8 @@ CPP_OBJS += \
 ./bd_sim.o \
 ./superdouble.o \
 ./cont_models.o \
-./boot.o
+./boot.o \
+./recode.o
 
 
 CPP_DEPS += \
@@ -127,7 +133,8 @@ CPP_DEPS += \
 ./bd_sim.d \
 ./superdouble.d \
 ./cont_models.d \
-./boot.d
+./boot.d \
+./recode.d
 
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
@@ -216,6 +223,10 @@ pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ)
 pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
 	@echo 'building pxcontrates'
 	g++ -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxseqrecode:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
+	@echo 'building pxseqrecode'
+	g++ -o "pxseqrecode" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 # Other Targets
 clean:

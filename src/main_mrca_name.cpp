@@ -16,6 +16,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <string.h>
 #include <getopt.h>
 
 using namespace std;
