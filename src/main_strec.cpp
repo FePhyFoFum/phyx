@@ -52,7 +52,7 @@ int main(int argc, char * argv[]){
     TreeReader tr;
 
     if (argc != 2){
-	cout << "usage: phyx_stmap configfile" << endl;
+	cout << "usage: pxstrec configfile" << endl;
 	exit(0);
     }
 
