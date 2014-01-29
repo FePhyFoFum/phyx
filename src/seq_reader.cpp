@@ -390,13 +390,44 @@ bool read_fasta_file(string filen,vector<Sequence>& seqs) {
 }
 
 
+bool read_phylip_file_strec(string filen,vector<Sequence>& seqs){
+    string tline;
+    ifstream infile(filen.c_str());
+    bool first = true;
+    while (getline(infile, tline)){
+        vector<string> searchtokens;
+        tokenize(tline, searchtokens, "\t");
+        for(unsigned int j=0;j<searchtokens.size();j++){
+            trim_spaces(searchtokens[j]);
+        }
+        if (first == true){ //reading past the first line
+            first = false;
+            try{
+                //int nseqs = atoi(searchtokens[0].c_str());
+                //int nsites = atoi(searchtokens[1].c_str());
+            }catch( char * str ){
+                return false; //not a phylip
+            }
+            continue;
+        }
+        if (searchtokens.size() < 2) {
+            continue;
+        }
+	cout << searchtokens[0] << " " << searchtokens[1] << endl;
+        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
+        seqs.push_back(a);
+    }
+    infile.close();
+    return true;
+}
+
 bool read_phylip_file(string filen,vector<Sequence>& seqs){
     string tline;
     ifstream infile(filen.c_str());
     bool first = true;
     while (getline(infile, tline)){
         vector<string> searchtokens;
-        tokenize(tline, searchtokens, "    ");
+        tokenize(tline, searchtokens, "\t    ");
         for(unsigned int j=0;j<searchtokens.size();j++){
             trim_spaces(searchtokens[j]);
         }

@@ -163,7 +163,7 @@ int main(int argc, char * argv[]){
 
 
     vector<Sequence> seqs;
-    bool phyl = read_phylip_file(datafile,seqs);
+    bool phyl = read_phylip_file_strec(datafile,seqs);
     if(phyl == false){
 	cout << "the sequence file is not phylip" << endl;
 	exit(0);

@@ -16,5 +16,6 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
 bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq);
 bool read_fasta_file(string,vector<Sequence>&);
 bool read_phylip_file(string,vector<Sequence>&);
+bool read_phylip_file_strec(string,vector<Sequence>&);
 
 #endif
