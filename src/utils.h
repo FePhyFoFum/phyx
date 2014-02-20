@@ -19,4 +19,12 @@ Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in);
 int random_int_range(int min, int max);
 void print_error(char * pname, char arg);
 
+int sum_matrix_col(vector<vector<int> > & matrix,int col);
+bool test_logical(vector<int> & matA,vector<int> & matB);
+double sum(vector<double> &inm);
+double sum(vector<int> &inm);
+
+string get_string_vector(vector<string> &sts);
+string get_string_vector(vector<int> &sts);
+
 #endif /* UTILS_H_ */

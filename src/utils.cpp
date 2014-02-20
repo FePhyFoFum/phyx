@@ -137,3 +137,65 @@ void print_error(char * pname, char arg){
     // cout << pname <<": invalid option -- '" << arg << "'" << endl;
     cout << "Try `" << pname << " --help' for more information." << endl;
 }
+
+
+int sum_matrix_col(vector<vector<int> > & matrix,int col){
+    int x=0;
+    for(unsigned int i=0;i<matrix.size();i++){
+	x += matrix[i][col];
+    }
+    return x;
+}
+
+
+bool test_logical(vector<int> & matA,vector<int> & matB){
+    bool test = false;
+    int match1 = 0;
+    unsigned int numdiffs = 0;
+    for (unsigned int i=0;i<matA.size();i++){
+	if ((matA[i] == 1) && (matB[i] == 1)){
+	    match1 += 1;
+	}else{
+	    numdiffs += 1;
+	}
+    }
+    if ((match1 != sum(matA)) && (match1 != sum(matB))){
+	if (numdiffs != matA.size()){
+	    test = true;
+	}
+    }
+    return test;
+}
+
+
+double sum(vector<double> &inm){
+    double x=0;
+    for(unsigned int i=0;i<inm.size();i++){
+	x += inm[i];
+    }
+    return x;
+}
+
+double sum(vector<int> &inm){
+    double x=0;
+    for(unsigned int i=0;i<inm.size();i++){
+	x += inm[i];
+    }
+    return x;
+}
+
+string get_string_vector(vector<string> &sts){
+    string rets;
+    for(int i=0;i<sts.size();i++){
+	rets += sts[i]+ " ";
+    }
+    return rets;
+}
+
+string get_string_vector(vector<int> & sts){
+    string rets;
+    for(int i=0;i<sts.size();i++){
+	rets += to_string(sts[i]) + " ";
+    }
+    return rets;
+}

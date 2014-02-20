@@ -264,6 +264,24 @@ vector<Node*> Node::get_leaves(){
     return retnodes;
 }
 
+vector<string> Node::get_leave_names(){
+	stack<Node*> nodes;
+	vector<string> names;
+	nodes.push(this);
+	while(nodes.empty() == false){
+		Node * nd = nodes.top();
+		nodes.pop();
+		if (nd->getChildCount() > 0){
+			for (int i=0;i<nd->getChildCount();i++){
+				nodes.push(nd->getChild(i));
+			}
+		}else{
+			names.push_back(nd->getName());
+		}
+	}
+	return names;
+}
+
 /*
  * use the string ones like this
  * StringNodeObject sno("...a node object");

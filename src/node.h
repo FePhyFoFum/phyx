@@ -37,6 +37,7 @@ public:
 
     int get_num_leaves();
     vector<Node*> get_leaves();
+    vector<string> get_leave_names();
 
     vector<Node*> getChildren();
     bool isExternal();
