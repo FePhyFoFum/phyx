@@ -199,3 +199,7 @@ string get_string_vector(vector<int> & sts){
     }
     return rets;
 }
+
+double logn(double x, double base){
+    return log10(x)/log10(base);
+}

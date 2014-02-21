@@ -121,39 +121,53 @@ int main(int argc, char * argv[]){
 	names.push_back(trees[0]->getExternalNode(i)->getName());
 	name_st_index[i] = trees[0]->getExternalNode(i)->getName();
     }
-    vector<vector<int> > biparts;
-    vector<int> bit_count;
+    vector<vector<int> > biparts; // first part of the bipart
+    vector<vector<int> > biparts2; // second part of the bipart
+    vector<double> bp_count;
     for(int i=0;i<numtrees;i++){
+	vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
+	set<string> rt_nms_set;
+	copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
 	for (int j=0;j<trees[i]->getInternalNodeCount();j++){
 	    vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
 	    vector<int> nms_i;
 	    set<string> nms_s;
+	    copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
 	    for (int k=0;k<nms.size();k++){
 		nms_i.push_back(name_index[nms[k]]);
-		nms_s.insert(nms[k]);
 	    }
 	    sort(nms_i.begin(),nms_i.end());
-	    if ((int)count(biparts.begin(),biparts.end(),nms_i) == 0){
+	    //get the other side of the bipart
+	    vector<int> nms_i2;
+	    vector<string> nms_s2(rt_nms.size());
+	    vector<string>::iterator it;
+	    it = set_difference(rt_nms_set.begin(),rt_nms_set.end(),nms_s.begin(),nms_s.end(),nms_s2.begin());
+	    nms_s2.resize(it-nms_s2.begin());
+	    for (int k=0;k<nms_s2.size();k++){
+		nms_i2.push_back(name_index[nms_s2[k]]);
+	    }
+	    //check to see if the bipart is new
+	    if ((int)count(biparts.begin(),biparts.end(),nms_i) == 0 && 
+		(int)count(biparts2.begin(),biparts2.end(),nms_i2)== 0){
 		biparts.push_back(nms_i);
-		bit_count.push_back(1);
+		biparts2.push_back(nms_i2);
+		bp_count.push_back(1);
 	    }else{
-		//get index
+		//TODO: need to fix this to check the other side of the bipart
+		//get index 
 		//could use a map
 		size_t index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
-		bit_count[index] += 1;
+		bp_count[index] += 1;
 	    }
 	}
     }
-
-    for (unsigned int i=0;i<bit_count.size();i++){
-	bit_count[i] /= trees.size();
-    }
-
+    
     cout << numtrees << " trees " <<  endl;
     cout << biparts.size() << " unique clades found" << endl;
 
-    //create a matrix of the biparts
     //calculate the logical matrix of biparts for each tree
+    //the matrix will have each i as a tree and 
+    //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
     vector<int> cols(biparts.size(),0);
     vector<vector<int> > matrix (numtrees,cols);
     for (unsigned int i=0;i<numtrees;i++){
@@ -165,11 +179,14 @@ int main(int argc, char * argv[]){
 	    }
 	    sort(nms_i.begin(),nms_i.end());
 	    matrix[i][find(biparts.begin(),biparts.end(),nms_i)-biparts.begin()] = 1;
-	    cout << get_string_vector(matrix[i]) << endl;
 	}
+	//cout << get_string_vector(matrix[i]) << endl;
     }
 
     //constructing the logical matrix
+    //the logical matrix has each row as a bipart1 and each col as a name
+    //there is a one if the bipart has the name
+    //need to add the -1 for bipart2
     vector<int> cols2(names.size(),0);
     vector<vector<int> > logical_matrix (biparts.size(),cols2);
     for(unsigned int i=0;i<biparts.size();i++){
@@ -185,19 +202,38 @@ int main(int argc, char * argv[]){
     for(unsigned int i = 0;i < biparts.size();i++){
 	int sumc = sum_matrix_col(matrix,i);
 	if(sumc != trees.size() && sumc > (smallest_proportion*trees.size())){
+	    vector<string> nms;
+	    for(int k=0;k<biparts[i].size();k++){nms.push_back(name_st_index[biparts[i][k]]);}
+	    cout << get_string_vector(nms) << " (" << bp_count[i] << ")" << endl;
+	    double totalcount = bp_count[i];
+	    vector<double> conflict_nums;
+	    conflict_nums.push_back(bp_count[i]);
 	    for(unsigned int j=0;j<biparts.size();j++){
 		int sumc2 = sum_matrix_col(matrix,j);
 		if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())){
 		    bool logitest = test_logical(logical_matrix[i],logical_matrix[j]);
 		    if (logitest){
-			vector<string> nms;
-			for(int k=0;k<biparts[i].size();k++){nms.push_back(name_st_index[biparts[i][k]]);}
 			vector<string> nms2;
-			for(int k=0;k<biparts[j].size();k++){nms2.push_back(name_st_index[biparts[j][k]]);}			
-			cout << get_string_vector(nms) << " | "<< get_string_vector(nms2) << endl;
+			for(int k=0;k<biparts[j].size();k++){nms2.push_back(name_st_index[biparts[j][k]]);}	
+			totalcount += bp_count[j];
+			conflict_nums.push_back(bp_count[j]);
+			cout << " \t "<< get_string_vector(nms2) << " (" << bp_count[j]  << ") " << endl;
 		    }
 		}
 	    }
+	    //calculate IAC
+	    double sign = 1;
+	    for(int j=0;j<conflict_nums.size();j++){
+		conflict_nums[j]/=totalcount;
+		if(conflict_nums[j] > conflict_nums[0])
+		    sign = -1;
+	    }
+	    double IAC = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
+	    for(int j=0;j<conflict_nums.size();j++){
+		IAC += (conflict_nums[j]*logn(conflict_nums[j],conflict_nums.size()));
+	    }
+	    IAC *= sign;
+	    cout << "\t" << IAC << endl;
 	}
     }
 

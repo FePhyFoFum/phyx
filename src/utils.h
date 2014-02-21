@@ -27,4 +27,6 @@ double sum(vector<int> &inm);
 string get_string_vector(vector<string> &sts);
 string get_string_vector(vector<int> &sts);
 
+double logn(double x,double base);
+
 #endif /* UTILS_H_ */
