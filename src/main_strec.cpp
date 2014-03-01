@@ -38,6 +38,7 @@ void print_help(){
     cout << " -c, --conf=FILE     configuration file" << endl;
     cout << " -o, --outanc=FILE   output file for ancestral calc"<<endl;
     cout << " -n, --outstnum=FILE output file for stochastic mapping number" << endl;
+    cout << " -a, --outstnumany=FILE output file for stochastic mapping number any" << endl;
     cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << endl;
     cout << " -l, --logf=FILE     log file, stout otherwise"<<endl;
     cout << "     --help          display this help and exit"<<endl;
@@ -60,6 +61,7 @@ static struct option const long_options[] =
     {"outanc", required_argument, NULL, 'o'},
     {"outstnum", required_argument, NULL, 'n'},
     {"outsttim", required_argument, NULL, 'm'},
+    {"outstnumany", required_argument, NULL, 'a'},
     {"logf", required_argument, NULL, 'l'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -97,6 +99,7 @@ int main(int argc, char * argv[]){
     bool outancfileset = false;
     bool outstochtimefileset = false;
     bool outstochnumfileset = false;
+    bool outstochnumanyfileset = false;
     bool datawide = false;
     char * conff;
     char * treef;
@@ -104,11 +107,12 @@ int main(int argc, char * argv[]){
     char * logf;
     char * outanc;
     char * outnum;
+    char * outnumany;
     char * outtime;
     bool going = true;
     while(going){
         int oi = -1;
-        int c = getopt_long(argc,argv,"d:t:c:o:n:m:l:hVw",long_options,&oi);
+        int c = getopt_long(argc,argv,"d:t:c:o:n:m:a:l:hVw",long_options,&oi);
         if (c == -1){
             break;
         }
@@ -588,9 +592,10 @@ int main(int argc, char * argv[]){
 			    sr.prepare_ancstate_reverse();
 			    vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]),true);
 			    double tnum = calculate_vector_double_sum(stoch)/double(totlike_sd);
+			    double bl = tree->getMRCA(mrcas[stochtime[j]])->getBL();
 			    if(verbose)
 				(*loos) << tnum << " ";
-			    sttimeout << "\t" << tnum;
+			    sttimeout << "\t" << tnum/bl;
 			    if (tnum < 0)
 				neg = true;
 			    excount += 1;
