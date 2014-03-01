@@ -76,6 +76,11 @@ BP_SRC = main_bp.cpp
 BP_OBJ = main_bp.o
 BP_DEP = main_bp.d
 
+BPSEQ_SRC = main_bpseq.cpp
+BPSEQ_OBJ = main_bpseq.o
+BPSEQ_DEP = main_bpseq.d
+
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -158,7 +163,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g -std=c++0x
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxboot pxcontrates pxbp
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxboot pxcontrates pxbp pxbpseq
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -235,6 +240,10 @@ pxseqrecode:  $(CPP_OBJS) $(SEQSAMP_OBJ)
 pxbp:  $(CPP_OBJS) $(BP_OBJ) 
 	@echo 'building pxbp'
 	g++ -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxbpseq:  $(CPP_OBJS) $(BPSEQ_OBJ) 
+	@echo 'building pxbpseq'
+	g++ -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 
 # Other Targets

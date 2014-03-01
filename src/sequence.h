@@ -37,6 +37,9 @@ public:
     double get_cont_char(int _index);
     int get_num_cont_char();
     void clear_cont_char();
+    void add_multistate_char(int num);
+    int get_multistate_char(int _index);
+    int get_num_multistate_char();
     void set_sequence(string seq);
     void set_id(string id);
     void set_aligned(bool al);

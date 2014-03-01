@@ -83,6 +83,19 @@ void Sequence::clear_cont_char(){
     cont_chars.clear();
 }
 
+void Sequence::add_multistate_char(int _num){
+    multistate_chars.push_back(_num);
+}
+
+int Sequence::get_multistate_char(int _index){
+    return multistate_chars[_index];
+}
+
+int Sequence::get_num_multistate_char(){
+    return multistate_chars.size();
+}
+
+
 void Sequence::set_sequence(string _seq){
     seq = _seq;
 }

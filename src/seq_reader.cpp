@@ -167,7 +167,20 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             return false;
         }
         seq.set_id(tokens[0]);
-        seq.set_sequence(tokens[1]);
+	//TESTING for if there are spaces in the sequences
+	// as would be the case for many pxstrec
+	if(tokens.size() == 2)
+	    seq.set_sequence(tokens[1]);
+	else{
+	    string tse = tokens[1];
+	    //TODO: look for decimal and add cont char if decimal present
+	    //seq.add_multistate_char(atoi(tokens[1].c_str()));
+	    for(int j=2;j<tokens.size();j++){
+		tse += " "+tokens[j];
+		//	seq.add_multistate_char(atoi(tokens[j].c_str()));
+	    }
+	    seq.set_sequence(tse);
+	}
         return true;
     }else if (ftype == 2){ // fasta
         bool first = true;

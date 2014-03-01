@@ -147,23 +147,34 @@ int sum_matrix_col(vector<vector<int> > & matrix,int col){
     return x;
 }
 
+int sum_matrix_col_negs(vector<vector<int> > & matrix,int col){
+    int x=0;
+    for(unsigned int i=0;i<matrix.size();i++){
+	if(matrix[i][col] < 0)
+	    x += matrix[i][col];
+    }
+    return x;
+}
 
 bool test_logical(vector<int> & matA,vector<int> & matB){
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
     for (unsigned int i=0;i<matA.size();i++){
-	if ((matA[i] == 1) && (matB[i] == 1)){
+	//added the -1, can take out if something gets fishy
+	if (((matA[i] == 1) && (matB[i] == 1))){
 	    match1 += 1;
 	}else{
 	    numdiffs += 1;
 	}
     }
-    if ((match1 != sum(matA)) && (match1 != sum(matB))){
+    //had to change because of negatives
+    if ((match1 != sum(matA)) && (match1 != sum(matB))){    
 	if (numdiffs != matA.size()){
 	    test = true;
 	}
     }
+    
     return test;
 }
 

@@ -29,14 +29,14 @@ StateReconstructor::StateReconstructor(RateModel & _rm):tree(NULL),nstates(_rm.n
 void StateReconstructor::set_tree(Tree * tr){
     tree = tr;
     if(verbose)
-    cout << "initializing nodes..." << endl;
+        cout << "initializing nodes..." << endl;
     for(int i=0;i<tree->getNodeCount();i++){
-    if(tree->getNode(i)->getBL()<MINBL){
-        tree->getNode(i)->setBL(MINBL * 100);
-    }
-    VectorNodeObject<Superdouble> * dcs = new VectorNodeObject<Superdouble>(nstates);
-    tree->getNode(i)->assocObject(dc,*dcs);
-    delete dcs;
+        if(tree->getNode(i)->getBL()<MINBL){
+            tree->getNode(i)->setBL(MINBL * 100);
+	}
+	VectorNodeObject<Superdouble> * dcs = new VectorNodeObject<Superdouble>(nstates);
+	tree->getNode(i)->assocObject(dc,*dcs);
+	delete dcs;
     }
 }
 
@@ -62,7 +62,7 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
         allsame = false;
     }
     if (allsame == true){
-    cout << "all the tips have the same characters" << endl;
+	cerr << "all the tips have the same characters" << endl;
     }
     return allsame;
 }
@@ -352,47 +352,47 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices(){
 
 vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool tm){
     if (node.isExternal()==false){//is not a tip
-    vector<double> totalExp (nstates,0);
-    vector<Superdouble> Bs;
-    if(tm)
-        Bs = node.seg_sp_stoch_map_revB_time;
-    else
-        Bs =  node.seg_sp_stoch_map_revB_number;
-    Node * c1 = node.getChild(0);
-    Node * c2 = node.getChild(1);
-    VectorNodeObject<Superdouble> * v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
-    VectorNodeObject<Superdouble> * v2  = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
-    VectorNodeObject<double> LHOODS (nstates,0);
-    for ( int i = 0; i < nstates; i++) {
-        //for (int j=0;j<nstates;j++){
-        //int ind1 = leftdists[j];
-        //int ind2 = rightdists[j];
-        //LHOODS[i] += (v1.at(ind1)*v2.at(ind2)*weight);
-        //}
-        LHOODS[i] = double(v1->at(i) * v2->at(i) * Bs.at(i));
-        //cout << v1->at(i) << " " <<  v2->at(i)<< " " << Bs.at(i) << endl;
-    }
-    for(int i=0;i<nstates;i++){
-        totalExp[i] = LHOODS[i];
-    }
-    //not sure if this should return a Superdouble or not when doing a bigtree
-    return totalExp;
+	vector<double> totalExp (nstates,0);
+	vector<Superdouble> Bs;
+	if(tm)
+	    Bs = node.seg_sp_stoch_map_revB_time;
+	else
+	    Bs =  node.seg_sp_stoch_map_revB_number;
+	Node * c1 = node.getChild(0);
+	Node * c2 = node.getChild(1);
+	VectorNodeObject<Superdouble> * v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+	VectorNodeObject<Superdouble> * v2  = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
+	VectorNodeObject<double> LHOODS (nstates,0);
+	for ( int i = 0; i < nstates; i++) {
+	    //for (int j=0;j<nstates;j++){
+	    //int ind1 = leftdists[j];
+	    //int ind2 = rightdists[j];
+	    //LHOODS[i] += (v1.at(ind1)*v2.at(ind2)*weight);
+	    //}
+	    LHOODS[i] = double(v1->at(i) * v2->at(i) * Bs.at(i));
+	    //cout << v1->at(i) << " " <<  v2->at(i)<< " " << Bs.at(i) << endl;
+	}
+	for(int i=0;i<nstates;i++){
+	    totalExp[i] = LHOODS[i];
+	}
+	//not sure if this should return a Superdouble or not when doing a bigtree
+	return totalExp;
     }else{
-    vector<double> totalExp (nstates,0);
-    vector<Superdouble> Bs;
-    if(tm)
-        Bs = node.seg_sp_stoch_map_revB_time;
-    else
-        Bs =  node.seg_sp_stoch_map_revB_number;
-    VectorNodeObject<double> LHOODS (nstates,0);
-    VectorNodeObject<Superdouble>* distconds = ((VectorNodeObject<Superdouble>*) node.getObject(dc));
-    for (int i = 0; i < nstates; i++) {
-        LHOODS[i] = double(Bs.at(i) * (distconds->at(i) ));
-    }
-    for(int i=0;i<nstates;i++){
-        totalExp[i] = LHOODS[i];
-    }
-    return totalExp;
+	vector<double> totalExp (nstates,0);
+	vector<Superdouble> Bs;
+	if(tm)
+	    Bs = node.seg_sp_stoch_map_revB_time;
+	else
+	    Bs =  node.seg_sp_stoch_map_revB_number;
+	VectorNodeObject<double> LHOODS (nstates,0);
+	VectorNodeObject<Superdouble>* distconds = ((VectorNodeObject<Superdouble>*) node.getObject(dc));
+	for (int i = 0; i < nstates; i++) {
+	    LHOODS[i] = double(Bs.at(i) * (distconds->at(i) ));
+	}
+	for(int i=0;i<nstates;i++){
+	    totalExp[i] = LHOODS[i];
+	}
+	return totalExp;
     }
 }
 
