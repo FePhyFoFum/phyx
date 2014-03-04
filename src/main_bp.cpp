@@ -108,7 +108,7 @@ int main(int argc, char * argv[]){
 	    ofstr->close();
 	    delete poos;
 	}
-	cout << "there are no trees;" << endl;
+	cerr << "there are no trees;" << endl;
     }
     
     //get the biparts for the trees
@@ -144,7 +144,7 @@ int main(int argc, char * argv[]){
 	it2 = set_difference(names_s.begin(),names_s.end(),rt_nms_set.begin(),rt_nms_set.end(),not_included_nms.begin());
 	not_included_nms.resize(it2-not_included_nms.begin());
 	for(int j=0;j<not_included_nms.size();j++){
-	    cout <<" not included: "  << not_included_nms[j]<< endl;
+	    cerr <<" not included: "  << not_included_nms[j]<< endl;
 	    not_included_i.push_back(name_index[not_included_nms[j]]);
 	}
 	//get the biparts
@@ -184,8 +184,8 @@ int main(int argc, char * argv[]){
 	}
     }
     
-    cout << numtrees << " trees " <<  endl;
-    cout << biparts.size() << " unique clades found" << endl;
+    (*poos) << numtrees << " trees " <<  endl;
+    (*poos) << biparts.size() << " unique clades found" << endl;
 
     //calculate the logical matrix of biparts for each tree
     //the matrix will have each i as a tree and 
@@ -228,7 +228,7 @@ int main(int argc, char * argv[]){
 	if(sumc != trees.size() && sumc > (smallest_proportion*trees.size())){
 	    vector<string> nms;
 	    for(int k=0;k<biparts[i].size();k++){nms.push_back(name_st_index[biparts[i][k]]);}
-	    cout << get_string_vector(nms); //" (" << bp_count[i] << ")" << endl;
+	    (*poos) << get_string_vector(nms); //" (" << bp_count[i] << ")" << endl;
 	    double totalcount = bp_count[i];
 	    vector<double> conflict_nums;
 	    conflict_nums.push_back(bp_count[i]);
@@ -258,10 +258,10 @@ int main(int argc, char * argv[]){
 	    }
 	    TSCA += ICA;
 	    ICA *= sign;
-	    cout << "\t" << ICA << endl;
+	    (*poos) << "\t" << ICA << endl;
 	}
     }
-    cout << "TSCA: " << TSCA << endl;
+    (*poos) << "TSCA: " << TSCA << endl;
 
     //shut things down
     if(fileset){

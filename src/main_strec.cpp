@@ -144,7 +144,11 @@ int main(int argc, char * argv[]){
                 outstochtimefileset = true;
                 outtime = strdup(optarg);
                 break;
-            case 'l':
+	    case 'a':
+		outstochnumanyfileset = true;
+		outnumany = strdup(optarg);
+		break;
+	    case 'l':
                 logfileset = true;
                 logf = strdup(optarg);
                 break;
@@ -376,8 +380,8 @@ int main(int argc, char * argv[]){
 	}
 	sttimeout << endl;
     }
-    if (stochnumber_any.size() > 0 && outfile_stochnum_any != "" ){
-	sttnumout_any.open(outfile_stochnum_any.c_str(),ios::out);
+    if (stochnumber_any.size() > 0 && outstochnumanyfileset == true){
+	sttnumout_any.open(outnumany,ios::out);
 	sttnumout_any << "site\ttree\tMRCA\tlnL";
 	sttnumout_any << "\tanystate";
 	sttnumout_any << endl;

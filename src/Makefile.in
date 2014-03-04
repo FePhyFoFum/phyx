@@ -80,6 +80,9 @@ BPSEQ_SRC = main_bpseq.cpp
 BPSEQ_OBJ = main_bpseq.o
 BPSEQ_DEP = main_bpseq.d
 
+TONEW_SRC = main_ttonew.cpp
+TONEW_OBJ = main_ttonew.o
+TONEW_DEP = main_ttonew.d
 
 CPP_SRCS += \
 ./utils.cpp \
@@ -244,6 +247,10 @@ pxbp:  $(CPP_OBJS) $(BP_OBJ)
 pxbpseq:  $(CPP_OBJS) $(BPSEQ_OBJ) 
 	@echo 'building pxbpseq'
 	g++ -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxttonew:  $(CPP_OBJS) $(TONEW_OBJ) 
+	@echo 'building pxttonew'
+	g++ -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 
 # Other Targets

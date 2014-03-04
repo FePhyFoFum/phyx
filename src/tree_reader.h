@@ -22,4 +22,10 @@ public:
 	Tree * readTree(string trees);
 };
 
+Tree * read_tree_string(string trees);
+int test_tree_filetype(string filen);
+int test_tree_filetype_stream(istream & stri, string & retstring);
+bool read_next_tree_from_stream_nexus(istream & stri, string & retstring);
+bool read_next_tree_from_stream_newick(istream & stri, string & retstring, Tree & tree);
+
 #endif /* TREE_READER_H_ */
