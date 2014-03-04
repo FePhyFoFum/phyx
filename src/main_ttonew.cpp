@@ -8,6 +8,7 @@
 #include <getopt.h>
 #include <algorithm>
 #include <set>
+#include <map>
 using namespace std;
 
 #include "tree.h"
@@ -96,4 +97,11 @@ int main(int argc, char * argv[]){
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     cout << ft << endl;
+    if(ft != 0){
+	cerr << "this really only converts nexus." << endl;
+	exit(0);
+    }
+    map<int,string> translation_table;
+    bool ttexists;
+    ttexists = get_nexus_translation_table(*pios, &translation_table);
 }
