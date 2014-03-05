@@ -259,6 +259,10 @@ int main(int argc, char * argv[]){
 	    TSCA += ICA;
 	    ICA *= sign;
 	    (*poos) << "\t" << ICA << endl;
+	}else if(sumc == trees.size()){
+	    vector<string> nms;
+	    for(int k=0;k<biparts[i].size();k++){nms.push_back(name_st_index[biparts[i][k]]);}
+	    (*poos) << get_string_vector(nms) << "\t" << 1 << endl;
 	}
     }
     (*poos) << "TSCA: " << TSCA << endl;
