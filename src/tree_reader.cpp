@@ -12,12 +12,14 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
 #include "node.h"
 #include "tree.h"
 #include "tree_reader.h"
+#include "utils.h"
 
 TreeReader::TreeReader(){}
 
@@ -295,28 +297,82 @@ int test_tree_filetype_stream(istream & stri, string & retstring){
     return ret;
 }
 
-bool get_nexus_translation_table(istream & stri, map<int, string> * trans){
+bool get_nexus_translation_table(istream & stri, map<string, string> * trans){
     string line1;
     bool exists = false;
-
+    bool going = true;
+    bool tgoing = false;
+    while (going){
+	if(!getline(stri,line1)){
+	    break;
+	}
+	string uc(line1);
+	transform(uc.begin(), uc.end(), uc.begin(), ::toupper);
+	if(uc.find("TRANSLATE") != string::npos){
+	    tgoing = true;
+	    exists = true;
+	    cout << "found translate" << endl;
+	    continue;
+	}
+	if(tgoing == true){
+	    //trimspaces and split up strings
+	    vector<string> tokens;
+	    string del(" \t");
+	    tokens.clear();
+	    tokenize(line1,tokens,del);
+	    for(int i=0;i<tokens.size();i++){
+		trim_spaces(tokens[i]);
+	    }
+	    size_t found = tokens[1].find(",");
+	    if (found!=string::npos)
+		tokens[1].erase(found,1);
+	    (*trans)[tokens[0]] = tokens[1];
+	    if(uc.find(";") != string::npos){
+		going = false;
+		cout << "found the ; " << endl;
+	    }
+	}
+    }
     return exists;
 }
 
 
 /*
  * this will read the nexus file after processing translating
- * 
+ * should add some error correction code here
  */
 
-bool read_next_tree_from_stream_nexus(istream & stri, string & retstring, Tree & tree){
-    string tline;
+Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool ttexists, map<string,string> * trans, bool * going){
+     string tline;
+     if(!getline(stri,tline)){
+	 (*going) = false;
+	 return NULL;
+     }
+     string uc(tline);
+     transform(uc.begin(),uc.end(),uc.begin(),::toupper);
+     if(uc.find("END;")!=string::npos){
+	 (*going) = false;
+	 return NULL;
+     }
+     vector<string> tokens;
+     string del(" \t");
+     tokenize(tline,tokens,del);
+     string tstring(tokens[tokens.size()-1]);
+     Tree * tree;
+     tree = read_tree_string(tstring);
+     if(ttexists){
+	 for(int i=0;i<tree->getExternalNodeCount();i++){
+	     tree->getExternalNode(i)->setName((*trans)[tree->getExternalNode(i)->getName()]);
+	 }
+     }
+     return tree;
 }
 
 /*
  * this is simple as each line is a tree
  *
  */
-bool read_next_tree_from_stream_newick(istream & stri, string & retstring, Tree & tree){
+bool read_next_tree_from_stream_newick(istream & stri, string & retstring, Tree * tree){
     string line1;
     if(retstring.size() > 0){
 	line1 = retstring;

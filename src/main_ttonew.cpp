@@ -101,7 +101,24 @@ int main(int argc, char * argv[]){
 	cerr << "this really only converts nexus." << endl;
 	exit(0);
     }
-    map<int,string> translation_table;
+    map<string,string> translation_table;
     bool ttexists;
     ttexists = get_nexus_translation_table(*pios, &translation_table);
+    going = true;
+    Tree * tree;
+    while(going){
+	tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
+	if (going == true){
+	    (*poos) << tree->getRoot()->getNewick(true) << endl;
+	    delete tree;
+	}
+    }
+    if(fileset){
+        fstr->close();
+        delete pios;
+    }if(outfileset){
+        ofstr->close();
+        delete poos;
+    }
+    return EXIT_SUCCESS;
 }
