@@ -96,7 +96,6 @@ int main(int argc, char * argv[]){
     //read trees 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    cout << ft << endl;
     if(ft != 0){
 	cerr << "this really only converts nexus." << endl;
 	exit(0);

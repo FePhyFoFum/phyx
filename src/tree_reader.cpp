@@ -311,7 +311,6 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans){
 	if(uc.find("TRANSLATE") != string::npos){
 	    tgoing = true;
 	    exists = true;
-	    cout << "found translate" << endl;
 	    continue;
 	}
 	if(tgoing == true){
@@ -324,12 +323,14 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans){
 		trim_spaces(tokens[i]);
 	    }
 	    size_t found = tokens[1].find(",");
-	    if (found!=string::npos)
+	    if (found != string::npos)
 		tokens[1].erase(found,1);
 	    (*trans)[tokens[0]] = tokens[1];
-	    if(uc.find(";") != string::npos){
+	    size_t found2 = tokens[1].find(";");
+	    if(found2 != string::npos){
+		tokens[1].erase(found2,1);
+		(*trans)[tokens[0]] = tokens[1];
 		going = false;
-		cout << "found the ; " << endl;
 	    }
 	}
     }
