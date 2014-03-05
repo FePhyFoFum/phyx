@@ -109,7 +109,7 @@ int main(int argc, char * argv[]){
     while(going){
 	tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
 	if (going == true){
-	    (*poos) << tree->getRoot()->getNewick(true) << endl;
+	    (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
 	    delete tree;
 	}
     }
