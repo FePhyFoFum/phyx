@@ -150,6 +150,9 @@ int main(int argc, char * argv[]){
 	//get the biparts
 	for(int j=0;j<trees[i]->getInternalNodeCount();j++){
 	    vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
+	    //skip the root
+	    if(nms.size() == rt_nms.size())
+		continue;
 	    vector<int> nms_i;
 	    set<string> nms_s;
 	    copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
@@ -166,6 +169,7 @@ int main(int argc, char * argv[]){
 	    for (int k=0;k<nms_s2.size();k++){
 		nms_i2.push_back(name_index[nms_s2[k]]);
 	    }
+	    //cout << get_string_vector(nms_s2) << endl;
 	    //check to see if the bipart is new
 	    if ((int)count(biparts.begin(),biparts.end(),nms_i) == 0 && 
 		(int)count(biparts2.begin(),biparts2.end(),nms_i2)== 0){
@@ -258,7 +262,7 @@ int main(int argc, char * argv[]){
 	    }
 	    TSCA += ICA;
 	    ICA *= sign;
-	    (*poos) << "\t" << ICA << endl;
+	    (*poos) << "FREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << endl;
 	}else if(sumc == trees.size()){
 	    vector<string> nms;
 	    for(int k=0;k<biparts[i].size();k++){nms.push_back(name_st_index[biparts[i][k]]);}
