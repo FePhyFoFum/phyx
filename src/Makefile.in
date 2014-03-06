@@ -166,7 +166,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g -std=c++0x
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxboot pxcontrates pxbp pxbpseq
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcontrates pxseqrecode pxbp pxbpseq
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -236,9 +236,9 @@ pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ)
 	@echo 'building pxcontrates'
 	g++ -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
-pxseqrecode:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
+pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ) 
 	@echo 'building pxseqrecode'
-	g++ -o "pxseqrecode" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxbp:  $(CPP_OBJS) $(BP_OBJ) 
 	@echo 'building pxbp'
