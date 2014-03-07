@@ -48,7 +48,11 @@ static struct option const long_options[] =
 void reroot(Tree * tree, vector<string> & outgr);
 void reroot(Tree * tree,vector<string> & outgr){
     Node * m = tree->getMRCA(outgr);
-    tree->reRoot(m);
+    if (m == tree->getRoot()){
+	tree->getInternalMRCA(outgr);
+	return;
+    }
+    bool success = tree->reRoot(m);
 }
 
 int main(int argc, char * argv[]){

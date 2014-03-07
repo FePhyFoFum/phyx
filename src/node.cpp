@@ -12,6 +12,7 @@
 #include <sstream>
 #include <map>
 #include <deque>
+#include <set>
 #include <stack>
 
 using namespace std;
@@ -264,22 +265,43 @@ vector<Node*> Node::get_leaves(){
     return retnodes;
 }
 
+/*
+ * gets the leaves from this node
+ */
+set<Node*> Node::get_leaves_set(){
+    set<Node*> retnodes;
+    stack<Node*> nodes;
+    nodes.push(this);
+    while(nodes.empty() == false){
+        Node * nd = nodes.top();
+        nodes.pop();
+        if (nd->getChildCount() > 0){
+            for (int i=0;i<nd->getChildCount();i++){
+                nodes.push(nd->getChild(i));
+            }
+        }else{
+            retnodes.insert(nd);
+        }
+    }
+    return retnodes;
+}
+
 vector<string> Node::get_leave_names(){
-	stack<Node*> nodes;
-	vector<string> names;
-	nodes.push(this);
-	while(nodes.empty() == false){
-		Node * nd = nodes.top();
-		nodes.pop();
-		if (nd->getChildCount() > 0){
-			for (int i=0;i<nd->getChildCount();i++){
-				nodes.push(nd->getChild(i));
-			}
-		}else{
-			names.push_back(nd->getName());
-		}
+    stack<Node*> nodes;
+    vector<string> names;
+    nodes.push(this);
+    while(nodes.empty() == false){
+	Node * nd = nodes.top();
+	nodes.pop();
+	if (nd->getChildCount() > 0){
+	    for (int i=0;i<nd->getChildCount();i++){
+		nodes.push(nd->getChild(i));
+	    }
+	}else{
+	    names.push_back(nd->getName());
 	}
-	return names;
+    }
+    return names;
 }
 
 /*

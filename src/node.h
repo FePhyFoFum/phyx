@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <map> 
+#include <set>
 using namespace std;
 
 
@@ -38,6 +39,7 @@ public:
     int get_num_leaves();
     vector<Node*> get_leaves();
     vector<string> get_leave_names();
+    set<Node *> get_leaves_set();
 
     vector<Node*> getChildren();
     bool isExternal();

@@ -1,10 +1,9 @@
 /*
  * tree.cpp
  *
- *  Created on: Nov 24, 2009
- *      Author: smitty
  */
 
+#include <set>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -107,14 +106,15 @@ void Tree::unRoot(Node & inroot){
 /*
  * seems to be working but check for leaks
  */
-void Tree::reRoot(Node * inroot){
+bool Tree::reRoot(Node * inroot){
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
         tritomyRoot(inroot);//not sure if this should actually be the inroot instead of NULL
     }
     //cout << this->root->getNewick(false) << endl;
     if (root == inroot) {
-        cout << "you asked to root at the current root" << endl;
+        cerr << "you asked to root at the current root" << endl;
+	return false;
     } else {
         Node * tempParent = inroot->getParent();
         Node * newRoot = new Node(tempParent);
@@ -128,6 +128,7 @@ void Tree::reRoot(Node * inroot){
         processReRoot(newRoot);
         setRoot(newRoot);
         processRoot();
+	return true;
     }
 }
 
@@ -219,6 +220,21 @@ Node * Tree::getMRCA(vector<Node *> innodes){
             cur1 = tempmrca;
         }
         mrca = cur1;
+    }
+    return mrca;
+}
+
+/**
+ * when the MRCA is returned as root, this will find 
+ * the other node, internal that can serve as another root
+ */
+Node * Tree::getInternalMRCA(vector<string> & innodes){
+    Node * mrca = NULL;
+    set<Node *> original;//original set of nodes
+    if(innodes.size() == 1){
+	return this->getExternalNode(innodes[0]);
+    }else{
+	
     }
     return mrca;
 }
