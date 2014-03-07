@@ -373,14 +373,16 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool
  * this is simple as each line is a tree
  *
  */
-bool read_next_tree_from_stream_newick(istream & stri, string & retstring, Tree * tree){
-    string line1;
+Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going){
+    string tline;
     if(retstring.size() > 0){
-	line1 = retstring;
+	tline = retstring;
 	retstring = "";
-    }else if(!getline(stri,line1)){
-	return false;
+    }else if(!getline(stri,tline)){
+	(*going) = false;
+	return NULL;
     }
-//    tree = read_tree_string(line1);
-    return true;
+    Tree * tree;
+    tree = read_tree_string(tline);
+    return tree;
 }

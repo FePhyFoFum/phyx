@@ -29,6 +29,6 @@ int test_tree_filetype(string filen);
 int test_tree_filetype_stream(istream & stri, string & retstring);
 bool get_nexus_translation_table(istream & stri, map<string,string> * trans);
 Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,bool ttexists, map<string,string> * trans,bool * going);
-bool read_next_tree_from_stream_newick(istream & stri, string & retstring, Tree * tree);
+Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going);
 
 #endif /* TREE_READER_H_ */
