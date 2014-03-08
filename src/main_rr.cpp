@@ -45,14 +45,21 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-void reroot(Tree * tree, vector<string> & outgr);
-void reroot(Tree * tree,vector<string> & outgr){
+bool reroot(Tree * tree, vector<string> & outgr);
+bool reroot(Tree * tree,vector<string> & outgr){
     Node * m = tree->getMRCA(outgr);
+    if (m == NULL)
+	return false;
     if (m == tree->getRoot()){
+	//check to see if the outgroups are just the children of the root
+	//if so, then do this
+	//tree->rootWithRootTips(outgr);
+	//if not, then do this
 	tree->getInternalMRCA(outgr);
-	return;
+	return true;
     }
     bool success = tree->reRoot(m);
+    return success;
 }
 
 int main(int argc, char * argv[]){
@@ -133,16 +140,17 @@ int main(int argc, char * argv[]){
 	cerr << "this really only works with nexus or newick" << endl;
 	exit(0);
     }
+    going = true;
+    bool exists;
     if(ft == 0){
 	map<string,string> translation_table;
 	bool ttexists;
 	ttexists = get_nexus_translation_table(*pios, &translation_table);
-	going = true;
 	Tree * tree;
 	while(going){
 	    tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
 	    if (going == true){
-		reroot(tree,outgroups);
+		exists = reroot(tree,outgroups);
 		(*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
 		delete tree;
 	    }
@@ -152,8 +160,11 @@ int main(int argc, char * argv[]){
 	while(going){
 	    tree = read_next_tree_from_stream_newick(*pios,retstring,&going);
 	    if(going == true){
-		reroot(tree,outgroups);
-		(*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+		exists = reroot(tree,outgroups);
+		if(exists == false)
+		    cerr << "the outgroup taxa don't exist in this tree " << endl;
+		else
+		    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
 		delete tree;
 	    }
 	}

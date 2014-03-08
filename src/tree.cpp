@@ -234,7 +234,15 @@ Node * Tree::getInternalMRCA(vector<string> & innodes){
     if(innodes.size() == 1){
 	return this->getExternalNode(innodes[0]);
     }else{
-	
+	//first get the root set
+	//then get the leaves set
+	//the difference will give the root back
+	//we want to choose a node that has all of the outgroups
+	//and the smallest number of other nodes
+	//this is the best case when there 
+	for(int i=0;i<this->getInternalNodeCount();i++){
+	    
+	}
     }
     return mrca;
 }
