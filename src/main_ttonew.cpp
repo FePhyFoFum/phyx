@@ -101,8 +101,11 @@ int main(int argc, char * argv[]){
 	exit(0);
     }
     map<string,string> translation_table;
+    vector<string> retstrings;
     bool ttexists;
-    ttexists = get_nexus_translation_table(*pios, &translation_table);
+    ttexists = get_nexus_translation_table(*pios, &translation_table,&retstrings);
+    if(retstrings.size() > 0)
+	retstring = retstrings[retstrings.size()-1];
     going = true;
     Tree * tree;
     while(going){

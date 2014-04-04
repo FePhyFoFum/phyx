@@ -143,9 +143,13 @@ int main(int argc, char * argv[]){
     going = true;
     bool exists;
     if(ft == 0){
+	vector<string> retstrings;
+	retstrings.push_back(retstring);
 	map<string,string> translation_table;
 	bool ttexists;
-	ttexists = get_nexus_translation_table(*pios, &translation_table);
+	ttexists = get_nexus_translation_table(*pios, &translation_table,&retstrings);
+	if (retstrings.size() > 0)
+	    retstring = retstrings[retstrings.size()-1];
 	Tree * tree;
 	while(going){
 	    tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);

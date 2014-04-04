@@ -96,10 +96,11 @@ int main(int argc, char * argv[]){
     string retstring;
     vector<Tree *> trees;
     while(getline(*pios,retstring)){
+	if (retstring.size() < 3)
+	    continue;
         trees.push_back(tr.readTree(retstring));
     }
     int numtrees = trees.size();
-
     if (numtrees == 0){
 	if(fileset){
 	    fstr->close();
@@ -194,7 +195,7 @@ int main(int argc, char * argv[]){
     //calculate the logical matrix of biparts for each tree
     //the matrix will have each i as a tree and 
     //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
-    vector<int> cols(biparts.size(),0);
+    vector<int> cols(biparts.size()+1,0);
     vector<vector<int> > matrix (numtrees,cols);
     for (unsigned int i=0;i<numtrees;i++){
 	for(int j=0;j<trees[i]->getInternalNodeCount();j++){
@@ -204,6 +205,7 @@ int main(int argc, char * argv[]){
 		nms_i.push_back(name_index[nms[k]]);
 	    }
 	    sort(nms_i.begin(),nms_i.end());
+	    //cout << find(biparts.begin(),biparts.end(),nms_i)-biparts.begin() << endl;
 	    matrix[i][find(biparts.begin(),biparts.end(),nms_i)-biparts.begin()] = 1;
 	}
     }
@@ -262,7 +264,7 @@ int main(int argc, char * argv[]){
 	    }
 	    TSCA += ICA;
 	    ICA *= sign;
-	    (*poos) << "FREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << endl;
+	    (*poos) << "\tFREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << endl;
 	}else if(sumc == trees.size()){
 	    vector<string> nms;
 	    for(int k=0;k<biparts[i].size();k++){nms.push_back(name_st_index[biparts[i][k]]);}

@@ -25,6 +25,8 @@ TreeReader::TreeReader(){}
 
 /*
  * the tree pointer coming in should just be a new Tree()
+ * we should take this out as soon as we are ready to repoint
+ * the existing code to teh right bits
  */
 Tree * TreeReader::readTree(string trees){
     Tree * tree = new Tree();
@@ -297,21 +299,32 @@ int test_tree_filetype_stream(istream & stri, string & retstring){
     return ret;
 }
 
-bool get_nexus_translation_table(istream & stri, map<string, string> * trans){
+/**
+ * this will look for the translation table i it exists
+ * 
+ */
+bool get_nexus_translation_table(istream & stri, map<string, string> * trans, vector<string> * retstrings){
     string line1;
     bool exists = false;
     bool going = true;
+    bool begintrees = false;
     bool tgoing = false;
     while (going){
 	if(!getline(stri,line1)){
 	    break;
 	}
+	(*retstrings).push_back(line1);
 	string uc(line1);
 	transform(uc.begin(), uc.end(), uc.begin(), ::toupper);
 	if(uc.find("TRANSLATE") != string::npos){
 	    tgoing = true;
 	    exists = true;
 	    continue;
+	}else if(begintrees == true && tgoing == false){
+	    return false;
+	}
+	if(uc.find("BEGIN TREES") != string::npos){
+	    begintrees = true;
 	}
 	if(tgoing == true){
 	    //trimspaces and split up strings
@@ -360,6 +373,7 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool
      tokenize(tline,tokens,del);
      string tstring(tokens[tokens.size()-1]);
      Tree * tree;
+     cout << tstring << endl;
      tree = read_tree_string(tstring);
      if(ttexists){
 	 for(int i=0;i<tree->getExternalNodeCount();i++){
