@@ -101,6 +101,11 @@ RR_SRC = main_rr.cpp
 RR_OBJ = main_rr.o
 RR_DEP = main_rr.d
 
+SM0_SRC = main_sm0.cpp
+SM0_OBJ = main_sm0.o
+SM0_DEP = main_sm0.d
+
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -182,7 +187,7 @@ OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g -std=c++0x
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0
 
 pxstrec: $(CPP_OBJS) $(STREC_OBJ)
 	@echo 'building pxstrec'
@@ -271,6 +276,11 @@ pxttonew:  $(CPP_OBJS) $(TONEW_OBJ)
 pxrr:  $(CPP_OBJS) $(RR_OBJ) 
 	@echo 'building pxrr'
 	g++ -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxsm0:  $(CPP_OBJS) $(SM0_OBJ) 
+	@echo 'building pxsm0'
+	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
 
 # Other Targets
 clean:

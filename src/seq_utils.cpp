@@ -192,3 +192,67 @@ void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr){
 	(*ostr) << ";\nend;\n" << endl;
 }
 
+
+void populate_map_codon_indices(map<string,vector<int> > * codon_position){
+    (*codon_position)["TTT"] = {0};
+    (*codon_position)["TTC"] = {1};
+    (*codon_position)["TTA"] = {2};
+    (*codon_position)["TTG"] = {3};
+    (*codon_position)["TCT"] = {4};
+    (*codon_position)["TCC"] = {5};
+    (*codon_position)["TCA"] = {6};
+    (*codon_position)["TCG"] = {7};
+    (*codon_position)["TAT"] = {8};
+    (*codon_position)["TAC"] = {9};
+    (*codon_position)["TGT"] = {10};
+    (*codon_position)["TGC"] = {11};
+    (*codon_position)["TGG"] = {12};
+    (*codon_position)["CTT"] = {13};
+    (*codon_position)["CTC"] = {14};
+    (*codon_position)["CTA"] = {15};
+    (*codon_position)["CTG"] = {16};
+    (*codon_position)["CCT"] = {17};
+    (*codon_position)["CCC"] = {18};
+    (*codon_position)["CCA"] = {19};
+    (*codon_position)["CCG"] = {20};
+    (*codon_position)["CAT"] = {21};
+    (*codon_position)["CAC"] = {22};
+    (*codon_position)["CAA"] = {23};
+    (*codon_position)["CAG"] = {24};
+    (*codon_position)["CGT"] = {25};
+    (*codon_position)["CGC"] = {26};
+    (*codon_position)["CGA"] = {27};
+    (*codon_position)["CGG"] = {28};
+    (*codon_position)["ATT"] = {29};
+    (*codon_position)["ATC"] = {30};
+    (*codon_position)["ATA"] = {31};
+    (*codon_position)["ATG"] = {32}; 
+    (*codon_position)["ACT"] = {33};
+    (*codon_position)["ACC"] = {34};
+    (*codon_position)["ACA"] = {35};
+    (*codon_position)["ACG"] = {36};
+    (*codon_position)["AAT"] = {37};
+    (*codon_position)["AAC"] = {38};
+    (*codon_position)["AAA"] = {39};
+    (*codon_position)["AAG"] = {40};
+    (*codon_position)["AGT"] = {41};
+    (*codon_position)["AGC"] = {42};
+    (*codon_position)["AGA"] = {43};
+    (*codon_position)["AGG"] = {44};
+    (*codon_position)["GTT"] = {45};
+    (*codon_position)["GTC"] = {46};
+    (*codon_position)["GTA"] = {47};
+    (*codon_position)["GTG"] = {48};
+    (*codon_position)["GCT"] = {49};
+    (*codon_position)["GCC"] = {50};
+    (*codon_position)["GCA"] = {51};
+    (*codon_position)["GCG"] = {52};
+    (*codon_position)["GAT"] = {53};
+    (*codon_position)["GAC"] = {54};
+    (*codon_position)["GAA"] = {55};
+    (*codon_position)["GAG"] = {56};
+    (*codon_position)["GGT"] = {57};
+    (*codon_position)["GGC"] = {58};
+    (*codon_position)["GGA"] = {59};
+    (*codon_position)["GGG"] = {60};
+}

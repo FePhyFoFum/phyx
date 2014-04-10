@@ -9,7 +9,7 @@ using namespace std;
 //should maybe just store the DNA or AA?
 //could even store those as separate
 typedef enum {
-DNA = 0, AA = 1, BINARY = 2, MULTI = 3 
+    DNA = 0, AA = 1, BINARY = 2, MULTI = 3, CODON=4
 } seqAlpha; 
 
 class Sequence{
@@ -22,7 +22,7 @@ private:
     seqAlpha alphabet;
     vector<double> cont_chars;
     vector<int> multistate_chars;
-
+  
 public:
     Sequence();
     Sequence(string,string,bool);
