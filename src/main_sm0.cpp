@@ -10,10 +10,17 @@
 
 using namespace std;
 
+#include "rate_model.h"
+#include "tree.h"
+#include "tree_reader.h"
+#include "state_reconstructor.h"
 #include "seq_reader.h"
 #include "sequence.h"
 #include "seq_utils.h"
 #include "utils.h"
+
+#include <armadillo>
+using namespace arma;
 
 void print_help(){
     cout << "Calculate Selection Model 0 with K and w with seqs and tree." << endl;
@@ -105,18 +112,67 @@ int main(int argc, char * argv[]){
     }else{
         poos = &cout;
     }
+    //read seqs
+    vector<Sequence> seqs;
+    vector<Sequence> sr_seqs;
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*spios,retstring);
     while(read_next_seq_from_stream(*spios,ft,retstring,seq)){
         (*poos) << seq.get_fasta();
+	seqs.push_back(seq);
+	Sequence tseq(seq.get_id(),"");
+	sr_seqs.push_back(tseq);
     }
     if(ft == 2){
         (*poos) << seq.get_fasta();
+	seqs.push_back(seq);
+	Sequence tseq(seq.get_id(),"");
+	sr_seqs.push_back(tseq);
     }
+    
+
+    //read trees 
+    ft = test_tree_filetype_stream(*tpios, retstring);
+    if(ft != 1){
+	cerr << "this really only works with newick" << endl;
+	exit(0);
+    }going = true;
+    Tree * tree;
+    if(ft == 1){
+	while(going){
+	    tree = read_next_tree_from_stream_newick(*tpios,retstring,&going);
+	    break;
+	}
+    }
+
+    map<string,string> codon_dict;
+    vector<string> codon_list;
     map<string,vector<int> > codon_pos;
+    populate_codon_list(&codon_list);
+    populate_map_codon_dict(&codon_dict);
     populate_map_codon_indices(&codon_pos);
 
+    mat bf(61,61);
+    mat K(61,61);
+    mat w(61,61);
+    mat inq(61,61);
+    generate_bigpibf_K_w(&bf,&K,&w,codon_dict,codon_pos,codon_list);
+    update_simple_goldman_yang_q(&inq,1.0,1.0,bf,K,w);
+//    cout << inq << endl;
+
+    RateModel rm(61);
+    rm.set_Q(inq);
+//    cout << rm.get_Q() << endl;
+    StateReconstructor sr(rm);
+    sr.set_tree(tree);
+    int sites = (seqs[0].get_sequence().size()/3);
+    cout << "there are " << sites << " sites" << endl;
+    for(int i=0;i<sites;i++){
+	create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,i,codon_pos);
+	sr.set_tip_conditionals(sr_seqs);
+	cout << sr.eval_likelihood() << endl;
+    }
     sfstr->close();
     delete spios;
     tfstr->close();

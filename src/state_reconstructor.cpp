@@ -44,22 +44,22 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
     bool allsame = true;
     string testsame = distrib_data[0].get_sequence();
     for(unsigned int i=0;i<distrib_data.size();i++){
-    Sequence seq = distrib_data[i];
-    Node * nd = tree->getExternalNode(seq.get_id());
-    if(verbose)
-        cout << nd->getName() << " ";
-    for(int j=0;j<nstates;j++){
-        if(seq.get_sequence().at(j) == '1')
-        (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
-        else
-        (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 0.0;
-        if(verbose)
-        cout << seq.get_sequence().at(j);
-    }
-    if(verbose)
-        cout << endl;
-    if (testsame != seq.get_sequence())
-        allsame = false;
+	Sequence seq = distrib_data[i];
+	Node * nd = tree->getExternalNode(seq.get_id());
+	if(verbose)
+	    cout << nd->getName() << " ";
+	for(int j=0;j<nstates;j++){
+	    if(seq.get_sequence().at(j) == '1')
+		(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
+	    else
+		(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 0.0;
+	    if(verbose)
+		cout << seq.get_sequence().at(j);
+	}
+	if(verbose)
+	    cout << endl;
+	if (testsame != seq.get_sequence())
+	    allsame = false;
     }
     if (allsame == true){
 	cerr << "all the tips have the same characters" << endl;
@@ -72,21 +72,21 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node){
     VectorNodeObject<Superdouble> * v = new VectorNodeObject<Superdouble> (nstates, 0);
     cx_mat p;
     if(use_stored_matrices == false){
-    p= rm.setup_P(node.getBL(),store_p_matrices);
+	p= rm.setup_P(node.getBL(),store_p_matrices);
     }else{
-    p = rm.stored_p_matrices[node.getBL()];
+	p = rm.stored_p_matrices[node.getBL()];
     }
     for( int j=0;j<nstates;j++){
-    for( int k=0;k<nstates;k++){
-        v->at(j) += (distconds.at(k)*real(p(j,k)));
-    }
+	for( int k=0;k<nstates;k++){
+	    v->at(j) += (distconds.at(k)*real(p(j,k)));
+	}
     }
     for(unsigned int j=0;j<distconds.size();j++){
-    distconds[j] = v->at(j);
+	distconds[j] = v->at(j);
     }
     if(store_p_matrices == true){
-    node.assocObject(sp_alphas,distconds);
-    node.assocObject(alphas,distconds);
+	node.assocObject(sp_alphas,distconds);
+	node.assocObject(alphas,distconds);
     }
     delete v;
     return distconds;
@@ -95,22 +95,28 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node){
 void StateReconstructor::ancdist_conditional_lh(Node & node){
     VectorNodeObject<Superdouble> distconds(nstates, 0);
     if (node.isExternal()==false){//is not a tip
-    Node * c1 = node.getChild(0);
-    Node * c2 = node.getChild(1);
-    ancdist_conditional_lh(*c1);
-    ancdist_conditional_lh(*c2);
-    VectorNodeObject<Superdouble> v1;
-    VectorNodeObject<Superdouble> v2;
-    v1 =conditionals(*c1);
-    v2 =conditionals(*c2);
-    for ( int i=0;i<nstates;i++){
-        distconds.at(i)= v1[i] * v2[i];
-    }
+	Node * c1 = node.getChild(0);
+	Node * c2 = node.getChild(1);
+	ancdist_conditional_lh(*c1);
+	ancdist_conditional_lh(*c2);
+	VectorNodeObject<Superdouble> v1;
+	VectorNodeObject<Superdouble> v2;
+	v1 =conditionals(*c1);
+	v2 =conditionals(*c2);
+	for ( int i=0;i<nstates;i++){
+	    distconds.at(i)= v1[i] * v2[i];
+	}
+	if(node.isRoot()){
+	    //with equal freq!
+	    for(int i=0;i<nstates;i++){
+		distconds.at(i) = distconds.at(i) * (1./nstates);
+	    }
+	}
     }else{
-    distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
+	distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
     }
     for(unsigned int i=0;i<distconds.size();i++){
-    ((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
+	((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
     }
 }
 

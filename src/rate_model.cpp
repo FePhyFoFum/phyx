@@ -71,6 +71,15 @@ void RateModel::setup_Q(mat & inQ){
     sameQ = false;
 }
 
+void RateModel::set_Q(mat & inQ){
+    for(unsigned int i=0;i<Q.n_rows;i++){
+	for(unsigned int j=0;j<Q.n_cols;j++){
+	    Q(i,j) = inQ(i,j);
+	}
+    }
+    sameQ = false;
+}
+
 mat & RateModel::get_Q(){
     return Q;
 }
@@ -137,4 +146,72 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec){
     lasteigvec = eigvec;
     lastImag = isImag;
     return isImag;
+}
+
+
+void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw){
+    double s = 0;
+    for (int i=0;i<61;i++){
+	for (int j=0;j<61;j++){
+	    if (bigpibf(i,j)==0)
+		(*inm)(i,j) = 0;
+	    else{
+		(*inm)(i,j) = 1/61.;
+		if(bigpiK(i,j)!=0)
+		    (*inm)(i,j) *= K;
+		if(bigpiw(i,j)!=0)
+		    (*inm)(i,j) *= w;
+	    } 
+	    if(i == j){
+		(*inm)(i,j) = 0;
+	    }
+	    s += (*inm)(i,j);
+	}
+    }
+    (*inm) = (*inm)/s;
+    for(unsigned int i=0;i<(*inm).n_rows;i++){
+	double su = 0;
+	for(unsigned int j=0;j<(*inm).n_cols;j++){
+	    if(i!=j){
+		su += (*inm)(i,j);
+	    }
+	}
+	(*inm)(i,i) = 0-su;
+    }
+    (*inm) = (*inm)/(1/61.);
+    //(*inm) = trans((*inm));
+}
+
+bool test_transition(char a, char b){
+    bool ret = false;
+    if ((a == 'A' &&  b == 'G') || (a == 'C' &&  b == 'T') || (a == 'G' &&  b == 'A') || (a == 'T' &&  b == 'C')){
+	ret = true;
+    }
+    return ret;
+}
+
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, map<string, vector<int> > & codon_index, vector<string> & codon_list){
+    for(int i=0;i<61;i++){
+	for(int j=0;j<61;j++){
+	    int diff = 0;
+	    bool transit = false;
+	    bool nonsyn = false;
+	    for(int m=0;m<3;m++){
+		if (codon_list[i][m] != codon_list[j][m])
+		    diff += 1;
+		transit = test_transition(codon_list[i][m],codon_list[j][m]);
+	    }
+	    if(diff > 1){
+		(*bf)(i,j) = 0;
+	    }else{
+		if (codon_dict[codon_list[i]] != codon_dict[codon_list[j]])
+		    nonsyn = true;
+		(*bf)(i,j) = 1;
+		if (transit)
+		    (*K)(i,j) = 1;
+		if(nonsyn)
+		    (*w)(i,j) = 1;
+	    }
+	}
+    }
 }

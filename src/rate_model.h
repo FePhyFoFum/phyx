@@ -31,7 +31,7 @@ public:
 	int nstates;
 	map<double, cx_mat> stored_p_matrices;
 	bool neg_p;
-
+	void set_Q(mat & inQ);
 	void set_Q_diag();
 	void set_Q_cell(int,int,double);
 	void setup_Q();
@@ -47,5 +47,8 @@ public:
 	//this should be used for getting the eigenvectors and eigenvalues
 	bool get_eigenvec_eigenval_from_Q(cx_mat * eigenvalues, cx_mat * eigenvectors);
 };
+void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw);
+bool test_transition(char a, char b);
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, map<string, vector<int> > & codon_index, vector<string> & codon_list);
 
 #endif
