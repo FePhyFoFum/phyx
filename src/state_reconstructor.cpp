@@ -106,12 +106,12 @@ void StateReconstructor::ancdist_conditional_lh(Node & node){
 	for ( int i=0;i<nstates;i++){
 	    distconds.at(i)= v1[i] * v2[i];
 	}
-	if(node.isRoot()){
+	//if(node.isRoot()){
 	    //with equal freq!
-	    for(int i=0;i<nstates;i++){
-		distconds.at(i) = distconds.at(i) * (1./nstates);
-	    }
-	}
+	//    for(int i=0;i<nstates;i++){
+//		distconds.at(i) = distconds.at(i) * (1./nstates);
+//	    }
+    //}
     }else{
 	distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
     }
