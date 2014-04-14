@@ -8,7 +8,7 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #profileing
 #-pg
 
-OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -g -std=c++11
+OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
 #profiling 
 #-g -pg
 #-O3 -ffast-math -ftree-vectorize 
@@ -119,13 +119,15 @@ CPP_SRCS += \
 ./pairwise_alignment.cpp \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
+./state_reconstructor_simple.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
 ./optimize_cont_models_nlopt.cpp \
 ./bd_sim.cpp \
 ./superdouble.cpp \
 ./cont_models.cpp \
 ./boot.cpp \
-./recode.cpp
+./recode.cpp \
+./mcmc.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -140,13 +142,15 @@ CPP_OBJS += \
 ./pairwise_alignment.o \
 ./rate_model.o \
 ./state_reconstructor.o \
+./state_reconstructor_simple.o \
 ./optimize_state_reconstructor_nlopt.o \
 ./optimize_cont_models_nlopt.o \
 ./bd_sim.o \
 ./superdouble.o \
 ./cont_models.o \
 ./boot.o \
-./recode.o
+./recode.o \
+./mcmc.o
 
 CPP_DEPS += \
 ./utils.d \
@@ -161,13 +165,15 @@ CPP_DEPS += \
 ./pairwise_alignment.d \
 ./rate_model.d \
 ./state_reconstructor.d \
+./state_reconstructor_simple.d \
 ./optimize_state_reconstructor_nlopt.d \
 ./optimize_cont_models_nlopt.d \
 ./bd_sim.d \
 ./superdouble.d \
 ./cont_models.d \
 ./boot.d \
-./recode.d
+./recode.d \
+./mcmc.d
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.cpp

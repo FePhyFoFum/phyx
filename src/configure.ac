@@ -22,7 +22,8 @@ phyx was developed with nlopt compiled with these flags
 --------------------------------------------------------])
 fi
 
-have_arma=no
+#setting this to yes, need to find a better lib to search for
+have_arma=yes
 AC_SEARCH_LIBS([wrapper_sgesv_],[armadillo], [have_arma=yes])
 
 if test "x${have_arma}" = xno; then

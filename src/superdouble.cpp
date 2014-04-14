@@ -52,27 +52,27 @@ ostream& operator<<(ostream& os, const Superdouble& x)
 }
 
 Superdouble Superdouble::operator * ( Superdouble  x){
-	Superdouble result(mantissa*x.mantissa,exponent+x.exponent);
-	if (result.stilldouble == true){
-		if (fabs(result.mantissa) > upperlimit || fabs(result.mantissa) < lowerlimit){
-			result.adjustDecimal();
-		}
-	}else{
-		result.adjustDecimal();
+    Superdouble result(mantissa*x.mantissa,exponent+x.exponent);
+    if (result.stilldouble == true){
+	if (fabs(result.mantissa) > upperlimit || fabs(result.mantissa) < lowerlimit){
+	    result.adjustDecimal();
 	}
-	return result;
+    }else{
+	result.adjustDecimal();
+    }
+    return result;
 }
 
 Superdouble Superdouble::operator * ( double  x){
-	Superdouble result(mantissa*x,exponent);
-	if (result.stilldouble == true){
-		if (fabs(result.mantissa) > upperlimit || fabs(result.mantissa) < lowerlimit){
-			result.adjustDecimal();
-		}
-	}else{
-		result.adjustDecimal();
+    Superdouble result(mantissa*x,exponent);
+    if (result.stilldouble == true){
+	if (fabs(result.mantissa) > upperlimit || fabs(result.mantissa) < lowerlimit){
+	    result.adjustDecimal();
 	}
-	return result;
+    }else{
+	result.adjustDecimal();
+    }
+    return result;
 }
 
 

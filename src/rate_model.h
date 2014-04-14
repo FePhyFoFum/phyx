@@ -17,8 +17,10 @@ private:
 	vector<string> labels;
 	vector< vector<double> > Q_mask;
 	bool sameQ;
-	cx_mat * lasteigval;
-	cx_mat * lasteigvec;
+	cx_mat lasteigval;
+	cx_mat lasteigvec;
+	cx_mat eigval;
+	cx_mat eigvec;
 	bool lastImag;
 
 public:
@@ -38,7 +40,7 @@ public:
 	void setup_Q(vector<vector<double> > & inQ);
 	void setup_Q(mat & inQ);
 	mat & get_Q();
-
+	void set_sameQ(bool);
 	cx_mat setup_P(double,bool);
 
 	/*

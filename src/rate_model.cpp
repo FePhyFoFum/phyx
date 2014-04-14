@@ -10,9 +10,13 @@ using namespace arma;
 inline int signof(double d){return d >= 0 ? 1 : -1;}
 inline double roundto(double in){return floor(in*(1000)+0.5)/(1000);}
 
-RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates){
+RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates),lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),eigval(_nstates,_nstates),eigvec(_nstates,_nstates){
     setup_Q();
     sameQ = false;
+    lasteigval.fill(0);
+    lasteigvec.fill(0);
+    eigval.fill(0);
+    eigvec.fill(0);
 }
 
 
@@ -86,8 +90,8 @@ mat & RateModel::get_Q(){
 
 cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
 //	sameQ = false;
-    cx_mat eigvec(nstates,nstates);eigvec.fill(0);
-    cx_mat eigval(nstates,nstates);eigval.fill(0);
+    eigvec.fill(0);
+    eigval.fill(0);
     bool isImag = get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
     //cout << eigval << endl;
     //cout << eigvec << endl;
@@ -117,8 +121,12 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
  */
 bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec){
     if(sameQ==true){
-	eigval = lasteigval;
-	eigvec = lasteigvec;
+	for(unsigned int i=0;i<Q.n_rows;i++){
+	    for(unsigned int j=0;j<Q.n_cols;j++){
+		(*eigval)(i,j) = lasteigval(i,j);
+		(*eigvec)(i,j) = lasteigvec(i,j);
+	    }
+	}
 	return lastImag;
     }
     mat tQ(nstates,nstates); tQ.fill(0);
@@ -133,21 +141,28 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec){
     bool isImag = false;
     for(unsigned int i=0;i<Q.n_rows;i++){
 	for(unsigned int j=0;j<Q.n_cols;j++){
-	    if(i==j)
+	    if(i==j){
 		(*eigval)(i,j) = eigva(i);
-	    else
+		lasteigval(i,j) = eigva(i);
+	    }else{
 		(*eigval)(i,j) = 0;
+		lasteigval(i,j) = 0;
+	    }
 	    (*eigvec)(i,j) = eigve(i,j);
+	    lasteigvec(i,j) = eigve(i,j);
 	    if(imag((*eigvec)(i,j)) > 0 || imag((*eigval)(i,j)))
 		isImag = true;
 	}
     }
-    lasteigval = eigval;
-    lasteigvec = eigvec;
+    //lasteigval = eigval;
+    //lasteigvec = eigvec;
     lastImag = isImag;
     return isImag;
 }
 
+void RateModel::set_sameQ(bool s){
+    sameQ = s;
+}
 
 void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw){
     double s = 0;

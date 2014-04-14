@@ -13,11 +13,12 @@ using namespace std;
 #include "rate_model.h"
 #include "tree.h"
 #include "tree_reader.h"
-#include "state_reconstructor.h"
+#include "state_reconstructor_simple.h"
 #include "seq_reader.h"
 #include "sequence.h"
 #include "seq_utils.h"
 #include "utils.h"
+#include "mcmc.h"
 
 #include <armadillo>
 using namespace arma;
@@ -164,7 +165,7 @@ int main(int argc, char * argv[]){
     RateModel rm(61);
     rm.set_Q(inq);
 //    cout << rm.get_Q() << endl;
-    StateReconstructor sr(rm);
+    StateReconstructorSimple sr(rm);
     sr.set_tree(tree);
     int sites = (seqs[0].get_sequence().size()/3);
     cout << "there are " << sites << " sites" << endl;
@@ -173,6 +174,9 @@ int main(int argc, char * argv[]){
 	sr.set_tip_conditionals(sr_seqs);
 	cout << sr.eval_likelihood() << endl;
     }
+    
+    sm0_mcmc(10000,100,tree,sr,rm,seqs,sr_seqs,codon_pos);
+    
     sfstr->close();
     delete spios;
     tfstr->close();

@@ -61,7 +61,7 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
 	if (testsame != seq.get_sequence())
 	    allsame = false;
     }
-    if (allsame == true){
+    if (allsame == true && verbose == true){
 	cerr << "all the tips have the same characters" << endl;
     }
     return allsame;
