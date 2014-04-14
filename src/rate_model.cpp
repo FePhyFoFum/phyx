@@ -10,13 +10,19 @@ using namespace arma;
 inline int signof(double d){return d >= 0 ? 1 : -1;}
 inline double roundto(double in){return floor(in*(1000)+0.5)/(1000);}
 
-RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates),lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),eigval(_nstates,_nstates),eigvec(_nstates,_nstates){
+RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates),
+lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),eigval(_nstates,_nstates),eigvec(_nstates,_nstates),
+lasteigval_simple(_nstates,_nstates),lasteigvec_simple(_nstates,_nstates),eigval_simple(_nstates,_nstates),eigvec_simple(_nstates,_nstates){
     setup_Q();
     sameQ = false;
     lasteigval.fill(0);
     lasteigvec.fill(0);
     eigval.fill(0);
     eigvec.fill(0);
+    lasteigval_simple.fill(0);
+    lasteigvec_simple.fill(0);
+    eigval_simple.fill(0);
+    eigvec_simple.fill(0);
 }
 
 
@@ -112,6 +118,68 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
     }
     return P;
 }
+
+mat RateModel::setup_P_simple(double bl,bool store_p_matrices){
+//	sameQ = false;
+    eigvec_simple.fill(0);
+    eigval_simple.fill(0);
+	get_eigenvec_eigenval_from_Q_simple(&eigval_simple, &eigvec_simple);
+    //cout << eigval << endl;
+    //cout << eigvec << endl;
+    for(int i=0;i<nstates;i++){
+	eigval_simple(i,i) = exp(eigval_simple(i,i) * bl);
+    }
+    mat C_inv = inv(eigvec_simple);
+    mat P = eigvec_simple * eigval_simple * C_inv;
+    neg_p = false;
+    for(int i=0;i<P.n_rows;i++){
+	for(int j=0;j<P.n_cols;j++){
+	    if (real(P(i,j))<0)
+		neg_p = true;
+	}
+    }
+/*    if(store_p_matrices == true){
+	stored_p_matrices[bl] = P;	
+    }*/
+    return P;
+}
+
+void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec){
+    if(sameQ==true){
+	for(unsigned int i=0;i<Q.n_rows;i++){
+	    for(unsigned int j=0;j<Q.n_cols;j++){
+		(*eigval)(i,j) = lasteigval_simple(i,j);
+		(*eigvec)(i,j) = lasteigvec_simple(i,j);
+	    }
+	}
+	return;
+    }
+    mat tQ(nstates,nstates); tQ.fill(0);
+    for(unsigned int i=0;i<Q.n_rows;i++){
+	for(unsigned int j=0;j<Q.n_cols;j++){
+	    tQ(i,j) = Q(i,j);
+	}
+    }
+    colvec eigva;
+    mat eigve;
+    eig_sym(eigva,eigve,tQ);
+    bool isImag = false;
+    for(unsigned int i=0;i<Q.n_rows;i++){
+	for(unsigned int j=0;j<Q.n_cols;j++){
+	    if(i==j){
+		(*eigval)(i,j) = eigva(i);
+		lasteigval_simple(i,j) = eigva(i);
+	    }else{
+		(*eigval)(i,j) = 0;
+		lasteigval_simple(i,j) = 0;
+	    }
+	    (*eigvec)(i,j) = eigve(i,j);
+	    lasteigvec_simple(i,j) = eigve(i,j);
+	}
+    }
+    return;
+}
+
 
 /*
  * this should be used to caluculate the eigenvalues and eigenvectors

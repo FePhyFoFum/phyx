@@ -65,11 +65,11 @@ bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_d
 VectorNodeObject<double> StateReconstructorSimple::conditionals(Node & node){
     VectorNodeObject<double> distconds = *((VectorNodeObject<double>*) node.getObject(dc));
     VectorNodeObject<double> * v = new VectorNodeObject<double> (nstates, 0);
-    cx_mat p;
+    mat p;
     if(use_stored_matrices == false){
-	p= rm.setup_P(node.getBL(),store_p_matrices);
+	p= rm.setup_P_simple(node.getBL(),store_p_matrices);
     }else{
-	p = rm.stored_p_matrices[node.getBL()];
+	p = rm.setup_P_simple(node.getBL(),store_p_matrices);//rm.stored_p_matrices[node.getBL()];
     }
     for( int j=0;j<nstates;j++){
 	for( int k=0;k<nstates;k++){

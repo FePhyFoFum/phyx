@@ -9,6 +9,9 @@
 #include "tree.h"
 #include "sequence.h"
 
-void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr, RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs, map<string,vector<int> > & codon_pos);
+#include <armadillo>
+using namespace arma;
+
+void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr, RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs, map<string,vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat &inq);
 
 #endif /* MCMC_H_ */

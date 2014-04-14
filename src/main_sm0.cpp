@@ -175,7 +175,7 @@ int main(int argc, char * argv[]){
 	cout << sr.eval_likelihood() << endl;
     }
     
-    sm0_mcmc(10000,100,tree,sr,rm,seqs,sr_seqs,codon_pos);
+    sm0_mcmc(300,10,tree,sr,rm,seqs,sr_seqs,codon_pos,bf,K,w,inq);
     
     sfstr->close();
     delete spios;

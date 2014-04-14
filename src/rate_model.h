@@ -21,6 +21,10 @@ private:
 	cx_mat lasteigvec;
 	cx_mat eigval;
 	cx_mat eigvec;
+	mat lasteigval_simple;
+	mat lasteigvec_simple;
+	mat eigval_simple;
+	mat eigvec_simple;
 	bool lastImag;
 
 public:
@@ -42,12 +46,15 @@ public:
 	mat & get_Q();
 	void set_sameQ(bool);
 	cx_mat setup_P(double,bool);
+	mat setup_P_simple(double,bool);
 
 	/*
 	 * get things from stmap
 	 */
 	//this should be used for getting the eigenvectors and eigenvalues
 	bool get_eigenvec_eigenval_from_Q(cx_mat * eigenvalues, cx_mat * eigenvectors);
+	void get_eigenvec_eigenval_from_Q_simple(mat * eigenvalues, mat * eigenvectors);
+
 };
 void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw);
 bool test_transition(char a, char b);
