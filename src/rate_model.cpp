@@ -119,29 +119,22 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
     return P;
 }
 
-mat RateModel::setup_P_simple(double bl,bool store_p_matrices){
+void RateModel::setup_P_simple(mat & p,double bl,bool store_p_matrices){
 //	sameQ = false;
     eigvec_simple.fill(0);
     eigval_simple.fill(0);
-	get_eigenvec_eigenval_from_Q_simple(&eigval_simple, &eigvec_simple);
+    get_eigenvec_eigenval_from_Q_simple(&eigval_simple, &eigvec_simple);
     //cout << eigval << endl;
     //cout << eigvec << endl;
     for(int i=0;i<nstates;i++){
 	eigval_simple(i,i) = exp(eigval_simple(i,i) * bl);
     }
     mat C_inv = inv(eigvec_simple);
-    mat P = eigvec_simple * eigval_simple * C_inv;
-    neg_p = false;
-    for(int i=0;i<P.n_rows;i++){
-	for(int j=0;j<P.n_cols;j++){
-	    if (real(P(i,j))<0)
-		neg_p = true;
-	}
-    }
+    p = eigvec_simple * eigval_simple * C_inv;
 /*    if(store_p_matrices == true){
 	stored_p_matrices[bl] = P;	
     }*/
-    return P;
+    //return P;
 }
 
 void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec){
@@ -228,6 +221,55 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec){
     return isImag;
 }
 
+extern"C" {
+    void wrapalldmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
+    void wrapsingledmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
+    void wrapdgpadm_(int * ideg,int * m,double * t,double * H,int * ldh,double * wsp,int * lwsp,int * ipiv,int * iexph,int *ns,int *iflag );
+}
+
+/*
+ * runs the basic padm fortran expokit full matrix exp
+ */
+void RateModel::setup_fortran_P(mat & P, double t, bool store_p_matrices){
+    /*
+      return P, the matrix of dist-to-dist transition probabilities,
+      from the model's rate matrix (Q) over a time duration (t)
+    */
+    int ideg = 6;
+    int m = Q.n_rows; // square so you only need the rows
+    int ldh = m;
+    double tol = 1;
+    int iflag = 0;
+    int lwsp = 4*m*m+6+1;
+    double * wsp = new double[lwsp];
+    int * ipiv = new int[m];
+    int iexph = 0;
+    int ns = 0;
+    double * H = new double [m*m];
+    convert_matrix_to_single_row_for_fortran(Q,t,H);
+    wrapdgpadm_(&ideg,&m,&tol,H,&ldh,wsp,&lwsp,ipiv,&iexph,&ns,&iflag);
+
+    for(int i=0;i<m;i++){
+	for(int j=0;j<m;j++){
+	    P(i,j) = wsp[iexph+(j-1)*m+(i-1)+m];
+	}
+    }
+    delete [] wsp;
+    delete [] ipiv;
+    delete [] H;
+    for(unsigned int i=0; i<nstates; i++){
+	double sum = 0.0;
+	for (unsigned int j=0; j<nstates; j++){
+	    sum += P(i,j);
+	}
+	for (unsigned int j=0; j<nstates; j++){
+	    P(i,j) = (P(i,j)/sum);
+	}
+    }
+    
+}
+
+
 void RateModel::set_sameQ(bool s){
     sameQ = s;
 }
@@ -295,6 +337,16 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon
 		if(nonsyn)
 		    (*w)(i,j) = 1;
 	    }
+	}
+    }
+}
+
+void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H){
+    int count = 0;
+    for(unsigned int i=0;i<inmatrix.n_cols;i++){
+	for(unsigned int j=0;j<inmatrix.n_cols;j++){
+	    H[i+(j*inmatrix.n_cols)] = inmatrix(i,j)*t;
+	    count += 1;
 	}
     }
 }

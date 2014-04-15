@@ -8,7 +8,7 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #profileing
 #-pg
 
-OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
+OPT_FLAGS = -O3 -march=native -ffast-math -ftree-vectorize -fopenmp -std=c++11
 #profiling 
 #-g -pg
 #-O3 -ffast-math -ftree-vectorize 
@@ -175,6 +175,25 @@ CPP_DEPS += \
 ./recode.d \
 ./mcmc.d
 
+#######
+# FORTRAN BIT
+######
+FC	= /usr/bin/gfortran
+FFLAGS	= -O3
+.f.o:;  $(FC) $(FFLAGS) -c $<
+
+# Each subdirectory must supply rules for building sources it contributes
+%.o: ./%.f
+	$(FC) $(FFLAGS) -c $<
+
+FORT_OBJS += \
+./clock.o \
+./my_expokit.o \
+./mataid.o \
+./blas.o \
+./lapack.o \
+./my_matexp.o
+
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.cpp
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
@@ -270,9 +289,9 @@ pxrr:  $(CPP_OBJS) $(RR_OBJ)
 	@echo 'building pxrr'
 	g++ -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
-pxsm0:  $(CPP_OBJS) $(SM0_OBJ) 
+pxsm0:  $(CPP_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
-	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lfortran
 
 
 # Other Targets

@@ -17,7 +17,14 @@ using namespace std;
 
 #define MINBL 0.000000001
 
-StateReconstructorSimple::StateReconstructorSimple(RateModel & _rm):tree(NULL),nstates(_rm.nstates),rm(_rm),dc("dist_conditionals"),store_p_matrices(false),use_stored_matrices(false),sp_alphas("sp_alphas"),alphas("alphas"){}
+/**
+ * this can take the multiple states
+ *
+ *
+ *
+ */
+
+StateReconstructorSimple::StateReconstructorSimple(RateModel & _rm, int num_sites):tree(NULL),nstates(_rm.nstates),nsites(num_sites),rm(_rm),dc("dist_conditionals"),store_p_matrices(false),use_stored_matrices(false),sp_alphas("sp_alphas"),alphas("alphas"),p(_rm.nstates,_rm.nstates),v_storage(_rm.nstates,0){}
     /*
      * initialize each node with segments
      */
@@ -29,13 +36,15 @@ void StateReconstructorSimple::set_tree(Tree * tr){
         if(tree->getNode(i)->getBL()<MINBL){
             tree->getNode(i)->setBL(MINBL * 100);
 	}
+	vector<double> tv(nsites);
+	tip_conditionals[tree->getNode(i)] = tv;
 	VectorNodeObject<double> * dcs = new VectorNodeObject<double>(nstates);
 	tree->getNode(i)->assocObject(dc,*dcs);
 	delete dcs;
     }
 }
 
-bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_data){
+bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_data,int site){
     bool allsame = true;
     string testsame = distrib_data[0].get_sequence();
     for(unsigned int i=0;i<distrib_data.size();i++){
@@ -44,10 +53,13 @@ bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_d
 	if(verbose)
 	    cout << nd->getName() << " ";
 	for(int j=0;j<nstates;j++){
-	    if(seq.get_sequence().at(j) == '1')
+	    if(seq.get_sequence().at(j) == '1'){
 		(((VectorNodeObject<double>*) nd->getObject(dc)))->at(j) = 1.0;
-	    else
+		tip_conditionals[tree->getNode(i)][site] = 1.0;
+	    }else{
 		(((VectorNodeObject<double>*) nd->getObject(dc)))->at(j) = 0.0;
+		tip_conditionals[tree->getNode(i)][site] = 0.0;
+	    }
 	    if(verbose)
 		cout << seq.get_sequence().at(j);
 	}
@@ -64,26 +76,25 @@ bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_d
 
 VectorNodeObject<double> StateReconstructorSimple::conditionals(Node & node){
     VectorNodeObject<double> distconds = *((VectorNodeObject<double>*) node.getObject(dc));
-    VectorNodeObject<double> * v = new VectorNodeObject<double> (nstates, 0);
-    mat p;
+    //VectorNodeObject<double> * v = new VectorNodeObject<double> (nstates, 0);
     if(use_stored_matrices == false){
-	p= rm.setup_P_simple(node.getBL(),store_p_matrices);
+	rm.setup_P_simple(p,node.getBL(),store_p_matrices);
     }else{
-	p = rm.setup_P_simple(node.getBL(),store_p_matrices);//rm.stored_p_matrices[node.getBL()];
+	rm.setup_P_simple(p,node.getBL(),store_p_matrices);//rm.stored_p_matrices[node.getBL()];
     }
     for( int j=0;j<nstates;j++){
+	v_storage[j] = 0;
 	for( int k=0;k<nstates;k++){
-	    v->at(j) += (distconds.at(k)*real(p(j,k)));
+	    v_storage[j] += (distconds.at(k)*p(j,k));
 	}
     }
     for(unsigned int j=0;j<distconds.size();j++){
-	distconds[j] = v->at(j);
+	distconds[j] = v_storage[j];
     }
     if(store_p_matrices == true){
 	node.assocObject(sp_alphas,distconds);
 	node.assocObject(alphas,distconds);
     }
-    delete v;
     return distconds;
 }
 

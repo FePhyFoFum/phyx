@@ -212,6 +212,26 @@ void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,vec
     }
 }
 
+/**
+ * given a vector of seqs, this will make, for each seq a vector
+ * that would be 000000100000 for each codon that is present
+ * this would be for each site, so reuse your vectors!
+ */
+void create_vector_seq_codon_state_reconstructor_all_site(vector<Sequence> & origseqs,vector<Sequence> & sr_seqs,int site,map<string,vector<int> > & codon_pos){
+    int start = site*3;
+    for (int i=0;i<origseqs.size();i++){
+	string codon = origseqs[i].get_sequence().substr(start,3);
+	string setsq = "";
+	for(int j=0;j<61;j++){
+	    setsq += "0";
+	}
+	for (int j=0;j<codon_pos[codon].size();j++){
+	    setsq.replace(codon_pos[codon][j],1,"1");
+	}
+	sr_seqs[i].set_sequence(setsq);
+    }
+}
+
 void populate_codon_list(vector<string> * codon_list){
     (*codon_list).push_back("TTT");
     (*codon_list).push_back("TTC");

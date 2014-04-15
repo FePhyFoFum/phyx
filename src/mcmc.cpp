@@ -12,16 +12,13 @@
 #include <armadillo>
 using namespace arma;
 
-
-
-
 void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr, RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs, map<string,vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat &inq){
     int sites = (seqs[0].get_sequence().size()/3);
     double curlike = 0;
     double sw = 0.5;
     for(int s=0;s<sites;s++){
 	create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
-	sr.set_tip_conditionals(sr_seqs);
+	sr.set_tip_conditionals(sr_seqs,s);
 	curlike +=  sr.eval_likelihood();
 	rm.set_sameQ(true);
     }
@@ -42,7 +39,7 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
 	rm.setup_Q(inq);
        	for(int s=0;s<sites;s++){
 	    create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
-	    sr.set_tip_conditionals(sr_seqs);
+	    sr.set_tip_conditionals(sr_seqs,s);
 	    newlike +=  sr.eval_likelihood();
 	    rm.set_sameQ(true);
 	}
