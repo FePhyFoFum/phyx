@@ -19,7 +19,7 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
     for(int s=0;s<sites;s++){
 	create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
 	sr.set_tip_conditionals(sr_seqs,s);
-	curlike +=  sr.eval_likelihood();
+	curlike +=  sr.eval_likelihood(s);
 	rm.set_sameQ(true);
     }
     cout << "start likelihood: " << curlike << endl;
@@ -37,10 +37,59 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
 	newlike = 0;
 	update_simple_goldman_yang_q(&inq,newk,neww,bf,K,w);
 	rm.setup_Q(inq);
+	sr.clear_map_ps();
        	for(int s=0;s<sites;s++){
-	    create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
-	    sr.set_tip_conditionals(sr_seqs,s);
-	    newlike +=  sr.eval_likelihood();
+	    //create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
+	    //sr.set_tip_conditionals(sr_seqs,s);
+	    newlike +=  sr.eval_likelihood(s);
+	    rm.set_sameQ(true);
+	}
+	if(newlike < curlike){
+	    curlike = newlike;
+	    startk = newk;
+	    startw = neww;
+	}
+	if(i%sampleiter == 0){
+	    cout << "iter: "<< i << " like: " << curlike << " K: "<< startk <<" w: " << startw << endl;
+	}
+    }
+}
+
+
+/**
+ * this should have 5 parameters
+ * K = free, w0 = 0,w1 = 1,w2 = free ,p0 = free ,p1 = free ,p2 = free
+ */
+void sm02a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr, RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs, map<string,vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat &inq){
+    int sites = (seqs[0].get_sequence().size()/3);
+    double curlike = 0;
+    double sw = 0.5;
+    for(int s=0;s<sites;s++){
+	create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
+	sr.set_tip_conditionals(sr_seqs,s);
+	curlike +=  sr.eval_likelihood(s);
+	rm.set_sameQ(true);
+    }
+    cout << "start likelihood: " << curlike << endl;
+
+    std::default_random_engine re;
+    
+    double newlike = 0;
+    double startk = 1.0; //start
+    double startw = 1.0; //startw
+    for (int i=0;i<reps;i++){
+	std::uniform_real_distribution<double> unif1(startk-sw,startk+sw);
+	std::uniform_real_distribution<double> unif2(startw-sw,startw+sw);
+	double newk = fabs(unif1(re));
+	double neww = fabs(unif2(re));
+	newlike = 0;
+	update_simple_goldman_yang_q(&inq,newk,neww,bf,K,w);
+	rm.setup_Q(inq);
+	sr.clear_map_ps();
+       	for(int s=0;s<sites;s++){
+	    //create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
+	    //sr.set_tip_conditionals(sr_seqs,s);
+	    newlike +=  sr.eval_likelihood(s);
 	    rm.set_sameQ(true);
 	}
 	if(newlike < curlike){

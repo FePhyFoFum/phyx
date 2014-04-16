@@ -170,12 +170,11 @@ int main(int argc, char * argv[]){
     sr.set_tree(tree);
     cout << "there are " << sites << " sites" << endl;
     for(int i=0;i<sites;i++){
-	create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,i,codon_pos);
-	sr.set_tip_conditionals(sr_seqs,i);
-	cout << sr.eval_likelihood() << endl;
+//	create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,i,codon_pos);
+//	sr.set_tip_conditionals(sr_seqs,i);
     }
     
-    sm0_mcmc(100,10,tree,sr,rm,seqs,sr_seqs,codon_pos,bf,K,w,inq);
+    sm0_mcmc(375,10,tree,sr,rm,seqs,sr_seqs,codon_pos,bf,K,w,inq);
     
     sfstr->close();
     delete spios;

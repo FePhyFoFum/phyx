@@ -2,13 +2,12 @@ RM := rm -f
 CXX := g++
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
-#-lgfortran NEED THIS?
 #gsl
 #-lgsl -lgslcblas 
 #profileing
 #-pg
 
-OPT_FLAGS = -O3 -march=native -ffast-math -ftree-vectorize -fopenmp -std=c++11
+OPT_FLAGS = -O3 -march=native -ffast-math -ftree-vectorize -fopenmp -std=c++11 -pg
 #profiling 
 #-g -pg
 #-O3 -ffast-math -ftree-vectorize 
@@ -291,7 +290,7 @@ pxrr:  $(CPP_OBJS) $(RR_OBJ)
 
 pxsm0:  $(CPP_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
-	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lfortran
+	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 
 # Other Targets
