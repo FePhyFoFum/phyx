@@ -24,6 +24,9 @@ private:
     string dc;
     
     map<double, mat> map_ps;
+    map<double, mat> map_ps0;
+    map<double, mat> map_ps1;
+    map<double, mat> map_ps2;
     map<Node *,vector<vector<double> > > conditionals_map;
     vector<double> v_storage;  //just junk storage
     vector<double> v1;
@@ -31,6 +34,7 @@ private:
     
     //VectorNodeObject<double> 
     void conditionals(vector<double> * v, Node & node,int site);
+    void conditionals2(vector<double> * v, Node & node,int site);
     void ancdist_conditional_lh(Node & node,int site);
     
 public:
@@ -39,6 +43,9 @@ public:
     double eval_likelihood(int site);
     bool set_tip_conditionals(vector<Sequence> & distrib_data,int );
     void clear_map_ps();
+    double pp0;
+    double pp1;
+    double pp2;
     ~StateReconstructorSimple();
 };
 #endif

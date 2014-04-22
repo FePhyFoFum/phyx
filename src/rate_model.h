@@ -13,6 +13,7 @@ class RateModel{
 
 private:
     mat Q;
+    vector<mat> Qs;
     vector<string> labels;
     vector< vector<double> > Q_mask;
     bool sameQ;
@@ -36,9 +37,12 @@ public:
       map of bl and p matrix
       map<branch length,p matrix>
     */
+    int selection_model; //0,2 = 2a
     int nstates;
     map<double, cx_mat> stored_p_matrices;
     bool neg_p;
+    void set_n_qs(int number);
+    void set_Q_which(mat & inQ, int which);
     void set_Q(mat & inQ);
     void set_Q_diag();
     void set_Q_cell(int,int,double);
@@ -49,6 +53,7 @@ public:
     void set_sameQ(bool);
     cx_mat setup_P(double,bool);
     void setup_P_simple(mat & p,double,bool);
+    void setup_fortran_P_whichQ(int which, mat & P, double t);
     void setup_fortran_P(mat & P, double t, bool store_p_matrices);
     /*
      * get things from stmap

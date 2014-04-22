@@ -12,7 +12,7 @@ inline double roundto(double in){return floor(in*(1000)+0.5)/(1000);}
 
 RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),nstates(_nstates),
 lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),eigval(_nstates,_nstates),eigvec(_nstates,_nstates),
-lasteigval_simple(_nstates,_nstates),lasteigvec_simple(_nstates,_nstates),eigval_simple(_nstates,_nstates),eigvec_simple(_nstates,_nstates){
+				   lasteigval_simple(_nstates,_nstates),lasteigvec_simple(_nstates,_nstates),eigval_simple(_nstates,_nstates),eigvec_simple(_nstates,_nstates){
     setup_Q();
     sameQ = false;
     lasteigval.fill(0);
@@ -78,6 +78,31 @@ void RateModel::setup_Q(mat & inQ){
 	}
     }
     set_Q_diag();
+    sameQ = false;
+}
+
+void RateModel::set_n_qs(int number){
+    for(int i=0;i<number;i++){
+	mat tm(nstates,nstates);
+	Qs.push_back(tm);
+    }
+}
+
+void RateModel::set_Q_which(mat & inQ,int which){
+    for(unsigned int i=0;i<Qs[which].n_rows;i++){
+	for(unsigned int j=0;j<Qs[which].n_cols;j++){
+	    Qs[which](i,j) = inQ(i,j);
+	}
+    }
+    for(unsigned int i=0;i<Qs[which].n_rows;i++){
+	double su = 0;
+	for(unsigned int j=0;j<Qs[which].n_cols;j++){
+	    if(i!=j){
+		su += Qs[which](i,j);
+	    }
+	}
+	Qs[which](i,i) = 0-su;
+    }
     sameQ = false;
 }
 
@@ -225,6 +250,11 @@ extern"C" {
     void wrapalldmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
     void wrapsingledmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
     void wrapdgpadm_(int * ideg,int * m,double * t,double * H,int * ldh,double * wsp,int * lwsp,int * ipiv,int * iexph,int *ns,int *iflag );
+}
+
+void RateModel::setup_fortran_P_whichQ(int which, mat & P, double t){
+    Q = Qs[which];
+    setup_fortran_P(P,t,false);
 }
 
 /*

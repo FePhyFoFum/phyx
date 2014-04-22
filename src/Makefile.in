@@ -104,6 +104,10 @@ SM0_SRC = main_sm0.cpp
 SM0_OBJ = main_sm0.o
 SM0_DEP = main_sm0.d
 
+SM2A_SRC = main_sm2a.cpp
+SM2A_OBJ = main_sm2a.o
+SM2A_DEP = main_sm2a.d
+
 
 CPP_SRCS += \
 ./utils.cpp \
@@ -126,6 +130,7 @@ CPP_SRCS += \
 ./cont_models.cpp \
 ./boot.cpp \
 ./recode.cpp \
+./branch_segment.cpp \
 ./mcmc.cpp
 
 CPP_OBJS += \
@@ -149,6 +154,7 @@ CPP_OBJS += \
 ./cont_models.o \
 ./boot.o \
 ./recode.o \
+./branch_segment.o \
 ./mcmc.o
 
 CPP_DEPS += \
@@ -172,6 +178,7 @@ CPP_DEPS += \
 ./cont_models.d \
 ./boot.d \
 ./recode.d \
+./branch_segment.d \
 ./mcmc.d
 
 #######
@@ -198,11 +205,11 @@ FORT_OBJS += \
 	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 
-pxstrec: $(CPP_OBJS) $(STREC_OBJ)
+pxstrec: $(CPP_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
-	g++ -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran 
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo 'building pxmrca'
@@ -292,6 +299,9 @@ pxsm0:  $(CPP_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
 	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
+pxsm2a:  $(CPP_OBJS) $(SM2A_OBJ) $(FORT_OBJS)
+	@echo 'building pxsm2a'
+	g++ -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 # Other Targets
 clean:
