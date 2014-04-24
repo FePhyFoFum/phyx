@@ -26,6 +26,8 @@ using namespace std;
 #include "state_reconstructor.h"
 #include "rate_model.h"
 #include "optimize_state_reconstructor_nlopt.h"
+#include "optimize_state_reconstructor_periods_nlopt.h"
+
 
 void print_help(){
     cout << "This will conduct state reconstruction analyses on data " << endl;
@@ -40,6 +42,7 @@ void print_help(){
     cout << " -n, --outstnum=FILE output file for stochastic mapping number" << endl;
     cout << " -a, --outstnumany=FILE output file for stochastic mapping number any" << endl;
     cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << endl;
+    cout << " -p, --periods=NUMS  comma separated times" << endl;
     cout << " -l, --logf=FILE     log file, stout otherwise"<<endl;
     cout << "     --help          display this help and exit"<<endl;
     cout << "     --version       display version and exit"<<endl;
@@ -62,6 +65,7 @@ static struct option const long_options[] =
     {"outstnum", required_argument, NULL, 'n'},
     {"outsttim", required_argument, NULL, 'm'},
     {"outstnumany", required_argument, NULL, 'a'},
+    {"periods", required_argument, NULL, 'p'},
     {"logf", required_argument, NULL, 'l'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -101,6 +105,7 @@ int main(int argc, char * argv[]){
     bool outstochnumfileset = false;
     bool outstochnumanyfileset = false;
     bool datawide = false;
+    bool periodsset = false;
     char * conff;
     char * treef;
     char * dataf;
@@ -109,10 +114,13 @@ int main(int argc, char * argv[]){
     char * outnum;
     char * outnumany;
     char * outtime;
+    string periodstring;
+    vector<string> ptokens;
+    vector<double> period_times;
     bool going = true;
     while(going){
         int oi = -1;
-        int c = getopt_long(argc,argv,"d:t:c:o:n:m:a:l:hVw",long_options,&oi);
+        int c = getopt_long(argc,argv,"d:t:c:o:n:m:a:l:p:hVw",long_options,&oi);
         if (c == -1){
             break;
         }
@@ -147,6 +155,15 @@ int main(int argc, char * argv[]){
 	    case 'a':
 		outstochnumanyfileset = true;
 		outnumany = strdup(optarg);
+		break;
+	    case 'p':
+		periodsset = true;
+		periodstring = (strdup(optarg));
+		tokenize(periodstring, ptokens, ",");
+		for(unsigned int j=0;j<ptokens.size();j++){
+		    trim_spaces(ptokens[j]);
+		    period_times.push_back((double)atof(ptokens[j].c_str()));
+		}
 		break;
 	    case 'l':
                 logfileset = true;
@@ -453,16 +470,28 @@ int main(int argc, char * argv[]){
 	for(int i=0;i<trees.size();i++){
 	    if(verbose)
 		(*loos) << i << endl;
+	    vector<RateModel> rms;
 	    RateModel rm(nstates_site_n);
+	    StateReconstructor sr(rm,rms);
 	    rm.setup_P(0.1,false);
-	    StateReconstructor sr(rm);
+	    if(periodsset == true){
+		rms.push_back(rm);
+		for(int p=1;p<period_times.size();p++){
+		    RateModel rm2(nstates_site_n);
+		    rm2.setup_P(0.1,false);
+		    rms.push_back(rm2);
+		}
+		sr.set_periods(period_times,rms);
+	    }
 	    sr.set_store_p_matrices(false);
 	    Tree * tree = trees[i];
 	    if(verbose)
 		(*loos) << "tips: "<< tree->getExternalNodeCount() << endl;
 
 	    sr.set_tree(tree);
-			
+	    if(periodsset == true){
+		sr.set_periods_model();
+	    }
 	    //checking that the data and the tree have the same names
 	    if(	checkdata(tree,runseqs) == 0)
 		exit(0); 			
@@ -472,52 +501,97 @@ int main(int argc, char * argv[]){
 		(*loos) << "skipping calculation" <<endl;
 		continue;
 	    }
-
-	    mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
-	    int ct = 0;
-	    if(freeparams == "_one_"){
-		ct = 1;
-	    }else if(freeparams == "_all_"){
-		ct = 0;
-		for(int k=0;k<nstates_site_n;k++){
-		    for(int j=0;j<nstates_site_n;j++){
-			if(k != j){
-			    free_var(k,j) = ct;
-			    ct += 1;
+	    double finallike; Superdouble totlike_sd;
+	    if(periodsset == false){
+		mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
+		int ct = 0;
+		if(freeparams == "_one_"){
+		    ct = 1;
+		}else if(freeparams == "_all_"){
+		    ct = 0;
+		    for(int k=0;k<nstates_site_n;k++){
+			for(int j=0;j<nstates_site_n;j++){
+			    if(k != j){
+				free_var(k,j) = ct;
+				ct += 1;
+			    }
 			}
 		    }
 		}
-	    }
-	    if(verbose)
-		(*loos) << free_var << endl;
-	    if(verbose)
-		(*loos) << ct << endl;
-	    rm.neg_p = false;
-
-	    //estimating the optimal rates
-
-	    if(estimate){//optimize
-		optimize_sr_nlopt(&rm,&sr,&free_var,ct);
-	    }else{//requires that the ratematrix is available
-
-		for(int i=0;i<nstates_site_n;i++){
-		    for(int j=0;j<nstates_site_n;j++){
-			free_var(i,j) = ratematrix[i][j];
+		if(verbose)
+		    (*loos) << free_var << endl;
+		if(verbose)
+		    (*loos) << ct << endl;
+		rm.neg_p = false;
+		cout << "likelihood: " << sr.eval_likelihood() << endl;
+		//estimating the optimal rates
+		if(estimate){//optimize
+		    optimize_sr_nlopt(&rm,&sr,&free_var,ct);
+		}else{//requires that the ratematrix is available
+		    for(int i=0;i<nstates_site_n;i++){
+			for(int j=0;j<nstates_site_n;j++){
+			    free_var(i,j) = ratematrix[i][j];
+			}
 		    }
 		}
+		//end estimating
+		if(verbose)
+		    (*loos) << free_var << endl;
+		rm.setup_Q(free_var);
+		sr.set_store_p_matrices(true);
+		finallike = sr.eval_likelihood();
+		if(verbose)
+		    (*loos) << "final_likelihood: " << finallike << endl;	
+	    }else{//optimize with periods
+		vector<mat> periods_free_var(period_times.size());
+		int ct = 0;
+		if(freeparams == "_one_"){
+		    ct = 1;
+		    for(int s=0;s<period_times.size();s++){
+			mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
+			periods_free_var[s] = free_var;
+		    }
+		}else if(freeparams == "_all_"){
+		    ct = 0;
+		    for(int s=0;s<period_times.size();s++){
+			mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
+			for(int k=0;k<nstates_site_n;k++){
+			    for(int j=0;j<nstates_site_n;j++){
+				if(k != j){
+				    free_var(k,j) = ct;
+				    ct += 1;
+				}
+			    }
+			}
+			periods_free_var[s] = free_var;
+		    }
+		}
+		if(verbose){
+		    for(int s=0;s<period_times.size();s++){
+			(*loos) << periods_free_var[s] << endl;			
+		    }
+		    (*loos) << ct << endl;
+		}
+		rm.neg_p = false;
+		cout << "likelihood: " << sr.eval_likelihood() << endl;
+		optimize_sr_periods_nlopt(&rms,&sr,&periods_free_var,ct);
+		if(verbose){
+		    for(int s=0;s<period_times.size();s++){
+			(*loos) << periods_free_var[s] << endl;
+		    }
+		    (*loos) << ct << endl;
+		    cout << "////////////////////////" << endl;
+		}
+		for(int s=0;s<period_times.size();s++){
+		    rms[s].setup_Q(periods_free_var[s]);
+		}
+		sr.set_store_p_matrices(true);
+		finallike = sr.eval_likelihood();
+		if(verbose)
+		    (*loos) << "final_likelihood: " << finallike << endl;
+		cout << "period set and so no ancestral states just yet" << endl;
+		continue;
 	    }
-	    //end estimating
-
-	    if(verbose)
-		(*loos) << free_var << endl;
-	    rm.setup_Q(free_var);
-
-	    sr.set_store_p_matrices(true);
-	    Superdouble totlike_sd;
-	    double finallike = sr.eval_likelihood();
-	    if(verbose)
-		(*loos) << "final_likelihood: " << finallike << endl;
-
 	    if(verbose)
 		(*loos) << "ancestral states" <<endl;
 	    sr.prepare_ancstate_reverse();

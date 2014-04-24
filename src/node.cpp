@@ -17,20 +17,21 @@
 
 using namespace std;
 
+#include "branch_segment.h"
 #include "node.h"
 #include "node_object.h"
 #include "string_node_object.h"
 
 Node::Node():BL(0.0),height(0.0),number(0),name(""),parent(NULL),
-    children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
+    children(vector<Node *> ()), assoc(map<string,NodeObject *>()),assocDV(map<string,vector<Superdouble> >()),
     comment(""){}
 
     Node::Node(Node * inparent):BL(0.0),height(0.0),number(0),name(""),parent(inparent),
-    children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
+    children(vector<Node *> ()), assoc(map<string,NodeObject *>()),assocDV(map<string,vector<Superdouble> >()),
     comment(""){}
 
     Node::Node(double bl,int innumber,string inname, Node * inparent):BL(bl),height(0.0),
-    number(innumber),name(inname),parent(inparent),children(vector<Node *> ()),assoc(map<string,NodeObject *>()),comment(""){}
+    number(innumber),name(inname),parent(inparent),children(vector<Node *> ()),assoc(map<string,NodeObject *>()),assocDV(map<string,vector<Superdouble> >()),comment(""){}
 
 
     vector<Node*> Node::getChildren(){
@@ -223,6 +224,27 @@ void Node::assocObject(string name,NodeObject & obj){
     assoc[name] = obj.clone();
 }
 
+void Node::assocDoubleVector(string name, vector<Superdouble> & obj){
+	if (assocDV.count(name) > 0 ){
+		assocDV.erase(name);
+	}
+	vector<Superdouble> tvec (obj.size());
+	for (unsigned int i=0;i<obj.size();i++){
+		tvec[i] = obj[i];
+	}
+	assocDV[name] = tvec;
+}
+
+vector<Superdouble> * Node::getDoubleVector(string name){
+	return &assocDV[name];
+}
+
+void Node::deleteDoubleVector(string name){
+	if (assocDV.count(name) > 0 ){
+		assocDV.erase(name);
+	}
+}
+
 /*
  * gets the number of leaves from this node
  */
@@ -320,6 +342,19 @@ vector<string> Node::get_leave_names(){
 NodeObject  * Node::getObject(string name){
     return assoc[name];
 }
+
+void Node::initSegVector(){
+    segs = new vector<BranchSegment> ();
+}
+
+vector<BranchSegment> * Node::getSegVector(){
+    return segs;
+}
+
+void Node::deleteSegVector(){
+    delete segs;
+}
+
 
 /*
  * delete the node

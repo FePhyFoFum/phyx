@@ -14,18 +14,28 @@ using namespace std;
 #include "sequence.h"
 #include "superdouble.h"
 
-#define verbose false
+#define verbose true
 
 #define MINBL 0.000000001
 
-StateReconstructor::StateReconstructor(RateModel & _rm):tree(NULL),nstates(_rm.nstates),rm(_rm),dc("dist_conditionals"),
+StateReconstructor::StateReconstructor(RateModel & _rm,vector<RateModel> &_vrm):tree(NULL),use_periods(false),nstates(_rm.nstates),rm(_rm),rm_periods(_vrm),dc("dist_conditionals"),andc("anc_dist_conditionals"),
                             store_p_matrices(false),use_stored_matrices(false),revB("revB"),
                             rev(false),rev_exp_number("rev_exp_number"),rev_exp_time("rev_exp_time"),
                             stochastic(false),stored_EN_matrices(map<Superdouble, mat >()),
                             stored_ER_matrices(map<Superdouble, mat >()),sp_alphas("sp_alphas"),alphas("alphas"){}
-    /*
-     * initialize each node with segments
-     */
+
+/**
+ * need to do this before you do the set tree
+ */
+void StateReconstructor::set_periods(vector<double> & ps,vector<RateModel> & rms){
+    use_periods = true;
+    periods = ps;
+    rm_periods = rms;
+}
+
+/*
+ * initialize each node with segments
+ */
 void StateReconstructor::set_tree(Tree * tr){
     tree = tr;
     if(verbose)
@@ -34,28 +44,104 @@ void StateReconstructor::set_tree(Tree * tr){
         if(tree->getNode(i)->getBL()<MINBL){
             tree->getNode(i)->setBL(MINBL * 100);
 	}
+	if(use_periods == true){
+	    tree->getNode(i)->initSegVector();
+	}
 	VectorNodeObject<Superdouble> * dcs = new VectorNodeObject<Superdouble>(nstates);
 	tree->getNode(i)->assocObject(dc,*dcs);
 	delete dcs;
     }
+    /*
+     * initialize the actual branch segments for each node
+     */
+    if(use_periods == true){
+	cout << "initializing branch segments..." << endl;
+	tree->setHeightFromTipToNodes();
+	for(int i=0;i<tree->getNodeCount();i++){
+	    if (tree->getNode(i)->hasParent()){
+		vector<double> pers(periods);
+		double anc = tree->getNode(i)->getParent()->getHeight();
+		double des = tree->getNode(i)->getHeight();
+		double t = des;
+		if (pers.size() > 0){
+		    for(unsigned int j=0;j<pers.size();j++){
+			double s = 0;
+			if(pers.size() == 1)
+			    s = pers[0];
+			for (unsigned int k=0;k<j+1;k++){
+			    s += pers[k];
+			}
+			if (t < s){
+			    double duration = min(s-t,anc-t);
+			    if (duration > 0){
+				BranchSegment tseg = BranchSegment(duration,j);
+				tree->getNode(i)->getSegVector()->push_back(tseg);
+			    }
+			    t += duration; // TODO: make sure that this is all working
+			}
+			if (t > anc || pers[j] > t){
+			    break;
+			}
+		    }
+		}else{
+		    BranchSegment tseg = BranchSegment(tree->getNode(i)->getBL(),0);
+		    tree->getNode(i)->getSegVector()->push_back(tseg);
+		}//end else/if
+	    }//end if
+	}//end for
+    }//end if 
 }
 
-bool StateReconstructor::set_tip_conditionals(vector<Sequence> & distrib_data){
+/**
+ * this will setup the distconds and ancdistconds for each segment
+ */
+void StateReconstructor::set_periods_model(){
+    for(int i=0;i<tree->getNodeCount();i++){
+	vector<BranchSegment> * tsegs = tree->getNode(i)->getSegVector();
+	for(unsigned int j=0;j<tsegs->size();j++){
+	    tsegs->at(j).setModel(&rm_periods[tsegs->at(j).getPeriod()]);
+	    vector<Superdouble> * distconds = new vector<Superdouble> (nstates,0);
+	    tsegs->at(j).distconds = distconds;
+	    vector<Superdouble> * ancdistconds = new vector<Superdouble> (nstates,0);
+	    tsegs->at(j).ancdistconds = ancdistconds;
+	}
+    }
+    vector<Superdouble> * distconds = new vector<Superdouble> (nstates,0);
+    tree->getRoot()->assocDoubleVector(dc,*distconds);
+    delete distconds;
+    vector<Superdouble> * ancdistconds = new vector<Superdouble> (nstates,0);
+    tree->getRoot()->assocDoubleVector(andc,*ancdistconds);
+    delete ancdistconds;
+}
+
+bool StateReconstructor::set_tip_conditionals(vector<Sequence> & data){
     bool allsame = true;
-    string testsame = distrib_data[0].get_sequence();
-    for(unsigned int i=0;i<distrib_data.size();i++){
-	Sequence seq = distrib_data[i];
+    string testsame = data[0].get_sequence();
+    for(unsigned int i=0;i<data.size();i++){
+	Sequence seq = data[i];
 	Node * nd = tree->getExternalNode(seq.get_id());
 	if(verbose)
 	    cout << nd->getName() << " ";
-	for(int j=0;j<nstates;j++){
-	    if(seq.get_sequence().at(j) == '1')
-		(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
-	    else
-		(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 0.0;
-	    if(verbose)
-		cout << seq.get_sequence().at(j);
-	}
+	if(use_periods == false){
+	    for(int j=0;j<nstates;j++){
+		if(seq.get_sequence().at(j) == '1')
+		    (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
+		else
+		    (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 0.0;
+		if(verbose)
+		    cout << seq.get_sequence().at(j);
+	    }
+	}else{
+	    vector<BranchSegment> * tsegs = nd->getSegVector();
+	    for(int j=0;j<nstates;j++){
+		if(seq.get_sequence().at(j) == '1')
+		    tsegs->at(0).distconds->at(j) = 1.0;
+		else
+		    tsegs->at(0).distconds->at(j) = 0.0;
+		if(verbose)
+		    cout << seq.get_sequence().at(j);
+	    }
+	}	
 	if(verbose)
 	    cout << endl;
 	if (testsame != seq.get_sequence())
@@ -92,6 +178,54 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node){
     return distconds;
 }
 
+VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods(Node & node){
+    vector<Superdouble> distconds;
+    vector<BranchSegment> * tsegs = node.getSegVector();
+    distconds = *tsegs->at(0).distconds;
+    for(unsigned int i=0;i<tsegs->size();i++){
+	for(unsigned int j=0;j<distconds.size();j++){
+	    tsegs->at(i).distconds->at(j) = distconds.at(j);
+	}
+	RateModel * trm = tsegs->at(i).getModel();
+	vector<Superdouble> * v = new vector<Superdouble> (nstates, 0);
+	//vector<vector<double > > p;
+	cx_mat p;
+	if(use_stored_matrices == false){
+	    //p= trm->setup_fortran_P(tsegs->at(i).getPeriod(),tsegs->at(i).getDuration(),store_p_matrices);
+	    p = trm->setup_P(tsegs->at(i).getDuration(),store_p_matrices);
+	}else{
+	    //p = trm->stored_p_matrices[tsegs->at(i).getPeriod()][tsegs->at(i).getDuration()];
+	    p = trm->stored_p_matrices[tsegs->at(i).getDuration()];
+	}
+	for(unsigned int j=0;j<nstates;j++){
+	    for(unsigned int k=0;k<nstates;k++){
+		v->at(j) += (distconds.at(k)*real(p(j,k)));
+	    }
+	}
+	
+	for(unsigned int j=0;j<nstates;j++){
+	    distconds[j] = v->at(j);
+	}
+	if(store_p_matrices == true){
+	    tsegs->at(i).seg_sp_alphas = distconds;
+
+	}
+	delete v;
+    }
+    /*
+     * if store is true we want to store the conditionals for each node
+     * for possible use in ancestral state reconstruction
+     */
+    if(store_p_matrices == true){
+	tsegs->at(0).alphas = distconds;
+    }
+    VectorNodeObject<Superdouble> rdistconds(distconds.size());
+    for(int i=0;i<distconds.size();i++){
+	rdistconds[i] = distconds[i];
+    }
+    return rdistconds;
+}
+
 void StateReconstructor::ancdist_conditional_lh(Node & node){
     VectorNodeObject<Superdouble> distconds(nstates, 0);
     if (node.isExternal()==false){//is not a tip
@@ -101,8 +235,13 @@ void StateReconstructor::ancdist_conditional_lh(Node & node){
 	ancdist_conditional_lh(*c2);
 	VectorNodeObject<Superdouble> v1;
 	VectorNodeObject<Superdouble> v2;
-	v1 =conditionals(*c1);
-	v2 =conditionals(*c2);
+	if(use_periods == false){
+	    v1 =conditionals(*c1);
+	    v2 =conditionals(*c2);
+	}else{
+	    v1 = conditionals_periods(*c1);
+	    v2 = conditionals_periods(*c2);
+	}
 	for ( int i=0;i<nstates;i++){
 	    distconds.at(i)= v1[i] * v2[i];
 	}
@@ -113,10 +252,29 @@ void StateReconstructor::ancdist_conditional_lh(Node & node){
 //	    }
     //}
     }else{
-	distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
+	if(use_periods == false){
+	    distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
+	}else{
+	    vector<BranchSegment> * tsegs = node.getSegVector();
+	    //distconds = *tsegs->at(0).distconds;
+	    for(int i=0;i<distconds.size();i++){distconds[i] = tsegs->at(0).distconds->at(i);}
+	}
     }
-    for(unsigned int i=0;i<distconds.size();i++){
-	((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
+    if(use_periods == false){
+	for(unsigned int i=0;i<distconds.size();i++){
+	    ((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
+	}
+    }else{
+	if(node.hasParent() == true){
+	    vector<BranchSegment> * tsegs = node.getSegVector();
+	    for(unsigned int i=0;i<distconds.size();i++){
+		tsegs->at(0).distconds->at(i) = distconds.at(i);
+	    }
+	}else{
+	    for(unsigned int i=0;i<distconds.size();i++){
+		((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
+	    }
+	}
     }
 }
 

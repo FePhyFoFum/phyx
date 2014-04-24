@@ -124,6 +124,7 @@ CPP_SRCS += \
 ./state_reconstructor.cpp \
 ./state_reconstructor_simple.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
+./optimize_state_reconstructor_periods_nlopt.cpp \
 ./optimize_cont_models_nlopt.cpp \
 ./bd_sim.cpp \
 ./superdouble.cpp \
@@ -148,6 +149,7 @@ CPP_OBJS += \
 ./state_reconstructor.o \
 ./state_reconstructor_simple.o \
 ./optimize_state_reconstructor_nlopt.o \
+./optimize_state_reconstructor_periods_nlopt.o \
 ./optimize_cont_models_nlopt.o \
 ./bd_sim.o \
 ./superdouble.o \
@@ -172,6 +174,7 @@ CPP_DEPS += \
 ./state_reconstructor.d \
 ./state_reconstructor_simple.d \
 ./optimize_state_reconstructor_nlopt.d \
+./optimize_state_reconstructor_periods_nlopt.d \
 ./optimize_cont_models_nlopt.d \
 ./bd_sim.d \
 ./superdouble.d \

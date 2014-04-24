@@ -14,7 +14,7 @@
 #include <set>
 using namespace std;
 
-
+#include "branch_segment.h"
 #include "node_object.h"
 #include "vector_node_object.h"
 #include "superdouble.h"
@@ -28,6 +28,8 @@ private:
     Node * parent;
     vector<Node *> children;
     map<string,NodeObject *> assoc;
+    map<string, vector<Superdouble> > assocDV;
+    vector<BranchSegment> * segs;
     string comment;
 
 public:
@@ -66,8 +68,13 @@ public:
     Node * getParent();
     int getChildCount();
     void assocObject(string name,NodeObject & obj);
+    void assocDoubleVector(string name, vector<Superdouble> & obj);
+	vector<Superdouble> * getDoubleVector(string name);
+	void deleteDoubleVector(string name);
     NodeObject * getObject(string name);
-
+    void initSegVector();
+    vector<BranchSegment> * getSegVector();
+    void deleteSegVector();
 
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_number; //segment specific rev B, combining the tempA and the ENLT
