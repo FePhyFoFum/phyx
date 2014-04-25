@@ -7,7 +7,7 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #profileing
 #-pg
 
-OPT_FLAGS = -O3 -march=native -ffast-math -ftree-vectorize -fopenmp -std=c++11 -pg
+OPT_FLAGS = -O3 -march=native -ffast-math -ftree-vectorize -fopenmp -std=c++11
 #profiling 
 #-g -pg
 #-O3 -ffast-math -ftree-vectorize 
