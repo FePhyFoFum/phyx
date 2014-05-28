@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef BRANCHSEGMENT_H_
-#define BRANCHSEGMENT_H_
+#ifndef _BRANCH_SEGMENT_H_
+#define _BRANCH_SEGMENT_H_
 
 #include <vector>
 using namespace std;
@@ -45,4 +45,4 @@ public:
     vector<Superdouble> * ancdistconds;//for ancestral state reconstructions
 };
 
-#endif /* BRANCHSEGMENT_H_ */
+#endif /* _BRANCH_SEGMENT_H_ */

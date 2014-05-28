@@ -1,5 +1,5 @@
-#ifndef SEQ_READER_H_
-#define SEQ_READER_H_
+#ifndef _SEQ_READER_H_
+#define _SEQ_READER_H_
 
 #include <string>
 #include <vector>
@@ -18,4 +18,4 @@ bool read_fasta_file(string,vector<Sequence>&);
 bool read_phylip_file(string,vector<Sequence>&);
 bool read_phylip_file_strec(string,vector<Sequence>&);
 
-#endif
+#endif /* _SEQ_READER_H_ */

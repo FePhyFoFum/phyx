@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef STRING_NODE_OBJECT_H_
-#define STRING_NODE_OBJECT_H_
+#ifndef _STRING_NODE_OBJECT_H_
+#define _STRING_NODE_OBJECT_H_
 
 #include "node_object.h"
 #include <string>
@@ -23,4 +23,4 @@ public:
 	StringNodeObject * clone() const { return new StringNodeObject(*this); }
 };
 
-#endif /* NODE_OBJECT_H_ */
+#endif /* _STRING_NODE_OBJECT_H_ */

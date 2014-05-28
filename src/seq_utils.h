@@ -1,5 +1,5 @@
-#ifndef SEQ_UTILS_H
-#define SEQ_UTILS_H
+#ifndef _SEQ_UTILS_H_
+#define _SEQ_UTILS_H_
 
 #include <vector>
 #include <map>
@@ -18,4 +18,5 @@ void populate_codon_list(vector<string> * codon_list);
 void populate_map_codon_dict(map<string, string> * codon_dict);
 void populate_map_codon_indices(map<string,vector<int> > * codon_position);
 void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,vector<Sequence> & sr_seqs,int site,map<string,vector<int> > & codon_pos);
-#endif
+
+#endif /* _SEQ_UTILS_H_ */

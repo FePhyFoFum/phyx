@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef OPTIMIZE_NLOPT_H_
-#define OPTIMIZE_NLOPT_H_
+#ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H_
+#define _OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H_
 
 #include <nlopt.h>
 
@@ -18,4 +18,4 @@ using namespace arma;
 
 void optimize_sr_nlopt(RateModel * _rm,StateReconstructor * _sr, mat * _free_mask, int _nfree);
 
-#endif /* OPTIMIZE_TNC_H_ */
+#endif /* _OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H_ */

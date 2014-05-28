@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef TREE_UTILS_H_
-#define TREE_UTILS_H_
+#ifndef _TREE_UTILS_H_
+#define _TREE_UTILS_H_
 
 #include <map>
 #include <vector>
@@ -21,4 +21,4 @@ bool check_names_against_tree(Tree * tr, vector<string> names);
 double get_length_to_root(Node * n);
 
 
-#endif /* TREE_UTILS_H_ */
+#endif /* _TREE_UTILS_H_ */

@@ -1,6 +1,6 @@
 
-#ifndef TREE_RECONSTRUCTOR_SIMPLE_H_
-#define TREE_RECONSTRUCTOR_SIMPLE_H_
+#ifndef _STATE_RECONSTRUCTOR_SIMPLE_H_
+#define _STATE_RECONSTRUCTOR_SIMPLE_H_
 
 #include <map>
 #include <string>
@@ -48,4 +48,4 @@ public:
     double pp2;
     ~StateReconstructorSimple();
 };
-#endif
+#endif /* _STATE_RECONSTRUCTOR_SIMPLE_H_ */

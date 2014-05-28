@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef OPTIMIZE_CONT_NLOPT_H_
-#define OPTIMIZE_CONT_NLOPT_H_
+#ifndef _OPTIMIZE_CONT_MODELS_NLOPT_H_
+#define _OPTIMIZE_CONT_MODELS_NLOPT_H_
 
 #include <nlopt.h>
 
@@ -21,4 +21,4 @@ double nlopt_ou_sr_log(unsigned n, const double *x, double *grad, void *data);
 vector<double> optimize_single_rate_bm_nlopt(rowvec & _x, mat & _vcv,bool log);
 vector<double> optimize_single_rate_bm_ou_nlopt(rowvec & _x, mat & _vcv);
 
-#endif /* OPTIMIZE_TNC_H_ */
+#endif /* _OPTIMIZE_CONT_MODELS_NLOPT_H_ */

@@ -23,8 +23,8 @@
  more development by Stephen A. Smith
  */
 
-#ifndef SUPERDOUBLE_H
-#define SUPERDOUBLE_H
+#ifndef _SUPERDOUBLE_H_
+#define _SUPERDOUBLE_H_
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
@@ -68,4 +68,4 @@ public:
 	operator double() {return mantissa*pow(10.,exponent);};
 	
 };
-#endif
+#endif /* _SUPERDOUBLE_H_ */

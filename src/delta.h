@@ -1,5 +1,5 @@
-#ifndef DELTA_H
-#define DELTA_H
+#ifndef _DELTA_H_
+#define _DELTA_H_
 
 #include <vector>
 #include <string>
@@ -31,4 +31,4 @@ public:
 	void setCLR(int,int,int);
 };
 
-#endif
+#endif /* _DELTA_H_ */

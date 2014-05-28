@@ -1,5 +1,5 @@
-#ifndef SEQ_SAMP_H_
-#define SEQ_SAMP_H_
+#ifndef _BOOT_H_
+#define _BOOT_H_
 
 class SequenceSampler {
 private:
@@ -35,4 +35,4 @@ public:
     //~SequenceResampler();
 };
 
-#endif /* SEQ_SAMP_H_ */
+#endif /* _BOOT_H_ */

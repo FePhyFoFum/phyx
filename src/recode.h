@@ -1,5 +1,5 @@
-#ifndef SEQ_RECODE_H_
-#define SEQ_RECODE_H_
+#ifndef _RECODE_H_
+#define _RECODE_H_
 
 class SequenceRecoder {
 
@@ -11,4 +11,4 @@ public:
     //~SequenceRecoder();
 };
 
-#endif /* SEQ_RECODE_H_ */
+#endif /* _RECODE_H_ */
