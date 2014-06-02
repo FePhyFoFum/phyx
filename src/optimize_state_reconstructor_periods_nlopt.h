@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef OPTIMIZE_NLOPT_PERIODS_H_
-#define OPTIMIZE_NLOPT_PERIODS_H_
+#ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_
+#define _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_
 
 #include <nlopt.h>
 
@@ -18,4 +18,4 @@ using namespace arma;
 
 void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr, vector<mat> * _free_mask, int _nfree);
 
-#endif
+#endif /* _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_ */

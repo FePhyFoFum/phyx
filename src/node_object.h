@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef NODE_OBJECT_H_
-#define NODE_OBJECT_H_
+#ifndef _NODE_OBJECT_H_
+#define _NODE_OBJECT_H_
 
 #include <string>
 using namespace std;
@@ -22,4 +22,4 @@ public:
 	virtual NodeObject * clone() const = 0;
 };
 
-#endif /* NODE_OBJECT_H_ */
+#endif /* _NODE_OBJECT_H_ */

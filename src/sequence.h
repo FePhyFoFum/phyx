@@ -1,5 +1,5 @@
-#ifndef SEQUENCE_H_
-#define SEQUENCE_H_
+#ifndef _SEQUENCE_H_
+#define _SEQUENCE_H_
 
 #include <string>
 #include <vector>
@@ -52,4 +52,4 @@ public:
     string get_fastq();
 
 };
-#endif
+#endif /* _SEQUENCE_H_ */

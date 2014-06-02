@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef TREE_H_
-#define TREE_H_
+#ifndef _TREE_H_
+#define _TREE_H_
 
 #include <string>
 #include <vector>
@@ -63,4 +63,4 @@ public:
     ~Tree();
 };
 
-#endif /* TREE_H_ */
+#endif /* _TREE_H_ */

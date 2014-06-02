@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef VECTOR_NODE_OBJECT_H_
-#define VECTOR_NODE_OBJECT_H_
+#ifndef _VECTOR_NODE_OBJECT_H_
+#define _VECTOR_NODE_OBJECT_H_
 
 #include "node_object.h"
 #include <vector>
@@ -31,4 +31,4 @@ public:
 	VectorNodeObject<T> * clone() const { return new VectorNodeObject<T>(*this); }
 };
 
-#endif /* NODE_OBJECT_H_ */
+#endif /* _VECTOR_NODE_OBJECT_H_ */

@@ -1,6 +1,6 @@
 
-#ifndef TREE_RECONSTRUCTOR_H_
-#define TREE_RECONSTRUCTOR_H_
+#ifndef _STATE_RECONSTRUCTOR_H_
+#define _STATE_RECONSTRUCTOR_H_
 
 #include <map>
 #include <string>
@@ -68,4 +68,4 @@ public:
     void set_use_stored_matrices(bool i);
     ~StateReconstructor();
 };
-#endif
+#endif /* _STATE_RECONSTRUCTOR_H_ */

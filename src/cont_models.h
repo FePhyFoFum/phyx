@@ -1,5 +1,5 @@
-#ifndef CONTMODELS_H_
-#define CONTMODELS_H_
+#ifndef _CONT_MODELS_H_
+#define _CONT_MODELS_H_
 
 #include <string>
 #include <vector>
@@ -18,4 +18,4 @@ Node * getMRCA_forVCV(Node * curn1,Node * curn2);
 Node * getMRCAFromPath_forVCV(vector<Node *> * path1,Node * curn2);
 void calc_vcv(Tree * tr, mat & vcv);
 
-#endif
+#endif /* _CONT_MODELS_H_ */

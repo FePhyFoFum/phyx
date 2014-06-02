@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef TREE_READER_H_
-#define TREE_READER_H_
+#ifndef _TREE_READER_H_
+#define _TREE_READER_H_
 
 #include <string>
 #include <vector>
@@ -31,4 +31,4 @@ bool get_nexus_translation_table(istream & stri, map<string,string> * trans,vect
 Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,bool ttexists, map<string,string> * trans,bool * going);
 Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going);
 
-#endif /* TREE_READER_H_ */
+#endif /* _TREE_READER_H_ */

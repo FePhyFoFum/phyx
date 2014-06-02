@@ -1,5 +1,5 @@
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef _UTILS_H_
+#define _UTILS_H_
 
 #include <vector>
 #include <string>
@@ -30,4 +30,4 @@ string get_string_vector(vector<int> &sts);
 
 double logn(double x,double base);
 
-#endif /* UTILS_H_ */
+#endif /* _UTILS_H_ */

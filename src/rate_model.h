@@ -1,5 +1,5 @@
-#ifndef RATEMODEL_H_
-#define RATEMODEL_H_
+#ifndef _RATE_MODEL_H_
+#define _RATE_MODEL_H_
 
 #include <vector>
 #include <string>
@@ -68,4 +68,4 @@ bool test_transition(char a, char b);
 void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, map<string, vector<int> > & codon_index, vector<string> & codon_list);
 void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H);
 
-#endif
+#endif /* _RATE_MODEL_H_ */

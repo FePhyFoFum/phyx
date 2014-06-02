@@ -1,5 +1,5 @@
-#ifndef BD_SIM_H_
-#define BD_SIM_H_
+#ifndef _BD_SIM_H_
+#define _BD_SIM_H_
 
 #include <string>
 #include <vector>
@@ -49,4 +49,4 @@ public:
 	//~BirthDeathSimulator();
 };
 
-#endif /* BD_SIM_H_ */
+#endif /* _BD_SIM_H_ */
