@@ -373,7 +373,7 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool
      tokenize(tline,tokens,del);
      string tstring(tokens[tokens.size()-1]);
      Tree * tree;
-     cout << tstring << endl;
+     //cout << tstring << endl;
      tree = read_tree_string(tstring);
      if(ttexists){
 	 for(int i=0;i<tree->getExternalNodeCount();i++){

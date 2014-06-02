@@ -100,6 +100,10 @@ RR_SRC = main_rr.cpp
 RR_OBJ = main_rr.o
 RR_DEP = main_rr.d
 
+TRM_SRC = main_trm.cpp
+TRM_OBJ = main_trm.o
+TRM_DEP = main_trm.d
+
 SM0_SRC = main_sm0.cpp
 SM0_OBJ = main_sm0.o
 SM0_DEP = main_sm0.d
@@ -303,6 +307,10 @@ pxttonew:  $(CPP_OBJS) $(TONEW_OBJ)
 pxrr:  $(CPP_OBJS) $(RR_OBJ) 
 	@echo 'building pxrr'
 	g++ -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxtrm:  $(CPP_OBJS) $(TRM_OBJ) 
+	@echo 'building pxtrm'
+	g++ -o "pxtrm" $(OPT_FLAGS) $(TRM_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxsm0:  $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
