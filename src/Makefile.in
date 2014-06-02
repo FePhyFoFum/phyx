@@ -76,9 +76,11 @@ SEQSAMP_SRC = main_boot.cpp
 SEQSAMP_OBJ = main_boot.o
 SEQSAMP_DEP = main_boot.d
 
-CONTRATES_SRC = main_contrates.cpp
-CONTRATES_OBJ = main_contrates.o
-CONTRATES_DEP = main_contrates.d
+CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
+
+CONTRATES_OBJ = main_contrates.o optimize_cont_models_nlopt.o
+
+CONTRATES_DEP = main_contrates.d optimize_cont_models_nlopt.d
 
 SEQRECODE_SRC = main_recode.cpp
 SEQRECODE_OBJ = main_recode.o
@@ -136,7 +138,6 @@ RATE_SRCS += \
 ./state_reconstructor_simple.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
 ./optimize_state_reconstructor_periods_nlopt.cpp \
-./optimize_cont_models_nlopt.cpp \
 ./branch_segment.cpp \
 ./mcmc.cpp
 
@@ -163,7 +164,6 @@ RATE_OBJS += \
 ./state_reconstructor_simple.o \
 ./optimize_state_reconstructor_nlopt.o \
 ./optimize_state_reconstructor_periods_nlopt.o \
-./optimize_cont_models_nlopt.o \
 ./branch_segment.o \
 ./mcmc.o
 
@@ -190,7 +190,6 @@ RATE_DEPS += \
 ./state_reconstructor_simple.d \
 ./optimize_state_reconstructor_nlopt.d \
 ./optimize_state_reconstructor_periods_nlopt.d \
-./optimize_cont_models_nlopt.d \
 ./branch_segment.d \
 ./mcmc.d
 
@@ -286,7 +285,7 @@ pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ)
 
 pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
 	@echo 'building pxcontrates'
-	g++ -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	g++ -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ) 
 	@echo 'building pxseqrecode'
