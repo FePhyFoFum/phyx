@@ -19,7 +19,7 @@ void print_help(){
     cout << "This will remove tips from a tree file and produce newick" << endl;
     cout << "Can read from stdin or file" << endl;
     cout << endl;
-    cout << "Usage: pxtrm [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxrmt [OPTION]... [FILE]..."<<endl;
     cout << endl; 
     cout << " -t, --treef=FILE     input tree file, stdin otherwise"<<endl;
     cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" <<endl;
@@ -34,7 +34,7 @@ void print_help(){
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxtrm 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxrmt 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

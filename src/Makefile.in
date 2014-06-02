@@ -100,9 +100,9 @@ RR_SRC = main_rr.cpp
 RR_OBJ = main_rr.o
 RR_DEP = main_rr.d
 
-TRM_SRC = main_trm.cpp
-TRM_OBJ = main_trm.o
-TRM_DEP = main_trm.d
+RMT_SRC = main_rmt.cpp
+RMT_OBJ = main_rmt.o
+RMT_DEP = main_rmt.d
 
 SM0_SRC = main_sm0.cpp
 SM0_OBJ = main_sm0.o
@@ -308,9 +308,9 @@ pxrr:  $(CPP_OBJS) $(RR_OBJ)
 	@echo 'building pxrr'
 	g++ -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
-pxtrm:  $(CPP_OBJS) $(TRM_OBJ) 
-	@echo 'building pxtrm'
-	g++ -o "pxtrm" $(OPT_FLAGS) $(TRM_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+pxrmt:  $(CPP_OBJS) $(RMT_OBJ) 
+	@echo 'building pxrmt'
+	g++ -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxsm0:  $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
