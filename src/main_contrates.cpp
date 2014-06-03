@@ -162,6 +162,7 @@ int main(int argc, char * argv[]) {
 	    calc_square_change_anc_states(trees[0],0);
 	    for(int i=0;i<trees[0]->getInternalNodeCount();i++){
 		double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
+		trees[0]->getInternalNode(i)->deleteDoubleVector("val");
 		std::ostringstream s;
 		s.precision(9);
 		s << "[&value=" << tv << "]";
@@ -170,6 +171,7 @@ int main(int argc, char * argv[]) {
 
 	    for(int i=0;i<trees[0]->getExternalNodeCount();i++){
 		double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
+		trees[0]->getExternalNode(i)->deleteDoubleVector("val");
 		std::ostringstream s;
 		s.precision(9);
 		s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
