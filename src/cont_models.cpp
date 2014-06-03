@@ -147,3 +147,51 @@ double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
     }
 }
 
+/**
+ * assumes that the characters are in get_cont_char and that the 
+ * results will be in assocDoubleVector as val and valse
+ */
+void calc_square_change_anc_states(Tree * tree, int index){
+    int df = 0;
+    int count = 0;
+    map<Node *,int> nodenum;
+    for (int i=0;i<tree->getInternalNodeCount();i++){
+	nodenum[tree->getInternalNode(i)] = count;
+	count += 1;
+	df += 1;
+	(*tree->getInternalNode(i)->getDoubleVector("val"))[index] = 0.0;
+    }
+    df -= 1;
+    mat fullMcp(df+1,df+1);
+    vec fullVcp(df+1);
+    calc_postorder_square_change(tree->getRoot(),nodenum,&fullMcp,&fullVcp,index);
+    mat b = chol(fullMcp);
+    vec mle;
+    mat x = solve(trimatl(b.t())*b,fullVcp);
+    count = 0;
+    for (int i=0;i<tree->getInternalNodeCount();i++){
+	(*tree->getInternalNode(i)->getDoubleVector("val"))[index] = x(nodenum[tree->getInternalNode(i)],0);
+	count += 1;
+    }
+}
+
+void calc_postorder_square_change(Node * node,map<Node *,int> & nodenum, mat * fullMcp, mat * fullVcp, int index){
+    for(int i=0;i<node->getChildCount();i++){
+	calc_postorder_square_change(node->getChild(i),nodenum,fullMcp,fullVcp,index);	
+    }
+    if (node->getChildCount() > 0){
+	int nni = nodenum[node];
+	for (int j=0;j<node->getChildCount();j++){
+	    double tbl = 2./node->getChild(j)->getBL();
+	    (*fullMcp)(nni,nni) += tbl;
+	    if (node->getChild(j)->getChildCount() == 0){
+		(*fullVcp)[nni] += (*node->getChild(j)->getDoubleVector("val"))[index] * tbl;
+	    }else{
+		int nnj = nodenum[node->getChild(j)];
+		(*fullMcp)(nni,nnj) -= tbl;
+		(*fullMcp)(nnj,nni) -= tbl;
+		(*fullMcp)(nnj,nnj) += tbl;
+	    }
+	}
+    }
+}

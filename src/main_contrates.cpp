@@ -30,6 +30,7 @@ void print_help(){
     cout << endl;
     cout << " -c, --charf=FILE     input character file, stdin otherwise" << endl;
     cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
+    cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
@@ -44,6 +45,8 @@ static struct option const long_options[] =
 {
     {"char", required_argument, NULL, 'c'},
     {"tree", required_argument, NULL, 't'},
+    {"outf", required_argument, NULL, 'o'},
+    {"analysis", required_argument, NULL, 'a'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -53,11 +56,15 @@ int main(int argc, char * argv[]) {
     bool going = true;
     bool cfileset = false;
     bool tfileset = false;
+    bool ofileset = false;
+    
     char * treef;
     char * charf;
+    char * outf;
+    int analysis = 0;
     while (going) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "c:t:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "c:t:o:a:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -70,6 +77,14 @@ int main(int argc, char * argv[]) {
                 tfileset = true;
                 treef = strdup(optarg);
                 break;
+	    case 'o':
+                ofileset = true;
+                outf = strdup(optarg);
+                break;
+	    case 'a':
+		if (optarg == "1")
+		    analysis = 1;
+		break;
             case 'h':
                 print_help();
                 exit(0);
@@ -132,21 +147,53 @@ int main(int argc, char * argv[]) {
 
     //conduct analyses for each character
     for (int c =0;c < nchars;c++){
-        cout << "character: "<< c << endl;
-        mat vcv;
-        int t_ind = 0;//TODO: do this over trees
-        int c_ind = c;
-        calc_vcv(trees[t_ind],vcv);
-        int n = trees[t_ind]->getExternalNodeCount();
-        rowvec x = rowvec(n);
-        for (int i=0;i<n;i++){
-            x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
-        }
-        vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
-        cout << "\tstate: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << endl;;
+        cerr << "character: "<< c << endl;
+	if (analysis == 0){
+	    for(int i=0;i<trees[0]->getExternalNodeCount();i++){
+		vector<Superdouble> tv (1);
+		tv[0] = seqs[seq_map[trees[0]->getExternalNode(i)->getName()]].get_cont_char(c);
+		trees[0]->getExternalNode(i)->assocDoubleVector("val",tv);
+	    }
+	    for(int i=0;i<trees[0]->getInternalNodeCount();i++){
+		vector<Superdouble> tv (1);
+		tv[0] = 0;
+		trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
+	    }
+	    calc_square_change_anc_states(trees[0],0);
+	    for(int i=0;i<trees[0]->getInternalNodeCount();i++){
+		double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
+		std::ostringstream s;
+		s.precision(9);
+		s << "[&value=" << tv << "]";
+		trees[0]->getInternalNode(i)->setName(s.str());
+	    }
 
-        vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
-        cout << "\tstate: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << endl;;
+	    for(int i=0;i<trees[0]->getExternalNodeCount();i++){
+		double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
+		std::ostringstream s;
+		s.precision(9);
+		s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
+		trees[0]->getExternalNode(i)->setName(s.str());
+	    }
+	    cout << "#nexus\nbegin trees;\ntree a =";
+	    cout << trees[0]->getRoot()->getNewick(true);
+	    cout << ";\nend;\n" << endl;
+	}else if (analysis == 1){
+	    mat vcv;
+	    int t_ind = 0;//TODO: do this over trees
+	    int c_ind = c;
+	    calc_vcv(trees[t_ind],vcv);
+	    int n = trees[t_ind]->getExternalNodeCount();
+	    rowvec x = rowvec(n);
+	    for (int i=0;i<n;i++){
+		x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
+	    }
+	    vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
+	    cout << "\tstate: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << endl;;
+	    
+	    vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
+	    cout << "\tstate: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << endl;
+	}
     }
 
     if (cfileset) {
