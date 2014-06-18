@@ -20,8 +20,8 @@ void print_help(){
     cout << endl;
     cout << "Usage: pxbp [OPTION]... [FILE]..."<<endl;
     cout << endl; 
-    cout << " -t, --treef=FILE     input sequence file, stdin otherwise"<<endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
+    cout << " -t, --treef=FILE     input treefile, stdin otherwise"<<endl;
+    cout << " -o, --outf=FILE     output file, stout otherwise"<<endl;
     cout << "     --help          display this help and exit"<<endl;
     cout << "     --version       display version and exit"<<endl;
     cout << endl;
