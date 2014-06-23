@@ -36,6 +36,7 @@ void print_help(){
     cout << endl; 
     cout << " -d, --dataf=FILE    input data file" <<endl;
     cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<endl;
+    cout << " -z, --dataz    data is in probability format (0,1,0,0)" << endl;
     cout << " -t, --treef=FILE    input tree file"<<endl;
     cout << " -c, --conf=FILE     configuration file" << endl;
     cout << " -o, --outanc=FILE   output file for ancestral calc"<<endl;
@@ -53,12 +54,13 @@ void print_help(){
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxstrec 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxstrec 0.2\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
     {"dataf", required_argument, NULL, 'd'},
     {"datawide", no_argument, NULL, 'w'},
+    {"dataz", no_argument ,  NULL, 'z'},
     {"treef", required_argument, NULL, 't'},
     {"conf", required_argument, NULL, 'c'},
     {"outanc", required_argument, NULL, 'o'},
@@ -106,6 +108,7 @@ int main(int argc, char * argv[]){
     bool outstochnumanyfileset = false;
     bool datawide = false;
     bool periodsset = false;
+    bool dataz = false; //the datafile will have probabilities
     char * conff;
     char * treef;
     char * dataf;
@@ -120,7 +123,7 @@ int main(int argc, char * argv[]){
     bool going = true;
     while(going){
         int oi = -1;
-        int c = getopt_long(argc,argv,"d:t:c:o:n:m:a:l:p:hVw",long_options,&oi);
+        int c = getopt_long(argc,argv,"d:t:c:o:n:m:a:l:p:hVwz",long_options,&oi);
         if (c == -1){
             break;
         }
@@ -129,6 +132,10 @@ int main(int argc, char * argv[]){
                 datafileset = true;
                 dataf = strdup(optarg);
                 break;
+	    case 'z':
+		dataz = true;
+		datawide = true;
+	        break;
 	    case 'w':
 	        datawide = true;
 		break;
@@ -332,7 +339,13 @@ int main(int argc, char * argv[]){
     int nstates;
     int nsites;
     if (datawide){
-	nstates = seqs[0].get_sequence().length();
+	if(dataz == false){
+	    nstates = seqs[0].get_sequence().length();
+	}else{
+	    vector<string> searchtokens;
+	    tokenize(seqs[0].get_sequence(), searchtokens, ",");
+	    nstates = searchtokens.size();
+	}
 	nsites = 1;
     }else{
 	int maxstate=1;
@@ -442,14 +455,21 @@ int main(int argc, char * argv[]){
 	    nstates_site_n = calculate_vector_int_sum(existing_states);
 	}else{
 	    runseqs = seqs;
-	    for(unsigned int se = 0;se<seqs.size();se++){
-		for(int i=0;i<nstates;i++){
-		    if(seqs[se].get_sequence().at(i) =='1'){
-			existing_states[i] = 1;
+	    if(dataz == false){
+		for(unsigned int se = 0;se<seqs.size();se++){
+		    for(int i=0;i<nstates;i++){
+			if(seqs[se].get_sequence().at(i) =='1'){
+			    existing_states[i] = 1;
+			}
 		    }
 		}
+		nstates_site_n = calculate_vector_int_sum(existing_states);
+	    }else{
+		for(int i=0;i<nstates;i++){
+		    existing_states[i] = 1;
+		}
+		nstates_site_n = nstates;
 	    }
-	    nstates_site_n = calculate_vector_int_sum(existing_states);
 	}
 	//mapping the existing states to the full states
 	int statecnt = 0;
@@ -496,7 +516,12 @@ int main(int argc, char * argv[]){
 	    if(	checkdata(tree,runseqs) == 0)
 		exit(0); 			
 			
-	    bool same = sr.set_tip_conditionals(runseqs);
+	    bool same;
+	    if(dataz == false)
+		same = sr.set_tip_conditionals(runseqs);
+	    else
+		same = sr.set_tip_conditionals_already_given(runseqs);
+	    
 	    if (same == true){
 		(*loos) << "skipping calculation" <<endl;
 		continue;

@@ -57,6 +57,7 @@ public:
     double eval_likelihood();
     void set_periods_model();
     bool set_tip_conditionals(vector<Sequence> & distrib_data);
+    bool set_tip_conditionals_already_given(vector<Sequence> & distrib_data);
     void prepare_ancstate_reverse();
     void reverse(Node *);
     vector<Superdouble> calculate_ancstate_reverse_sd(Node & node);

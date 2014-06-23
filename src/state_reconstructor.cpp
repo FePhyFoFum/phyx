@@ -153,6 +153,39 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & data){
     return allsame;
 }
 
+bool StateReconstructor::set_tip_conditionals_already_given(vector<Sequence> & data){
+    bool allsame = false;
+    for(unsigned int i=0;i<data.size();i++){
+	Sequence seq = data[i];
+	Node * nd = tree->getExternalNode(seq.get_id());
+	vector<string> searchtokens;
+	tokenize(seq.get_sequence(), searchtokens, ",");
+	for(unsigned int j=0;j<searchtokens.size();j++){
+	    trim_spaces(searchtokens[j]);
+	}
+	if(verbose)
+	    cout << nd->getName() << " ";
+	if(use_periods == false){
+	    for(int j=0;j<nstates;j++){
+		(((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = atof(searchtokens[j].c_str());
+		if(verbose)
+		    cout << searchtokens[j];
+	    }
+	}else{
+	    vector<BranchSegment> * tsegs = nd->getSegVector();
+	    for(int j=0;j<nstates;j++){
+		tsegs->at(0).distconds->at(j) = atof(searchtokens[j].c_str());
+		if(verbose)
+		    cout << searchtokens[j];
+	    }
+	}	
+	if(verbose)
+	    cout << endl;
+    }
+    return allsame;
+}
+
+
 VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node){
     VectorNodeObject<Superdouble> distconds = *((VectorNodeObject<Superdouble>*) node.getObject(dc));
     VectorNodeObject<Superdouble> * v = new VectorNodeObject<Superdouble> (nstates, 0);
