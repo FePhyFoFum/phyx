@@ -1,6 +1,5 @@
 #ifndef _RATE_MODEL_H_
 #define _RATE_MODEL_H_
-
 #include <vector>
 #include <string>
 #include <map>
