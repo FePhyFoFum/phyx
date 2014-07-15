@@ -9,7 +9,7 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 
 OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
 UNAME := $(shell uname)
-ifeq (($UNAME), Linux)
+ifeq "$(UNAME)" "Linux"
     OPT_FLAGS += -march=native
 endif
 #profiling 
