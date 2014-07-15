@@ -8,6 +8,7 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #-pg
 
 OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
+# MAC compilation fails with -march=native. check should occur earlier...
 UNAME := $(shell uname)
 ifeq "$(UNAME)" "Linux"
     OPT_FLAGS += -march=native
@@ -200,7 +201,8 @@ RATE_DEPS += \
 #######
 # FORTRAN BIT
 ######
-FC	= /usr/bin/gfortran
+# Don't assume location of gfortran e.g. with HomeBrew on MAC
+FC := $(shell which gfortran)
 FFLAGS	= -O3
 .f.o:;  $(FC) $(FFLAGS) -c $<
 
