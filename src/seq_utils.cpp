@@ -61,7 +61,7 @@ char get_dna_from_pos(set<int> ins){
     if(ins.count(3)==1){
         return 'T';
     }
-    return("-");
+    return('-');
 }
 
 set<int> get_dna_pos(char inc){
