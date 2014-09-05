@@ -31,7 +31,8 @@ void print_help(){
     cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
     cout << " -b, --birth=DOUBLE  birth rate, default=1." << endl;
     cout << " -d, --death=DOUBLE  death rate, default=0." << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
+    cout << " -s, --showd         show dead taxa" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
@@ -49,6 +50,7 @@ static struct option const long_options[] =
     {"birth", required_argument, NULL, 'b'},
     {"death", required_argument, NULL, 'd'},
     {"outf", required_argument, NULL, 'o'},
+    {"showd", no_argument, NULL, 's'},
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -65,10 +67,11 @@ int main(int argc, char * argv[]){
     double time;
     double birth = 1.0;
     double death = 0.0;
+    bool showd = false;
     int seed = -1;
     while(going){
         int oi = -1;
-        int c = getopt_long(argc,argv,"e:t:b:d:o:x:hV",long_options,&oi);
+        int c = getopt_long(argc,argv,"e:t:b:d:o:x:shV",long_options,&oi);
         if (c == -1){
             break;
         }
@@ -101,6 +104,9 @@ int main(int argc, char * argv[]){
                 break;
             case 'x':
                 seed = atoi(strdup(optarg));
+                break;
+            case 's':
+                showd = true;
                 break;
             case 'h':
                 print_help();
@@ -137,13 +143,13 @@ int main(int argc, char * argv[]){
     
     TreeReader tr;
     BirthDeathSimulator bd(ext,time,birth,death,seed);
-    Tree * bdtr = bd.make_tree(false);
+    Tree * bdtr = bd.make_tree(showd);
     if (ext != 0){
         int countlimit = 100;
         int count = 1;
-        while (bdtr->getExternalNodeCount() != ext){
+        while (bdtr->getExtantNodeCount() != ext){
             delete (bdtr);
-            bdtr = bd.make_tree(false);
+            bdtr = bd.make_tree(showd);
             if (count >= countlimit){
                 cout << "can't seem to get the tips right after " << countlimit << " trials" << endl;
                 break;

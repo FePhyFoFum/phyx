@@ -75,6 +75,25 @@ int Tree::getExternalNodeCount(){
     return externalNodeCount;
 }
 
+int Tree::getExtantNodeCount(){
+    setHeightFromRootToNodes();
+    double largest = 0;
+    for(int i=0;i<externalNodeCount;i++){
+        double th = getExternalNode(i)->getHeight();
+        if (th > largest){
+            largest = th;
+        }
+    }
+    int count = 0;
+    for(int i=0;i<externalNodeCount;i++){
+        double th = getExternalNode(i)->getHeight();
+        if (fabs(th-largest) < 0.00001){
+            count += 1;
+        }
+    }
+    return count;
+}
+
 int Tree::getInternalNodeCount(){
     return internalNodeCount;
 }

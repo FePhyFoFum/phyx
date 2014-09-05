@@ -44,6 +44,7 @@ public:
     Node * getInternalNode(string & name);
     Node * getNode(int num);
     int getNodeCount();
+    int getExtantNodeCount();
     int getExternalNodeCount();
     int getInternalNodeCount();
     Node * getRoot();
