@@ -34,6 +34,7 @@ vector<string> tab_split(string dna){
 
 	string second_dna_file;
 	int count = 0;
+	int Length_of_token;
 	string line;
 	ifstream input_dna;
 	vector<string> names; //vector to contain names
@@ -47,10 +48,15 @@ vector<string> tab_split(string dna){
 				//cout << line << endl;
 				istringstream str(line);
 				if (count != 0){
-					while(getline(str, token, '\t')){
+					while(getline(str, token, ' ')){
 						//create a vector with name and sequence as elements
-							names.push_back(token);
+						 //   token.erase(std::remove(token.begin(), token.end(), ' '), token.end());
+							Length_of_token = getlength(token);
+							if (Length_of_token != 0){
+								cout << "After Erase" << token << '\n';
+								names.push_back(token);
 						//	cout << token << endl;
+							}
 					}
 				}
 				count++;
