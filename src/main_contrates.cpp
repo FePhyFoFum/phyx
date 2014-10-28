@@ -77,14 +77,14 @@ int main(int argc, char * argv[]) {
                 tfileset = true;
                 treef = strdup(optarg);
                 break;
-	    case 'o':
+	        case 'o':
                 ofileset = true;
                 outf = strdup(optarg);
                 break;
-	    case 'a':
-		if (optarg == "1")
-		    analysis = 1;
-		break;
+	        case 'a':
+	        	if (optarg[0] == '1')
+		            analysis = 1;
+		        break;
             case 'h':
                 print_help();
                 exit(0);
