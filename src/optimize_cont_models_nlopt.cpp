@@ -75,12 +75,14 @@ vector<double> optimize_single_rate_bm_nlopt(rowvec & _x, mat & _vcv,bool log){
     a.ovcv = _vcv;
 
     //nlopt::opt opt(nlopt::LN_NELDERMEAD, 2);
-    nlopt::opt opt(nlopt::LN_BOBYQA,2);
-    //nlopt::opt opt(nlopt::LN_SBPLX, 2);
+    //nlopt::opt opt(nlopt::LN_BOBYQA,2);
+    //BOBYQA is better but the other finishes more
+    nlopt::opt opt(nlopt::LN_SBPLX, 2);
     //nlopt::opt opt(nlopt::LN_PRAXIS,2);
 
     opt.set_lower_bounds(0.000000001);
     opt.set_upper_bounds(100000);
+    opt.set_ftol_abs(0.000001);
     if (log){
         opt.set_min_objective(nlopt_bm_sr_log,&a);
     }else{
@@ -105,13 +107,15 @@ vector<double> optimize_single_rate_bm_ou_nlopt(rowvec & _x, mat & _vcv){
     a.ovcv = _vcv;
 
     //nlopt::opt opt(nlopt::LN_NELDERMEAD, 3);
-     nlopt::opt opt(nlopt::LN_BOBYQA,3);
-    //nlopt::opt opt(nlopt::LN_SBPLX, 3);
+    //BOBYQA is better but the other finishes more
+    //nlopt::opt opt(nlopt::LN_BOBYQA,3);
+    nlopt::opt opt(nlopt::LN_SBPLX, 3);
     //nlopt::opt opt(nlopt::LN_PRAXIS,3);
     opt.set_min_objective(nlopt_ou_sr_log,&a);
     opt.set_lower_bounds(0.000000001);
     opt.set_upper_bounds(100000);
 	opt.set_xtol_rel(0.000001);
+    opt.set_ftol_rel(0.00001);
     opt.set_maxeval(5000);
     double minf;
     //2 parameters, 1 anc, 2 rate, 3 alpha
