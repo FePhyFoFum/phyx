@@ -193,12 +193,12 @@ int main(int argc, char * argv[]) {
 	    vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
         double aic = (2*2)-(2*(-res[2]));
         double aicc = aic + ((2*2*(2+1))/(n-2-1));
-	    cout << "\tBM state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
+	    cout << c << " BM "<< " state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
 	    
 	    vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
         aic = (2*3)-(2*(-res2[3]));
         aicc = aic + ((2*3*(3+1))/(n-3-1));
-	    cout << "\tOU state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << " aic: " << aic << " aicc: " << aicc << endl;
+	    cout << c << " OU "<< " state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << " aic: " << aic << " aicc: " << aicc << endl;
 	}
     }
 
