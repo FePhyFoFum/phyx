@@ -9,7 +9,7 @@
 using namespace std;
 
 void tokenize(const string& str, vector<string>& tokens,const string& delimiters = " ");
-void trim_spaces( string& str);
+void trim_spaces(string& str);
 bool is_number(const string &);
 double calculate_vector_double_sum(vector<double> & in);
 double calculate_vector_double_mean(vector<double> & in);

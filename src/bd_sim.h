@@ -9,7 +9,7 @@ using namespace std;
 #include "tree.h"
 #include "node.h"
 
-class BirthDeathSimulator{
+class BirthDeathSimulator {
 private:
 	int failures;
 	int maxfailures;
@@ -42,7 +42,7 @@ private:
 
 public:
 	BirthDeathSimulator();
-	BirthDeathSimulator(double,double,double,double,int);
+	BirthDeathSimulator(double estop, double tstop, double brate, double drate, int seed);
 
 	Tree * make_tree(bool);
 

@@ -22,7 +22,7 @@ using namespace std;
 #include "utils.h"
 #include "bd_sim.h"
 
-void print_help(){
+void print_help () {
     cout << "Birth-death simulator" << endl;
     cout << endl;
     cout << "Usage: pxbd [OPTION]... " << endl;
@@ -57,7 +57,7 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main (int argc, char * argv[]) {
     bool going = true;
     bool outfileset = false;
     bool timeset = false;
@@ -70,7 +70,7 @@ int main(int argc, char * argv[]){
     bool showd = false;
     bool extisall = false;
     int seed = -1;
-    while(going){
+    while (going) {
         int oi = -1;
         int c = getopt_long(argc,argv,"e:t:b:d:o:x:shV",long_options,&oi);
         if (c == -1){
@@ -124,7 +124,7 @@ int main(int argc, char * argv[]){
 //     cout << "death = " << death << endl;
 //     cout << "seed = " << seed << endl;
     
-    if (ext == 0 && time == 0){
+    if (ext == 0 && time == 0) {
         cout << "you have to set -e or -t" << endl;
         exit(0);
     }
@@ -138,17 +138,18 @@ int main(int argc, char * argv[]){
     if (outfileset == true){
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
     
     TreeReader tr;
     BirthDeathSimulator bd(ext,time,birth,death,seed);
     Tree * bdtr = bd.make_tree(showd);
-    if (ext != 0){
+    if (ext != 0) {
         int countlimit = 100;
         int count = 1;
-        while (bdtr->getExtantNodeCount() != ext){
+        // the following doesn't get called. the bd sim handles failures itself.
+        while (bdtr->getExtantNodeCount() != ext) {
             delete (bdtr);
             bdtr = bd.make_tree(showd);
             if (count >= countlimit){
@@ -159,7 +160,7 @@ int main(int argc, char * argv[]){
         }
     }
     (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
-    if (outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

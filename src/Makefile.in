@@ -1,10 +1,12 @@
 RM := rm -f
-CXX := g++
+## Use compiler from configure. May be specified by user with:
+## ./configure CXX=foo
+CXX := @CXX@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #gsl
 #-lgsl -lgslcblas 
-#profileing
+#profiling
 #-pg
 
 OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
@@ -15,7 +17,15 @@ ifeq "$(UNAME)" "Linux"
 endif
 #profiling 
 #-g -pg
-#-O3 -ffast-math -ftree-vectorize 
+#-O3 -ffast-math -ftree-vectorize
+
+#######
+# FORTRAN BIT
+######
+# Don't assume location of gfortran e.g. with HomeBrew on MAC
+FC := $(shell which gfortran)
+FFLAGS	= -O3
+.f.o:;  $(FC) $(FFLAGS) -c $<
 
 CONSEQ_SRC = main_conseq.cpp
 CONSEQ_OBJ = main_conseq.o
@@ -80,6 +90,10 @@ SW_DEP = main_sw.d
 SEQSAMP_SRC = main_boot.cpp
 SEQSAMP_OBJ = main_boot.o
 SEQSAMP_DEP = main_boot.d
+
+LOGMANIP_SRC = main_logmanip.cpp
+LOGMANIP_OBJ = main_logmanip.o
+LOGMANIP_DEP = main_logmanip.d
 
 CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
 
@@ -198,14 +212,6 @@ RATE_DEPS += \
 ./branch_segment.d \
 ./mcmc.d
 
-#######
-# FORTRAN BIT
-######
-# Don't assume location of gfortran e.g. with HomeBrew on MAC
-FC := $(shell which gfortran)
-FFLAGS	= -O3
-.f.o:;  $(FC) $(FFLAGS) -c $<
-
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.f
 	$(FC) $(FFLAGS) -c $<
@@ -220,110 +226,114 @@ FORT_OBJS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.cpp
-	g++ $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
+	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
-	g++ -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran 
+	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran 
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo 'building pxmrca'
-	g++ -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
 	@echo 'building pxmrcacut'
-	g++ -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ) 
 	@echo 'building pxmrcaname'
-	g++ -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
 	@echo 'building pxconseq'
-	g++ -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxbd:  $(CPP_OBJS) $(BD_OBJ) 
 	@echo 'building pxbd'
-	g++ -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxnni:  $(CPP_OBJS) $(NNI_OBJ) 
 	@echo 'building pxnni'
-	g++ -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ) 
 	@echo 'building pxseqtest'
-	g++ -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxstofa:  $(CPP_OBJS) $(TOFA_OBJ) 
 	@echo 'building pxstofa'
-	g++ -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxstophy:  $(CPP_OBJS) $(TOPHY_OBJ) 
 	@echo 'building pxstophy'
-	g++ -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxstonex:  $(CPP_OBJS) $(TONEX_OBJ) 
 	@echo 'building pxstonex'
-	g++ -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ) 
 	@echo 'building pxfqfilt'
-	g++ -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
 	@echo 'building pxrevcomp'
-	g++ -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxnw:  $(CPP_OBJS) $(NW_OBJ) 
 	@echo 'building pxnw'
-	g++ -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxsw:  $(CPP_OBJS) $(SW_OBJ) 
 	@echo 'building pxsw'
-	g++ -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxboot'
-	g++ -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxlogmanip:  $(CPP_OBJS) $(LOGMANIP_OBJ) 
+	@echo 'building pxlogmanip'
+	$(CXX) -o "pxlogmanip" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
 	@echo 'building pxcontrates'
-	g++ -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ) 
 	@echo 'building pxseqrecode'
-	g++ -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxbp:  $(CPP_OBJS) $(BP_OBJ) 
 	@echo 'building pxbp'
-	g++ -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxbpseq:  $(CPP_OBJS) $(BPSEQ_OBJ) 
 	@echo 'building pxbpseq'
-	g++ -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxttonew:  $(CPP_OBJS) $(TONEW_OBJ) 
 	@echo 'building pxttonew'
-	g++ -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxrr:  $(CPP_OBJS) $(RR_OBJ) 
 	@echo 'building pxrr'
-	g++ -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxrmt:  $(CPP_OBJS) $(RMT_OBJ) 
 	@echo 'building pxrmt'
-	g++ -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxsm0:  $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
-	g++ -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+	$(CXX) -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 pxsm2a:  $(CPP_OBJS) $(RATE_OBJS) $(SM2A_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm2a'
-	g++ -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+	$(CXX) -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 # Other Targets
 clean:
