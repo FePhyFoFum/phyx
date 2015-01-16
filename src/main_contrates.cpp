@@ -77,14 +77,14 @@ int main(int argc, char * argv[]) {
                 tfileset = true;
                 treef = strdup(optarg);
                 break;
-	    case 'o':
+	        case 'o':
                 ofileset = true;
                 outf = strdup(optarg);
                 break;
-	    case 'a':
-		if (optarg == "1")
-		    analysis = 1;
-		break;
+	        case 'a':
+	        	if (optarg[0] == '1')
+		            analysis = 1;
+		        break;
             case 'h':
                 print_help();
                 exit(0);
@@ -191,10 +191,14 @@ int main(int argc, char * argv[]) {
 		x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
 	    }
 	    vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
-	    cout << "\tstate: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << endl;;
+        double aic = (2*2)-(2*(-res[2]));
+        double aicc = aic + ((2*2*(2+1))/(n-2-1));
+	    cout << c << " BM "<< " state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
 	    
 	    vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
-	    cout << "\tstate: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << endl;
+        aic = (2*3)-(2*(-res2[3]));
+        aicc = aic + ((2*3*(3+1))/(n-3-1));
+	    cout << c << " OU "<< " state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << " aic: " << aic << " aicc: " << aicc << endl;
 	}
     }
 

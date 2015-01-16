@@ -29,7 +29,7 @@ void tokenize(const string& str, vector<string>& tokens,
     }
 }
 
-void trim_spaces( string& str) {
+void trim_spaces(string& str) {
     // Trim Both leading and trailing spaces
     size_t startpos = str.find_first_not_of(" \t\r\n"); // Find the first character position after excluding leading blank spaces
     size_t endpos = str.find_last_not_of(" \t\r\n"); // Find the first character position from reverse af
