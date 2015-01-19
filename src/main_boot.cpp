@@ -19,7 +19,7 @@ using namespace std;
 #include "seq_reader.h"
 #include "boot.h"
 
-void print_help(){
+void print_help() {
     cout << "Sequence alignment bootstrap or jackknife resampling" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
@@ -168,4 +168,5 @@ int main(int argc, char * argv[]) {
         ofstr->close();
         delete poos;
     }
+    return EXIT_SUCCESS;
 }
