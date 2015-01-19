@@ -15,4 +15,6 @@ autom4te.cache
 .DS_Store?
 ._*
 .metadata
+.autotools
+.settings
 
