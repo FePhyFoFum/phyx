@@ -67,6 +67,7 @@ vector <string> tab_split(string & dna) {
 
 //not a good way but the best I can come up with now
 //to return all the unique values of a vector
+/*
 vector <string> matcher(vector <string>& unique_ones, vector <string>& match) {
     //sorts uniquely and removes duplicates
      vector <string>::iterator it;
@@ -85,6 +86,7 @@ vector <string> matcher(vector <string>& unique_ones, vector <string>& match) {
      }
      return unique_ones;
 }
+*/
 
 //where the strings get concatenated
 //not great but doesn't suck nearly bad as attempts 1 or 2
