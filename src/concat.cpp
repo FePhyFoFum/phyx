@@ -46,7 +46,7 @@ vector <string> tab_split(string & dna) {
 			if (verbose) cout << "line: " << line << endl;
 			istringstream str(line);
 			string token;
-			if (first) {
+			if (first) { // can use this for error-checking (num taxa / char)
 				str >> ntaxa;
 				str >> nchar;
 				first = false;
@@ -70,11 +70,11 @@ vector <string> tab_split(string & dna) {
 vector <string> matcher(vector <string>& unique_ones, vector <string>& match) {
     //sorts uniquely and removes duplicates
      vector <string>::iterator it;
-     vector <string> no_dup;
+     //vector <string> no_dup; // not used.
      sort(unique_ones.begin(), unique_ones.end());
      it = unique(unique_ones.begin(), unique_ones.end());
      unique_ones.resize(distance(unique_ones.begin(),it));
-     unique_ones.push_back("@!#!@$!@$!@$!@"); // what is this for?
+     //unique_ones.push_back("@!#!@$!@$!@$!@"); // what is this for?
 
      for (vector <string>::size_type i = 0; i != match.size(); i++) {
          for (vector <string>::size_type j = 0; j != unique_ones.size(); j++) {
@@ -94,13 +94,13 @@ vector <string> matcher(vector <string>& unique_ones, vector <string>& match) {
 //the length of the newest string
 vector <string> concat(vector <string>& old_vec, vector <string>& new_vec, int current_size, int running_size) {
     vector <string> phylip;
-    vector <string> no_match_old;
-    vector <string> no_match_new;
-    vector <string> match;
-    vector <string> unique_old;
-    vector <string> unique_new;
-    int old_match_count = 0;
-    int new_match_count = 0;
+    //vector <string> no_match_old;
+    //vector <string> no_match_new;
+    //vector <string> match;
+    //vector <string> unique_old;
+    //vector <string> unique_new;
+    //int old_match_count = 0;
+    //int new_match_count = 0;
     string cat;
 
     if (verbose) {
@@ -112,7 +112,10 @@ vector <string> concat(vector <string>& old_vec, vector <string>& new_vec, int c
         }
     }
 
-    //find matches of old vector to new
+    /*
+    //find matches of old vector to new.
+    // *** this doesn't seem efficient, as every name will be compared to every other,
+    // even after a match is found.
     for (vector <string>::size_type i = 0; i != old_vec.size(); i += 2) {
 		for (vector <string>::size_type j = 0; j != new_vec.size(); j += 2) {
 			if (old_vec[i] == new_vec[j]) {
@@ -127,20 +130,49 @@ vector <string> concat(vector <string>& old_vec, vector <string>& new_vec, int c
 			}
 		}
     }
+    */
 
+    // a slightly different take
 
+    // set up filler sequences
+    string prev_filler(old_vec[1].size(), 'N');
+    string new_filler(new_vec[1].size(), 'N');
 
-    // testing junk
-    cout << "Non-matches (old):" << endl;
-    for (int i = 0; i < (int)no_match_old.size(); i++) {
-        cout << "\t" << no_match_old[i] << endl;
+    for (vector <string>::size_type i = 0; i != old_vec.size(); i += 2) {
+		bool match_found = false;
+		if (new_vec.size() > 0) {
+			for (int j = 0; j != new_vec.size(); j += 2) {
+				if (old_vec[i] == new_vec[j]) {
+					cat = old_vec[i + 1] + new_vec[j + 1];
+					phylip.push_back(old_vec[i]);
+					phylip.push_back(cat);
+					match_found = true;
+
+					// erase matched entry so it won't have to be compared against again.
+					// erase in reverse order.
+					new_vec.erase(new_vec.begin()+(j+1));
+					new_vec.erase(new_vec.begin()+j);
+					break;
+				}
+			}
+		}
+    	if (!match_found) { // taxon is missing from present locus.
+    		phylip.push_back(old_vec[i]);
+    		phylip.push_back(old_vec[i + 1] + new_filler);
+    	}
+	}
+
+    // now, all that should be left are the novel sequences from the new file
+    if (new_vec.size() > 0) {
+		for (vector <string>::size_type i = 0; i != new_vec.size(); i += 2) {
+			phylip.push_back(new_vec[i]);
+			phylip.push_back(prev_filler + new_vec[i + 1]);
+		}
     }
-    cout << "Non-matches (new):" << endl;
-    for (int i = 0; i < (int)no_match_new.size(); i++) {
-        cout << "\t" << no_match_new[i] << endl;
-    }
 
+    // and that should be it
 
+    /*
 
     for (vector <string>::size_type i = 0; i != old_vec.size(); i += 2) {
         for (vector <string>::size_type j = 0; j != match.size(); j++) {
@@ -191,6 +223,7 @@ vector <string> concat(vector <string>& old_vec, vector <string>& new_vec, int c
             }
         }
     }
+    */
     return phylip;
 }
 
@@ -216,16 +249,23 @@ int main() {
     vector <string> second_sequences;
     string token;
     //Here is where the file is read in line by line
+    cout << "enter dna: ";
+    cin >> dna;
     //cout << "enter dna: ";
     //cin >> dna;
     //have new sequences enter here
 
     while (cont == 'Y') {
-        //cout << "enter next: ";
+    	cout << "enter next: ";
+    	cin >> second_dna_file;
+    	cout << "continue: ";
+    	cin >> cont;
+
+    	//cout << "enter next: ";
         //cin >> second_dna_file;
         //cout << "continue: ";
         //cin >> cont;
-    	cont = 'N';
+    	//cont = 'N';
         if (while_count == 0) {
             sequences = tab_split(dna);
             running_size = getlength(sequences[1]);
