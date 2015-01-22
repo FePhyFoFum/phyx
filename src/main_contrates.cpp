@@ -210,4 +210,5 @@ int main(int argc, char * argv[]) {
         tfstr->close();
         delete poos;
     }
+    return EXIT_SUCCESS;
 }

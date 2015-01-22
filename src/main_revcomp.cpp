@@ -104,8 +104,10 @@ int main(int argc, char * argv[]){
     if(fileset){
         fstr->close();
         delete pios;
-    }if(outfileset){
+    }
+    if(outfileset){
         ofstr->close();
         delete poos;
     }
+    return EXIT_SUCCESS;
 }

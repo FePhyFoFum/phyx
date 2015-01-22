@@ -189,4 +189,5 @@ int main(int argc, char * argv[]){
         ofstr->close();
         delete poos;
     }
+    return EXIT_SUCCESS;
 }

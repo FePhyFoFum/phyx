@@ -78,13 +78,13 @@ vector<string> matcher(vector<string>& unique_ones, vector<string>& match)
      unique_ones.push_back("@!#!@$!@$!@$!@");
 
      for(vector<string>::size_type i = 0; i != match.size(); i++) {
-     		for(vector<string>::size_type j = 0; j != unique_ones.size(); j++){
-     			if(unique_ones[j] == match[i]){
- 					unique_ones.erase(remove(unique_ones.begin(), unique_ones.end(), unique_ones[j]), unique_ones.end());
-     			}
+			for(vector<string>::size_type j = 0; j != unique_ones.size(); j++){
+				if(unique_ones[j] == match[i]){
+					unique_ones.erase(remove(unique_ones.begin(), unique_ones.end(), unique_ones[j]), unique_ones.end());
+				}
 
-     		}
-     	}
+			}
+		}
      return unique_ones;
 }
 
@@ -262,6 +262,7 @@ int main()
 	return 0;
 
 }
+
 
 
 
