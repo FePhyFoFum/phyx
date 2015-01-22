@@ -5,6 +5,8 @@
  *      Author: joe
  */
 
+// Compile with: g++ -Wall concat_JWB.cpp -o Concat
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -17,8 +19,8 @@
 
 using namespace std;
 
-bool verbose = false;
-bool testing = true;
+bool verbose = false; // print out extra junk for debugging
+bool testing = true;  // hard code file names for faster testing (no user input)
 
 //Gets the length of the string
 int getlength(string seq) {
@@ -31,7 +33,7 @@ int getlength(string seq) {
 //each element of the vector contains what has been
 //split on the tab, so element 0 is name and
 //element 1 is the sequence itself
-vector <string> tab_split(string & dna) {
+vector <string> tab_split(string & dna) { // should use phyx seq reader. can take in multiple formats.
     string second_dna_file;
     bool first = true;
     string line;
@@ -144,7 +146,7 @@ vector <string> concat(vector <string>& old_vec, vector <string>& new_vec, int c
     for (vector <string>::size_type i = 0; i != old_vec.size(); i += 2) {
 		bool match_found = false;
 		if (new_vec.size() > 0) {
-			for (int j = 0; j != new_vec.size(); j += 2) {
+			for (int j = 0; j != (int)new_vec.size(); j += 2) {
 				if (old_vec[i] == new_vec[j]) {
 					cat = old_vec[i + 1] + new_vec[j + 1];
 					phylip.push_back(old_vec[i]);
@@ -173,7 +175,7 @@ vector <string> concat(vector <string>& old_vec, vector <string>& new_vec, int c
 		}
     }
 
-    // and that should be it
+    // and that should be it!
 
     /*
 
@@ -252,23 +254,24 @@ int main() {
     vector <string> second_sequences;
     string token;
     //Here is where the file is read in line by line
-    cout << "enter dna: ";
-    cin >> dna;
+    if (!testing) {
+        cout << "enter dna: ";
+        cin >> dna;
+    }
     //cout << "enter dna: ";
     //cin >> dna;
     //have new sequences enter here
 
     while (cont == 'Y') {
-    	cout << "enter next: ";
-    	cin >> second_dna_file;
-    	cout << "continue: ";
-    	cin >> cont;
+        if (!testing) {
+            cout << "enter next: ";
+            cin >> second_dna_file;
+            cout << "continue: ";
+            cin >> cont;
+        } else {
+            cont = 'N';
+        }
 
-    	//cout << "enter next: ";
-        //cin >> second_dna_file;
-        //cout << "continue: ";
-        //cin >> cont;
-    	//cont = 'N';
         if (while_count == 0) {
             sequences = tab_split(dna);
             running_size = getlength(sequences[1]);
