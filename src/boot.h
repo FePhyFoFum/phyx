@@ -17,21 +17,21 @@ private:
     vector <int> get_jackknife_sites (int const& numchar);
     vector <int> get_partitioned_bootstrap_sites ();
     
-    void parsePartitions (string & partf);
-    void getPartitionParameters (vector <string> & tokens, int & start, int & stop, int & interval);
-    vector <int> getPartitionSites (string const& part);
-    void checkValidPartitions ();
-    void calNumPartitionedSites ();
-    void getSitePartitions (); // not used
+    void parse_partitions (string & partf);
+    void get_partition_parameters (vector <string> & tokens, int & start, int & stop, int & interval);
+    vector <int> get_partition_sites (string const& part);
+    void check_valid_partitions ();
+    void calculate_num_partitioned_sites ();
+    void get_site_partitions (); // not used
     
-    void findDuplicatesMissing (vector <int> const& allSites);
+    void find_duplicates_missing (vector <int> const& allSites);
 
 public:
     SequenceSampler (int const& seed, float const& jackfract, string & partf);
     vector <int> get_sampled_sites ();
     void sample_sites (int const& numchar);
     string get_resampled_seq (string const& origseq);
-    int getNumPartitionedSites ();
+    int get_num_partitioned_sites ();
     //~SequenceResampler();
 };
 

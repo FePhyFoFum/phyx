@@ -27,7 +27,7 @@ SequenceSampler::SequenceSampler (int const& seed, float const& jackfract, strin
     }
     if (!partf.empty()) {
         partitioned = true;
-        parsePartitions(partf);
+        parse_partitions(partf);
     }
 }
 
@@ -124,7 +124,7 @@ grab partition information from separate file. example:
 mtDNA_1st = 1-2066\3
 TGFb2 = 5059-5721
 */
-void SequenceSampler::parsePartitions (string & partf) {
+void SequenceSampler::parse_partitions (string & partf) {
     vector <int> temp;
     string line;
     ifstream infile(partf.c_str());
@@ -133,7 +133,7 @@ void SequenceSampler::parsePartitions (string & partf) {
         if (line.size() < 1) {
             continue;
         } else {
-            temp = getPartitionSites(line);
+            temp = get_partition_sites(line);
             partitions.push_back(temp);
             temp.clear();
         }
@@ -141,16 +141,16 @@ void SequenceSampler::parsePartitions (string & partf) {
     infile.close();
     
     numPartitions = (int)partitions.size();
-    calNumPartitionedSites();
+    calculate_num_partitioned_sites();
     
     // do error-checking here:
-    checkValidPartitions();
+    check_valid_partitions();
 }
 
 // expecting pattern: name = start-end[\3]
 // want to be flexible with spaces/lackthereof
 // guaranteed to be ordered
-vector <int> SequenceSampler::getPartitionSites (string const& part) {
+vector <int> SequenceSampler::get_partition_sites (string const& part) {
     vector <int> sites;
     vector <string> tokens;
     int start = 0;
@@ -159,7 +159,7 @@ vector <int> SequenceSampler::getPartitionSites (string const& part) {
     
     string delim(" -=;\t\\");
     tokenize(part, tokens, delim);
-    getPartitionParameters (tokens, start, stop, interval);
+    get_partition_parameters (tokens, start, stop, interval);
     
     int i = start;
     
@@ -171,10 +171,10 @@ vector <int> SequenceSampler::getPartitionSites (string const& part) {
     return sites;
 }
 
-// opposite of getPartitionSites. want single vector listing site-specific partitions. e.g.
+// opposite of get_partition_sites. want single vector listing site-specific partitions. e.g.
 // 1231231231231234444444444444
 // not used
-void SequenceSampler::getSitePartitions () {
+void SequenceSampler::get_site_partitions () {
     vector <int> sites(numPartitionedSites, 0);
     
     for (int i = 0; i < numPartitions; i++) {
@@ -188,7 +188,7 @@ void SequenceSampler::getSitePartitions () {
 // GADPH = 2991-3406\3
 // after being tokenized, should be of length 3 or 4 (latter when interval)
 // convert from 1-start to 0-start
-void SequenceSampler::getPartitionParameters (vector <string> & tokens, int & start, int & stop, int & interval) {
+void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & start, int & stop, int & interval) {
     if ((int)tokens.size() < 3 || (int)tokens.size() > 4) {
         cout << "Error: invalid/unsupported partition specification." << endl;
         exit (0);
@@ -211,7 +211,7 @@ void SequenceSampler::getPartitionParameters (vector <string> & tokens, int & st
     //cout << endl;
 }
 
-void SequenceSampler::calNumPartitionedSites () {
+void SequenceSampler::calculate_num_partitioned_sites () {
     numPartitionedSites = 0;
     
     for (int i = 0; i < numPartitions; i++) {
@@ -224,12 +224,12 @@ void SequenceSampler::calNumPartitionedSites () {
     }
 }
 
-int SequenceSampler::getNumPartitionedSites () {
+int SequenceSampler::get_num_partitioned_sites () {
     return numPartitionedSites;
 }
 
 // should do some error-checking e.g. for 1) missing sites, 2) overlapping partitions
-void SequenceSampler::checkValidPartitions () {
+void SequenceSampler::check_valid_partitions () {
     vector <int> allSites = partitions[0];
     for (int i = 1; i < numPartitions; i++) {
         allSites.insert(allSites.end(), partitions[i].begin(), partitions[i].end());
@@ -242,11 +242,11 @@ void SequenceSampler::checkValidPartitions () {
     
     if (diff != 0) { // sites are duplicated
         //cout << "Error in partitioning: maximum site value " << max << " does not equal site count " << count << "." << endl;
-        findDuplicatesMissing(allSites);
+        find_duplicates_missing(allSites);
     }
 }
 
-void SequenceSampler::findDuplicatesMissing (vector <int> const& allSites) {
+void SequenceSampler::find_duplicates_missing (vector <int> const& allSites) {
     vector <int> unique;
     vector <int> duplicates;
     vector <int> missing;

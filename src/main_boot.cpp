@@ -144,9 +144,9 @@ int main(int argc, char * argv[]) {
         if (first) { // need to read in first sequence to get numchar
             numchar = (int)seq.get_sequence().size(); // check against partition information
             if (partitioned) {
-                if (numchar != ss.getNumPartitionedSites()) {
+                if (numchar != ss.get_num_partitioned_sites()) {
                     cout << "Error: numSites in sequence (" << numchar <<
-                        ") does not match that in partition file (" << ss.getNumPartitionedSites() <<
+                        ") does not match that in partition file (" << ss.get_num_partitioned_sites() <<
                         ")." << endl;
                 }
             }
