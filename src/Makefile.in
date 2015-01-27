@@ -91,14 +91,16 @@ SEQSAMP_SRC = main_boot.cpp
 SEQSAMP_OBJ = main_boot.o
 SEQSAMP_DEP = main_boot.d
 
+CONCAT_SRC = main_concat.cpp
+CONCAT_OBJ = main_concat.o
+CONCAT_DEP = main_concat.d
+
 LOGMANIP_SRC = main_logmanip.cpp
 LOGMANIP_OBJ = main_logmanip.o
 LOGMANIP_DEP = main_logmanip.d
 
 CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
-
 CONTRATES_OBJ = main_contrates.o optimize_cont_models_nlopt.o
-
 CONTRATES_DEP = main_contrates.d optimize_cont_models_nlopt.d
 
 SEQRECODE_SRC = main_recode.cpp
@@ -149,6 +151,7 @@ CPP_SRCS += \
 ./superdouble.cpp \
 ./cont_models.cpp \
 ./boot.cpp \
+./concat.cpp \
 ./recode.cpp
 
 RATE_SRCS += \
@@ -175,6 +178,7 @@ CPP_OBJS += \
 ./superdouble.o \
 ./cont_models.o \
 ./boot.o \
+./concat.o \
 ./recode.o 
 
 RATE_OBJS += \
@@ -201,6 +205,7 @@ CPP_DEPS += \
 ./superdouble.d \
 ./cont_models.d \
 ./boot.d \
+./concat.d \
 ./recode.d 
 
 RATE_DEPS += \
@@ -229,7 +234,7 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -294,6 +299,10 @@ pxsw:  $(CPP_OBJS) $(SW_OBJ)
 pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxboot'
 	$(CXX) -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+
+pxconcat:  $(CPP_OBJS) $(CONCAT_OBJ) 
+	@echo 'building pxconcat'
+	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxlogmanip:  $(CPP_OBJS) $(LOGMANIP_OBJ) 
 	@echo 'building pxlogmanip'
