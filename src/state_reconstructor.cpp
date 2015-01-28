@@ -351,7 +351,7 @@ void StateReconstructor::reverse(Node * node){
 
     VectorNodeObject<Superdouble> tempA (nstates,0);
     //needs to be the same as ancdist_cond_lh
-    for ( int i = 0; i < nstates; i++) {
+    for (int i = 0; i < nstates; i++) {
         //root has i, curnode has left, sister of cur has right
         //for ( int j = 0; j < nstates; j++) {
         tempA[i] += (sisdistconds.at(i)*parrev->at(i));
@@ -396,39 +396,41 @@ void StateReconstructor::reverse(Node * node){
 }
 
 vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd(Node & node){
-    if (node.isExternal()==false){//is not a tip
-    VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
-    Node * c1 = node.getChild(0);
-    Node * c2 = node.getChild(1);
-    VectorNodeObject<Superdouble>* v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
-    VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
     vector<Superdouble> LHOODS (nstates,0);
-    for ( int i = 0; i < nstates; i++) {
-        //for ( int j=0;j<nstates;j++){
-        //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
-        //}
-        LHOODS[i] = ((v1->at(i)*v2->at(i)) * Bs->at(i));
+    if (node.isExternal() == false) {//is not a tip
+        VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
+        Node * c1 = node.getChild(0);
+        Node * c2 = node.getChild(1);
+        VectorNodeObject<Superdouble>* v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+        VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
+
+        for (int i = 0; i < nstates; i++) {
+            //for ( int j=0;j<nstates;j++){
+            //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
+            //}
+            LHOODS[i] = ((v1->at(i)*v2->at(i)) * Bs->at(i));
+        }
     }
     return LHOODS;
-    }
 }
 
 vector<double> StateReconstructor::calculate_ancstate_reverse(Node & node){
-    if (node.isExternal()==false){//is not a tip
-    VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
-    Node * c1 = node.getChild(0);
-    Node * c2 = node.getChild(1);
-    VectorNodeObject<Superdouble>* v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
-    VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
     vector<double> LHOODS (nstates,0);
-    for ( int i = 0; i < nstates; i++) {
-        //for ( int j=0;j<nstates;j++){
-        //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
-        //}
-        LHOODS[i] = double((v1->at(i)*v2->at(i)) * Bs->at(i));
+    if (node.isExternal() == false) {//is not a tip
+        VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
+        Node * c1 = node.getChild(0);
+        Node * c2 = node.getChild(1);
+        VectorNodeObject<Superdouble>* v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+        VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
+
+        for (int i = 0; i < nstates; i++) {
+            //for ( int j=0;j<nstates;j++){
+            //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
+            //}
+            LHOODS[i] = double((v1->at(i)*v2->at(i)) * Bs->at(i));
+        }
     }
     return LHOODS;
-    }
 }
 
 void StateReconstructor::prepare_stochmap_reverse_all_nodes(int from, int to){
