@@ -21,6 +21,8 @@ public:
     int get_sequence_length ();
     int get_num_taxa ();
     Sequence get_sequence (int const & index);
+    vector <int> get_partition_sizes ();
+    void write_partition_information (string & partfile);
     //~SequenceConcatenater();
 };
 

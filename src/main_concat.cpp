@@ -13,12 +13,12 @@
 #include <iterator>
 #include <algorithm>
 #include <string.h>
-#include "sequence.h"
-#include "seq_reader.h"
 #include <getopt.h>
 
 using namespace std;
 
+#include "sequence.h"
+#include "seq_reader.h"
 #include "utils.h"
 #include "concat.h"
 
@@ -30,6 +30,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     list of input sequence files" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << " -p, --partf=FILE    output partition file, none otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
     cout << endl;
@@ -43,6 +44,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
+	{"partf", required_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -51,6 +53,7 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
+    bool logparts = false;
     vector <string> inputFiles;
     SequenceConcatenater result;
     char * outf;
@@ -61,7 +64,7 @@ int main(int argc, char * argv[]) {
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -90,8 +93,11 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
-                cout << "Setting output file: " << outf << endl;
                 break;
+            case 'p':
+				logparts = true;
+				partf = strdup(optarg);
+				break;
             case 'h':
                 print_help();
                 exit(0);
@@ -131,6 +137,7 @@ int main(int argc, char * argv[]) {
         }
     }
 
+    // write sequences. currently only fasta format.
     for (int i = 0; i < result.get_num_taxa(); i++) {
         Sequence curr = result.get_sequence(i);
         (*poos) << ">" << curr.get_id() << endl;
@@ -141,6 +148,12 @@ int main(int argc, char * argv[]) {
         ofstr->close();
         delete poos;
     }
+
+    // log partition information. currently only RAxML-style.
+    if (logparts) {
+    	result.write_partition_information(partf);
+    }
+
     return EXIT_SUCCESS;
 }
 

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <ctime>
 #include <fstream>
+#include <string.h>
 
 using namespace std;
 
@@ -33,14 +34,11 @@ void SequenceConcatenater::read_sequences (string & seqf) {
     int counter = 0;
     int length = 0;
 
-    cout << "ft = " << ft << "; retstring = " << retstring << endl;
     if (ft == 1) { // phylip
         vector <string> fileDim;
         tokenize(retstring, fileDim, " ");
         numTaxa = stoi(fileDim[0]);
         numChar = stoi(fileDim[1]);
-
-        //cout << "numTaxa = " << numTaxa << "; numChar = " << numChar << "." << endl;
 
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
             length = (int)seq.get_sequence().size();
@@ -75,7 +73,6 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                 first = false;
             }
             seqs.push_back(seq);
-            cout << "Taxon: " << seq.get_id() << endl;
             counter++;
         }
         numTaxa = counter;
@@ -118,6 +115,8 @@ void SequenceConcatenater::concatenate(SequenceConcatenater & newSeqs) {
             numTaxa++;
         }
     }
+    numPartitions++;
+    partitionSizes.push_back(newSeqs.get_sequence_length());
 }
 
 int SequenceConcatenater::get_sequence_length () {
@@ -135,4 +134,20 @@ void SequenceConcatenater::delete_sequence (SequenceConcatenater & newSeqs, int 
 
 Sequence SequenceConcatenater::get_sequence (int const & index) {
     return seqs[index];
+}
+
+vector <int> SequenceConcatenater::get_partition_sizes () {
+	return partitionSizes;
+}
+
+void SequenceConcatenater::write_partition_information (string & partfile) {
+	ofstream outfile(partfile.c_str());
+	int charIndex = 1;
+	int stopIndex = 1;
+	for (int i = 0; i < (int)partitionSizes.size(); i++) {
+		stopIndex = charIndex + partitionSizes[i] - 1;
+		outfile << "DNA, gene" << i << " = " << charIndex << "-" << stopIndex << endl;
+		charIndex = stopIndex + 1;
+	}
+	outfile.close();
 }
