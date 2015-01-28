@@ -25,6 +25,7 @@ using namespace std;
 void print_help() {
     cout << "Sequence file concatenation" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
+    cout << "Individual files can be of different formats." << endl;
     cout << endl;
     cout << "Usage: pxconcat [OPTION]... " << endl;
     cout << endl;
