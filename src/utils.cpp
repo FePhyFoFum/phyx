@@ -10,7 +10,12 @@
 #include <string>
 #include <sstream>
 
+#include <cmath>
+#include <limits>
+
 using namespace std;
+
+#define EPSILON numeric_limits<double>::epsilon()
 
 #include "utils.h"
 #include "superdouble.h"
@@ -192,7 +197,6 @@ bool test_logical(vector<int> & matA,vector<int> & matB){
     return test;
 }
 
-
 double sum(vector<double> &inm){
     double x=0;
     for(unsigned int i=0;i<inm.size();i++){
@@ -227,4 +231,13 @@ string get_string_vector(vector<int> & sts){
 
 double logn(double x, double base){
     return log10(x)/log10(base);
+}
+
+// check if 2 doubles are equal within some tolerance.
+bool essentially_equal (double a, double b) {
+    bool equal = false;
+    if (abs(a - b) <= max(EPSILON, EPSILON * max(abs(a), abs(b)))) {
+        return true;
+    }
+    return equal;
 }
