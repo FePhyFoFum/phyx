@@ -45,7 +45,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-{"partf", required_argument, NULL, 'p'},
+    {"partf", required_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
