@@ -96,9 +96,9 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-logparts = true;
-partf = strdup(optarg);
-break;
+                logparts = true;
+                partf = strdup(optarg);
+                break;
             case 'h':
                 print_help();
                 exit(0);
