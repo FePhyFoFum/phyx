@@ -34,12 +34,14 @@ void SequenceConcatenater::read_sequences (string & seqf) {
     int counter = 0;
     int length = 0;
 
-    if (ft == 1) { // phylip
-        vector <string> fileDim;
-        tokenize(retstring, fileDim, " ");
-        numTaxa = stoi(fileDim[0]);
-        numChar = stoi(fileDim[1]);
-
+    if (ft == 1 || ft == 0) {
+        if (ft == 1) {
+            vector <string> fileDim = tokenize(retstring);
+            numTaxa = stoi(fileDim[0]);
+            numChar = stoi(fileDim[1]);
+        } else {
+            get_nexus_dimensions (seqf, numTaxa, numChar);
+        }
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
             length = (int)seq.get_sequence().size();
             if (length != numChar) {
@@ -137,17 +139,17 @@ Sequence SequenceConcatenater::get_sequence (int const & index) {
 }
 
 vector <int> SequenceConcatenater::get_partition_sizes () {
-	return partitionSizes;
+    return partitionSizes;
 }
 
 void SequenceConcatenater::write_partition_information (string & partfile) {
-	ofstream outfile(partfile.c_str());
-	int charIndex = 1;
-	int stopIndex = 1;
-	for (int i = 0; i < (int)partitionSizes.size(); i++) {
-		stopIndex = charIndex + partitionSizes[i] - 1;
-		outfile << "DNA, gene" << i << " = " << charIndex << "-" << stopIndex << endl;
-		charIndex = stopIndex + 1;
-	}
-	outfile.close();
+    ofstream outfile(partfile.c_str());
+    int charIndex = 1;
+    int stopIndex = 1;
+    for (int i = 0; i < (int)partitionSizes.size(); i++) {
+        stopIndex = charIndex + partitionSizes[i] - 1;
+        outfile << "DNA, gene" << i << " = " << charIndex << "-" << stopIndex << endl;
+        charIndex = stopIndex + 1;
+    }
+    outfile.close();
 }

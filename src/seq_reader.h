@@ -17,5 +17,6 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
 bool read_fasta_file(string,vector<Sequence>&);
 bool read_phylip_file(string,vector<Sequence>&);
 bool read_phylip_file_strec(string,vector<Sequence>&);
+void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar);
 
 #endif /* _SEQ_READER_H_ */
