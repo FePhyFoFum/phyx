@@ -1,6 +1,6 @@
 RM := rm -f
 ## Use compiler from configure. May be specified by user with:
-## ./configure CXX=foo
+## ./configure CXX=g++-4.
 CXX := @CXX@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
