@@ -23,6 +23,7 @@ class Node{
 private:
     double BL;//branch lengths
     double height; // could be from tip or from root
+    double depth;
     int number;
     string name;
     Node * parent;
@@ -55,6 +56,8 @@ public:
     void setBL(double bl);
     double getHeight();
     void setHeight(double he);
+    double getDepth();
+    void setDepth(double de);
     bool hasChild(Node & test);
     bool addChild(Node & c);
     bool removeChild(Node & c);
@@ -64,7 +67,7 @@ public:
     void setName(string s);
     void setComment(string s);
     string getNewick(bool bl);
-    string getNewick(bool bl,string obj);
+    string getNewick(bool bl, string obj);
     Node * getParent();
     int getChildCount();
     void assocObject(string name,NodeObject & obj);
