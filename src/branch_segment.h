@@ -9,12 +9,14 @@
 #define _BRANCH_SEGMENT_H_
 
 #include <vector>
-using namespace std;
 
-#include "rate_model.h"
+class RateModel;
+
+using namespace std;
 
 #include "vector_node_object.h"
 #include "superdouble.h"
+
 
 class BranchSegment{
 private:

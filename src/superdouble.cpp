@@ -1,9 +1,11 @@
 
-#include "superdouble.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
+
+#include "superdouble.h"
+
 using namespace std;
 
 

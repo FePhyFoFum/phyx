@@ -10,12 +10,12 @@
 
 #include <string>
 #include <vector>
-#include <map> 
+#include <map>
 #include <set>
+
 using namespace std;
 
 #include "branch_segment.h"
-#include "node_object.h"
 #include "vector_node_object.h"
 #include "superdouble.h"
 

@@ -26,7 +26,7 @@ TreeReader::TreeReader(){}
 /*
  * the tree pointer coming in should just be a new Tree()
  * we should take this out as soon as we are ready to repoint
- * the existing code to teh right bits
+ * the existing code to the right bits
  */
 Tree * TreeReader::readTree(string trees){
     Tree * tree = new Tree();

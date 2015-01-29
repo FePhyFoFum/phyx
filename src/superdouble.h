@@ -25,13 +25,14 @@
 
 #ifndef _SUPERDOUBLE_H_
 #define _SUPERDOUBLE_H_
+
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <iostream>
+
 using namespace std;
 
-
-class Superdouble  {
+class Superdouble {
 private:
 	long double mantissa;
 	int exponent;

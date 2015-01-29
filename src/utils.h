@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <map>
 #include "superdouble.h"
 
 using namespace std;
