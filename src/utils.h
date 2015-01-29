@@ -32,5 +32,6 @@ string get_string_vector(vector<int> &sts);
 double logn(double x,double base);
 
 bool essentially_equal (double a, double b);
+bool all_equal (vector <double> vals);
 
 #endif /* _UTILS_H_ */

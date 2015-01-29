@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <limits>
+#include <functional>
 
 using namespace std;
 
@@ -138,7 +139,7 @@ vector<vector<double> > processRateMatrixConfigFile(string filename, int numstat
 
 Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
     Superdouble sum = 0;
-    for (unsigned int i=0;i<in.size();i++){
+    for (unsigned int i=0; i < in.size(); i++){
         sum += in[i];
 	//cout << in[i] << " sum:" << sum << endl;
     }
@@ -241,3 +242,13 @@ bool essentially_equal (double a, double b) {
     }
     return equal;
 }
+
+bool all_equal (vector <double> vals) {
+    bool equal = false;
+    vector <double>::iterator it = find_if_not(vals.begin()+1, vals.end(), bind(essentially_equal, placeholders::_1, vals[0]));
+    if (it == end(vals)) {
+        equal = true;
+    }
+    return equal;
+}
+
