@@ -17,6 +17,9 @@
 using namespace std;
 
 #define EPSILON numeric_limits<double>::epsilon()
+#define MEPSILON numeric_limits<double>::min()
+#define GEPSILON numeric_limits<double>::round_error()
+#define FLEPSILON numeric_limits<float>::epsilon()
 
 #include "utils.h"
 #include "superdouble.h"
@@ -75,58 +78,58 @@ void trim_spaces(string& str) {
     */
 }
 
-bool is_number(const string& s){
+bool is_number(const string& s) {
     string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)){ 
+    while (it != s.end() && std::isdigit(*it)) {
 	    ++it;
     }
     return !s.empty() && it == s.end();
 }
 
-double calculate_vector_double_sum(vector<double> & in){
+double calculate_vector_double_sum(vector<double> & in) {
     double sum = 0;
-    for (unsigned int i=0;i<in.size();i++){
+    for (unsigned int i=0;i<in.size();i++) {
         sum += in[i];
     }
     return sum;
 }
 
-double calculate_vector_double_mean(vector<double> & in){
+double calculate_vector_double_mean(vector<double> & in) {
     double sum = 0;
-    for (unsigned int i=0;i<in.size();i++){
+    for (unsigned int i=0;i<in.size();i++) {
         sum += in[i]/in.size();
     }
     return sum;
 }
 
-int calculate_vector_int_sum(vector<int> & in){
+int calculate_vector_int_sum(vector<int> & in) {
     int sum = 0;
-    for (unsigned int i=0;i<in.size();i++){
+    for (unsigned int i=0;i<in.size();i++) {
         sum += in[i];
     }
     return sum;
 }
 
-vector<vector<double> > processRateMatrixConfigFile(string filename, int numstates){
+vector<vector<double> > processRateMatrixConfigFile(string filename, int numstates) {
     vector<double> cols(numstates,1);
     vector<vector<double> >  ratematrix = vector<vector<double> > (numstates,cols);
     //read file
     ifstream ifs(filename.c_str());
     string line;
     int fromarea = 0;
-    while(getline(ifs,line)){
-        if(line.size() > 3){
+    while(getline(ifs,line)) {
+        if(line.size() > 3) {
             vector<string> tokens;
             string del(" ,\t");
             tokens.clear();
             tokenize(line, tokens, del);
-            for(unsigned int j=0;j<tokens.size();j++){
+            for(unsigned int j=0;j<tokens.size();j++) {
                 trim_spaces(tokens[j]);
             }
-            for(unsigned int j=0;j<tokens.size();j++){
+            for(unsigned int j=0;j<tokens.size();j++) {
                 ratematrix[fromarea][j] = atof(tokens[j].c_str());
             }
-            if(fromarea < numstates-1){
+            if(fromarea < numstates-1) {
                 fromarea += 1;
             }else{
                 fromarea = 0;
@@ -137,9 +140,9 @@ vector<vector<double> > processRateMatrixConfigFile(string filename, int numstat
     return ratematrix;
 }
 
-Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
+Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in) {
     Superdouble sum = 0;
-    for (unsigned int i=0; i < in.size(); i++){
+    for (unsigned int i=0; i < in.size(); i++) {
         sum += in[i];
 	//cout << in[i] << " sum:" << sum << endl;
     }
@@ -147,28 +150,28 @@ Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in){
     return sum;
 }
 
-int random_int_range(int min, int max){
+int random_int_range(int min, int max) {
     return min + (rand() % (int)(max - min + 1));
 }
 
 // arg below is always '?'. besides, getopt prints errors to sterr
-void print_error(char * pname, char arg){
+void print_error(char * pname, char arg) {
     // cout << pname <<": invalid option -- '" << arg << "'" << endl;
     cout << "Try `" << pname << " --help' for more information." << endl;
 }
 
 
-int sum_matrix_col(vector<vector<int> > & matrix,int col){
+int sum_matrix_col(vector<vector<int> > & matrix,int col) {
     int x=0;
-    for(unsigned int i=0;i<matrix.size();i++){
+    for(unsigned int i=0;i<matrix.size();i++) {
 	    x += matrix[i][col];
     }
     return x;
 }
 
-int sum_matrix_col_negs(vector<vector<int> > & matrix,int col){
+int sum_matrix_col_negs(vector<vector<int> > & matrix,int col) {
     int x=0;
-    for(unsigned int i=0;i<matrix.size();i++){
+    for(unsigned int i=0;i<matrix.size();i++) {
         if(matrix[i][col] < 0) {
             x += matrix[i][col];
         }
@@ -176,21 +179,21 @@ int sum_matrix_col_negs(vector<vector<int> > & matrix,int col){
     return x;
 }
 
-bool test_logical(vector<int> & matA,vector<int> & matB){
+bool test_logical(vector<int> & matA,vector<int> & matB) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
-    for (unsigned int i=0;i<matA.size();i++){
+    for (unsigned int i=0;i<matA.size();i++) {
         //added the -1, can take out if something gets fishy
-        if (((matA[i] == 1) && (matB[i] == 1))){
+        if (((matA[i] == 1) && (matB[i] == 1))) {
             match1 += 1;
         }else{
             numdiffs += 1;
         }
     }
     //had to change because of negatives
-    if ((match1 != sum(matA)) && (match1 != sum(matB))){    
-        if (numdiffs != matA.size()){
+    if ((match1 != sum(matA)) && (match1 != sum(matB))) {
+        if (numdiffs != matA.size()) {
             test = true;
         }
     }
@@ -198,48 +201,65 @@ bool test_logical(vector<int> & matA,vector<int> & matB){
     return test;
 }
 
-double sum(vector<double> &inm){
+double sum(vector<double> &inm) {
     double x=0;
-    for(unsigned int i=0;i<inm.size();i++){
+    for(unsigned int i=0;i<inm.size();i++) {
 	    x += inm[i];
     }
     return x;
 }
 
-double sum(vector<int> &inm){
+double sum(vector<int> &inm) {
     double x=0;
-    for(unsigned int i=0;i<inm.size();i++){
+    for(unsigned int i=0;i<inm.size();i++) {
 	    x += inm[i];
     }
     return x;
 }
 
-string get_string_vector(vector<string> &sts){
+string get_string_vector(vector<string> &sts) {
     string rets;
-    for(int i=0;i<sts.size();i++){
+    for(int i=0;i<sts.size();i++) {
 	    rets += sts[i]+ " ";
     }
     return rets;
 }
 
-string get_string_vector(vector<int> & sts){
+string get_string_vector(vector<int> & sts) {
     string rets;
-    for(int i=0;i<sts.size();i++){
+    for(int i=0;i<sts.size();i++) {
 	    rets += to_string(sts[i]) + " ";
     }
     return rets;
 }
 
-double logn(double x, double base){
+double logn(double x, double base) {
     return log10(x)/log10(base);
 }
 
 // check if 2 doubles are equal within some tolerance.
 bool essentially_equal (double a, double b) {
     bool equal = false;
+    cout << "EPSILON = " << EPSILON << endl;
+    cout << "GEPSILON = " << GEPSILON << endl;
+    cout << "FLEPSILON = " << FLEPSILON << endl;
+    cout << "MEPSILON = " << MEPSILON << endl;
+    cout << "max(abs(a), abs(b)) = " << max(abs(a), abs(b)) << endl;
+    cout << "EPSILON * max(abs(a), abs(b)) = " << EPSILON * max(abs(a), abs(b)) << endl;
+    cout << "max(EPSILON, EPSILON * max(abs(a), abs(b))) = " << max(EPSILON, EPSILON * max(abs(a), abs(b))) << endl;
+    cout << "abs(a - b) = " << abs(a - b) << endl;
+    cout << "fabs(a - b) < EPSILON = " << (fabs(a - b) <  EPSILON) << endl;
+
+    cout << "ApproximatelyEqual: " <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << endl;
+
+
+    cout << "EssentiallyEqual: " <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << endl;
+
     if (abs(a - b) <= max(EPSILON, EPSILON * max(abs(a), abs(b)))) {
-        return true;
+        equal = true;
     }
+    cout << equal << endl;
+
     return equal;
 }
 
@@ -249,6 +269,7 @@ bool all_equal (vector <double> vals) {
     if (it == end(vals)) {
         equal = true;
     }
+    cout << "All equal = " << equal << endl;
     return equal;
 }
 

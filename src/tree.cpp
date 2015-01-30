@@ -26,13 +26,13 @@ Tree::Tree(Node * inroot) {
 
 void Tree::addExternalNode(Node * tn) {
     externalNodes.push_back(tn);
-    externalNodeCount = externalNodes.size();
+    externalNodeCount++;
     nodes.push_back(tn);
 }
 
 void Tree::addInternalNode(Node * tn) {
     internalNodes.push_back(tn);
-    internalNodeCount = internalNodes.size();
+    internalNodeCount++;
     nodes.push_back(tn);
 }
 
@@ -45,7 +45,7 @@ Node * Tree::getExternalNode(int num) {
  */
 Node * Tree::getExternalNode(string name) {
     Node * ret = NULL;
-    for (unsigned int i=0; i < externalNodes.size(); i++) {
+    for (int i=0; i < externalNodeCount; i++) {
         if (externalNodes.at(i)->getName() == name) {
             ret = externalNodes.at(i);
         }
@@ -62,7 +62,7 @@ Node * Tree::getInternalNode(int num) {
  */
 Node * Tree::getInternalNode(string & name) {
     Node * ret = NULL;
-    for(unsigned int i=0; i < internalNodes.size(); i++) {
+    for(int i=0; i < internalNodeCount; i++) {
         if (internalNodes.at(i)->getName() == name) {
             ret = internalNodes.at(i);
         }
