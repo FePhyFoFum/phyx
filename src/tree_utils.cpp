@@ -195,13 +195,14 @@ bool is_ultrametric_tips (Tree * tr) {
     }
     */
 
-
+    /*
     for (int i = 1; i < (int)paths.size(); i++) {
         cout << "Comparing " << paths[0] << " to " << paths[i] << " = " << (paths[0] - paths[i]) << "." << endl;
         essentially_equal(paths[0], paths[i]);
     }
 
     exit(0);
+    */
 
     ultrametric = all_equal(paths);
 

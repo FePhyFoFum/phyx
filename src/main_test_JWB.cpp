@@ -1,10 +1,10 @@
-
-
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include <time.h> 
 
 using namespace std;
 
@@ -35,22 +35,31 @@ int main (int argc, char * argv[]) {
         }
     }
     infile.close();
+    
+    double seconds = 0;
 
     for (int i = 0; i < (int)treeStrings.size(); i++) {
         Tree * tree = tr.readTree(treeStrings[0]);
 
         cout << "Rooted status: " << is_rooted << endl;
         cout << "Tree length = "  << get_tree_length(tree) << endl;
-        if (is_ultrametric_tips (tree)) {
-            cout << "Tree is ultrametric (tip-to-root paths)!" << endl;
-        } else {
-            cout << "Tree is NOT ultrametric (tip-to-root paths). Wah-wha..." << endl;
+        
+        time_t start = time(NULL);
+        for (int j = 0; j < 1000000; j++) {
+            is_ultrametric_tips (tree);
         }
-        if (is_ultrametric_postorder (tree)) {
-            cout << "Tree is ultrametric (postorder)!" << endl;
-        } else {
-            cout << "Tree is NOT ultrametric (postorder). Wah-wha..." << endl;
+        time_t stop = time(NULL);
+        seconds = difftime(stop, start);
+        cout << "is_ultrametric_tips took: " << seconds << " seconds. " << endl;
+        
+        start = stop;
+        for (int j = 0; j < 1000000; j++) {
+            is_ultrametric_postorder (tree);
         }
+        stop = time(NULL);
+        seconds = difftime(stop, start);
+        cout << "is_ultrametric_postorder took: " << seconds << " seconds. " << endl;
+        
         delete tree;
     }
 
