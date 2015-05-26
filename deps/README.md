@@ -6,21 +6,19 @@ Phyx requires the dependencies NLopt and Armadillo. Armadillo itself has some op
 ### NLopt
 For the time being, please use the provided source code, regardless of system. Type:
 
-tar -xvzf nlopt-2.2.1.tar.gz
-cd nlopt-2.2.1
-./configure --with-cxx --without-octave --without-matlab
-make
-sudo make install
+	tar -xvzf nlopt-2.4.2.tar.gz
+	cd nlopt-2.4.2
+	./configure --with-cxx --without-octave --without-matlab
+	make
+	sudo make install
 
 LINUX
 ---------------
 Install using existing repositories. Type the following command into a terminal prompt:
 
-#sudo apt-get install libnlopt-dev ## coming soon
-sudo apt-get install liblapack-dev
-sudo apt-get install libatlas-cpp-0.6-dev
-sudo apt-get install libarmadillo-dev
-
+	sudo apt-get install liblapack-dev
+	sudo apt-get install libatlas-cpp-0.6-dev
+	sudo apt-get install libarmadillo-dev
 
 MAC
 ---------------
@@ -29,32 +27,31 @@ Installation will be from source code (provided in the deps directory).
 
 ### LAPACK (optional) - this can take a while
 
-tar -xvzf lapack-3.4.2.tgz
-cd lapack-3.4.2
-cp make.inc.example make.inc
-make blaslib
-make
+	tar -xvzf lapack-3.4.2.tgz
+	cd lapack-3.4.2
+	cp make.inc.example make.inc
+	make blaslib
+	make
 
 ### ATLAS (optional)
 
-tar -xvzf atlas3.10.0.tar.gz
-cd ATLAS
-mkdir build
-cd build
-../configure
-make build
-make check
-make time
-sudo make install
+	tar -xvjf atlas3.10.2.tar.bz2
+	cd ATLAS
+	mkdir build
+	cd build
+	../configure
+	make build
+	make check
+	make time
+	sudo make install
 
 ### Armadillo
 
-tar -xvzf armadillo-5.200.1.tar.gz
-cd armadillo-5.200.1
-cmake .
-make
-sudo make install
-
+	tar -xvzf armadillo-5.200.1.tar.gz
+	cd armadillo-5.200.1
+	cmake .
+	make
+	sudo make install
 
 WINDOWS
 ---------------
