@@ -9,8 +9,10 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #profiling
 #-pg
 
-OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
-
+OPT_FLAGS = -O3 -fopenmp -std=c++11
+ifneq "$(CXX)" "icc"
+    OPT_FLAGS += -ffast-math -ftree-vectorize
+endif
 
 # MAC compilation fails with -march=native. check should occur earlier...
 UNAME := $(shell uname)
