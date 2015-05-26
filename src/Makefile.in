@@ -1,6 +1,6 @@
 RM := rm -f
-## Use compiler from configure. May be specified by user with:
-## ./configure CXX=g++-4.
+## Use compiler from configure. May be specified by user with e.g.:
+## ./configure CXX=g++-4.8
 CXX := @CXX@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
@@ -10,6 +10,8 @@ CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
 #-pg
 
 OPT_FLAGS = -O3 -ffast-math -ftree-vectorize -fopenmp -std=c++11
+
+
 # MAC compilation fails with -march=native. check should occur earlier...
 UNAME := $(shell uname)
 ifeq "$(UNAME)" "Linux"

@@ -1,8 +1,7 @@
 Instructions for installing dependencies
 ========================================
 
-Phyx requires the dependencies NLopt and Armadillo. Armadillo itself has some optional dependencies
-which may provide faster execution. 
+Phyx requires the dependencies NLopt and Armadillo. Armadillo itself has some optional dependencies which may provide faster execution. 
 
 ### NLopt
 For the time being, please use the provided source code, regardless of system. Type:
@@ -50,8 +49,8 @@ sudo make install
 
 ### Armadillo
 
-tar -xvzf armadillo-3.6.3.tar.gz
-cd armadillo-3.6.3
+tar -xvzf armadillo-5.200.1.tar.gz
+cd armadillo-5.200.1
 cmake .
 make
 sudo make install

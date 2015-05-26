@@ -11,7 +11,7 @@ AC_PROG_CXX
 AC_CHECK_LIB([m], [fabs])
 
 have_nlopt=no
-AC_SEARCH_LIBS([nlopt_urand],[nlopt_cxx], [have_nlopt=yes])
+AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes])
 
 if test "x${have_nlopt}" = xno; then
    AC_MSG_ERROR([
@@ -22,9 +22,9 @@ phyx was developed with nlopt compiled with these flags
 --------------------------------------------------------])
 fi
 
-#setting this to yes, need to find a better lib to search for
-have_arma=yes
-AC_SEARCH_LIBS([wrapper_sgesv_],[armadillo], [have_arma=yes])
+#need to find a better lib to search for
+have_arma=no
+AC_SEARCH_LIBS([wrapper_sgesv_], [armadillo], [have_arma=yes])
 
 if test "x${have_arma}" = xno; then
    AC_MSG_ERROR([
