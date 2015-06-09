@@ -17,4 +17,5 @@ autom4te.cache
 .metadata
 .autotools
 .settings
+nbproject
 
