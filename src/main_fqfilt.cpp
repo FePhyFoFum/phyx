@@ -1,5 +1,5 @@
 /*
- * main_mrca.cpp
+ * main_fqfilt.cpp
  *
  */
 
@@ -18,20 +18,19 @@ using namespace std;
 #include "sequence.h"
 
 void print_help(){
-    cout << "Filter fastq files by mean quality score and send" << endl;
-    cout << "result to standard output. Can read from stdin or file." << endl;
-    cout << "Input is expected to be fastq and output is fastq."<<endl;
+    cout << "Filter fastq files by mean quality." << endl;
+    cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxfqfilt [OPTION]... [FILE]..."<<endl;
     cout << endl; 
-    cout << " -m, --mean=VALUE    mean value under which seqs are filtered"<<endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << " -m, --mean=VALUE    mean value under which seqs are filtered" << endl;
+    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << "     --help          display this help and exit" << endl;
+    cout << "     --version       display version and exit" << endl;
     cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
 string versionline("pxfqfilt 0.1\nCopyright (C) 2013 FePhyFoFum\nLiscence GPLv2\nwritten by Stephen A. Smith (blackrim)");

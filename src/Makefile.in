@@ -91,9 +91,9 @@ SW_SRC = main_sw.cpp
 SW_OBJ = main_sw.o
 SW_DEP = main_sw.d
 
-SEQSAMP_SRC = main_boot.cpp
-SEQSAMP_OBJ = main_boot.o
-SEQSAMP_DEP = main_boot.d
+SEQSAMP_SRC = main_seq_sample.cpp
+SEQSAMP_OBJ = main_seq_sample.o
+SEQSAMP_DEP = main_seq_sample.d
 
 CONCAT_SRC = main_concat.cpp
 CONCAT_OBJ = main_concat.o
@@ -154,7 +154,7 @@ CPP_SRCS += \
 ./bd_sim.cpp \
 ./superdouble.cpp \
 ./cont_models.cpp \
-./boot.cpp \
+./seq_sample.cpp \
 ./concat.cpp \
 ./recode.cpp
 
@@ -181,7 +181,7 @@ CPP_OBJS += \
 ./bd_sim.o \
 ./superdouble.o \
 ./cont_models.o \
-./boot.o \
+./seq_sample.o \
 ./concat.o \
 ./recode.o 
 
@@ -208,7 +208,7 @@ CPP_DEPS += \
 ./bd_sim.d \
 ./superdouble.d \
 ./cont_models.d \
-./boot.d \
+./seq_sample.d \
 ./concat.d \
 ./recode.d 
 
@@ -238,9 +238,9 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 # removed pxlogmanip above as files are missing
-#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -302,9 +302,9 @@ pxsw:  $(CPP_OBJS) $(SW_OBJ)
 	@echo 'building pxsw'
 	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
-pxboot:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
-	@echo 'building pxboot'
-	$(CXX) -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+pxseqsamp:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
+	@echo 'building pxseqsamp'
+	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
 
 pxconcat:  $(CPP_OBJS) $(CONCAT_OBJ) 
 	@echo 'building pxconcat'

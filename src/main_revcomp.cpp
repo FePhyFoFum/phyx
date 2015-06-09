@@ -16,7 +16,7 @@ using namespace std;
 #include "utils.h"
 
 void print_help(){
-    cout << "Reverse complement sequences from nexus,phylip, fastq to fasta." << endl;
+    cout << "Reverse complement sequences from nexus, phylip, or fastq to fasta." << endl;
     cout << "Can read from stdin or file, but output is fasta." << endl;
     cout << endl;
     cout << "Usage: pxrevcomp [OPTION]... [FILE]..."<<endl;

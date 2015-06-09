@@ -23,14 +23,14 @@ using namespace std;
 #include "bd_sim.h"
 
 void print_help () {
-    cout << "Birth-death simulator" << endl;
+    cout << "Birth-death simulator." << endl;
     cout << endl;
     cout << "Usage: pxbd [OPTION]... " << endl;
     cout << endl;
     cout << " -e, --extant=INT    number of extant species, alt to time" << endl;
     cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
-    cout << " -b, --birth=DOUBLE  birth rate, default=1." << endl;
-    cout << " -d, --death=DOUBLE  death rate, default=0." << endl;
+    cout << " -b, --birth=DOUBLE  birth rate, default=1" << endl;
+    cout << " -d, --death=DOUBLE  death rate, default=0" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -s, --showd         show dead taxa" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;

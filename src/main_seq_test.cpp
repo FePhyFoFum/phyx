@@ -1,5 +1,5 @@
 /*
- * main_mrca.cpp
+ * main_seq_test.cpp
  *
  */
 

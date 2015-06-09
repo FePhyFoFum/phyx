@@ -30,26 +30,26 @@ using namespace std;
 
 
 void print_help(){
-    cout << "This will conduct state reconstruction analyses on data " << endl;
+    cout << "This will conduct state reconstruction analyses." << endl;
     cout << endl;
-    cout << "Usage: pxstrec [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxstrec [OPTION]... [FILE]..." << endl;
     cout << endl; 
     cout << " -d, --dataf=FILE    input data file" <<endl;
     cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<endl;
     cout << " -z, --dataz    data is in probability format (0,1,0,0)" << endl;
-    cout << " -t, --treef=FILE    input tree file"<<endl;
+    cout << " -t, --treef=FILE    input tree file" << endl;
     cout << " -c, --conf=FILE     configuration file" << endl;
-    cout << " -o, --outanc=FILE   output file for ancestral calc"<<endl;
+    cout << " -o, --outanc=FILE   output file for ancestral calc" << endl;
     cout << " -n, --outstnum=FILE output file for stochastic mapping number" << endl;
     cout << " -a, --outstnumany=FILE output file for stochastic mapping number any" << endl;
     cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << endl;
     cout << " -p, --periods=NUMS  comma separated times" << endl;
-    cout << " -l, --logf=FILE     log file, stout otherwise"<<endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << " -l, --logf=FILE     log file, stout otherwise" << endl;
+    cout << "     --help          display this help and exit" << endl;
+    cout << "     --version       display version and exit" << endl;
     cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 /*
  * add you name if you contribute (probably add another line)

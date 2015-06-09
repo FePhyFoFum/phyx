@@ -25,8 +25,8 @@ using namespace std;
 
 void print_help(){
     cout << "Conduct Needleman-Wunsch analysis for all the seqs in a file." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs. And " << endl;
-    cout << "will output a list of the scores and distances (and the alignments"<< endl;
+    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
+    cout << "Output is a list of the scores and distances (and the alignments"<< endl;
     cout << "if asked)." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;

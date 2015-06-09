@@ -17,18 +17,19 @@ using namespace std;
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
-#include "boot.h"
+#include "seq_sample.h"
 
 void print_help() {
-    cout << "Sequence alignment bootstrap or jackknife resampling" << endl;
+    cout << "Sequence alignment bootstrap or jackknife resampling." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
+    cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxboot [OPTION]... " << endl;
+    cout << "Usage: pxseqsamp [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -p, --partf=FILE    file listing empirical partitions: NAME = START-STOP[\\INTERVAL]" << endl;
-    cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap" << endl;
+    cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap (i.e. -f 1.0)" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;

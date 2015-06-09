@@ -16,18 +16,18 @@ using namespace std;
 #include "utils.h"
 
 void print_help(){
-    cout << "This will convert a tree file to newick" << endl;
-    cout << "Can read from stdin or file" << endl;
+    cout << "This will convert a tree file to newick." << endl;
+    cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxttonew [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxttonew [OPTION]... [FILE]..." << endl;
     cout << endl; 
-    cout << " -t, --treef=FILE     input sequence file, stdin otherwise"<<endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << " -t, --treef=FILE    input sequence file, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << "     --help          display this help and exit" << endl;
+    cout << "     --version       display version and exit" << endl;
     cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 /*
  * add you name if you contribute (probably add another line)

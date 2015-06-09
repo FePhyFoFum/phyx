@@ -19,18 +19,18 @@ using namespace std;
 #include "seq_utils.h"
 
 void print_help(){
-    cout << "Convert seqfiles from nexus,phylip, fastq to nexus." << endl;
+    cout << "Convert seqfiles from nexus, phylip, or fastq to nexus." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxstonex [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxstonex [OPTION]... [FILE]..." << endl;
     cout << endl; 
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << "     --help          display this help and exit" << endl;
+    cout << "     --version       display version and exit" << endl;
     cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
 string versionline("pxstonex 0.1\nCopyright (C) 2013 FePhyFoFum\nLiscence GPLv2\nwritten by Stephen A. Smith (blackrim)");

@@ -16,19 +16,19 @@ using namespace std;
 #include "utils.h"
 
 void print_help(){
-    cout << "This will reroot a tree file and produce newick" << endl;
-    cout << "Can read from stdin or file" << endl;
+    cout << "This will reroot a tree file and produce a newick." << endl;
+    cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxrr [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxrr [OPTION]... [FILE]..." << endl;
     cout << endl; 
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise"<<endl;
-    cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" <<endl; 
-    cout << " -o, --outf=FILE      output tree file, stout otherwise"<<endl;
-    cout << "     --help           display this help and exit"<<endl;
-    cout << "     --version        display version and exit"<<endl;
+    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
+    cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl; 
+    cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
+    cout << "     --help           display this help and exit" << endl;
+    cout << "     --version        display version and exit" << endl;
     cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 /*
  * add you name if you contribute (probably add another line)

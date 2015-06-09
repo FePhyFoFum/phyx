@@ -25,25 +25,25 @@ using namespace std;
 
 void print_help(){
     cout << "Conduct Smith-Waterman analysis for all the seqs in a file." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs. And " << endl;
-    cout << "will output a list of the scores and distances (and the alignments"<< endl;
+    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
+    cout << "Output is a list of the scores and distances (and the alignments" << endl;
     cout << "if asked)." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxsw [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxsw [OPTION]... [FILE]..." << endl;
     cout << endl; 
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<endl;
-    cout << " -o, --outf=FILE     output score/distance file, stout otherwise"<<endl;
-    cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise"<<endl;
-    cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)"<<endl;
-    cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62"<<endl;
+    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE     output score/distance file, stout otherwise" << endl;
+    cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise" << endl;
+    cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)" << endl;
+    cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62" << endl;
     cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << endl;
     cout << " -v, --verbose       make the output more verbose, turns off parallel" << endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << "     --help          display this help and exit" << endl;
+    cout << "     --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
 string versionline("pxsw 0.1\nCopyright (C) 2013 FePhyFoFum\nLiscence GPLv2\nwritten by Stephen A. Smith (blackrim)");

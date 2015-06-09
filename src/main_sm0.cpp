@@ -27,16 +27,16 @@ void print_help(){
     cout << "Calculate Selection Model 0 with K and w with seqs and tree." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxsm0 [OPTION]... [FILE]..."<<endl;
+    cout << "Usage: pxsm0 [OPTION]... [FILE]..." << endl;
     cout << endl; 
-    cout << " -s, --seqf=FILE     input sequence file"<<endl;
+    cout << " -s, --seqf=FILE     input sequence file" <<endl;
     cout << " -t, --treef=FILE    input tree file" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << "     --help          display this help and exit" << endl;
+    cout << "     --version       display version and exit" << endl;
     cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
+    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
 string versionline("pxsm0 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");

@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#include "boot.h"
+#include "seq_sample.h"
 #include "utils.h"
 
 SequenceSampler::SequenceSampler (int const& seed, float const& jackfract, string & partf)

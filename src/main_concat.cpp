@@ -1,5 +1,5 @@
 /*
- * concat.cpp
+ * Main_concat.cpp
  *
  *  Created on: Sep 22, 2014
  *      Author: joe
@@ -23,7 +23,7 @@ using namespace std;
 #include "concat.h"
 
 void print_help() {
-    cout << "Sequence file concatenation" << endl;
+    cout << "Sequence file concatenation." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << "Individual files can be of different formats." << endl;
     cout << endl;
