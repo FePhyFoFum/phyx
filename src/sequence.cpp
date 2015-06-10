@@ -127,7 +127,7 @@ void Sequence::perm_reverse_complement(){
 void Sequence::set_qualstr(string & stri,int offset){
     qualarr.clear();
     qualstr = stri;
-    for (int i=0;i<stri.size();i++){
+    for (unsigned int i=0; i < stri.size(); i++){
         qualarr.push_back(((int)stri[i])-offset);
     }
 }
@@ -142,16 +142,23 @@ double Sequence::get_qualarr_mean(){
 
 string Sequence::get_fasta(){
     string retstr;
-    retstr.append(">");retstr.append(id);retstr.append("\n");
-    retstr.append(seq);retstr.append("\n");
+    retstr.append(">");
+    retstr.append(id);
+    retstr.append("\n");
+    retstr.append(seq);
+    retstr.append("\n");
     return retstr;
 }
 
 string Sequence::get_fastq(){
     string retstr;
-    retstr.append("@");retstr.append(id);retstr.append("\n");
-    retstr.append(seq);retstr.append("\n+\n");
-    retstr.append(qualstr);retstr.append("\n");
+    retstr.append("@");
+    retstr.append(id);
+    retstr.append("\n");
+    retstr.append(seq);
+    retstr.append("\n+\n");
+    retstr.append(qualstr);
+    retstr.append("\n");
     return retstr;
 }
 

@@ -38,7 +38,7 @@ vector <int> SequenceSampler::get_sampled_sites () {
 
 string SequenceSampler::get_resampled_seq (string const& origseq) {
     string seq;
-    for (int i = 0; i < (int)samplesites.size(); i++) {
+    for (unsigned int i = 0; i < samplesites.size(); i++) {
         if (i == 0) {
             seq = origseq[samplesites[i]];
         } else {
@@ -178,7 +178,7 @@ void SequenceSampler::get_site_partitions () {
     vector <int> sites(numPartitionedSites, 0);
     
     for (int i = 0; i < numPartitions; i++) {
-        for (int j = 0; j < (int)partitions[i].size(); j++) {
+        for (unsigned int j = 0; j < partitions[i].size(); j++) {
             sites[partitions[i][j]] = i;
         }
     }
@@ -217,7 +217,7 @@ void SequenceSampler::calculate_num_partitioned_sites () {
     for (int i = 0; i < numPartitions; i++) {
         numPartitionedSites += (int)partitions[i].size();
 //         cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << endl;
-//         for (int j = 0; j < (int)partitions[i].size(); j++) {
+//         for (unsigned int j = 0; j < partitions[i].size(); j++) {
 //             cout << partitions[i][j] << " ";
 //         }
 //         cout << endl;
@@ -254,7 +254,7 @@ void SequenceSampler::find_duplicates_missing (vector <int> const& allSites) {
     int maxVal = allSites.back();
     
     vector <int> counts(maxVal, 0);
-    for (int i = 0; i < (int)allSites.size(); i++) {
+    for (unsigned int i = 0; i < allSites.size(); i++) {
         counts[allSites[i]]++;
     }
     
@@ -273,14 +273,14 @@ void SequenceSampler::find_duplicates_missing (vector <int> const& allSites) {
     
     if (duplicates.size() != 0) {
         cout << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
-        for (int i = 0; i < (int)duplicates.size(); i++) {
+        for (unsigned int i = 0; i < duplicates.size(); i++) {
             cout << duplicates[i] << " ";
         }
         cout << endl;
     }
     if (missing.size() != 0) {
         cout << "Error: the following " << missing.size() << " sites are not found in any partition: ";
-        for (int i = 0; i < (int)missing.size(); i++) {
+        for (unsigned int i = 0; i < missing.size(); i++) {
             cout << missing[i] << " ";
         }
         cout << endl;

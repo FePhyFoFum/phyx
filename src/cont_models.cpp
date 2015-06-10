@@ -103,7 +103,7 @@ mu should be a vector
 sigma should be vcv with sigma already applied
  */
 double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
-    int size = x.n_cols;
+    unsigned int size = x.n_cols;
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size){
         double DET = det(sigma);
         if (DET == 0){
@@ -124,7 +124,7 @@ double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
 }
 
 double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
-    int size = x.n_cols;
+    unsigned int size = x.n_cols;
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size){
         double DET;
         double sign;

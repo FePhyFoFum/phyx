@@ -19,10 +19,10 @@ using namespace std;
 #define MINBL 0.000000001
 
 StateReconstructor::StateReconstructor(RateModel & _rm,vector<RateModel> &_vrm):tree(NULL),use_periods(false),nstates(_rm.nstates),rm(_rm),rm_periods(_vrm),dc("dist_conditionals"),andc("anc_dist_conditionals"),
-                            store_p_matrices(false),use_stored_matrices(false),revB("revB"),
-                            rev(false),rev_exp_number("rev_exp_number"),rev_exp_time("rev_exp_time"),
-                            stochastic(false),stored_EN_matrices(map<Superdouble, mat >()),
-                            stored_ER_matrices(map<Superdouble, mat >()),sp_alphas("sp_alphas"),alphas("alphas"){}
+    store_p_matrices(false),use_stored_matrices(false),revB("revB"),
+    rev(false),rev_exp_number("rev_exp_number"),rev_exp_time("rev_exp_time"),
+    stochastic(false),stored_EN_matrices(map<Superdouble, mat >()),
+    stored_ER_matrices(map<Superdouble, mat >()),sp_alphas("sp_alphas"),alphas("alphas"){}
 
 /**
  * need to do this before you do the set tree
@@ -195,7 +195,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node){
     }else{
 	p = rm.stored_p_matrices[node.getBL()];
     }
-    for( int j=0;j<nstates;j++){
+    for(int j=0;j<nstates;j++){
 	for( int k=0;k<nstates;k++){
 	    v->at(j) += (distconds.at(k)*real(p(j,k)));
 	}
@@ -230,13 +230,13 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods(Node & no
 	    //p = trm->stored_p_matrices[tsegs->at(i).getPeriod()][tsegs->at(i).getDuration()];
 	    p = trm->stored_p_matrices[tsegs->at(i).getDuration()];
 	}
-	for(unsigned int j=0;j<nstates;j++){
-	    for(unsigned int k=0;k<nstates;k++){
+	for(int j=0;j<nstates;j++){
+	    for(int k=0;k<nstates;k++){
 		v->at(j) += (distconds.at(k)*real(p(j,k)));
 	    }
 	}
 	
-	for(unsigned int j=0;j<nstates;j++){
+	for(int j=0;j<nstates;j++){
 	    distconds[j] = v->at(j);
 	}
 	if(store_p_matrices == true){
@@ -253,7 +253,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods(Node & no
 	tsegs->at(0).alphas = distconds;
     }
     VectorNodeObject<Superdouble> rdistconds(distconds.size());
-    for(int i=0;i<distconds.size();i++){
+    for(unsigned int i=0; i < distconds.size(); i++){
 	rdistconds[i] = distconds[i];
     }
     return rdistconds;
@@ -290,7 +290,9 @@ void StateReconstructor::ancdist_conditional_lh(Node & node){
 	}else{
 	    vector<BranchSegment> * tsegs = node.getSegVector();
 	    //distconds = *tsegs->at(0).distconds;
-	    for(int i=0;i<distconds.size();i++){distconds[i] = tsegs->at(0).distconds->at(i);}
+	    for(unsigned int i=0; i < distconds.size(); i++){
+                distconds[i] = tsegs->at(0).distconds->at(i);
+            }
 	}
     }
     if(use_periods == false){
@@ -493,58 +495,60 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices(){
     stochastic = true;
     //calculate and store local expectation matrix for each branch length
     for(int k = 0; k < tree->getNodeCount(); k++){
-    double dur =  tree->getNode(k)->getBL();
-    cx_mat eigvec(nstates,nstates);eigvec.fill(0);
-    cx_mat eigval(nstates,nstates);eigval.fill(0);
-    bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
-    mat Ql(nstates,nstates);Ql.fill(0);
-    for(int i=0;i<Ql.n_rows;i++){
-        for(int j=0;j<Ql.n_cols;j++){
-        if (i!=j)
-            Ql(i,j) = rm.get_Q()(i,j);
-        }
-    }
-    mat W(nstates,nstates);W.fill(0);W(1,1) = 1;
-    cx_mat summed(nstates,nstates);summed.fill(0);
-    cx_mat summedR(nstates,nstates);summedR.fill(0);
-    for(int i=0;i<nstates;i++){
-        mat Ei(nstates,nstates);Ei.fill(0);Ei(i,i)=1;
-        cx_mat Si(nstates,nstates);
-        Si = eigvec * Ei * inv(eigvec);
-        for(int j=0;j<nstates;j++){
-        cx_double dij = (eigval(i,i)-eigval(j,j)) * dur;
-        mat Ej(nstates,nstates);Ej.fill(0);Ej(j,j)=1;
-        cx_mat Sj(nstates,nstates);
-        Sj = eigvec * Ej * inv(eigvec);
-        cx_double Iijt = 0;
-        if (abs(dij) > 10){
-            Iijt = (exp(eigval(i,i)*dur)-exp(eigval(j,j)*dur))/(eigval(i,i)-eigval(j,j));
-        }else if(abs(dij) < 10e-20){
-            Iijt = dur*exp(eigval(j,j)*dur)*(1.+dij/2.+pow(dij,2.)/6.+pow(dij,3.)/24.);
-        }else{
-            if(eigval(i,i) == eigval(j,j)){
-            //WAS Iijt = dur*exp(eigval(j,j)*dur)*expm1(dij)/dij;
-            if (isImag)
-                Iijt = dur*exp(eigval(j,j)*dur)*(exp(dij)-1.)/dij;
-            else
-                Iijt = dur*exp(eigval(j,j)*dur)*(expm1(real(dij)))/dij;
-            }else{
-            //WAS Iijt = -dur*exp(eigval(i,i)*dur)*expm1(-dij)/dij;
-            if (isImag)
-                Iijt = -dur*exp(eigval(i,i)*dur)*(exp(-dij)-1.)/dij;
-            else
-                Iijt = -dur*exp(eigval(i,i)*dur)*(expm1(real(-dij)))/dij;
+        double dur =  tree->getNode(k)->getBL();
+        cx_mat eigvec(nstates,nstates);eigvec.fill(0);
+        cx_mat eigval(nstates,nstates);eigval.fill(0);
+        bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
+        mat Ql(nstates,nstates);
+        Ql.fill(0);
+        for(unsigned int i=0; i < Ql.n_rows; i++){
+            for(unsigned int j=0; j < Ql.n_cols; j++){
+                if (i!=j) {
+                    Ql(i,j) = rm.get_Q()(i,j);
+                }
             }
         }
-        summed += (Si  * Ql * Sj * Iijt);
-        summedR += (Si * W * Sj * Iijt);
+        mat W(nstates,nstates);W.fill(0);W(1,1) = 1;
+        cx_mat summed(nstates,nstates);summed.fill(0);
+        cx_mat summedR(nstates,nstates);summedR.fill(0);
+        for(int i=0;i<nstates;i++){
+            mat Ei(nstates,nstates);Ei.fill(0);Ei(i,i)=1;
+            cx_mat Si(nstates,nstates);
+            Si = eigvec * Ei * inv(eigvec);
+            for(int j=0;j<nstates;j++){
+            cx_double dij = (eigval(i,i)-eigval(j,j)) * dur;
+            mat Ej(nstates,nstates);Ej.fill(0);Ej(j,j)=1;
+            cx_mat Sj(nstates,nstates);
+            Sj = eigvec * Ej * inv(eigvec);
+            cx_double Iijt = 0;
+            if (abs(dij) > 10){
+                Iijt = (exp(eigval(i,i)*dur)-exp(eigval(j,j)*dur))/(eigval(i,i)-eigval(j,j));
+            }else if(abs(dij) < 10e-20){
+                Iijt = dur*exp(eigval(j,j)*dur)*(1.+dij/2.+pow(dij,2.)/6.+pow(dij,3.)/24.);
+            }else{
+                if(eigval(i,i) == eigval(j,j)){
+                //WAS Iijt = dur*exp(eigval(j,j)*dur)*expm1(dij)/dij;
+                if (isImag)
+                    Iijt = dur*exp(eigval(j,j)*dur)*(exp(dij)-1.)/dij;
+                else
+                    Iijt = dur*exp(eigval(j,j)*dur)*(expm1(real(dij)))/dij;
+                }else{
+                //WAS Iijt = -dur*exp(eigval(i,i)*dur)*expm1(-dij)/dij;
+                if (isImag)
+                    Iijt = -dur*exp(eigval(i,i)*dur)*(exp(-dij)-1.)/dij;
+                else
+                    Iijt = -dur*exp(eigval(i,i)*dur)*(expm1(real(-dij)))/dij;
+                }
+            }
+            summed += (Si  * Ql * Sj * Iijt);
+            summedR += (Si * W * Sj * Iijt);
+            }
         }
-    }
-    //cout << isImag << endl;
-    //cout << summed << endl;
-    //seems like when these are IMAG, there can sometimes be negative with very small values
-    stored_EN_matrices[dur] = abs(real(summed));//(real(summed));
-    stored_ER_matrices[dur] = abs(real(summedR));;//(real(summedR));
+        //cout << isImag << endl;
+        //cout << summed << endl;
+        //seems like when these are IMAG, there can sometimes be negative with very small values
+        stored_EN_matrices[dur] = abs(real(summed));//(real(summed));
+        stored_ER_matrices[dur] = abs(real(summedR));;//(real(summedR));
     }
 }
 
@@ -559,8 +563,8 @@ vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool 
 	    Bs =  node.seg_sp_stoch_map_revB_number;
 	Node * c1 = node.getChild(0);
 	Node * c2 = node.getChild(1);
-	VectorNodeObject<Superdouble> * v1  = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
-	VectorNodeObject<Superdouble> * v2  = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
+	VectorNodeObject<Superdouble> * v1 = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
+	VectorNodeObject<Superdouble> * v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
 	VectorNodeObject<double> LHOODS (nstates,0);
 	for ( int i = 0; i < nstates; i++) {
 	    //for (int j=0;j<nstates;j++){

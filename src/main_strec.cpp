@@ -79,16 +79,16 @@ bool checkdata(Tree * intree, vector<Sequence> runseqs){
     vector<string> ret;
     set<string> seqnames;
     set<string> treenames;
-    for (unsigned int i=0;i<intree->getExternalNodeCount(); i++){
+    for (int i=0; i < intree->getExternalNodeCount(); i++){
         treenames.insert(intree->getExternalNode(i)->getName());
     }
-    for(unsigned int i=0;i<runseqs.size();i++){
+    for(unsigned int i=0; i < runseqs.size(); i++){
         seqnames.insert(runseqs[i].get_id());
     }
     vector<string> v(treenames.size()+seqnames.size());
     vector<string>::iterator it;
     it=set_difference (seqnames.begin(), seqnames.end(), treenames.begin(), treenames.end(), v.begin());
-    if(int(it-v.begin())>0) {
+    if(int(it-v.begin()) > 0) {
         cerr << "there are " << int(it - v.begin()) << " taxa that have the wrong names.\n";
     }
     for(it=v.begin() ; it != v.end(); it++){
@@ -463,8 +463,8 @@ int main(int argc, char * argv[]){
         }else{
             runseqs = seqs;
             if(dataz == false){
-                for(unsigned int se = 0;se<seqs.size();se++){
-                    for(int i=0;i<nstates;i++){
+                for(unsigned int se=0; se < seqs.size(); se++){
+                    for(int i=0; i < nstates; i++){
                         if(seqs[se].get_sequence().at(i) =='1'){
                             existing_states[i] = 1;
                         }
@@ -472,7 +472,7 @@ int main(int argc, char * argv[]){
                 }
                 nstates_site_n = calculate_vector_int_sum(existing_states);
             }else{
-                for(int i=0;i<nstates;i++){
+                for(int i=0; i < nstates; i++){
                     existing_states[i] = 1;
                 }
                 nstates_site_n = nstates;
@@ -480,11 +480,11 @@ int main(int argc, char * argv[]){
         }
         //mapping the existing states to the full states
         int statecnt = 0;
-        for(int i=nstates-1;i>=0;i--){
+        for(int i=nstates-1; i >= 0; i--){
             if(existing_states[i] == 1){
                 continue;
             }else{
-                for(unsigned int se =0 ; se<runseqs.size();se++){
+                for(unsigned int se=0; se < runseqs.size(); se++){
                     runseqs[se].set_sequence(runseqs[se].get_sequence().erase(i,1));
                 }
             }
@@ -494,7 +494,7 @@ int main(int argc, char * argv[]){
             (*loos) <<"states: " << nstates_site_n << endl;
             (*loos) << "trees: ";
         }
-        for(int i=0;i<trees.size();i++){
+        for(unsigned int i=0; i < trees.size(); i++){
             if(verbose) {
                 (*loos) << i << endl;
             }
@@ -504,7 +504,7 @@ int main(int argc, char * argv[]){
             rm.setup_P(0.1,false);
             if(periodsset == true){
                 rms.push_back(rm);
-                for(int p=1;p<period_times.size();p++){
+                for(unsigned int p=1; p < period_times.size(); p++){
                     RateModel rm2(nstates_site_n);
                     rm2.setup_P(0.1,false);
                     rms.push_back(rm2);
@@ -583,13 +583,13 @@ int main(int argc, char * argv[]){
                 int ct = 0;
                 if(freeparams == "_one_"){
                     ct = 1;
-                    for(int s=0;s<period_times.size();s++){
+                    for(unsigned int s=0; s < period_times.size(); s++){
                         mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
                         periods_free_var[s] = free_var;
                     }
                 }else if(freeparams == "_all_"){
                     ct = 0;
-                    for(int s=0;s<period_times.size();s++){
+                    for(unsigned int s=0; s < period_times.size(); s++){
                         mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
                         for(int k=0;k<nstates_site_n;k++){
                             for(int j=0;j<nstates_site_n;j++){
@@ -603,7 +603,7 @@ int main(int argc, char * argv[]){
                     }
                 }
                 if(verbose){
-                    for(int s=0;s<period_times.size();s++){
+                    for(unsigned int s=0; s < period_times.size(); s++){
                         (*loos) << periods_free_var[s] << endl;            
                     }
                     (*loos) << ct << endl;
@@ -612,13 +612,13 @@ int main(int argc, char * argv[]){
                 cout << "likelihood: " << sr.eval_likelihood() << endl;
                 optimize_sr_periods_nlopt(&rms,&sr,&periods_free_var,ct);
                 if(verbose){
-                    for(int s=0;s<period_times.size();s++){
+                    for(unsigned int s=0; s < period_times.size(); s++){
                         (*loos) << periods_free_var[s] << endl;
                     }
                     (*loos) << ct << endl;
                     cout << "////////////////////////" << endl;
                 }
-                for(int s=0;s<period_times.size();s++){
+                for(unsigned int s=0; s < period_times.size(); s++){
                     rms[s].setup_Q(periods_free_var[s]);
                 }
                 sr.set_store_p_matrices(true);
@@ -636,11 +636,11 @@ int main(int argc, char * argv[]){
             for(unsigned int j=0;j<ancstates.size();j++){
             if(ancstates[j] == "_all_"){
                 vector<Superdouble> lhoods;
-                for(unsigned int l=0;l<tree->getInternalNodeCount();l++){
+                for(int l=0; l < tree->getInternalNodeCount(); l++){
                     lhoods = sr.calculate_ancstate_reverse_sd(*tree->getInternalNode(l));
                     totlike_sd = calculate_vector_Superdouble_sum(lhoods);
 
-                    bool neg = false;
+                    bool neg = false; // not used
                     int excount = 0;
                     double highest = 0;
                     int high = 0;

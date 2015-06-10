@@ -128,7 +128,7 @@ int main(int argc, char * argv[]) {
 
     bool first = true;
 
-    for (int i = 0; i < (int)inputFiles.size(); i++) {
+    for (unsigned int i = 0; i < inputFiles.size(); i++) {
         SequenceConcatenater curr(inputFiles[i]);
         if (!first) {
             result.concatenate(curr);

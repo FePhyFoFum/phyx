@@ -142,7 +142,7 @@ int main(int argc, char * argv[]){
     vector<string> names;
     map<string,int> name_index;
     map<int,string> name_st_index;
-    for(int i=0;i<seqs.size();i++){
+    for(unsigned int i=0; i < seqs.size(); i++){
         string tname = seqs[i].get_id();
         name_index[tname] = i;
         cout << tname << " " << i << endl;
@@ -158,13 +158,13 @@ int main(int argc, char * argv[]){
     vector<double> bp_count;
     vector<int> seq_bipart_map;
     //for each column
-    for(int i=0;i<numcols;i++){
+    for(int i=0; i < numcols; i++){
         vector<int> tbpa;
         vector<int> tbpc;
         vector<int> tbpg;
         vector<int> tbpt;
         int skip = 0;
-        for (int j=0;j<numseqs;j++){
+        for (int j=0; j < numseqs; j++){
             if (seqs[j].get_sequence()[i] == 'A'){
                 tbpa.push_back(j);
             }else if(seqs[j].get_sequence()[i] == 'C'){
@@ -192,9 +192,9 @@ int main(int argc, char * argv[]){
         tallbp.push_back(tbpt);
         //check to see if the bipart is new
         bool add = true;
-        for(int j =0;j<all_bp.size();j++){//for each bipart set
+        for(unsigned int j=0; j < all_bp.size(); j++){//for each bipart set
             bool got = true;
-            for(int k=0;k<tallbp.size();k++){//for each nucleotide set
+            for(unsigned int k=0; k < tallbp.size(); k++){//for each nucleotide set
                 bool tm = true;
                 if((int)count(all_bp[j].begin(),all_bp[j].end(),tallbp[k]) == 0){ //no match
                     tm = false;
@@ -224,18 +224,18 @@ int main(int argc, char * argv[]){
     //this would be an intersection of each of the parts and if one is null then it is compatible
     double ACA = 0;
     vector<double> bp_ica(bp_count.size());
-    for(int i=0;i<all_bp.size();i++){
+    for(unsigned int i=0; i < all_bp.size(); i++){
         double totalcount = bp_count[i];
         vector<double> conflict_nums;
         conflict_nums.push_back(bp_count[i]);
         vector<int> conflicts;
-        for(int j=0;j<all_bp.size();j++){
+        for(unsigned int j=0; j < all_bp.size(); j++){
             if (i == j) {
                 continue;
             }
             bool good = true;
             int compcount = 0;
-            for(int m=0;m<all_bp[i].size();m++){
+            for(unsigned int m=0; m < all_bp[i].size(); m++){
                 if(all_bp[i][m].size() <= 1) {
                     continue;
                 } else {
@@ -243,7 +243,7 @@ int main(int argc, char * argv[]){
                 }
                 int badcount = 0;
                 int compcount2 = 0;
-                for(int n=0;n<all_bp[i].size();n++){
+                for(unsigned int n=0; n < all_bp[i].size(); n++){
                     if(all_bp[j][n].size() <= 1) {
                         continue;
                     }
@@ -277,14 +277,14 @@ int main(int argc, char * argv[]){
         }
         //calculate ICA
         double sign = 1;
-        for(int j=0;j<conflict_nums.size();j++){
+        for(unsigned int j=0; j < conflict_nums.size(); j++){
             conflict_nums[j]/=totalcount;
             if(conflict_nums[j] > conflict_nums[0]) {
                 sign = -1;
             }
         }
         double ICA = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
-        for(int j=0;j<conflict_nums.size();j++){
+        for(unsigned int j=0; j < conflict_nums.size(); j++){
             ICA += (conflict_nums[j]*logn(conflict_nums[j],conflict_nums.size()));
         }
         ACA += ICA;
@@ -298,7 +298,7 @@ int main(int argc, char * argv[]){
 
     //tree processing
     if(tfileset){
-        for(int t=0;t<trees.size();t++){
+        for(unsigned int t=0; t < trees.size(); t++){
             vector<string> rt_nms = trees[t]->getRoot()->get_leave_names();
             set<string> rt_nms_set;
             copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
@@ -308,7 +308,7 @@ int main(int argc, char * argv[]){
                 vector<int> nms_i;
                 set<string> nms_s;
                 copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
-                for (int k=0;k<nms.size();k++){
+                for (unsigned int k=0; k < nms.size(); k++){
                     nms_i.push_back(name_index[nms[k]]);
                 }
                 sort(nms_i.begin(),nms_i.end());
@@ -318,13 +318,13 @@ int main(int argc, char * argv[]){
                 vector<string>::iterator it;
                 it = set_difference(rt_nms_set.begin(),rt_nms_set.end(),nms_s.begin(),nms_s.end(),nms_s2.begin());
                 nms_s2.resize(it-nms_s2.begin());
-                for (int k=0;k<nms_s2.size();k++){
+                for (unsigned int k=0; k < nms_s2.size(); k++){
                     nms_i2.push_back(name_index[nms_s2[k]]);
                 }
                 //find the biparts that are the same
                 vector<int> matches;
-                for(int i=0;i<all_bp.size();i++){
-                    for(int m=0;m<all_bp[i].size();m++){
+                for(unsigned int i=0; i < all_bp.size(); i++){
+                    for(unsigned int m=0; m < all_bp[i].size(); m++){
                         if(all_bp[i][m].size() <= 1 || (all_bp[i][m].size() != nms_i.size() && all_bp[i][m].size() != nms_i2.size() ) ) {
                             continue;
                         }

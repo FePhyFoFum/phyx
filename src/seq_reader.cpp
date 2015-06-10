@@ -124,7 +124,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         string del(" \t");
         tokenize(tline, tokens, del);
         if (tokens.size() > 1) {
-            for (int i=0; i < tokens.size(); i++) {
+            for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
             if (tokens[0].compare(";") == 0) {
@@ -161,7 +161,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         }
         tokens.clear();
         tokenize(tline,tokens,del);
-        for (int i=0; i < tokens.size(); i++) {
+        for (unsigned int i=0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
         if (tokens[0].size() == 0){
@@ -176,7 +176,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             string tse = tokens[1];
             //TODO: look for decimal and add cont char if decimal present
             //seq.add_multistate_char(atoi(tokens[1].c_str()));
-            for (int j=2; j < tokens.size(); j++) {
+            for (unsigned int j=2; j < tokens.size(); j++) {
                 tse += " " + tokens[j];
             //seq.add_multistate_char(atoi(tokens[j].c_str()));
             }
@@ -297,7 +297,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
         }
         tokens.clear();
         tokenize(tline,tokens,del);
-        for(int i=0;i<tokens.size();i++){
+        for(unsigned int i=0; i < tokens.size(); i++){
             trim_spaces(tokens[i]);
         }
         if (tokens[0].size() == 0){
@@ -305,7 +305,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
         }
         seq.set_id(tokens[0]);
         //split the tokens by spaces
-        for (int i =1 ;i< tokens.size();i++){
+        for (unsigned int i=1 ; i < tokens.size(); i++){
             seq.add_cont_char((double)atof(tokens[i].c_str()));
         }
         return true;
@@ -324,13 +324,13 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
                 if (!getline(stri, tline)){
                     tokens.clear();
                     tokenize(curseq,tokens,del);
-                    for(int i=0;i<tokens.size();i++){
+                    for(unsigned int i=0; i < tokens.size(); i++){
                         trim_spaces(tokens[i]);
                     }
                     if (tokens[0].size() == 0){
                         return false;
                     }
-                    for (int i =0 ;i< tokens.size();i++){
+                    for (unsigned int i=0 ; i < tokens.size(); i++){
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     return false;
@@ -346,13 +346,13 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
                     //split the tokens by spaces
                     tokens.clear();
                     tokenize(curseq,tokens,del);
-                    for(int i=0;i<tokens.size();i++){
+                    for(unsigned int i=0; i < tokens.size(); i++){
                         trim_spaces(tokens[i]);
                     }
                     if (tokens[0].size() == 0){
                         return false;
                     }
-                    for (int i =0 ;i< tokens.size();i++){
+                    for (unsigned int i =0 ; i < tokens.size(); i++){
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     retstring = tline;
@@ -508,7 +508,7 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
         replace(tline.begin(), tline.end(), '=', ' ');
         replace(tline.begin(), tline.end(), ';', ' ');
         vector <string> searchtokens = tokenize(tline);
-            for (int i = 0; i < (int)searchtokens.size(); i++) {
+            for (unsigned int i = 0; i < searchtokens.size(); i++) {
                 if (searchtokens[i].substr(0, 4) == "NTAX") {
                     i++;
                     numTaxa = stoi(searchtokens[i]);

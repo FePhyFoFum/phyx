@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -204,7 +205,6 @@ bool test_logical(vector <int> & matA,vector <int> & matB) {
             test = true;
         }
     }
-    
     return test;
 }
 
@@ -226,7 +226,7 @@ double sum(vector <int> &inm) {
 
 string get_string_vector(vector <string> &sts) {
     string rets;
-    for (int i=0; i < sts.size(); i++) {
+    for (unsigned int i=0; i < sts.size(); i++) {
         rets += sts[i]+ " ";
     }
     return rets;
@@ -234,7 +234,7 @@ string get_string_vector(vector <string> &sts) {
 
 string get_string_vector(vector <int> & sts) {
     string rets;
-    for (int i=0; i < sts.size(); i++) {
+    for (unsigned int i=0; i < sts.size(); i++) {
         rets += to_string(sts[i]) + " ";
     }
     return rets;

@@ -26,7 +26,7 @@ string SequenceRecoder::get_recoded_seq (string const& origseq) {
 
 
 void SequenceRecoder::ry_recode (string &s) {
-    for (int i = 0; i < s.length(); i++) {
+    for (unsigned int i = 0; i < s.length(); i++) {
         switch (s[i]) {
             case 'A':
             case 'G':

@@ -39,11 +39,11 @@ double nlopt_sr_periods(unsigned n, const double *x, double *grad, void *my_func
 	}
     }
     double like;
-    for(int i=0;i<nloptrm_periods->size();i++){
+    for(unsigned int i=0; i < nloptrm_periods->size(); i++){
 	nloptrm_periods->at(i).set_Q_diag();
     }
     like = nloptsr_periods->eval_likelihood();
-    for(int i=0;i<nloptrm_periods->size();i++){
+    for(unsigned int i=0; i < nloptrm_periods->size(); i++){
 	if (nloptrm_periods->at(i).neg_p == true){
 	    like = 10000000000000;
 	    break;

@@ -38,7 +38,7 @@ int main (int argc, char * argv[]) {
     
     double seconds = 0;
 
-    for (int i = 0; i < (int)treeStrings.size(); i++) {
+    for (unsigned int i = 0; i < (treeStrings.size(); i++) {
         Tree * tree = tr.readTree(treeStrings[0]);
 
         cout << "Rooted status: " << is_rooted << endl;

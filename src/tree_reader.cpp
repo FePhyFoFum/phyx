@@ -293,7 +293,7 @@ int test_tree_filetype_stream(istream & stri, string & retstring){
     int ret = 666; // if you get 666, there is no filetype set
     if (retstring[0] == '#'){
         ret = 0;
-    }else if (retstring[0] == '('){
+    } else if (retstring[0] == '('){
         ret = 1;
     }
     return ret;
@@ -310,37 +310,38 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans, ve
     bool begintrees = false;
     bool tgoing = false;
     while (going){
-	if(!getline(stri,line1)){
+	if (!getline(stri,line1)){
 	    break;
 	}
 	(*retstrings).push_back(line1);
 	string uc(line1);
 	transform(uc.begin(), uc.end(), uc.begin(), ::toupper);
-	if(uc.find("TRANSLATE") != string::npos){
+	if (uc.find("TRANSLATE") != string::npos){
 	    tgoing = true;
 	    exists = true;
 	    continue;
-	}else if(begintrees == true && tgoing == false){
+	} else if(begintrees == true && tgoing == false){
 	    return false;
 	}
-	if(uc.find("BEGIN TREES") != string::npos){
+	if (uc.find("BEGIN TREES") != string::npos){
 	    begintrees = true;
 	}
-	if(tgoing == true){
+	if (tgoing == true){
 	    //trimspaces and split up strings
 	    vector<string> tokens;
 	    string del(" \t");
 	    tokens.clear();
 	    tokenize(line1,tokens,del);
-	    for(int i=0;i<tokens.size();i++){
+	    for (unsigned int i=0; i < tokens.size(); i++){
 		trim_spaces(tokens[i]);
 	    }
 	    size_t found = tokens[1].find(",");
-	    if (found != string::npos)
+	    if (found != string::npos) {
 		tokens[1].erase(found,1);
+            }
 	    (*trans)[tokens[0]] = tokens[1];
 	    size_t found2 = tokens[1].find(";");
-	    if(found2 != string::npos){
+	    if (found2 != string::npos){
 		tokens[1].erase(found2,1);
 		(*trans)[tokens[0]] = tokens[1];
 		going = false;

@@ -132,8 +132,8 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
     cx_mat C_inv = inv(eigvec);
     cx_mat P = eigvec * eigval * C_inv;
     neg_p = false;
-    for(int i=0;i<P.n_rows;i++){
-	for(int j=0;j<P.n_cols;j++){
+    for(unsigned int i=0; i < P.n_rows; i++){
+	for(unsigned int j=0; j < P.n_cols; j++){
 	    if (real(P(i,j))<0)
 		neg_p = true;
 	}
@@ -287,12 +287,12 @@ void RateModel::setup_fortran_P(mat & P, double t, bool store_p_matrices){
     delete [] wsp;
     delete [] ipiv;
     delete [] H;
-    for(unsigned int i=0; i<nstates; i++){
+    for (int i=0; i<nstates; i++){
 	double sum = 0.0;
-	for (unsigned int j=0; j<nstates; j++){
+	for (int j=0; j<nstates; j++){
 	    sum += P(i,j);
 	}
-	for (unsigned int j=0; j<nstates; j++){
+	for (int j=0; j<nstates; j++){
 	    P(i,j) = (P(i,j)/sum);
 	}
     }

@@ -162,15 +162,15 @@ int main(int argc, char * argv[]){
     }
 
     //go all by all
-    for(int i=0;i<seqs.size();i++){
+    for(unsigned int i=0; i < seqs.size(); i++){
         omp_set_num_threads(num_threads);
-#pragma omp parallel for
-        for(int j=0;j<seqs.size();j++){
+        #pragma omp parallel for
+        for(unsigned int j=0; j < seqs.size(); j++){
             if(j > i){
                 string aln1;
                 string aln2;
                 double sc = sw(seqs[i],seqs[j],sc_mat,0, aln1, aln2);
-#pragma omp critical
+                #pragma omp critical
                 {
                     cout << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << endl;
                     if (verbose){

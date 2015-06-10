@@ -20,7 +20,8 @@ using namespace std;
 
 int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2) {
 	vector<Node *> vnd;
-	vnd.push_back(nd1);vnd.push_back(nd2);
+	vnd.push_back(nd1);
+        vnd.push_back(nd2);
 	Node * mrca = tr->getMRCA(vnd);
 	int count = 0;
 	Node * cur = nd1;
@@ -125,17 +126,17 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
 
 // maybe move this elsewhere...
 bool check_names_against_tree(Tree * tr, vector<string> names) {
-	bool allgood = true;
-	
-	for (int i = 0; i < (int)names.size(); i++) {
-	    //cout << "Checking name '" << names[i] << "'." << endl;
-		Node * nd = tr->getExternalNode(names[i]);
-		if (nd == NULL) {
-			cout << "Taxon '" << names[i] << "' not found in tree." << endl;
-			allgood = false;
-		}
-	}
-	return allgood;
+    bool allgood = true;
+
+    for (unsigned int i = 0; i < names.size(); i++) {
+    //cout << "Checking name '" << names[i] << "'." << endl;
+        Node * nd = tr->getExternalNode(names[i]);
+        if (nd == NULL) {
+            cout << "Taxon '" << names[i] << "' not found in tree." << endl;
+            allgood = false;
+        }
+    }
+    return allgood;
 }
 
 // moving to own function, as as generally useful
@@ -196,7 +197,7 @@ bool is_ultrametric_tips (Tree * tr) {
     */
 
     /*
-    for (int i = 1; i < (int)paths.size(); i++) {
+    for (unsigned int i = 1; i < paths.size(); i++) {
         cout << "Comparing " << paths[0] << " to " << paths[i] << " = " << (paths[0] - paths[i]) << "." << endl;
         essentially_equal(paths[0], paths[i]);
     }

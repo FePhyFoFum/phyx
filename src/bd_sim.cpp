@@ -145,7 +145,7 @@ void BirthDeathSimulator::node_birth(Node *innode) {
 }
 
 void BirthDeathSimulator::delete_dead_nodes() {
-    for (int i=0; i < dead_nodes.size(); i++) {
+    for (unsigned int i=0; i < dead_nodes.size(); i++) {
         delete_a_node(dead_nodes[i]);
     }
     /*

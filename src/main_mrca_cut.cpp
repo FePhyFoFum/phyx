@@ -144,7 +144,7 @@ int main(int argc, char * argv[]){
         lines.push_back(line);
     }
     
-    for (int i = 0; i < (int)lines.size(); i++) {
+    for (unsigned int i = 0; i < lines.size(); i++) {
         Tree * tree = tr.readTree(lines[i]);
         cout << tree->getExternalNodeCount() << endl;
 

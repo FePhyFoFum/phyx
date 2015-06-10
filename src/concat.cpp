@@ -146,7 +146,7 @@ void SequenceConcatenater::write_partition_information (string & partfile) {
     ofstream outfile(partfile.c_str());
     int charIndex = 1;
     int stopIndex = 1;
-    for (int i = 0; i < (int)partitionSizes.size(); i++) {
+    for (unsigned int i = 0; i < partitionSizes.size(); i++) {
         stopIndex = charIndex + partitionSizes[i] - 1;
         outfile << "DNA, gene" << i << " = " << charIndex << "-" << stopIndex << endl;
         charIndex = stopIndex + 1;

@@ -105,13 +105,13 @@ set<int> get_dna_pos(char inc){
  */
 string consensus_seq(vector<Sequence> & seqs, int alpha){
     int seqlength = seqs[0].get_sequence().length();
-    for(int i=0;i<seqs.size();i++){
-        assert(seqs[i].get_sequence().length() == seqlength);
+    for(unsigned int i=0; i < seqs.size(); i++){
+        assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     string retstring;
-    for(int i=0;i<seqlength;i++){
+    for(int i=0; i < seqlength; i++){
         set<int> fullset;
-        for(int j=0;j<seqs.size();j++){
+        for(unsigned int j=0; j < seqs.size(); j++){
             set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
             fullset.insert(tset.begin(),tset.end());
         }
@@ -163,11 +163,11 @@ char single_dna_complement(char inc){
 
 void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr){
     int seqlength = seqs[0].get_sequence().length();
-    for(int i=0;i<seqs.size();i++){
-        assert(seqs[i].get_sequence().length() == seqlength);
+    for(unsigned int i=0; i < seqs.size(); i++){
+        assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     (*ostr) << seqs.size() << " " << seqlength << endl;
-    for(int i=0;i<seqs.size();i++){
+    for(unsigned int i=0; i < seqs.size(); i++){
         (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
     }
 }
@@ -178,19 +178,18 @@ void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr){
  */
 void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr){
     int seqlength = seqs[0].get_sequence().length();
-    for(int i=0;i<seqs.size();i++){
-        assert(seqs[i].get_sequence().length() == seqlength);
+    for(unsigned int i=0; i < seqs.size(); i++){
+        assert((int)seqs[i].get_sequence().length() == seqlength);
     }
-	(*ostr) << "#NEXUS" << endl;
-	(*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
+    (*ostr) << "#NEXUS" << endl;
+    (*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
     (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << endl;
-	(*ostr) << "\tFORMAT DATATYPE="<< seqs[0].get_alpha_name() << " INTERLEAVE=NO GAP=-;"<<endl;
-	(*ostr) << "\tMATRIX\n" << endl;
-    for(int i=0;i<seqs.size();i++){
+    (*ostr) << "\tFORMAT DATATYPE="<< seqs[0].get_alpha_name() << " INTERLEAVE=NO GAP=-;"<<endl;
+    (*ostr) << "\tMATRIX\n" << endl;
+    for(unsigned int i=0; i < seqs.size(); i++){
         (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
     }
-
-	(*ostr) << ";\nend;\n" << endl;
+    (*ostr) << ";\nend;\n" << endl;
 }
 
 /**
@@ -200,13 +199,13 @@ void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr){
  */
 void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,vector<Sequence> & sr_seqs,int site,map<string,vector<int> > & codon_pos){
     int start = site*3;
-    for (int i=0;i<origseqs.size();i++){
+    for (unsigned int i=0; i < origseqs.size(); i++){
 	string codon = origseqs[i].get_sequence().substr(start,3);
 	string setsq = "";
 	for(int j=0;j<61;j++){
 	    setsq += "0";
 	}
-	for (int j=0;j<codon_pos[codon].size();j++){
+	for (unsigned int j=0; j < codon_pos[codon].size(); j++){
 	    setsq.replace(codon_pos[codon][j],1,"1");
 	}
 	sr_seqs[i].set_sequence(setsq);
@@ -220,13 +219,13 @@ void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,vec
  */
 void create_vector_seq_codon_state_reconstructor_all_site(vector<Sequence> & origseqs,vector<Sequence> & sr_seqs,int site,map<string,vector<int> > & codon_pos){
     int start = site*3;
-    for (int i=0;i<origseqs.size();i++){
+    for (unsigned int i=0; i < origseqs.size(); i++){
 	string codon = origseqs[i].get_sequence().substr(start,3);
 	string setsq = "";
-	for(int j=0;j<61;j++){
+	for (int j=0; j < 61;j ++){
 	    setsq += "0";
 	}
-	for (int j=0;j<codon_pos[codon].size();j++){
+	for (unsigned int j=0; j < codon_pos[codon].size(); j++){
 	    setsq.replace(codon_pos[codon][j],1,"1");
 	}
 	sr_seqs[i].set_sequence(setsq);

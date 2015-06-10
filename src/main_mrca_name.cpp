@@ -123,11 +123,11 @@ int main(int argc, char * argv[]){
         pios = &cin;
     }
     
-/* 
-   collect clade names
-   expecting (new) format:
-   MRCANAME = tip1 tip2 ... 
-*/
+    /* 
+       collect clade names
+       expecting (new) format:
+       MRCANAME = tip1 tip2 ... 
+    */
     ifstream inmrca(mrcaf);
     string mrcaline;
     map<string, vector<string> > mrcas;
@@ -153,7 +153,7 @@ int main(int argc, char * argv[]){
     }
     
 // allow multiple trees
-    for (int i = 0; i < (int)lines.size(); i++) {
+    for (unsigned int i = 0; i < lines.size(); i++) {
         Tree * tree = tr.readTree(lines[i]);
         map<string, vector<string> >::iterator it;
         for (it = mrcas.begin(); it != mrcas.end(); it++){
