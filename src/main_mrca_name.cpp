@@ -7,7 +7,7 @@
  * The idea behind this is to allow for the naming of internal nodes based
  * on given MRCAS and a set of names in a file the input of which should
  * look like
- * mrca list seperated by spaces\tname
+ * mrca list separated by spaces\tname
 */
 
 #include <stdio.h>
@@ -32,7 +32,7 @@ using namespace std;
 void print_help(){
     cout << "Label internal nodes with clade names." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
-    cout << "mrca list seperated by spaces\\tname (although this may change)" << endl;
+    cout << "mrca list separated by spaces\\tname (although this may change)" << endl;
     cout << endl;
     cout << "Usage: pxmrcaname [OPTION]... " << endl;
     cout << endl;
@@ -144,7 +144,7 @@ int main(int argc, char * argv[]){
             trim_spaces(searchtokens2[j]);
             vec.push_back(searchtokens2[j]);
         }
-    //second searchtoken is the set of mrca names
+    //second searchtoken is the set(?) of mrca names
         mrcas[searchtokens[1]] = vec;
     }
     inmrca.close();
@@ -158,19 +158,19 @@ int main(int argc, char * argv[]){
     
 // allow multiple trees
     for (int i = 0; i < (int)lines.size(); i++) {
-		Tree * tree = tr.readTree(lines[1]);
-		map<string, vector<string> >::iterator it;
-		for (it = mrcas.begin(); it != mrcas.end(); it++){
-		    //cout << "Dealing with clade '" << (*it).first << "'" << endl;
-		    if (!check_names_against_tree(tree, (*it).second)) {
-		        cout << "Check mrca file for typos." << endl;
-		        exit (0);
-		    }
-			Node * nd = tree->getMRCA((*it).second);
-			nd->setName((*it).first);
-		}
-		(*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
-		delete tree;
+        Tree * tree = tr.readTree(lines[i]);
+        map<string, vector<string> >::iterator it;
+        for (it = mrcas.begin(); it != mrcas.end(); it++){
+            //cout << "Dealing with clade '" << (*it).first << "'" << endl;
+            if (!check_names_against_tree(tree, (*it).second)) {
+                cout << "Check mrca file for typos." << endl;
+                exit (0);
+            }
+            Node * nd = tree->getMRCA((*it).second);
+            nd->setName((*it).first);
+        }
+        (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+        delete tree;
     }
     
     if (fileset) {
