@@ -6,8 +6,8 @@
 /*
  * The idea behind this is to allow for the naming of internal nodes based
  * on given MRCAS and a set of names in a file the input of which should
- * look like
- * mrca list separated by spaces\tname
+ * look like:
+ * MRCANAME = tip1 tip2 ...
 */
 
 #include <stdio.h>
@@ -32,7 +32,7 @@ using namespace std;
 void print_help(){
     cout << "Label internal nodes with clade names." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
-    cout << "mrca list separated by spaces\\tname (although this may change)" << endl;
+    cout << "MRCANAME = tip1 tip2 ..." << endl;
     cout << endl;
     cout << "Usage: pxmrcaname [OPTION]... " << endl;
     cout << endl;
@@ -123,7 +123,11 @@ int main(int argc, char * argv[]){
         pios = &cin;
     }
     
-// collect clade names
+/* 
+   collect clade names
+   expecting (new) format:
+   MRCANAME = tip1 tip2 ... 
+*/
     ifstream inmrca(mrcaf);
     string mrcaline;
     map<string, vector<string> > mrcas;
@@ -132,20 +136,12 @@ int main(int argc, char * argv[]){
             continue;
         }
         vector<string> searchtokens;
-        tokenize(mrcaline, searchtokens, "\t");
-        for (int j = 0; j < (int)searchtokens.size(); j++){
-            trim_spaces(searchtokens[j]);
-        }
-    //first searchtoken is the set of names
-        vector<string> vec;
-        vector<string> searchtokens2;
-        tokenize(searchtokens[0], searchtokens2, " ");
-        for (int j = 0; j < (int)searchtokens2.size(); j++){
-            trim_spaces(searchtokens2[j]);
-            vec.push_back(searchtokens2[j]);
-        }
-    //second searchtoken is the set(?) of mrca names
-        mrcas[searchtokens[1]] = vec;
+        tokenize(mrcaline, searchtokens, "=");
+        string mrcaname = searchtokens[0];
+        trim_spaces(mrcaname);
+        searchtokens.erase(searchtokens.begin());
+        searchtokens = tokenize(searchtokens[0]);
+        mrcas[mrcaname] = searchtokens;
     }
     inmrca.close();
     
