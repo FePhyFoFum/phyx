@@ -66,9 +66,9 @@ void trim_spaces(string& str) {
 
     // if all spaces or empty return an empty string
     if ((string::npos == startpos) || ( string::npos == endpos)) {
-	    str = "";
+        str = "";
     } else {
-	    str = str.substr(startpos, endpos - startpos + 1);
+        str = str.substr(startpos, endpos - startpos + 1);
     }
     /*
     // Code for  Trim Leading Spaces only
@@ -88,7 +88,7 @@ void trim_spaces(string& str) {
 bool is_number(const string& s) {
     string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) {
-	    ++it;
+        ++it;
     }
     return !s.empty() && it == s.end();
 }
@@ -151,7 +151,7 @@ Superdouble calculate_vector_Superdouble_sum(vector <Superdouble> & in) {
     Superdouble sum = 0;
     for (unsigned int i=0; i < in.size(); i++) {
         sum += in[i];
-	    // cout << in[i] << " sum:" << sum << endl;
+        // cout << in[i] << " sum:" << sum << endl;
     }
     // cout << "endsum:" << sum << endl;
     return sum;
@@ -171,7 +171,7 @@ void print_error(char * pname, char arg) {
 int sum_matrix_col(vector <vector <int> > & matrix,int col) {
     int x=0;
     for (unsigned int i=0; i < matrix.size(); i++) {
-	    x += matrix[i][col];
+        x += matrix[i][col];
     }
     return x;
 }
@@ -211,7 +211,7 @@ bool test_logical(vector <int> & matA,vector <int> & matB) {
 double sum(vector <double> &inm) {
     double x=0;
     for (unsigned int i=0;i<inm.size();i++) {
-	    x += inm[i];
+        x += inm[i];
     }
     return x;
 }
@@ -219,7 +219,7 @@ double sum(vector <double> &inm) {
 double sum(vector <int> &inm) {
     double x=0;
     for (unsigned int i=0; i < inm.size(); i++) {
-	    x += inm[i];
+        x += inm[i];
     }
     return x;
 }
@@ -227,7 +227,7 @@ double sum(vector <int> &inm) {
 string get_string_vector(vector <string> &sts) {
     string rets;
     for (int i=0; i < sts.size(); i++) {
-	    rets += sts[i]+ " ";
+        rets += sts[i]+ " ";
     }
     return rets;
 }
@@ -235,7 +235,7 @@ string get_string_vector(vector <string> &sts) {
 string get_string_vector(vector <int> & sts) {
     string rets;
     for (int i=0; i < sts.size(); i++) {
-	    rets += to_string(sts[i]) + " ";
+        rets += to_string(sts[i]) + " ";
     }
     return rets;
 }

@@ -49,14 +49,14 @@ bool reroot(Tree * tree, vector<string> & outgr);
 bool reroot(Tree * tree,vector<string> & outgr){
     Node * m = tree->getMRCA(outgr);
     if (m == NULL)
-	return false;
+    return false;
     if (m == tree->getRoot()){
-	//check to see if the outgroups are just the children of the root
-	//if so, then do this
-	//tree->rootWithRootTips(outgr);
-	//if not, then do this
-	tree->getInternalMRCA(outgr);
-	return true;
+    //check to see if the outgroups are just the children of the root
+    //if so, then do this
+    //tree->rootWithRootTips(outgr);
+    //if not, then do this
+    tree->getInternalMRCA(outgr);
+    return true;
     }
     bool success = tree->reRoot(m);
     return success;
@@ -73,25 +73,25 @@ int main(int argc, char * argv[]){
     char * outf;
     char * outgroupsc;
     while(going){
-	int oi = -1;
-	int c = getopt_long(argc,argv,"g:t:o:hV",long_options,&oi);
-	if (c == -1){
-	    break;
-	}
-	switch(c){
-	    case 't':
-		fileset = true;
-		treef = strdup(optarg);
-		break;
-	    case 'g':
-	        outgroupsset = true;
-		outgroupsc = strdup(optarg);
-		break;
-	    case 'o':
-		outfileset = true;
-		outf = strdup(optarg);
-		break;
-	    case 'h':
+    int oi = -1;
+    int c = getopt_long(argc,argv,"g:t:o:hV",long_options,&oi);
+    if (c == -1){
+        break;
+    }
+    switch(c){
+        case 't':
+        fileset = true;
+        treef = strdup(optarg);
+        break;
+        case 'g':
+            outgroupsset = true;
+        outgroupsc = strdup(optarg);
+        break;
+        case 'o':
+        outfileset = true;
+        outf = strdup(optarg);
+        break;
+        case 'h':
                 print_help();
                 exit(0);
             case 'V':
@@ -100,20 +100,20 @@ int main(int argc, char * argv[]){
             default:
                 print_error(argv[0],(char)c);
                 exit(0);
-	}
+    }
     }
     if(outgroupsset == true){
-	vector<string> tokens2;
-	string del2(",");
-	tokens2.clear();
-	tokenize(outgroupsc, tokens2, del2);
-	for(unsigned int j=0;j<tokens2.size();j++){
-	    trim_spaces(tokens2[j]);
-	    outgroups.push_back(tokens2[j]);
-	}
+    vector<string> tokens2;
+    string del2(",");
+    tokens2.clear();
+    tokenize(outgroupsc, tokens2, del2);
+    for(unsigned int j=0;j<tokens2.size();j++){
+        trim_spaces(tokens2[j]);
+        outgroups.push_back(tokens2[j]);
+    }
     }else{
-	cerr << "you need to set the outgroup (-g)" << endl;
-	exit(0);
+    cerr << "you need to set the outgroup (-g)" << endl;
+    exit(0);
     }
 
     istream * pios;
@@ -121,57 +121,57 @@ int main(int argc, char * argv[]){
     ifstream * fstr;
     ofstream * ofstr;
     if(fileset == true){
-	fstr = new ifstream(treef);
-	pios = fstr;
+    fstr = new ifstream(treef);
+    pios = fstr;
     }else{
-	pios = &cin;
+    pios = &cin;
     }
     if(outfileset == true){
-	ofstr = new ofstream(outf);
-	poos = ofstr;
+    ofstr = new ofstream(outf);
+    poos = ofstr;
     }else{
-	poos = &cout;
+    poos = &cout;
     }
     
     //read trees 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if(ft != 0 && ft != 1){
-	cerr << "this really only works with nexus or newick" << endl;
-	exit(0);
+    cerr << "this really only works with nexus or newick" << endl;
+    exit(0);
     }
     going = true;
     bool exists;
     if(ft == 0){
-	vector<string> retstrings;
-	retstrings.push_back(retstring);
-	map<string,string> translation_table;
-	bool ttexists;
-	ttexists = get_nexus_translation_table(*pios, &translation_table,&retstrings);
-	if (retstrings.size() > 0)
-	    retstring = retstrings[retstrings.size()-1];
-	Tree * tree;
-	while(going){
-	    tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
-	    if (going == true){
-		exists = reroot(tree,outgroups);
-		(*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
-		delete tree;
-	    }
-	}
+    vector<string> retstrings;
+    retstrings.push_back(retstring);
+    map<string,string> translation_table;
+    bool ttexists;
+    ttexists = get_nexus_translation_table(*pios, &translation_table,&retstrings);
+    if (retstrings.size() > 0)
+        retstring = retstrings[retstrings.size()-1];
+    Tree * tree;
+    while(going){
+        tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
+        if (going == true){
+        exists = reroot(tree,outgroups);
+        (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+        delete tree;
+        }
+    }
     }else if(ft == 1){
-	Tree * tree;
-	while(going){
-	    tree = read_next_tree_from_stream_newick(*pios,retstring,&going);
-	    if(going == true){
-		exists = reroot(tree,outgroups);
-		if(exists == false)
-		    cerr << "the outgroup taxa don't exist in this tree " << endl;
-		else
-		    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
-		delete tree;
-	    }
-	}
+    Tree * tree;
+    while(going){
+        tree = read_next_tree_from_stream_newick(*pios,retstring,&going);
+        if(going == true){
+        exists = reroot(tree,outgroups);
+        if(exists == false)
+            cerr << "the outgroup taxa don't exist in this tree " << endl;
+        else
+            (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+        delete tree;
+        }
+    }
     }
     if(fileset){
         fstr->close();

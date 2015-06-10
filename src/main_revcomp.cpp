@@ -91,8 +91,8 @@ int main(int argc, char * argv[]){
     }
     Sequence seq;
     string retstring;
-	int ft = test_seq_filetype_stream(*pios,retstring);
-	while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
         seq.perm_reverse_complement();
         (*poos) << seq.get_fasta();
     }
