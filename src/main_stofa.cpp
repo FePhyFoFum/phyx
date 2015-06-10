@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;
@@ -94,14 +94,14 @@ int main(int argc, char * argv[]){
         poos = &cout;
     }
 
-	int ft = test_seq_filetype_stream(*pios,retstring);
-	while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-	    (*poos) << seq.get_fasta();
-	}
-	//fasta has a trailing one
-	if (ft == 2){
-	    (*poos) << seq.get_fasta();
-	}
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+        (*poos) << seq.get_fasta();
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+        (*poos) << seq.get_fasta();
+    }
     if(fileset){
         fstr->close();
         delete pios;

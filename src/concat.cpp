@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <ctime>
 #include <fstream>
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 

@@ -13,50 +13,50 @@
 using namespace std;
 
 BranchSegment::BranchSegment(double dur,int per):duration(dur),period(per),
-		model(NULL),fossilareaindices(vector<int>()),startdistint(-666),
-		distconds(NULL),ancdistconds(NULL){}
+        model(NULL),fossilareaindices(vector<int>()),startdistint(-666),
+        distconds(NULL),ancdistconds(NULL){}
 
 void BranchSegment::setModel(RateModel * mod){
-	model = mod;
+    model = mod;
 }
 
 /*void BranchSegment::setStartDist(vector<int> sd){
-	startdist = sd;
+    startdist = sd;
 }*/
 
 void BranchSegment::clearStartDist(){
-	//startdist.clear();
-	startdistint = -666; //null is -666
+    //startdist.clear();
+    startdistint = -666; //null is -666
 }
 
 double BranchSegment::getDuration(){
-	return duration;
+    return duration;
 }
 
 int BranchSegment::getPeriod(){
-	return period;
+    return period;
 }
 /*
 vector<int> BranchSegment::getStartDist(){
-	return startdist;
+    return startdist;
 }*/
 
 void BranchSegment::set_start_dist_int(int d){
-	startdistint = d;
+    startdistint = d;
 }
 
 int BranchSegment::get_start_dist_int(){
-	return startdistint;
+    return startdistint;
 }
 
 RateModel * BranchSegment::getModel(){
-	return model;
+    return model;
 }
 
 vector<int> BranchSegment::getFossilAreas(){
-	return fossilareaindices;
+    return fossilareaindices;
 }
 
 void BranchSegment::setFossilArea(int area){
-	fossilareaindices.push_back(area);
+    fossilareaindices.push_back(area);
 }

@@ -1,5 +1,5 @@
 /*
- * main_strec.cpp
+ * main_TEST.cpp
  *
  */
 
@@ -23,23 +23,23 @@ using namespace std;
 #include "fasta_util.h"
 
 int main(int argc, char * argv[]){
-	TreeReader tr;
+    TreeReader tr;
 
-	if (argc != 1){
-		cout << "usage: phyx_test" << endl;
-		exit(0);
-	}
-	string datafile = "../../../projects/PHLAWD_fish/12S.keep";
-	vector<Sequence> seqs;
-	FastaUtil pr;
-	bool phyl = pr.readFile(datafile,seqs);
-	cout << "sequences: " << seqs.size() << endl;
-	cout << seqs[0].get_sequence() <<endl;
-	seqs[0].reverse_complement();
-	cout << endl;
-	cout << seqs[0].get_sequence()<< endl;
-	cout << "writing file" << endl;
-	string outfile = "test.fasta";
-	pr.writeFileFromVector(outfile,seqs);
-	return EXIT_SUCCESS;
+    if (argc != 1){
+        cout << "usage: phyx_test" << endl;
+        exit(0);
+    }
+    string datafile = "../../../projects/PHLAWD_fish/12S.keep";
+    vector<Sequence> seqs;
+    FastaUtil pr;
+    bool phyl = pr.readFile(datafile,seqs);
+    cout << "sequences: " << seqs.size() << endl;
+    cout << seqs[0].get_sequence() <<endl;
+    seqs[0].reverse_complement();
+    cout << endl;
+    cout << seqs[0].get_sequence()<< endl;
+    cout << "writing file" << endl;
+    string outfile = "test.fasta";
+    pr.writeFileFromVector(outfile,seqs);
+    return EXIT_SUCCESS;
 }

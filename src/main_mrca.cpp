@@ -55,41 +55,41 @@ int main(int argc, char * argv[]){
     TreeReader tr;
     
     if (argc != 3){
-	cout << "usage: pxmrca MRCA newickfile" << endl;
-	exit(0);
+        cout << "usage: pxmrca MRCA newickfile" << endl;
+        exit(0);
     }
     
     ifstream infile(argv[1]);
     if (!infile){
-	cerr << "Could not open mrcafile." << endl;
-	return 1;
+        cerr << "Could not open mrcafile." << endl;
+        return 1;
     }
     
     string mrcaline;
     map<string, vector<string> > mrcas;
     while (getline(infile, mrcaline)){
-	vector<string> searchtokens;
-	tokenize(mrcaline, searchtokens, " 	");
-	cout << "Read in " << searchtokens.size() << " tokens!" << endl;
+        vector<string> searchtokens;
+        tokenize(mrcaline, searchtokens, "     ");
+        cout << "Read in " << searchtokens.size() << " tokens!" << endl;
         for(unsigned int j=0; j < searchtokens.size(); j++){
-	    trim_spaces(searchtokens[j]);
-	}
-	vector<string> vec;
+            trim_spaces(searchtokens[j]);
+        }
+        vector<string> vec;
         vec.push_back(searchtokens[1]);
         vec.push_back(searchtokens[2]);
-	mrcas[searchtokens[0]] = vec;
+        mrcas[searchtokens[0]] = vec;
     }
     infile.close();
     
     ifstream infile2(argv[2]);
     if (!infile2){
-	cerr << "Could not open treefile." << endl;
-	return 1;
+        cerr << "Could not open treefile." << endl;
+        return 1;
     }
     vector<string> lines;
     string line;
     while (getline(infile2, line)){
-	lines.push_back(line);
+        lines.push_back(line);
     }
     infile2.close();
 
@@ -98,8 +98,8 @@ int main(int argc, char * argv[]){
 
     map<string,vector<string> >::iterator it;
     for (it=mrcas.begin(); it!=mrcas.end(); it++){
-	Node * nd = tree->getMRCA((*it).second);
-	cout << (*it).first<<" "<< nd->get_num_leaves() << " " << nd->getName() << endl;
+        Node * nd = tree->getMRCA((*it).second);
+        cout << (*it).first<<" "<< nd->get_num_leaves() << " " << nd->getName() << endl;
     }
 
     delete tree;

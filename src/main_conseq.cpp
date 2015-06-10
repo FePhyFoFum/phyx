@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;
@@ -92,9 +92,9 @@ int main(int argc, char * argv[]){
     Sequence seq;
     string retstring;
     vector<Sequence> seqs;
-	int ft = test_seq_filetype_stream(*pios,retstring);
-	while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-	    seqs.push_back(seq);
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+        seqs.push_back(seq);
     }
     if(ft == 2){
         seqs.push_back(seq);
@@ -107,7 +107,8 @@ int main(int argc, char * argv[]){
     if(fileset){
         fstr->close();
         delete pios;
-    }if(outfileset){
+    }
+    if(outfileset){
         ofstr->close();
         delete poos;
     }

@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+
 using namespace std;
 
 #include "node.h"
@@ -53,7 +54,7 @@ int main(int argc, char * argv[]){
         //moving through the tree
 
         Delta delta;
-#pragma omp parallel for ordered num_threads(4)
+        #pragma omp parallel for ordered num_threads(4)
         for(int i=0;i<tree->getInternalNodeCount();i++){
             if (tree->getInternalNode(i)->get_num_leaves() > 1 && tree->getInternalNode(i)->isRoot() == false
                     && tree->getInternalNode(i)->getChildCount() == 2){

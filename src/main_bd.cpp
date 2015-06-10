@@ -9,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;
@@ -129,7 +129,7 @@ int main (int argc, char * argv[]) {
         exit(0);
     }
     if (timeset && extantset) {
-    	cout << "Set -e or -t, not both" << endl;
+        cout << "Set -e or -t, not both" << endl;
         exit(0);
     }
     

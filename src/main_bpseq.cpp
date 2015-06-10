@@ -4,10 +4,11 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 #include <algorithm>
 #include <set>
+
 using namespace std;
 
 #include "tree.h"
@@ -66,11 +67,11 @@ int main(int argc, char * argv[]){
                 fileset = true;
                 seqf = strdup(optarg);
                 break;
-	    case 't':
-		tfileset = true;
-		conditional = true;
-		treef = strdup(optarg);
-		break;
+            case 't':
+                tfileset = true;
+                conditional = true;
+                treef = strdup(optarg);
+                break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
@@ -109,17 +110,17 @@ int main(int argc, char * argv[]){
     // then we will calculate the conditional biparts as well
     vector<Tree *> trees;
     if(tfileset == true){
-	tfstr = new ifstream(treef);
-	piost = tfstr;
-	TreeReader tr;
-	string retstring;
-	while(getline(*piost,retstring)){
-	    trees.push_back(tr.readTree(retstring));
-	}
-	int numtrees = trees.size();	
-	if (numtrees == 0){
-	    cout << "there are no trees;" << endl;
-	}
+        tfstr = new ifstream(treef);
+        piost = tfstr;
+        TreeReader tr;
+        string retstring;
+        while(getline(*piost,retstring)){
+            trees.push_back(tr.readTree(retstring));
+        }
+        int numtrees = trees.size();    
+        if (numtrees == 0){
+            cout << "there are no trees;" << endl;
+        }
     }
 
     //read the sequences
@@ -142,11 +143,11 @@ int main(int argc, char * argv[]){
     map<string,int> name_index;
     map<int,string> name_st_index;
     for(int i=0;i<seqs.size();i++){
-	string tname = seqs[i].get_id();
-	name_index[tname] = i;
-	cout << tname << " " << i << endl;
-	names.push_back(tname);
-	name_st_index[i] = tname;
+        string tname = seqs[i].get_id();
+        name_index[tname] = i;
+        cout << tname << " " << i << endl;
+        names.push_back(tname);
+        name_st_index[i] = tname;
     }
     int numseqs = seqs.size();
     int numcols = seqs[0].get_sequence().size();
@@ -158,60 +159,61 @@ int main(int argc, char * argv[]){
     vector<int> seq_bipart_map;
     //for each column
     for(int i=0;i<numcols;i++){
-	vector<int> tbpa;
-	vector<int> tbpc;
-	vector<int> tbpg;
-	vector<int> tbpt;
-	int skip = 0;
-	for (int j=0;j<numseqs;j++){
-	    if (seqs[j].get_sequence()[i] == 'A'){
-		tbpa.push_back(j);
-	    }else if(seqs[j].get_sequence()[i] == 'C'){
-		tbpc.push_back(j);
-	    }else if (seqs[j].get_sequence()[i] == 'G'){
-		tbpg.push_back(j);
-	    }else if(seqs[j].get_sequence()[i] == 'T'){
-		tbpt.push_back(j);
-	    }else{
-		cout << "don't recognize character " << seqs[j].get_sequence()[i] << endl;
-		skip += 1;
-	    }
-	}
-	if(skip == numseqs)
-	    continue;
-	sort(tbpa.begin(),tbpa.end());
-	sort(tbpc.begin(),tbpc.end());
-	sort(tbpg.begin(),tbpg.end());
-	sort(tbpt.begin(),tbpt.end());
-	vector<vector<int> > tallbp;
-	tallbp.push_back(tbpa);
-	tallbp.push_back(tbpc);
-	tallbp.push_back(tbpg);
-	tallbp.push_back(tbpt);
-	//check to see if the bipart is new
-	bool add = true;
-	for(int j =0;j<all_bp.size();j++){//for each bipart set
-	    bool got = true;
-	    for(int k=0;k<tallbp.size();k++){//for each nucleotide set
-		bool tm = true;
-		if((int)count(all_bp[j].begin(),all_bp[j].end(),tallbp[k]) == 0){ //no match
-		    tm = false;
-		    got = false;
-		    break;
-		}
-	    }
-	    if(got == true){//we have a match
-		bp_count[j] += 1;
-		seq_bipart_map.push_back(j);
-		add = false;
-		break;
-	    }
-	}
-	if (add == true){
-	    all_bp.push_back(tallbp);
-	    bp_count.push_back(1);
-	    seq_bipart_map.push_back(bp_count.size()-1);
-	}
+        vector<int> tbpa;
+        vector<int> tbpc;
+        vector<int> tbpg;
+        vector<int> tbpt;
+        int skip = 0;
+        for (int j=0;j<numseqs;j++){
+            if (seqs[j].get_sequence()[i] == 'A'){
+                tbpa.push_back(j);
+            }else if(seqs[j].get_sequence()[i] == 'C'){
+                tbpc.push_back(j);
+            }else if (seqs[j].get_sequence()[i] == 'G'){
+                tbpg.push_back(j);
+            }else if(seqs[j].get_sequence()[i] == 'T'){
+                tbpt.push_back(j);
+            }else{
+                cout << "don't recognize character " << seqs[j].get_sequence()[i] << endl;
+                skip += 1;
+            }
+        }
+        if(skip == numseqs) {
+            continue;
+        }
+        sort(tbpa.begin(),tbpa.end());
+        sort(tbpc.begin(),tbpc.end());
+        sort(tbpg.begin(),tbpg.end());
+        sort(tbpt.begin(),tbpt.end());
+        vector<vector<int> > tallbp;
+        tallbp.push_back(tbpa);
+        tallbp.push_back(tbpc);
+        tallbp.push_back(tbpg);
+        tallbp.push_back(tbpt);
+        //check to see if the bipart is new
+        bool add = true;
+        for(int j =0;j<all_bp.size();j++){//for each bipart set
+            bool got = true;
+            for(int k=0;k<tallbp.size();k++){//for each nucleotide set
+                bool tm = true;
+                if((int)count(all_bp[j].begin(),all_bp[j].end(),tallbp[k]) == 0){ //no match
+                    tm = false;
+                    got = false;
+                    break;
+                }
+            }
+            if(got == true){//we have a match
+                bp_count[j] += 1;
+                seq_bipart_map.push_back(j);
+                add = false;
+                break;
+            }
+        }
+        if (add == true){
+            all_bp.push_back(tallbp);
+            bp_count.push_back(1);
+            seq_bipart_map.push_back(bp_count.size()-1);
+        }
     }
     
     cout << numseqs << " sequences with " << numcols << " cols" <<   endl;
@@ -223,68 +225,72 @@ int main(int argc, char * argv[]){
     double ACA = 0;
     vector<double> bp_ica(bp_count.size());
     for(int i=0;i<all_bp.size();i++){
-	double totalcount = bp_count[i];
-	vector<double> conflict_nums;
-	conflict_nums.push_back(bp_count[i]);
-	vector<int> conflicts;
-	for(int j=0;j<all_bp.size();j++){
-	    if (i == j )
-		continue;
-	    bool good = true;
-	    int compcount = 0;
-	    for(int m=0;m<all_bp[i].size();m++){
-		if(all_bp[i][m].size() <= 1)
-		    continue;
-		else
-		    compcount += 1;
-		int badcount = 0;
-		int compcount2 = 0;
-		for(int n=0;n<all_bp[i].size();n++){
-		    if(all_bp[j][n].size() <= 1)
-			continue;
-		    else
-			compcount2 += 1;
-		    //intersection of [i][m] and [j][n]
-		    vector<int> v3;
-		    set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),all_bp[j][n].begin(),all_bp[j][n].end(),back_inserter(v3));
-		    if (v3.size() > 0 && v3.size() < all_bp[j][n].size() && v3.size() < all_bp[i][m].size()){
-			badcount += 1;
-		    }
-		}
-		if(badcount >= 2 && compcount > 1 && compcount2 > 1){
-		    good = false;
-		    break;
-		}
-	    }
-	    if(good == false){
-		conflicts.push_back(j);
-		conflict_nums.push_back(bp_count[j]);
-		totalcount += bp_count[j];
-//		cout << i << " ("<<bp_count[i] << ") and " << j << " ("  <<bp_count[j] << " )" << endl;
-//		cout << "\t" << get_string_vector(all_bp[i][0]) << " | " << get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
-//		cout << "\t" << get_string_vector(all_bp[j][0]) << " | " << get_string_vector(all_bp[j][1]) << " | " << get_string_vector(all_bp[j][2]) << " | " << get_string_vector(all_bp[j][3]) << endl;
-	    }
-	}
-	if(conflict_nums.size() == 1){
-	    cout << i  << " ("<<bp_count[i] << ") no conflict" << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
-	    bp_ica[i] = 1;
-	    continue;
-	}
-	//calculate ICA
-	double sign = 1;
-	for(int j=0;j<conflict_nums.size();j++){
-	    conflict_nums[j]/=totalcount;
-	    if(conflict_nums[j] > conflict_nums[0])
-		sign = -1;
-	}
-	double ICA = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
-	for(int j=0;j<conflict_nums.size();j++){
-	    ICA += (conflict_nums[j]*logn(conflict_nums[j],conflict_nums.size()));
-	}
-	ACA += ICA;
-	ICA *= sign;
-	bp_ica[i] = ICA;
-	cout << i <<" ("  << bp_count[i] << ")\t" << ICA << " " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
+        double totalcount = bp_count[i];
+        vector<double> conflict_nums;
+        conflict_nums.push_back(bp_count[i]);
+        vector<int> conflicts;
+        for(int j=0;j<all_bp.size();j++){
+            if (i == j) {
+                continue;
+            }
+            bool good = true;
+            int compcount = 0;
+            for(int m=0;m<all_bp[i].size();m++){
+                if(all_bp[i][m].size() <= 1) {
+                    continue;
+                } else {
+                    compcount += 1;
+                }
+                int badcount = 0;
+                int compcount2 = 0;
+                for(int n=0;n<all_bp[i].size();n++){
+                    if(all_bp[j][n].size() <= 1) {
+                        continue;
+                    }
+                    
+                    compcount2 += 1;
+                    //intersection of [i][m] and [j][n]
+                    vector<int> v3;
+                    set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),all_bp[j][n].begin(),all_bp[j][n].end(),back_inserter(v3));
+                    if (v3.size() > 0 && v3.size() < all_bp[j][n].size() && v3.size() < all_bp[i][m].size()){
+                    badcount += 1;
+                    }
+                }
+                if(badcount >= 2 && compcount > 1 && compcount2 > 1){
+                    good = false;
+                    break;
+                }
+            }
+            if(good == false){
+            conflicts.push_back(j);
+            conflict_nums.push_back(bp_count[j]);
+            totalcount += bp_count[j];
+    //        cout << i << " ("<<bp_count[i] << ") and " << j << " ("  <<bp_count[j] << " )" << endl;
+    //        cout << "\t" << get_string_vector(all_bp[i][0]) << " | " << get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
+    //        cout << "\t" << get_string_vector(all_bp[j][0]) << " | " << get_string_vector(all_bp[j][1]) << " | " << get_string_vector(all_bp[j][2]) << " | " << get_string_vector(all_bp[j][3]) << endl;
+            }
+        }
+        if(conflict_nums.size() == 1){
+            cout << i  << " ("<<bp_count[i] << ") no conflict" << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
+            bp_ica[i] = 1;
+            continue;
+        }
+        //calculate ICA
+        double sign = 1;
+        for(int j=0;j<conflict_nums.size();j++){
+            conflict_nums[j]/=totalcount;
+            if(conflict_nums[j] > conflict_nums[0]) {
+                sign = -1;
+            }
+        }
+        double ICA = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
+        for(int j=0;j<conflict_nums.size();j++){
+            ICA += (conflict_nums[j]*logn(conflict_nums[j],conflict_nums.size()));
+        }
+        ACA += ICA;
+        ICA *= sign;
+        bp_ica[i] = ICA;
+        cout << i <<" ("  << bp_count[i] << ")\t" << ICA << " " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
     }
     cout << " " << ACA << endl;
  
@@ -292,54 +298,55 @@ int main(int argc, char * argv[]){
 
     //tree processing
     if(tfileset){
-	for(int t=0;t<trees.size();t++){
-	    vector<string> rt_nms = trees[t]->getRoot()->get_leave_names();
-	    set<string> rt_nms_set;
-	    copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
-	    for (int j=0;j<trees[t]->getInternalNodeCount();j++){
-		vector<string> nms = trees[t]->getInternalNode(j)->get_leave_names();
-		cout << get_string_vector(nms) << endl;
-		vector<int> nms_i;
-		set<string> nms_s;
-		copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
-		for (int k=0;k<nms.size();k++){
-		    nms_i.push_back(name_index[nms[k]]);
-		}
-		sort(nms_i.begin(),nms_i.end());
-		//get the other side of the bipart
-		vector<int> nms_i2;
-		vector<string> nms_s2(rt_nms.size());
-		vector<string>::iterator it;
-		it = set_difference(rt_nms_set.begin(),rt_nms_set.end(),nms_s.begin(),nms_s.end(),nms_s2.begin());
-		nms_s2.resize(it-nms_s2.begin());
-		for (int k=0;k<nms_s2.size();k++){
-		    nms_i2.push_back(name_index[nms_s2[k]]);
-		}
-		//find the biparts that are the same
-		vector<int> matches;
-		for(int i=0;i<all_bp.size();i++){
-		    for(int m=0;m<all_bp[i].size();m++){
-			if(all_bp[i][m].size() <= 1 || (all_bp[i][m].size() != nms_i.size() && all_bp[i][m].size() != nms_i2.size() ) )
-			    continue;
-			vector<int> v3;
-			set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),nms_i.begin(),nms_i.end(),back_inserter(v3));
-			if (v3.size() == nms_i.size()){
-			    cout << i << " (" << bp_ica[i] << ") ";
-			    break;
-			}
-			vector<int> v4;
-			set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),nms_i2.begin(),nms_i2.end(),back_inserter(v4));
-			if(v4.size() == nms_i2.size()){
-			    cout << i << " (" << bp_ica[i] << ") ";
-			    break;
-			}
-		    }//each part of the bipart
-		}//each bipart
-		cout << endl;
-	    }//each internal node
-	}//each tree
-	tfstr->close();
-	delete piost;
+        for(int t=0;t<trees.size();t++){
+            vector<string> rt_nms = trees[t]->getRoot()->get_leave_names();
+            set<string> rt_nms_set;
+            copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
+            for (int j=0;j<trees[t]->getInternalNodeCount();j++){
+                vector<string> nms = trees[t]->getInternalNode(j)->get_leave_names();
+                cout << get_string_vector(nms) << endl;
+                vector<int> nms_i;
+                set<string> nms_s;
+                copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
+                for (int k=0;k<nms.size();k++){
+                    nms_i.push_back(name_index[nms[k]]);
+                }
+                sort(nms_i.begin(),nms_i.end());
+                //get the other side of the bipart
+                vector<int> nms_i2;
+                vector<string> nms_s2(rt_nms.size());
+                vector<string>::iterator it;
+                it = set_difference(rt_nms_set.begin(),rt_nms_set.end(),nms_s.begin(),nms_s.end(),nms_s2.begin());
+                nms_s2.resize(it-nms_s2.begin());
+                for (int k=0;k<nms_s2.size();k++){
+                    nms_i2.push_back(name_index[nms_s2[k]]);
+                }
+                //find the biparts that are the same
+                vector<int> matches;
+                for(int i=0;i<all_bp.size();i++){
+                    for(int m=0;m<all_bp[i].size();m++){
+                        if(all_bp[i][m].size() <= 1 || (all_bp[i][m].size() != nms_i.size() && all_bp[i][m].size() != nms_i2.size() ) ) {
+                            continue;
+                        }
+                        vector<int> v3;
+                        set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),nms_i.begin(),nms_i.end(),back_inserter(v3));
+                        if (v3.size() == nms_i.size()){
+                            cout << i << " (" << bp_ica[i] << ") ";
+                            break;
+                        }
+                        vector<int> v4;
+                        set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),nms_i2.begin(),nms_i2.end(),back_inserter(v4));
+                        if(v4.size() == nms_i2.size()){
+                            cout << i << " (" << bp_ica[i] << ") ";
+                            break;
+                        }
+                    }//each part of the bipart
+                }//each bipart
+                cout << endl;
+            }//each internal node
+        }//each tree
+        tfstr->close();
+        delete piost;
     }
 
     //shut things down

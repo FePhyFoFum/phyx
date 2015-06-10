@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;

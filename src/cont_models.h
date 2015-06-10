@@ -5,12 +5,14 @@
 #include <vector>
 #include <math.h>
 
+
 #include "node.h"
 #include "tree.h"
 #include "tree_utils.h"
-
 #include <armadillo>
+
 using namespace arma;
+
 
 double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma);
 double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma);

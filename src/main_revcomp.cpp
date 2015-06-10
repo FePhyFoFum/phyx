@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;
@@ -96,14 +96,14 @@ int main(int argc, char * argv[]){
         poos = &cout;
     }
 
-	int ft = test_seq_filetype_stream(*pios,retstring);
-	while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-	    seqs.push_back(seq);
-	}
-	//fasta has a trailing one
-	if (ft == 2){
-	    seqs.push_back(seq);
-	}
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+        seqs.push_back(seq);
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+        seqs.push_back(seq);
+    }
     write_phylip_alignment(seqs,poos);
     if(fileset){
         fstr->close();

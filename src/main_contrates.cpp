@@ -1,14 +1,10 @@
-/*
-   Bare-bones sequence alignment resampling. Default is bootstrap, alternative is joackknife.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 #include <map>
 
@@ -78,14 +74,14 @@ int main(int argc, char * argv[]) {
                 tfileset = true;
                 treef = strdup(optarg);
                 break;
-	        case 'o':
+            case 'o':
                 ofileset = true;
                 outf = strdup(optarg);
                 break;
-	        case 'a':
-	        	if (optarg[0] == '1')
-		            analysis = 1;
-		        break;
+            case 'a':
+                if (optarg[0] == '1')
+                    analysis = 1;
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -149,58 +145,58 @@ int main(int argc, char * argv[]) {
     //conduct analyses for each character
     for (int c =0;c < nchars;c++){
         cerr << "character: "<< c << endl;
-	if (analysis == 0){
-	    for(int i=0;i<trees[0]->getExternalNodeCount();i++){
-		vector<Superdouble> tv (1);
-		tv[0] = seqs[seq_map[trees[0]->getExternalNode(i)->getName()]].get_cont_char(c);
-		trees[0]->getExternalNode(i)->assocDoubleVector("val",tv);
-	    }
-	    for(int i=0;i<trees[0]->getInternalNodeCount();i++){
-		vector<Superdouble> tv (1);
-		tv[0] = 0;
-		trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
-	    }
-	    calc_square_change_anc_states(trees[0],0);
-	    for(int i=0;i<trees[0]->getInternalNodeCount();i++){
-		double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
-		trees[0]->getInternalNode(i)->deleteDoubleVector("val");
-		std::ostringstream s;
-		s.precision(9);
-		s << "[&value=" << tv << "]";
-		trees[0]->getInternalNode(i)->setName(s.str());
-	    }
+        if (analysis == 0){
+            for(int i=0;i<trees[0]->getExternalNodeCount();i++){
+                vector<Superdouble> tv (1);
+                tv[0] = seqs[seq_map[trees[0]->getExternalNode(i)->getName()]].get_cont_char(c);
+                trees[0]->getExternalNode(i)->assocDoubleVector("val",tv);
+            }
+            for(int i=0;i<trees[0]->getInternalNodeCount();i++){
+                vector<Superdouble> tv (1);
+                tv[0] = 0;
+                trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
+            }
+            calc_square_change_anc_states(trees[0],0);
+            for(int i=0;i<trees[0]->getInternalNodeCount();i++){
+                double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
+                trees[0]->getInternalNode(i)->deleteDoubleVector("val");
+                std::ostringstream s;
+                s.precision(9);
+                s << "[&value=" << tv << "]";
+                trees[0]->getInternalNode(i)->setName(s.str());
+            }
 
-	    for(int i=0;i<trees[0]->getExternalNodeCount();i++){
-		double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
-		trees[0]->getExternalNode(i)->deleteDoubleVector("val");
-		std::ostringstream s;
-		s.precision(9);
-		s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
-		trees[0]->getExternalNode(i)->setName(s.str());
-	    }
-	    cout << "#nexus\nbegin trees;\ntree a =";
-	    cout << trees[0]->getRoot()->getNewick(true);
-	    cout << ";\nend;\n" << endl;
-	}else if (analysis == 1){
-	    mat vcv;
-	    int t_ind = 0;//TODO: do this over trees
-	    int c_ind = c;
-	    calc_vcv(trees[t_ind],vcv);
-	    int n = trees[t_ind]->getExternalNodeCount();
-	    rowvec x = rowvec(n);
-	    for (int i=0;i<n;i++){
-		x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
-	    }
-	    vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
-        double aic = (2*2)-(2*(-res[2]));
-        double aicc = aic + ((2*2*(2+1))/(n-2-1));
-	    cout << c << " BM "<< " state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
-	    
-	    vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
-        aic = (2*3)-(2*(-res2[3]));
-        aicc = aic + ((2*3*(3+1))/(n-3-1));
-	    cout << c << " OU "<< " state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << " aic: " << aic << " aicc: " << aicc << endl;
-	}
+            for(int i=0;i<trees[0]->getExternalNodeCount();i++){
+                double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
+                trees[0]->getExternalNode(i)->deleteDoubleVector("val");
+                std::ostringstream s;
+                s.precision(9);
+                s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
+                trees[0]->getExternalNode(i)->setName(s.str());
+            }
+            cout << "#nexus\nbegin trees;\ntree a =";
+            cout << trees[0]->getRoot()->getNewick(true);
+            cout << ";\nend;\n" << endl;
+        }else if (analysis == 1){
+            mat vcv;
+            int t_ind = 0;//TODO: do this over trees
+            int c_ind = c;
+            calc_vcv(trees[t_ind],vcv);
+            int n = trees[t_ind]->getExternalNodeCount();
+            rowvec x = rowvec(n);
+            for (int i=0;i<n;i++){
+                x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
+            }
+            vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
+            double aic = (2*2)-(2*(-res[2]));
+            double aicc = aic + ((2*2*(2+1))/(n-2-1));
+            cout << c << " BM "<< " state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
+
+            vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
+            aic = (2*3)-(2*(-res2[3]));
+            aicc = aic + ((2*3*(3+1))/(n-3-1));
+            cout << c << " OU "<< " state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << " aic: " << aic << " aicc: " << aicc << endl;
+        }
     }
 
     if (cfileset) {

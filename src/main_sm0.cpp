@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 
 using namespace std;
@@ -70,7 +70,7 @@ int main(int argc, char * argv[]){
                 sfileset = true;
                 seqf = strdup(optarg);
                 break;
-	    case 't':
+            case 't':
                 tfileset = true;
                 treef = strdup(optarg);
                 break;
@@ -94,7 +94,7 @@ int main(int argc, char * argv[]){
     ostream* poos;
     ifstream* sfstr;
     ifstream* tfstr;
-    ofstream* ofstr; 
+    ofstream* ofstr;
     if(sfileset == true){
         sfstr = new ifstream(seqf);
         spios = sfstr;
@@ -104,8 +104,8 @@ int main(int argc, char * argv[]){
         tpios = tfstr;
     }
     if(tfileset == false || sfileset == false){
-	cout << "you have to set the tree and seq files" << endl;
-	exit(0);
+        cout << "you have to set the tree and seq files" << endl;
+        exit(0);
     }
     if(outfileset == true){
         ofstr = new ofstream(outf);
@@ -121,30 +121,31 @@ int main(int argc, char * argv[]){
     int ft = test_seq_filetype_stream(*spios,retstring);
     while(read_next_seq_from_stream(*spios,ft,retstring,seq)){
         (*poos) << seq.get_fasta();
-	seqs.push_back(seq);
-	Sequence tseq(seq.get_id(),"");
-	sr_seqs.push_back(tseq);
+        seqs.push_back(seq);
+        Sequence tseq(seq.get_id(),"");
+        sr_seqs.push_back(tseq);
     }
     if(ft == 2){
         (*poos) << seq.get_fasta();
-	seqs.push_back(seq);
-	Sequence tseq(seq.get_id(),"");
-	sr_seqs.push_back(tseq);
+        seqs.push_back(seq);
+        Sequence tseq(seq.get_id(),"");
+        sr_seqs.push_back(tseq);
     }
     
 
     //read trees 
     ft = test_tree_filetype_stream(*tpios, retstring);
     if(ft != 1){
-	cerr << "this really only works with newick" << endl;
-	exit(0);
-    }going = true;
+        cerr << "this really only works with newick" << endl;
+        exit(0);
+    }
+    going = true;
     Tree * tree;
     if(ft == 1){
-	while(going){
-	    tree = read_next_tree_from_stream_newick(*tpios,retstring,&going);
-	    break;
-	}
+        while(going){
+            tree = read_next_tree_from_stream_newick(*tpios,retstring,&going);
+            break;
+        }
     }
 
     map<string,string> codon_dict;

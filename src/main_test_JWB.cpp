@@ -15,13 +15,13 @@ using namespace std;
 bool verbose = false;
 
 int main (int argc, char * argv[]) {
-	TreeReader tr;
+    TreeReader tr;
 
-	if (argc != 2) {
-		cout << "usage: phyx_test_JWB treefile" << endl;
-		exit(0);
-	}
-	ifstream infile(argv[1]);
+    if (argc != 2) {
+        cout << "usage: phyx_test_JWB treefile" << endl;
+        exit(0);
+    }
+    ifstream infile(argv[1]);
     if (!infile) {
         cerr << "Could not open treefile." << endl;
         return 1;
@@ -63,5 +63,5 @@ int main (int argc, char * argv[]) {
         delete tree;
     }
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

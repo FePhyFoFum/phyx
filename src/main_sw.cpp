@@ -1,5 +1,5 @@
 /*
- * main_mrca.cpp
+ * main_SW.cpp
  *
  */
 
@@ -10,7 +10,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include <getopt.h>
 #include <omp.h>
 
