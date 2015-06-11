@@ -479,7 +479,7 @@ int main(int argc, char * argv[]){
             }
         }
         //mapping the existing states to the full states
-        int statecnt = 0;
+        //int statecnt = 0; // not used
         for(int i=nstates-1; i >= 0; i--){
             if(existing_states[i] == 1){
                 continue;
@@ -640,7 +640,7 @@ int main(int argc, char * argv[]){
                     lhoods = sr.calculate_ancstate_reverse_sd(*tree->getInternalNode(l));
                     totlike_sd = calculate_vector_Superdouble_sum(lhoods);
 
-                    bool neg = false; // not used
+                    //bool neg = false; // not used
                     int excount = 0;
                     double highest = 0;
                     int high = 0;

@@ -64,7 +64,6 @@ int main(int argc, char * argv[]) {
     int seed = -1;
     while (1) {
         int oi = -1;
-        int curind = optind;
         int c = getopt_long(argc, argv, "s:o:p:f:x:hV", long_options, &oi);
         if (c == -1) {
             break;

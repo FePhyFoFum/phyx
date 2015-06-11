@@ -68,7 +68,7 @@ int main (int argc, char * argv[]) {
     double birth = 1.0;
     double death = 0.0;
     bool showd = false;
-    bool extisall = false;
+    //bool extisall = false; // not used
     int seed = -1;
     while (going) {
         int oi = -1;

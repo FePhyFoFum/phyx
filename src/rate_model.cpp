@@ -184,7 +184,7 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
     colvec eigva;
     mat eigve;
     eig_sym(eigva,eigve,tQ);
-    bool isImag = false;
+    //bool isImag = false; // not used
     for (unsigned int i=0; i < Q.n_rows; i++) {
 	for (unsigned int j=0; j < Q.n_cols; j++) {
 	    if (i == j) {

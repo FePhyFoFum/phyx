@@ -49,12 +49,10 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
-    int numchar = 0;
     char * outf;
     char * seqf;
     while (1) {
         int oi = -1;
-        int curind = optind;
         int c = getopt_long(argc, argv, "s:o:p:f:x:hV", long_options, &oi);
         if (c == -1) {
             break;

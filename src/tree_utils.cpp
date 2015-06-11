@@ -19,34 +19,34 @@ using namespace std;
 #include "utils.h"
 
 int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2) {
-	vector<Node *> vnd;
-	vnd.push_back(nd1);
-        vnd.push_back(nd2);
-	Node * mrca = tr->getMRCA(vnd);
-	int count = 0;
-	Node * cur = nd1;
-	while (cur != mrca) {
-		cur = cur->getParent();
-		count+= 1;
-	}
-	cur = nd2;
-	while (cur != mrca) {
-		cur = cur->getParent();
-		count += 1;
-	}
-	return count;
+    vector<Node *> vnd;
+    vnd.push_back(nd1);
+    vnd.push_back(nd2);
+    Node * mrca = tr->getMRCA(vnd);
+    int count = 0;
+    Node * cur = nd1;
+    while (cur != mrca) {
+        cur = cur->getParent();
+        count+= 1;
+    }
+    cur = nd2;
+    while (cur != mrca) {
+            cur = cur->getParent();
+        count += 1;
+    }
+    return count;
 }
 
 /*
  * calculates the branch lengths to the root
  */
 double get_length_to_root(Node * n) {
-	double length = 0;
-	while (n->getParent() != NULL) {
-		length += n->getBL();
-		n = n->getParent();
-	}
-	return length;
+    double length = 0;
+    while (n->getParent() != NULL) {
+        length += n->getBL();
+        n = n->getParent();
+    }
+    return length;
 }
 
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
@@ -67,7 +67,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
                     nds.push_back(tnd->getParent()->getChild(j));
                 }
             }
-        }else{
+        } else {
             if (tnd->getParent() != NULL) {
                 nds.push_back(tnd->getParent());
             }
@@ -83,7 +83,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
                     nds.push_back(tnd->getParent()->getChild(j));
                 }
             }
-        }else{
+        } else {
             nds.push_back(tnd->getParent());
         }
         tree_map[tnd] = nds;
@@ -161,7 +161,7 @@ double get_tree_length (Tree * tr) {
 
 
 /* Two possible approaches:
- * 1) get  get_length_to_root for each external node
+ * 1) get get_length_to_root for each external node
  *    - easy, but inefficient
  * 2) do a postorder traversal
  *    - efficient, but harder
@@ -233,7 +233,7 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
         }
         if (node->getChildCount() > 0) {
             vector <double> heights;
-            bool parentHeight = 0.0;
+            //bool parentHeight = 0.0; // not used
             for (int i = 0; i < node->getChildCount(); i++) {
                 postorder_ultrametricity_check(node->getChild(i), ultrametric);
                 heights.push_back(node->getChild(i)->getBL() + node->getChild(i)->getHeight());

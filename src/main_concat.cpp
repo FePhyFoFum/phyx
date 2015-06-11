@@ -58,9 +58,7 @@ int main(int argc, char * argv[]) {
     vector <string> inputFiles;
     SequenceConcatenater result;
     char * outf;
-    char * seqf;
     string partf = "";
-    int seed = -1;
 
     while (1) {
         int oi = -1;
