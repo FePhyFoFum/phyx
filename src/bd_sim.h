@@ -17,7 +17,7 @@ private:
     double deathrate;
     double sumrate;
     double relative_birth_rate;
-    double extantstop;
+    int extantstop;
     double timestop;
     int numofchanges;
     double currenttime;

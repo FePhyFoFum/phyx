@@ -95,7 +95,7 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead) {
 bool BirthDeathSimulator::check_stop_conditions() {
     bool keepgoing = true;
     if (extantstop > 0) {
-        if (extantnodes.size() >= extantstop) {
+        if ((int)extantnodes.size() >= extantstop) {
             currenttime += time_to_next_sp_event();
             keepgoing = false;
         }

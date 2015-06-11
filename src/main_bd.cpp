@@ -63,8 +63,8 @@ int main (int argc, char * argv[]) {
     bool timeset = false;
     bool extantset = false;
     char * outf;
-    double ext;
-    double time;
+    int ext = 0;
+    double time = 0.0;
     double birth = 1.0;
     double death = 0.0;
     bool showd = false;
@@ -78,7 +78,7 @@ int main (int argc, char * argv[]) {
         }
         switch(c){
             case 'e':
-                ext = atof(strdup(optarg));
+                ext = atoi(strdup(optarg));
                 extantset = true;
                 break;
             case 't':
@@ -135,7 +135,7 @@ int main (int argc, char * argv[]) {
     
     ostream* poos;
     ofstream* ofstr; 
-    if (outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
     } else {
@@ -143,7 +143,7 @@ int main (int argc, char * argv[]) {
     }
     
     TreeReader tr;
-    BirthDeathSimulator bd(ext,time,birth,death,seed);
+    BirthDeathSimulator bd(ext, time, birth, death, seed);
     Tree * bdtr = bd.make_tree(showd);
     if (ext != 0) {
         int countlimit = 100;
