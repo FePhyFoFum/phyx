@@ -32,7 +32,7 @@ private:
 public:
     RateModel(int);
     /*
-      storing once optimization has occured
+      storing once optimization has occurred
       map of bl and p matrix
       map<branch length,p matrix>
     */

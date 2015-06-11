@@ -4,11 +4,11 @@
 class SequenceConcatenater {
 private:
     vector <Sequence> seqs;
+    int numPartitions;
     int numChar;
     int numTaxa;
-    int numPartitions;
-    string filename;
     int ft;
+    string filename;
     vector <int> partitionSizes;
     
     void read_sequences (string & seqf);
