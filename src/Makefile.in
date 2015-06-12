@@ -59,6 +59,10 @@ NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
 NNI_DEP = main_nni.d
 
+UPGMA_SRC = main_upgma.cpp
+UPGMA_OBJ = main_upgma.o
+UPGMA_DEP = main_upgma.d
+
 SEQT_SRC = main_seq_test.cpp
 SEQT_OBJ = main_seq_test.o
 SEQT_DEP = main_seq_test.d
@@ -152,6 +156,7 @@ CPP_SRCS += \
 ./seq_models.cpp \
 ./pairwise_alignment.cpp \
 ./bd_sim.cpp \
+./upgma.cpp \
 ./superdouble.cpp \
 ./cont_models.cpp \
 ./seq_sample.cpp \
@@ -179,6 +184,7 @@ CPP_OBJS += \
 ./seq_models.o \
 ./pairwise_alignment.o \
 ./bd_sim.o \
+./upgma.o \
 ./superdouble.o \
 ./cont_models.o \
 ./seq_sample.o \
@@ -206,6 +212,7 @@ CPP_DEPS += \
 ./seq_models.d \
 ./pairwise_alignment.d \
 ./bd_sim.d \
+./upgma.d \
 ./superdouble.d \
 ./cont_models.d \
 ./seq_sample.d \
@@ -238,81 +245,85 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 # removed pxlogmanip above as files are missing
-#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma  pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
-	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran 
+	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo 'building pxmrca'
-	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
 	@echo 'building pxmrcacut'
-	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ) 
 	@echo 'building pxmrcaname'
-	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
 	@echo 'building pxconseq'
-	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxbd:  $(CPP_OBJS) $(BD_OBJ) 
 	@echo 'building pxbd'
-	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxnni:  $(CPP_OBJS) $(NNI_OBJ) 
 	@echo 'building pxnni'
-	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ) 
+	@echo 'building pxupgma'
+	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ) 
 	@echo 'building pxseqtest'
-	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxstofa:  $(CPP_OBJS) $(TOFA_OBJ) 
 	@echo 'building pxstofa'
-	$(CXX) -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxstophy:  $(CPP_OBJS) $(TOPHY_OBJ) 
 	@echo 'building pxstophy'
-	$(CXX) -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxstonex:  $(CPP_OBJS) $(TONEX_OBJ) 
 	@echo 'building pxstonex'
-	$(CXX) -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ) 
 	@echo 'building pxfqfilt'
-	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
 	@echo 'building pxrevcomp'
-	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxnw:  $(CPP_OBJS) $(NW_OBJ) 
 	@echo 'building pxnw'
-	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxsw:  $(CPP_OBJS) $(SW_OBJ) 
 	@echo 'building pxsw'
-	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxseqsamp:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxseqsamp'
-	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxconcat:  $(CPP_OBJS) $(CONCAT_OBJ) 
 	@echo 'building pxconcat'
-	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxlogmanip:  $(CPP_OBJS) $(LOGMANIP_OBJ) 
 	@echo 'building pxlogmanip'
-	$(CXX) -o "pxlogmanip" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxlogmanip" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
 	@echo 'building pxcontrates'
@@ -320,27 +331,27 @@ pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ)
 
 pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ) 
 	@echo 'building pxseqrecode'
-	$(CXX) -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxbp:  $(CPP_OBJS) $(BP_OBJ) 
 	@echo 'building pxbp'
-	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxbpseq:  $(CPP_OBJS) $(BPSEQ_OBJ) 
 	@echo 'building pxbpseq'
-	$(CXX) -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxttonew:  $(CPP_OBJS) $(TONEW_OBJ) 
 	@echo 'building pxttonew'
-	$(CXX) -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxrr:  $(CPP_OBJS) $(RR_OBJ) 
 	@echo 'building pxrr'
-	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxrmt:  $(CPP_OBJS) $(RMT_OBJ) 
 	@echo 'building pxrmt'
-	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS) 
+	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxsm0:  $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'

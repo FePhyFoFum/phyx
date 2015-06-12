@@ -17,11 +17,13 @@ using namespace std;
 #include "seq_reader.h"
 #include "concat.h"
 
-SequenceConcatenater::SequenceConcatenater (string & seqf):numPartitions(0), numChar(0), numTaxa(0), ft(0) {
+SequenceConcatenater::SequenceConcatenater (string & seqf):numPartitions(0),
+    numChar(0), numTaxa(0), ft(0) {
     read_sequences(seqf);
 }
 
-SequenceConcatenater::SequenceConcatenater ():numPartitions(0), numChar(0), numTaxa(0), ft(0) {
+SequenceConcatenater::SequenceConcatenater ():numPartitions(0), numChar(0),
+    numTaxa(0), ft(0) {
 
 }
 
