@@ -32,7 +32,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -p, --percent=DOUBLE  percent missing, default=50.0%" << endl;
+    cout << " -p, --percent=DOUBLE  percent allowed to be missing, default=50.0%" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
     cout << endl;
@@ -95,9 +95,16 @@ int main(int argc, char * argv[]) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
     }
+    ostream* poos;
+    ofstream* ofstr;
+    if (outfileset == true) {
+        ofstr = new ofstream(outf);
+        poos = ofstr;
+    } else {
+        poos = &cout;
+    }
 
 	clsq functions;
-	ofstream ofstr(outf);
 	string fasta;
 	double MissingAllowed;
 	map<string, string> sequences;
@@ -109,7 +116,11 @@ int main(int argc, char * argv[]) {
 	MissingAllowed = (MissingAllowed / 100.0);
 	sequences = functions.FastaToOneLine(fasta, MissingAllowed);
     for(iter = sequences.begin(); iter != sequences.end(); iter++){
-    	ofstr << ">" << iter -> first << "\n" << iter -> second << "\n";
+    	*poos << ">" << iter -> first << "\n" << iter -> second << "\n";
+    }
+    if (outfileset) {
+        ofstr->close();
+        delete poos;
     }
 
     return EXIT_SUCCESS;
