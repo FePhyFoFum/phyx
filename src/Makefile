@@ -1,0 +1,380 @@
+RM := rm -f
+## Use compiler from configure. May be specified by user with e.g.:
+## ./configure CXX=g++-4.8
+CXX := g++
+
+CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
+#gsl
+#-lgsl -lgslcblas 
+#profiling
+#-pg
+
+OPT_FLAGS = -O3 -fopenmp -std=c++11
+ifneq "$(CXX)" "icc"
+    OPT_FLAGS += -ffast-math -ftree-vectorize
+endif
+
+# MAC compilation fails with -march=native. check should occur earlier...
+UNAME := $(shell uname)
+ifeq "$(UNAME)" "Linux"
+    OPT_FLAGS += -march=native
+endif
+#profiling 
+#-g -pg
+#-O3 -ffast-math -ftree-vectorize
+
+#######
+# FORTRAN BIT
+######
+# Don't assume location of gfortran e.g. with HomeBrew on MAC
+FC := $(shell which gfortran)
+FFLAGS	= -O3
+.f.o:;  $(FC) $(FFLAGS) -c $<
+
+CONSEQ_SRC = main_conseq.cpp
+CONSEQ_OBJ = main_conseq.o
+CONSEQ_DEP = main_conseq.d
+
+STREC_SRC = main_strec.cpp
+STREC_OBJ = main_strec.o
+STREC_DEP = main_strec.d
+
+MRCA_SRC = main_mrca.cpp
+MRCA_OBJ = main_mrca.o
+MRCA_DEP = main_mrca.d
+
+MRCACUT_SRC = main_mrca_cut.cpp
+MRCACUT_OBJ = main_mrca_cut.o
+MRCACUT_DEP = main_mrca_cut.d
+
+MRCANAME_SRC = main_mrca_name.cpp
+MRCANAME_OBJ = main_mrca_name.o
+MRCANAME_DEP = main_mrca_name.d
+
+BD_SRC = main_bd.cpp
+BD_OBJ = main_bd.o
+BD_DEP = main_bd.d
+
+NNI_SRC = main_nni.cpp
+NNI_OBJ = main_nni.o
+NNI_DEP = main_nni.d
+
+UPGMA_SRC = main_upgma.cpp
+UPGMA_OBJ = main_upgma.o
+UPGMA_DEP = main_upgma.d
+
+SEQT_SRC = main_seq_test.cpp
+SEQT_OBJ = main_seq_test.o
+SEQT_DEP = main_seq_test.d
+
+TOFA_SRC = main_stofa.cpp
+TOFA_OBJ = main_stofa.o
+TOFA_DEP = main_stofa.d
+
+TOPHY_SRC = main_stophy.cpp
+TOPHY_OBJ = main_stophy.o
+TOPHY_DEP = main_stophy.d
+
+TONEX_SRC = main_stonex.cpp
+TONEX_OBJ = main_stonex.o
+TONEX_DEP = main_stonex.d
+
+FQFILT_SRC = main_fqfilt.cpp
+FQFILT_OBJ = main_fqfilt.o
+FQFILT_DEP = main_fqfilt.d
+
+REVCOMP_SRC = main_revcomp.cpp
+REVCOMP_OBJ = main_revcomp.o
+REVCOMP_DEP = main_revcomp.d
+
+NW_SRC = main_nw.cpp
+NW_OBJ = main_nw.o
+NW_DEP = main_nw.d
+
+SW_SRC = main_sw.cpp
+SW_OBJ = main_sw.o
+SW_DEP = main_sw.d
+
+SEQSAMP_SRC = main_seq_sample.cpp
+SEQSAMP_OBJ = main_seq_sample.o
+SEQSAMP_DEP = main_seq_sample.d
+
+CONCAT_SRC = main_concat.cpp
+CONCAT_OBJ = main_concat.o
+CONCAT_DEP = main_concat.d
+
+LOGMANIP_SRC = main_logmanip.cpp
+LOGMANIP_OBJ = main_logmanip.o
+LOGMANIP_DEP = main_logmanip.d
+
+CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
+CONTRATES_OBJ = main_contrates.o optimize_cont_models_nlopt.o
+CONTRATES_DEP = main_contrates.d optimize_cont_models_nlopt.d
+
+SEQRECODE_SRC = main_recode.cpp
+SEQRECODE_OBJ = main_recode.o
+SEQRECODE_DEP = main_recode.d
+
+BP_SRC = main_bp.cpp
+BP_OBJ = main_bp.o
+BP_DEP = main_bp.d
+
+BPSEQ_SRC = main_bpseq.cpp
+BPSEQ_OBJ = main_bpseq.o
+BPSEQ_DEP = main_bpseq.d
+
+TONEW_SRC = main_ttonew.cpp
+TONEW_OBJ = main_ttonew.o
+TONEW_DEP = main_ttonew.d
+
+RR_SRC = main_rr.cpp
+RR_OBJ = main_rr.o
+RR_DEP = main_rr.d
+
+RMT_SRC = main_rmt.cpp
+RMT_OBJ = main_rmt.o
+RMT_DEP = main_rmt.d
+
+SM0_SRC = main_sm0.cpp
+SM0_OBJ = main_sm0.o
+SM0_DEP = main_sm0.d
+
+SM2A_SRC = main_sm2a.cpp
+SM2A_OBJ = main_sm2a.o
+SM2A_DEP = main_sm2a.d
+
+CLSQ_SRC = main_clsq.cpp
+CLSQ_OBJ = main_clsq.o
+CLSQ_DEP = main_clsq.d
+
+CPP_SRCS += \
+./utils.cpp \
+./node.cpp \
+./tree.cpp \
+./tree_reader.cpp \
+./tree_utils.cpp \
+./sequence.cpp \
+./seq_reader.cpp \
+./seq_utils.cpp \
+./seq_models.cpp \
+./pairwise_alignment.cpp \
+./bd_sim.cpp \
+./upgma.cpp \
+./superdouble.cpp \
+./cont_models.cpp \
+./seq_sample.cpp \
+./concat.cpp \
+./recode.cpp \
+./clsq.cpp
+
+RATE_SRCS += \
+./rate_model.cpp \
+./state_reconstructor.cpp \
+./state_reconstructor_simple.cpp \
+./optimize_state_reconstructor_nlopt.cpp \
+./optimize_state_reconstructor_periods_nlopt.cpp \
+./branch_segment.cpp \
+./mcmc.cpp
+
+CPP_OBJS += \
+./utils.o \
+./node.o \
+./tree.o \
+./tree_reader.o \
+./tree_utils.o \
+./sequence.o \
+./seq_reader.o \
+./seq_utils.o \
+./seq_models.o \
+./pairwise_alignment.o \
+./bd_sim.o \
+./upgma.o \
+./superdouble.o \
+./cont_models.o \
+./seq_sample.o \
+./concat.o \
+./recode.o \
+./clsq.o
+
+RATE_OBJS += \
+./rate_model.o \
+./state_reconstructor.o \
+./state_reconstructor_simple.o \
+./optimize_state_reconstructor_nlopt.o \
+./optimize_state_reconstructor_periods_nlopt.o \
+./branch_segment.o \
+./mcmc.o
+
+CPP_DEPS += \
+./utils.d \
+./node.d \
+./tree.d \
+./tree_reader.d \
+./tree_utils.d \
+./sequence.d \
+./seq_reader.d \
+./seq_utils.d \
+./seq_models.d \
+./pairwise_alignment.d \
+./bd_sim.d \
+./upgma.d \
+./superdouble.d \
+./cont_models.d \
+./seq_sample.d \
+./concat.d \
+./recode.d \
+./clsq.d
+
+RATE_DEPS += \
+./rate_model.d \
+./state_reconstructor.d \
+./state_reconstructor_simple.d \
+./optimize_state_reconstructor_nlopt.d \
+./optimize_state_reconstructor_periods_nlopt.d \
+./branch_segment.d \
+./mcmc.d
+
+# Each subdirectory must supply rules for building sources it contributes
+%.o: ./%.f
+	$(FC) $(FFLAGS) -c $<
+
+FORT_OBJS += \
+./clock.o \
+./my_expokit.o \
+./mataid.o \
+./blas.o \
+./lapack.o \
+./my_matexp.o
+
+# Each subdirectory must supply rules for building sources it contributes
+%.o: ./%.cpp
+	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
+
+# All Target
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+# removed pxlogmanip above as files are missing
+#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma  pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+
+pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
+	@echo 'building pxstrec'
+	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+
+pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
+	@echo 'building pxmrca'
+	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
+	@echo 'building pxmrcacut'
+	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ) 
+	@echo 'building pxmrcaname'
+	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
+	@echo 'building pxconseq'
+	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxbd:  $(CPP_OBJS) $(BD_OBJ) 
+	@echo 'building pxbd'
+	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxnni:  $(CPP_OBJS) $(NNI_OBJ) 
+	@echo 'building pxnni'
+	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ) 
+	@echo 'building pxupgma'
+	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
+	@echo 'building pxclsq'
+	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ) 
+	@echo 'building pxseqtest'
+	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxstofa:  $(CPP_OBJS) $(TOFA_OBJ) 
+	@echo 'building pxstofa'
+	$(CXX) -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxstophy:  $(CPP_OBJS) $(TOPHY_OBJ) 
+	@echo 'building pxstophy'
+	$(CXX) -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxstonex:  $(CPP_OBJS) $(TONEX_OBJ) 
+	@echo 'building pxstonex'
+	$(CXX) -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxfqfilt:  $(CPP_OBJS) $(FQFILT_OBJ) 
+	@echo 'building pxfqfilt'
+	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ) 
+	@echo 'building pxrevcomp'
+	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxnw:  $(CPP_OBJS) $(NW_OBJ) 
+	@echo 'building pxnw'
+	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxsw:  $(CPP_OBJS) $(SW_OBJ) 
+	@echo 'building pxsw'
+	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxseqsamp:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
+	@echo 'building pxseqsamp'
+	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxconcat:  $(CPP_OBJS) $(CONCAT_OBJ) 
+	@echo 'building pxconcat'
+	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxlogmanip:  $(CPP_OBJS) $(LOGMANIP_OBJ) 
+	@echo 'building pxlogmanip'
+	$(CXX) -o "pxlogmanip" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
+	@echo 'building pxcontrates'
+	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ) 
+	@echo 'building pxseqrecode'
+	$(CXX) -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxbp:  $(CPP_OBJS) $(BP_OBJ) 
+	@echo 'building pxbp'
+	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxbpseq:  $(CPP_OBJS) $(BPSEQ_OBJ) 
+	@echo 'building pxbpseq'
+	$(CXX) -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxttonew:  $(CPP_OBJS) $(TONEW_OBJ) 
+	@echo 'building pxttonew'
+	$(CXX) -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxrr:  $(CPP_OBJS) $(RR_OBJ) 
+	@echo 'building pxrr'
+	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxrmt:  $(CPP_OBJS) $(RMT_OBJ) 
+	@echo 'building pxrmt'
+	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxsm0:  $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
+	@echo 'building pxsm0'
+	$(CXX) -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+
+pxsm2a:  $(CPP_OBJS) $(RATE_OBJS) $(SM2A_OBJ) $(FORT_OBJS)
+	@echo 'building pxsm2a'
+	$(CXX) -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+
+# Other Targets
+clean:
+	-$(RM) *.o *.d px* 
+
+distclean:
+	-$(RM) *.o *.d px* configure config.log config.h config.status Makefile
+
