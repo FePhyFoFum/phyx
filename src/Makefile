@@ -147,6 +147,10 @@ CLSQ_SRC = main_clsq.cpp
 CLSQ_OBJ = main_clsq.o
 CLSQ_DEP = main_clsq.d
 
+AATOC_SRC = main_aatocdn.cpp
+AATOC_OBJ = main_aatocdn.o
+AATOC_DEP = main_aatocdn.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -165,7 +169,8 @@ CPP_SRCS += \
 ./seq_sample.cpp \
 ./concat.cpp \
 ./recode.cpp \
-./clsq.cpp
+./clsq.cpp \
+./aatocdn.cpp
 
 RATE_SRCS += \
 ./rate_model.cpp \
@@ -194,7 +199,8 @@ CPP_OBJS += \
 ./seq_sample.o \
 ./concat.o \
 ./recode.o \
-./clsq.o
+./clsq.o \
+./aatocdn.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -223,7 +229,8 @@ CPP_DEPS += \
 ./seq_sample.d \
 ./concat.d \
 ./recode.d \
-./clsq.d
+./clsq.d \
+./aatocdn.d \
 
 RATE_DEPS += \
 ./rate_model.d \
@@ -251,7 +258,7 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 # removed pxlogmanip above as files are missing
 #all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma  pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
 
@@ -290,6 +297,10 @@ pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ)
 pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'
 	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxaatocdn:   $(CPP_OBJS) $(AATOC_OBJ)
+	@echo 'building pxaatocdn'
+	$(CXX) -o "pxaatocdn" $(OPT_FLAGS) $(AATOC_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxseqtest:  $(CPP_OBJS) $(SEQT_OBJ) 
 	@echo 'building pxseqtest'
