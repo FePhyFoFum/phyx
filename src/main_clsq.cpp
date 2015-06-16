@@ -51,7 +51,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-	{"percent", required_argument, NULL, 'p'},
+    {"percent", required_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -60,14 +60,14 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
-    bool percentgiven = false;
+    //bool percentgiven = false; // not used
     string seqf = "";
     string outf = ""; // not used at the moment
     double percent = 50.0;
 
     while (1) {
         int oi = -1;
-        int curind = optind;
+        //int curind = optind; // not used
         int c = getopt_long(argc, argv,  "s:o:p:hV", long_options, &oi);
         if (c == -1) {
             break;
@@ -82,9 +82,9 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-            	percentgiven = true;
-            	percent = atof(strdup(optarg));
-            	break;
+                //percentgiven = true;
+                percent = atof(strdup(optarg));
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -101,87 +101,108 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     ostream* poos;
-    ostream* tempos;
-    ofstream* temposof;
+    //ostream* tempos;
+    //ofstream* temposof;
     ofstream* ofstr;
     istream* pios;
     ifstream* fstr;
-    string temp;
-    if(fileset == true){
-        fstr = new ifstream(seqf);
-        pios = fstr;
-    }else{
-        pios = &cin;
-    }
+    //string temp;
+    
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
     } else {
         poos = &cout;
     }
-    if (outfileset == true) {
-    	temposof = new ofstream("HackyWay.txt");
-    	tempos = temposof;
+    
+    if (fileset == true) {
+        fstr = new ifstream(seqf);
+        pios = fstr;
     } else {
-    	tempos = &cout;
+        pios = &cin;
     }
+    /*
+    if (outfileset == true) {
+        temposof = new ofstream("HackyWay.txt");
+        tempos = temposof;
+    } else {
+        tempos = &cout;
+    }
+    */
+    
+    SequenceCleaner toClean(pios, percent);
+    
+    // check
+    //cout << "Read in " << toClean.get_num_taxa() << " taxa." << endl;
+    
+    // write sequences. currently only fasta format.
+    toClean.write_seqs(poos);
+    
+    if (outfileset) {
+        ofstr->close();
+        delete poos;
+    }
+    if(fileset){
+        fstr->close();
+        delete pios;
+    }
+    
+    
+    /*
     //read in sequences
     string retstring;
     Sequence seq;
     vector<Sequence> seqs;
     int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-    	seqs.push_back(seq);
+    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+        seqs.push_back(seq);
         (*tempos) << seq.get_fasta();
     }
     temposof ->close();
     if (ft == 2){
-    	clsq functions;
-		string fasta;
-		cout << seqf << endl;
-		double MissingAllowed;
-		map<string, string> sequences;
-		map<string, string>::iterator iter;
-		//HardCoded Test
-		//fasta = ("TestFiles/clsq.test");
-		fasta = seqf;
-		MissingAllowed = percent;
-		MissingAllowed = (MissingAllowed / 100.0);
-		sequences = functions.FastaToOneLine(fasta, MissingAllowed);
-    	for(iter = sequences.begin(); iter != sequences.end(); iter++){
-    		*poos << ">" << iter -> first << "\n" << iter -> second << "\n";
-    	}
-    	remove("HackyWay.txt");
-    	if (outfileset) {
-        	ofstr->close();
-        	delete poos;
-    	}
-    }else{
-    	cout <<  ft << endl;
-    	clsq functions;
-		string fasta;
-		double MissingAllowed;
-		map<string, string> sequences;
-		map<string, string>::iterator iter;
-		//HardCoded Test
-		//fasta = ("TestFiles/clsq.test");
-		fasta = ("HackyWay.txt");
-		MissingAllowed = percent;
-		MissingAllowed = (MissingAllowed / 100.0);
-		sequences = functions.FastaToOneLine(fasta, MissingAllowed);
-    	for(iter = sequences.begin(); iter != sequences.end(); iter++){
-    		*poos << ">" << iter -> first << "\n" << iter -> second << "\n";
-    	}
-    	remove("HackyWay.txt");
-    	if (outfileset) {
-        	ofstr->close();
-        	delete poos;
-    	}
-
-
-
+        clsq functions;
+        string fasta;
+        cout << seqf << endl;
+        double MissingAllowed;
+        map<string, string> sequences;
+        map<string, string>::iterator iter;
+        //HardCoded Test
+        //fasta = ("TestFiles/clsq.test");
+        fasta = seqf;
+        MissingAllowed = percent;
+        MissingAllowed = (MissingAllowed / 100.0);
+        sequences = functions.FastaToOneLine(fasta, MissingAllowed);
+        for(iter = sequences.begin(); iter != sequences.end(); iter++){
+            *poos << ">" << iter -> first << "\n" << iter -> second << "\n";
+        }
+        remove("HackyWay.txt");
+        if (outfileset) {
+            ofstr->close();
+            delete poos;
+        }
+    } else {
+        cout <<  ft << endl;
+        clsq functions;
+        string fasta;
+        double MissingAllowed;
+        map<string, string> sequences;
+        map<string, string>::iterator iter;
+        //HardCoded Test
+        //fasta = ("TestFiles/clsq.test");
+        fasta = ("HackyWay.txt");
+        MissingAllowed = percent;
+        MissingAllowed = (MissingAllowed / 100.0);
+        sequences = functions.FastaToOneLine(fasta, MissingAllowed);
+        for(iter = sequences.begin(); iter != sequences.end(); iter++) {
+            *poos << ">" << iter -> first << "\n" << iter -> second << "\n";
+        }
+        remove("HackyWay.txt");
+        if (outfileset) {
+            ofstr->close();
+            delete poos;
+        }
     }
+    */
 
     return EXIT_SUCCESS;
-
 }

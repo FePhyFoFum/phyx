@@ -77,26 +77,26 @@ int main(int argc, char * argv[]){
     ostream* poos;
     ifstream* fstr;
     ofstream* ofstr; 
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
     Sequence seq;
     string retstring;
     vector<Sequence> seqs;
     int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
         seqs.push_back(seq);
     }
-    if(ft == 2){
+    if (ft == 2) {
         seqs.push_back(seq);
     }
     string rets = consensus_seq(seqs,0);

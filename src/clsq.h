@@ -5,8 +5,8 @@
  *      Author: joe
  */
 
-#ifndef CLSQ_H_
-#define CLSQ_H_
+#ifndef _CLSQ_H_
+#define _CLSQ_H_
 
 #include <iostream>
 #include <string>
@@ -20,18 +20,25 @@
 using namespace std;
 
 
-class clsq {
+class SequenceCleaner {
 private:
-
-	string fasta, line, dna, name_hold;
-	map<string, string> sequences;
-	map<string, string>::iterator iter;
-	map<string, string> Trimmed;
+    
+    int numTaxa, numChar;
+    double missingAllowed;
+    string fasta, line, dna, name_hold;
+    map<string, string> sequences;
+    map<string, string>::iterator iter;
+    map<string, string> trimmedSeqs;
+    void read_sequences (istream* pios);
+    void CheckMissing(double MissingData [], string& dna);
+    void clean_sequences();
 
 public:
-	clsq();
-	map<string, string> FastaToOneLine(string &fasta, double& MissingAllowed);
-	virtual ~clsq();
+    SequenceCleaner(istream* pios, double& MissingAllowed);
+    int get_num_taxa (); // not used
+    map<string, string> get_trimmed_seqs (); // not used
+    void write_seqs (ostream* poos);
+    virtual ~SequenceCleaner();
 };
 
-#endif /* CLSQ_H_ */
+#endif /* _CLSQ_H_ */
