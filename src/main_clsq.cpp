@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     //bool percentgiven = false; // not used
     string seqf = "";
     string outf = ""; // not used at the moment
-    double percent = 50.0;
+    double percent = 0.5;
 
     while (1) {
         int oi = -1;

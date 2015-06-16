@@ -43,7 +43,7 @@ map<string, string> SequenceCleaner::get_trimmed_seqs () {
 }
 
 void SequenceCleaner::write_seqs (ostream* poos) {
-    cout << "About to write sequences for " << trimmedSeqs.size() << " taxa!" << endl;
+    //cout << "About to write sequences for " << trimmedSeqs.size() << " taxa!" << endl;
     // hmm. doesn't work...
     //for (auto& kv : trimmedSeqs) {
     //    (*poos) << ">" << kv.first << endl;
