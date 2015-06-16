@@ -180,19 +180,7 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences){
     string fasta, SeqName, MatchName;
     int count = 0, FirstCount = 0;
     double MatchScore;
-        
-    //vector< vector<double> > Score;
-    //initialize the 2d vector and fill it with zeroes
-        /*
-    for (iter = sequences.begin(); iter != sequences.end(); iter++){
-        vector<double> row;
-        for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++){
-            row.push_back(0);
-                }
-        Score.push_back(row);
-    }
-        */
-       
+
     // an easier way to initialize a vector of vectors:
     int ntax = sequences.size(); // this should be a property of the class, calculated once
     vector< vector<double> > Score(ntax, vector<double>(ntax, 0.0));
@@ -234,12 +222,12 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences){
 }
 
 // should use existing seq readers
-map<string, string> UPGMA::FastaToOneLine (string& fasta){
+map<string, string> UPGMA::FastaToOneLine (ifstream& readline){
 
     string line, dna, name_hold;
-    ifstream readline;
+    //ifstream readline;
     bool round_one = true;
-    readline.open(fasta.c_str());
+    //readline.open(fasta.c_str());
     if (readline.is_open()){
         while (getline (readline, line)){
             if (line[0] == '>'){
@@ -273,8 +261,10 @@ UPGMA::UPGMA() {
 
 // alternate constructor
 UPGMA::UPGMA (string & seqf):ntax(0), nchar(0) {
+    ifstream* fstr;
+    fstr = new ifstream(seqf);
     seqfile = seqf;
-    sequences = FastaToOneLine (seqfile); // use existing seq readers instead
+    sequences = FastaToOneLine (*fstr); // use existing seq readers instead
     ntax = sequences.size();
     nchar = (int)sequences.begin()->second.size(); // ugly. should set when reading seqs
     set_name_key ();
