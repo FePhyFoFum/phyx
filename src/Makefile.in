@@ -151,7 +151,6 @@ AATOC_SRC = main_aatocdn.cpp
 AATOC_OBJ = main_aatocdn.o
 AATOC_DEP = main_aatocdn.d
 
-
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -261,7 +260,7 @@ FORT_OBJS += \
 # All Target
 all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 # removed pxlogmanip above as files are missing
-#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma  pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a
+#all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
