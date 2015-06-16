@@ -13,11 +13,16 @@
 #include <algorithm>
 #include <map>
 #include <iterator>
+#include <cstring>
+#include <getopt.h>
+
 
 using namespace std;
 
 #include "upgma.h"
 #include "utils.h"
+#include "sequence.h"
+#include "seq_reader.h"
 
 void Update_Tree(string& newname, vector<string>& names, map<int, string>& NumbKeys, 
     int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2){
@@ -221,37 +226,6 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences){
     return Score;
 }
 
-// should use existing seq readers
-map<string, string> UPGMA::FastaToOneLine (ifstream& readline){
-
-    string line, dna, name_hold;
-    //ifstream readline;
-    bool round_one = true;
-    //readline.open(fasta.c_str());
-    if (readline.is_open()){
-        while (getline (readline, line)){
-            if (line[0] == '>'){
-
-                if (round_one == false){
-                    line.erase (std::remove(line.begin(), line.end(), '>'), line.end());
-                    sequences[name_hold] = dna;
-                    dna = "";
-
-                }else{
-                    line.erase (std::remove(line.begin(), line.end(), '>'), line.end());
-                }
-                name_hold = line;
-            }else{
-                round_one = false;
-                dna += line;
-            }
-        }
-    }
-    sequences[name_hold] = dna;
-    return sequences;
-
-}
-
 UPGMA::UPGMA() {
     // TODO Auto-generated constructor stub
 
@@ -262,9 +236,19 @@ UPGMA::UPGMA() {
 // alternate constructor
 UPGMA::UPGMA (string & seqf):ntax(0), nchar(0) {
     ifstream* fstr;
+    istream* pios;
     fstr = new ifstream(seqf);
-    seqfile = seqf;
-    sequences = FastaToOneLine (*fstr); // use existing seq readers instead
+    pios = fstr;
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+        sequences[seq.get_id()] = seq.get_sequence();
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+    	sequences[seq.get_id()] = seq.get_sequence();
+    }
     ntax = sequences.size();
     nchar = (int)sequences.begin()->second.size(); // ugly. should set when reading seqs
     set_name_key ();

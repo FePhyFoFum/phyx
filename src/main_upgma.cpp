@@ -7,7 +7,7 @@
 
 
 // TODO: need to remove unnecessary includes
-//g++ -std=c++11 upgma.cpp main_upgma.cpp utils.cpp superdouble.cpp -o test
+//g++ -std=c++11 upgma.cpp main_upgma.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -18,10 +18,13 @@
 #include <cstring>
 #include <getopt.h>
 
+
 using namespace std;
 
 #include "upgma.h"
 #include "utils.h"
+#include "sequence.h"
+#include "seq_reader.h"
 
 void print_help() {
     cout << "Basic UPGMA Tree Maker." << endl;
@@ -106,8 +109,19 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
-    
+    Sequence seq;
+    string retstring;
     map<string, string> sequences;
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+        sequences[seq.get_id()] = seq.get_sequence();
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+    	sequences[seq.get_id()] = seq.get_sequence();
+    }
+
+    
     map<string, string>::iterator iter;
     map<int, string> NameKey;
     vector< vector<double> > Matrix;
@@ -115,14 +129,14 @@ int main(int argc, char * argv[]) {
    // string fasta = seqf; // temporary
     int count = 0;
     UPGMA functions;
-    sequences = functions.FastaToOneLine(*fstr);
+    //sequences = functions.FastaToOneLine(*fstr);
     for(iter = sequences.begin(); iter != sequences.end(); iter++){
         NameKey[count] = iter -> first;
         names.push_back(iter -> first);
         count++;
     }
     Matrix = functions.BuildMatrix(sequences);
-    //functions.TREEMAKE(names, NameKey, Matrix);
+    functions.TREEMAKE(names, NameKey, Matrix);
     //cout << "Newick:" << endl << functions.get_newick() << endl;
     
     //cout << endl;
