@@ -7,26 +7,21 @@
 
 
 // TODO: need to remove unnecessary includes
+//g++ -std=c++11 upgma.cpp main_upgma.cpp utils.cpp superdouble.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
 #include <sstream>
 #include <iterator>
-//#include <algorithm>
 #include <map>
-#include <iterator>
 #include <cstring>
 #include <getopt.h>
 
 using namespace std;
 
 #include "upgma.h"
-//#include "node.h"
-//#include "sequence.h"
-//#include "seq_reader.h"
 #include "utils.h"
-//#include "concat.h"
 
 void print_help() {
     cout << "Basic UPGMA Tree Maker." << endl;
@@ -59,7 +54,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     string seqf = "";
-    string outf = ""; // not used at the moment
+    string outf = "";
     
     while (1) {
         int oi = -1;
@@ -94,34 +89,52 @@ int main(int argc, char * argv[]) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
     }
+    //outfile prep
+    ostream* poos;
+    ofstream* ofstr;
+    ifstream* fstr;
+    istream* pios;
+    if(fileset == true){
+        fstr = new ifstream(seqf);
+        pios = fstr;
+    }else{
+        pios = &cin;
+    }
+    if (outfileset == true) {
+        ofstr = new ofstream(outf);
+        poos = ofstr;
+    } else {
+        poos = &cout;
+    }
     
     map<string, string> sequences;
     map<string, string>::iterator iter;
     map<int, string> NameKey;
     vector< vector<double> > Matrix;
     vector<string> names;
-    string fasta = seqf; // temporary
+   // string fasta = seqf; // temporary
     int count = 0;
-    //fasta = ("TestFiles/drosophila.aln");
-    //fasta = ("TestFiles/Real_Test.fa");
-    //cin >> fasta;
     UPGMA functions;
-    sequences = functions.FastaToOneLine(fasta);
+    sequences = functions.FastaToOneLine(*fstr);
     for(iter = sequences.begin(); iter != sequences.end(); iter++){
         NameKey[count] = iter -> first;
         names.push_back(iter -> first);
         count++;
     }
     Matrix = functions.BuildMatrix(sequences);
-    functions.TREEMAKE(names, NameKey, Matrix);
-    cout << "Newick:" << endl << functions.get_newick() << endl;
+    //functions.TREEMAKE(names, NameKey, Matrix);
+    //cout << "Newick:" << endl << functions.get_newick() << endl;
     
-    cout << endl;
+    //cout << endl;
     
     // alternate:
     UPGMA terp(seqf);
-    cout << "Newick:" << endl << terp.get_newick() << endl;
+    //cout << "Newick:" << endl << terp.get_newick() << endl;
+    *poos << terp.get_newick() << endl;
     
-    //return 0;
+    if (outfileset) {
+        ofstr->close();
+        delete poos;
+    }
     return EXIT_SUCCESS;
 }
