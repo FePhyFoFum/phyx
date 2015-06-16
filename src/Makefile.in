@@ -151,6 +151,10 @@ AATOC_SRC = main_aatocdn.cpp
 AATOC_OBJ = main_aatocdn.o
 AATOC_DEP = main_aatocdn.d
 
+TLATE_SRC = main_tlate.cpp
+TLATE_OBJ = main_tlate.o
+TLATE_DEP = main_tlate.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -170,7 +174,8 @@ CPP_SRCS += \
 ./concat.cpp \
 ./recode.cpp \
 ./clsq.cpp \
-./aatocdn.cpp
+./aatocdn.cpp \
+./tlate.cpp
 
 RATE_SRCS += \
 ./rate_model.cpp \
@@ -200,7 +205,8 @@ CPP_OBJS += \
 ./concat.o \
 ./recode.o \
 ./clsq.o \
-./aatocdn.o
+./aatocdn.o \
+./tlate.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -230,7 +236,8 @@ CPP_DEPS += \
 ./concat.d \
 ./recode.d \
 ./clsq.d \
-./aatocdn.d 
+./aatocdn.d \
+./tlate.d
 
 RATE_DEPS += \
 ./rate_model.d \
@@ -258,7 +265,7 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate
 # removed pxlogmanip above as files are missing
 #all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 
@@ -297,6 +304,10 @@ pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ)
 pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'
 	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxtlate:   $(CPP_OBJS) $(TLATE_OBJ)
+	@echo 'building pxclsq'
+	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxaatocdn:   $(CPP_OBJS) $(AATOC_OBJ)
 	@echo 'building pxaatocdn'
