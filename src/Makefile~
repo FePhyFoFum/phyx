@@ -230,7 +230,7 @@ CPP_DEPS += \
 ./concat.d \
 ./recode.d \
 ./clsq.d \
-./aatocdn.d 
+./aatocdn.d \
 
 RATE_DEPS += \
 ./rate_model.d \
