@@ -7,7 +7,7 @@
 
 #include "aatocdn.h"
 
-map<string, string> aa_to_cdn::ChangeToCodon(map<string, string>& AminoAcid, map<string,string>& Nucleotide){
+map<string, string> AAtoCDN::ChangeToCodon(map<string, string>& AminoAcid, map<string,string>& Nucleotide){
 
 	for (iter = AminoAcid.begin(); iter != AminoAcid.end(); iter++){
 
@@ -44,46 +44,8 @@ map<string, string> aa_to_cdn::ChangeToCodon(map<string, string>& AminoAcid, map
 	return CodonAln;
 }
 
-//Used Twice so everything is declared in the function
-map <string, string> aa_to_cdn::FastaToOneLine (string& fasta){
-
-    map <string, string> sequences;
-    string line, dna, name_hold;
-    ifstream readline;
-	bool round_one = true;
-	readline.open(fasta.c_str());
-	if (readline.is_open()){
-        while (getline (readline, line)){
-            if (line[0] == '>'){
-
-                if (round_one == false){
-
-                	line.erase(std::remove(line.begin(), line.end(), '>'), line.end());
-                    sequences[name_hold] = dna;
-                    dna = "";
-
-                }else{
-                    line.erase(std::remove(line.begin(), line.end(), '>'), line.end());
-                }
-                name_hold = line;
-            }else{
-                round_one = false;
-                dna += line;
-            }
-        }
-    }
-    sequences[name_hold] = dna;
-    return sequences;
-
-}
-
-
-aa_to_cdn::aa_to_cdn() {
+AAtoCDN::AAtoCDN() {
 	// TODO Auto-generated constructor stub
 
-}
-
-aa_to_cdn::~aa_to_cdn() {
-	// TODO Auto-generated destructor stub
 }
 

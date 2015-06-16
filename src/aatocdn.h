@@ -19,7 +19,7 @@
 #include <iterator>
 using namespace std;
 
-class aa_to_cdn {
+class AAtoCDN {
 private:
 
 	map<string, string> CodonAln;
@@ -32,8 +32,7 @@ private:
 	int j;
 
 public:
-	aa_to_cdn();
-	virtual ~aa_to_cdn();
+	AAtoCDN();
 	map<string, string> FastaToOneLine(string&);
 	map<string, string> ChangeToCodon(map<string, string>&, map<string,string>&);
 

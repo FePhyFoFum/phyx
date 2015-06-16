@@ -6,7 +6,7 @@
  */
 
 
-//To compile alone: g++ -std=c++11 main_aatocdn.cpp aatocdn.cpp utils.cpp superdouble.cpp -o test
+//g++ -std=c++11 main_aatocdn.cpp aatocdn.cpp utils.cpp superdouble.cpp sequence.cpp seq_utils.cpp seq_reader.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -23,9 +23,11 @@ using namespace std;
 
 #include "aatocdn.h"
 #include "utils.h"
+#include "sequence.h"
+#include "seq_reader.h"
 
 void print_help() {
-    cout << "Takes in AA alignment and unaligned Nucleotide file to give Codon Alignment." << endl;
+    cout << "Takes in AA alignment and unaligned Nucleotide file to give a Codon Alignment." << endl;
     cout << "This will get rid of any sequences found in either only the Nucleotide or the Amino Acid Alignment" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
@@ -98,22 +100,50 @@ int main(int argc, char * argv[]) {
     }
     ostream* poos;
     ofstream* ofstr;
+    ifstream* fstr;
+    istream* pios;
+    ifstream* nucfstr;
+    istream* nucpios;
+    if(fileset == true){
+        fstr = new ifstream(aaseqf);
+        pios = fstr;
+    }else{
+        pios = &cin;
+    }
+    if(fileset == true){
+    	nucfstr = new ifstream(nucseqf);
+    	nucpios = nucfstr;
+    }else{
+    	nucpios = &cin;
+    }
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
     } else {
         poos = &cout;
     }
+    Sequence aa_seq, nuc_seq;
+    string retstring;
+    map<string, string> aa_sequences, nuc_sequences, CodonSequences;
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,aa_seq)){
+        aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+    	aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
+    }
+    while(read_next_seq_from_stream(*nucpios,ft,retstring,nuc_seq)){
+    	nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+    	nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    }
 
-	aa_to_cdn functions;
-	string AAFasta, NucFasta;
-	map<string, string> AASequences, NucSequences, CodonSequences;
+	AAtoCDN functions;
 	map<string, string>::iterator iter;
-	AAFasta = ("TestFiles/AA.fa");
-	NucFasta = ("TestFiles/Codon.fa");
-	AASequences = functions.FastaToOneLine(AAFasta);
-	NucSequences = functions.FastaToOneLine(NucFasta);
-	CodonSequences = functions.ChangeToCodon(AASequences, NucSequences);
+	CodonSequences = functions.ChangeToCodon(aa_sequences, nuc_sequences);
     for (iter = CodonSequences.begin(); iter != CodonSequences.end(); iter++){
     	*poos << ">" << iter -> first << "\n" << iter -> second << endl;
     }
