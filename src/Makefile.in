@@ -155,6 +155,10 @@ TLATE_SRC = main_tlate.cpp
 TLATE_OBJ = main_tlate.o
 TLATE_DEP = main_tlate.d
 
+RMS_SRC = main_rms.cpp
+RMS_OBJ = main_rms.o
+RMS_DEP = main_rms.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -265,7 +269,7 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms
 # removed pxlogmanip above as files are missing
 #all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 
@@ -304,6 +308,10 @@ pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ)
 pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'
 	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxrms:   $(CPP_OBJS) $(RMS_OBJ)
+	@echo 'building pxrms'
+	$(CXX) -o "pxrms" $(OPT_FLAGS) $(RMS_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxtlate:   $(CPP_OBJS) $(TLATE_OBJ)
 	@echo 'building pxclsq'
