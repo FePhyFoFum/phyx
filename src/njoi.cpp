@@ -22,7 +22,7 @@ using namespace std;
 #include "utils.h"
 
 //Calculates the Q matrix
-void CalcQ(int NumbOfSequences, vector< vector<double> >& OriginalMatrix,vector< vector<double> >& ConvertedMatrix){
+void CalcQ(int NumbOfSequences, vector< vector<double> >& OriginalMatrix,vector< vector<double> >& ConvertedMatrix, vector< vector<double> >& LengthMatrix){
 
 
 	ConvertedMatrix = OriginalMatrix;
@@ -49,55 +49,39 @@ void CalcQ(int NumbOfSequences, vector< vector<double> >& OriginalMatrix,vector<
 		for (int j = 0; j < NumbOfSequences; j++){
 
 			if (i != j){
+				LengthMatrix[i][j] = abs(Sums[i] - Sums[j]);
 				ConvertedMatrix[i][j] -= Sums[i];
 				ConvertedMatrix[i][j] -= Sums[j];
 			}
 			//cout << ConvertedMatrix[i][j] << "\t";
+			//cout << LengthMatrix[i][j] << "\t";
 
 		}
 		//cout << endl;
 	}
 	Sums.clear();
 }
+void FetchLengths(int NumbOfSequences, vector< vector<double> >& NewMatrix, vector< vector<double> >& LengthMatrix,
+		int& mini1, int& mini2, double& brlength1, double& brlength2){
+
+	string hold = to_string(NumbOfSequences);
+	double Mat = (NewMatrix[mini1][mini2] / 2.0);
+	double Seq = (1 / (2*(stod(hold)-2)));
+    brlength1 = Mat + Seq * LengthMatrix[mini1][mini2];
+    brlength2 = NewMatrix[mini1][mini2] - brlength1;
+
+}
 
 
-void Update_Tree(string& newname, vector<string>& names, map<int, string>& NumbKeys,
-    int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2){
+void Update_Tree(int NumbOfSequences, string& newname, vector<string>& names, map<int, string>& NumbKeys,
+    int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2, double& brlength1, double& brlength2){
 
     //update the tree values, Tree Size is the node it is at
     vector<double> row_hits, col_hits, new_ColRow;
-    double br_length = NewMatrix[mini1][mini2] / 2.0;
-    double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
-    string length1 = std::to_string(br_length);
-    string length2 = length1;
     double ColRow = 0.0;
-
-    // extremely hacky way to get correct ELs
-    std::size_t found = names[mini1].find("#");
-    if (found != std::string::npos) {
-        string terp = names[mini1];
-        std::size_t pos = terp.find("#");
-        double oldheight = std::stod(terp.substr(pos+1));
-        names[mini1] = terp.substr(0, pos);
-        length1 = std::to_string(br_length - oldheight);
-    }
-    // have to do it for the other side too
-    found = names[mini2].find("#");
-    if (found != std::string::npos) {
-        string terp = names[mini2];
-        std::size_t pos = terp.find("#");
-        double oldheight = std::stod(terp.substr(pos+1));
-        names[mini2] = terp.substr(0, pos);
-        length2 = std::to_string(br_length - oldheight);
-    }
-
-    //newname = "(" + names[mini1] + ":" + length1 + "," + names[mini2] + ":" + length2 + ")";
-    newname = "(" + names[mini1] + "," + names[mini2] + ")";
-    /*
-    if (node_list > 1) {
-        newname += "#" + std::to_string(br_length); // store height
-    }*/
-
+    double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
+    //Quick way to print just topology
+    newname = "(" + names[mini1] + ":" + to_string(brlength2) +  "," + names[mini2] + ":" + to_string(brlength1) +  ")";
     names.erase(names.begin()+mini1);
     names.erase(names.begin()+(mini2-1));
     names.insert(names.begin(), newname);
@@ -182,19 +166,27 @@ void njoi::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
 
     int mini1 = 0, mini2 = 0;
     int NumbOfSequences = NumbKeys.size();
+    double brlength1 = 0.0;
+    double brlength2 = 0.0;
     //int NumbOfSequences = 5;
 	vector< vector<double> > NewMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+	vector< vector<double> > LengthMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
     NewMatrix = Matrix;
     map<int, string>::iterator iter;
     string newname;
-    while (NumbOfSequences > 1){
+    while (NumbOfSequences > 2){
+
 
     	vector< vector<double> > QMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
-        CalcQ(NumbOfSequences, Matrix, QMatrix); //works round one
+    	//vector< vector<double> > LengthMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+        CalcQ(NumbOfSequences, Matrix, QMatrix, LengthMatrix); //works round one
         Choose_Small(NumbOfSequences, QMatrix, mini1, mini2); //Works round two
-        Update_Tree(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2);
+        FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2, brlength1, brlength2);
+        Update_Tree((NumbOfSequences + 1), newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2, brlength1, brlength2);
 
     }
+    FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2, brlength1, brlength2);
+    newname = "(" + names[mini1] + ":" + to_string(brlength2) +  "," + names[mini2] + ":" + to_string(brlength1) +  ")";
     newickstring = newname + ";";
 }
 
@@ -243,12 +235,18 @@ vector< vector<double> > njoi::BuildMatrix (map <string, string>& sequences){
         FirstCount++;
 
     }
-    /*/Wikipedias example
+    //Wikipedias example
+    /*
     Score = {{0.0,5.0,9.0,9.0,8.0},
     		{5.0,0.0,10.0,10.0,9.0},
 			{9.0,10.0,0.0,8.0,7.0},
 			{9.0,10.0,8.0,0.0,3.0},
 			{8.0,9.0,7.0,3.0,0.0}
+    };
+    Score = {{0.0,3.0,5.0,8.0},
+    		{3.0,0.0,7.0,6.0},
+			{5.0,7.0,0.0,4.0},
+			{8.0,6.0,4.0,0.0}
     };*/
     //prints the distance matrix maybe too verbose
     /*
