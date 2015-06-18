@@ -159,6 +159,10 @@ RMS_SRC = main_rms.cpp
 RMS_OBJ = main_rms.o
 RMS_DEP = main_rms.d
 
+NJOI_SRC = main_njoi.cpp
+NJOI_OBJ = main_njoi.o
+NJOI_DEP = main_njoi.d
+
 CPP_SRCS += \
 ./utils.cpp \
 ./node.cpp \
@@ -179,7 +183,8 @@ CPP_SRCS += \
 ./recode.cpp \
 ./clsq.cpp \
 ./aatocdn.cpp \
-./tlate.cpp
+./tlate.cpp \
+./njoi.cpp
 
 RATE_SRCS += \
 ./rate_model.cpp \
@@ -210,7 +215,8 @@ CPP_OBJS += \
 ./recode.o \
 ./clsq.o \
 ./aatocdn.o \
-./tlate.o
+./tlate.o \
+./njoi.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -241,7 +247,8 @@ CPP_DEPS += \
 ./recode.d \
 ./clsq.d \
 ./aatocdn.d \
-./tlate.d
+./tlate.d \
+./njoi.d
 
 RATE_DEPS += \
 ./rate_model.d \
@@ -269,7 +276,7 @@ FORT_OBJS += \
 	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxnjoi
 # removed pxlogmanip above as files are missing
 #all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 
@@ -304,6 +311,10 @@ pxnni:  $(CPP_OBJS) $(NNI_OBJ)
 pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ) 
 	@echo 'building pxupgma'
 	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxnjoi:  $(CPP_OBJS) $(NJOI_OBJ) 
+	@echo 'building pxnjoi'
+	$(CXX) -o "pxnjoi" $(OPT_FLAGS) $(NJOI_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'

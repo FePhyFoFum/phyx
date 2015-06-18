@@ -1,5 +1,5 @@
 /*
- * main_njoi.cpp
+ * main_NJOI.cpp
  *
  *  Created on: Jun 12, 2015
  *      Author: joe
@@ -23,7 +23,6 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
-//#include <algorithm>
 #include <map>
 #include <iterator>
 #include <cstring>
@@ -32,13 +31,11 @@
 using namespace std;
 
 #include "njoi.h"
-//#include "node.h"
-//#include "sequence.h"
-//#include "seq_reader.h"
+#include "sequence.h"
+#include "seq_reader.h"
 #include "utils.h"
-//#include "concat.h"
 
-//g++ -std=c++11 njoi.cpp main_njoi.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
+//g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 
 void print_help() {
     cout << "Basic UPGMA Tree Maker." << endl;
@@ -71,7 +68,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     string seqf = "";
-    string outf = ""; // not used at the moment
+    string outf = "";
 
     while (1) {
         int oi = -1;
@@ -102,23 +99,48 @@ int main(int argc, char * argv[]) {
     }
 
     // only taking files at the moment (not stdin)
-   /* if (!fileset) {
+    if (!fileset) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
-    }*/
-
+    }
+    //outfile prep
+    ostream* poos;
+    ofstream* ofstr;
+    ifstream* fstr;
+    istream* pios;
+    if(fileset == true){
+        fstr = new ifstream(seqf);
+        pios = fstr;
+    }else{
+        pios = &cin;
+    }
+    if (outfileset == true) {
+        ofstr = new ofstream(outf);
+        poos = ofstr;
+    }else{
+        poos = &cout;
+    }
+    Sequence seq;
+    string retstring;
     map<string, string> sequences;
+    int ft = test_seq_filetype_stream(*pios,retstring);
+    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+        sequences[seq.get_id()] = seq.get_sequence();
+    }
+    //fasta has a trailing one
+    if (ft == 2){
+    	sequences[seq.get_id()] = seq.get_sequence();
+    }
     map<string, string>::iterator iter;
     map<int, string> NameKey;
     vector< vector<double> > Matrix;
     vector<string> names;
     string fasta = seqf; // temporary
     int count = 0;
-    fasta = ("TestFiles/drosophila.aln");
-    //fasta = ("TestFiles/Real_Test.fa");
+    //fasta = ("TestFiles/drosophila.aln");
+    //fasta = ("TestFiles/Full_Mito_Sci_Names.fa");
     //cin >> fasta;
-    njoi functions;
-    sequences = functions.FastaToOneLine(fasta);
+    NJOI functions;
     for(iter = sequences.begin(); iter != sequences.end(); iter++){
         NameKey[count] = iter -> first;
         names.push_back(iter -> first);
@@ -126,14 +148,9 @@ int main(int argc, char * argv[]) {
     }
     Matrix = functions.BuildMatrix(sequences);
     functions.TREEMAKE(names, NameKey, Matrix);
-    cout << "Newick:" << endl << functions.get_newick() << endl;
 
     cout << endl;
-
-    // alternate:
-    //njoi terp(seqf);
-    //cout << "Newick:" << endl << terp.get_newick() << endl;
-
-    //return 0;
+    NJOI terp(seqf);
+    *poos << terp.get_newick() << endl;
     return EXIT_SUCCESS;
 }

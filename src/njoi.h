@@ -1,11 +1,11 @@
 /*
- * njoi.h
+ * NJOI.h
  *
  *  Created on: Jun 12, 2015
  *      Author: joe
  */
 
-//Compile g++ -std=c++11 njoi.cpp main_njoi.cpp utils.cpp superdouble.cpp -o test
+//Compile g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp superdouble.cpp -o test
 #ifndef NJOI_H_
 #define NJOI_H_
 
@@ -20,7 +20,7 @@
 #include <iterator>
 
 using namespace std;
-class njoi {
+class NJOI {
 private:
 
     map <string, string> sequences;
@@ -39,8 +39,8 @@ private:
     string newickstring; // temporary
 
 public:
-    njoi();
-    njoi (string & fasta);
+    NJOI();
+    NJOI (string & fasta);
     map<string, string> FastaToOneLine(string& fasta);
     vector< vector<double> > BuildMatrix(map<string, string>& sequences);
     void TREEMAKE(vector<string>&, map <int, string>&, vector< vector<double> >&);
