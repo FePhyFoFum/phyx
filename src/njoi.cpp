@@ -182,8 +182,10 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
         Tree_Update((NumbOfSequences + 1), newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2, brlength1, brlength2);
 
     }
-    FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2, brlength1, brlength2);
-    newname = "(" + names[mini1] + ":" + to_string(brlength2) +  "," + names[mini2] + ":" + to_string(brlength1) +  ")";
+    double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
+    //cout << Matrix[mini1][mini2] << endl;
+    //FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2, brlength1, brlength2);
+    newname = "(" + names[mini1] + ":" + to_string(adjlength) +  "," + names[mini2] + ":" + to_string(adjlength) +  ")";
     newickstring = newname + ";";
 }
 
