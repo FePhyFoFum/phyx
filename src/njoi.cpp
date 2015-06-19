@@ -6,7 +6,6 @@
  */
 
 
-//#include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -71,9 +70,7 @@ void FetchLengths(int NumbOfSequences, vector< vector<double> >& NewMatrix, vect
 	//Cant figure out how to bypass changing to a string then a double, but their has to
 	//be a command to change integer to double
 	string hold = to_string(NumbOfSequences);
-	double Mat = (NewMatrix[mini1][mini2] / 2.0);
-	double Seq = (1 / (2*(stod(hold)-2)));
-    brlength1 = Mat + Seq * LengthMatrix[mini1][mini2];
+    brlength1 = (NewMatrix[mini1][mini2] / 2.0) + (1 / (2*(stod(hold)-2))) * LengthMatrix[mini1][mini2];
     brlength2 = NewMatrix[mini1][mini2] - brlength1;
 
 }

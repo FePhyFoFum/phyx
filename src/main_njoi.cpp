@@ -35,7 +35,7 @@ using namespace std;
 #include "seq_reader.h"
 #include "utils.h"
 
-//g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
+//g++ -std=c++11 njoi.cpp main_njoi.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 
 void print_help() {
     cout << "Basic UPGMA Tree Maker." << endl;
