@@ -38,10 +38,10 @@ using namespace std;
 //g++ -std=c++11 njoi.cpp main_njoi.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 
 void print_help() {
-    cout << "Basic UPGMA Tree Maker." << endl;
+    cout << "Basic Neighbour-Joining Tree Maker." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
-    cout << "Usage: pxupgma [OPTION]... " << endl;
+    cout << "Usage: pxnjoi [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output newick file, stout otherwise" << endl;
@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
     }
     //fasta has a trailing one
     if (ft == 2){
-    	sequences[seq.get_id()] = seq.get_sequence();
+        sequences[seq.get_id()] = seq.get_sequence();
     }
     map<string, string>::iterator iter;
     map<int, string> NameKey;

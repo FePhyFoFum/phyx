@@ -6,8 +6,8 @@
  */
 
 //Compile g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp superdouble.cpp -o test
-#ifndef NJOI_H_
-#define NJOI_H_
+#ifndef _NJOI_H_
+#define _NJOI_H_
 
 #include <iostream>
 #include <string>
@@ -47,4 +47,4 @@ public:
     string get_newick ();
 };
 
-#endif /* NJOI_H_ */
+#endif /* _NJOI_H_ */

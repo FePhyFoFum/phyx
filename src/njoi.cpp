@@ -28,48 +28,43 @@ using namespace std;
  */
 void CalcQ(int NumbOfSequences, vector< vector<double> >& OriginalMatrix,vector< vector<double> >& ConvertedMatrix, vector< vector<double> >& LengthMatrix){
 
-
-	ConvertedMatrix = OriginalMatrix;
-	double row_sum = 0.0;
-	double col_sum = 0.0;
-	vector<double> Sums;
-	for (int i = 0; i < NumbOfSequences; i++){
-		row_sum = 0.0;
-		for (int j = 0; j < NumbOfSequences; j++){
-				row_sum += ConvertedMatrix[i][j];
-				ConvertedMatrix[i][j] *= (NumbOfSequences - 2);
-
-		}
-		Sums.push_back(row_sum);
-		if (i == 0){
-			col_sum = row_sum;
-		}
-	}
-	Sums.push_back(col_sum);
-	for (int i = 0; i < NumbOfSequences; i++){
-		for (int j = 0; j < NumbOfSequences; j++){
-
-			if (i != j){
-				LengthMatrix[i][j] = abs(Sums[i] - Sums[j]);
-				ConvertedMatrix[i][j] -= Sums[i];
-				ConvertedMatrix[i][j] -= Sums[j];
-			}
-
-
-		}
-	}
-	Sums.clear();
+    ConvertedMatrix = OriginalMatrix;
+    double row_sum = 0.0;
+    double col_sum = 0.0;
+    vector<double> Sums;
+    for (int i = 0; i < NumbOfSequences; i++){
+        row_sum = 0.0;
+        for (int j = 0; j < NumbOfSequences; j++){
+                row_sum += ConvertedMatrix[i][j];
+                ConvertedMatrix[i][j] *= (NumbOfSequences - 2);
+        }
+        Sums.push_back(row_sum);
+        if (i == 0){
+            col_sum = row_sum;
+        }
+    }
+    Sums.push_back(col_sum);
+    for (int i = 0; i < NumbOfSequences; i++){
+        for (int j = 0; j < NumbOfSequences; j++){
+            if (i != j){
+                LengthMatrix[i][j] = abs(Sums[i] - Sums[j]);
+                ConvertedMatrix[i][j] -= Sums[i];
+                ConvertedMatrix[i][j] -= Sums[j];
+            }
+        }
+    }
+    Sums.clear();
 }
 /*Calculate the Branch Lengths
  * NewMatrix: Has original distances
  * LengthMatrix: Has adjusted lengths
  */
 void FetchLengths(int NumbOfSequences, vector< vector<double> >& NewMatrix, vector< vector<double> >& LengthMatrix,
-		int& mini1, int& mini2, double& brlength1, double& brlength2){
+        int& mini1, int& mini2, double& brlength1, double& brlength2){
 
-	//Cant figure out how to bypass changing to a string then a double, but their has to
-	//be a command to change integer to double
-	string hold = to_string(NumbOfSequences);
+    //Cant figure out how to bypass changing to a string then a double, but their has to
+    //be a command to change integer to double
+    string hold = to_string(NumbOfSequences);
     brlength1 = (NewMatrix[mini1][mini2] / 2.0) + (1 / (2*(stod(hold)-2))) * LengthMatrix[mini1][mini2];
     brlength2 = NewMatrix[mini1][mini2] - brlength1;
 
@@ -94,13 +89,13 @@ void Tree_Update(int NumbOfSequences, string& newname, vector<string>& names, ma
     vector< vector<double> > temp_matrix(node_list, vector<double>(node_list, 0.0));
     //Reformat Matrix Takes in the hits
     for (int i = 0; i < NewMatrix.size(); i++){
-            for (int j = 0; j < NewMatrix.size(); j++){
-                if (i == mini1){
-                        row_hits.push_back(NewMatrix[mini1][j]);
-                }else if(i == mini2){
-                    col_hits.push_back(NewMatrix[mini2][j]);
-                }
+        for (int j = 0; j < NewMatrix.size(); j++){
+            if (i == mini1){
+                    row_hits.push_back(NewMatrix[mini1][j]);
+            }else if(i == mini2){
+                col_hits.push_back(NewMatrix[mini2][j]);
             }
+        }
     }
     int count = 0;
     //Make a new First Row and Column
@@ -164,20 +159,17 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
     int NumbOfSequences = NumbKeys.size();
     double brlength1 = 0.0;
     double brlength2 = 0.0;
-	vector< vector<double> > NewMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
-	vector< vector<double> > LengthMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+    vector< vector<double> > NewMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+    vector< vector<double> > LengthMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
     NewMatrix = Matrix;
     map<int, string>::iterator iter;
     string newname;
     while (NumbOfSequences > 2){
-
-
-    	vector< vector<double> > QMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+        vector< vector<double> > QMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
         CalcQ(NumbOfSequences, Matrix, QMatrix, LengthMatrix);
         Choose_Smallest(NumbOfSequences, QMatrix, mini1, mini2);
         FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2, brlength1, brlength2);
         Tree_Update((NumbOfSequences + 1), newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2, brlength1, brlength2);
-
     }
     double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
     //cout << Matrix[mini1][mini2] << endl;
@@ -186,15 +178,11 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
     newickstring = newname + ";";
 }
 
-
-
 double CalcSeqsDiffs(string& sequence1, string& sequence2){
 
     double score = 0;
     for (int i = 0; i < sequence1.size(); i++){
-
         if (sequence1[i] != sequence2[i]){
-
             score++;
         }
     }
@@ -225,10 +213,8 @@ vector< vector<double> > NJOI::BuildMatrix (map <string, string>& sequences){
             MatchName = SeqName + "," + iter2 -> first;
             Score[FirstCount][SecondCount] = MatchScore;
             SecondCount++;
-
         }
         FirstCount++;
-
     }
     return Score;
 }
@@ -252,7 +238,7 @@ NJOI::NJOI (string & seqf):ntax(0), nchar(0) {
     }
     //fasta has a trailing one
     if (ft == 2){
-    	sequences[seq.get_id()] = seq.get_sequence();
+        sequences[seq.get_id()] = seq.get_sequence();
     }
     ntax = sequences.size();
     nchar = (int)sequences.begin()->second.size(); // ugly. should set when reading seqs
