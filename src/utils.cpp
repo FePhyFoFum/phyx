@@ -95,27 +95,31 @@ bool is_number(const string& s) {
 }
 
 double calculate_vector_double_sum(vector <double> & in) {
-    double sum = 0;
-    for (unsigned int i=0; i < in.size(); i++) {
-        sum += in[i];
-    }
-    return sum;
+//    double sum = 0.0;
+//    for (unsigned int i=0; i < in.size(); i++) {
+//        sum += in[i];
+//    }
+//    return sum;
+    return accumulate(in.begin(), in.end(), 0.0);
 }
 
 double calculate_vector_double_mean(vector <double> & in) {
-    double sum = 0;
-    for (unsigned int i=0; i < in.size(); i++) {
-        sum += in[i]/in.size();
-    }
-    return sum;
+//    double sum = 0.0;
+//    for (unsigned int i=0; i < in.size(); i++) {
+//        sum += in[i]/in.size();
+//    }
+//    return sum;
+    // one division rather than n.size() divisions. should help with precision too
+    return calculate_vector_double_sum (in) / (double)in.size();
 }
 
 int calculate_vector_int_sum(vector <int> & in) {
-    int sum = 0;
-    for (unsigned int i=0; i < in.size(); i++) {
-        sum += in[i];
-    }
-    return sum;
+//    int sum = 0;
+//    for (unsigned int i=0; i < in.size(); i++) {
+//        sum += in[i];
+//    }
+//    return sum;
+    return accumulate(in.begin(), in.end(), 0);
 }
 
 vector <vector <double> > processRateMatrixConfigFile(string filename, int numstates) {
@@ -238,6 +242,27 @@ string get_string_vector(vector <int> & sts) {
         rets += to_string(sts[i]) + " ";
     }
     return rets;
+}
+
+// Hamming (edit) distance
+unsigned int calc_hamming_dist (string const& s1, string const& s2) {
+    
+    if (s1 == s2) {
+        return 0;
+    }
+    
+    // TODO: What should we do if s1.size() != s2.size()?
+    if (s1.size() != s2.size()){
+      throw std::invalid_argument(
+          "Strings passed to hd() must have the same lenght"
+      );
+    }
+
+    return std::inner_product(
+        s1.begin(), s1.end(), s2.begin(), 
+        0, std::plus<unsigned int>(),
+        std::not2(std::equal_to<std::string::value_type>())
+    );
 }
 
 double logn(double x, double base) {

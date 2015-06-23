@@ -28,6 +28,8 @@ double sum(vector<int> &inm);
 string get_string_vector(vector<string> &sts);
 string get_string_vector(vector<int> &sts);
 
+unsigned int calc_hamming_dist (string const& s1, string const& s2);
+
 double logn(double x,double base);
 
 bool essentially_equal (double a, double b);
