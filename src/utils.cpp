@@ -251,10 +251,10 @@ unsigned int calc_hamming_dist (string const& s1, string const& s2) {
         return 0;
     }
     
-    // TODO: What should we do if s1.size() != s2.size()?
-    if (s1.size() != s2.size()){
+    // bail if sequences are of different lengths. should be caught earlier than this
+    if (s1.size() != s2.size()) {
       throw std::invalid_argument(
-          "Strings passed to hd() must have the same lenght"
+          "Hamming distances are only defined for strings of equal length"
       );
     }
 

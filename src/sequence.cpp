@@ -14,7 +14,7 @@ using namespace std;
 #include "utils.h"
 #include "seq_utils.h"
 
-Sequence::Sequence():id(),seq(), length(0),aligned(),alphabet(DNA){}
+Sequence::Sequence():id(), seq(), length(0), aligned(), alphabet(DNA){}
 
 Sequence::Sequence(string _id, string _seq, bool _aligned){
     id = _id;
@@ -68,7 +68,10 @@ string Sequence::get_id(){
 }
 
 unsigned int Sequence::get_length(){
-    return length;
+    if (length == 0) {
+        length = seq.size();
+    }
+    return seq.size();
 }
 
 void Sequence::add_cont_char(double _num){
@@ -102,6 +105,7 @@ int Sequence::get_num_multistate_char(){
 
 void Sequence::set_sequence(string _seq){
     seq = _seq;
+    length = seq.size();
 }
 
 void Sequence::set_id(string _id){
