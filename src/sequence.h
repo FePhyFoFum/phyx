@@ -16,6 +16,7 @@ class Sequence{
 private:
     string id;
     string seq;
+    unsigned int length;
     bool aligned;
     vector<double> qualarr;
     string qualstr;
@@ -33,6 +34,7 @@ public:
     bool is_aligned();
     string get_sequence();
     string get_id();
+    unsigned int get_length();
     void add_cont_char(double num);
     double get_cont_char(int _index);
     int get_num_cont_char();

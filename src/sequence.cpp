@@ -6,9 +6,7 @@
  */
 
 #include <string>
-
 #include <iostream>
-
 
 using namespace std;
 
@@ -16,17 +14,19 @@ using namespace std;
 #include "utils.h"
 #include "seq_utils.h"
 
-Sequence::Sequence():id(),seq(),aligned(),alphabet(DNA){}
+Sequence::Sequence():id(),seq(), length(0),aligned(),alphabet(DNA){}
 
 Sequence::Sequence(string _id, string _seq, bool _aligned){
     id = _id;
     seq = _seq;
+    length = seq.size();
     aligned = _aligned;
     alphabet = DNA;
 }
 Sequence::Sequence(string _id, string _seq){
     id = _id;
     seq = _seq;
+    length = seq.size();
     aligned = false;
     alphabet = DNA;
 }
@@ -45,7 +45,7 @@ string Sequence::get_alpha_name(){
     if (alphabet == BINARY){
         return "BINARY";
     }
-    if(alphabet == MULTI){
+    if (alphabet == MULTI){
         return "MULTI";
     }
     return "";
@@ -65,6 +65,10 @@ string Sequence::get_sequence(){
 
 string Sequence::get_id(){
     return id;
+}
+
+unsigned int Sequence::get_length(){
+    return length;
 }
 
 void Sequence::add_cont_char(double _num){
