@@ -80,10 +80,10 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     		ChanceG = (Matrix[row][3] /abs(Matrix[row][row]) + ChanceC);
     		if(RandNumb < ChanceT){
     			newstring += "T";
-    		}else if(RandNumb < ChanceT && RandNumb > ChanceC){
+    		}else if(RandNumb > ChanceT && RandNumb < ChanceC){
 
     			newstring += "C";
-    		}else if(RandNumb < ChanceC && RandNumb > ChanceG){
+    		}else if(RandNumb > ChanceC && RandNumb < ChanceG){
 
     			newstring += "G";
     		}else{
@@ -100,7 +100,7 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     			newstring += "A";
     		}else if(RandNumb > ChanceA & RandNumb < ChanceC){
     			newstring += "C";
-    		}else if(RandNumb < ChanceC && RandNumb > ChanceG){
+    		}else if(RandNumb > ChanceC && RandNumb < ChanceG){
 
     			newstring += "G";
     		}else{
@@ -115,10 +115,10 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     		ChanceG = (Matrix[row][3] /ChanceC + ChanceT);
     		if(RandNumb < ChanceA){
     			newstring += "A";
-    		}else if(RandNumb < ChanceA && RandNumb > ChanceT){
+    		}else if(RandNumb > ChanceA && RandNumb < ChanceT){
 
     			newstring += "T";
-    		}else if(RandNumb < ChanceT && RandNumb > ChanceG){
+    		}else if(RandNumb > ChanceT && RandNumb < ChanceG){
 
     			newstring += "G";
     		}else{
@@ -133,10 +133,10 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     		ChanceC = (Matrix[row][2] / ChanceG + ChanceC);
     		if(RandNumb < ChanceA){
     			newstring += "A";
-    		}else if(RandNumb < ChanceA && RandNumb > ChanceT){
+    		}else if(RandNumb > ChanceA && RandNumb < ChanceT){
 
     			newstring += "T";
-    		}else if(RandNumb < ChanceT && RandNumb > ChanceC){
+    		}else if(RandNumb > ChanceT && RandNumb < ChanceC){
 
     			newstring += "C";
     		}else{
@@ -274,10 +274,10 @@ void EvoSim(vector< vector<double> >& rmatrix, Tree * tree, string Ancestor){
     vector<double> basefreq(4, 0.0);
     vector< vector<double> > QMatrix;
 	vector< vector<double> > PMatrix(4, vector<double>(4, 0.0));
-    basefreq[0] = 0.1;
-    basefreq[1] = 0.4;
-    basefreq[2] = 0.3;
-    basefreq[3] = 0.2;
+    basefreq[0] = 0.25;
+    basefreq[1] = 0.25;
+    basefreq[2] = 0.25;
+    basefreq[3] = 0.25;
 	//Pre-Order Traverse the tree
 	for (int k = (tree->getNodeCount() - 2); k >= 0; k--){
 
