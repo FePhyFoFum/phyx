@@ -39,6 +39,28 @@ int main(){
 	double length;
 	string path, newick, line;
 	int sequence_length = 0;
+	/*
+	 * Default Base Frequencies and Rate Matrix
+	 *
+	 */
+	vector<double> basefreq(4, 0.0);
+    basefreq[0] = 0.25;
+    basefreq[1] = 0.25;
+    basefreq[2] = 0.25;
+    basefreq[3] = 0.25;
+    vector< vector<double> > rmatrix(4, vector<double>(4, 1.0));
+    for (int i = 0; i < rmatrix.size(); i++){
+    	for (int j = 0; j < rmatrix.size(); j++){
+
+    		if (i == j){//Fill Diagnol
+
+    			rmatrix[i][j] *= -1.0;
+
+    		}else{
+    			rmatrix[i][j] *= 0.33333;
+    		}
+    	}
+    }
 	ifstream readline;
 	path = ("TestFiles/RAxML_bestTree.drosML");
 	readline.open(path.c_str());
@@ -47,9 +69,8 @@ int main(){
 			newick = line;
 		}
 	}
-	//Reads in sequences ok
 	sequence_length = 1000;
 	tree = TreeUtil.readTree(newick);
-	SGen.TakeInTree(tree, sequence_length);
+	SGen.TakeInTree(rmatrix, tree, sequence_length, basefreq);
 
 }

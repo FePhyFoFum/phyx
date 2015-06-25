@@ -266,18 +266,13 @@ vector< vector<double> > PCalq(vector< vector<double> > QMatrix, float br){
  *Calculates the JC Matrix
  *
  */
-void EvoSim(vector< vector<double> >& rmatrix, Tree * tree, string Ancestor){
+void EvoSim(vector< vector<double> >& rmatrix, Tree * tree, string Ancestor, vector<double>& basefreq){
 
 	Node nodes;
 	double brlength = 0.0;
 	string branch = "";
-    vector<double> basefreq(4, 0.0);
     vector< vector<double> > QMatrix;
 	vector< vector<double> > PMatrix(4, vector<double>(4, 0.0));
-    basefreq[0] = 0.25;
-    basefreq[1] = 0.25;
-    basefreq[2] = 0.25;
-    basefreq[3] = 0.25;
 	//Pre-Order Traverse the tree
 	for (int k = (tree->getNodeCount() - 2); k >= 0; k--){
 
@@ -307,7 +302,7 @@ void randDNA(int len, string& Ancestor) {
 }
 
 //Take in a tree
-void SEQGEN::TakeInTree(Tree * tree, int length){
+void SEQGEN::TakeInTree(vector< vector<double> >& rmatrix, Tree * tree, int length, vector<double>& basefreq){
 
 	string Ancestor = "";
 	string branch = "";
@@ -315,27 +310,8 @@ void SEQGEN::TakeInTree(Tree * tree, int length){
     vector< vector<double> > QMatrix;
 	vector< vector<double> > PMatrix(4, vector<double>(4, 0.0));
 
-
-    /*Test Stuff
-     * rmatrix is the rate matrix
-     * Gets filled with .333 and -1.0
-     *To be given in the future
-     */
-    vector< vector<double> > rmatrix(4, vector<double>(4, 1.0));
-    for (int i = 0; i < rmatrix.size(); i++){
-    	for (int j = 0; j < rmatrix.size(); j++){
-
-    		if (i == j){//Fill Diagnol
-
-    			rmatrix[i][j] *= -1.0;
-
-    		}else{
-    			rmatrix[i][j] *= 0.33333;
-    		}
-    	}
-    }
     randDNA(length, Ancestor);
-    EvoSim(rmatrix, tree, Ancestor);
+    EvoSim(rmatrix, tree, Ancestor, basefreq);
 }
 
 SEQGEN::SEQGEN() {
@@ -346,45 +322,3 @@ SEQGEN::SEQGEN() {
 SEQGEN::~SEQGEN() {
 	// TODO Auto-generated destructor stub
 }
-/*
-for(int i=0;i<tree->getExternalNodeCount();i++){
-    string tname = tree->getExternalNode(i)->getName();
-    brlength = tree->getExternalNode(i)->getBL();
-    //JC = ((1.0/4.0)-((1.0/4.0)*exp(-4.0*((brlength))/3.0)));
-    //JC = 1/4.0 * (1 - (exp(-4.0*(brlength))));
-    branch = to_string(brlength);
-    	cout << ">" << tname << "_" << branch << "\n" << Ancestor << endl;
-}*/
-/*
-for(int i=0;i<tree->getNodeCount();i++){
-    brlength = tree->getNode(i)->getBL();
-    string tname = tree->getNode(i)->getName();
-    branch = to_string(brlength);
-    cout << branch << "\t" << tname << endl;
-}
-*/
-/*
- * Calculates the rate matrix under JC
-
-void JC(vector< vector<double> >& Matrix, double& brlength){
-
-    vector< vector<double> > TempMatrix(4, vector<double>(4, 1.0));
-	//cout << "BR Length: " << brlength << endl;
-    for (int i = 0; i < Matrix.size(); i++){
-    	for (int j = 0; j < Matrix.size(); j++){
-
-    		if (i == j){//Fill Diagnol
-
-    			TempMatrix[i][j] *= 0.25 + (0.75 * exp((-4.0*brlength) / 3.0));
-
-
-    		}else{
-    			TempMatrix[i][j] *= 0.25 - (0.25 * exp((-4.0*brlength) / 3.0));
-    		}
-			//cout << TempMatrix[i][j] << "\t";
-    	}
-    	//cout << endl;
-    }
-    Matrix = TempMatrix;
-
-}*/

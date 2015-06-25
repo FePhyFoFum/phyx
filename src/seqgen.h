@@ -36,7 +36,7 @@ private:
 
 public:
 	SEQGEN();
-	void TakeInTree(Tree *, int);
+	void TakeInTree(vector< vector<double> >&, Tree *, int, vector<double>&);
 	Node * PreOrder(int);
 	virtual ~SEQGEN();
 };
