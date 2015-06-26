@@ -48,10 +48,10 @@ using namespace std;
  *
  *
  */
-void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
+void SeqSim(string& Ancestor, vector< vector<double> >& Matrix){
 
 
-    string hold = ""; //for the stupid to double thing I always do
+    string hold = ""; //for the stupid string to double thing I always do
     string newstring = "";
     for (int i = 0; i < Ancestor.size(); i++){
         float RandNumb = 0.0;
@@ -75,9 +75,11 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     		}else if(RandNumb > ChanceT && RandNumb < ChanceC){
 
     			newstring += "C";
+
     		}else if(RandNumb > ChanceC && RandNumb < ChanceG){
 
     			newstring += "G";
+
     		}else{
 
     			newstring += "A";
@@ -252,7 +254,7 @@ void EvoSim(vector< vector<double> >& rmatrix, Tree * tree, string Ancestor, vec
 	    //If its a tip print the name and the sequence
 	    if (tree->getNode(k)->getName() != ""){
 	    	string tname = tree->getNode(k)->getName();
-	    	//cout << ">" << tname << "\n" << Ancestor << endl;
+	    	cout << ">" << tname << "\n" << Ancestor << endl;
 	    }
 
 	}
@@ -264,17 +266,21 @@ void randDNA(int len, string& Ancestor,vector<double>& basefreq) {
 	string hold = "";
     for (int i = 0; i < len; i++) {
         int RandNumb = 0;
+        int A = (basefreq[0] * 100);
+        int T = ((basefreq[1] * 100) + (basefreq[0] * 100));
+        int C = ((basefreq[2] * 100) + T);
         random_device rand_dev;
         mt19937 generator(rand_dev());
         std::uniform_int_distribution<int>  distr(0, 100);
     	hold = to_string(distr(generator));
     	RandNumb = stod(hold);
-        if (RandNumb < 25){
+        if (RandNumb < A){
+
         	Ancestor += "A";
-        }else if(RandNumb > 25 && RandNumb < 50){
+        }else if(RandNumb > A && RandNumb < T){
 
         	Ancestor += "T";
-        }else if(RandNumb > 50 && RandNumb < 75){
+        }else if(RandNumb > T && RandNumb < C){
 
         	Ancestor += "C";
         }else{
@@ -282,7 +288,7 @@ void randDNA(int len, string& Ancestor,vector<double>& basefreq) {
         	Ancestor += "G";
         }
     }
-    cout << Ancestor << endl;
+    cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
 }
 
 //Take in a tree
