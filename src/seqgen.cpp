@@ -43,22 +43,15 @@ using namespace std;
  */
 
 
+/*Use the P matrix probabilities and randomly draw numbers to see
+ *if each individual state will undergo some type of change
+ *
+ *
+ */
 void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
 
-	//cout << "In Seq Sim" << endl;
-    const int range_from  = 0;
-    const int range_to    = 100000;
-    //Odds of it being any of these states
-    float RandNumb = 0.0;
-    float ChanceA = 0.0;
-    float ChanceT = 0.0;
-    float ChanceC = 0.0;
-    float ChanceG = 0.0;
-    int row = 0;
-    string hold = "";
-    random_device rand_dev;
-    mt19937 generator(rand_dev());
-    std::uniform_int_distribution<int>  distr(range_from, range_to);
+
+    string hold = ""; //for the stupid to double thing I always do
     string newstring = "";
     for (int i = 0; i < Ancestor.size(); i++){
         float RandNumb = 0.0;
@@ -68,16 +61,15 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
         float ChanceG = 0.0;
         random_device rand_dev;
         mt19937 generator(rand_dev());
-        std::uniform_int_distribution<int>  distr(range_from, range_to);
+        std::uniform_int_distribution<int>  distr(0, 100000);
     	hold = to_string(distr(generator));
     	RandNumb = stod(hold);
     	RandNumb /= 100000;
     	if (Ancestor[i] == 'A'){
-    		row = 0;
-    		ChanceA = abs(Matrix[row][row]);
-    		ChanceT = Matrix[row][1] /abs(Matrix[row][row]);
-    		ChanceC = (Matrix[row][2] /abs(Matrix[row][row]) + ChanceT);
-    		ChanceG = (Matrix[row][3] /abs(Matrix[row][row]) + ChanceC);
+    		ChanceA = abs(Matrix[0][0]);
+    		ChanceT = Matrix[0][1] /abs(Matrix[0][0]);
+    		ChanceC = (Matrix[0][2] /abs(Matrix[0][0]) + ChanceT);
+    		ChanceG = (Matrix[0][3] /abs(Matrix[0][0]) + ChanceC);
     		if(RandNumb < ChanceT){
     			newstring += "T";
     		}else if(RandNumb > ChanceT && RandNumb < ChanceC){
@@ -91,14 +83,14 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     			newstring += "A";
     		}
     	}else if (Ancestor[i] == 'T'){
-    		row = 1;
-    		ChanceT = abs(Matrix[row][row]);
-    		ChanceA = Matrix[row][0] / ChanceT;
-    		ChanceC = (Matrix[row][2] / ChanceT + ChanceA);
-    		ChanceG = (Matrix[row][3] / ChanceT + ChanceC);
+
+    		ChanceT = abs(Matrix[1][1]);
+    		ChanceA = Matrix[1][0] / ChanceT;
+    		ChanceC = (Matrix[1][2] / ChanceT + ChanceA);
+    		ChanceG = (Matrix[1][3] / ChanceT + ChanceC);
     		if(RandNumb < ChanceA){
     			newstring += "A";
-    		}else if(RandNumb > ChanceA & RandNumb < ChanceC){
+    		}else if(RandNumb > ChanceA && RandNumb < ChanceC){
     			newstring += "C";
     		}else if(RandNumb > ChanceC && RandNumb < ChanceG){
 
@@ -108,11 +100,11 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     			newstring += "T";
     		}
     	}else if (Ancestor[i] == 'C'){
-    		row = 2;
-    		ChanceC = abs(Matrix[row][row]);
-    		ChanceA = Matrix[row][0] / ChanceC;
-    		ChanceT = (Matrix[row][1] /ChanceC + ChanceA);
-    		ChanceG = (Matrix[row][3] /ChanceC + ChanceT);
+
+    		ChanceC = abs(Matrix[2][2]);
+    		ChanceA = Matrix[2][0] / ChanceC;
+    		ChanceT = (Matrix[2][1] /ChanceC + ChanceA);
+    		ChanceG = (Matrix[2][3] /ChanceC + ChanceT);
     		if(RandNumb < ChanceA){
     			newstring += "A";
     		}else if(RandNumb > ChanceA && RandNumb < ChanceT){
@@ -126,11 +118,11 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
     			newstring += "C";
     		}
     	}else{
-    		row = 3;
-    		ChanceG = abs(Matrix[row][row]);
-    		ChanceA = Matrix[row][0] / ChanceG;
-    		ChanceT = (Matrix[row][1] / ChanceG + ChanceA);
-    		ChanceC = (Matrix[row][2] / ChanceG + ChanceC);
+
+    		ChanceG = abs(Matrix[3][3]);
+    		ChanceA = Matrix[3][0] / ChanceG;
+    		ChanceT = (Matrix[3][1] / ChanceG + ChanceA);
+    		ChanceC = (Matrix[3][2] / ChanceG + ChanceC);
     		if(RandNumb < ChanceA){
     			newstring += "A";
     		}else if(RandNumb > ChanceA && RandNumb < ChanceT){
@@ -151,11 +143,9 @@ void SeqSim(string& Ancestor, vector< vector<double> > Matrix){
 
 }
 /*
- * Calculate the Q Matrix
- *
- *
+ * Calculate the Q Matrix (Substitution rate matrix)
  */
-vector< vector<double> > CalQ(vector< vector<double> > rmatrix, vector<double> basefreq){
+vector< vector<double> > CalQ(vector< vector<double> >& rmatrix, vector<double>& basefreq){
 
 	vector< vector<double> > bigpi(4, vector<double>(4, 1.0));
 	vector< vector<double> > t(4, vector<double>(4, 0.0));
@@ -171,10 +161,7 @@ vector< vector<double> > CalQ(vector< vector<double> > rmatrix, vector<double> b
     		}else{
     			bigpi[i][j] = 0.0;
     		}
-
-			//cout << bigpi[i][j] << "\t";
     	}
-    	//cout << endl;
     }
     for (int i = 0; i < rmatrix.size(); i++){
     	for (int j = 0; j < rmatrix.size(); j++){
@@ -184,12 +171,10 @@ vector< vector<double> > CalQ(vector< vector<double> > rmatrix, vector<double> b
     			bigpi[i][j] /= tscale;
 
     		}else{
+    			//set the diagnols to zero
     			bigpi[i][j] = 0.0;
     		}
-
-			//cout << bigpi[i][j] << "\t";
     	}
-    	//cout << endl;
     }
     for (int i = 0; i < rmatrix.size(); i++){
     	double diag = 0.0;
@@ -210,56 +195,41 @@ vector< vector<double> > CalQ(vector< vector<double> > rmatrix, vector<double> b
     		bigpi[i][j] /= basefreq[i];
     	}
     }
-    for (int i = 0; i < rmatrix.size(); i++){
-    	for (int j = 0; j < rmatrix.size(); j++){
-
-			//cout << bigpi[i][j] << "\t";
-    	}
-    	//cout << endl;
-    }
 
 	return bigpi;
 }
-/*Calculate the P Matrix
+/*Calculate the P Matrix (Probability Matrix
+ * Changes to armadillos format then back I don't like the way could be more
+ * efficient but yeah...
  */
 vector< vector<double> > PCalq(vector< vector<double> > QMatrix, float br){
 
-	vector<double> PMatrix;
-	vector< vector<double> > NewP(4, vector<double>(4, 0.0));
+	vector< vector<double> > Pmatrix(4, vector<double>(4, 0.0));
 	mat A = randn<mat>(4,4);
-	mat B;
+	mat B = randn<mat>(4,4);
+	int count = 0;
+	//Q * t moved into Matrix form for armadillo
    for (int i = 0; i < QMatrix.size(); i++){
     	for (int j = 0; j < QMatrix.size(); j++){
 
-    		if (i == j){
-
-    			//cout << QMatrix[i][j] << " ";
-
-    		}else{
-    			//cout << QMatrix[i][j] << " ";
-    		}
-    		PMatrix.push_back(QMatrix[i][j]);
+    		A[count] = (QMatrix[i][j] * br);
+    		count++;
     	}
-    	//cout << endl;
     }
-   //Q * t
-   for (int i = 0; i < PMatrix.size(); i++){
-
-	   A[i] = (PMatrix[i] * br);
-   }
-   //e^
+   //exponentiate the matrix
    B = expmat(A);
    //cout << B << endl;
-   int count = 0;
-   for (int i = 0; i < NewP.size(); i++){
-    	for (int j = 0; j < NewP.size(); j++){
+   count = 0;
+   //convert the matrix back to C++ vector
+   for (int i = 0; i < Pmatrix.size(); i++){
+    	for (int j = 0; j < Pmatrix.size(); j++){
 
-    		NewP[i][j] = B[count];
+    		Pmatrix[i][j] = B[count];
     		count++;
     	}
    }
 
-	return NewP;
+	return Pmatrix;
 }
 /*
  * Pre-Order traversal works
@@ -268,37 +238,51 @@ vector< vector<double> > PCalq(vector< vector<double> > QMatrix, float br){
  */
 void EvoSim(vector< vector<double> >& rmatrix, Tree * tree, string Ancestor, vector<double>& basefreq){
 
-	Node nodes;
 	double brlength = 0.0;
-	string branch = "";
-    vector< vector<double> > QMatrix;
+    vector< vector<double> > QMatrix(4, vector<double>(4, 0.0));
 	vector< vector<double> > PMatrix(4, vector<double>(4, 0.0));
 	//Pre-Order Traverse the tree
 	for (int k = (tree->getNodeCount() - 2); k >= 0; k--){
 
 
-		//cout << ">node" << to_string(k) << "\n" << Ancestor << endl;
 	    brlength = tree->getNode(k)->getBL();
 	    QMatrix = CalQ(rmatrix, basefreq);
 	    PMatrix = PCalq(QMatrix, brlength);
 	    SeqSim(Ancestor, PMatrix);
-	    //If their is a name print the name and the sequence
+	    //If its a tip print the name and the sequence
 	    if (tree->getNode(k)->getName() != ""){
 	    	string tname = tree->getNode(k)->getName();
-	    	branch = to_string(brlength);
-	    	cout << ">" << tname << "\n" << Ancestor << endl;
+	    	//cout << ">" << tname << "\n" << Ancestor << endl;
 	    }
 
 	}
 
 }
 
-void randDNA(int len, string& Ancestor) {
-	char DNA[] = "ATCG";
+void randDNA(int len, string& Ancestor,vector<double>& basefreq) {
 
+	string hold = "";
     for (int i = 0; i < len; i++) {
-        Ancestor += DNA[rand() % (5 - 1)];
+        int RandNumb = 0;
+        random_device rand_dev;
+        mt19937 generator(rand_dev());
+        std::uniform_int_distribution<int>  distr(0, 100);
+    	hold = to_string(distr(generator));
+    	RandNumb = stod(hold);
+        if (RandNumb < 25){
+        	Ancestor += "A";
+        }else if(RandNumb > 25 && RandNumb < 50){
+
+        	Ancestor += "T";
+        }else if(RandNumb > 50 && RandNumb < 75){
+
+        	Ancestor += "C";
+        }else{
+
+        	Ancestor += "G";
+        }
     }
+    cout << Ancestor << endl;
 }
 
 //Take in a tree
@@ -307,10 +291,7 @@ void SEQGEN::TakeInTree(vector< vector<double> >& rmatrix, Tree * tree, int leng
 	string Ancestor = "";
 	string branch = "";
     vector< vector<double> > Matrix(4, vector<double>(4, 1.0));
-    vector< vector<double> > QMatrix;
-	vector< vector<double> > PMatrix(4, vector<double>(4, 0.0));
-
-    randDNA(length, Ancestor);
+    randDNA(length, Ancestor, basefreq);
     EvoSim(rmatrix, tree, Ancestor, basefreq);
 }
 
