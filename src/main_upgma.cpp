@@ -87,20 +87,14 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    // only taking files at the moment (not stdin)
-    if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
-        exit(0);
-    }
-    //outfile prep
     ostream* poos;
     ofstream* ofstr;
     ifstream* fstr;
     istream* pios;
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
     if (outfileset == true) {
@@ -109,46 +103,18 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
-    Sequence seq;
-    string retstring;
-    map<string, string> sequences;
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-        sequences[seq.get_id()] = seq.get_sequence();
+    
+    UPGMA upgma(pios);
+    *poos << upgma.get_newick() << endl;
+    
+    if (fileset) {
+        fstr->close();
+        delete pios;
     }
-    //fasta has a trailing one
-    if (ft == 2){
-    	sequences[seq.get_id()] = seq.get_sequence();
-    }
-
-    
-    map<string, string>::iterator iter;
-    map<int, string> NameKey;
-    vector< vector<double> > Matrix;
-    vector<string> names;
-   // string fasta = seqf; // temporary
-    int count = 0;
-    UPGMA functions;
-    //sequences = functions.FastaToOneLine(*fstr);
-    for(iter = sequences.begin(); iter != sequences.end(); iter++){
-        NameKey[count] = iter -> first;
-        names.push_back(iter -> first);
-        count++;
-    }
-    Matrix = functions.BuildMatrix(sequences);
-    functions.TREEMAKE(names, NameKey, Matrix);
-    //cout << "Newick:" << endl << functions.get_newick() << endl;
-    
-    //cout << endl;
-    
-    // alternate:
-    UPGMA terp(seqf);
-    //cout << "Newick:" << endl << terp.get_newick() << endl;
-    *poos << terp.get_newick() << endl;
-    
     if (outfileset) {
         ofstr->close();
         delete poos;
     }
+    
     return EXIT_SUCCESS;
 }

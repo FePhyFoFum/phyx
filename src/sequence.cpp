@@ -145,7 +145,7 @@ vector<double> Sequence::get_qualarr(){
 }
 
 double Sequence::get_qualarr_mean(){
-    return calculate_vector_double_mean(qualarr);
+    return mean(qualarr);
 }
 
 string Sequence::get_fasta(){

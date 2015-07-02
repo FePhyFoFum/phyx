@@ -182,9 +182,9 @@ void StateReconstructorSimple::ancdist_conditional_lh(Node & node,int site){
 
 double StateReconstructorSimple::eval_likelihood(int site){
    ancdist_conditional_lh(*tree->getRoot(),site);
-//    return (-log(calculate_vector_double_sum(*
+//    return (-log(sum(*
 //          (VectorNodeObject<double>*) tree->getRoot()->getObject(dc))));
-    return (-log(calculate_vector_double_sum(conditionals_map[tree->getRoot()][site])));
+    return (-log(sum(conditionals_map[tree->getRoot()][site])));
     //return double(-(calculate_vector_Superdouble_sum(*(VectorNodeObject<double>*) tree->getRoot()->getObject(dc))).getLn());
 }
 

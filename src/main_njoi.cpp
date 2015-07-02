@@ -8,12 +8,12 @@
 
 
 
-/*
- * main_upgma.cpp
- *
- *  Created on: Jun 10, 2015
- *      Author: joe
- */
+#ifdef _OPENMP
+    #include <omp.h>
+#else
+    #define omp_get_num_procs() 1
+    #define omp_get_max_threads() 1
+#endif
 
 
 // TODO: need to remove unnecessary includes
@@ -45,6 +45,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output newick file, stout otherwise" << endl;
+    cout << " -n, --nthreads=INT  number of threads, default=1" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
     cout << endl;
@@ -52,21 +53,29 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxupgma 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv2\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxnjoi 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv2\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
+    {"nthreads", required_argument, NULL, 'n'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
 };
 
+void printInfo () {
+    int foo = omp_get_num_procs();
+    int bar = omp_get_max_threads();
+    cout << "numprocs = " << foo << "; threads = " << bar << endl;
+}
+
 int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
+    int threads = 1;
     string seqf = "";
     string outf = "";
 
@@ -86,8 +95,12 @@ int main(int argc, char * argv[]) {
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
+            case 'n':
+                threads = atoi(strdup(optarg));
+                break;
             case 'h':
                 print_help();
+                printInfo(); // temp
                 exit(0);
             case 'V':
                 cout << versionline << endl;
@@ -99,58 +112,41 @@ int main(int argc, char * argv[]) {
     }
 
     // only taking files at the moment (not stdin)
-    if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
-        exit(0);
-    }
+//    if (!fileset) {
+//        cout << "you must specify an input sequence file" << endl;
+//        exit(0);
+//    }
+    
     //outfile prep
     ostream* poos;
     ofstream* ofstr;
     ifstream* fstr;
     istream* pios;
-    if(fileset == true){
+    
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
-    Sequence seq;
-    string retstring;
-    map<string, string> sequences;
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-        sequences[seq.get_id()] = seq.get_sequence();
+    
+    NJOI nj(pios, threads);
+    *poos << nj.get_newick() << endl;
+    
+    if (fileset) {
+        fstr->close();
+        delete pios;
     }
-    //fasta has a trailing one
-    if (ft == 2){
-        sequences[seq.get_id()] = seq.get_sequence();
+    if (outfileset) {
+        ofstr->close();
+        delete poos;
     }
-    map<string, string>::iterator iter;
-    map<int, string> NameKey;
-    vector< vector<double> > Matrix;
-    vector<string> names;
-    string fasta = seqf; // temporary
-    int count = 0;
-    //fasta = ("TestFiles/drosophila.aln");
-    //fasta = ("TestFiles/Full_Mito_Sci_Names.fa");
-    //cin >> fasta;
-    NJOI functions;
-    for(iter = sequences.begin(); iter != sequences.end(); iter++){
-        NameKey[count] = iter -> first;
-        names.push_back(iter -> first);
-        count++;
-    }
-    Matrix = functions.BuildMatrix(sequences);
-    functions.TREEMAKE(names, NameKey, Matrix);
-
-    cout << endl;
-    NJOI terp(seqf);
-    *poos << terp.get_newick() << endl;
+    
     return EXIT_SUCCESS;
 }

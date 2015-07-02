@@ -5,7 +5,7 @@
  *      Author: joe
  */
 
-//Compile g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp superdouble.cpp -o test
+//Compile g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp -o test
 #ifndef _NJOI_H_
 #define _NJOI_H_
 
@@ -34,13 +34,14 @@ private:
     // additions:
     int ntax;
     int nchar;
+    int nthreads;
     string seqfile;
     map<int, string> NameKey;
     string newickstring; // temporary
 
 public:
     NJOI();
-    NJOI (string & fasta);
+    NJOI (istream* pios, int & threads);
     map<string, string> FastaToOneLine(string& fasta);
     vector< vector<double> > BuildMatrix(map<string, string>& sequences);
     void TREEMAKE(vector<string>&, map <int, string>&, vector< vector<double> >&);

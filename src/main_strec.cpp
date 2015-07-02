@@ -460,7 +460,7 @@ int main(int argc, char * argv[]) {
                 Sequence tse =Sequence(seqs[se].get_id(),tseqs,true);
                 runseqs.push_back(tse);
             }
-            nstates_site_n = calculate_vector_int_sum(existing_states);
+            nstates_site_n = sum(existing_states);
         }else{
             runseqs = seqs;
             if (dataz == false) {
@@ -471,7 +471,7 @@ int main(int argc, char * argv[]) {
                         }
                     }
                 }
-                nstates_site_n = calculate_vector_int_sum(existing_states);
+                nstates_site_n = sum(existing_states);
             }else{
                 for (int i=0; i < nstates; i++) {
                     existing_states[i] = 1;
@@ -714,7 +714,7 @@ int main(int argc, char * argv[]) {
                         sr.prepare_stochmap_reverse_all_nodes(excount,excount);
                         sr.prepare_ancstate_reverse();
                         vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]),true);
-                        double tnum = calculate_vector_double_sum(stoch)/double(totlike_sd);
+                        double tnum = sum(stoch)/double(totlike_sd);
                         double bl = tree->getMRCA(mrcas[stochtime[j]])->getBL();
                         if (verbose) {
                             (*loos) << tnum << " ";
@@ -767,7 +767,7 @@ int main(int argc, char * argv[]) {
                                         sr.prepare_stochmap_reverse_all_nodes(excount,excount2);
                                         sr.prepare_ancstate_reverse();
                                         vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]),false);
-                                        double tnum = calculate_vector_double_sum(stoch)/totlike_sd;
+                                        double tnum = sum(stoch)/totlike_sd;
                                         if (verbose) {
                                             (*loos) << tnum << " ";
                                         }
@@ -833,8 +833,8 @@ int main(int argc, char * argv[]) {
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
                     vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]),false);
-                    double tnum = calculate_vector_double_sum(stoch)/totlike_sd;
-                    //(*loos) << calculate_vector_double_sum(stoch)<< " "<<totlike << endl;
+                    double tnum = sum(stoch)/totlike_sd;
+                    //(*loos) << sum(stoch)<< " "<<totlike << endl;
                     if (verbose) {
                         (*loos) << tnum << " " ;
                     }

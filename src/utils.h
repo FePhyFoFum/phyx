@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <string>
+#include <iterator>
 #include "superdouble.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -11,9 +13,12 @@ void tokenize(const string& str, vector<string>& tokens,const string& delimiters
 vector <string> tokenize (string const& input);
 void trim_spaces(string& str);
 bool is_number(const string &);
-double calculate_vector_double_sum(vector<double> & in);
-double calculate_vector_double_mean(vector<double> & in);
-int calculate_vector_int_sum(vector<int> & in);
+
+double sum(vector<double> & in);
+int sum(vector<int> & in);
+double mean(vector<double> & in);
+vector <int> sum (vector <int> & vec1, vector <int> & vec2);
+
 vector<vector<double> > processRateMatrixConfigFile(string filename, int numareas);
 Superdouble calculate_vector_Superdouble_sum(vector<Superdouble> & in);
 int random_int_range(int min, int max);
@@ -22,11 +27,14 @@ void print_error(char * pname, char arg);
 int sum_matrix_col(vector<vector<int> > & matrix,int col);
 int sum_matrix_col_negs(vector<vector<int> > & matrix,int col);
 bool test_logical(vector<int> & matA,vector<int> & matB);
-double sum(vector<double> &inm);
-double sum(vector<int> &inm);
 
 string get_string_vector(vector<string> &sts);
 string get_string_vector(vector<int> &sts);
+
+template<typename T> void print_vector (vector <T> & vec) {
+    std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(std::cout, " "));
+    cout << endl;
+}
 
 unsigned int calc_hamming_dist (string const& s1, string const& s2);
 

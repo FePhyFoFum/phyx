@@ -10,6 +10,7 @@
 #include <math.h>
 #include <string>
 #include <sstream>
+//#include <iterator>
 
 #include <cmath>
 #include <limits>
@@ -94,34 +95,6 @@ bool is_number(const string& s) {
     return !s.empty() && it == s.end();
 }
 
-double calculate_vector_double_sum(vector <double> & in) {
-//    double sum = 0.0;
-//    for (unsigned int i=0; i < in.size(); i++) {
-//        sum += in[i];
-//    }
-//    return sum;
-    return accumulate(in.begin(), in.end(), 0.0);
-}
-
-double calculate_vector_double_mean(vector <double> & in) {
-//    double sum = 0.0;
-//    for (unsigned int i=0; i < in.size(); i++) {
-//        sum += in[i]/in.size();
-//    }
-//    return sum;
-    // one division rather than n.size() divisions. should help with precision too
-    return calculate_vector_double_sum (in) / (double)in.size();
-}
-
-int calculate_vector_int_sum(vector <int> & in) {
-//    int sum = 0;
-//    for (unsigned int i=0; i < in.size(); i++) {
-//        sum += in[i];
-//    }
-//    return sum;
-    return accumulate(in.begin(), in.end(), 0);
-}
-
 vector <vector <double> > processRateMatrixConfigFile(string filename, int numstates) {
     vector <double> cols(numstates,1);
     vector <vector <double> > ratematrix = vector <vector <double> > (numstates,cols);
@@ -181,7 +154,7 @@ int sum_matrix_col(vector <vector <int> > & matrix,int col) {
     return x;
 }
 
-int sum_matrix_col_negs(vector <vector <int> > & matrix,int col) {
+int sum_matrix_col_negs(vector <vector <int> > & matrix, int col) {
     int x=0;
     for (unsigned int i=0; i < matrix.size(); i++) {
         if (matrix[i][col] < 0) {
@@ -191,7 +164,7 @@ int sum_matrix_col_negs(vector <vector <int> > & matrix,int col) {
     return x;
 }
 
-bool test_logical(vector <int> & matA,vector <int> & matB) {
+bool test_logical(vector <int> & matA, vector <int> & matB) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
@@ -212,20 +185,31 @@ bool test_logical(vector <int> & matA,vector <int> & matB) {
     return test;
 }
 
-double sum(vector <double> &inm) {
-    double x=0;
-    for (unsigned int i=0;i<inm.size();i++) {
-        x += inm[i];
-    }
-    return x;
+// simple math on vectors
+double mean (vector <double> & in) {
+    return sum (in) / (double)in.size();
 }
 
-double sum(vector <int> &inm) {
-    double x=0;
-    for (unsigned int i=0; i < inm.size(); i++) {
-        x += inm[i];
+double sum (vector <double> & in) {
+    return accumulate(in.begin(), in.end(), 0.0);
+}
+
+int sum (vector <int> & in) {
+    return accumulate(in.begin(), in.end(), 0);
+}
+
+vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
+    
+    // bail if sequences are of different lengths. should be caught earlier than this
+    if (vec1.size() != vec2.size()) {
+      throw std::invalid_argument(
+          "Vectors must be of equal length"
+      );
     }
-    return x;
+    
+    vector <int> res = vec1;
+    std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<int>());
+    return res;
 }
 
 string get_string_vector(vector <string> &sts) {
@@ -253,14 +237,13 @@ unsigned int calc_hamming_dist (string const& s1, string const& s2) {
     
     // bail if sequences are of different lengths. should be caught earlier than this
     if (s1.size() != s2.size()) {
-      throw std::invalid_argument(
+        throw std::invalid_argument(
           "Hamming distances are only defined for strings of equal length"
       );
     }
 
     return std::inner_product(
-        s1.begin(), s1.end(), s2.begin(), 
-        0, std::plus<unsigned int>(),
+        s1.begin(), s1.end(), s2.begin(), 0, std::plus<unsigned int>(),
         std::not2(std::equal_to<std::string::value_type>())
     );
 }
