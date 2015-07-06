@@ -23,7 +23,7 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-void Update_Tree(string& newname, vector<string>& names, map<int, string>& NumbKeys, 
+void update_tree(string& newname, vector<string>& names, map<int, string>& NumbKeys, 
     int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2) {
 
     //update the tree values, Tree Size is the node it is at
@@ -174,7 +174,7 @@ void UPGMA::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
     while (NumbOfSequences > 1) {
 
         Choose_Small(NumbOfSequences, Matrix, mini1, mini2);
-        Update_Tree(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2);
+        update_tree(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2);
 
     }
     newickstring = newname + ";";

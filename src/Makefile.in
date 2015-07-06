@@ -4,30 +4,21 @@ RM := rm -f
 CXX := @CXX@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
-#gsl
+# gsl:
 #-lgsl -lgslcblas 
-#profiling
-#-pg
+# profiling:
+#-g -pg
 
-OPT_FLAGS = -O3 -fopenmp -std=c++11
+OPT_FLAGS := @OPT_FLAGS@
 ifneq "$(CXX)" "icc"
     OPT_FLAGS += -ffast-math -ftree-vectorize
 endif
-
-# MAC compilation fails with -march=native. check should occur earlier...
-UNAME := $(shell uname)
-ifeq "$(UNAME)" "Linux"
-    OPT_FLAGS += -march=native
-endif
-#profiling 
-#-g -pg
-#-O3 -ffast-math -ftree-vectorize
 
 #######
 # FORTRAN BIT
 ######
 # Don't assume location of gfortran e.g. with HomeBrew on MAC
-FC := $(shell which gfortran)
+FC := @FC@
 FFLAGS	= -O3
 .f.o:;  $(FC) $(FFLAGS) -c $<
 
@@ -159,9 +150,9 @@ RMS_SRC = main_rms.cpp
 RMS_OBJ = main_rms.o
 RMS_DEP = main_rms.d
 
-NJOI_SRC = main_njoi.cpp
-NJOI_OBJ = main_njoi.o
-NJOI_DEP = main_njoi.d
+NJ_SRC = main_nj.cpp
+NJ_OBJ = main_nj.o
+NJ_DEP = main_nj.d
 
 CPP_SRCS += \
 ./utils.cpp \
@@ -184,7 +175,7 @@ CPP_SRCS += \
 ./clsq.cpp \
 ./aatocdn.cpp \
 ./tlate.cpp \
-./njoi.cpp
+./nj.cpp
 
 RATE_SRCS += \
 ./rate_model.cpp \
@@ -216,7 +207,7 @@ CPP_OBJS += \
 ./clsq.o \
 ./aatocdn.o \
 ./tlate.o \
-./njoi.o
+./nj.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -248,7 +239,7 @@ CPP_DEPS += \
 ./clsq.d \
 ./aatocdn.d \
 ./tlate.d \
-./njoi.d
+./nj.d
 
 RATE_DEPS += \
 ./rate_model.d \
@@ -273,10 +264,11 @@ FORT_OBJS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.cpp
-	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
+	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o  "$@" "$<"
+#	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxnjoi
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxnj
 # removed pxlogmanip above as files are missing
 #all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 
@@ -312,9 +304,9 @@ pxupgma:  $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
 	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxnjoi:  $(CPP_OBJS) $(NJOI_OBJ) 
-	@echo 'building pxnjoi'
-	$(CXX) -o "pxnjoi" $(OPT_FLAGS) $(NJOI_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxnj:  $(CPP_OBJS) $(NJ_OBJ) 
+	@echo 'building pxnj'
+	$(CXX) -o "pxnj" $(OPT_FLAGS) $(NJ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'

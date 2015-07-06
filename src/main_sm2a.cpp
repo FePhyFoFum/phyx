@@ -1,6 +1,4 @@
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -39,7 +37,7 @@ void print_help(){
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxsm0 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxsm2a 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

@@ -11,15 +11,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <vector>
-#include <sstream>
-#include <iterator>
-#include <map>
-#include <iterator>
 #include <cstring>
 #include <getopt.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 using namespace std;
 
@@ -101,8 +94,6 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     ostream* poos;
-    //ostream* tempos;
-    //ofstream* temposof;
     ofstream* ofstr;
     istream* pios;
     ifstream* fstr;
@@ -121,14 +112,6 @@ int main(int argc, char * argv[]) {
     } else {
         pios = &cin;
     }
-    /*
-    if (outfileset == true) {
-        temposof = new ofstream("HackyWay.txt");
-        tempos = temposof;
-    } else {
-        tempos = &cout;
-    }
-    */
     
     SequenceCleaner toClean(pios, percent);
     
@@ -146,63 +129,6 @@ int main(int argc, char * argv[]) {
         fstr->close();
         delete pios;
     }
-    
-    
-    /*
-    //read in sequences
-    string retstring;
-    Sequence seq;
-    vector<Sequence> seqs;
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
-        seqs.push_back(seq);
-        (*tempos) << seq.get_fasta();
-    }
-    temposof ->close();
-    if (ft == 2){
-        clsq functions;
-        string fasta;
-        cout << seqf << endl;
-        double MissingAllowed;
-        map<string, string> sequences;
-        map<string, string>::iterator iter;
-        //HardCoded Test
-        //fasta = ("TestFiles/clsq.test");
-        fasta = seqf;
-        MissingAllowed = percent;
-        MissingAllowed = (MissingAllowed / 100.0);
-        sequences = functions.FastaToOneLine(fasta, MissingAllowed);
-        for(iter = sequences.begin(); iter != sequences.end(); iter++){
-            *poos << ">" << iter -> first << "\n" << iter -> second << "\n";
-        }
-        remove("HackyWay.txt");
-        if (outfileset) {
-            ofstr->close();
-            delete poos;
-        }
-    } else {
-        cout <<  ft << endl;
-        clsq functions;
-        string fasta;
-        double MissingAllowed;
-        map<string, string> sequences;
-        map<string, string>::iterator iter;
-        //HardCoded Test
-        //fasta = ("TestFiles/clsq.test");
-        fasta = ("HackyWay.txt");
-        MissingAllowed = percent;
-        MissingAllowed = (MissingAllowed / 100.0);
-        sequences = functions.FastaToOneLine(fasta, MissingAllowed);
-        for(iter = sequences.begin(); iter != sequences.end(); iter++) {
-            *poos << ">" << iter -> first << "\n" << iter -> second << "\n";
-        }
-        remove("HackyWay.txt");
-        if (outfileset) {
-            ofstr->close();
-            delete poos;
-        }
-    }
-    */
 
     return EXIT_SUCCESS;
 }

@@ -1,23 +1,23 @@
 /*
- * NJOI.h
+ * NJ.h
  *
  *  Created on: Jun 12, 2015
  *      Author: joe
  */
 
 //Compile g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp -o test
-#ifndef _NJOI_H_
-#define _NJOI_H_
+#ifndef _NJ_H_
+#define _NJ_H_
 
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <iterator>
+//#include <iterator>
 #include <algorithm>
 #include <map>
-#include <iterator>
+//#include <iterator>
 
 using namespace std;
 class NJOI {
@@ -48,4 +48,4 @@ public:
     string get_newick ();
 };
 
-#endif /* _NJOI_H_ */
+#endif /* _NJ_H_ */

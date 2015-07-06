@@ -3,13 +3,10 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
-#include <vector>
 #include <cstring>
 #include <getopt.h>
 #include <omp.h>

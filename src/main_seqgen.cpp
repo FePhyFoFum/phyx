@@ -10,10 +10,6 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <sstream>
-#include <iterator>
-#include <map>
-#include <iterator>
 #include <cstring>
 #include <getopt.h>
 
@@ -55,10 +51,10 @@ static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"outf", required_argument, NULL, 'o'},
-	{"comp", required_argument, NULL, 'c'},
-	{"length", required_argument, NULL, 'l'},
-	{"Ancestors", required_argument, NULL, 'l'},
-	{"ratemat", required_argument, NULL, 'r'},
+    {"comp", required_argument, NULL, 'c'},
+    {"length", required_argument, NULL, 'l'},
+    {"Ancestors", required_argument, NULL, 'l'},
+    {"ratemat", required_argument, NULL, 'r'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -67,44 +63,44 @@ static struct option const long_options[] =
 int main(){
 
 
-	TreeReader TreeUtil;
-	Tree * tree;
-	SEQGEN SGen;
-	double length;
-	string path, newick, line;
-	int sequence_length = 0;
-	/*
-	 * Default Base Frequencies and Rate Matrix
-	 *
-	 */
-	vector<double> basefreq(4, 0.0);
+    TreeReader TreeUtil;
+    Tree * tree;
+    SEQGEN SGen;
+    double length;
+    string path, newick, line;
+    int sequence_length = 0;
+    /*
+     * Default Base Frequencies and Rate Matrix
+     *
+     */
+    vector<double> basefreq(4, 0.0);
     basefreq[0] = .25;
     basefreq[1] = .25;
     basefreq[2] = .25;
     basefreq[3] = (((1 - basefreq[0]) - basefreq[1]) - basefreq[2]);
     vector< vector<double> > rmatrix(4, vector<double>(4, 1.0));
     for (int i = 0; i < rmatrix.size(); i++){
-    	for (int j = 0; j < rmatrix.size(); j++){
+        for (int j = 0; j < rmatrix.size(); j++){
 
-    		if (i == j){//Fill Diagnol
+            if (i == j){//Fill Diagnol
 
-    			rmatrix[i][j] *= -1.0;
+                rmatrix[i][j] *= -1.0;
 
-    		}else{
-    			rmatrix[i][j] *= 0.33333;
-    		}
-    	}
+            }else{
+                rmatrix[i][j] *= 0.33333;
+            }
+        }
     }
-	ifstream readline;
-	path = ("TestFiles/RAxML_bestTree.drosML");
-	readline.open(path.c_str());
-	if (readline.is_open()){
-		while (getline(readline, line)){
-			newick = line;
-		}
-	}
-	sequence_length = 1001;
-	tree = TreeUtil.readTree(newick);
-	SGen.TakeInTree(rmatrix, tree, sequence_length, basefreq);
+    ifstream readline;
+    path = ("TestFiles/RAxML_bestTree.drosML");
+    readline.open(path.c_str());
+    if (readline.is_open()){
+        while (getline(readline, line)){
+            newick = line;
+        }
+    }
+    sequence_length = 1001;
+    tree = TreeUtil.readTree(newick);
+    SGen.TakeInTree(rmatrix, tree, sequence_length, basefreq);
 
 }

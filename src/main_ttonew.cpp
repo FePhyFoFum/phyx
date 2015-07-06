@@ -1,13 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <cstring>
 #include <getopt.h>
-#include <algorithm>
-#include <set>
 #include <map>
 using namespace std;
 

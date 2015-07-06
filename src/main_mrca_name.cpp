@@ -10,8 +10,6 @@
  * MRCANAME = tip1 tip2 ...
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <vector>

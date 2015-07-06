@@ -12,7 +12,7 @@ class UPGMA {
 private:
 
     map <string, string> sequences;
-    map <string, string>::iterator iter; // not used
+    map <string, string>::iterator iter;
     vector<string> names;
     vector< vector<double> > Matrix;
     void set_name_key ();

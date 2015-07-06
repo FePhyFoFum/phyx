@@ -2,9 +2,7 @@
  Bare-bones sequence alignment resampling. Default is bootstrap, alternative is jackknife.
  Conserved-partition bootstrap now implemented.
 */
-    
-#include <stdio.h>
-#include <stdlib.h>
+
 #include <iostream>
 #include <fstream>
 #include <vector>

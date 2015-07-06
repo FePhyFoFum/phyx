@@ -16,7 +16,7 @@
 
 using namespace std;
 
-#include "njoi.h"
+#include "nj.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"

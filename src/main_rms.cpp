@@ -11,8 +11,6 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <sstream>
-#include <iterator>
 #include <cstring>
 #include <getopt.h>
 #include <algorithm>

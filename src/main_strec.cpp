@@ -3,16 +3,11 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <getopt.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include <set>
-#include <algorithm>
-
 using namespace std;
 
 #include "node.h"

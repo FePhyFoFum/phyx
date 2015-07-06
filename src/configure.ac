@@ -3,10 +3,13 @@
 
 AC_PREREQ([2.69])
 AC_INIT([phyx],[1.0],[eebsmith@umich.edu])
+
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CXX
+
+AC_PROG_FC
 
 AC_CHECK_LIB([m], [fabs])
 
@@ -48,6 +51,36 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([floor pow sqrt])
+
+#############################
+# Platform specific setup
+#############################
+
+OPT_FLAGS="-O3 -fopenmp -std=c++11"
+
+AC_CANONICAL_HOST
+# Check for which host we are on and setup a few things
+# specifically based on the host
+case $host_os in
+  darwin* )
+        # Do something specific for mac
+        ;;
+  linux*)
+        # Do something specific for linux
+        OPT_FLAGS="$OPT_FLAGS -march=native"
+        ;;
+   *BSD*)
+        # Do something specific for BSD
+        ;;
+    *)
+        #Default Case
+        AC_MSG_ERROR([Your platform is not currently supported])
+        ;;
+esac
+
+AC_SUBST(OPT_FLAGS)
+
+#############################
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
