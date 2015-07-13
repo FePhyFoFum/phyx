@@ -12,7 +12,7 @@ bool read_next_seq_char_from_stream (istream & stri, int ftype,
 void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar);
 
 // deprecated
-//int test_seq_filetype (string filen);
+int test_seq_filetype (string filen);
 //bool read_fasta_file (string filen, vector <Sequence>& seqs);
 //bool read_phylip_file (string filen, vector <Sequence>& seqs);
 //bool read_phylip_file_strec (string filen, vector <Sequence>& seqs);

@@ -365,7 +365,7 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
  * # (nexus), num (phylip), > (fasta), @ (fastq)
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
  */
-/*
+
 int test_seq_filetype(string filen) {
     string tline;
     ifstream infile(filen.c_str());
@@ -401,7 +401,7 @@ int test_seq_filetype(string filen) {
     infile.close();
     return ret;
 }
-*/
+
 
 /*
 bool read_phylip_file(string filen, vector <Sequence>& seqs) {

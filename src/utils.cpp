@@ -86,6 +86,10 @@ void trim_spaces (string& str) {
     */
 }
 
+void parse_double_list (string& str, vector <double>& tokens, const string& delimiters) {
+    
+}
+
 bool is_number (const string& s) {
     string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) {

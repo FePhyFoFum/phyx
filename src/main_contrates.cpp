@@ -17,7 +17,7 @@ using namespace std;
 #include "cont_models.h"
 #include "optimize_cont_models_nlopt.h"
 
-void print_help(){
+void print_help() {
     cout << "Continuous character rate estimation with Brownian and OU." << endl;
     cout << "This will take fasta, phylip (and soon nexus) inputs." << endl;
     cout << "Can read from stdin or file." << endl;
@@ -108,7 +108,7 @@ int main(int argc, char * argv[]) {
     if (cfileset == true) {
         cfstr = new ifstream(charf);
         pios = cfstr;
-    }else{
+    } else {
         cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
     }
     string retstring;
@@ -118,18 +118,18 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     Sequence seq;
-    vector<Sequence> seqs;
-    map<string,int> seq_map;
+    vector <Sequence> seqs;
+    map <string,int> seq_map;
     int y = 0;
     int nchars = 0 ;
-    while (read_next_seq_char_from_stream(*pios,ft,retstring,seq)) {
+    while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
         nchars = seq.get_num_cont_char();
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
         y++;
     }
-    if(ft == 2){
+    if(ft == 2) {
         seqs.push_back(seq);
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
@@ -137,26 +137,26 @@ int main(int argc, char * argv[]) {
     //read trees
     TreeReader tr;
     vector<Tree *> trees;
-    while(getline(*poos,retstring)){
+    while (getline(*poos,retstring)) {
         trees.push_back(tr.readTree(retstring));
     }
 
     //conduct analyses for each character
-    for (int c =0;c < nchars;c++){
-        cerr << "character: "<< c << endl;
-        if (analysis == 0){
-            for(int i=0;i<trees[0]->getExternalNodeCount();i++){
+    for (int c =0; c < nchars; c++) {
+        cerr << "character: " << c << endl;
+        if (analysis == 0) {
+            for (int i=0; i < trees[0]->getExternalNodeCount(); i++) {
                 vector<Superdouble> tv (1);
                 tv[0] = seqs[seq_map[trees[0]->getExternalNode(i)->getName()]].get_cont_char(c);
                 trees[0]->getExternalNode(i)->assocDoubleVector("val",tv);
             }
-            for(int i=0;i<trees[0]->getInternalNodeCount();i++){
+            for (int i=0; i < trees[0]->getInternalNodeCount(); i++) {
                 vector<Superdouble> tv (1);
                 tv[0] = 0;
                 trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
             }
             calc_square_change_anc_states(trees[0],0);
-            for(int i=0;i<trees[0]->getInternalNodeCount();i++){
+            for (int i=0; i < trees[0]->getInternalNodeCount(); i++){
                 double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
                 trees[0]->getInternalNode(i)->deleteDoubleVector("val");
                 std::ostringstream s;
@@ -164,8 +164,7 @@ int main(int argc, char * argv[]) {
                 s << "[&value=" << tv << "]";
                 trees[0]->getInternalNode(i)->setName(s.str());
             }
-
-            for(int i=0;i<trees[0]->getExternalNodeCount();i++){
+            for (int i=0; i < trees[0]->getExternalNodeCount(); i++){
                 double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
                 trees[0]->getExternalNode(i)->deleteDoubleVector("val");
                 std::ostringstream s;
@@ -176,25 +175,28 @@ int main(int argc, char * argv[]) {
             cout << "#nexus\nbegin trees;\ntree a =";
             cout << trees[0]->getRoot()->getNewick(true);
             cout << ";\nend;\n" << endl;
-        }else if (analysis == 1){
+        } else if (analysis == 1) {
             mat vcv;
             int t_ind = 0;//TODO: do this over trees
             int c_ind = c;
             calc_vcv(trees[t_ind],vcv);
             int n = trees[t_ind]->getExternalNodeCount();
             rowvec x = rowvec(n);
-            for (int i=0;i<n;i++){
+            for (int i=0; i < n; i++) {
                 x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
             }
-            vector<double> res = optimize_single_rate_bm_nlopt(x, vcv,true);
+            vector<double> res = optimize_single_rate_bm_nlopt(x, vcv, true);
             double aic = (2*2)-(2*(-res[2]));
             double aicc = aic + ((2*2*(2+1))/(n-2-1));
-            cout << c << " BM "<< " state: " << res[0] <<  " rate: " << res[1] << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
+            cout << c << " BM " << " state: " << res[0] <<  " rate: " << res[1]
+                << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
 
             vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
             aic = (2*3)-(2*(-res2[3]));
             aicc = aic + ((2*3*(3+1))/(n-3-1));
-            cout << c << " OU "<< " state: " << res2[0] <<  " rate: " << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3] << " aic: " << aic << " aicc: " << aicc << endl;
+            cout << c << " OU " << " state: " << res2[0] <<  " rate: "
+                << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3]
+                << " aic: " << aic << " aicc: " << aicc << endl;
         }
     }
 

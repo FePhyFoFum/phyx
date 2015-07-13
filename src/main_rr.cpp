@@ -62,7 +62,7 @@ bool reroot(Tree * tree,vector<string> & outgr){
     return success;
 }
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     bool going = true;
     bool fileset = false;
     bool outgroupsset = false;
@@ -72,13 +72,13 @@ int main(int argc, char * argv[]){
     char * treef;
     char * outf;
     char * outgroupsc;
-    while(going){
+    while (going) {
         int oi = -1;
         int c = getopt_long(argc,argv,"g:t:o:hV",long_options,&oi);
-        if (c == -1){
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
@@ -102,16 +102,16 @@ int main(int argc, char * argv[]){
                 exit(0);
         }
     }
-    if(outgroupsset == true){
+    if (outgroupsset == true) {
         vector<string> tokens2;
         string del2(",");
         tokens2.clear();
         tokenize(outgroupsc, tokens2, del2);
-        for(unsigned int j=0;j<tokens2.size();j++){
+        for (unsigned int j=0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             outgroups.push_back(tokens2[j]);
         }
-    }else{
+    } else {
         cerr << "you need to set the outgroup (-g)" << endl;
         exit(0);
     }
@@ -120,53 +120,54 @@ int main(int argc, char * argv[]){
     ostream * poos;
     ifstream * fstr;
     ofstream * ofstr;
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
     
     //read trees 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    if(ft != 0 && ft != 1){
+    if (ft != 0 && ft != 1) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
     going = true;
     bool exists;
-    if(ft == 0){
+    if (ft == 0) {
         vector<string> retstrings;
         retstrings.push_back(retstring);
         map<string,string> translation_table;
         bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table,&retstrings);
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstrings);
         if (retstrings.size() > 0) {
             retstring = retstrings[retstrings.size()-1];
         }
         Tree * tree;
-        while(going){
-            tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
-            if (going == true){
-                exists = reroot(tree,outgroups);
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (going == true) {
+                exists = reroot(tree, outgroups);
                 (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
                 delete tree;
             }
         }
-    }else if(ft == 1){
+    } else if (ft == 1) {
         Tree * tree;
-        while(going){
-            tree = read_next_tree_from_stream_newick(*pios,retstring,&going);
-            if(going == true){
-                exists = reroot(tree,outgroups);
-                if(exists == false) {
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (going == true) {
+                exists = reroot(tree, outgroups);
+                if (exists == false) {
                     cerr << "the outgroup taxa don't exist in this tree " << endl;
                 } else {
                     (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
@@ -175,11 +176,11 @@ int main(int argc, char * argv[]){
             }
         }
     }
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
     }
-    if(outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

@@ -90,6 +90,10 @@ SEQSAMP_SRC = main_seq_sample.cpp
 SEQSAMP_OBJ = main_seq_sample.o
 SEQSAMP_DEP = main_seq_sample.d
 
+SEQGEN_SRC = main_seqgen.cpp
+SEQGEN_OBJ = main_seqgen.o
+SEQGEN_DEP = main_seqgen.d
+
 CONCAT_SRC = main_concat.cpp
 CONCAT_OBJ = main_concat.o
 CONCAT_DEP = main_concat.d
@@ -170,6 +174,7 @@ CPP_SRCS += \
 ./superdouble.cpp \
 ./cont_models.cpp \
 ./seq_sample.cpp \
+./seqgen.cpp \
 ./concat.cpp \
 ./recode.cpp \
 ./clsq.cpp \
@@ -202,6 +207,7 @@ CPP_OBJS += \
 ./superdouble.o \
 ./cont_models.o \
 ./seq_sample.o \
+./seqgen.o \
 ./concat.o \
 ./recode.o \
 ./clsq.o \
@@ -234,6 +240,7 @@ CPP_DEPS += \
 ./superdouble.d \
 ./cont_models.d \
 ./seq_sample.d \
+./seqgen.d \
 ./concat.d \
 ./recode.d \
 ./clsq.d \
@@ -268,7 +275,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o  "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxnj
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxnj pxseqgen
 # removed pxlogmanip above as files are missing
 #all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxseqsamp pxconcat pxlogmanip pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn
 
@@ -359,6 +366,10 @@ pxsw:  $(CPP_OBJS) $(SW_OBJ)
 pxseqsamp:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxseqsamp'
 	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+
+pxseqgen:  $(CPP_OBJS) $(SEQGEN_OBJ)  $(FORT_OBJS)
+	@echo 'building pxseqgen'
+	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 pxconcat:  $(CPP_OBJS) $(CONCAT_OBJ) 
 	@echo 'building pxconcat'

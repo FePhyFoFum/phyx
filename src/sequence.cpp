@@ -102,7 +102,6 @@ int Sequence::get_num_multistate_char() {
     return multistate_chars.size();
 }
 
-
 void Sequence::set_sequence(string _seq) {
     seq = _seq;
     length = seq.size();

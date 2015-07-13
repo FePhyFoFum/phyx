@@ -5,40 +5,55 @@
  *      Author: joe
  */
 
-#ifndef SEQGEN_H_
-#define SEQGEN_H_
+#ifndef _SEQGEN_H_
+#define _SEQGEN_H_
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <iterator>
-#include <algorithm>
-#include <map>
-#include <iterator>
+//#include <iostream>
+//#include <string>
+//#include <fstream>
+//#include <vector>
+//#include <sstream>
+//#include <iterator>
+//#include <algorithm>
+//#include <map>
+//#include <iterator>
 
-#include "seqgen.h"
-#include "sequence.h"
-#include "seq_reader.h"
-#include "utils.h"
-#include "node.h"
+//#include "seqgen.h"
+//#include "sequence.h"
+//#include "seq_reader.h"
+//#include "utils.h"
+//#include "node.h"
 #include "tree.h"
-#include "tree_reader.h"
+//#include "tree_reader.h"
 
 
 class SEQGEN {
 
 private:
-
-    vector<Node *> nodes;
+    // constant values
+    int seqlen;
+    vector <double> basefreqs;
+    vector < vector <double> > rmatrix;
+    Tree * tree;
+    int nreps;
+    
+    void EvoSim(Tree * tree, string Ancestor);
+    vector < vector <double> > CalQ();
+    vector < vector <double> > PCalq(vector < vector <double> > QMatrix, float br);
+    void SeqSim(string& Ancestor, vector < vector <double> >& Matrix);
+    void randDNA (string& Ancestor);
+    void TakeInTree();
+//    vector<Node *> nodes; // unused
 
 
 public:
-	SEQGEN();
-	void TakeInTree(vector< vector<double> >&, Tree *, int, vector<double>&);
-	Node * PreOrder(int);
-	virtual ~SEQGEN();
+    SEQGEN();
+    SEQGEN(int const &seqlenth, vector <double> const& basefreq,
+        vector < vector<double> >& rmatrix, Tree * tree, int const& nreps);
+    //Node * PreOrder(int);
+    
+    
+    //virtual ~SEQGEN();
 };
 
-#endif /* SEQGEN_H_ */
+#endif /* _SEQGEN_H_ */

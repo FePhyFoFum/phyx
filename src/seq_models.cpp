@@ -52,7 +52,7 @@ void read_scoring_matrix_from_lines(vector<string> & lines, map<char,map<char,in
     bool first = true;
     for (unsigned int i=0; i < lines.size(); i++){
         string line = lines[i];
-        if (line[0] == '#'){
+        if (line[0] == '#') {
             continue;
         }else{
             vector<string> tokens;
@@ -61,17 +61,17 @@ void read_scoring_matrix_from_lines(vector<string> & lines, map<char,map<char,in
             for(unsigned int i=0; i < tokens.size(); i++){
                 trim_spaces(tokens[i]);
             }
-            if (first == true){
+            if (first == true) {
                 first = false;
-                for (unsigned int i=0; i < tokens.size(); i++){
+                for (unsigned int i=0; i < tokens.size(); i++) {
                     order.push_back(tokens[i][0]);
                 }
-                for (unsigned int j=0; j < order.size(); j++){
+                for (unsigned int j=0; j < order.size(); j++) {
                     sc_mat[order[j]] = map<char,int>();
                 }
                 continue;
             }
-            for (unsigned int j=0; j < order.size(); j++){
+            for (unsigned int j=0; j < order.size(); j++) {
                 sc_mat[tokens[0][0]][order[j]] = atoi(tokens[j+1].c_str()); //#changed from int to float
             }
         }

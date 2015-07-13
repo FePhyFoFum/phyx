@@ -286,14 +286,14 @@ int test_tree_filetype(string filen){
  * #nexus, ( newick
  * returns in the order above, 0 ,1, 666 --- no filetype recognized
  */
-int test_tree_filetype_stream(istream & stri, string & retstring){
+int test_tree_filetype_stream(istream & stri, string & retstring) {
     if (!getline(stri, retstring)){
         cout << "ERROR: end of file too soon" << endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
-    if (retstring[0] == '#'){
+    if (retstring[0] == '#') {
         ret = 0;
-    } else if (retstring[0] == '('){
+    } else if (retstring[0] == '(') {
         ret = 1;
     }
     return ret;
@@ -303,14 +303,15 @@ int test_tree_filetype_stream(istream & stri, string & retstring){
  * this will look for the translation table i it exists
  * 
  */
-bool get_nexus_translation_table(istream & stri, map<string, string> * trans, vector<string> * retstrings){
+bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
+    vector<string> * retstrings) {
     string line1;
     bool exists = false;
     bool going = true;
     bool begintrees = false;
     bool tgoing = false;
     while (going){
-	if (!getline(stri,line1)){
+	if (!getline(stri,line1)) {
 	    break;
 	}
 	(*retstrings).push_back(line1);
@@ -357,27 +358,28 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans, ve
  * should add some error correction code here
  */
 
-Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool ttexists, map<string,string> * trans, bool * going){
+Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
+    bool ttexists, map<string,string> * trans, bool * going) {
      string tline;
-     if(!getline(stri,tline)){
+     if (!getline(stri,tline)) {
 	 (*going) = false;
 	 return NULL;
      }
      string uc(tline);
      transform(uc.begin(),uc.end(),uc.begin(),::toupper);
-     if(uc.find("END;")!=string::npos){
+     if (uc.find("END;")!=string::npos) {
 	 (*going) = false;
 	 return NULL;
      }
      vector<string> tokens;
      string del(" \t");
-     tokenize(tline,tokens,del);
+     tokenize(tline, tokens, del);
      string tstring(tokens[tokens.size()-1]);
      Tree * tree;
      //cout << tstring << endl;
      tree = read_tree_string(tstring);
-     if(ttexists){
-	 for(int i=0;i<tree->getExternalNodeCount();i++){
+     if (ttexists) {
+	 for (int i=0; i < tree->getExternalNodeCount(); i++) {
 	     tree->getExternalNode(i)->setName((*trans)[tree->getExternalNode(i)->getName()]);
 	 }
      }
@@ -388,16 +390,29 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool
  * this is simple as each line is a tree
  *
  */
-Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going){
+Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going) {
     string tline;
-    if(retstring.size() > 0){
+    if (retstring.size() > 0) {
 	tline = retstring;
 	retstring = "";
-    }else if(!getline(stri,tline)){
+    } else if (!getline(stri,tline)) {
 	(*going) = false;
 	return NULL;
     }
     Tree * tree;
     tree = read_tree_string(tline);
+    return tree;
+}
+
+// 0 is Nexus, 1 is newick
+Tree * read_next_tree_from_stream (int const& ft, istream & stri,
+    string & retstring, bool * going) {
+    Tree * tree;
+    if (ft == 0) {
+        
+    } else if (ft == 1) {
+        tree = read_next_tree_from_stream_newick(stri, retstring, going);
+    }
+    
     return tree;
 }

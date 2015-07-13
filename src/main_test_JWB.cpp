@@ -12,6 +12,7 @@ using namespace std;
 #include "tree_reader.h"
 #include "tree.h"
 #include "tree_utils.h"
+#include "seq_reader.h"
 
 bool verbose = false;
 
