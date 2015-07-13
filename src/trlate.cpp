@@ -8,11 +8,11 @@
 #include "pxtrlate.h"
 
 pxtrlate::pxtrlate() {
-	// TODO Auto-generated constructor stub
+    // TODO Auto-generated constructor stub
 
 }
 
 pxtrlate::~pxtrlate() {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stub
 }
 

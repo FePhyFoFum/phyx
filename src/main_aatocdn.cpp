@@ -10,14 +10,13 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <vector>
-#include <sstream>
+//#include <vector>
+//#include <sstream>
 #include <iterator>
 #include <map>
 #include <iterator>
 #include <cstring>
 #include <getopt.h>
-
 
 using namespace std;
 
@@ -33,8 +32,8 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxaatocdn [OPTION]... " << endl;
     cout << endl;
-    cout << " -a, --aaseqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -n, --nucseqf=FILE     input sequence file, stdin otherwise" << endl;
+    cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
+    cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
@@ -48,7 +47,7 @@ string versionline("pxaatocodon 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv
 static struct option const long_options[] =
 {
     {"aaseqf", required_argument, NULL, 'a'},
-	{"nucseqf", required_argument, NULL, 'n'},
+    {"nucseqf", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -80,9 +79,9 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'n':
-            	nucfile = true;
+                nucfile = true;
                 nucseqf = strdup(optarg);
-            	break;
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -104,17 +103,18 @@ int main(int argc, char * argv[]) {
     istream* pios;
     ifstream* nucfstr;
     istream* nucpios;
-    if(fileset == true){
+    
+    if (fileset == true) {
         fstr = new ifstream(aaseqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(fileset == true){
-    	nucfstr = new ifstream(nucseqf);
-    	nucpios = nucfstr;
-    }else{
-    	nucpios = &cin;
+    if (fileset == true) {
+        nucfstr = new ifstream(nucseqf);
+        nucpios = nucfstr;
+    } else {
+        nucpios = &cin;
     }
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -122,30 +122,32 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
+    
     Sequence aa_seq, nuc_seq;
     string retstring;
     map<string, string> aa_sequences, nuc_sequences, CodonSequences;
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,aa_seq)){
+    
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    while(read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
         aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
     }
     //fasta has a trailing one
-    if (ft == 2){
-    	aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
+    if (ft == 2) {
+        aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
     }
-    while(read_next_seq_from_stream(*nucpios,ft,retstring,nuc_seq)){
-    	nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    while(read_next_seq_from_stream(*nucpios, ft, retstring, nuc_seq)) {
+        nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
     }
     //fasta has a trailing one
-    if (ft == 2){
-    	nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    if (ft == 2) {
+        nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
     }
 
-	AAtoCDN functions;
-	map<string, string>::iterator iter;
-	CodonSequences = functions.ChangeToCodon(aa_sequences, nuc_sequences);
-    for (iter = CodonSequences.begin(); iter != CodonSequences.end(); iter++){
-    	*poos << ">" << iter -> first << "\n" << iter -> second << endl;
+    AAtoCDN functions;
+    map<string, string>::iterator iter;
+    CodonSequences = functions.ChangeToCodon(aa_sequences, nuc_sequences);
+    for (iter = CodonSequences.begin(); iter != CodonSequences.end(); iter++) {
+        *poos << ">" << iter -> first << "\n" << iter -> second << endl;
     }
     if (outfileset) {
         ofstr->close();

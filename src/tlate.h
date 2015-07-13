@@ -5,16 +5,15 @@
  *      Author: joe
  */
 
-#ifndef TLATE_H_
-#define TLATE_H_
-
+#ifndef _TLATE_H_
+#define _TLATE_H_
 
 class TLATE {
 
 public:
-	TLATE();
-	string Translate(string&);
-	//virtual ~tlate();
+    TLATE();
+    string Translate(string& dna);
+    //virtual ~tlate();
 };
 
-#endif /* TLATE_H_ */
+#endif /* _TLATE_H_ */

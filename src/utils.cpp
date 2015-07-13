@@ -10,7 +10,6 @@
 #include <math.h>
 #include <string>
 #include <sstream>
-//#include <iterator>
 
 #include <cmath>
 #include <limits>
@@ -34,7 +33,7 @@ double EPSILON = 1e-7;
 #include "utils.h"
 #include "superdouble.h"
 
-void tokenize(const string& str, vector <string>& tokens, const string& delimiters) {
+void tokenize (const string& str, vector <string>& tokens, const string& delimiters) {
     // Skip delimiters at beginning.
     string::size_type lastPos = str.find_first_not_of(delimiters, 0);
     // Find first "non-delimiter".
@@ -61,13 +60,13 @@ vector <string> tokenize (string const& input) {
     return tokens;
 }
 
-void trim_spaces(string& str) {
+void trim_spaces (string& str) {
     // Trim Both leading and trailing spaces
     size_t startpos = str.find_first_not_of(" \t\r\n"); // Find the first character position after excluding leading blank spaces
     size_t endpos = str.find_last_not_of(" \t\r\n"); // Find the first character position from reverse af
 
     // if all spaces or empty return an empty string
-    if ((string::npos == startpos) || ( string::npos == endpos)) {
+    if (string::npos == startpos || string::npos == endpos) {
         str = "";
     } else {
         str = str.substr(startpos, endpos - startpos + 1);
@@ -87,7 +86,7 @@ void trim_spaces(string& str) {
     */
 }
 
-bool is_number(const string& s) {
+bool is_number (const string& s) {
     string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) {
         ++it;
@@ -95,7 +94,7 @@ bool is_number(const string& s) {
     return !s.empty() && it == s.end();
 }
 
-vector <vector <double> > processRateMatrixConfigFile(string filename, int numstates) {
+vector <vector <double> > processRateMatrixConfigFile (string filename, int numstates) {
     vector <double> cols(numstates,1);
     vector <vector <double> > ratematrix = vector <vector <double> > (numstates,cols);
     //read file
@@ -125,7 +124,7 @@ vector <vector <double> > processRateMatrixConfigFile(string filename, int numst
     return ratematrix;
 }
 
-Superdouble calculate_vector_Superdouble_sum(vector <Superdouble> & in) {
+Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
     Superdouble sum = 0;
     for (unsigned int i=0; i < in.size(); i++) {
         sum += in[i];
@@ -135,18 +134,17 @@ Superdouble calculate_vector_Superdouble_sum(vector <Superdouble> & in) {
     return sum;
 }
 
-int random_int_range(int min, int max) {
+int random_int_range (int min, int max) {
     return min + (rand() % (int)(max - min + 1));
 }
 
 // arg below is always '?'. besides, getopt prints errors to sterr
-void print_error(char * pname, char arg) {
+void print_error (char * pname, char arg) {
     // cout << pname <<": invalid option -- '" << arg << "'" << endl;
     cout << "Try `" << pname << " --help' for more information." << endl;
 }
 
-
-int sum_matrix_col(vector <vector <int> > & matrix,int col) {
+int sum_matrix_col (vector <vector <int> > & matrix,int col) {
     int x=0;
     for (unsigned int i=0; i < matrix.size(); i++) {
         x += matrix[i][col];
@@ -154,7 +152,7 @@ int sum_matrix_col(vector <vector <int> > & matrix,int col) {
     return x;
 }
 
-int sum_matrix_col_negs(vector <vector <int> > & matrix, int col) {
+int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
     int x=0;
     for (unsigned int i=0; i < matrix.size(); i++) {
         if (matrix[i][col] < 0) {
@@ -164,7 +162,7 @@ int sum_matrix_col_negs(vector <vector <int> > & matrix, int col) {
     return x;
 }
 
-bool test_logical(vector <int> & matA, vector <int> & matB) {
+bool test_logical (vector <int> & matA, vector <int> & matB) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
@@ -212,7 +210,7 @@ vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
     return res;
 }
 
-string get_string_vector(vector <string> &sts) {
+string get_string_vector (vector <string> &sts) {
     string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
         rets += sts[i]+ " ";
@@ -220,13 +218,102 @@ string get_string_vector(vector <string> &sts) {
     return rets;
 }
 
-string get_string_vector(vector <int> & sts) {
+string get_string_vector (vector <int> & sts) {
     string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
         rets += to_string(sts[i]) + " ";
     }
     return rets;
 }
+
+// replace all occurrences of origSubStr to replSubStr
+void replace_all (string& str, string const& origSubStr, string const& replSubStr) {
+    if (origSubStr.empty()) {
+        return;
+    }
+    size_t start_pos = 0;
+    while ((start_pos = str.find(origSubStr, start_pos)) != std::string::npos) {
+        str.replace(start_pos, origSubStr.length(), replSubStr);
+        start_pos += replSubStr.length();
+    }
+}
+
+/*------------------------------------------------------------------------/
+
+ Phun with phormats!
+ Both Nexus and newick have rules regarding punctuation and the treatment
+ of whitespace characters.
+ Of course they are not equivalent (that would be too easy)...
+ 
+ Newick rules are given here: http://evolution.genetics.washington.edu/phylip/newick_doc.html
+ Unquoted labels may not contain blanks, parentheses, square brackets,
+ single_quotes, colons, semicolons, or commas.
+ 
+ Nexus rules are given in Maddison et al. 1997. Syst. Biol. 46 (4): 590-621 doi: 10.1093/sysbio/46.4.590
+ Nexus punctuation characters: () [] {} / \, ; := * ' "` + - <>
+ 
+ Commonalities:
+ 1) if a token contains punctuation it needs to be surrounded by single quotes
+ 2) single quotes within a token are replaced by doubled single quotes
+    e.g. the token 'John's' should be represented as 'John''s'
+ 3) underscores in unquoted tokens should be treated as blank spaces ('dark characters')
+    e.g. B._zephyrum is equivalent to 'B. zephyrum'
+ 
+ Where they diverge (punctuation in Nexus but not newick):  
+ 
+/-----------------------------------------------------------------------*/
+const string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>";
+const string newick_punct = "()[]\':;,";
+
+// get a taxon label that is newick-compliant
+string get_valid_newick_label (string const& inLabel) {
+    bool needQuotes = false;
+    string outLabel = inLabel;
+    
+    // if surrounded by single quotes already, assume cool
+    if (outLabel[0] == '\'' && outLabel[outLabel.size() - 1] == '\'') {
+        return outLabel;
+    }
+    if (outLabel.find_first_of(newick_punct) != std::string::npos) {
+        needQuotes = true;
+        quotify_label(outLabel);
+    } else if (outLabel.find_first_of(" ") != std::string::npos) {
+        std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
+    }
+    return outLabel;
+}
+
+// get a taxon label that is Nexus-compliant
+string get_valid_nexus_label (string const& inLabel) {
+    bool needQuotes = false;
+    string outLabel = inLabel;
+    
+    // if surrounded by single quotes already, assume cool
+    if (outLabel[0] == '\'' && outLabel[outLabel.size() - 1] == '\'') {
+        return outLabel;
+    }
+    if (outLabel.find_first_of(nexus_punct) != std::string::npos) {
+        needQuotes = true;
+        quotify_label(outLabel);
+    } else if (outLabel.find_first_of(" ") != std::string::npos) {
+        std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
+    }
+    return outLabel;
+}
+
+// got an invalid token. replace internal quotes and underscores, surround by quotes
+void quotify_label (string & token) {
+    // replace internal quotes
+    replace_all(token, "'", "''");
+    
+    // replace underscores
+    std::replace(token.begin(), token.end(), '_', ' ');
+    
+    // add outer quotes
+    token = "'" + token + "'";
+}
+
+//------------------------------------------------------------------------//
 
 // Hamming (edit) distance
 unsigned int calc_hamming_dist (string const& s1, string const& s2) {
@@ -248,7 +335,7 @@ unsigned int calc_hamming_dist (string const& s1, string const& s2) {
     );
 }
 
-double logn(double x, double base) {
+double logn (double x, double base) {
     return log10(x)/log10(base);
 }
 

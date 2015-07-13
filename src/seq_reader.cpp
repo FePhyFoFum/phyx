@@ -1,5 +1,4 @@
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -13,47 +12,6 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
-
-/*
- * tests the filetype by checking the first string and guessing based on
- * # (nexus), num (phylip), > (fasta), @ (fastq)
- * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
- */
-int test_seq_filetype(string filen){
-    string tline;
-    ifstream infile(filen.c_str());
-    int ret = 666; // if you get 666, there is no filetype set
-    while (getline(infile,tline)){
-        if (tline.size() < 1){
-            continue;
-        }
-        if (tline[0] == '#'){
-            ret = 0;
-            break;
-        }
-        vector<string> tokens;
-        string del(" \t");
-        tokenize(tline,tokens,del);
-        if (tokens.size() > 1){
-            trim_spaces(tokens[0]);
-            if (is_number(tokens[0])){
-                ret = 1;
-                break;
-            }
-        }
-        if (tline[0] == '>'){
-            ret = 2;
-            break;
-        }
-        if (tline[0] == '@'){
-            ret = 3;
-            break;
-        }
-        break;
-    }
-    infile.close();
-    return ret;
-}
 
 /*
  * tests the filetype by checking the first string and guessing based on
@@ -164,7 +122,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         for (unsigned int i=0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
-        if (tokens[0].size() == 0){
+        if (tokens[0].size() == 0) {
             return false;
         }
         seq.set_id(tokens[0]);
@@ -183,48 +141,50 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             seq.set_sequence(tse);
         }
         return true;
-    }else if (ftype == 2){ // fasta
+    } else if (ftype == 2) { // fasta
         bool first = true;
         bool going = true;
         string curseq = "";
-        while (going){
-            if (first == true && retstring.size() > 0){
+        while (going) {
+            if (first == true && retstring.size() > 0) {
                 tline = retstring;
                 retstring = "";
-            }else{
-                if (!getline(stri, tline)){
+            } else{
+                if (!getline(stri, tline)) {
                     seq.set_sequence(curseq);
                     return false;
                 }
             }
-            if (tline.substr(0,1) == ">"){
-                if (first == true){
+            if (tline.substr(0,1) == ">") {
+                if (first == true) {
                     string id_ = tline.substr(1,tline.size()-1);
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
-                }else{
+                } else{
                     seq.set_sequence(curseq);
                     retstring = tline;
                     return true;
                 }
-            }else{
+            } else{
                 curseq.append(tline);
             }
         }
-    }else if (ftype == 3){//fastq assumes a 33 offset for now
+    } else if (ftype == 3) {//fastq assumes a 33 offset for now
         string line1,line2,line3,line4;
-        if (retstring.size() > 0){
+        if (retstring.size() > 0) {
             line1 = retstring;
             retstring = "";
-        }else if (!getline(stri,line1)){
+        } else if (!getline(stri,line1)) {
             return false;
         }
-        if (!getline(stri,line2)){
+        if (!getline(stri,line2)) {
             return false;
-        }if (!getline(stri,line3)){
+        }
+        if (!getline(stri,line3)) {
             return false;
-        }if (!getline(stri,line4)){
+        }
+        if (!getline(stri,line4)) {
             return false;
         }
         seq.set_id(line1.substr(1,line1.size()-1));
@@ -241,23 +201,23 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
  * TODO: need to add csv
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
  */
-int test_char_filetype_stream(istream & stri,string & retstring){
-    if (!getline(stri, retstring)){
+int test_char_filetype_stream(istream & stri, string & retstring) {
+    if (!getline(stri, retstring)) {
         cout << "ERROR: end of file too soon" << endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
     //NEXUS
-    if (retstring[0] == '#'){
+    if (retstring[0] == '#') {
         ret = 0;
-    }else if (retstring[0] == '>'){
+    } else if (retstring[0] == '>') {
         ret = 2;
-    }else{    
+    } else{    
         vector<string> tokens;
         string del(" \t");
         tokenize(retstring,tokens,del);
-        if (tokens.size() > 1){
+        if (tokens.size() > 1) {
             trim_spaces(tokens[0]);
-            if (is_number(tokens[0])){
+            if (is_number(tokens[0])) {
                 ret = 1;
             }
         }
@@ -270,230 +230,100 @@ int test_char_filetype_stream(istream & stri,string & retstring){
  * TODO: nexus 
  * TODO: decide if this should just be merged with the above reader
  */
-bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq){
+bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq) {
     string tline;
-    if (ftype == 1){ // phylip
+    if (ftype == 1) { // phylip
         vector<string> tokens;
         tokens.clear();
         string del(" \t");
         string tline;
         //check to see if we are at the beginning of the file
-        if (retstring.size() > 0){
+        if (retstring.size() > 0) {
             tokenize(retstring,tokens,del);
-            if (tokens.size() > 1){
+            if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
-                if (is_number(tokens[0])){
+                if (is_number(tokens[0])) {
                     getline(stri,tline);
-                }else{
+                } else{
                     tline = retstring;
                 }
             }
             retstring = "";
         }
-        if (tline.size() == 0){
-            if (!getline(stri,tline)){
+        if (tline.size() == 0) {
+            if (!getline(stri,tline)) {
                 return false;
             }
         }
         tokens.clear();
         tokenize(tline,tokens,del);
-        for(unsigned int i=0; i < tokens.size(); i++){
+        for(unsigned int i=0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
-        if (tokens[0].size() == 0){
+        if (tokens[0].size() == 0) {
             return false;
         }
         seq.set_id(tokens[0]);
         //split the tokens by spaces
-        for (unsigned int i=1 ; i < tokens.size(); i++){
+        for (unsigned int i=1 ; i < tokens.size(); i++) {
             seq.add_cont_char((double)atof(tokens[i].c_str()));
         }
         return true;
-    }else if (ftype == 2){ // fasta
+    } else if (ftype == 2) { // fasta
         bool first = true;
         bool going = true;
         vector<string> tokens;
         string del(" \t");
         string tline;
         string curseq = "";
-        while (going){
-            if (first == true && retstring.size() > 0){
+        while (going) {
+            if (first == true && retstring.size() > 0) {
                 tline = retstring;
                 retstring = "";
-            }else{
-                if (!getline(stri, tline)){
+            } else{
+                if (!getline(stri, tline)) {
                     tokens.clear();
                     tokenize(curseq,tokens,del);
-                    for(unsigned int i=0; i < tokens.size(); i++){
+                    for(unsigned int i=0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
-                    if (tokens[0].size() == 0){
+                    if (tokens[0].size() == 0) {
                         return false;
                     }
-                    for (unsigned int i=0 ; i < tokens.size(); i++){
+                    for (unsigned int i=0 ; i < tokens.size(); i++) {
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     return false;
                 }
             }
-            if (tline.substr(0,1) == ">"){
-                if (first == true){
+            if (tline.substr(0,1) == ">") {
+                if (first == true) {
                     string id_ = tline.substr(1,tline.size()-1);
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
-                }else{
+                } else{
                     //split the tokens by spaces
                     tokens.clear();
                     tokenize(curseq,tokens,del);
-                    for(unsigned int i=0; i < tokens.size(); i++){
+                    for(unsigned int i=0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
-                    if (tokens[0].size() == 0){
+                    if (tokens[0].size() == 0) {
                         return false;
                     }
-                    for (unsigned int i =0 ; i < tokens.size(); i++){
+                    for (unsigned int i =0 ; i < tokens.size(); i++) {
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     retstring = tline;
                     return true;
                 }
-            }else{
+            } else{
                 curseq.append(tline);
             }
         }
     }
     return false;
-}
-
-
-//return false if not a fasta
-bool read_fasta_file(string filen,vector<Sequence>& seqs) {
-    string tline;
-    ifstream infile(filen.c_str());
-    bool first = true;
-    Sequence cur;
-    string curseq;
-    while (getline(infile, tline)){
-        trim_spaces(tline);
-        if (tline.size() < 1){
-            continue;
-        }
-        if (tline.substr(0,1) == ">"){
-            string id_ = tline.substr(1,tline.size()-1);
-            if (first == true){
-                first = false;
-                cur = Sequence();
-                cur.set_id(id_);
-                curseq = "";
-            }else{
-                cur.set_sequence(curseq);
-                seqs.push_back(cur);
-                cur = Sequence();
-                cur.set_id(id_);
-                curseq = "";
-            }
-        }else{
-            curseq += tline;
-        }
-    }
-    cur.set_sequence(curseq);
-    seqs.push_back(cur);
-    infile.close();
-    return true;
-}
-
-
-bool read_phylip_file_strec(string filen,vector<Sequence>& seqs){
-    string tline;
-    ifstream infile(filen.c_str());
-    bool first = true;
-    while (getline(infile, tline)){
-        vector<string> searchtokens;
-        tokenize(tline, searchtokens, "\t");
-        for(unsigned int j=0;j<searchtokens.size();j++){
-            trim_spaces(searchtokens[j]);
-        }
-        if (first == true){ //reading past the first line
-            first = false;
-            try{
-                //int nseqs = atoi(searchtokens[0].c_str());
-                //int nsites = atoi(searchtokens[1].c_str());
-            }catch( char * str ){
-                return false; //not a phylip
-            }
-            continue;
-        }
-        if (searchtokens.size() < 2) {
-            continue;
-        }
-cout << searchtokens[0] << " " << searchtokens[1] << endl;
-        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
-        seqs.push_back(a);
-    }
-    infile.close();
-    return true;
-}
-
-bool read_phylip_file(string filen,vector<Sequence>& seqs){
-    string tline;
-    ifstream infile(filen.c_str());
-    bool first = true;
-    while (getline(infile, tline)){
-        vector<string> searchtokens;
-        tokenize(tline, searchtokens, "\t    ");
-        for(unsigned int j=0;j<searchtokens.size();j++){
-            trim_spaces(searchtokens[j]);
-        }
-        if (first == true){ //reading past the first line
-            first = false;
-            try{
-                //int nseqs = atoi(searchtokens[0].c_str());
-                //int nsites = atoi(searchtokens[1].c_str());
-            }catch( char * str ){
-                return false; //not a phylip
-            }
-            continue;
-        }
-        if (searchtokens.size() < 2) {
-            continue;
-        }
-        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
-        seqs.push_back(a);
-    }
-    infile.close();
-    return true;
-}
-
-//TODO: INCOMPLETE
-bool read_nexus_seqs_file(string filen, vector<Sequence>& seqs) {
-    string tline;
-    ifstream infile(filen.c_str());
-    bool first = true;
-    while (getline(infile, tline)) {
-        vector <string> searchtokens;
-        tokenize(tline, searchtokens, "    ");
-        for (unsigned int j=0; j < searchtokens.size(); j++) {
-            trim_spaces(searchtokens[j]);
-        }
-        if (first == true) { //reading past the first line
-            first = false;
-            try {
-                //int nseqs = atoi(searchtokens[0].c_str());
-                //int nsites = atoi(searchtokens[1].c_str());
-            } catch( char * str ) {
-                return false; //not a phylip
-            }
-            continue;
-        }
-        if (searchtokens.size() < 2) {
-            continue;
-        }
-        Sequence a = Sequence(searchtokens[0], searchtokens[1], true);
-        seqs.push_back(a);
-    }
-    infile.close();
-    return true;
 }
 
 void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
@@ -522,3 +352,190 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
     }
     infile.close();
 }
+
+
+// **************************** //
+// *** Deprecated functions *** //
+// **************************** //
+
+// Leftover file-centric functions from before working with streams
+
+/*
+ * tests the filetype by checking the first string and guessing based on
+ * # (nexus), num (phylip), > (fasta), @ (fastq)
+ * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
+ */
+/*
+int test_seq_filetype(string filen) {
+    string tline;
+    ifstream infile(filen.c_str());
+    int ret = 666; // if you get 666, there is no filetype set
+    while (getline(infile,tline)) {
+        if (tline.size() < 1) {
+            continue;
+        }
+        if (tline[0] == '#') {
+            ret = 0;
+            break;
+        }
+        vector<string> tokens;
+        string del(" \t");
+        tokenize(tline,tokens,del);
+        if (tokens.size() > 1) {
+            trim_spaces(tokens[0]);
+            if (is_number(tokens[0])) {
+                ret = 1;
+                break;
+            }
+        }
+        if (tline[0] == '>') {
+            ret = 2;
+            break;
+        }
+        if (tline[0] == '@') {
+            ret = 3;
+            break;
+        }
+        break;
+    }
+    infile.close();
+    return ret;
+}
+*/
+
+/*
+bool read_phylip_file(string filen, vector <Sequence>& seqs) {
+    string tline;
+    ifstream infile(filen.c_str());
+    bool first = true;
+    while (getline(infile, tline)) {
+        vector<string> searchtokens;
+        tokenize(tline, searchtokens, "\t    ");
+        for(unsigned int j=0;j<searchtokens.size();j++) {
+            trim_spaces(searchtokens[j]);
+        }
+        if (first == true) { //reading past the first line
+            first = false;
+            try{
+                //int nseqs = atoi(searchtokens[0].c_str());
+                //int nsites = atoi(searchtokens[1].c_str());
+            }catch( char * str ) {
+                return false; //not a phylip
+            }
+            continue;
+        }
+        if (searchtokens.size() < 2) {
+            continue;
+        }
+        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
+        seqs.push_back(a);
+    }
+    infile.close();
+    return true;
+}
+*/
+
+// return false if not a fasta
+/*
+bool read_fasta_file(string filen, vector <Sequence>& seqs) {
+    string tline;
+    ifstream infile(filen.c_str());
+    bool first = true;
+    Sequence cur;
+    string curseq;
+    while (getline(infile, tline)) {
+        trim_spaces(tline);
+        if (tline.size() < 1) {
+            continue;
+        }
+        if (tline.substr(0,1) == ">") {
+            string id_ = tline.substr(1,tline.size()-1);
+            if (first == true) {
+                first = false;
+                cur = Sequence();
+                cur.set_id(id_);
+                curseq = "";
+            } else{
+                cur.set_sequence(curseq);
+                seqs.push_back(cur);
+                cur = Sequence();
+                cur.set_id(id_);
+                curseq = "";
+            }
+        } else{
+            curseq += tline;
+        }
+    }
+    cur.set_sequence(curseq);
+    seqs.push_back(cur);
+    infile.close();
+    return true;
+}
+*/
+
+/*
+bool read_phylip_file_strec(string filen, vector <Sequence>& seqs) {
+    string tline;
+    ifstream infile(filen.c_str());
+    bool first = true;
+    while (getline(infile, tline)) {
+        vector<string> searchtokens;
+        tokenize(tline, searchtokens, "\t");
+        for(unsigned int j=0;j<searchtokens.size();j++) {
+            trim_spaces(searchtokens[j]);
+        }
+        if (first == true) { //reading past the first line
+            first = false;
+            try{
+                //int nseqs = atoi(searchtokens[0].c_str());
+                //int nsites = atoi(searchtokens[1].c_str());
+            }catch( char * str ) {
+                return false; //not a phylip
+            }
+            continue;
+        }
+        if (searchtokens.size() < 2) {
+            continue;
+        }
+        cout << searchtokens[0] << " " << searchtokens[1] << endl;
+        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
+        seqs.push_back(a);
+    }
+    infile.close();
+    return true;
+}
+*/
+
+//TODO: INCOMPLETE
+/*
+bool read_nexus_seqs_file(string filen, vector <Sequence>& seqs) {
+    string tline;
+    ifstream infile(filen.c_str());
+    bool first = true;
+    while (getline(infile, tline)) {
+        vector <string> searchtokens;
+        tokenize(tline, searchtokens, "    ");
+        for (unsigned int j=0; j < searchtokens.size(); j++) {
+            trim_spaces(searchtokens[j]);
+        }
+        if (first == true) { //reading past the first line
+            first = false;
+            try {
+                //int nseqs = atoi(searchtokens[0].c_str());
+                //int nsites = atoi(searchtokens[1].c_str());
+            } catch( char * str ) {
+                return false; //not a phylip
+            }
+            continue;
+        }
+        if (searchtokens.size() < 2) {
+            continue;
+        }
+        Sequence a = Sequence(searchtokens[0], searchtokens[1], true);
+        seqs.push_back(a);
+    }
+    infile.close();
+    return true;
+}
+*/
+

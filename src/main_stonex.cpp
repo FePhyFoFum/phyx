@@ -16,7 +16,7 @@ using namespace std;
 #include "sequence.h"
 #include "seq_utils.h"
 
-void print_help(){
+void print_help() {
     cout << "Convert seqfiles from nexus, phylip, or fastq to nexus." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -42,19 +42,19 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     bool going = true;
     bool fileset = false;
     bool outfileset = false;
     char * seqf;
     char * outf;
-    while(going){
+    while(going) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"s:o:hV",long_options,&oi);
-        if (c == -1){
+        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
@@ -70,7 +70,7 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -81,32 +81,33 @@ int main(int argc, char * argv[]){
     ostream* poos;
     ifstream* fstr;
     ofstream* ofstr; 
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
 
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
     //fasta has a trailing one
-    if (ft == 2){
+    if (ft == 2) {
         seqs.push_back(seq);
     }
-    write_nexus_alignment(seqs,poos);
-    if(fileset){
+    write_nexus_alignment(seqs, poos);
+    if (fileset) {
         fstr->close();
         delete pios;
-    }if(outfileset){
+    }
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

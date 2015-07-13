@@ -88,15 +88,17 @@ int main(int argc, char * argv[]) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
     }
+    
     //outfile prep
     ostream* poos;
     ofstream* ofstr;
     ifstream* fstr;
     istream* pios;
-    if(fileset == true){
+    
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
     if (outfileset == true) {
@@ -105,22 +107,23 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
+    
     Sequence seq;
     TLATE functions;
     string retstring;
     string aa_seq;
     string nuc_seq;
 
-    int ft = test_seq_filetype_stream(*pios,retstring);
+    int ft = test_seq_filetype_stream(*pios, retstring);
     //send sequences to be translated here
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-    	nuc_seq = seq.get_sequence();
-    	aa_seq = functions.Translate(nuc_seq);
-    	*poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
+    while(read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+        nuc_seq = seq.get_sequence();
+        aa_seq = functions.Translate(nuc_seq);
+        *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
     //fasta has a trailing one
-    if (ft == 2){
-    	*poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
+    if (ft == 2) {
+        *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
 
     if (outfileset) {

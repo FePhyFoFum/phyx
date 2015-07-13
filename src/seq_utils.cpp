@@ -9,6 +9,7 @@ using namespace std;
 
 #include "seq_utils.h"
 #include "sequence.h"
+#include "utils.h"
 
 /**
  * TODO: need to make a alphabet guesser
@@ -18,82 +19,82 @@ using namespace std;
  * procedure to get the character of a nucleotide
  * from the set of positions
  */
-char get_dna_from_pos(set<int> ins){
-    if(ins.count(0) == 1){
-        if(ins.count(1) == 1){
-            if(ins.count(2) == 1){
-                if(ins.count(3) == 1){
+char get_dna_from_pos(set<int> ins) {
+    if (ins.count(0) == 1) {
+        if (ins.count(1) == 1) {
+            if (ins.count(2) == 1) {
+                if (ins.count(3) == 1) {
                     return 'N';
                 }
                 return 'V';
             }
-            if(ins.count(3) == 1){
+            if (ins.count(3) == 1) {
                 return 'H';
             }
             return 'M';
         }
-        if(ins.count(2) == 1){
+        if (ins.count(2) == 1) {
             return 'R';
         }
-        if(ins.count(3) == 1){
+        if (ins.count(3) == 1) {
             return 'W';
         }
         return 'A';
     }
-    if(ins.count(1)==1){
-        if(ins.count(2) == 1){
-            if(ins.count(3) == 1){
+    if (ins.count(1)==1) {
+        if (ins.count(2) == 1) {
+            if (ins.count(3) == 1) {
                 return 'B';
             }
             return 'S';
         }
-        if(ins.count(3) == 1){
+        if (ins.count(3) == 1) {
             return 'Y';
         }
         return 'C';
     }
-    if(ins.count(2)==1){
-        if(ins.count(3) == 1){
+    if (ins.count(2)==1) {
+        if (ins.count(3) == 1) {
             return 'K';
         }
         return 'G';
     }
-    if(ins.count(3)==1){
+    if (ins.count(3)==1) {
         return 'T';
     }
     return('-');
 }
 
-set<int> get_dna_pos(char inc){
+set<int> get_dna_pos(char inc) {
     set<int> ret;
     inc = toupper(inc);
-    if(inc == 'A'){
+    if (inc == 'A') {
         ret.insert(0);
-    }else if(inc == 'C'){
+    } else if (inc == 'C') {
         ret.insert(1);
-    }else if(inc == 'G'){
+    } else if (inc == 'G') {
         ret.insert(2);
-    }else if(inc == 'T'){
+    } else if (inc == 'T') {
         ret.insert(3);
-    }else if(inc == '-' || inc == 'N'){
+    } else if (inc == '-' || inc == 'N') {
         ret.insert(0);ret.insert(1);ret.insert(2);ret.insert(3);
-    }else if(inc == 'Y'){
+    } else if (inc == 'Y') {
         ret.insert(1);ret.insert(3);
-    }else if(inc == 'R'){
+    } else if (inc == 'R') {
         ret.insert(0);ret.insert(2);
-    }else if(inc == 'W'){
+    } else if (inc == 'W') {
         ret.insert(0);ret.insert(3);
-    }else if(inc == 'M'){
+    } else if (inc == 'M') {
         ret.insert(0);ret.insert(1);
-    }else if(inc == 'B'){
+    } else if (inc == 'B') {
         ret.insert(1);ret.insert(2);ret.insert(3);
-    }else if(inc == 'V'){
+    } else if (inc == 'V') {
         ret.insert(0);ret.insert(1);ret.insert(2);
-    }else if(inc == 'S'){
+    } else if (inc == 'S') {
         ret.insert(1);ret.insert(2);
-    }else if(inc == 'K'){
+    } else if (inc == 'K') {
         ret.insert(2);ret.insert(3);
-    }else if(inc == 'H'){
+    } else if (inc == 'H') {
         ret.insert(0);ret.insert(1);ret.insert(3);
     }
     return ret;
@@ -103,17 +104,17 @@ set<int> get_dna_pos(char inc){
  * 
  * int alpha: the alphabet with 0=dna, 1=aa
  */
-string consensus_seq(vector<Sequence> & seqs, int alpha){
+string consensus_seq(vector <Sequence> & seqs, int alpha) {
     int seqlength = seqs[0].get_sequence().length();
-    for(unsigned int i=0; i < seqs.size(); i++){
+    for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     string retstring;
-    for(int i=0; i < seqlength; i++){
+    for (int i=0; i < seqlength; i++) {
         set<int> fullset;
-        for(unsigned int j=0; j < seqs.size(); j++){
+        for (unsigned int j=0; j < seqs.size(); j++) {
             set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
-            fullset.insert(tset.begin(),tset.end());
+            fullset.insert(tset.begin(), tset.end());
         }
         retstring += get_dna_from_pos(fullset);
     }
@@ -124,50 +125,50 @@ string consensus_seq(vector<Sequence> & seqs, int alpha){
  * Returns a map of DNA
  *
  */
-char single_dna_complement(char inc){
+char single_dna_complement(char inc) {
     inc = toupper(inc);
-    if(inc=='A'){
+    if (inc=='A') {
         return 'T';
-    }else if(inc=='T'){
+    } else if (inc=='T') {
         return 'A';
-    }else if(inc=='U'){
+    } else if (inc=='U') {
         return 'A';
-    }else if(inc=='G'){
+    } else if (inc=='G') {
         return 'C';
-    }else if(inc=='C'){
+    } else if (inc=='C') {
         return 'G';
-    }else if(inc=='Y'){
+    } else if (inc=='Y') {
         return 'R';
-    }else if(inc=='R'){
+    } else if (inc=='R') {
         return 'Y';
-    }else if(inc=='S'){
+    } else if (inc=='S') {
         return 'S';
-    }else if(inc=='W'){
+    } else if (inc=='W') {
         return 'W';
-    }else if(inc=='K'){
+    } else if (inc=='K') {
         return 'M';
-    }else if(inc=='M'){
+    } else if (inc=='M') {
         return 'K';
-    }else if(inc=='B'){
+    } else if (inc=='B') {
         return 'V';
-    }else if(inc=='D'){
+    } else if (inc=='D') {
         return 'H';
-    }else if(inc=='H'){
+    } else if (inc=='H') {
         return 'D';
-    }else if(inc=='V'){
+    } else if (inc=='V') {
         return 'B';
-    }else{
+    } else{
         return 'N';
     }
 }
 
-void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr){
+void write_phylip_alignment(vector <Sequence> & seqs, ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
-    for(unsigned int i=0; i < seqs.size(); i++){
+    for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     (*ostr) << seqs.size() << " " << seqlength << endl;
-    for(unsigned int i=0; i < seqs.size(); i++){
+    for (unsigned int i=0; i < seqs.size(); i++) {
         (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
     }
 }
@@ -176,18 +177,22 @@ void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr){
  * this is not for concatenation. only single gene regions
  * another one needs to be written for concatenation
  */
-void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr){
+void write_nexus_alignment(vector <Sequence> & seqs, ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
-    for(unsigned int i=0; i < seqs.size(); i++){
+    string datatype = seqs[0].get_alpha_name();
+    if (datatype == "AA") { // "AA" is not a valid Nexus datatype
+        datatype = "PROTEIN";
+    }
+    for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     (*ostr) << "#NEXUS" << endl;
     (*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
     (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << endl;
-    (*ostr) << "\tFORMAT DATATYPE="<< seqs[0].get_alpha_name() << " INTERLEAVE=NO GAP=-;"<<endl;
+    (*ostr) << "\tFORMAT DATATYPE=" << datatype << " INTERLEAVE=NO GAP=-;" << endl;
     (*ostr) << "\tMATRIX\n" << endl;
-    for(unsigned int i=0; i < seqs.size(); i++){
-        (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+    for (unsigned int i=0; i < seqs.size(); i++) {
+        (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;
     }
     (*ostr) << ";\nend;\n" << endl;
 }
@@ -197,15 +202,16 @@ void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr){
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,vector<Sequence> & sr_seqs,int site,map<string,vector<int> > & codon_pos){
+void create_vector_seq_codon_state_reconstructor(vector <Sequence> & origseqs,
+    vector <Sequence> & sr_seqs, int site, map<string, vector<int> > & codon_pos) {
     int start = site*3;
-    for (unsigned int i=0; i < origseqs.size(); i++){
+    for (unsigned int i=0; i < origseqs.size(); i++) {
 	string codon = origseqs[i].get_sequence().substr(start,3);
 	string setsq = "";
-	for(int j=0;j<61;j++){
+	for (int j=0;j<61;j++) {
 	    setsq += "0";
 	}
-	for (unsigned int j=0; j < codon_pos[codon].size(); j++){
+	for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
 	    setsq.replace(codon_pos[codon][j],1,"1");
 	}
 	sr_seqs[i].set_sequence(setsq);
@@ -217,22 +223,23 @@ void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,vec
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor_all_site(vector<Sequence> & origseqs,vector<Sequence> & sr_seqs,int site,map<string,vector<int> > & codon_pos){
+void create_vector_seq_codon_state_reconstructor_all_site(vector <Sequence> & origseqs,
+    vector <Sequence> & sr_seqs, int site, map<string, vector <int> > & codon_pos) {
     int start = site*3;
-    for (unsigned int i=0; i < origseqs.size(); i++){
+    for (unsigned int i=0; i < origseqs.size(); i++) {
 	string codon = origseqs[i].get_sequence().substr(start,3);
 	string setsq = "";
-	for (int j=0; j < 61;j ++){
+	for (int j=0; j < 61;j ++) {
 	    setsq += "0";
 	}
-	for (unsigned int j=0; j < codon_pos[codon].size(); j++){
+	for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
 	    setsq.replace(codon_pos[codon][j],1,"1");
 	}
 	sr_seqs[i].set_sequence(setsq);
     }
 }
 
-void populate_codon_list(vector<string> * codon_list){
+void populate_codon_list(vector <string> * codon_list) {
     (*codon_list).push_back("TTT");
     (*codon_list).push_back("TTC");
     (*codon_list).push_back("TTA");
@@ -296,7 +303,7 @@ void populate_codon_list(vector<string> * codon_list){
     (*codon_list).push_back("GGG");
 }
 
-void populate_map_codon_dict(map<string, string> * codon_dict){
+void populate_map_codon_dict(map <string, string> * codon_dict) {
     (*codon_dict)["TTT"] = "F";
     (*codon_dict)["TTC"] = "F";
     (*codon_dict)["TTA"] = "L";
@@ -360,7 +367,7 @@ void populate_map_codon_dict(map<string, string> * codon_dict){
     (*codon_dict)["GGG"] = "G";
 }
 
-void populate_map_codon_indices(map<string,vector<int> > * codon_position){
+void populate_map_codon_indices(map <string,vector<int> > * codon_position) {
     (*codon_position)["TTT"] = {0};
     (*codon_position)["TTC"] = {1};
     (*codon_position)["TTA"] = {2};
