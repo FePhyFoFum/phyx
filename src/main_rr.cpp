@@ -38,7 +38,7 @@ string versionline("pxrr 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwrit
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"outgroups",required_argument,NULL,'g'},
+    {"outgroups",required_argument,NULL, 'g'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -46,11 +46,11 @@ static struct option const long_options[] =
 };
 
 bool reroot(Tree * tree, vector<string> & outgr);
-bool reroot(Tree * tree,vector<string> & outgr){
+bool reroot(Tree * tree, vector<string> & outgr) {
     Node * m = tree->getMRCA(outgr);
     if (m == NULL)
     return false;
-    if (m == tree->getRoot()){
+    if (m == tree->getRoot()) {
     //check to see if the outgroups are just the children of the root
     //if so, then do this
     //tree->rootWithRootTips(outgr);
@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
     char * outgroupsc;
     while (going) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"g:t:o:hV",long_options,&oi);
+        int c = getopt_long(argc, argv, "g:t:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -143,19 +143,14 @@ int main(int argc, char * argv[]) {
     going = true;
     bool exists;
     if (ft == 0) {
-        vector<string> retstrings;
-        retstrings.push_back(retstring);
         map<string,string> translation_table;
         bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstrings);
-        if (retstrings.size() > 0) {
-            retstring = retstrings[retstrings.size()-1];
-        }
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (going == true) {
+            if (tree != NULL) {
                 exists = reroot(tree, outgroups);
                 (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
                 delete tree;

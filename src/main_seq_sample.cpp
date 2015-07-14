@@ -101,11 +101,6 @@ int main(int argc, char * argv[]) {
         }
     }
     
-//    if (argc == 1) {
-//        cout << "no arguments provided" << endl;
-//        exit(0);
-//    }
-    
     istream* pios;
     ostream* poos;
     ifstream* fstr;

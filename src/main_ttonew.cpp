@@ -12,7 +12,7 @@ using namespace std;
 #include "tree_reader.h"
 #include "utils.h"
 
-void print_help(){
+void print_help() {
     cout << "This will convert a tree file to newick." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -40,7 +40,7 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     bool going = true;
     bool fileset = false;
     bool outfileset = false;
@@ -48,7 +48,7 @@ int main(int argc, char * argv[]){
     char * outf;
     while(going){
         int oi = -1;
-        int c = getopt_long(argc,argv,"t:o:hV",long_options,&oi);
+        int c = getopt_long(argc, argv, "t:o:hV", long_options, &oi);
         if (c == -1){
             break;
         }
@@ -68,7 +68,7 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
 
         }
@@ -77,46 +77,44 @@ int main(int argc, char * argv[]){
     ostream * poos;
     ifstream * fstr;
     ofstream * ofstr;
-    if(fileset == true){
+    if(fileset == true ) {
         fstr = new ifstream(treef);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
     
     //read trees 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    if(ft != 0){
+    if (ft != 0) {
         cerr << "this really only converts nexus." << endl;
         exit(0);
     }
-    map<string,string> translation_table;
-    vector<string> retstrings;
+    map <string, string> translation_table;
     bool ttexists;
-    ttexists = get_nexus_translation_table(*pios, &translation_table,&retstrings);
-    if(retstrings.size() > 0) {
-        retstring = retstrings[retstrings.size()-1];
-    }
+    ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
     going = true;
     Tree * tree;
     while(going){
-        tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
-        if (going == true){
+        tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            &translation_table, &going);
+        if (going == true) {
             (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
             delete tree;
         }
     }
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
-    }if(outfileset){
+    }
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

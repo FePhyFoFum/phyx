@@ -41,7 +41,7 @@ void print_help() {
     cout << " -l, --len=INT        length of sequences to generate. default is 1000" << endl;
     cout << " -r, --ratemat=Input  input values for rate matrix. default is JC69" << endl;
     cout << " -o, --outf=FILE      output seq file, stout otherwise" << endl;
-    cout << " -n, --reps=INT       number of replicates" << endl;
+    cout << " -n, --nreps=INT      number of replicates" << endl;
     cout << " -x, --seed=INT       random number seed, clock otherwise" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
@@ -60,7 +60,7 @@ static struct option const long_options[] =
     {"length", required_argument, NULL, 'l'},
     {"ancestors", no_argument, NULL, 'a'},
     {"ratemat", required_argument, NULL, 'r'},
-    {"reps", required_argument, NULL, 'n'},
+    {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -183,24 +183,66 @@ int main(int argc, char * argv[]) {
     
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    if (ft != 1) {
-        cerr << "Only considering with newick at the moment" << endl;
+    if (ft != 0 && ft != 1) {
+        cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
     
     // allow > 1 tree in input. passing but not yet using nreps
     int treeCounter = 0;
     bool going = true;
-    while (going) {
+    bool exists;
+    if (ft == 1) { // newick. easy
         Tree * tree;
-        tree = read_next_tree_from_stream (ft, *pios, retstring, &going);
-        if (tree != NULL) {
-            cout << "Working on tree #" << treeCounter << endl;
-            SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
-            delete tree;
-            treeCounter++;
+        while (going) {
+            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            if (tree != NULL) {
+                cout << "Working on tree #" << treeCounter << endl;
+                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
+                delete tree;
+                treeCounter++;
+            }
+        }
+    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (going == true) {
+                cout << "Working on tree #" << treeCounter << endl;
+                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
+                delete tree;
+                treeCounter++;
+            }
         }
     }
+    
+    
+    
+//    while (going) {
+//        Tree * tree;
+//        if (ft == 1) { // newick
+//            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+//            if (tree != NULL) {
+//                cout << "Working on tree #" << treeCounter << endl;
+//                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
+//                delete tree;
+//                treeCounter++;
+//            }
+//        } else { // Nexus
+//            vector<string> retstrings;
+//            retstrings.push_back(retstring);
+//            map<string,string> translation_table;
+//            bool ttexists;
+//            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstrings);
+//            if (retstrings.size() > 0) {
+//                retstring = retstrings[retstrings.size()-1];
+//            }
+//        }
+//    }
     
     //SEQGEN SGen(seqlen, basefreq, rmatrix);
     //SGen.TakeInTree(rmatrix, tree);
