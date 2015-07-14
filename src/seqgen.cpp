@@ -7,28 +7,28 @@
 
 #include <iostream>
 #include <string>
-#include <fstream>
+//#include <fstream>
 #include <vector>
-#include <sstream>
-#include <iterator>
+//#include <sstream>
+//#include <iterator>
 //#include <map>
-#include <iterator>
-#include <cstring>
+//#include <iterator>
+//#include <cstring>
 //#include <getopt.h>
 //#include <stdio.h>
 #include <nlopt.hpp>
-#include <math.h>
+//#include <math.h>
 #include <armadillo>
 #include <random>
-
+#include <ctime>
+#include <numeric>
 
 using namespace std;
 using namespace arma;
 
-
 #include "seqgen.h"
-#include "sequence.h"
-#include "seq_reader.h"
+//#include "sequence.h"
+//#include "seq_reader.h"
 #include "utils.h"
 #include "node.h"
 #include "tree.h"
@@ -44,65 +44,101 @@ using namespace arma;
  * G .33 .33 .33  -1
  */
 
+// this should enable easy changing of order, if desired
+map <char, int> SEQGEN::nucMap = {
+   {'A', 0},
+   {'T', 1},
+   {'C', 2},
+   {'G', 3}
+};
 
 /*Use the P matrix probabilities and randomly draw numbers to see
  *if each individual state will undergo some type of change
- *
- *
  */
 void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
 
-    string hold = ""; //for the stupid string to double thing I always do
-    string newstring = "";
+    //string hold = ""; //for the stupid string to double thing I always do
+    //string newstring = "";
+    //mt19937 generator(rand());
+    
+    // do cumulative sums. only have to do once
+//    vector <double> fromA (4, 0.0), fromC (4, 0.0), fromG (4, 0.0), fromT (4, 0.0);
+//    std::partial_sum(Matrix[0].begin(), Matrix[0].end(), fromA.begin(), plus<double>());
+//    std::partial_sum(Matrix[1].begin(), Matrix[1].end(), fromT.begin(), plus<double>());
+//    std::partial_sum(Matrix[2].begin(), Matrix[2].end(), fromC.begin(), plus<double>());
+//    std::partial_sum(Matrix[3].begin(), Matrix[3].end(), fromG.begin(), plus<double>());
+    
+    std::vector<double>::iterator low;
+    
+    for (int i = 0; i < 4; i++) {
+        std::partial_sum(Matrix[i].begin(), Matrix[i].end(), Matrix[i].begin(), plus<double>());
+    }
+    string chars = "ATCG";
+    string newstring = Ancestor; // instead of building, set size and replace
     for (unsigned int i = 0; i < Ancestor.size(); i++) {
+        
+        float RandNumb = get_uniform_random_deviate();
+        int ancChar = nucMap[Ancestor[i]];
+        
+        low = std::lower_bound (Matrix[ancChar].begin(), Matrix[ancChar].end(), RandNumb);
+        newstring[i] = chars[low - Matrix[ancChar].begin()];
+        
+    /*  
         float RandNumb = 0.0;
         float ChanceA = 0.0;
         float ChanceT = 0.0;
         float ChanceC = 0.0;
         float ChanceG = 0.0;
-        random_device rand_dev;
-        mt19937 generator(rand_dev());
-        std::uniform_int_distribution <int>  distr(0, 100000);
-    	hold = to_string(distr(generator));
-    	RandNumb = stod(hold);
-    	RandNumb /= 100000;
+        
+        //random_device rand_dev;
+        //mt19937 generator(rand_dev());
+        //mt19937 generator(rand());
+        
+//      std::uniform_int_distribution <int>  distr(0, 100000);
+//    	hold = to_string(distr(generator));
+//    	RandNumb = stod(hold);
+//      cout << "RandNumb = " << RandNumb;
+//    	RandNumb /= 100000;
+//      cout << "; Now RandNumb = " << RandNumb << endl;
+        
+        // these are all constant. do not recalculate for every loop
     	if (Ancestor[i] == 'A') {
             ChanceA = abs(Matrix[0][0]);
-            ChanceT = Matrix[0][1] /abs(Matrix[0][0]);
-            ChanceC = (Matrix[0][2] /abs(Matrix[0][0]) + ChanceT);
-            ChanceG = (Matrix[0][3] /abs(Matrix[0][0]) + ChanceC);
+            ChanceT = Matrix[0][1] / ChanceA;
+            ChanceC = (Matrix[0][2] / abs(Matrix[0][0]) + ChanceT);
+            ChanceG = (Matrix[0][3] / abs(Matrix[0][0]) + ChanceC);
             if (RandNumb < ChanceT) {
-                    newstring += "T";
+                newstring += "T";
             } else if (RandNumb > ChanceT && RandNumb < ChanceC) {
-                    newstring += "C";
+                newstring += "C";
             } else if (RandNumb > ChanceC && RandNumb < ChanceG) {
                 newstring += "G";
             } else {
                 newstring += "A";
             }
     	} else if (Ancestor[i] == 'T') {
-    		ChanceT = abs(Matrix[1][1]);
-    		ChanceA = Matrix[1][0] / ChanceT;
-    		ChanceC = (Matrix[1][2] / ChanceT + ChanceA);
-    		ChanceG = (Matrix[1][3] / ChanceT + ChanceC);
-    		if (RandNumb < ChanceA) {
-                    newstring += "A";
-    		} else if(RandNumb > ChanceA && RandNumb < ChanceC) {
-                    newstring += "C";
-    		} else if(RandNumb > ChanceC && RandNumb < ChanceG) {
-                    newstring += "G";
-    		} else {
-                    newstring += "T";
-    		}
+            ChanceT = abs(Matrix[1][1]);
+            ChanceA = Matrix[1][0] / ChanceT;
+            ChanceC = (Matrix[1][2] / ChanceT + ChanceA);
+            ChanceG = (Matrix[1][3] / ChanceT + ChanceC);
+            if (RandNumb < ChanceA) {
+                newstring += "A";
+            } else if (RandNumb > ChanceA && RandNumb < ChanceC) {
+                newstring += "C";
+            } else if (RandNumb > ChanceC && RandNumb < ChanceG) {
+                newstring += "G";
+            } else {
+                newstring += "T";
+            }
     	} else if (Ancestor[i] == 'C') {
             ChanceC = abs(Matrix[2][2]);
             ChanceA = Matrix[2][0] / ChanceC;
-            ChanceT = (Matrix[2][1] /ChanceC + ChanceA);
-            ChanceG = (Matrix[2][3] /ChanceC + ChanceT);
-            if(RandNumb < ChanceA) {
-                    newstring += "A";
+            ChanceT = (Matrix[2][1] / ChanceC + ChanceA);
+            ChanceG = (Matrix[2][3] / ChanceC + ChanceT);
+            if (RandNumb < ChanceA) {
+                newstring += "A";
             } else if (RandNumb > ChanceA && RandNumb < ChanceT) {
-                    newstring += "T";
+                newstring += "T";
             } else if (RandNumb > ChanceT && RandNumb < ChanceG) {
                 newstring += "G";
             } else {
@@ -113,6 +149,17 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
             ChanceA = Matrix[3][0] / ChanceG;
             ChanceT = (Matrix[3][1] / ChanceG + ChanceA);
             ChanceC = (Matrix[3][2] / ChanceG + ChanceC);
+            
+            cout << endl << i << ". RandNumb = " << RandNumb << endl;
+            for (int ii = 0; ii < 4; ii++) {
+                print_vector(Matrix[ii]);
+            }
+            cout << Matrix[3][3] << " " << Matrix[3][0] << " "
+                << Matrix[3][1] << " " << Matrix[3][2] << endl;
+            cout << "ChanceG = " << ChanceG << "; ChanceA = " << ChanceA
+                 << "; ChanceT = " << ChanceT  << "; ChanceC = " << ChanceC << endl;
+            //print_vector(fromG);
+            
             if (RandNumb < ChanceA) {
                 newstring += "A";
             } else if (RandNumb > ChanceA && RandNumb < ChanceT) {
@@ -124,9 +171,12 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
             }
     	}
     	//cout << (RandNumb / 10000) << endl;
+     
+    */
     }
     Ancestor = newstring;
 }
+
 /*
  * Calculate the Q Matrix (Substitution rate matrix)
  */
@@ -172,6 +222,7 @@ vector < vector <double> > SEQGEN::CalQ() {
     }
     return bigpi;
 }
+
 /*Calculate the P Matrix (Probability Matrix
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
@@ -190,7 +241,6 @@ vector < vector <double> > SEQGEN::PCalq(vector < vector <double> > QMatrix, flo
     	}
     }
    //exponentiate the matrix
-   //mat B = expmat(A);
    B = expmat(A);
    //cout << B << endl;
    count = 0;
@@ -203,6 +253,7 @@ vector < vector <double> > SEQGEN::PCalq(vector < vector <double> > QMatrix, flo
    }
     return Pmatrix;
 }
+
 /*
  * Pre-Order traversal works
  *Calculates the JC Matrix
@@ -227,49 +278,81 @@ void SEQGEN::EvoSim(Tree * tree, string Ancestor) {
     }
 }
 
-void SEQGEN::randDNA (string& Ancestor) {
+void SEQGEN::randDNA () {
 
-    string hold = "";
+    //string hold = "";
+    //mt19937 generator(rand());
+    
+    // keep this outside of the function, as it is constant
+    float A = basefreqs[0];
+    float T = basefreqs[1] + A;
+    float C = basefreqs[2]  + T;
+    
     for (int i = 0; i < seqlen; i++) {
-        int RandNumb = 0;
-        int A = (basefreqs[0] * 100);
-        int T = ((basefreqs[1] * 100) + (basefreqs[0] * 100));
-        int C = ((basefreqs[2] * 100) + T);
-        random_device rand_dev;
-        mt19937 generator(rand_dev());
-        std::uniform_int_distribution<int>  distr(0, 100);
-    	hold = to_string(distr(generator));
-    	RandNumb = stod(hold);
+//        int RandNumb = 0;
+//        int A = (basefreqs[0] * 100);
+//        int T = ((basefreqs[1] * 100) + (basefreqs[0] * 100));
+//        int C = ((basefreqs[2] * 100) + T);
+        //random_device rand_dev;
+        //mt19937 generator(rand_dev());
+        //mt19937 generator(rand());
+        
+//      std::uniform_int_distribution<int>  distr(0, 100);
+//    	hold = to_string(distr(generator));
+//    	RandNumb = stod(hold);
+        
+        float RandNumb = get_uniform_random_deviate();
+        
         if (RandNumb < A) {
-            Ancestor += "A";
+            Ancestor[i] = 'A';
         } else if (RandNumb > A && RandNumb < T) {
-            Ancestor += "T";
+            Ancestor[i] = 'T';
         } else if (RandNumb > T && RandNumb < C) {
-            Ancestor += "C";
-        } else {
-            Ancestor += "G";
+            Ancestor[i] = 'C';
         }
+        // initialized as all Gs, so the following is not needed
+        //else {
+        //    Ancestor[i] = 'G';
+        //}
     }
     cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
 }
 
 //Take in a tree
-void SEQGEN::TakeInTree() {
-    string Ancestor = "";
-    string branch = "";
-    //vector < vector <double> > Matrix(4, vector <double>(4, 1.0));
-    randDNA(Ancestor);
-    EvoSim(tree, Ancestor);
-}
+//void SEQGEN::TakeInTree() {
+//    //string Ancestor = "";
+//    //string branch = ""; // not used
+//    //vector < vector <double> > Matrix(4, vector <double>(4, 1.0));
+//    //randDNA();
+//    EvoSim(tree, Ancestor);
+//}
 
 SEQGEN::SEQGEN() {
     // TODO Auto-generated constructor stub
 }
 
 SEQGEN::SEQGEN(int const &seqlenth, vector <double> const& basefreq,
-    vector < vector<double> >& rmatrix, Tree * tree, int const& nreps):seqlen(seqlenth),
-    basefreqs(basefreq), rmatrix(rmatrix), tree(tree), nreps(nreps) {
-    TakeInTree();
+    vector < vector<double> >& rmatrix, Tree * tree, int const& nreps,
+    int const& seed):seqlen(seqlenth), basefreqs(basefreq), rmatrix(rmatrix),
+    tree(tree), nreps(nreps), seed(seed), Ancestor(seqlenth, 'G') {
+    
+    // set the number generator being used
+    if (seed != -1) { // user provided seed
+        srand(seed);
+        generator = mt19937(rand());
+    } else {
+        random_device rand_dev;
+        generator = mt19937(rand_dev());
+    }
+    randDNA();
+    EvoSim(tree, Ancestor);
+    //TakeInTree();
+}
+
+// call this whenever a random float is needed
+float SEQGEN::get_uniform_random_deviate () {
+    std::uniform_real_distribution<float> distribution(0.0, 1.0);
+    return distribution(generator);
 }
 
 //SEQGEN::~SEQGEN() {

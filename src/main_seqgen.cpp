@@ -191,14 +191,13 @@ int main(int argc, char * argv[]) {
     // allow > 1 tree in input. passing but not yet using nreps
     int treeCounter = 0;
     bool going = true;
-    bool exists;
     if (ft == 1) { // newick. easy
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
+                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps, seed);
                 delete tree;
                 treeCounter++;
             }
@@ -213,7 +212,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
+                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps, seed);
                 delete tree;
                 treeCounter++;
             }
