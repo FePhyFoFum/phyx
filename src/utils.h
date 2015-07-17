@@ -31,9 +31,11 @@ string get_string_vector(vector <string> &sts);
 string get_string_vector(vector <int> &sts);
 
 void replace_all (string& str, string const& origSubStr, string const& replSubStr);
+void replace_each (string& str, string const& badChars, string const& replSubStr);
 
 string get_valid_newick_label (string const& inLabel);
 string get_valid_nexus_label (string const& inLabel);
+string get_safe_taxon_label (string const& inLabel);
 void quotify_label (string & token);
 
 template<typename T> void print_vector (vector <T> & vec) {

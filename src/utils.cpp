@@ -242,6 +242,22 @@ void replace_all (string& str, string const& origSubStr, string const& replSubSt
     }
 }
 
+// similar to above, but here we replace any 'bad' characters present in origSubStr
+// by the replacement. each bad character will be replaced (i.e. contiguous
+// characters will each be replaced). replacement string may be longer than what
+// is being replaced (a single character).
+// e.g. we might replace each chars in "()[]:;" by "_"
+void replace_each (string& str, string const& badChars, string const& replSubStr) {
+    if (badChars.empty()) {
+        return;
+    }
+    size_t start_pos = str.find_first_of(badChars);
+    while (start_pos != std::string::npos) {
+        str.replace(start_pos, 1, replSubStr);
+        start_pos = str.find_first_of(badChars, start_pos+replSubStr.length());
+    }
+}
+
 /*------------------------------------------------------------------------/
 
  Phun with phormats!
@@ -302,6 +318,14 @@ string get_valid_nexus_label (string const& inLabel) {
     } else if (outLabel.find_first_of(" ") != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
     }
+    return outLabel;
+}
+
+// alters the label, but *should* open in all programs
+// replace all illegal characters with an underscore
+string get_safe_taxon_label (string const& inLabel) {
+    string outLabel = inLabel;
+    replace_each(outLabel, nexus_punct, "_");
     return outLabel;
 }
 

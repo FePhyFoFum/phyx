@@ -192,7 +192,9 @@ void write_nexus_alignment(vector <Sequence> & seqs, ostream * ostr) {
     (*ostr) << "\tFORMAT DATATYPE=" << datatype << " INTERLEAVE=NO GAP=-;" << endl;
     (*ostr) << "\tMATRIX\n" << endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
-        (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;
+        // MrBayes is not Nexus-compliant, so using a "safe" version
+        (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;
+        //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
     }
     (*ostr) << ";\nend;\n" << endl;
 }
