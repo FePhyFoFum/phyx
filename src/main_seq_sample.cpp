@@ -149,9 +149,12 @@ int main(int argc, char * argv[]) {
         (*poos) << ">" << seq.get_id() << endl;
         (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
     }
-// have to deal with last sequence outside while loop. fix this.
-    (*poos) << ">" << seq.get_id() << endl;
-    (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
+    // have to deal with last sequence outside while loop. fix this.
+    // not sure if this is necessary and seems to produce duplicates at the end
+    if (ft == 2){
+        (*poos) << ">" << seq.get_id() << endl;
+        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
+    }
     
     if (fileset) {
         fstr->close();
