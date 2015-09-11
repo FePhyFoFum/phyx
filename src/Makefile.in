@@ -4,6 +4,7 @@ RM := rm -f
 CXX := @CXX@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
+
 # gsl:
 #-lgsl -lgslcblas 
 # profiling:
@@ -189,7 +190,9 @@ RATE_SRCS += \
 ./optimize_state_reconstructor_nlopt.cpp \
 ./optimize_state_reconstructor_periods_nlopt.cpp \
 ./branch_segment.cpp \
-./mcmc.cpp
+./mcmc.cpp \
+./cont_models.cpp \
+./seqgen.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -205,9 +208,7 @@ CPP_OBJS += \
 ./bd_sim.o \
 ./upgma.o \
 ./superdouble.o \
-./cont_models.o \
 ./seq_sample.o \
-./seqgen.o \
 ./concat.o \
 ./recode.o \
 ./clsq.o \
@@ -222,7 +223,9 @@ RATE_OBJS += \
 ./optimize_state_reconstructor_nlopt.o \
 ./optimize_state_reconstructor_periods_nlopt.o \
 ./branch_segment.o \
-./mcmc.o
+./mcmc.o \
+./cont_models.o \
+./seqgen.o 
 
 CPP_DEPS += \
 ./utils.d \
@@ -238,9 +241,7 @@ CPP_DEPS += \
 ./bd_sim.d \
 ./upgma.d \
 ./superdouble.d \
-./cont_models.d \
 ./seq_sample.d \
-./seqgen.d \
 ./concat.d \
 ./recode.d \
 ./clsq.d \
@@ -255,7 +256,9 @@ RATE_DEPS += \
 ./optimize_state_reconstructor_nlopt.d \
 ./optimize_state_reconstructor_periods_nlopt.d \
 ./branch_segment.d \
-./mcmc.d
+./mcmc.d \
+./cont_models.d \
+./seqgen.d
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.f
@@ -285,23 +288,23 @@ pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo 'building pxmrca'
-	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS)
 
 pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ) 
 	@echo 'building pxmrcacut'
-	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS)
 
 pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ) 
 	@echo 'building pxmrcaname'
-	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS)
 
 pxconseq:  $(CPP_OBJS) $(CONSEQ_OBJ) 
 	@echo 'building pxconseq'
-	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS)
 
 pxbd:  $(CPP_OBJS) $(BD_OBJ) 
 	@echo 'building pxbd'
-	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS)
 
 pxnni:  $(CPP_OBJS) $(NNI_OBJ) 
 	@echo 'building pxnni'
@@ -321,7 +324,7 @@ pxclsq:   $(CPP_OBJS) $(CLSQ_OBJ)
 
 pxrms:   $(CPP_OBJS) $(RMS_OBJ)
 	@echo 'building pxrms'
-	$(CXX) -o "pxrms" $(OPT_FLAGS) $(RMS_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxrms" $(OPT_FLAGS) $(RMS_OBJ) $(CPP_OBJS)
 
 pxtlate:   $(CPP_OBJS) $(TLATE_OBJ)
 	@echo 'building pxclsq'
@@ -357,15 +360,15 @@ pxrevcomp:  $(CPP_OBJS) $(REVCOMP_OBJ)
 
 pxnw:  $(CPP_OBJS) $(NW_OBJ) 
 	@echo 'building pxnw'
-	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS)
 
 pxsw:  $(CPP_OBJS) $(SW_OBJ) 
 	@echo 'building pxsw'
-	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS)
 
 pxseqsamp:  $(CPP_OBJS) $(SEQSAMP_OBJ) 
 	@echo 'building pxseqsamp'
-	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxseqsamp" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS)
 
 pxseqgen:  $(CPP_OBJS) $(SEQGEN_OBJ)  $(FORT_OBJS)
 	@echo 'building pxseqgen'
@@ -373,7 +376,7 @@ pxseqgen:  $(CPP_OBJS) $(SEQGEN_OBJ)  $(FORT_OBJS)
 
 pxconcat:  $(CPP_OBJS) $(CONCAT_OBJ) 
 	@echo 'building pxconcat'
-	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS)
 
 pxlogmanip:  $(CPP_OBJS) $(LOGMANIP_OBJ) 
 	@echo 'building pxlogmanip'
@@ -389,7 +392,7 @@ pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ)
 
 pxbp:  $(CPP_OBJS) $(BP_OBJ) 
 	@echo 'building pxbp'
-	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS)
 
 pxbpseq:  $(CPP_OBJS) $(BPSEQ_OBJ) 
 	@echo 'building pxbpseq'
@@ -401,11 +404,11 @@ pxttonew:  $(CPP_OBJS) $(TONEW_OBJ)
 
 pxrr:  $(CPP_OBJS) $(RR_OBJ) 
 	@echo 'building pxrr'
-	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS)
 
 pxrmt:  $(CPP_OBJS) $(RMT_OBJ) 
 	@echo 'building pxrmt'
-	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS)
 
 pxsm0:  $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm0'
