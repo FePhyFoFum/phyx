@@ -17,7 +17,7 @@ have_nlopt=no
 AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes])
 
 if test "x${have_nlopt}" = xno; then
-   AC_MSG_ERROR([
+   AC_MSG_WARN([
 --------------------------------------------------------
 The nlopt library is required for optimization.
 phyx was developed with nlopt compiled with these flags
@@ -30,7 +30,7 @@ have_arma=no
 AC_SEARCH_LIBS([wrapper_sgesv_], [armadillo], [have_arma=yes])
 
 if test "x${have_arma}" = xno; then
-   AC_MSG_ERROR([
+   AC_MSG_WARN([
 --------------------------------------------------------
 The armadillo library is required for some linear algebra
 operations.
