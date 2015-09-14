@@ -1,0 +1,4 @@
+DNA, gene0 = 1-20
+CHARSET gene1a = 21-41\3;
+CHARSET geneb1 = 22-41\3;
+CHARSET genec1 = 23-41\3;

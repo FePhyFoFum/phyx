@@ -123,6 +123,10 @@ vector <int> SequenceSampler::get_jackknife_sites (int const& numchar) {
 grab partition information from separate file. example:
 mtDNA_1st = 1-2066\3
 TGFb2 = 5059-5721
+TODO: update to 1) RAxML and 2) Nexus style
+ - RAxML: DNA, gene0 = 1-4243
+ - MrBayes: CHARSET gene0 = 1-4243;
+ * So, thrown out first token, and should work for both
 */
 void SequenceSampler::parse_partitions (string & partf) {
     vector <int> temp;
@@ -147,7 +151,7 @@ void SequenceSampler::parse_partitions (string & partf) {
     check_valid_partitions();
 }
 
-// expecting pattern: name = start-end[\3]
+// expecting pattern: (CHARSET/DNA,) name = start-end[\3][,]
 // want to be flexible with spaces/lackthereof
 // guaranteed to be ordered
 vector <int> SequenceSampler::get_partition_sites (string const& part) {
@@ -185,27 +189,29 @@ void SequenceSampler::get_site_partitions () {
     sitePartitions = sites;
 }
 
-// GADPH = 2991-3406\3
-// after being tokenized, should be of length 3 or 4 (latter when interval)
+// CHARSET GADPH = 2991-3406\3
+// after being tokenized, should be of length 4 or 5 (latter when interval)
 // convert from 1-start to 0-start
 void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & start, int & stop, int & interval) {
-    if ((int)tokens.size() < 3 || (int)tokens.size() > 4) {
+    if ((int)tokens.size() < 4 || (int)tokens.size() > 5) {
         cout << "Error: invalid/unsupported partition specification." << endl;
         exit (0);
     }
     
-    partitionNames.push_back(tokens[0]);
-    //cout << "Processing partition '" << tokens[0] << "': ";
-    if (is_number(tokens[1])) {
-        start = atoi(tokens[1].c_str()) - 1;
+    // ignore first token. will be either CHARSET of DNA,
+    partitionNames.push_back(tokens[1]);
+    //cout << "Processing partition '" << tokens[1] << "': ";
+    
+    if (is_number(tokens[2])) {
+        start = atoi(tokens[2].c_str()) - 1;
         //cout << "start = " << start;
     }
-    if (is_number(tokens[2])) {
-        stop = atoi(tokens[2].c_str()) - 1;
+    if (is_number(tokens[3])) {
+        stop = atoi(tokens[3].c_str()) - 1;
         //cout << "; stop = " << stop;
     }
-    if (((int)tokens.size() == 4) && is_number(tokens[3])) {
-        interval = atoi(tokens[3].c_str());
+    if (((int)tokens.size() == 5) && is_number(tokens[4])) {
+        interval = atoi(tokens[4].c_str());
         //cout << "; interval = " << interval;
     }
     //cout << endl;
