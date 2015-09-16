@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstring>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <map>
 #include <deque>
@@ -176,7 +177,8 @@ string Node::getNewick(bool bl) {
         ret = ret+this->getChild(i)->getNewick(bl);
         if (bl == true) {
             std::ostringstream o;
-            o << this->getChild(i)->getBL();
+            //20 is what you get from raxml
+            o << setprecision(20) << this->getChild(i)->getBL();
             ret += ":" + o.str();
         }
         if (i == this->getChildCount()-1) {
