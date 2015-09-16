@@ -404,6 +404,8 @@ void Tree::pruneExternalNode(Node * node) {
                 break;
             }
         }
+    }else{
+        root = other;
     }
     delete node;
     this->processRoot();
