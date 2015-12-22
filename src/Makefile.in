@@ -382,9 +382,9 @@ pxlogmanip:  $(CPP_OBJS) $(LOGMANIP_OBJ)
 	@echo 'building pxlogmanip'
 	$(CXX) -o "pxlogmanip" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) 
+pxcontrates:  $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)  
 	@echo 'building pxcontrates'
-	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS) $(CPP_OBJS) $(CPP_LIBS) -lgfortran
 
 pxseqrecode:  $(CPP_OBJS) $(SEQRECODE_OBJ) 
 	@echo 'building pxseqrecode'
