@@ -170,13 +170,13 @@ int main(int argc, char * argv[]){
         while(going){
             tree = read_next_tree_from_stream_newick(*pios,retstring,&going);
             if(going == true){
-            exists = removetip(tree,names);
-            if(exists == false) {
-                cerr << "the names don't exist in this tree " << endl;
-            } else {
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
-            }
-            delete tree;
+                exists = removetip(tree,names);
+                if(exists == false) {
+                    cerr << "the names don't exist in this tree " << endl;
+                } else {
+                    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                }
+                delete tree;
             }
         }
     }
