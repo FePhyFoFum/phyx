@@ -315,7 +315,7 @@ void SEQGEN::randDNA () {
         //    Ancestor[i] = 'G';
         //}
     }
-    cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
+    //cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
 }
 
 //Take in a tree

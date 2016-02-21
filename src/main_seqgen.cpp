@@ -196,7 +196,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
-                cout << "Working on tree #" << treeCounter << endl;
+                //cout << "Working on tree #" << treeCounter << endl;
                 SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps, seed);
                 delete tree;
                 treeCounter++;
