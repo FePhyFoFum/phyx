@@ -146,12 +146,8 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
     
-    //TreeReader TreeUtil;
-    //Tree * tree;
-    //SEQGEN SGen(seqlen, basefreq);
-    //double length;
     string path, newick, line;
-    //int sequence_length = 0;
+    
     /*
      * Default Base Frequencies and Rate Matrix
      *
@@ -169,17 +165,6 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-//    ifstream readline;
-//    //path = ("TestFiles/RAxML_bestTree.drosML");
-//    path = ("TEST/ultra_100.tre");
-//    readline.open(path.c_str());
-//    if (readline.is_open()) {
-//        while (getline(readline, line)) {
-//            newick = line;
-//        }
-//    }
-//    //sequence_length = 1001;
-//    tree = TreeUtil.readTree(newick);
     
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
@@ -198,6 +183,12 @@ int main(int argc, char * argv[]) {
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
                 SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed);
+                vector <Sequence> seqs = SGen.get_sequences();
+                for (unsigned int i = 0; i < seqs.size(); i++) {
+                    Sequence seq = seqs[i];
+                    (*poos) << ">" << seq.get_id() << endl;
+                    (*poos) << seq.get_sequence() << endl;
+                }
                 delete tree;
                 treeCounter++;
             }
@@ -213,37 +204,17 @@ int main(int argc, char * argv[]) {
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
                 SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed);
+                vector <Sequence> seqs = SGen.get_sequences();
+                for (unsigned int i = 0; i < seqs.size(); i++) {
+                    Sequence seq = seqs[i];
+                    (*poos) << ">" << seq.get_id() << endl;
+                    (*poos) << seq.get_sequence() << endl;
+                }
                 delete tree;
                 treeCounter++;
             }
         }
     }
     
-    
-    
-//    while (going) {
-//        Tree * tree;
-//        if (ft == 1) { // newick
-//            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
-//            if (tree != NULL) {
-//                cout << "Working on tree #" << treeCounter << endl;
-//                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps);
-//                delete tree;
-//                treeCounter++;
-//            }
-//        } else { // Nexus
-//            vector<string> retstrings;
-//            retstrings.push_back(retstring);
-//            map<string,string> translation_table;
-//            bool ttexists;
-//            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstrings);
-//            if (retstrings.size() > 0) {
-//                retstring = retstrings[retstrings.size()-1];
-//            }
-//        }
-//    }
-    
-    //SEQGEN SGen(seqlen, basefreq, rmatrix);
-    //SGen.TakeInTree(rmatrix, tree);
     return EXIT_SUCCESS;
 }

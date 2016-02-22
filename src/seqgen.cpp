@@ -7,17 +7,8 @@
 
 #include <iostream>
 #include <string>
-//#include <fstream>
 #include <vector>
-//#include <sstream>
-//#include <iterator>
-//#include <map>
-//#include <iterator>
-//#include <cstring>
-//#include <getopt.h>
-//#include <stdio.h>
 #include <nlopt.hpp>
-//#include <math.h>
 #include <armadillo>
 #include <random>
 #include <ctime>
@@ -27,8 +18,6 @@ using namespace std;
 using namespace arma;
 
 #include "seqgen.h"
-//#include "sequence.h"
-//#include "seq_reader.h"
 #include "utils.h"
 #include "node.h"
 #include "tree.h"
@@ -55,7 +44,7 @@ map <char, int> SequenceGenerator::nucMap = {
 /* Use the P matrix probabilities and randomly draw numbers to see
  * if each individual state will undergo some type of change
  */
-string SequenceGenerator::SeqSim (string const& anc, vector < vector <double> >& Matrix) {
+string SequenceGenerator::simulate_sequence (string const& anc, vector < vector <double> >& Matrix) {
 
     //string hold = ""; //for the stupid string to double thing I always do
     //string newstring = "";
@@ -171,7 +160,6 @@ string SequenceGenerator::SeqSim (string const& anc, vector < vector <double> >&
             }
         }
         //cout << (RandNumb / 10000) << endl;
-     
     */
     }
     //Ancestor = newstring;
@@ -183,7 +171,7 @@ string SequenceGenerator::SeqSim (string const& anc, vector < vector <double> >&
 /*
  * Calculate the Q Matrix (Substitution rate matrix)
  */
-vector < vector <double> > SequenceGenerator::CalQ () {
+vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
 
     vector < vector <double> > bigpi(4, vector <double>(4, 1.0));
     vector < vector <double> > t(4, vector <double>(4, 0.0));
@@ -207,7 +195,7 @@ vector < vector <double> > SequenceGenerator::CalQ () {
             if (i != j) {
                 bigpi[i][j] /= tscale;
             } else {
-                //set the diagnols to zero
+                // set the diagnols to zero *** are they not set to zero above?
                 bigpi[i][j] = 0.0;
             }
         }
@@ -231,11 +219,11 @@ vector < vector <double> > SequenceGenerator::CalQ () {
 }
 
 
-/* Calculate the P Matrix (Probability Matrix
+/* Calculate the P Matrix (Probability Matrix)
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
  */
-vector < vector <double> > SequenceGenerator::PCalq (vector < vector <double> > QMatrix, float br) {
+vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vector <double> > QMatrix, float br) {
 
     vector < vector <double> > Pmatrix(4, vector <double>(4, 0.0));
     mat A = randn<mat>(4,4);
@@ -267,8 +255,9 @@ vector < vector <double> > SequenceGenerator::PCalq (vector < vector <double> > 
  * Pre-Order traversal works
  * Calculates the JC Matrix
  */
-// is this pre-order? depends on node numbering, i think
-void SequenceGenerator::EvoSim (Tree * tree) {
+// TODO: how to name ancestor nodes (sequences)
+//       - if we have this we can add to results (if desired))
+void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
 
     double brlength = 0.0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
@@ -280,12 +269,12 @@ void SequenceGenerator::EvoSim (Tree * tree) {
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
-        QMatrix = CalQ();
-        PMatrix = PCalq(QMatrix, brlength);
+        QMatrix = calculate_q_matrix();
+        PMatrix = calculate_p_matrix(QMatrix, brlength);
         Node * dec = tree->getNode(k);
         Node * parent = tree->getNode(k)->getParent();
         string ancSeq = seqs[parent];
-        string decSeq = SeqSim(ancSeq, PMatrix);
+        string decSeq = simulate_sequence(ancSeq, PMatrix);
         seqs[dec] = decSeq;
         
         //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
@@ -293,14 +282,16 @@ void SequenceGenerator::EvoSim (Tree * tree) {
         // If its a tip print the name and the sequence
         if (tree->getNode(k)->getName() != "") {
             string tname = tree->getNode(k)->getName();
-            cout << ">" << tname << "\n" << decSeq << endl;
+            //cout << ">" << tname << "\n" << decSeq << endl;
+            Sequence seq(tname, decSeq);
+            res.push_back(seq);
         }
     }
 }
 
 
 // initialized as string of length seqlenth, all 'G'
-void SequenceGenerator::randDNA () {
+void SequenceGenerator::generate_random_sequence () {
 
     //string hold = "";
     //mt19937 generator(rand());
@@ -340,15 +331,6 @@ void SequenceGenerator::randDNA () {
     //cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
 }
 
-//Take in a tree
-//void SEQGEN::TakeInTree() {
-//    //string Ancestor = "";
-//    //string branch = ""; // not used
-//    //vector < vector <double> > Matrix(4, vector <double>(4, 1.0));
-//    //randDNA();
-//    EvoSim(tree, Ancestor);
-//}
-
 
 SequenceGenerator::SequenceGenerator () {
     // TODO Auto-generated constructor stub
@@ -371,12 +353,18 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
     }
     
     // TODO: what if suer wants to pass in ancestral sequence?
-    randDNA();
+    //       - need to allow this to be passed in
+    generate_random_sequence();
     
-    EvoSim(tree);
+    preorder_tree_traversal(tree);
     //TakeInTree();
 }
 
+
+// not sure of a more elegant way to do this...
+vector<Sequence> SequenceGenerator::get_sequences () {
+    return res;
+}
 
 // call this whenever a random float is needed
 float SequenceGenerator::get_uniform_random_deviate () {

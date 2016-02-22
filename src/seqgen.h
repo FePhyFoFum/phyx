@@ -8,25 +8,10 @@
 #ifndef _SEQGEN_H_
 #define _SEQGEN_H_
 
-//#include <iostream>
-//#include <string>
-//#include <fstream>
-//#include <vector>
-//#include <sstream>
-//#include <iterator>
-//#include <algorithm>
-//#include <map>
-//#include <iterator>
 #include <random>
 
-//#include "seqgen.h"
-//#include "sequence.h"
-//#include "seq_reader.h"
-//#include "utils.h"
-//#include "node.h"
+#include "sequence.h"
 #include "tree.h"
-//#include "tree_reader.h"
-
 
 class SequenceGenerator {
 
@@ -44,11 +29,13 @@ private:
     
     map <Node *, string> seqs;
     
-    void EvoSim (Tree * tree);
-    vector < vector <double> > CalQ ();
-    vector < vector <double> > PCalq (vector < vector <double> > QMatrix, float br);
-    string SeqSim (string const& anc, vector < vector <double> >& Matrix);
-    void randDNA ();
+    vector<Sequence> res;
+    
+    void preorder_tree_traversal (Tree * tree);
+    vector < vector <double> > calculate_q_matrix ();
+    vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix, float br);
+    string simulate_sequence (string const& anc, vector < vector <double> >& Matrix);
+    void generate_random_sequence ();
     //void TakeInTree ();
     mt19937 generator;
     float get_uniform_random_deviate ();
@@ -60,6 +47,7 @@ public:
     SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
         int const& nreps, int const & seed);
+    vector<Sequence> get_sequences ();
     //Node * PreOrder(int); // not used
     
     
