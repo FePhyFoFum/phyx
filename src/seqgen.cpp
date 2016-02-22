@@ -45,17 +45,17 @@ using namespace arma;
  */
 
 // this should enable easy changing of order, if desired
-map <char, int> SEQGEN::nucMap = {
+map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
    {'T', 1},
    {'C', 2},
    {'G', 3}
 };
 
-/*Use the P matrix probabilities and randomly draw numbers to see
- *if each individual state will undergo some type of change
+/* Use the P matrix probabilities and randomly draw numbers to see
+ * if each individual state will undergo some type of change
  */
-void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
+string SequenceGenerator::SeqSim (string const& anc, vector < vector <double> >& Matrix) {
 
     //string hold = ""; //for the stupid string to double thing I always do
     //string newstring = "";
@@ -74,11 +74,11 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
         std::partial_sum(Matrix[i].begin(), Matrix[i].end(), Matrix[i].begin(), plus<double>());
     }
     string chars = "ATCG";
-    string newstring = Ancestor; // instead of building, set size and replace
-    for (unsigned int i = 0; i < Ancestor.size(); i++) {
+    string newstring = anc; // instead of building, set size and replace
+    for (unsigned int i = 0; i < anc.size(); i++) {
         
         float RandNumb = get_uniform_random_deviate();
-        int ancChar = nucMap[Ancestor[i]];
+        int ancChar = nucMap[anc[i]];
         
         low = std::lower_bound (Matrix[ancChar].begin(), Matrix[ancChar].end(), RandNumb);
         newstring[i] = chars[low - Matrix[ancChar].begin()];
@@ -95,14 +95,14 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
         //mt19937 generator(rand());
         
 //      std::uniform_int_distribution <int>  distr(0, 100000);
-//    	hold = to_string(distr(generator));
-//    	RandNumb = stod(hold);
+//      hold = to_string(distr(generator));
+//      RandNumb = stod(hold);
 //      cout << "RandNumb = " << RandNumb;
-//    	RandNumb /= 100000;
+//      RandNumb /= 100000;
 //      cout << "; Now RandNumb = " << RandNumb << endl;
         
         // these are all constant. do not recalculate for every loop
-    	if (Ancestor[i] == 'A') {
+        if (Ancestor[i] == 'A') {
             ChanceA = abs(Matrix[0][0]);
             ChanceT = Matrix[0][1] / ChanceA;
             ChanceC = (Matrix[0][2] / abs(Matrix[0][0]) + ChanceT);
@@ -116,7 +116,7 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
             } else {
                 newstring += "A";
             }
-    	} else if (Ancestor[i] == 'T') {
+        } else if (Ancestor[i] == 'T') {
             ChanceT = abs(Matrix[1][1]);
             ChanceA = Matrix[1][0] / ChanceT;
             ChanceC = (Matrix[1][2] / ChanceT + ChanceA);
@@ -130,7 +130,7 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
             } else {
                 newstring += "T";
             }
-    	} else if (Ancestor[i] == 'C') {
+        } else if (Ancestor[i] == 'C') {
             ChanceC = abs(Matrix[2][2]);
             ChanceA = Matrix[2][0] / ChanceC;
             ChanceT = (Matrix[2][1] / ChanceC + ChanceA);
@@ -144,7 +144,7 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
             } else {
                 newstring += "C";
             }
-    	} else {
+        } else {
             ChanceG = abs(Matrix[3][3]);
             ChanceA = Matrix[3][0] / ChanceG;
             ChanceT = (Matrix[3][1] / ChanceG + ChanceA);
@@ -169,65 +169,73 @@ void SEQGEN::SeqSim(string& Ancestor, vector < vector <double> >& Matrix) {
             } else {
                 newstring += "G";
             }
-    	}
-    	//cout << (RandNumb / 10000) << endl;
+        }
+        //cout << (RandNumb / 10000) << endl;
      
     */
     }
-    Ancestor = newstring;
+    //Ancestor = newstring;
+    
+    return newstring;
 }
+
 
 /*
  * Calculate the Q Matrix (Substitution rate matrix)
  */
-vector < vector <double> > SEQGEN::CalQ() {
+vector < vector <double> > SequenceGenerator::CalQ () {
 
     vector < vector <double> > bigpi(4, vector <double>(4, 1.0));
     vector < vector <double> > t(4, vector <double>(4, 0.0));
+    
     double tscale = 0.0;
+    
+    // doing the same looping multiple times here. simplify?
+    
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
-    	for (unsigned int j = 0; j < rmatrix.size(); j++) {
+        for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i != j) {
                 bigpi[i][j] *= basefreqs[i] * basefreqs[j] * rmatrix[i][j];
                 tscale += bigpi[i][j];
             } else {
                 bigpi[i][j] = 0.0;
             }
-    	}
+        }
     }
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
-    	for (unsigned int j = 0; j < rmatrix.size(); j++) {
+        for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i != j) {
                 bigpi[i][j] /= tscale;
             } else {
                 //set the diagnols to zero
                 bigpi[i][j] = 0.0;
             }
-    	}
+        }
     }
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
-    	double diag = 0.0;
-    	for (unsigned int j = 0; j < rmatrix.size(); j++) {
+        double diag = 0.0;
+        for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i != j) {
                 diag -= bigpi[i][j];
             }
-    	}
-    	bigpi[i][i] = diag;
+        }
+        bigpi[i][i] = diag;
     }
     //Divide and Transpose
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
-    	for (unsigned int j = 0; j < rmatrix.size(); j++) {
+        for (unsigned int j = 0; j < rmatrix.size(); j++) {
             bigpi[i][j] /= basefreqs[i];
-    	}
+        }
     }
     return bigpi;
 }
 
-/*Calculate the P Matrix (Probability Matrix
+
+/* Calculate the P Matrix (Probability Matrix
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
  */
-vector < vector <double> > SEQGEN::PCalq(vector < vector <double> > QMatrix, float br) {
+vector < vector <double> > SequenceGenerator::PCalq (vector < vector <double> > QMatrix, float br) {
 
     vector < vector <double> > Pmatrix(4, vector <double>(4, 0.0));
     mat A = randn<mat>(4,4);
@@ -235,10 +243,10 @@ vector < vector <double> > SEQGEN::PCalq(vector < vector <double> > QMatrix, flo
     int count = 0;
     //Q * t moved into Matrix form for armadillo
    for (unsigned int i = 0; i < QMatrix.size(); i++) {
-    	for (unsigned int j = 0; j < QMatrix.size(); j++) {
+        for (unsigned int j = 0; j < QMatrix.size(); j++) {
             A[count] = (QMatrix[i][j] * br);
             count++;
-    	}
+        }
     }
    //exponentiate the matrix
    B = expmat(A);
@@ -246,39 +254,53 @@ vector < vector <double> > SEQGEN::PCalq(vector < vector <double> > QMatrix, flo
    count = 0;
    //convert the matrix back to C++ vector
    for (unsigned int i = 0; i < Pmatrix.size(); i++) {
-    	for (unsigned int j = 0; j < Pmatrix.size(); j++) {
+        for (unsigned int j = 0; j < Pmatrix.size(); j++) {
             Pmatrix[i][j] = B[count];
             count++;
-    	}
+        }
    }
     return Pmatrix;
 }
 
+
 /*
  * Pre-Order traversal works
- *Calculates the JC Matrix
- *
+ * Calculates the JC Matrix
  */
-void SEQGEN::EvoSim(Tree * tree, string Ancestor) {
+// is this pre-order? depends on node numbering, i think
+void SequenceGenerator::EvoSim (Tree * tree) {
 
     double brlength = 0.0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
     vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
-    //Pre-Order Traverse the tree
+    
+    Node * root = tree->getRoot();
+    seqs[root] = Ancestor;
+    
+    // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
         QMatrix = CalQ();
         PMatrix = PCalq(QMatrix, brlength);
-        SeqSim(Ancestor, PMatrix);
-        //If its a tip print the name and the sequence
+        Node * dec = tree->getNode(k);
+        Node * parent = tree->getNode(k)->getParent();
+        string ancSeq = seqs[parent];
+        string decSeq = SeqSim(ancSeq, PMatrix);
+        seqs[dec] = decSeq;
+        
+        //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
+        
+        // If its a tip print the name and the sequence
         if (tree->getNode(k)->getName() != "") {
             string tname = tree->getNode(k)->getName();
-            cout << ">" << tname << "\n" << Ancestor << endl;
+            cout << ">" << tname << "\n" << decSeq << endl;
         }
     }
 }
 
-void SEQGEN::randDNA () {
+
+// initialized as string of length seqlenth, all 'G'
+void SequenceGenerator::randDNA () {
 
     //string hold = "";
     //mt19937 generator(rand());
@@ -298,8 +320,8 @@ void SEQGEN::randDNA () {
         //mt19937 generator(rand());
         
 //      std::uniform_int_distribution<int>  distr(0, 100);
-//    	hold = to_string(distr(generator));
-//    	RandNumb = stod(hold);
+//      hold = to_string(distr(generator));
+//      RandNumb = stod(hold);
         
         float RandNumb = get_uniform_random_deviate();
         
@@ -327,14 +349,17 @@ void SEQGEN::randDNA () {
 //    EvoSim(tree, Ancestor);
 //}
 
-SEQGEN::SEQGEN() {
+
+SequenceGenerator::SequenceGenerator () {
     // TODO Auto-generated constructor stub
 }
 
-SEQGEN::SEQGEN(int const &seqlenth, vector <double> const& basefreq,
-    vector < vector<double> >& rmatrix, Tree * tree, int const& nreps,
-    int const& seed):seqlen(seqlenth), basefreqs(basefreq), rmatrix(rmatrix),
-    tree(tree), nreps(nreps), seed(seed), Ancestor(seqlenth, 'G') {
+
+SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
+    vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
+    int const& nreps, int const& seed):seqlen(seqlenth), basefreqs(basefreq), 
+    rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
+    Ancestor(seqlenth, 'G') {
     
     // set the number generator being used
     if (seed != -1) { // user provided seed
@@ -344,16 +369,21 @@ SEQGEN::SEQGEN(int const &seqlenth, vector <double> const& basefreq,
         random_device rand_dev;
         generator = mt19937(rand_dev());
     }
+    
+    // TODO: what if suer wants to pass in ancestral sequence?
     randDNA();
-    EvoSim(tree, Ancestor);
+    
+    EvoSim(tree);
     //TakeInTree();
 }
 
+
 // call this whenever a random float is needed
-float SEQGEN::get_uniform_random_deviate () {
+float SequenceGenerator::get_uniform_random_deviate () {
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
     return distribution(generator);
 }
+
 
 //SEQGEN::~SEQGEN() {
 //    // TODO Auto-generated destructor stub

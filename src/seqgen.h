@@ -28,7 +28,7 @@
 //#include "tree_reader.h"
 
 
-class SEQGEN {
+class SequenceGenerator {
 
 private:
     // constant values
@@ -40,11 +40,14 @@ private:
     int seed;
     string Ancestor;
     static map<char, int> nucMap;
+    bool showancs;
     
-    void EvoSim (Tree * tree, string Ancestor);
+    map <Node *, string> seqs;
+    
+    void EvoSim (Tree * tree);
     vector < vector <double> > CalQ ();
     vector < vector <double> > PCalq (vector < vector <double> > QMatrix, float br);
-    void SeqSim (string& Ancestor, vector < vector <double> >& Matrix);
+    string SeqSim (string const& anc, vector < vector <double> >& Matrix);
     void randDNA ();
     //void TakeInTree ();
     mt19937 generator;
@@ -53,10 +56,10 @@ private:
 
 
 public:
-    SEQGEN();
-    SEQGEN(int const &seqlenth, vector <double> const& basefreq,
-        vector < vector<double> >& rmatrix, Tree * tree, int const& nreps,
-        int const & seed);
+    SequenceGenerator ();
+    SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
+        vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
+        int const& nreps, int const & seed);
     //Node * PreOrder(int); // not used
     
     

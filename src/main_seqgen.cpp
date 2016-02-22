@@ -30,7 +30,7 @@ using namespace std;
 
 
 void print_help() {
-    cout << "Basic Sequence Simulator under the GTR Model." << endl;
+    cout << "Basic sequence simulator under the GTR model." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
     cout << "Usage: pxseqgen [OPTION]... " << endl;
@@ -197,7 +197,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
-                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps, seed);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed);
                 delete tree;
                 treeCounter++;
             }
@@ -212,7 +212,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SEQGEN SGen(seqlen, basefreq, rmatrix, tree, nreps, seed);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed);
                 delete tree;
                 treeCounter++;
             }

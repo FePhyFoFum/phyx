@@ -61,6 +61,7 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead) {
             extantnodes.push_back(root);//empty
         }
     }
+    
     vector<Node*> temp_extant_nodes(extantnodes);
     for (unsigned int i=0; i < temp_extant_nodes.size(); i++) {
         try {
