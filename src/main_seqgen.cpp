@@ -78,7 +78,14 @@ int main(int argc, char * argv[]) {
     int nreps = 1; // not implemented at the moment
     int seed = -1;
     double sum = 0;
-    
+    vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
+    for (unsigned int i = 0; i < rmatrix.size(); i++) {
+        for (unsigned int j = 0; j < rmatrix.size(); j++) {
+            if (i == j) {//Fill Diagnol
+                rmatrix[i][j] = -1.0;
+            }
+        }
+    }
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:hV", long_options, &oi);
@@ -110,7 +117,30 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 inrates = strdup(optarg);
+		while (!userrates.empty()){
+    		 sum += userrates.back();
+    		 userrates.pop_back();
+ 		}
                 parse_double_comma_list(inrates, userrates);
+		rmatrix[0][2] = userrates[0];
+		rmatrix[2][0] = userrates[0];
+		rmatrix[0][3] = userrates[1];
+		rmatrix[3][0] = userrates[1];
+		rmatrix[0][1] = userrates[2];
+		rmatrix[1][0] = userrates[2];
+		rmatrix[2][3] = userrates[3];
+		rmatrix[3][2] = userrates[3];
+		rmatrix[1][2] = userrates[4];
+		rmatrix[2][1] = userrates[4];
+		rmatrix[1][3] = userrates[5];
+		rmatrix[3][1] = userrates[5];
+		/*Turn on to check matrix
+                for (unsigned int i = 0; i < rmatrix.size(); i++) {
+                   for (unsigned int j = 0; j < rmatrix.size(); j++) {
+  			cout << rmatrix[i][j] << " ";
+                   }
+			cout << "\n";
+                }*/
                 break;
             case 'n':
                 nreps = atoi(strdup(optarg));
@@ -134,7 +164,6 @@ int main(int argc, char * argv[]) {
     ostream* poos;
     ifstream* fstr;
     ofstream* ofstr;
-    cout << basefreq[0] << endl;
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
@@ -159,6 +188,7 @@ int main(int argc, char * argv[]) {
     //basefreq[1] = .25;
     //basefreq[2] = .25;
     //basefreq[3] = 1.0 - basefreq[0] - basefreq[1] - basefreq[2];
+    /*	
     vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
@@ -167,7 +197,7 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    
+    */
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
