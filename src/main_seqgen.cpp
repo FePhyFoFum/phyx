@@ -16,10 +16,7 @@
 using namespace std;
 
 #include "seqgen.h"
-//#include "sequence.h"
-//#include "seq_reader.h"
 #include "utils.h"
-//#include "node.h"
 #include "tree.h"
 #include "tree_reader.h"
 
@@ -36,7 +33,7 @@ void print_help() {
     cout << "Usage: pxseqgen [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE     input treefile, stdin otherwise" << endl;
-    cout << " -c, --comp=Input     comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
+    cout << " -b, --basef=Input    comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
     cout << " -a, --ancestors      print the ancestral sequences at each node. default is no" << endl;
     cout << " -l, --len=INT        length of sequences to generate. default is 1000" << endl;
     cout << " -r, --ratemat=Input  input values for rate matrix. default is JC69" << endl;
@@ -83,7 +80,7 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:c:l:ar:n:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -96,9 +93,9 @@ int main(int argc, char * argv[]) {
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
-            case 'c':
+            case 'b':
                 infreqs = strdup(optarg);
-                parse_double_list(infreqs, basefreq, ", ");
+                parse_double_comma_list(infreqs, basefreq);
                 break;
             case 'l':
                 seqlen = atoi(strdup(optarg));
@@ -108,7 +105,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 inrates = strdup(optarg);
-                parse_double_list(inrates, userrates, ", ");
+                parse_double_comma_list(inrates, userrates);
                 break;
             case 'n':
                 nreps = atoi(strdup(optarg));

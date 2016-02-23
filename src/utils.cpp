@@ -32,6 +32,7 @@ double EPSILON = 1e-7;
 #include "utils.h"
 #include "superdouble.h"
 
+
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters) {
     // Skip delimiters at beginning.
     string::size_type lastPos = str.find_first_not_of(delimiters, 0);
@@ -48,7 +49,36 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
     }
 }
 
+
+// probably a nicer way to do this
+void parse_double_comma_list (string& str, vector <double>& tokens) {
+    std::stringstream ss(str);
+    double i;
+    while (ss >> i) {
+        tokens.push_back(i);
+        bool done = false;
+        while (!done) { // shouldn't be any spaces, but let's be safe
+            if (ss.peek() == ' ' || ss.peek() == ',') {
+                ss.ignore();
+            } else {
+                done = true;
+            }
+        }
+    }
+}
+
+
+bool is_number (const string& s) {
+    string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) {
+        ++it;
+    }
+    return !s.empty() && it == s.end();
+}
+
+
 // works a little differently than above; don't need to trim spaces
+// assumes delimiter is some form of whitespace
 vector <string> tokenize (string const& input) {
     vector <string> tokens;
     string temp;
@@ -58,6 +88,7 @@ vector <string> tokenize (string const& input) {
     }
     return tokens;
 }
+
 
 void trim_spaces (string& str) {
     // Trim Both leading and trailing spaces
@@ -71,7 +102,7 @@ void trim_spaces (string& str) {
         str = str.substr(startpos, endpos - startpos + 1);
     }
     /*
-    // Code for  Trim Leading Spaces only
+    // Code for Trim Leading Spaces only
     size_t startpos = str.find_first_not_of(\t); // Find the first character position after excluding leading blank spaces
     if (string::npos != startpos)
     str = str.substr( startpos );
@@ -85,21 +116,10 @@ void trim_spaces (string& str) {
     */
 }
 
-void parse_double_list (string& str, vector <double>& tokens, const string& delimiters) {
-    
-}
-
-bool is_number (const string& s) {
-    string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) {
-        ++it;
-    }
-    return !s.empty() && it == s.end();
-}
 
 vector <vector <double> > processRateMatrixConfigFile (string filename, int numstates) {
     vector <double> cols(numstates,1);
-    vector <vector <double> > ratematrix = vector <vector <double> > (numstates,cols);
+    vector <vector <double> > ratematrix = vector <vector <double> > (numstates, cols);
     //read file
     ifstream ifs(filename.c_str());
     string line;
@@ -127,6 +147,7 @@ vector <vector <double> > processRateMatrixConfigFile (string filename, int nums
     return ratematrix;
 }
 
+
 Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
     Superdouble sum = 0;
     for (unsigned int i=0; i < in.size(); i++) {
@@ -137,15 +158,18 @@ Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
     return sum;
 }
 
+
 int random_int_range (int min, int max) {
     return min + (rand() % (int)(max - min + 1));
 }
+
 
 // arg below is always '?'. besides, getopt prints errors to sterr
 void print_error (char * pname, char arg) {
     // cout << pname <<": invalid option -- '" << arg << "'" << endl;
     cout << "Try `" << pname << " --help' for more information." << endl;
 }
+
 
 int sum_matrix_col (vector <vector <int> > & matrix,int col) {
     int x=0;
@@ -154,6 +178,7 @@ int sum_matrix_col (vector <vector <int> > & matrix,int col) {
     }
     return x;
 }
+
 
 int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
     int x=0;
@@ -164,6 +189,7 @@ int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
     }
     return x;
 }
+
 
 bool test_logical (vector <int> & matA, vector <int> & matB) {
     bool test = false;
@@ -186,18 +212,22 @@ bool test_logical (vector <int> & matA, vector <int> & matB) {
     return test;
 }
 
+
 // simple math on vectors
 double mean (vector <double> & in) {
     return sum (in) / (double)in.size();
 }
 
+
 double sum (vector <double> & in) {
     return accumulate(in.begin(), in.end(), 0.0);
 }
 
+
 int sum (vector <int> & in) {
     return accumulate(in.begin(), in.end(), 0);
 }
+
 
 vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
     
@@ -213,6 +243,7 @@ vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
     return res;
 }
 
+
 string get_string_vector (vector <string> &sts) {
     string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
@@ -221,6 +252,7 @@ string get_string_vector (vector <string> &sts) {
     return rets;
 }
 
+
 string get_string_vector (vector <int> & sts) {
     string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
@@ -228,6 +260,7 @@ string get_string_vector (vector <int> & sts) {
     }
     return rets;
 }
+
 
 // replace all occurrences of origSubStr to replSubStr
 void replace_all (string& str, string const& origSubStr, string const& replSubStr) {
@@ -240,6 +273,7 @@ void replace_all (string& str, string const& origSubStr, string const& replSubSt
         start_pos += replSubStr.length();
     }
 }
+
 
 // similar to above, but here we replace any 'bad' characters present in origSubStr
 // by the replacement. each bad character will be replaced (i.e. contiguous
@@ -284,6 +318,7 @@ void replace_each (string& str, string const& badChars, string const& replSubStr
 const string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>";
 const string newick_punct = "()[]\':;,";
 
+
 // get a taxon label that is newick-compliant
 string get_valid_newick_label (string const& inLabel) {
     bool needQuotes = false;
@@ -301,6 +336,7 @@ string get_valid_newick_label (string const& inLabel) {
     }
     return outLabel;
 }
+
 
 // get a taxon label that is Nexus-compliant
 string get_valid_nexus_label (string const& inLabel) {
@@ -320,6 +356,7 @@ string get_valid_nexus_label (string const& inLabel) {
     return outLabel;
 }
 
+
 // alters the label, but *should* open in all programs
 // replace all illegal characters with an underscore
 string get_safe_taxon_label (string const& inLabel) {
@@ -327,6 +364,7 @@ string get_safe_taxon_label (string const& inLabel) {
     replace_each(outLabel, nexus_punct, "_");
     return outLabel;
 }
+
 
 // got an invalid token. replace internal quotes and underscores, surround by quotes
 void quotify_label (string & token) {
@@ -339,6 +377,7 @@ void quotify_label (string & token) {
     // add outer quotes
     token = "'" + token + "'";
 }
+
 
 //------------------------------------------------------------------------//
 
@@ -362,9 +401,11 @@ unsigned int calc_hamming_dist (string const& s1, string const& s2) {
     );
 }
 
+
 double logn (double x, double base) {
     return log10(x)/log10(base);
 }
+
 
 // check if 2 doubles are equal within some tolerance.
 bool essentially_equal (double a, double b) {
@@ -384,6 +425,7 @@ bool essentially_equal (double a, double b) {
     
     return equal;
 }
+
 
 bool all_equal (vector <double> vals) {
     bool equal = false;
