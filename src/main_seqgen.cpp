@@ -77,6 +77,7 @@ int main(int argc, char * argv[]) {
     vector <double> userrates(4, 0.25);
     int nreps = 1; // not implemented at the moment
     int seed = -1;
+    double sum = 0;
     
     while (1) {
         int oi = -1;
@@ -95,6 +96,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 infreqs = strdup(optarg);
+		while (!basefreq.empty()){
+    		 sum += basefreq.back();
+    		 basefreq.pop_back();
+ 		}
                 parse_double_comma_list(infreqs, basefreq);
                 break;
             case 'l':
@@ -129,7 +134,7 @@ int main(int argc, char * argv[]) {
     ostream* poos;
     ifstream* fstr;
     ofstream* ofstr;
-    
+    cout << basefreq[0] << endl;
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
