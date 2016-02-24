@@ -54,6 +54,7 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
 void parse_double_comma_list (string& str, vector <double>& tokens) {
     std::stringstream ss(str);
     double i;
+
     while (ss >> i) {
         tokens.push_back(i);
         bool done = false;

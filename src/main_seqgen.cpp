@@ -36,7 +36,7 @@ void print_help() {
     cout << " -b, --basef=Input    comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
     cout << " -a, --ancestors      print the ancestral sequences at each node. default is no" << endl;
     cout << " -l, --len=INT        length of sequences to generate. default is 1000" << endl;
-    cout << " -r, --ratemat=Input  input values for rate matrix. default is JC69" << endl;
+    cout << " -r, --ratemat=Input  input values for rate matrix. default is JC69\n\t\t      Order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T\n\t\t      EX for JC69:.3,.3,.3,.3,.3" << endl;
     cout << " -o, --outf=FILE      output seq file, stout otherwise" << endl;
     cout << " -n, --nreps=INT      number of replicates" << endl;
     cout << " -x, --seed=INT       random number seed, clock otherwise" << endl;
@@ -103,6 +103,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 infreqs = strdup(optarg);
+		
 		while (!basefreq.empty()){
     		 sum += basefreq.back();
     		 basefreq.pop_back();
@@ -134,13 +135,17 @@ int main(int argc, char * argv[]) {
 		rmatrix[2][1] = userrates[4];
 		rmatrix[1][3] = userrates[5];
 		rmatrix[3][1] = userrates[5];
-		/*Turn on to check matrix
+		rmatrix[0][0] = (userrates[0]+userrates[1]+userrates[2]) * -1;
+		rmatrix[1][1] = (userrates[2]+userrates[4]+userrates[5]) * -1;
+		rmatrix[2][2] = (userrates[0]+userrates[3]+userrates[4]) * -1;
+		rmatrix[3][3] = (userrates[1]+userrates[3]+userrates[5]) * -1;
+		//Turn on to check matrix
                 for (unsigned int i = 0; i < rmatrix.size(); i++) {
                    for (unsigned int j = 0; j < rmatrix.size(); j++) {
   			cout << rmatrix[i][j] << " ";
                    }
 			cout << "\n";
-                }*/
+                }
                 break;
             case 'n':
                 nreps = atoi(strdup(optarg));
