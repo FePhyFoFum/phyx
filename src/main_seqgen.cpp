@@ -139,13 +139,13 @@ int main(int argc, char * argv[]) {
 		rmatrix[1][1] = (userrates[2]+userrates[4]+userrates[5]) * -1;
 		rmatrix[2][2] = (userrates[0]+userrates[3]+userrates[4]) * -1;
 		rmatrix[3][3] = (userrates[1]+userrates[3]+userrates[5]) * -1;
-		//Turn on to check matrix
+		/*//Turn on to check matrix
                 for (unsigned int i = 0; i < rmatrix.size(); i++) {
                    for (unsigned int j = 0; j < rmatrix.size(); j++) {
   			cout << rmatrix[i][j] << " ";
                    }
 			cout << "\n";
-                }
+                }*/
                 break;
             case 'n':
                 nreps = atoi(strdup(optarg));
