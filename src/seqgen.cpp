@@ -250,6 +250,18 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
     return Pmatrix;
 }
 
+/*
+* Create a gamma distribution and pull from it
+*/
+double GetGamma(double alpha, double beta){
+
+    double gamma = 1.0;
+    double number = 0.0;
+    int runs = 10000;
+    default_random_engine generator;
+    gamma_distribution<double> distribution(alpha,beta);
+    return gamma;
+}
 
 /*
  * Pre-Order traversal works
@@ -260,15 +272,18 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
 void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
 
     double brlength = 0.0;
+    double gamma = 0.0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
     vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     
     Node * root = tree->getRoot();
     seqs[root] = Ancestor;
+
     
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
+        gamma = GetGamma(1.0,1.0);
         QMatrix = calculate_q_matrix();
         PMatrix = calculate_p_matrix(QMatrix, brlength);
         Node * dec = tree->getNode(k);
