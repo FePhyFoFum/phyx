@@ -321,6 +321,8 @@ void SequenceGenerator::generate_random_sequence () {
     //mt19937 generator(rand());
     vector<float> foo(seqlen,1.0);
     site_rates = foo;
+    float gamma = 0.0;
+    float normalized = 0.0;
     // keep this outside of the function, as it is constant
     float A = basefreqs[0];
     float T = basefreqs[1] + A;
@@ -340,6 +342,8 @@ void SequenceGenerator::generate_random_sequence () {
         float RandNumb = get_uniform_random_deviate();
   	if (alpha != -1.0){
             float GammaNumb = get_gamma_random_deviate(alpha);
+            //normalized = sqrt(GammaNumb) / alpha;
+            //gamma += GammaNumb;
             site_rates[i] = GammaNumb;
         }
         //cout << GammaNumb << endl;
@@ -355,6 +359,7 @@ void SequenceGenerator::generate_random_sequence () {
         //    Ancestor[i] = 'G';
         //}
     }
+    //cout << (gamma / 1000.0) << endl;
     //cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
 }
 
@@ -402,7 +407,7 @@ float SequenceGenerator::get_uniform_random_deviate () {
 float SequenceGenerator::get_gamma_random_deviate (float alpha) {
 
     //default_random_engine generator;
-    std::gamma_distribution<float> distribution(alpha,alpha);
+    std::gamma_distribution<float> distribution(alpha,(1/alpha));
     return distribution(generator);
 }
 
