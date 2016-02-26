@@ -40,6 +40,7 @@ void print_help() {
     cout << " -o, --outf=FILE      output seq file, stout otherwise" << endl;
     cout << " -n, --nreps=INT      number of replicates" << endl;
     cout << " -x, --seed=INT       random number seed, clock otherwise" << endl;
+    cout << " -g, --gamma=INT      gamma value, Default 1" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
     cout << endl;
@@ -59,6 +60,7 @@ static struct option const long_options[] =
     {"ratemat", required_argument, NULL, 'r'},
     {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
+    {"gamma", required_argument, NULL, 'g'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -154,15 +156,15 @@ int main(int argc, char * argv[]) {
             case 'x':
                 seed = atoi(strdup(optarg));
                 break;
+            case 'g':
+                alpha = atof(strdup(optarg));
+                break;
             case 'h':
                 print_help();
                 exit(0);
             case 'V':
                 cout << versionline << endl;
                 exit(0);
-            case 'g':
-                alpha = atof(strdup(optarg));
-                break;
             default:
                 print_error(argv[0],(char)c);
                 exit(0);
