@@ -258,8 +258,14 @@ double GetGamma(double alpha, double beta){
     double gamma = 1.0;
     double number = 0.0;
     int runs = 10000;
+    double all_gamma = 0.0;
+    //vector<double> gamma_dist; 
     default_random_engine generator;
     gamma_distribution<double> distribution(alpha,beta);
+    //for (unsigned int i=0; i<runs; ++i){
+     number = distribution(generator);
+     cout << number << endl;
+    //}
     return gamma;
 }
 
