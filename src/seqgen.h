@@ -30,15 +30,17 @@ private:
     map <Node *, string> seqs;
     
     vector<Sequence> res;
-    
+    float alpha;
     void preorder_tree_traversal (Tree * tree);
+    vector <float> site_rates;
     vector < vector <double> > calculate_q_matrix ();
     vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix, float br);
-    string simulate_sequence (string const& anc, vector < vector <double> >& Matrix);
+    string simulate_sequence (string const& anc, vector < vector <double> >& Matrix, float const& brlength);
     void generate_random_sequence ();
     //void TakeInTree ();
     mt19937 generator;
     float get_uniform_random_deviate ();
+    float get_gamma_random_deviate (float);
 //    vector<Node *> nodes; // unused
 
 
@@ -46,7 +48,7 @@ public:
     SequenceGenerator ();
     SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-        int const& nreps, int const & seed);
+        int const& nreps, int const & seed, float const& alpha);
     vector<Sequence> get_sequences ();
     //Node * PreOrder(int); // not used
     

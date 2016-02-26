@@ -44,7 +44,7 @@ map <char, int> SequenceGenerator::nucMap = {
 /* Use the P matrix probabilities and randomly draw numbers to see
  * if each individual state will undergo some type of change
  */
-string SequenceGenerator::simulate_sequence (string const& anc, vector < vector <double> >& Matrix) {
+string SequenceGenerator::simulate_sequence (string const& anc, vector < vector <double> >& QMatrix, float const& brlength) {
 
     //string hold = ""; //for the stupid string to double thing I always do
     //string newstring = "";
@@ -58,19 +58,23 @@ string SequenceGenerator::simulate_sequence (string const& anc, vector < vector 
 //    std::partial_sum(Matrix[3].begin(), Matrix[3].end(), fromG.begin(), plus<double>());
     
     std::vector<double>::iterator low;
-    
+    vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
+    /*
     for (int i = 0; i < 4; i++) {
         std::partial_sum(Matrix[i].begin(), Matrix[i].end(), Matrix[i].begin(), plus<double>());
-    }
+    }*/
     string chars = "ATCG";
     string newstring = anc; // instead of building, set size and replace
     for (unsigned int i = 0; i < anc.size(); i++) {
-        
         float RandNumb = get_uniform_random_deviate();
         int ancChar = nucMap[anc[i]];
-        
-        low = std::lower_bound (Matrix[ancChar].begin(), Matrix[ancChar].end(), RandNumb);
-        newstring[i] = chars[low - Matrix[ancChar].begin()];
+        float brnew = brlength * site_rates[i];
+        PMatrix = calculate_p_matrix(QMatrix, brnew);
+        for (int i = 0; i < 4; i++) {
+            std::partial_sum(PMatrix[i].begin(), PMatrix[i].end(), PMatrix[i].begin(), plus<double>());
+        }
+        low = std::lower_bound (PMatrix[ancChar].begin(), PMatrix[ancChar].end(), RandNumb);
+        newstring[i] = chars[low - PMatrix[ancChar].begin()];
         
     /*  
         float RandNumb = 0.0;
@@ -252,7 +256,7 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
 
 /*
 * Create a gamma distribution and pull from it
-*/
+
 double GetGamma(double alpha, double beta){
 
     double gamma = 1.0;
@@ -268,7 +272,7 @@ double GetGamma(double alpha, double beta){
     //}
     return gamma;
 }
-
+*/
 /*
  * Pre-Order traversal works
  * Calculates the JC Matrix
@@ -280,7 +284,7 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
     double brlength = 0.0;
     double gamma = 0.0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
-    vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
+    //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     
     Node * root = tree->getRoot();
     seqs[root] = Ancestor;
@@ -289,13 +293,12 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
-        gamma = GetGamma(1.0,1.0);
         QMatrix = calculate_q_matrix();
-        PMatrix = calculate_p_matrix(QMatrix, brlength);
+        //PMatrix = calculate_p_matrix(QMatrix, brlength);
         Node * dec = tree->getNode(k);
         Node * parent = tree->getNode(k)->getParent();
         string ancSeq = seqs[parent];
-        string decSeq = simulate_sequence(ancSeq, PMatrix);
+        string decSeq = simulate_sequence(ancSeq, QMatrix, brlength);
         seqs[dec] = decSeq;
         
         //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
@@ -316,12 +319,12 @@ void SequenceGenerator::generate_random_sequence () {
 
     //string hold = "";
     //mt19937 generator(rand());
-    
+    vector<float> foo(seqlen,1.0);
+    site_rates = foo;
     // keep this outside of the function, as it is constant
     float A = basefreqs[0];
     float T = basefreqs[1] + A;
     float C = basefreqs[2]  + T;
-    
     for (int i = 0; i < seqlen; i++) {
 //        int RandNumb = 0;
 //        int A = (basefreqs[0] * 100);
@@ -334,9 +337,12 @@ void SequenceGenerator::generate_random_sequence () {
 //      std::uniform_int_distribution<int>  distr(0, 100);
 //      hold = to_string(distr(generator));
 //      RandNumb = stod(hold);
-        
         float RandNumb = get_uniform_random_deviate();
-        
+  	if (alpha != -1.0){
+            float GammaNumb = get_gamma_random_deviate(alpha);
+            site_rates[i] = GammaNumb;
+        }
+        //cout << GammaNumb << endl;
         if (RandNumb < A) {
             Ancestor[i] = 'A';
         } else if (RandNumb > A && RandNumb < T) {
@@ -353,6 +359,7 @@ void SequenceGenerator::generate_random_sequence () {
 }
 
 
+
 SequenceGenerator::SequenceGenerator () {
     // TODO Auto-generated constructor stub
 }
@@ -360,9 +367,9 @@ SequenceGenerator::SequenceGenerator () {
 
 SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed):seqlen(seqlenth), basefreqs(basefreq), 
+    int const& nreps, int const& seed, float const& alpha):seqlen(seqlenth), basefreqs(basefreq), 
     rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    Ancestor(seqlenth, 'G') {
+    Ancestor(seqlenth, 'G'),alpha(alpha) {
     
     // set the number generator being used
     if (seed != -1) { // user provided seed
@@ -392,7 +399,12 @@ float SequenceGenerator::get_uniform_random_deviate () {
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
     return distribution(generator);
 }
+float SequenceGenerator::get_gamma_random_deviate (float alpha) {
 
+    //default_random_engine generator;
+    std::gamma_distribution<float> distribution(alpha,alpha);
+    return distribution(generator);
+}
 
 //SEQGEN::~SEQGEN() {
 //    // TODO Auto-generated destructor stub
