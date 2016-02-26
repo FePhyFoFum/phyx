@@ -91,7 +91,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:hV:g", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -106,11 +106,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 infreqs = strdup(optarg);
-		
-		while (!basefreq.empty()){
-    		 sum += basefreq.back();
-    		 basefreq.pop_back();
- 		}
+                while (!basefreq.empty()){
+                     sum += basefreq.back();
+                     basefreq.pop_back();
+                 }
                 parse_double_comma_list(infreqs, basefreq);
                 break;
             case 'l':
@@ -121,33 +120,33 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 inrates = strdup(optarg);
-		while (!userrates.empty()){
-    		 sum += userrates.back();
-    		 userrates.pop_back();
- 		}
+                while (!userrates.empty()){
+                     sum += userrates.back();
+                     userrates.pop_back();
+                 }
                 parse_double_comma_list(inrates, userrates);
-		rmatrix[0][2] = userrates[0];
-		rmatrix[2][0] = userrates[0];
-		rmatrix[0][3] = userrates[1];
-		rmatrix[3][0] = userrates[1];
-		rmatrix[0][1] = userrates[2];
-		rmatrix[1][0] = userrates[2];
-		rmatrix[2][3] = userrates[3];
-		rmatrix[3][2] = userrates[3];
-		rmatrix[1][2] = userrates[4];
-		rmatrix[2][1] = userrates[4];
-		rmatrix[1][3] = userrates[5];
-		rmatrix[3][1] = userrates[5];
-		rmatrix[0][0] = (userrates[0]+userrates[1]+userrates[2]) * -1;
-		rmatrix[1][1] = (userrates[2]+userrates[4]+userrates[5]) * -1;
-		rmatrix[2][2] = (userrates[0]+userrates[3]+userrates[4]) * -1;
-		rmatrix[3][3] = (userrates[1]+userrates[3]+userrates[5]) * -1;
-		/*//Turn on to check matrix
+                rmatrix[0][2] = userrates[0];
+                rmatrix[2][0] = userrates[0];
+                rmatrix[0][3] = userrates[1];
+                rmatrix[3][0] = userrates[1];
+                rmatrix[0][1] = userrates[2];
+                rmatrix[1][0] = userrates[2];
+                rmatrix[2][3] = userrates[3];
+                rmatrix[3][2] = userrates[3];
+                rmatrix[1][2] = userrates[4];
+                rmatrix[2][1] = userrates[4];
+                rmatrix[1][3] = userrates[5];
+                rmatrix[3][1] = userrates[5];
+                rmatrix[0][0] = (userrates[0]+userrates[1]+userrates[2]) * -1;
+                rmatrix[1][1] = (userrates[2]+userrates[4]+userrates[5]) * -1;
+                rmatrix[2][2] = (userrates[0]+userrates[3]+userrates[4]) * -1;
+                rmatrix[3][3] = (userrates[1]+userrates[3]+userrates[5]) * -1;
+                /*//Turn on to check matrix
                 for (unsigned int i = 0; i < rmatrix.size(); i++) {
                    for (unsigned int j = 0; j < rmatrix.size(); j++) {
-  			cout << rmatrix[i][j] << " ";
+                      cout << rmatrix[i][j] << " ";
                    }
-			cout << "\n";
+                    cout << "\n";
                 }*/
                 break;
             case 'n':
@@ -199,7 +198,7 @@ int main(int argc, char * argv[]) {
     //basefreq[1] = .25;
     //basefreq[2] = .25;
     //basefreq[3] = 1.0 - basefreq[0] - basefreq[1] - basefreq[2];
-    /*	
+    /*    
     vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
