@@ -34,13 +34,14 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE     input treefile, stdin otherwise" << endl;
     cout << " -b, --basef=Input    comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
-    cout << " -a, --ancestors      print the ancestral sequences at each node. default is no" << endl;
+    cout << " -a, --ancestors      print the ancestral sequences at each node. use -p for the nodes labels, default is no" << endl;
     cout << " -l, --len=INT        length of sequences to generate. default is 1000" << endl;
     cout << " -r, --ratemat=Input  input values for rate matrix. default is JC69\n\t\t      Order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T\n\t\t      EX for JC69:.3,.3,.3,.3,.3" << endl;
     cout << " -o, --outf=FILE      output seq file, stout otherwise" << endl;
     cout << " -n, --nreps=INT      number of replicates" << endl;
     cout << " -x, --seed=INT       random number seed, clock otherwise" << endl;
     cout << " -g, --gamma=INT      gamma value, Default 1" << endl;
+    cout << " -p, --postorder      (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
     cout << endl;
@@ -61,6 +62,7 @@ static struct option const long_options[] =
     {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
     {"gamma", required_argument, NULL, 'g'},
+    {"postorder", no_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -69,7 +71,9 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
+    bool printpost = false;
     bool showancs = false;
+    string yorn = "n";
     int seqlen = 1000;
     string infreqs;
     string inrates;
@@ -91,7 +95,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:p:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -157,6 +161,14 @@ int main(int argc, char * argv[]) {
                 break;
             case 'g':
                 alpha = atof(strdup(optarg));
+                break;
+            case 'p':
+                yorn = strdup(optarg);
+                if (yorn == "y" || yorn == "Y" || yorn == "Yes" || yorn == "yes"){
+                    printpost = true;
+                }else{
+				    printpost = false;
+				}
                 break;
             case 'h':
                 print_help();
@@ -224,7 +236,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
@@ -245,7 +257,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];

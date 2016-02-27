@@ -279,10 +279,12 @@ double GetGamma(double alpha, double beta){
  */
 // TODO: how to name ancestor nodes (sequences)
 //       - if we have this we can add to results (if desired))
-void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
+void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs) {
 
     double brlength = 0.0;
     double gamma = 0.0;
+    int count = 0;
+    string str = "";
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     
@@ -302,9 +304,14 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
         seqs[dec] = decSeq;
         
         //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
-        
+        if (showancs == true && tree->getNode(k)->isInternal() == true){
+			
+			str = to_string(count);
+			cout << ">" << "Node_" << str << "\n" << decSeq << endl;
+			count++; 
+        }
         // If its a tip print the name and the sequence
-        if (tree->getNode(k)->getName() != "") {
+        if (tree->getNode(k)->isInternal() != true) {
             string tname = tree->getNode(k)->getName();
             //cout << ">" << tname << "\n" << decSeq << endl;
             Sequence seq(tname, decSeq);
@@ -312,7 +319,26 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree) {
         }
     }
 }
-
+void SequenceGenerator::PrintNodeNames(Tree * tree){
+	
+	int count = 0;
+	string str = "Node";
+	string newick = "";
+	//cout << "Good Shit Miroki" << endl;
+	Node * root = tree->getRoot();
+    seqs[root] = Ancestor;
+    for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
+		if (tree->getNode(k)->isInternal() == true) {
+            //cout << k << endl;
+            str = to_string(count);
+            newick = "Node_" + str;
+            tree->getNode(k)->setName(newick);
+            count++;
+        }
+	}
+	cout << tree->getRoot()->getNewick(true) <<";" << endl;
+	
+}
 
 // initialized as string of length seqlenth, all 'G'
 void SequenceGenerator::generate_random_sequence () {
@@ -372,10 +398,10 @@ SequenceGenerator::SequenceGenerator () {
 
 SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha):seqlen(seqlenth), basefreqs(basefreq), 
+    int const& nreps, int const& seed, float const& alpha, bool const& printpost):seqlen(seqlenth), basefreqs(basefreq), 
     rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    Ancestor(seqlenth, 'G'),alpha(alpha) {
-    
+    Ancestor(seqlenth, 'G'),alpha(alpha),printpost(printpost) {
+    //cout << printpost << endl;
     // set the number generator being used
     if (seed != -1) { // user provided seed
         srand(seed);
@@ -384,12 +410,15 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
         random_device rand_dev;
         generator = mt19937(rand_dev());
     }
-    
+    //Print out the nodes names
+    if(printpost == true){
+		PrintNodeNames(tree);
+	}
     // TODO: what if suer wants to pass in ancestral sequence?
     //       - need to allow this to be passed in
     generate_random_sequence();
     
-    preorder_tree_traversal(tree);
+    preorder_tree_traversal(tree, showancs);
     //TakeInTree();
 }
 

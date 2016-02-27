@@ -31,7 +31,9 @@ private:
     
     vector<Sequence> res;
     float alpha;
-    void preorder_tree_traversal (Tree * tree);
+    bool printpost;
+    void PrintNodeNames (Tree * tree);
+    void preorder_tree_traversal (Tree * tree, bool showancs);
     vector <float> site_rates;
     vector < vector <double> > calculate_q_matrix ();
     vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix, float br);
@@ -48,7 +50,7 @@ public:
     SequenceGenerator ();
     SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-        int const& nreps, int const & seed, float const& alpha);
+        int const& nreps, int const & seed, float const& alpha, bool const& printpost);
     vector<Sequence> get_sequences ();
     //Node * PreOrder(int); // not used
     
