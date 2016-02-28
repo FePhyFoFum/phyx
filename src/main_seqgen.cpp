@@ -43,8 +43,8 @@ void print_help() {
     cout << " -g, --gamma=INT      gamma value, Default 1" << endl;
     cout << " -p, --postorderprint (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
     cout << " -m, --multimodel=INT Have multiple models across tree, input is as follows," 
-                               << "Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T"
-                               << "EX for node 0: 0,.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
+                               << "A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T"
+                               << "EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
     cout << endl;
@@ -260,6 +260,7 @@ int main(int argc, char * argv[]) {
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
                     (*poos) << ">" << seq.get_id() << endl;
+                    //cout << "Here" << endl;
                     (*poos) << seq.get_sequence() << endl;
                 }
                 delete tree;

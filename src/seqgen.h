@@ -30,6 +30,9 @@ private:
     bool showancs;
     
     map <Node *, string> seqs;
+    map <Node *, vector < vector <double> >> ancq;
+    vector < vector <double> > Qparent;
+
     
     vector<Sequence> res;
     float alpha;
