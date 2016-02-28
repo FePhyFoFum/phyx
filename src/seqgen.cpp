@@ -170,7 +170,55 @@ string SequenceGenerator::simulate_sequence (string const& anc, vector < vector 
     
     return newstring;
 }
+/*
+ * Calculate the Multi Q Matrix (Substitution rate matrix)
+ */
+vector < vector <double> > SequenceGenerator::calcQmatrix (vector< vector <double> > rate_matrix) {
 
+    vector < vector <double> > bigpi(4, vector <double>(4, 1.0));
+    vector < vector <double> > t(4, vector <double>(4, 0.0));
+    
+    double tscale = 0.0;
+    
+    // doing the same looping multiple times here. simplify?
+    
+    for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+        for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+            if (i != j) {
+                bigpi[i][j] *= basefreqs[i] * basefreqs[j] * rate_matrix[i][j];
+                tscale += bigpi[i][j];
+            } else {
+                bigpi[i][j] = 0.0;
+            }
+        }
+    }
+    for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+        for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+            if (i != j) {
+                bigpi[i][j] /= tscale;
+            } else {
+                // set the diagnols to zero *** are they not set to zero above?
+                bigpi[i][j] = 0.0;
+            }
+        }
+    }
+    for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+        double diag = 0.0;
+        for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+            if (i != j) {
+                diag -= bigpi[i][j];
+            }
+        }
+        bigpi[i][i] = diag;
+    }
+    //Divide and Transpose
+    for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+        for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+            bigpi[i][j] /= basefreqs[i];
+        }
+    }
+    return bigpi;
+}
 
 /*
  * Calculate the Q Matrix (Substitution rate matrix)
@@ -251,42 +299,93 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
             count++;
         }
    }
-    return Pmatrix;
+   return Pmatrix;
 }
 
-/*
-* Create a gamma distribution and pull from it
-
-double GetGamma(double alpha, double beta){
-
-    double gamma = 1.0;
-    double number = 0.0;
-    int runs = 10000;
-    double all_gamma = 0.0;
-    //vector<double> gamma_dist; 
-    default_random_engine generator;
-    gamma_distribution<double> distribution(alpha,beta);
-    //for (unsigned int i=0; i<runs; ++i){
-     number = distribution(generator);
-     cout << number << endl;
-    //}
-    return gamma;
-}
-*/
 /*
  * Pre-Order traversal works
  * Calculates the JC Matrix
  */
 // TODO: how to name ancestor nodes (sequences)
 //       - if we have this we can add to results (if desired))
-void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs) {
+void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vector<double> multirates, bool mm) {
 
     double brlength = 0.0;
     double gamma = 0.0;
     int count = 0;
+    int rate_count = 0;
     string str = "";
+    int check = 0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
+    vector< vector <double> > rate_matrix(4, vector<double>(4, 0.33));
+
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
+    if (mm == true){
+		check = (int)round(multirates[0]);
+		    /*for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+                for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+                    if (i == j) {
+                        rate_matrix[i][j] = -1.0;
+                    }
+                }
+            }*/
+            if(check == 0){
+				
+			    rate_matrix[0][2] = multirates[1];
+                rate_matrix[2][0] = multirates[1];
+                rate_matrix[0][3] = multirates[2];
+                rate_matrix[3][0] = multirates[2];
+                rate_matrix[0][1] = multirates[3];
+                rate_matrix[1][0] = multirates[3];
+                rate_matrix[2][3] = multirates[4];
+                rate_matrix[3][2] = multirates[4];
+                rate_matrix[1][2] = multirates[5];
+                rate_matrix[2][1] = multirates[5];
+                rate_matrix[1][3] = multirates[6];
+                rate_matrix[3][1] = multirates[6];
+                rate_matrix[0][0] = (multirates[1]+multirates[2]+multirates[3]) * -1;
+                rate_matrix[1][1] = (multirates[3]+multirates[5]+multirates[6]) * -1;
+                rate_matrix[2][2] = (multirates[1]+multirates[4]+multirates[5]) * -1;
+                rate_matrix[3][3] = (multirates[2]+multirates[4]+multirates[6]) * -1;
+                for (unsigned int i = 0; i < 7; i++){
+			        multirates.erase (multirates.begin() + 0); 
+			    }
+                /*for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+                   for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+                      cout << rate_matrix[i][j] << " ";
+                   }
+                    cout << "\n";
+                }*/
+			}else{
+				
+			    rate_matrix[0][2] = .33;
+                rate_matrix[2][0] = .33;
+                rate_matrix[0][3] = .33;
+                rate_matrix[3][0] = .33;
+                rate_matrix[0][1] = .33;
+                rate_matrix[1][0] = .33;
+                rate_matrix[2][3] = .33;
+                rate_matrix[3][2] = .33;
+                rate_matrix[1][2] = .33;
+                rate_matrix[2][1] = .33;
+                rate_matrix[1][3] = .33;
+                rate_matrix[3][1] = .33;
+                rate_matrix[0][0] = (multirates[1]+multirates[2]+multirates[3]) * -1;
+                rate_matrix[1][1] = (multirates[3]+multirates[5]+multirates[6]) * -1;
+                rate_matrix[2][2] = (multirates[1]+multirates[4]+multirates[5]) * -1;
+                rate_matrix[3][3] = (multirates[2]+multirates[4]+multirates[6]) * -1;
+                for (unsigned int i = 0; i < 7; i++){
+			        multirates.erase (multirates.begin() + 0);; 
+			    }
+                /*for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+                   for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+                      cout << rate_matrix[i][j] << " ";
+                   }
+                    cout << "\n";
+                }*/
+				
+			}
+	}
     
     Node * root = tree->getRoot();
     seqs[root] = Ancestor;
@@ -295,7 +394,48 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs) {
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
-        QMatrix = calculate_q_matrix();
+        if(mm == true){
+			check = (int)round(multirates[0]);
+		    if(tree->getNode(k)->isInternal() == true){
+                if(check == rate_count){
+
+				    rate_matrix[0][2] = multirates[1];
+                    rate_matrix[2][0] = multirates[1];
+                    rate_matrix[0][3] = multirates[2];
+                    rate_matrix[3][0] = multirates[2];
+                    rate_matrix[0][1] = multirates[3];
+                    rate_matrix[1][0] = multirates[3];
+                    rate_matrix[2][3] = multirates[4];
+                    rate_matrix[3][2] = multirates[4];
+                    rate_matrix[1][2] = multirates[5];
+                    rate_matrix[2][1] = multirates[5];
+                    rate_matrix[1][3] = multirates[6];
+                    rate_matrix[3][1] = multirates[6];
+                    rate_matrix[0][0] = (multirates[1]+multirates[2]+multirates[3]) * -1;
+                    rate_matrix[1][1] = (multirates[3]+multirates[5]+multirates[6]) * -1;
+                    rate_matrix[2][2] = (multirates[1]+multirates[4]+multirates[5]) * -1;
+                    rate_matrix[3][3] = (multirates[2]+multirates[4]+multirates[6]) * -1;
+
+				    for (unsigned int i = 0; i < 7; i++){
+			            multirates.erase (multirates.begin() + 0);; 
+			        }
+	                for (unsigned int i = 0; i < multirates.size(); i++){
+			            cout << multirates[i] << endl;
+			        }			    
+			    }
+			    rate_count++;
+
+			}
+			QMatrix = calcQmatrix(rate_matrix);
+		}else{
+		    QMatrix = calculate_q_matrix();
+		}
+		/*for (unsigned int i = 0; i < rate_matrix.size(); i++) {
+            for (unsigned int j = 0; j < rate_matrix.size(); j++) {
+                cout << rate_matrix[i][j] << " ";
+            }
+            cout << "\n";
+        }*/
         //PMatrix = calculate_p_matrix(QMatrix, brlength);
         Node * dec = tree->getNode(k);
         Node * parent = tree->getNode(k)->getParent();
@@ -398,10 +538,10 @@ SequenceGenerator::SequenceGenerator () {
 
 SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha, bool const& printpost):seqlen(seqlenth), basefreqs(basefreq), 
+    int const& nreps, int const& seed, float const& alpha, bool const& printpost, vector<double> const& multirates, bool const& mm):seqlen(seqlenth), basefreqs(basefreq), 
     rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    Ancestor(seqlenth, 'G'),alpha(alpha),printpost(printpost) {
-    //cout << printpost << endl;
+    Ancestor(seqlenth, 'G'),alpha(alpha),printpost(printpost),multirates(multirates), mm(mm) {
+
     // set the number generator being used
     if (seed != -1) { // user provided seed
         srand(seed);
@@ -418,7 +558,7 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
     //       - need to allow this to be passed in
     generate_random_sequence();
     
-    preorder_tree_traversal(tree, showancs);
+    preorder_tree_traversal(tree, showancs, multirates, mm);
     //TakeInTree();
 }
 

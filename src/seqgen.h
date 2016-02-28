@@ -18,7 +18,9 @@ class SequenceGenerator {
 private:
     // constant values
     int seqlen;
+    bool mm;
     vector <double> basefreqs;
+    vector <double> multirates;
     vector < vector <double> > rmatrix;
     Tree * tree;
     int nreps;
@@ -33,9 +35,10 @@ private:
     float alpha;
     bool printpost;
     void PrintNodeNames (Tree * tree);
-    void preorder_tree_traversal (Tree * tree, bool showancs);
+    void preorder_tree_traversal (Tree * tree, bool showancs, vector <double> multirates, bool mm);
     vector <float> site_rates;
     vector < vector <double> > calculate_q_matrix ();
+    vector <vector<double>> calcQmatrix (vector<vector <double>>);
     vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix, float br);
     string simulate_sequence (string const& anc, vector < vector <double> >& Matrix, float const& brlength);
     void generate_random_sequence ();
@@ -50,7 +53,7 @@ public:
     SequenceGenerator ();
     SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-        int const& nreps, int const & seed, float const& alpha, bool const& printpost);
+        int const& nreps, int const & seed, float const& alpha, bool const& printpost,vector<double> const& multirates, bool const& mm);
     vector<Sequence> get_sequences ();
     //Node * PreOrder(int); // not used
     

@@ -41,7 +41,10 @@ void print_help() {
     cout << " -n, --nreps=INT      number of replicates" << endl;
     cout << " -x, --seed=INT       random number seed, clock otherwise" << endl;
     cout << " -g, --gamma=INT      gamma value, Default 1" << endl;
-    cout << " -p, --postorder      (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
+    cout << " -p, --postorderprint (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
+    cout << " -m, --multimodel=INT Have multiple models across tree, input is as follows," 
+                               << "Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T"
+                               << "EX for node 0: 0,.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
     cout << endl;
@@ -63,6 +66,7 @@ static struct option const long_options[] =
     {"seed", required_argument, NULL, 'x'},
     {"gamma", required_argument, NULL, 'g'},
     {"postorder", no_argument, NULL, 'p'},
+    {"multimodel", required_argument, NULL, 'm'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -73,14 +77,17 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool printpost = false;
     bool showancs = false;
+    bool mm = false;
     string yorn = "n";
     int seqlen = 1000;
     string infreqs;
     string inrates;
+    string holdrates;
     char * outf;
     char * treef;
     vector <double> basefreq(4, 0.25);
     vector <double> userrates(4, 0.25);
+    vector <double> multirates(4, 0.25);
     int nreps = 1; // not implemented at the moment
     int seed = -1;
     double sum = 0;
@@ -95,7 +102,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:p:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:p:m:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -170,6 +177,18 @@ int main(int argc, char * argv[]) {
 				    printpost = false;
 				}
                 break;
+            case 'm':
+                 mm = true;
+                 holdrates = strdup(optarg);
+                 while (!multirates.empty()){
+                     sum += multirates.back();
+                     multirates.pop_back();
+                 }
+                 parse_double_comma_list(holdrates, multirates);
+                 /*for (unsigned int i = 0; i < userrates.size(); i++){
+					 cout << userrates[i] << endl;
+				 }*/
+				 break;
             case 'h':
                 print_help();
                 exit(0);
@@ -236,7 +255,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost,multirates, mm);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
@@ -257,7 +276,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost,multirates, mm);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
