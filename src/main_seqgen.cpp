@@ -32,6 +32,7 @@ void print_help() {
     cout << " -l, --length=INT       length of sequences to generate. default is 1000" << endl;
     cout << " -b, --basef=Input      comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
     cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
+    cout << " -i, --pinvar=DOUBLE    proportion of invariable sites. default is 0.0" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
@@ -57,8 +58,9 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"outf", required_argument, NULL, 'o'},
     {"length", required_argument, NULL, 'l'},
-    {"gamma", required_argument, NULL, 'g'},
     {"basef", required_argument, NULL, 'b'},
+    {"gamma", required_argument, NULL, 'g'},
+    {"pinvar", required_argument, NULL, 'i'},
     {"ratemat", required_argument, NULL, 'r'},
     {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
@@ -163,6 +165,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'g':
                 alpha = atof(strdup(optarg));
+                break;
+            case 'i':
+                pinvar = atof(strdup(optarg));
                 break;
             case 'p':
                 printpost = true;
