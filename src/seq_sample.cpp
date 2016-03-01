@@ -93,27 +93,8 @@ vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
 // sample WITHOUT replacement. not with partitioned models
 vector <int> SequenceSampler::get_jackknife_sites (int const& numchar) {
     int numsample = numchar * jkfract + 0.5;
-    int randnum = 0;
     
-    if (numsample == 0) {
-        cout << "Jackknife fraction " << jkfract << " leaves no characters remaining." << endl;
-        exit(0);
-    }
-    
-    vector <int> randsites (numsample); // numchar zero-initialized elements
-    
-// ugh. must be a more succinct way to do this.
-    vector <int> allsites (numchar);
-    for (int i = 0; i < numchar; i++) {
-        allsites[i] = i;
-    }
-    
-    for (int i = 0; i < numsample; i++) {
-        randnum = random_int_range(i, (numchar - 1));
-    // swap, so don't have to worry about multiple hits
-        swap(allsites[i], allsites[randnum]);
-        randsites[i] = allsites[i];
-    }
+    vector <int> randsites = sample_without_replacement(numchar, numsample);
     
     return randsites;
 }

@@ -21,6 +21,9 @@ vector <int> sum (vector <int> & vec1, vector <int> & vec2);
 vector <vector <double> > processRateMatrixConfigFile (string filename, int numareas);
 Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in);
 int random_int_range (int min, int max);
+
+vector <int> sample_without_replacement (int const& numTotal, int const& numSample);
+
 void print_error (char * pname, char arg);
 
 int sum_matrix_col (vector <vector <int> > & matrix, int col);

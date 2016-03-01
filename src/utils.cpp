@@ -166,6 +166,23 @@ int random_int_range (int min, int max) {
 }
 
 
+// given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
+vector <int> sample_without_replacement (int const& numTotal, int const& numSample) {
+    vector <int> randsites (numSample); // numchar zero-initialized elements
+    vector <int> allsites (numTotal);
+    iota(allsites.begin(), allsites.end(), 0); // generate sequence 0,1,2...n-1
+    
+    int randNum = 0;
+    for (int i = 0; i < numSample; i++) {
+        randNum = random_int_range(i, (numTotal - 1));
+    // swap, so don't have to worry about multiple hits
+        swap(allsites[i], allsites[randNum]);
+        randsites[i] = allsites[i];
+    }
+    return randsites;
+}
+
+
 // arg below is always '?'. besides, getopt prints errors to sterr
 void print_error (char * pname, char arg) {
     // cout << pname <<": invalid option -- '" << arg << "'" << endl;
