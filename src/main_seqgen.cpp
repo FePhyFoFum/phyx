@@ -116,6 +116,11 @@ int main(int argc, char * argv[]) {
             case 'b':
                 infreqs = strdup(optarg);
                 basefreq = parse_double_comma_list(infreqs);
+                if (basefreq.size() != 4) {
+                    cout << "Error: must provide 4 base frequencies (" << basefreq.size()
+                        << " provided). Exiting." << endl;
+                    exit(0);
+                }
                 break;
             case 'l':
                 seqlen = atoi(strdup(optarg));
