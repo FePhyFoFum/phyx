@@ -301,13 +301,21 @@ void SequenceGenerator::PrintNodeNames(Tree * tree) {
 }
 
 
-// initialized as string of length seqlenth, all 'G'
-void SequenceGenerator::generate_random_sequence () {
+vector <float> SequenceGenerator::set_site_rates () {
+    // use alpha
+    vector <float> srates(seqlen, 1.0);
+    if (alpha != -1.0) { // default i.e. no rate variation
+        for (int i = 0; i < seqlen; i++) {
+            srates[i] = get_gamma_random_deviate(alpha);
+        }
+    }
+    return srates;
+} 
 
-    //string hold = "";
-    //mt19937 generator(rand());
-    vector<float> foo(seqlen,1.0);
-    site_rates = foo;
+
+// initialized as string of length seqlength, all 'G'
+void SequenceGenerator::generate_random_sequence () {
+    
     float gamma = 0.0;
     float normalized = 0.0;
     // keep this outside of the function, as it is constant
@@ -315,23 +323,7 @@ void SequenceGenerator::generate_random_sequence () {
     float T = basefreqs[1] + A;
     float C = basefreqs[2]  + T;
     for (int i = 0; i < seqlen; i++) {
-//        int RandNumb = 0;
-//        int A = (basefreqs[0] * 100);
-//        int T = ((basefreqs[1] * 100) + (basefreqs[0] * 100));
-//        int C = ((basefreqs[2] * 100) + T);
-        //random_device rand_dev;
-        //mt19937 generator(rand_dev());
-        //mt19937 generator(rand());
-        
-//      std::uniform_int_distribution<int>  distr(0, 100);
-//      hold = to_string(distr(generator));
-//      RandNumb = stod(hold);
         float RandNumb = get_uniform_random_deviate();
-        if (alpha != -1.0) {
-            float GammaNumb = get_gamma_random_deviate(alpha);
-            site_rates[i] = GammaNumb;
-        }
-        //cout << GammaNumb << endl;
         if (RandNumb < A) {
             Ancestor[i] = 'A';
         } else if (RandNumb > A && RandNumb < T) {
@@ -339,13 +331,7 @@ void SequenceGenerator::generate_random_sequence () {
         } else if (RandNumb > T && RandNumb < C) {
             Ancestor[i] = 'C';
         }
-        // initialized as all Gs, so the following is not needed
-        //else {
-        //    Ancestor[i] = 'G';
-        //}
     }
-    //cout << (gamma / 1000.0) << endl;
-    //cout << ">Ancestral_Seq" << "\n" << Ancestor << endl;
 }
 
 
@@ -355,12 +341,8 @@ SequenceGenerator::SequenceGenerator () {
 }
 
 
-SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
-    vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha, bool const& printpost, vector<double> const& multirates, bool const& mm):seqlen(seqlenth), basefreqs(basefreq), 
-    rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    Ancestor(seqlenth, 'G'),alpha(alpha),printpost(printpost),multirates(multirates), mm(mm) {
-
+// set all values
+void SequenceGenerator::initialize () {
     // set the number generator being used
     if (seed != -1) { // user provided seed
         srand(seed);
@@ -369,8 +351,22 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
         random_device rand_dev;
         generator = mt19937(rand_dev());
     }
+    site_rates = set_site_rates();
+}
+
+
+SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
+    vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
+    int const& nreps, int const& seed, float const& alpha, bool const& printpost,
+    vector<double> const& multirates, bool const& mm):seqlen(seqlenth), basefreqs(basefreq), 
+    rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
+    Ancestor(seqlenth, 'G'), alpha(alpha), printpost(printpost), multirates(multirates),
+    mm(mm) {
+    
+    initialize();
+    
     //Print out the nodes names
-    if(printpost == true){
+    if (printpost == true) {
         PrintNodeNames(tree);
     }
     // TODO: what if suer wants to pass in ancestral sequence?

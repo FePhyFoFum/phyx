@@ -20,11 +20,6 @@ using namespace std;
 #include "tree.h"
 #include "tree_reader.h"
 
-//Standalone compile line, needs armadillo 5.2
-//g++ -std=c++11 branch_segment.cpp seqgen.cpp node.cpp tree.cpp tree_reader.cpp main_seqgen.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -larmadillo  -llapack -lblas -lpthread -lm -o test
-
-// example call: ./pxseqgen -t TEST/ultra_100.tre -l 25
-
 
 void print_help() {
     cout << "Basic sequence simulator under the GTR model." << endl;
@@ -34,7 +29,8 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE       input treefile, stdin otherwise" << endl;
     cout << " -b, --basef=Input      comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
-    cout << " -a, --ancestors        print the ancestral sequences at each node. use -p for the nodes labels, default is no" << endl;
+    cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
+    cout << "                          use -p for the nodes labels" << endl;
     cout << " -l, --len=INT          length of sequences to generate. default is 1000" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
@@ -42,10 +38,11 @@ void print_help() {
     cout << " -n, --nreps=INT        number of replicates" << endl;
     cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
     cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
-    cout << " -p, --printnodelabels  (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
-    cout << " -m, --multimodel=Input specify multiple models across tree, input is as follows," 
-                               << "A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T"
-                               << "EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
+    cout << " -p, --printnodelabels  print newick with internal node labels. default is no" << endl;
+    cout << " -m, --multimodel=Input specify multiple models across tree" << endl;
+    cout << "                          input is as follows:" << endl; 
+    cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
+    cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
     cout << endl;
@@ -91,13 +88,12 @@ int main(int argc, char * argv[]) {
     vector <double> multirates(4, 0.25);
     int nreps = 1; // not implemented at the moment
     int seed = -1;
-    double sum = 0;
     float alpha = -1.0;
     vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
-            if (i == j) {//Fill Diagnol
-                rmatrix[i][j] = -1.0;
+            if (i == j) {//Fill Diagonal
+                rmatrix[i][j] = -0.99;
             }
         }
     }
@@ -118,9 +114,8 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 infreqs = strdup(optarg);
-                while (!basefreq.empty()){
-                     sum += basefreq.back();
-                     basefreq.pop_back();
+                while (!basefreq.empty()) {
+                    basefreq.pop_back();
                  }
                 parse_double_comma_list(infreqs, basefreq);
                 break;
@@ -132,10 +127,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 inrates = strdup(optarg);
-                while (!userrates.empty()){
-                     sum += userrates.back();
-                     userrates.pop_back();
-                 }
+                while (!userrates.empty()) {
+                    userrates.pop_back();
+                }
                 parse_double_comma_list(inrates, userrates);
                 rmatrix[0][2] = userrates[0];
                 rmatrix[2][0] = userrates[0];
@@ -174,17 +168,16 @@ int main(int argc, char * argv[]) {
                 printpost = true;
                 break;
             case 'm':
-                 mm = true;
-                 holdrates = strdup(optarg);
-                 while (!multirates.empty()) {
-                     sum += multirates.back();
-                     multirates.pop_back();
-                 }
-                 parse_double_comma_list(holdrates, multirates);
-                 /*for (unsigned int i = 0; i < userrates.size(); i++) {
-                     cout << userrates[i] << endl;
-                 }*/
-                 break;
+                mm = true;
+                holdrates = strdup(optarg);
+                while (!multirates.empty()) {
+                    multirates.pop_back();
+                }
+                parse_double_comma_list(holdrates, multirates);
+                /*for (unsigned int i = 0; i < userrates.size(); i++) {
+                    cout << userrates[i] << endl;
+                }*/
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -214,7 +207,6 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
     
-    string path, newick, line;
     
     /*
      * Default Base Frequencies and Rate Matrix
