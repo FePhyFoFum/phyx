@@ -161,7 +161,7 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
 
     double brlength = 0.0;
     double gamma = 0.0;
-    int count = 0;
+    //int count = 0; // not used for anything
     int rate_count = 0;
     string str = "";
     int check = 0;
@@ -197,6 +197,12 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     Node * root = tree->getRoot();
     seqs[root] = Ancestor;
     ancq[root] = QMatrix;
+    
+    if (showancs) {
+        string tname = root->getName();
+        Sequence seq(tname, Ancestor);
+        res.push_back(seq);
+    }
     
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
@@ -265,9 +271,11 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
         
         //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
         if (showancs == true && tree->getNode(k)->isInternal() == true) {
-            str = to_string(count);
-            cout << ">" << "Node_" << str << "\n" << decSeq << endl;
-            count++; 
+            string tname = tree->getNode(k)->getName();
+            Sequence seq(tname, decSeq);
+            res.push_back(seq);
+            //cout << ">" << "Node_" << str << "\n" << decSeq << endl;
+            //count++; 
         }
         // If its a tip print the name and the sequence
         if (tree->getNode(k)->isInternal() != true) {
@@ -282,17 +290,17 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
 
 void SequenceGenerator::PrintNodeNames(Tree * tree) {
     
-    int count = 0;
+    int count = 1;
     string str = "Node";
-    string newick = "";
+    string nlabel = "";
     Node * root = tree->getRoot();
-    seqs[root] = Ancestor;
+    root->setName("Node_0");
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         if (tree->getNode(k)->isInternal() == true) {
             //cout << k << endl;
             str = to_string(count);
-            newick = "Node_" + str;
-            tree->getNode(k)->setName(newick);
+            nlabel = "Node_" + str;
+            tree->getNode(k)->setName(nlabel);
             count++;
         }
     }
@@ -332,7 +340,43 @@ void SequenceGenerator::generate_random_sequence () {
             Ancestor[i] = 'C';
         }
     }
+    
 }
+
+
+// rates are in order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
+vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <double> const& rates) {
+    
+    // initialize
+    vector < vector <double> > foo(4, vector<double>(4, 0.33));
+    
+    rmatrix = foo;
+    // planning ahead here for potential non-reversible matrices
+    if (rates.size() == 6) {
+        rmatrix[0][1] = rates[0];
+        rmatrix[1][0] = rates[0];
+        rmatrix[0][2] = rates[1];
+        rmatrix[2][0] = rates[1];
+        rmatrix[0][3] = rates[2];
+        rmatrix[3][0] = rates[2];
+        rmatrix[1][2] = rates[3];
+        rmatrix[2][1] = rates[3];
+        rmatrix[1][3] = rates[4];
+        rmatrix[3][1] = rates[4];
+        rmatrix[2][3] = rates[5];
+        rmatrix[3][2] = rates[5];
+        
+        rmatrix[0][0] = (rates[0] + rates[1] + rates[2]) * -1;
+        rmatrix[1][1] = (rates[0] + rates[3] + rates[4]) * -1;
+        rmatrix[2][2] = (rates[1] + rates[3] + rates[5]) * -1;
+        rmatrix[3][3] = (rates[2] + rates[4] + rates[5]) * -1;
+        
+    } else {
+        cout << "Er, we don't deal with " << rates.size() << " rates at the moment..." << endl;
+        exit(0);
+    }
+}
+
 
 
 

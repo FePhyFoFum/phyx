@@ -51,12 +51,12 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
 
 
 // probably a nicer way to do this
-void parse_double_comma_list (string& str, vector <double>& tokens) {
+vector <double> parse_double_comma_list (string& str) {
+    vector <double> res;
     std::stringstream ss(str);
     double i;
-
     while (ss >> i) {
-        tokens.push_back(i);
+        res.push_back(i);
         bool done = false;
         while (!done) { // shouldn't be any spaces, but let's be safe
             if (ss.peek() == ' ' || ss.peek() == ',') {
@@ -66,6 +66,7 @@ void parse_double_comma_list (string& str, vector <double>& tokens) {
             }
         }
     }
+    return res;
 }
 
 

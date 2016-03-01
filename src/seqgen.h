@@ -36,7 +36,7 @@ private:
     map <Node *, vector < vector <double> >> ancq;
     vector < vector <double> > Qparent;
     
-    vector<Sequence> res;
+    vector <Sequence> res;
     float alpha;
     bool printpost;
     void PrintNodeNames (Tree * tree);
@@ -50,6 +50,7 @@ private:
     string simulate_sequence (string const& anc, vector < vector <double> >& Matrix,
         float const& brlength);
     void generate_random_sequence ();
+    vector < vector <double> > construct_rate_matrix (vector <double> const& rates);
     
     mt19937 generator;
     float get_uniform_random_deviate ();

@@ -10,7 +10,7 @@ vector <string> tokenize (string const& input);
 void trim_spaces (string& str);
 bool is_number (const string &);
 
-void parse_double_comma_list (string& str, vector <double>& tokens);
+vector <double> parse_double_comma_list (string& str);
 
 // do stuff over vectors
 double sum (vector <double> & in);

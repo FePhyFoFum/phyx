@@ -28,16 +28,16 @@ void print_help() {
     cout << "Usage: pxseqgen [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE       input treefile, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE        output seq file, stout otherwise" << endl;
+    cout << " -l, --length=INT       length of sequences to generate. default is 1000" << endl;
     cout << " -b, --basef=Input      comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
-    cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
-    cout << "                          use -p for the nodes labels" << endl;
-    cout << " -l, --len=INT          length of sequences to generate. default is 1000" << endl;
+    cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
-    cout << " -o, --outf=FILE        output seq file, stout otherwise" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
     cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
-    cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
+    cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
+    cout << "                          use -p for the nodes labels" << endl;
     cout << " -p, --printnodelabels  print newick with internal node labels. default is no" << endl;
     cout << " -m, --multimodel=Input specify multiple models across tree" << endl;
     cout << "                          input is as follows:" << endl; 
@@ -56,13 +56,13 @@ static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"outf", required_argument, NULL, 'o'},
-    {"comp", required_argument, NULL, 'c'},
     {"length", required_argument, NULL, 'l'},
-    {"ancestors", no_argument, NULL, 'a'},
+    {"gamma", required_argument, NULL, 'g'},
+    {"basef", required_argument, NULL, 'b'},
     {"ratemat", required_argument, NULL, 'r'},
     {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
-    {"gamma", required_argument, NULL, 'g'},
+    {"ancestors", no_argument, NULL, 'a'},
     {"printnodelabels", no_argument, NULL, 'p'},
     {"multimodel", required_argument, NULL, 'm'},
     {"help", no_argument, NULL, 'h'},
@@ -76,6 +76,7 @@ int main(int argc, char * argv[]) {
     bool printpost = false;
     bool showancs = false;
     bool mm = false;
+    double pinvar = 0.0;
     string yorn = "n";
     int seqlen = 1000;
     string infreqs;
@@ -99,7 +100,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:pm:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:l:g:b:r:n:x:apm:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -114,10 +115,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 infreqs = strdup(optarg);
-                while (!basefreq.empty()) {
-                    basefreq.pop_back();
-                 }
-                parse_double_comma_list(infreqs, basefreq);
+                basefreq = parse_double_comma_list(infreqs);
                 break;
             case 'l':
                 seqlen = atoi(strdup(optarg));
@@ -127,10 +125,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 inrates = strdup(optarg);
-                while (!userrates.empty()) {
-                    userrates.pop_back();
-                }
-                parse_double_comma_list(inrates, userrates);
+                userrates = parse_double_comma_list(inrates);
                 rmatrix[0][2] = userrates[0];
                 rmatrix[2][0] = userrates[0];
                 rmatrix[0][3] = userrates[1];
@@ -170,13 +165,7 @@ int main(int argc, char * argv[]) {
             case 'm':
                 mm = true;
                 holdrates = strdup(optarg);
-                while (!multirates.empty()) {
-                    multirates.pop_back();
-                }
-                parse_double_comma_list(holdrates, multirates);
-                /*for (unsigned int i = 0; i < userrates.size(); i++) {
-                    cout << userrates[i] << endl;
-                }*/
+                multirates = parse_double_comma_list(holdrates);
                 break;
             case 'h':
                 print_help();
