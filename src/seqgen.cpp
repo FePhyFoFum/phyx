@@ -33,6 +33,7 @@ using namespace arma;
  * G .33 .33 .33  -1
  */
 
+
 // this should enable easy changing of order, if desired
 map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
@@ -41,28 +42,15 @@ map <char, int> SequenceGenerator::nucMap = {
    {'G', 3}
 };
 
+
 /* Use the P matrix probabilities and randomly draw numbers to see
  * if each individual state will undergo some type of change
  */
 string SequenceGenerator::simulate_sequence (string const& anc, vector < vector <double> >& QMatrix, float const& brlength) {
 
-    //string hold = ""; //for the stupid string to double thing I always do
-    //string newstring = "";
-    //mt19937 generator(rand());
-    
-    // do cumulative sums. only have to do once
-//    vector <double> fromA (4, 0.0), fromC (4, 0.0), fromG (4, 0.0), fromT (4, 0.0);
-//    std::partial_sum(Matrix[0].begin(), Matrix[0].end(), fromA.begin(), plus<double>());
-//    std::partial_sum(Matrix[1].begin(), Matrix[1].end(), fromT.begin(), plus<double>());
-//    std::partial_sum(Matrix[2].begin(), Matrix[2].end(), fromC.begin(), plus<double>());
-//    std::partial_sum(Matrix[3].begin(), Matrix[3].end(), fromG.begin(), plus<double>());
-    
     std::vector<double>::iterator low;
     vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
-    /*
-    for (int i = 0; i < 4; i++) {
-        std::partial_sum(Matrix[i].begin(), Matrix[i].end(), Matrix[i].begin(), plus<double>());
-    }*/
+    
     string chars = "ATCG";
     string newstring = anc; // instead of building, set size and replace
     for (unsigned int i = 0; i < anc.size(); i++) {
@@ -71,105 +59,15 @@ string SequenceGenerator::simulate_sequence (string const& anc, vector < vector 
         float brnew = brlength * site_rates[i];
         PMatrix = calculate_p_matrix(QMatrix, brnew);
         for (int i = 0; i < 4; i++) {
+            // this calculates a cumulative sum
             std::partial_sum(PMatrix[i].begin(), PMatrix[i].end(), PMatrix[i].begin(), plus<double>());
         }
         low = std::lower_bound (PMatrix[ancChar].begin(), PMatrix[ancChar].end(), RandNumb);
         newstring[i] = chars[low - PMatrix[ancChar].begin()];
-        
-    /*  
-        float RandNumb = 0.0;
-        float ChanceA = 0.0;
-        float ChanceT = 0.0;
-        float ChanceC = 0.0;
-        float ChanceG = 0.0;
-        
-        //random_device rand_dev;
-        //mt19937 generator(rand_dev());
-        //mt19937 generator(rand());
-        
-//      std::uniform_int_distribution <int>  distr(0, 100000);
-//      hold = to_string(distr(generator));
-//      RandNumb = stod(hold);
-//      cout << "RandNumb = " << RandNumb;
-//      RandNumb /= 100000;
-//      cout << "; Now RandNumb = " << RandNumb << endl;
-        
-        // these are all constant. do not recalculate for every loop
-        if (Ancestor[i] == 'A') {
-            ChanceA = abs(Matrix[0][0]);
-            ChanceT = Matrix[0][1] / ChanceA;
-            ChanceC = (Matrix[0][2] / abs(Matrix[0][0]) + ChanceT);
-            ChanceG = (Matrix[0][3] / abs(Matrix[0][0]) + ChanceC);
-            if (RandNumb < ChanceT) {
-                newstring += "T";
-            } else if (RandNumb > ChanceT && RandNumb < ChanceC) {
-                newstring += "C";
-            } else if (RandNumb > ChanceC && RandNumb < ChanceG) {
-                newstring += "G";
-            } else {
-                newstring += "A";
-            }
-        } else if (Ancestor[i] == 'T') {
-            ChanceT = abs(Matrix[1][1]);
-            ChanceA = Matrix[1][0] / ChanceT;
-            ChanceC = (Matrix[1][2] / ChanceT + ChanceA);
-            ChanceG = (Matrix[1][3] / ChanceT + ChanceC);
-            if (RandNumb < ChanceA) {
-                newstring += "A";
-            } else if (RandNumb > ChanceA && RandNumb < ChanceC) {
-                newstring += "C";
-            } else if (RandNumb > ChanceC && RandNumb < ChanceG) {
-                newstring += "G";
-            } else {
-                newstring += "T";
-            }
-        } else if (Ancestor[i] == 'C') {
-            ChanceC = abs(Matrix[2][2]);
-            ChanceA = Matrix[2][0] / ChanceC;
-            ChanceT = (Matrix[2][1] / ChanceC + ChanceA);
-            ChanceG = (Matrix[2][3] / ChanceC + ChanceT);
-            if (RandNumb < ChanceA) {
-                newstring += "A";
-            } else if (RandNumb > ChanceA && RandNumb < ChanceT) {
-                newstring += "T";
-            } else if (RandNumb > ChanceT && RandNumb < ChanceG) {
-                newstring += "G";
-            } else {
-                newstring += "C";
-            }
-        } else {
-            ChanceG = abs(Matrix[3][3]);
-            ChanceA = Matrix[3][0] / ChanceG;
-            ChanceT = (Matrix[3][1] / ChanceG + ChanceA);
-            ChanceC = (Matrix[3][2] / ChanceG + ChanceC);
-            
-            cout << endl << i << ". RandNumb = " << RandNumb << endl;
-            for (int ii = 0; ii < 4; ii++) {
-                print_vector(Matrix[ii]);
-            }
-            cout << Matrix[3][3] << " " << Matrix[3][0] << " "
-                << Matrix[3][1] << " " << Matrix[3][2] << endl;
-            cout << "ChanceG = " << ChanceG << "; ChanceA = " << ChanceA
-                 << "; ChanceT = " << ChanceT  << "; ChanceC = " << ChanceC << endl;
-            //print_vector(fromG);
-            
-            if (RandNumb < ChanceA) {
-                newstring += "A";
-            } else if (RandNumb > ChanceA && RandNumb < ChanceT) {
-                newstring += "T";
-            } else if (RandNumb > ChanceT && RandNumb < ChanceC) {
-                newstring += "C";
-            } else {
-                newstring += "G";
-            }
-        }
-        //cout << (RandNumb / 10000) << endl;
-    */
     }
-    //Ancestor = newstring;
-    
     return newstring;
 }
+
 
 /*
  * Calculate the Q Matrix (Substitution rate matrix)
@@ -182,7 +80,6 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
     double tscale = 0.0;
     
     // doing the same looping multiple times here. simplify?
-    
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i != j) {
@@ -233,7 +130,7 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
     mat B = randn<mat>(4,4);
     int count = 0;
     //Q * t moved into Matrix form for armadillo
-   for (unsigned int i = 0; i < QMatrix.size(); i++) {
+    for (unsigned int i = 0; i < QMatrix.size(); i++) {
         for (unsigned int j = 0; j < QMatrix.size(); j++) {
             A[count] = (QMatrix[i][j] * br);
             count++;
@@ -253,6 +150,7 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
    return Pmatrix;
 }
 
+
 /*
  * Pre-Order traversal works
  * Calculates the JC Matrix
@@ -271,54 +169,51 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     vector< vector <double> > rate_matrix(4, vector<double>(4, 0.33));
 
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
-    if (mm == true){		
-			    rmatrix[0][2] = multirates[0]; //A->C
-                rmatrix[2][0] = multirates[0]; //C->A
-                rmatrix[0][3] = multirates[1]; //A->G
-                rmatrix[3][0] = multirates[1]; //G->A
-                rmatrix[0][1] = multirates[2]; //A->T
-                rmatrix[1][0] = multirates[2]; //T->A
-                rmatrix[2][3] = multirates[3]; //C->G
-                rmatrix[3][2] = multirates[3]; //G->C
-                rmatrix[1][2] = multirates[4]; //C->T
-                rmatrix[2][1] = multirates[4]; //T->C
-                rmatrix[1][3] = multirates[5]; //G->T
-                rmatrix[3][1] = multirates[5]; //T->G
-                rmatrix[0][0] = (multirates[0]+multirates[1]+multirates[2]) * -1;
-                rmatrix[1][1] = (multirates[2]+multirates[4]+multirates[5]) * -1;
-                rmatrix[2][2] = (multirates[0]+multirates[3]+multirates[4]) * -1;
-                rmatrix[3][3] = (multirates[1]+multirates[3]+multirates[5]) * -1;
-                for (unsigned int i = 0; i < 6; i++){
-			        multirates.erase (multirates.begin() + 0); 
-			    }
-			    //QMatrix = calcQmatrix(rate_matrix);
-			    //QMatrix = calculate_q_matrix();
-
-	}
+    if (mm == true) {        
+        rmatrix[0][2] = multirates[0]; //A->C
+        rmatrix[2][0] = multirates[0]; //C->A
+        rmatrix[0][3] = multirates[1]; //A->G
+        rmatrix[3][0] = multirates[1]; //G->A
+        rmatrix[0][1] = multirates[2]; //A->T
+        rmatrix[1][0] = multirates[2]; //T->A
+        rmatrix[2][3] = multirates[3]; //C->G
+        rmatrix[3][2] = multirates[3]; //G->C
+        rmatrix[1][2] = multirates[4]; //C->T
+        rmatrix[2][1] = multirates[4]; //T->C
+        rmatrix[1][3] = multirates[5]; //G->T
+        rmatrix[3][1] = multirates[5]; //T->G
+        rmatrix[0][0] = (multirates[0]+multirates[1]+multirates[2]) * -1;
+        rmatrix[1][1] = (multirates[2]+multirates[4]+multirates[5]) * -1;
+        rmatrix[2][2] = (multirates[0]+multirates[3]+multirates[4]) * -1;
+        rmatrix[3][3] = (multirates[1]+multirates[3]+multirates[5]) * -1;
+        for (unsigned int i = 0; i < 6; i++) {
+            multirates.erase (multirates.begin() + 0); 
+        }
+        //QMatrix = calcQmatrix(rate_matrix);
+        //QMatrix = calculate_q_matrix();
+    }
     QMatrix = calculate_q_matrix();
 
     Node * root = tree->getRoot();
     seqs[root] = Ancestor;
     ancq[root] = QMatrix;
-
     
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
-		    /*for (unsigned int i = 0; i < QMatrix.size(); i++) {
-                for (unsigned int j = 0; j < QMatrix.size(); j++) {
-                    cout << QMatrix[i][j] << " ";
-                }
-                cout << "\n";
+        /*for (unsigned int i = 0; i < QMatrix.size(); i++) {
+            for (unsigned int j = 0; j < QMatrix.size(); j++) {
+                cout << QMatrix[i][j] << " ";
             }
-            cout << "\n";*/
-        if(mm == true){
-			check = (int)round(multirates[0]);
-			//cout << check << " " << rate_count << endl;
-		    if(tree->getNode(k)->isInternal() == true && multirates.size() != 0){
-                if(check == rate_count){
-
-				    rmatrix[0][2] = multirates[1];
+            cout << "\n";
+        }
+        cout << "\n";*/
+        if (mm == true) {
+            check = (int)round(multirates[0]);
+            //cout << check << " " << rate_count << endl;
+            if (tree->getNode(k)->isInternal() == true && multirates.size() != 0) {
+                if (check == rate_count) {
+                    rmatrix[0][2] = multirates[1];
                     rmatrix[2][0] = multirates[1];
                     rmatrix[0][3] = multirates[2];
                     rmatrix[3][0] = multirates[2];
@@ -335,21 +230,20 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
                     rmatrix[2][2] = (multirates[1]+multirates[4]+multirates[5]) * -1;
                     rmatrix[3][3] = (multirates[2]+multirates[4]+multirates[6]) * -1;
 
-				    for (unsigned int i = 0; i < 7; i++){
-			            multirates.erase (multirates.begin() + 0);
-			        }
-			        //cout << "Size " << multirates.size() << endl;
-			        //cout << multirates[0] << endl;
-			        /*
-	                for (unsigned int i = 0; i < multirates.size(); i++){
-			            cout << multirates[i] << endl;
-			        }*/	    
-			    }
-			    rate_count++;
-
-			}
+                    for (unsigned int i = 0; i < 7; i++){
+                        multirates.erase(multirates.begin() + 0);
+                    }
+                    //cout << "Size " << multirates.size() << endl;
+                    //cout << multirates[0] << endl;
+                    /*
+                    for (unsigned int i = 0; i < multirates.size(); i++){
+                        cout << multirates[i] << endl;
+                    }*/        
+                }
+                rate_count++;
+            }
         }
-	    QMatrix = calculate_q_matrix();
+        QMatrix = calculate_q_matrix();
 
         //PMatrix = calculate_p_matrix(QMatrix, brlength);
         Node * dec = tree->getNode(k);
@@ -359,22 +253,21 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
         string ancSeq = seqs[parent];
         string decSeq = simulate_sequence(ancSeq, Qparent, brlength);
         /*
-		    for (unsigned int i = 0; i < Qparent.size(); i++) {
-                for (unsigned int j = 0; j < Qparent.size(); j++) {
-                    cout << Qparent[i][j] << " ";
-                }
-                cout << "\n";
+        for (unsigned int i = 0; i < Qparent.size(); i++) {
+            for (unsigned int j = 0; j < Qparent.size(); j++) {
+                cout << Qparent[i][j] << " ";
             }
-            cout << "\n";*/
+            cout << "\n";
+        }
+        cout << "\n";*/
         seqs[dec] = decSeq;
         ancq[dec] = QMatrix;
         
         //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
-        if (showancs == true && tree->getNode(k)->isInternal() == true){
-			
-			str = to_string(count);
-			cout << ">" << "Node_" << str << "\n" << decSeq << endl;
-			count++; 
+        if (showancs == true && tree->getNode(k)->isInternal() == true) {
+            str = to_string(count);
+            cout << ">" << "Node_" << str << "\n" << decSeq << endl;
+            count++; 
         }
         // If its a tip print the name and the sequence
         if (tree->getNode(k)->isInternal() != true) {
@@ -385,25 +278,28 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
         }
     }
 }
-void SequenceGenerator::PrintNodeNames(Tree * tree){
-	
-	int count = 0;
-	string str = "Node";
-	string newick = "";
-	Node * root = tree->getRoot();
+
+
+void SequenceGenerator::PrintNodeNames(Tree * tree) {
+    
+    int count = 0;
+    string str = "Node";
+    string newick = "";
+    Node * root = tree->getRoot();
     seqs[root] = Ancestor;
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
-		if (tree->getNode(k)->isInternal() == true) {
+        if (tree->getNode(k)->isInternal() == true) {
             //cout << k << endl;
             str = to_string(count);
             newick = "Node_" + str;
             tree->getNode(k)->setName(newick);
             count++;
         }
-	}
-	cout << tree->getRoot()->getNewick(true) <<";" << endl;
-	
+    }
+    cout << tree->getRoot()->getNewick(true) <<";" << endl;
+    
 }
+
 
 // initialized as string of length seqlenth, all 'G'
 void SequenceGenerator::generate_random_sequence () {
@@ -431,10 +327,8 @@ void SequenceGenerator::generate_random_sequence () {
 //      hold = to_string(distr(generator));
 //      RandNumb = stod(hold);
         float RandNumb = get_uniform_random_deviate();
-  	if (alpha != -1.0){
+        if (alpha != -1.0) {
             float GammaNumb = get_gamma_random_deviate(alpha);
-            //normalized = sqrt(GammaNumb) / alpha;
-            //gamma += GammaNumb;
             site_rates[i] = GammaNumb;
         }
         //cout << GammaNumb << endl;
@@ -477,8 +371,8 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
     }
     //Print out the nodes names
     if(printpost == true){
-		PrintNodeNames(tree);
-	}
+        PrintNodeNames(tree);
+    }
     // TODO: what if suer wants to pass in ancestral sequence?
     //       - need to allow this to be passed in
     generate_random_sequence();
@@ -493,11 +387,14 @@ vector<Sequence> SequenceGenerator::get_sequences () {
     return res;
 }
 
+
 // call this whenever a random float is needed
 float SequenceGenerator::get_uniform_random_deviate () {
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
     return distribution(generator);
 }
+
+
 float SequenceGenerator::get_gamma_random_deviate (float alpha) {
 
     //default_random_engine generator;

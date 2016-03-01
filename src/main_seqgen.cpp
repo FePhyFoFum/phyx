@@ -32,17 +32,18 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxseqgen [OPTION]... " << endl;
     cout << endl;
-    cout << " -t, --treef=FILE     input treefile, stdin otherwise" << endl;
-    cout << " -b, --basef=Input    comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
-    cout << " -a, --ancestors      print the ancestral sequences at each node. use -p for the nodes labels, default is no" << endl;
-    cout << " -l, --len=INT        length of sequences to generate. default is 1000" << endl;
-    cout << " -r, --ratemat=Input  input values for rate matrix. default is JC69\n\t\t      Order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T\n\t\t      EX for JC69:.3,.3,.3,.3,.3" << endl;
-    cout << " -o, --outf=FILE      output seq file, stout otherwise" << endl;
-    cout << " -n, --nreps=INT      number of replicates" << endl;
-    cout << " -x, --seed=INT       random number seed, clock otherwise" << endl;
-    cout << " -g, --gamma=INT      gamma value, Default 1" << endl;
-    cout << " -p, --postorderprint (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
-    cout << " -m, --multimodel=INT Have multiple models across tree, input is as follows," 
+    cout << " -t, --treef=FILE       input treefile, stdin otherwise" << endl;
+    cout << " -b, --basef=Input      comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
+    cout << " -a, --ancestors        print the ancestral sequences at each node. use -p for the nodes labels, default is no" << endl;
+    cout << " -l, --len=INT          length of sequences to generate. default is 1000" << endl;
+    cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
+    cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
+    cout << " -o, --outf=FILE        output seq file, stout otherwise" << endl;
+    cout << " -n, --nreps=INT        number of replicates" << endl;
+    cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
+    cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
+    cout << " -p, --postorderprint   (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
+    cout << " -m, --multimodel=Input specify multiple models across tree, input is as follows," 
                                << "A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T"
                                << "EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
     cout << "     --help           display this help and exit" << endl;
@@ -102,7 +103,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:p:m:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:pm:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -170,25 +171,20 @@ int main(int argc, char * argv[]) {
                 alpha = atof(strdup(optarg));
                 break;
             case 'p':
-                yorn = strdup(optarg);
-                if (yorn == "y" || yorn == "Y" || yorn == "Yes" || yorn == "yes"){
-                    printpost = true;
-                }else{
-				    printpost = false;
-				}
+                printpost = true;
                 break;
             case 'm':
                  mm = true;
                  holdrates = strdup(optarg);
-                 while (!multirates.empty()){
+                 while (!multirates.empty()) {
                      sum += multirates.back();
                      multirates.pop_back();
                  }
                  parse_double_comma_list(holdrates, multirates);
-                 /*for (unsigned int i = 0; i < userrates.size(); i++){
-					 cout << userrates[i] << endl;
-				 }*/
-				 break;
+                 /*for (unsigned int i = 0; i < userrates.size(); i++) {
+                     cout << userrates[i] << endl;
+                 }*/
+                 break;
             case 'h':
                 print_help();
                 exit(0);
