@@ -32,7 +32,7 @@ void print_help() {
     cout << " -l, --length=INT       length of sequences to generate. default is 1000" << endl;
     cout << " -b, --basef=Input      comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
     cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
-    cout << " -i, --pinvar=DOUBLE    proportion of invariable sites. default is 0.0" << endl;
+    cout << " -i, --pinvar=FLOAT    proportion of invariable sites. default is 0.0" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
     bool printpost = false;
     bool showancs = false;
     bool mm = false;
-    double pinvar = 0.0;
+    float pinvar = 0.0;
     string yorn = "n";
     int seqlen = 1000;
     string infreqs;
@@ -242,7 +242,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost,multirates, mm);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, pinvar, printpost,multirates, mm);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
@@ -264,7 +264,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, printpost,multirates, mm);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, pinvar, printpost,multirates, mm);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];

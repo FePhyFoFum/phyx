@@ -311,12 +311,28 @@ void SequenceGenerator::label_internal_nodes() {
 }
 
 
+// involves both gamma and pinvar
 vector <float> SequenceGenerator::set_site_rates () {
-    // use alpha
     vector <float> srates(seqlen, 1.0);
+    
+    // invariable sites
+    if (pinvar != 0.0) {
+        int numsample = seqlen * pinvar + 0.5;
+        // sample invariable sites
+        vector <int> randsites = sample_without_replacement(seqlen, numsample);
+        // must be a more elegant way of doing this
+        for (int i = 0; i < randsites.size(); i++) {
+            srates[randsites[i]] = 0.0;
+        }
+    }
+    
+    // gamma-distributed rate variation. could explore other distributions...
     if (alpha != -1.0) { // default i.e. no rate variation
         for (int i = 0; i < seqlen; i++) {
-            srates[i] = get_gamma_random_deviate(alpha);
+            // want to skip over sites that are set to invariable
+            if (srates[i] != 0.0) {
+                srates[i] = get_gamma_random_deviate(alpha);
+            }
         }
     }
     return srates;
@@ -380,8 +396,6 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
 }
 
 
-
-
 SequenceGenerator::SequenceGenerator () {
     // TODO Auto-generated constructor stub
 }
@@ -406,7 +420,7 @@ void SequenceGenerator::initialize () {
 
 SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha, bool const& printpost,
+    int const& nreps, int const& seed, float const& alpha, float const& pinvar, bool const& printpost,
     vector<double> const& multirates, bool const& mm):seqlen(seqlenth), basefreqs(basefreq), 
     rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
     Ancestor(seqlenth, 'G'), alpha(alpha), printpost(printpost), multirates(multirates),

@@ -38,6 +38,8 @@ private:
     
     vector <Sequence> res;
     float alpha;
+    float pinvar;
+    
     bool printpost;
     void print_node_labels ();
     void label_internal_nodes();
@@ -62,7 +64,7 @@ public:
     SequenceGenerator ();
     SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-        int const& nreps, int const & seed, float const& alpha, 
+        int const& nreps, int const & seed, float const& alpha, float const& pinvar,
         bool const& printpost, vector<double> const& multirates, bool const& mm);
     vector<Sequence> get_sequences ();
     
