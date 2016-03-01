@@ -42,7 +42,7 @@ void print_help() {
     cout << " -n, --nreps=INT        number of replicates" << endl;
     cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
     cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
-    cout << " -p, --postorderprint   (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
+    cout << " -p, --printnodelabels  (Y or N) prints postorder traversal to screen, good if printing ancestral sequences default No" << endl;
     cout << " -m, --multimodel=Input specify multiple models across tree, input is as follows," 
                                << "A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T"
                                << "EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
@@ -66,7 +66,7 @@ static struct option const long_options[] =
     {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
     {"gamma", required_argument, NULL, 'g'},
-    {"postorder", no_argument, NULL, 'p'},
+    {"printnodelabels", no_argument, NULL, 'p'},
     {"multimodel", required_argument, NULL, 'm'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -103,7 +103,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:p:m:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:pm:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -171,12 +171,7 @@ int main(int argc, char * argv[]) {
                 alpha = atof(strdup(optarg));
                 break;
             case 'p':
-                yorn = strdup(optarg);
-                if (yorn == "y" || yorn == "Y" || yorn == "Yes" || yorn == "yes"){
-                    printpost = true;
-                }else{
-                    printpost = false;
-                }
+                printpost = true;
                 break;
             case 'm':
                  mm = true;
