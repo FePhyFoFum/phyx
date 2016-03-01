@@ -103,7 +103,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:pm:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:b:l:ar:n:x:g:p:m:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -171,7 +171,12 @@ int main(int argc, char * argv[]) {
                 alpha = atof(strdup(optarg));
                 break;
             case 'p':
-                printpost = true;
+                yorn = strdup(optarg);
+                if (yorn == "y" || yorn == "Y" || yorn == "Yes" || yorn == "yes"){
+                    printpost = true;
+                }else{
+                    printpost = false;
+                }
                 break;
             case 'm':
                  mm = true;
