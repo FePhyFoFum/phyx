@@ -39,7 +39,8 @@ private:
     vector <Sequence> res;
     float alpha;
     bool printpost;
-    void PrintNodeNames (Tree * tree);
+    void print_node_labels ();
+    void label_internal_nodes();
     void preorder_tree_traversal (Tree * tree, bool showancs,
         vector <double> multirates, bool mm);
     vector <float> site_rates;

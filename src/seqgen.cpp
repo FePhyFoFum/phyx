@@ -288,8 +288,12 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
 }
 
 
-void SequenceGenerator::PrintNodeNames(Tree * tree) {
-    
+void SequenceGenerator::print_node_labels() {
+    cout << tree->getRoot()->getNewick(true) <<";" << endl;
+}
+
+
+void SequenceGenerator::label_internal_nodes() {
     int count = 1;
     string str = "Node";
     string nlabel = "";
@@ -304,8 +308,6 @@ void SequenceGenerator::PrintNodeNames(Tree * tree) {
             count++;
         }
     }
-    cout << tree->getRoot()->getNewick(true) <<";" << endl;
-    
 }
 
 
@@ -396,6 +398,9 @@ void SequenceGenerator::initialize () {
         generator = mt19937(rand_dev());
     }
     site_rates = set_site_rates();
+    if (showancs) {
+        label_internal_nodes();
+    }
 }
 
 
@@ -411,7 +416,7 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
     
     //Print out the nodes names
     if (printpost == true) {
-        PrintNodeNames(tree);
+        print_node_labels();
     }
     // TODO: what if suer wants to pass in ancestral sequence?
     //       - need to allow this to be passed in
