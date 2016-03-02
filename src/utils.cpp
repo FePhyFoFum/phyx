@@ -167,6 +167,7 @@ int random_int_range (int min, int max) {
 
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
+// this is pretty sweet, if i do say so myself
 vector <int> sample_without_replacement (int const& numTotal, int const& numSample) {
     vector <int> randsites (numSample); // numchar zero-initialized elements
     vector <int> allsites (numTotal);
