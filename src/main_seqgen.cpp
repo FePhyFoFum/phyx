@@ -86,6 +86,7 @@ int main(int argc, char * argv[]) {
     string inrates;
     string holdrates;
     string ancseq;
+    double testsum = 0.0;
     char * outf;
     char * treef;
     vector <double> basefreq(4, 0.25);
@@ -123,6 +124,11 @@ int main(int argc, char * argv[]) {
                 if (basefreq.size() != 4) {
                     cout << "Error: must provide 4 base frequencies (" << basefreq.size()
                         << " provided). Exiting." << endl;
+                    exit(0);
+                }
+                testsum = sum(basefreq);
+                if (!essentially_equal(testsum, 1.0)) {
+                    cout << "Error: base frequencies must sum to 1.0. Exiting." << endl;
                     exit(0);
                 }
                 break;
