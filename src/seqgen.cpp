@@ -274,21 +274,18 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
             cout << "\n";
         }
         cout << "\n";*/
-        seqs[dec] = decSeq;
-        ancq[dec] = QMatrix;
         
-        //cout << "anc: " << ancSeq << "; dec: " << decSeq << endl;
+        seqs[dec] = decSeq;
+        ancq[dec] = QMatrix; // why store this?
+        
         if (showancs == true && tree->getNode(k)->isInternal() == true) {
             string tname = tree->getNode(k)->getName();
             Sequence seq(tname, decSeq);
             res.push_back(seq);
-            //cout << ">" << "Node_" << str << "\n" << decSeq << endl;
-            //count++; 
         }
         // If its a tip print the name and the sequence
         if (tree->getNode(k)->isInternal() != true) {
             string tname = tree->getNode(k)->getName();
-            //cout << ">" << tname << "\n" << decSeq << endl;
             Sequence seq(tname, decSeq);
             res.push_back(seq);
         }
@@ -296,6 +293,7 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
 }
 
 
+// this should probably be returned on its own
 void SequenceGenerator::print_node_labels() {
     cout << tree->getRoot()->getNewick(true) <<";" << endl;
 }
@@ -351,43 +349,18 @@ vector <float> SequenceGenerator::set_site_rates () {
 string SequenceGenerator::generate_random_sequence () {
     
     string ancseq(seqlen, 'G');
+    vector <double> cumsum(4);
+    std::vector <double>::iterator low;
+    std::partial_sum(basefreqs.begin(), basefreqs.end(), cumsum.begin(), plus<double>());
     
-    // keep this outside of the function, as it is constant
-    // replace this with cumulative sum
-    
-    
-    float A = basefreqs[0];
-    float T = basefreqs[1] + A;
-    float C = basefreqs[2]  + T;
-    for (int i = 0; i < seqlen; i++) {
-        float RandNumb = get_uniform_random_deviate();
-        if (RandNumb < A) {
-            ancseq[i] = 'A';
-        } else if (RandNumb > A && RandNumb < T) {
-            ancseq[i] = 'T';
-        } else if (RandNumb > T && RandNumb < C) {
-            ancseq[i] = 'C';
-        }
-    }
-    /*
-    float A = basefreqs[0];
-    float C = basefreqs[1] + A;
-    float G = basefreqs[2] + C;
-    float T = basefreqs[3] + G;
+    string chars = "ATCG"; // change this ordering
     
     for (int i = 0; i < seqlen; i++) {
         float RandNumb = get_uniform_random_deviate();
-        if (RandNumb < A) {
-            rootSequence[i] = 'A';
-        } else if (RandNumb > A && RandNumb < C) {
-            rootSequence[i] = 'C';
-        } else if (RandNumb > C && RandNumb < G) {
-            rootSequence[i] = 'G';
-        } else if (RandNumb > G && RandNumb < T) {
-            rootSequence[i] = 'T';
-        }
+        low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+        ancseq[i] = chars[low - cumsum.begin()];
     }
-    */
+    
     return ancseq;
 }
 
@@ -442,9 +415,9 @@ void SequenceGenerator::initialize () {
     if (rootSequence.length() == 0) {
         rootSequence = generate_random_sequence();
     } else {
+        // if root sequence is provided, set length to this
         seqlen = rootSequence.size();
     }
-    cout << "seqlen = " << seqlen << endl;
     site_rates = set_site_rates();
 }
 
@@ -460,16 +433,12 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     
     initialize();
     
-    //Print out the nodes names
+    // Print out the nodes names
     if (printpost == true) {
         print_node_labels();
     }
-    // TODO: what if suer wants to pass in ancestral sequence?
-    //       - need to allow this to be passed in
-    //generate_random_sequence();
     
     preorder_tree_traversal(tree, showancs, multirates, mm);
-    //TakeInTree();
 }
 
 
