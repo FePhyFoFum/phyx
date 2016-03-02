@@ -416,6 +416,8 @@ void SequenceGenerator::initialize () {
     if (rootSequence.length() == 0) {
         rootSequence = generate_random_sequence();
     } else {
+        // make sure uppercase
+        std::transform(rootSequence.begin(), rootSequence.end(), rootSequence.begin(), ::toupper);
         // if root sequence is provided, set length to this
         seqlen = rootSequence.size();
     }
