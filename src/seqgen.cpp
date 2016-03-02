@@ -35,33 +35,36 @@ using namespace arma;
 
 
 // this should enable easy changing of order, if desired
-/*
+
 map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
    {'C', 1},
    {'G', 2},
    {'T', 3}
 };
-*/
+string SequenceGenerator::nucleotides = "ACGT";
+
+/*
 map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
    {'T', 1},
    {'C', 2},
    {'G', 3}
 };
-
-
+string SequenceGenerator::nucleotides = "ATCG";
+*/
+ 
 /* Use the P matrix probabilities and randomly draw numbers to see
  * if each individual state will undergo some type of change
  */
-string SequenceGenerator::simulate_sequence (string const& anc, vector < vector <double> >& QMatrix, float const& brlength) {
+string SequenceGenerator::simulate_sequence (string const& anc, 
+    vector < vector <double> >& QMatrix, float const& brlength) {
 
     std::vector<double>::iterator low;
     vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     
-    string chars = "ATCG";
     string newstring = anc; // instead of building, set size and replace
-    for (unsigned int i = 0; i < anc.size(); i++) {
+    for (unsigned int i = 0; i < seqlen; i++) {
         float RandNumb = get_uniform_random_deviate();
         int ancChar = nucMap[anc[i]];
         float brnew = brlength * site_rates[i];
@@ -71,7 +74,7 @@ string SequenceGenerator::simulate_sequence (string const& anc, vector < vector 
             std::partial_sum(PMatrix[i].begin(), PMatrix[i].end(), PMatrix[i].begin(), plus<double>());
         }
         low = std::lower_bound (PMatrix[ancChar].begin(), PMatrix[ancChar].end(), RandNumb);
-        newstring[i] = chars[low - PMatrix[ancChar].begin()];
+        newstring[i] = nucleotides[low - PMatrix[ancChar].begin()];
     }
     return newstring;
 }
@@ -351,16 +354,14 @@ string SequenceGenerator::generate_random_sequence () {
     string ancseq(seqlen, 'G');
     vector <double> cumsum(4);
     std::vector <double>::iterator low;
+    // cumulative sum
     std::partial_sum(basefreqs.begin(), basefreqs.end(), cumsum.begin(), plus<double>());
-    
-    string chars = "ATCG"; // change this ordering
     
     for (int i = 0; i < seqlen; i++) {
         float RandNumb = get_uniform_random_deviate();
         low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
-        ancseq[i] = chars[low - cumsum.begin()];
+        ancseq[i] = nucleotides[low - cumsum.begin()];
     }
-    
     return ancseq;
 }
 
@@ -418,6 +419,7 @@ void SequenceGenerator::initialize () {
         // if root sequence is provided, set length to this
         seqlen = rootSequence.size();
     }
+    // set site-specific rate (pinvar and gamma)
     site_rates = set_site_rates();
 }
 

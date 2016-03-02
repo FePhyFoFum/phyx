@@ -27,6 +27,8 @@ private:
     int seed;
     string rootSequence;
     static map<char, int> nucMap;
+    static string nucleotides;
+    
     bool showancs;
     
     // set all values
