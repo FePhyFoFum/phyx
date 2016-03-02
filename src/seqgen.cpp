@@ -430,7 +430,7 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     string const& ancseq, bool const& printpost, vector<double> const& multirates,
     bool const& mm):seqlen(seqlength), basefreqs(basefreq), 
     rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    rootSequence(ancseq), alpha(alpha), printpost(printpost), multirates(multirates),
+    rootSequence(ancseq), alpha(alpha), pinvar(pinvar), printpost(printpost), multirates(multirates),
     mm(mm) {
     
     initialize();
