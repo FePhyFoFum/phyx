@@ -25,7 +25,7 @@ private:
     Tree * tree;
     int nreps;
     int seed;
-    string Ancestor;
+    string rootSequence;
     static map<char, int> nucMap;
     bool showancs;
     
@@ -52,7 +52,7 @@ private:
         float br);
     string simulate_sequence (string const& anc, vector < vector <double> >& Matrix,
         float const& brlength);
-    void generate_random_sequence ();
+    string generate_random_sequence ();
     vector < vector <double> > construct_rate_matrix (vector <double> const& rates);
     
     mt19937 generator;
@@ -61,11 +61,12 @@ private:
     vector <float> set_site_rates ();
     
 public:
-    SequenceGenerator ();
-    SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
+    
+    SequenceGenerator (int const &seqlength, vector <double> const& basefreq,
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
         int const& nreps, int const & seed, float const& alpha, float const& pinvar,
-        bool const& printpost, vector<double> const& multirates, bool const& mm);
+        string const& ancseq, bool const& printpost, vector<double> const& multirates,
+        bool const& mm);
     vector<Sequence> get_sequences ();
     
 };

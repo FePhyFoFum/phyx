@@ -30,9 +30,9 @@ void print_help() {
     cout << " -t, --treef=FILE       input treefile, stdin otherwise" << endl;
     cout << " -o, --outf=FILE        output seq file, stout otherwise" << endl;
     cout << " -l, --length=INT       length of sequences to generate. default is 1000" << endl;
-    cout << " -b, --basef=Input      comma-delimited base freqs in order: A,T,C,G. default is equal" << endl;
-    cout << " -g, --gamma=INT        gamma value. default is no rate variation" << endl;
-    cout << " -i, --pinvar=FLOAT    proportion of invariable sites. default is 0.0" << endl;
+    cout << " -b, --basef=Input      comma-delimited base freqs in order: A,C,G,T. default is equal" << endl;
+    cout << " -g, --gamma=INT        gamma shape value. default is no rate variation" << endl;
+    cout << " -i, --pinvar=FLOAT     proportion of invariable sites. default is 0.0" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
@@ -44,8 +44,9 @@ void print_help() {
     cout << "                          input is as follows:" << endl; 
     cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
     cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
-    cout << "     --help           display this help and exit" << endl;
-    cout << "     --version        display version and exit" << endl;
+    cout << " -k, --rootseq=STRING   set root sequence. default is random (from basefreqs)" << endl;
+    cout << "     --help             display this help and exit" << endl;
+    cout << "     --version          display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
@@ -84,6 +85,7 @@ int main(int argc, char * argv[]) {
     string infreqs;
     string inrates;
     string holdrates;
+    string ancseq;
     char * outf;
     char * treef;
     vector <double> basefreq(4, 0.25);
@@ -102,7 +104,7 @@ int main(int argc, char * argv[]) {
     }
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:n:x:apm:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:n:x:apm:k:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -177,6 +179,9 @@ int main(int argc, char * argv[]) {
                 holdrates = strdup(optarg);
                 multirates = parse_double_comma_list(holdrates);
                 break;
+            case 'k':
+                ancseq = strdup(optarg);
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -242,7 +247,8 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, pinvar, printpost,multirates, mm);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs,
+                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
@@ -264,7 +270,8 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs, nreps, seed, alpha, pinvar, printpost,multirates, mm);
+                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs,
+                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];

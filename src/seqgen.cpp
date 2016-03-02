@@ -35,6 +35,14 @@ using namespace arma;
 
 
 // this should enable easy changing of order, if desired
+/*
+map <char, int> SequenceGenerator::nucMap = {
+   {'A', 0},
+   {'C', 1},
+   {'G', 2},
+   {'T', 3}
+};
+*/
 map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
    {'T', 1},
@@ -195,12 +203,12 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     QMatrix = calculate_q_matrix();
 
     Node * root = tree->getRoot();
-    seqs[root] = Ancestor;
+    seqs[root] = rootSequence;
     ancq[root] = QMatrix;
     
     if (showancs) {
         string tname = root->getName();
-        Sequence seq(tname, Ancestor);
+        Sequence seq(tname, rootSequence);
         res.push_back(seq);
     }
     
@@ -340,25 +348,47 @@ vector <float> SequenceGenerator::set_site_rates () {
 
 
 // initialized as string of length seqlength, all 'G'
-void SequenceGenerator::generate_random_sequence () {
+string SequenceGenerator::generate_random_sequence () {
     
-    float gamma = 0.0;
-    float normalized = 0.0;
+    string ancseq(seqlen, 'G');
+    
     // keep this outside of the function, as it is constant
+    // replace this with cumulative sum
+    
+    
     float A = basefreqs[0];
     float T = basefreqs[1] + A;
     float C = basefreqs[2]  + T;
     for (int i = 0; i < seqlen; i++) {
         float RandNumb = get_uniform_random_deviate();
         if (RandNumb < A) {
-            Ancestor[i] = 'A';
+            ancseq[i] = 'A';
         } else if (RandNumb > A && RandNumb < T) {
-            Ancestor[i] = 'T';
+            ancseq[i] = 'T';
         } else if (RandNumb > T && RandNumb < C) {
-            Ancestor[i] = 'C';
+            ancseq[i] = 'C';
         }
     }
+    /*
+    float A = basefreqs[0];
+    float C = basefreqs[1] + A;
+    float G = basefreqs[2] + C;
+    float T = basefreqs[3] + G;
     
+    for (int i = 0; i < seqlen; i++) {
+        float RandNumb = get_uniform_random_deviate();
+        if (RandNumb < A) {
+            rootSequence[i] = 'A';
+        } else if (RandNumb > A && RandNumb < C) {
+            rootSequence[i] = 'C';
+        } else if (RandNumb > C && RandNumb < G) {
+            rootSequence[i] = 'G';
+        } else if (RandNumb > G && RandNumb < T) {
+            rootSequence[i] = 'T';
+        }
+    }
+    */
+    return ancseq;
 }
 
 
@@ -396,11 +426,6 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
 }
 
 
-SequenceGenerator::SequenceGenerator () {
-    // TODO Auto-generated constructor stub
-}
-
-
 // set all values
 void SequenceGenerator::initialize () {
     // set the number generator being used
@@ -411,19 +436,26 @@ void SequenceGenerator::initialize () {
         random_device rand_dev;
         generator = mt19937(rand_dev());
     }
-    site_rates = set_site_rates();
     if (showancs) {
         label_internal_nodes();
     }
+    if (rootSequence.length() == 0) {
+        rootSequence = generate_random_sequence();
+    } else {
+        seqlen = rootSequence.size();
+    }
+    cout << "seqlen = " << seqlen << endl;
+    site_rates = set_site_rates();
 }
 
 
-SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const& basefreq,
+SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> const& basefreq,
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha, float const& pinvar, bool const& printpost,
-    vector<double> const& multirates, bool const& mm):seqlen(seqlenth), basefreqs(basefreq), 
+    int const& nreps, int const& seed, float const& alpha, float const& pinvar, 
+    string const& ancseq, bool const& printpost, vector<double> const& multirates,
+    bool const& mm):seqlen(seqlength), basefreqs(basefreq), 
     rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    Ancestor(seqlenth, 'G'), alpha(alpha), printpost(printpost), multirates(multirates),
+    rootSequence(ancseq), alpha(alpha), printpost(printpost), multirates(multirates),
     mm(mm) {
     
     initialize();
@@ -434,7 +466,7 @@ SequenceGenerator::SequenceGenerator (int const &seqlenth, vector <double> const
     }
     // TODO: what if suer wants to pass in ancestral sequence?
     //       - need to allow this to be passed in
-    generate_random_sequence();
+    //generate_random_sequence();
     
     preorder_tree_traversal(tree, showancs, multirates, mm);
     //TakeInTree();
