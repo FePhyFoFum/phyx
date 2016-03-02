@@ -56,7 +56,7 @@ private:
         float const& brlength);
     string generate_random_sequence ();
     vector < vector <double> > construct_rate_matrix (vector <double> const& rates);
-    
+    void check_valid_sequence ();
     mt19937 generator;
     float get_uniform_random_deviate ();
     float get_gamma_random_deviate (float);

@@ -416,13 +416,25 @@ void SequenceGenerator::initialize () {
     if (rootSequence.length() == 0) {
         rootSequence = generate_random_sequence();
     } else {
-        // make sure uppercase
-        std::transform(rootSequence.begin(), rootSequence.end(), rootSequence.begin(), ::toupper);
+        check_valid_sequence();
         // if root sequence is provided, set length to this
         seqlen = rootSequence.size();
     }
     // set site-specific rate (pinvar and gamma)
     site_rates = set_site_rates();
+}
+
+
+// make sure sequence contains only valid nucleotide characters
+void SequenceGenerator::check_valid_sequence () {
+    // make sure uppercase
+    std::transform(rootSequence.begin(), rootSequence.end(), rootSequence.begin(), ::toupper);
+    std::size_t found = rootSequence.find_first_not_of(nucleotides);
+    if (found != std::string::npos) {
+        cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
+            << found+1 << " (only A,C,G,T allowed). Exiting." << endl;
+        exit(0);
+    }
 }
 
 
