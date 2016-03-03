@@ -17,32 +17,41 @@ class SequenceGenerator {
 
 private:
     // constant values
-    int seqlen;
-    bool mm;
-    vector <double> basefreqs;
-    vector <double> multirates;
-    vector < vector <double> > rmatrix;
     Tree * tree;
+    
+    int seqlen;
     int nreps;
     int seed;
+    
+    float alpha;
+    float pinvar;
+    
     string rootSequence;
-    static map<char, int> nucMap;
-    static string nucleotides;
+    
+    vector <double> basefreqs;
+    vector < vector <double> > rmatrix;
+    vector <double> multirates;
     
     bool showancs;
+    bool printnodelabels;
+    bool mm;
+    
+    // hard-coded stuff
+    static map<char, int> nucMap;
+    static string nucleotides;
     
     // set all values
     void initialize ();
     
+    // intermediate results
     map <Node *, string> seqs;
     map <Node *, vector < vector <double> >> ancq;
     vector < vector <double> > Qparent;
     
+    // the result to return
     vector <Sequence> res;
-    float alpha;
-    float pinvar;
     
-    bool printpost;
+    // los funciones
     void print_node_labels ();
     void label_internal_nodes();
     void preorder_tree_traversal (Tree * tree, bool showancs,
@@ -69,6 +78,8 @@ public:
         int const& nreps, int const & seed, float const& alpha, float const& pinvar,
         string const& ancseq, bool const& printpost, vector<double> const& multirates,
         bool const& mm);
+    
+    // return results
     vector<Sequence> get_sequences ();
     
 };

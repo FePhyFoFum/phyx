@@ -64,7 +64,7 @@ string SequenceGenerator::simulate_sequence (string const& anc,
     vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     
     string newstring = anc; // instead of building, set size and replace
-    for (unsigned int i = 0; i < seqlen; i++) {
+    for (int i = 0; i < seqlen; i++) {
         float RandNumb = get_uniform_random_deviate();
         int ancChar = nucMap[anc[i]];
         float brnew = brlength * site_rates[i];
@@ -171,7 +171,6 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
 void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vector<double> multirates, bool mm) {
 
     double brlength = 0.0;
-    double gamma = 0.0;
     //int count = 0; // not used for anything
     int rate_count = 0;
     string str = "";
@@ -330,7 +329,7 @@ vector <float> SequenceGenerator::set_site_rates () {
         // sample invariable sites
         vector <int> randsites = sample_without_replacement(seqlen, numsample);
         // must be a more elegant way of doing this
-        for (int i = 0; i < randsites.size(); i++) {
+        for (int i = 0; i < numsample; i++) {
             srates[randsites[i]] = 0.0;
         }
     }
@@ -370,33 +369,33 @@ string SequenceGenerator::generate_random_sequence () {
 vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <double> const& rates) {
     
     // initialize
-    vector < vector <double> > foo(4, vector<double>(4, 0.33));
+    vector < vector <double> > ratemat(4, vector<double>(4, 0.33));
     
-    rmatrix = foo;
     // planning ahead here for potential non-reversible matrices
     if (rates.size() == 6) {
-        rmatrix[0][1] = rates[0];
-        rmatrix[1][0] = rates[0];
-        rmatrix[0][2] = rates[1];
-        rmatrix[2][0] = rates[1];
-        rmatrix[0][3] = rates[2];
-        rmatrix[3][0] = rates[2];
-        rmatrix[1][2] = rates[3];
-        rmatrix[2][1] = rates[3];
-        rmatrix[1][3] = rates[4];
-        rmatrix[3][1] = rates[4];
-        rmatrix[2][3] = rates[5];
-        rmatrix[3][2] = rates[5];
+        ratemat[0][1] = rates[0];
+        ratemat[1][0] = rates[0];
+        ratemat[0][2] = rates[1];
+        ratemat[2][0] = rates[1];
+        ratemat[0][3] = rates[2];
+        ratemat[3][0] = rates[2];
+        ratemat[1][2] = rates[3];
+        ratemat[2][1] = rates[3];
+        ratemat[1][3] = rates[4];
+        ratemat[3][1] = rates[4];
+        ratemat[2][3] = rates[5];
+        ratemat[3][2] = rates[5];
         
-        rmatrix[0][0] = (rates[0] + rates[1] + rates[2]) * -1;
-        rmatrix[1][1] = (rates[0] + rates[3] + rates[4]) * -1;
-        rmatrix[2][2] = (rates[1] + rates[3] + rates[5]) * -1;
-        rmatrix[3][3] = (rates[2] + rates[4] + rates[5]) * -1;
+        ratemat[0][0] = (rates[0] + rates[1] + rates[2]) * -1;
+        ratemat[1][1] = (rates[0] + rates[3] + rates[4]) * -1;
+        ratemat[2][2] = (rates[1] + rates[3] + rates[5]) * -1;
+        ratemat[3][3] = (rates[2] + rates[4] + rates[5]) * -1;
         
     } else {
         cout << "Er, we don't deal with " << rates.size() << " rates at the moment..." << endl;
         exit(0);
     }
+    return ratemat;
 }
 
 
@@ -442,15 +441,15 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
     int const& nreps, int const& seed, float const& alpha, float const& pinvar, 
     string const& ancseq, bool const& printpost, vector<double> const& multirates,
-    bool const& mm):seqlen(seqlength), basefreqs(basefreq), 
-    rmatrix(rmatrix), tree(tree), showancs(showancs), nreps(nreps), seed(seed), 
-    rootSequence(ancseq), alpha(alpha), pinvar(pinvar), printpost(printpost), multirates(multirates),
+    bool const& mm):tree(tree), seqlen(seqlength), nreps(nreps), seed(seed), alpha(alpha),
+    pinvar(pinvar), rootSequence(ancseq), basefreqs(basefreq), rmatrix(rmatrix), 
+    multirates(multirates), showancs(showancs), printnodelabels(printpost),
     mm(mm) {
     
     initialize();
     
     // Print out the nodes names
-    if (printpost == true) {
+    if (printnodelabels == true) {
         print_node_labels();
     }
     

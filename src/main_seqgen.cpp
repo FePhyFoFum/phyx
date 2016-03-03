@@ -86,11 +86,10 @@ int main(int argc, char * argv[]) {
     string inrates;
     string holdrates;
     string ancseq;
-    double testsum = 0.0;
     char * outf;
     char * treef;
     vector <double> basefreq(4, 0.25);
-    vector <double> userrates(4, 0.25);
+    vector <double> userrates;
     vector <double> multirates(4, 0.25);
     int nreps = 1; // not implemented at the moment
     int seed = -1;
@@ -126,8 +125,7 @@ int main(int argc, char * argv[]) {
                         << " provided). Exiting." << endl;
                     exit(0);
                 }
-                testsum = sum(basefreq);
-                if (!essentially_equal(testsum, 1.0)) {
+                if (!essentially_equal(sum(basefreq), 1.0)) {
                     cout << "Error: base frequencies must sum to 1.0. Exiting." << endl;
                     exit(0);
                 }
