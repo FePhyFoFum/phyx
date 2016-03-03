@@ -97,22 +97,25 @@ int main(int argc, char * argv[]){
     } else {
         poos = &cout;
     }
-
-    int ft = test_seq_filetype_stream(*pios,retstring);
+    
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    
     if (ft != 3) {
         cout << "must be fastq input" << endl;
     }
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+    
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         double mean = seq.get_qualarr_mean();
         if (mean > meanfilt) {
             (*poos) << seq.get_fastq();
         }
     }
-    if (fileset) {
+    
+    if (fileset == true) {
         fstr->close();
         delete pios;
     }
-    if (outfileset) {
+    if (outfileset == true) {
         ofstr->close();
         delete poos;
     }

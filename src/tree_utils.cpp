@@ -53,7 +53,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);
     for (int i=0; i < tr->getInternalNodeCount(); i++) {
-	    Node * tnd = tr->getInternalNode(i);
+        Node * tnd = tr->getInternalNode(i);
         if (tnd->getParent() == NULL && rooted == true) {
             continue;
         }

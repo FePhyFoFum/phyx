@@ -15,20 +15,20 @@ using namespace std;
 template<class T>
 class VectorNodeObject: public vector<T>, public NodeObject{
 public:
-	VectorNodeObject():
-		vector<T>() {}
+    VectorNodeObject():
+        vector<T>() {}
 
-	VectorNodeObject(typename vector<T>::size_type num, const T& val = T() ):
-		vector<T>(num, val) {}
+    VectorNodeObject(typename vector<T>::size_type num, const T& val = T() ):
+        vector<T>(num, val) {}
 
-	VectorNodeObject(typename vector<T>::iterator start, typename vector<T>::iterator end):
-		vector<T>(start, end) {}
+    VectorNodeObject(typename vector<T>::iterator start, typename vector<T>::iterator end):
+        vector<T>(start, end) {}
 
-	virtual ~VectorNodeObject() {}
+    virtual ~VectorNodeObject() {}
 
 public:
 
-	VectorNodeObject<T> * clone() const { return new VectorNodeObject<T>(*this); }
+    VectorNodeObject<T> * clone() const { return new VectorNodeObject<T>(*this); }
 };
 
 #endif /* _VECTOR_NODE_OBJECT_H_ */

@@ -34,39 +34,39 @@ using namespace std;
 
 class Superdouble {
 private:
-	long double mantissa;
-	int exponent;
-	bool stilldouble;
-	double upperlimit;
-	double lowerlimit;
-	void adjustDecimal();
-	friend ostream& operator<<(ostream& os, const Superdouble& x);
-	
+    long double mantissa;
+    int exponent;
+    bool stilldouble;
+    double upperlimit;
+    double lowerlimit;
+    void adjustDecimal();
+    friend ostream& operator<<(ostream& os, const Superdouble& x);
+    
 public:
-	Superdouble(long double mantissa=1.0, int exponent=0);
-	~Superdouble();
-	Superdouble operator* ( Superdouble x);
-	Superdouble operator* ( double x);
-	Superdouble operator/ ( Superdouble x);
-	Superdouble operator+ ( Superdouble x);
-	Superdouble operator- ( Superdouble x);
-	void operator++ ();
-	void operator -- ();
-	void operator*= (Superdouble x);
-	void operator/= (Superdouble x);
-	void operator+= (Superdouble x);
-	void operator-= (Superdouble x);
-	bool operator < (const Superdouble &x)const ;
-	bool operator > (const Superdouble &x)const ;
-	bool operator >= (const Superdouble &x)const ;
-	bool operator <= (const Superdouble &x)const ;
-	int getExponent();
-	double getMantissa();
-	Superdouble getLn();
-	Superdouble abs();
-	void switch_sign();
-	
-	operator double() {return mantissa*pow(10.,exponent);};
-	
+    Superdouble(long double mantissa=1.0, int exponent=0);
+    ~Superdouble();
+    Superdouble operator* ( Superdouble x);
+    Superdouble operator* ( double x);
+    Superdouble operator/ ( Superdouble x);
+    Superdouble operator+ ( Superdouble x);
+    Superdouble operator- ( Superdouble x);
+    void operator++ ();
+    void operator -- ();
+    void operator*= (Superdouble x);
+    void operator/= (Superdouble x);
+    void operator+= (Superdouble x);
+    void operator-= (Superdouble x);
+    bool operator < (const Superdouble &x)const ;
+    bool operator > (const Superdouble &x)const ;
+    bool operator >= (const Superdouble &x)const ;
+    bool operator <= (const Superdouble &x)const ;
+    int getExponent();
+    double getMantissa();
+    Superdouble getLn();
+    Superdouble abs();
+    void switch_sign();
+    
+    operator double() {return mantissa*pow(10.,exponent);};
+    
 };
 #endif /* _SUPERDOUBLE_H_ */

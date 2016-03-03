@@ -95,22 +95,24 @@ int main(int argc, char * argv[]) {
     }
 
     int ft = test_seq_filetype_stream(*pios, retstring);
+    
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
+    
     // fasta has a trailing one
     if (ft == 2) {
         seqs.push_back(seq);
     }
     write_nexus_alignment(seqs, poos);
-    if (fileset) {
+    
+    if (fileset == true) {
         fstr->close();
         delete pios;
     }
-    if (outfileset) {
+    if (outfileset == true) {
         ofstr->close();
         delete poos;
     }
     return EXIT_SUCCESS;
 }
-

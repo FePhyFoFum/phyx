@@ -21,11 +21,9 @@ map <string, string> AAtoCDN::ChangeToCodon(map <string, string>& AminoAcid,
         if (Nucleotide.find(iter -> first) == Nucleotide.end()) {
             cout << "Only in the AA File: " << iter -> first << endl;
         } else {
-
             AminoAcidSequence = iter -> second;
             NucleotideSequence = Nucleotide[iter -> first];
             for (unsigned int i=0; i < AminoAcidSequence.size(); i++) {
-                //j = 0;
                 if (AminoAcidSequence[i] == '-') {
                     temp += "---";
                 } else {
@@ -39,9 +37,7 @@ map <string, string> AAtoCDN::ChangeToCodon(map <string, string>& AminoAcid,
             temp = "";
         }
     }
-
     return CodonSequences;
-//    return CodonAln;
 }
 
 AAtoCDN::AAtoCDN() {

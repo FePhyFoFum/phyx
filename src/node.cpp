@@ -116,7 +116,7 @@ void Node::setDepth(double de) {
 bool Node::hasChild(Node & test) {
     bool ret = false;
     for (unsigned int i=0; i < children.size(); i++) {
-        if(children.at(i) == &test) {
+        if (children.at(i) == &test) {
             ret = true;
             break;
         }
@@ -215,7 +215,7 @@ string Node::getNewick(bool bl, string obj) {
             ret += ",";
         }
     }
-    if(isInternal() == true) {
+    if (isInternal() == true) {
         if (obj == "number") {
             std::ostringstream o;
             o << number;
@@ -227,7 +227,7 @@ string Node::getNewick(bool bl, string obj) {
                 ret += o.str();
             }
         }
-    } else {//EXTERNAL
+    } else { // EXTERNAL
         if (name.size() > 0) {
             ret = ret + name;
         }
@@ -251,24 +251,24 @@ void Node::assocObject(string name,NodeObject & obj) {
 }
 
 void Node::assocDoubleVector(string name, vector<Superdouble> & obj) {
-	if (assocDV.count(name) > 0) {
-		assocDV.erase(name);
-	}
-	vector<Superdouble> tvec (obj.size());
-	for (unsigned int i=0; i < obj.size(); i++) {
-		tvec[i] = obj[i];
-	}
-	assocDV[name] = tvec;
+    if (assocDV.count(name) > 0) {
+        assocDV.erase(name);
+    }
+    vector<Superdouble> tvec (obj.size());
+    for (unsigned int i=0; i < obj.size(); i++) {
+        tvec[i] = obj[i];
+    }
+    assocDV[name] = tvec;
 }
 
 vector<Superdouble> * Node::getDoubleVector(string name) {
-	return &assocDV[name];
+    return &assocDV[name];
 }
 
 void Node::deleteDoubleVector(string name) {
-	if (assocDV.count(name) > 0) {
-		assocDV.erase(name);
-	}
+    if (assocDV.count(name) > 0) {
+        assocDV.erase(name);
+    }
 }
 
 /*

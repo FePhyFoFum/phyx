@@ -15,19 +15,19 @@ using namespace arma;
 
 class OptimizeStateReconstructor{
 private:
-	RateModel * rm;
-	StateReconstructor * sr;
-	mat * free_variables;
-	int nfree_variables;
-	int maxiterations;
-	double stoppingprecision;
+    RateModel * rm;
+    StateReconstructor * sr;
+    mat * free_variables;
+    int nfree_variables;
+    int maxiterations;
+    double stoppingprecision;
 
-	double GetLikelihoodWithOptimized(const gsl_vector * variables);
-	static double GetLikelihoodWithOptimized_gsl(const gsl_vector * variables, void *obj);
+    double GetLikelihoodWithOptimized(const gsl_vector * variables);
+    static double GetLikelihoodWithOptimized_gsl(const gsl_vector * variables, void *obj);
 
 public:
-	OptimizeStateReconstructor(RateModel *,StateReconstructor *, mat *, int);
-	mat optimize();
+    OptimizeStateReconstructor(RateModel *,StateReconstructor *, mat *, int);
+    mat optimize();
 };
 
 #endif /* _OPTIMIZE_STATE_RECONSTRUCTOR_GSL_H_ */

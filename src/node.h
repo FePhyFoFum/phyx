@@ -72,8 +72,8 @@ public:
     int getChildCount();
     void assocObject(string name,NodeObject & obj);
     void assocDoubleVector(string name, vector<Superdouble> & obj);
-	vector<Superdouble> * getDoubleVector(string name);
-	void deleteDoubleVector(string name);
+    vector<Superdouble> * getDoubleVector(string name);
+    void deleteDoubleVector(string name);
     NodeObject * getObject(string name);
     void initSegVector();
     vector<BranchSegment> * getSegVector();

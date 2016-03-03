@@ -132,7 +132,7 @@ bool Tree::reRoot(Node * inroot) {
     //cout << this->root->getNewick(false) << endl;
     if (root == inroot) {
         cerr << "you asked to root at the current root" << endl;
-	    return false;
+        return false;
     } else {
         Node * tempParent = inroot->getParent();
         Node * newRoot = new Node(tempParent);
@@ -146,7 +146,7 @@ bool Tree::reRoot(Node * inroot) {
         processReRoot(newRoot);
         setRoot(newRoot);
         processRoot();
-	    return true;
+        return true;
     }
 }
 
@@ -250,7 +250,7 @@ Node * Tree::getInternalMRCA(vector<string> & innodes) {
     Node * mrca = NULL;
     set<Node *> original;//original set of nodes
     if (innodes.size() == 1) {
-	    return this->getExternalNode(innodes[0]);
+        return this->getExternalNode(innodes[0]);
     } else {
         //first get the root set
         //then get the leaves set

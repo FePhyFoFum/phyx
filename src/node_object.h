@@ -14,12 +14,12 @@ using namespace std;
 class NodeObject{
 
 public:
-	NodeObject() {}
+    NodeObject() {}
 
-	virtual ~NodeObject() {}
+    virtual ~NodeObject() {}
 
 public:
-	virtual NodeObject * clone() const = 0;
+    virtual NodeObject * clone() const = 0;
 };
 
 #endif /* _NODE_OBJECT_H_ */

@@ -208,15 +208,15 @@ void create_vector_seq_codon_state_reconstructor(vector <Sequence> & origseqs,
     vector <Sequence> & sr_seqs, int site, map<string, vector<int> > & codon_pos) {
     int start = site*3;
     for (unsigned int i=0; i < origseqs.size(); i++) {
-	string codon = origseqs[i].get_sequence().substr(start,3);
-	string setsq = "";
-	for (int j=0;j<61;j++) {
-	    setsq += "0";
-	}
-	for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
-	    setsq.replace(codon_pos[codon][j],1,"1");
-	}
-	sr_seqs[i].set_sequence(setsq);
+        string codon = origseqs[i].get_sequence().substr(start,3);
+        string setsq = "";
+        for (int j=0;j<61;j++) {
+            setsq += "0";
+        }
+        for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
+            setsq.replace(codon_pos[codon][j],1,"1");
+        }
+        sr_seqs[i].set_sequence(setsq);
     }
 }
 
@@ -227,17 +227,16 @@ void create_vector_seq_codon_state_reconstructor(vector <Sequence> & origseqs,
  */
 void create_vector_seq_codon_state_reconstructor_all_site(vector <Sequence> & origseqs,
     vector <Sequence> & sr_seqs, int site, map<string, vector <int> > & codon_pos) {
-    int start = site*3;
+    int start = site * 3;
     for (unsigned int i=0; i < origseqs.size(); i++) {
-	string codon = origseqs[i].get_sequence().substr(start,3);
-	string setsq = "";
-	for (int j=0; j < 61;j ++) {
-	    setsq += "0";
-	}
-	for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
-	    setsq.replace(codon_pos[codon][j],1,"1");
-	}
-	sr_seqs[i].set_sequence(setsq);
+        string codon = origseqs[i].get_sequence().substr(start, 3);
+        
+        string setsq(61, '0');
+        
+        for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
+            setsq.replace(codon_pos[codon][j], 1, "1");
+        }
+        sr_seqs[i].set_sequence(setsq);
     }
 }
 
