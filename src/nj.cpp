@@ -91,7 +91,7 @@ void FetchLengths(int const& NumbOfSequences, vector< vector<double> > const& Ne
 // NumbOfSequences arg wasn't being used
 //void Tree_Update(int NumbOfSequences, string& newname, vector<string>& names,
 //    map<int, string>& NumbKeys, int& node_list, vector< vector<double> >& NewMatrix,
-//    int& mini1, int& mini2, double& brlength1, double& brlength2){
+//    int& mini1, int& mini2, double& brlength1, double& brlength2) {
 void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
     int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
     double& brlength1, double& brlength2) {
@@ -241,22 +241,22 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
 }
 
 // not used. doesn't have a declaration either
-//double CalcSeqsDiffs(string const& sequence1, string const& sequence2){
+//double CalcSeqsDiffs(string const& sequence1, string const& sequence2) {
 //    double score = 0;
-//    for (unsigned int i = 0; i < sequence1.size(); i++){
-//        if (sequence1[i] != sequence2[i]){
+//    for (unsigned int i = 0; i < sequence1.size(); i++) {
+//        if (sequence1[i] != sequence2[i]) {
 //            score++;
 //        }
 //    }
 //    return score;
 //}
 
-vector< vector<double> > NJOI::BuildMatrix (map <string, string>& sequences){
+vector< vector<double> > NJOI::BuildMatrix (map <string, string>& sequences) {
 
     vector<string> SequenceName;
     map <string, string>::iterator iter, iter2;
     string fasta, SeqName, MatchName;
-    int count = 0, FirstCount = 0;
+    int FirstCount = 0;
     double MatchScore;
 
     // an easier way to initialize a vector of vectors:
@@ -298,7 +298,7 @@ NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences[seq.get_id()] = seq.get_sequence();
         if (!first) {
-            if (seq.get_length() != nchar) {
+            if ((int)seq.get_length() != nchar) {
                 cout << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
                     << nchar << "." << endl << "Exiting." << endl;
@@ -315,7 +315,7 @@ NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
     //fasta has a trailing one
     if (ft == 2) {
         sequences[seq.get_id()] = seq.get_sequence();
-        if (seq.get_length() != nchar) {
+        if ((int)seq.get_length() != nchar) {
             cout << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
                 << nchar << "." << endl << "Exiting." << endl;

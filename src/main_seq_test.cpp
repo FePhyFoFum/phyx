@@ -12,9 +12,9 @@ using namespace std;
 #include "utils.h"
 #include "seq_reader.h"
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
 
-    if (argc > 2){
+    if (argc > 2) {
         cout << "usage: pxseqtest file" << endl;
         exit(0);
     }

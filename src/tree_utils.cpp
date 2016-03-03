@@ -127,7 +127,6 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
 // maybe move this elsewhere...
 bool check_names_against_tree(Tree * tr, vector<string> names) {
     bool allgood = true;
-
     for (unsigned int i = 0; i < names.size(); i++) {
     //cout << "Checking name '" << names[i] << "'." << endl;
         Node * nd = tr->getExternalNode(names[i]);
@@ -151,7 +150,7 @@ bool is_rooted (Tree * tr) {
 // sum of edge lengths
 double get_tree_length (Tree * tr) {
    double length = 0.0;
-   Node * root = tr->getRoot();
+   //Node * root = tr->getRoot(); // not used
    int numNodes = tr->getNodeCount();
    for (int i = 0; i < numNodes; i++) {
        length += tr->getNode(i)->getBL();

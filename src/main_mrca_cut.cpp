@@ -121,7 +121,7 @@ int main(int argc, char * argv[]){
     ifstream inmrca(mrcaf);
     string mrcaline;
     map<string, vector<string> > mrcas;
-    while (getline(inmrca, mrcaline)){
+    while (getline(inmrca, mrcaline)) {
         if (mrcaline.empty()) {
             continue;
         }
@@ -138,7 +138,7 @@ int main(int argc, char * argv[]){
     // collect tree(s)
     vector<string> lines;
     string line;
-    while (getline(*pios, line)){
+    while (getline(*pios, line)) {
         lines.push_back(line);
     }
     
@@ -147,7 +147,7 @@ int main(int argc, char * argv[]){
         cout << tree->getExternalNodeCount() << endl;
 
         map<string,vector<string> >::iterator it;
-        for (it = mrcas.begin(); it != mrcas.end(); it++){
+        for (it = mrcas.begin(); it != mrcas.end(); it++) {
             //cout << "Dealing with clade '" << (*it).first << "'" << endl;
             if (!check_names_against_tree(tree, (*it).second)) {
                 cout << "Check mrca file for typos." << endl;

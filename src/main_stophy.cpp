@@ -42,7 +42,7 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     bool going = true;
     bool fileset = false;
     bool outfileset = false;
@@ -81,16 +81,16 @@ int main(int argc, char * argv[]){
     ostream* poos;
     ifstream* fstr;
     ofstream* ofstr; 
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
 
@@ -99,15 +99,15 @@ int main(int argc, char * argv[]){
         seqs.push_back(seq);
     }
     //fasta has a trailing one
-    if (ft == 2){
+    if (ft == 2) {
         seqs.push_back(seq);
     }
     write_phylip_alignment(seqs,poos);
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
     }
-    if(outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

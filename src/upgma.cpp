@@ -33,6 +33,7 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     string length1 = std::to_string(br_length);
     string length2 = length1;
     double ColRow = 0.0;
+    int matrixsize = NewMatrix.size();
 
     // extremely hacky way to get correct ELs
     std::size_t found = names[mini1].find("#");
@@ -73,9 +74,9 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
 //        temp_matrix.push_back(row);
 //    }
     
-    //Reformat Matrix
-    for (int i = 0; i < NewMatrix.size(); i++) {
-        for (int j = 0; j < NewMatrix.size(); j++) {
+    // Reformat Matrix
+    for (int i = 0; i < matrixsize; i++) {
+        for (int j = 0; j < matrixsize; j++) {
             if (i == mini1) {
                 row_hits.push_back(NewMatrix[mini1][j]);
             } else if (i == mini2) {
@@ -86,7 +87,7 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     
     int count = 0;
     //Make a new First Row and Column
-    for (int i = 0; i < col_hits.size(); i++) {
+    for (int i = 0; i < (int)col_hits.size(); i++) {
         ColRow = (col_hits[i] + row_hits[i]) / 2;
         if (i != mini1) {
             if (i != mini2) {
@@ -104,14 +105,14 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     //cout << "NewMatrix.size() = " << NewMatrix.size()
     //    << "; mini1 = " << mini1 << "; mini2 = " << mini2 << endl;
     // mini1 is always < mini2
-    for (int i = 0; i < NewMatrix.size(); i++) {
+    for (int i = 0; i < matrixsize; i++) {
         // print vector contents
         //print_vector(NewMatrix[i]);
         //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std::cout, " "));
         jcount = 1;
         if (i != mini1 && i != mini2) {
 //            if(i != mini2) {
-            for (int j = 0; j < NewMatrix.size(); j++) {
+            for (int j = 0; j < matrixsize; j++) {
                 if (j != mini1 && j != mini2) {
                     //if(j != mini2) {
                         temp_matrix[icount][jcount] = NewMatrix[i][j];
@@ -172,10 +173,8 @@ void UPGMA::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
     map<int, string>::iterator iter;
     string newname;
     while (NumbOfSequences > 1) {
-
         Choose_Small(NumbOfSequences, Matrix, mini1, mini2);
         update_tree(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2);
-
     }
     newickstring = newname + ";";
 }
@@ -184,7 +183,7 @@ void UPGMA::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
 // not used
 double CalcSeqDiffs(string& sequence1, string& sequence2) {
     double score = 0;
-    for (int i = 0; i < sequence1.size(); i++) {
+    for (unsigned int i = 0; i < sequence1.size(); i++) {
         if (sequence1[i] != sequence2[i]) {
             score++;
         }
@@ -197,7 +196,7 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
     vector<string> SequenceName;
     map <string, string>::iterator iter, iter2;
     string fasta, SeqName, MatchName;
-    int count = 0, FirstCount = 0;
+    int FirstCount = 0;
     double MatchScore;
 
     // an easier way to initialize a vector of vectors:
@@ -259,7 +258,7 @@ UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences[seq.get_id()] = seq.get_sequence();
         if (!first) {
-            if (seq.get_length() != nchar) {
+            if ((int)seq.get_length() != nchar) {
                 cout << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
                     << nchar << "." << endl << "Exiting." << endl;
@@ -276,7 +275,7 @@ UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
     //fasta has a trailing one
     if (ft == 2) {
         sequences[seq.get_id()] = seq.get_sequence();
-        if (seq.get_length() != nchar) {
+        if ((int)seq.get_length() != nchar) {
             cout << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
                 << nchar << "." << endl << "Exiting." << endl;

@@ -57,14 +57,13 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
-    bool nucfile = false;
+    bool nucfile = false; // not used
     string aaseqf = "";
     string nucseqf = "";
     string outf = "";
 
     while (1) {
         int oi = -1;
-        int curind = optind;
         int c = getopt_long(argc, argv,  "a:o:n:hV", long_options, &oi);
         if (c == -1) {
             break;

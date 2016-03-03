@@ -167,7 +167,7 @@ int random_int_range (int min, int max) {
 
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
-// this is pretty sweet, if i do say so myself
+// ok, this is pretty sweet, if i do say so myself
 vector <int> sample_without_replacement (int const& numTotal, int const& numSample) {
     vector <int> randsites (numSample); // numchar zero-initialized elements
     vector <int> allsites (numTotal);
@@ -341,15 +341,14 @@ const string newick_punct = "()[]\':;,";
 
 // get a taxon label that is newick-compliant
 string get_valid_newick_label (string const& inLabel) {
-    bool needQuotes = false;
     string outLabel = inLabel;
     
     // if surrounded by single quotes already, assume cool
     if (outLabel[0] == '\'' && outLabel[outLabel.size() - 1] == '\'') {
         return outLabel;
     }
+    // does the label require quotes?
     if (outLabel.find_first_of(newick_punct) != std::string::npos) {
-        needQuotes = true;
         quotify_label(outLabel);
     } else if (outLabel.find_first_of(" ") != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
@@ -360,15 +359,14 @@ string get_valid_newick_label (string const& inLabel) {
 
 // get a taxon label that is Nexus-compliant
 string get_valid_nexus_label (string const& inLabel) {
-    bool needQuotes = false;
     string outLabel = inLabel;
     
     // if surrounded by single quotes already, assume cool
     if (outLabel[0] == '\'' && outLabel[outLabel.size() - 1] == '\'') {
         return outLabel;
     }
+    // does the label require quotes?
     if (outLabel.find_first_of(nexus_punct) != std::string::npos) {
-        needQuotes = true;
         quotify_label(outLabel);
     } else if (outLabel.find_first_of(" ") != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');

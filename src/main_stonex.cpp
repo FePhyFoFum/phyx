@@ -98,7 +98,7 @@ int main(int argc, char * argv[]) {
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
-    //fasta has a trailing one
+    // fasta has a trailing one
     if (ft == 2) {
         seqs.push_back(seq);
     }

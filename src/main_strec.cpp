@@ -95,8 +95,8 @@ bool checkdata(Tree * intree, vector<Sequence> runseqs) {
 }
 
 int main(int argc, char * argv[]) {
-    bool datafileset = false;
-    bool treefileset = false;
+    bool datafileset = false; // not used
+    bool treefileset = false; // not used
     bool conffileset = false;
     bool logfileset = false;
     bool outancfileset = false;
@@ -163,11 +163,7 @@ int main(int argc, char * argv[]) {
             case 'p':
                 periodsset = true;
                 periodstring = (strdup(optarg));
-                tokenize(periodstring, ptokens, ",");
-                for (unsigned int j=0; j < ptokens.size(); j++) {
-                    trim_spaces(ptokens[j]);
-                    period_times.push_back((double)atof(ptokens[j].c_str()));
-                }
+                period_times = parse_double_comma_list(periodstring);
                 break;
             case 'l':
                 logfileset = true;
@@ -189,7 +185,7 @@ int main(int argc, char * argv[]) {
     if (logfileset == true) {
         logout = new ofstream(logf);
         loos = logout;
-    }else{
+    } else {
         loos = &cout;
     }
 
@@ -341,13 +337,13 @@ int main(int argc, char * argv[]) {
     if (datawide) {
         if (dataz == false) {
             nstates = seqs[0].get_sequence().length();
-        }else{
+        } else {
             vector<string> searchtokens;
             tokenize(seqs[0].get_sequence(), searchtokens, ",");
             nstates = searchtokens.size();
         }
         nsites = 1;
-    }else{
+    } else {
         int maxstate=1;
         vector<string> searchtokens;
         tokenize(seqs[0].get_sequence(), searchtokens, " ");
@@ -443,7 +439,7 @@ int main(int argc, char * argv[]) {
                     for (int mse = 0;mse<nstates;mse++) {
                     tseqs.replace(mse,1,"1");
                     }
-                }else{
+                } else {
                     int pos = atoi(searchtokens[n].c_str());
                     tseqs.replace(pos,1,"1");
                 }
@@ -456,7 +452,7 @@ int main(int argc, char * argv[]) {
                 runseqs.push_back(tse);
             }
             nstates_site_n = sum(existing_states);
-        }else{
+        } else {
             runseqs = seqs;
             if (dataz == false) {
                 for (unsigned int se=0; se < seqs.size(); se++) {
@@ -467,7 +463,7 @@ int main(int argc, char * argv[]) {
                     }
                 }
                 nstates_site_n = sum(existing_states);
-            }else{
+            } else {
                 for (int i=0; i < nstates; i++) {
                     existing_states[i] = 1;
                 }
@@ -479,7 +475,7 @@ int main(int argc, char * argv[]) {
         for (int i=nstates-1; i >= 0; i--) {
             if (existing_states[i] == 1) {
                 continue;
-            }else{
+            } else {
                 for (unsigned int se=0; se < runseqs.size(); se++) {
                     runseqs[se].set_sequence(runseqs[se].get_sequence().erase(i,1));
                 }
@@ -523,7 +519,7 @@ int main(int argc, char * argv[]) {
             bool same;
             if (dataz == false) {
                 same = sr.set_tip_conditionals(runseqs);
-            }else{
+            } else {
                 same = sr.set_tip_conditionals_already_given(runseqs);
             }
             if (same == true) {
@@ -557,9 +553,9 @@ int main(int argc, char * argv[]) {
                 //estimating the optimal rates
                 if (estimate) {//optimize
                     optimize_sr_nlopt(&rm,&sr,&free_var,ct);
-                }else{//requires that the ratematrix is available
+                } else { // requires that the ratematrix is available
                     for (int i=0;i<nstates_site_n;i++) {
-                        for (int j=0;j<nstates_site_n;j++) {
+                        for (int j=0; j < nstates_site_n; j++) {
                             free_var(i,j) = ratematrix[i][j];
                         }
                     }
@@ -574,7 +570,7 @@ int main(int argc, char * argv[]) {
                 if (verbose) {
                     (*loos) << "final_likelihood: " << finallike << endl;  
                 }
-            }else{//optimize with periods
+            } else { //optimize with periods
                 vector<mat> periods_free_var(period_times.size());
                 int ct = 0;
                 if (freeparams == "_one_") {
@@ -655,7 +651,7 @@ int main(int argc, char * argv[]) {
                     tree->getInternalNode(l)->setName(out.str());
                 }
                 ancout << tree->getRoot()->getNewick(true) << ";"<< endl;
-            }else{
+            } else {
                 vector<Superdouble> lhoods;
                 if (verbose) {
                     (*loos) <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  endl;
@@ -674,7 +670,7 @@ int main(int argc, char * argv[]) {
                         if (double(lhoods[excount]/totlike_sd) < 0)
                         neg = true;
                         excount += 1;
-                    }else{
+                    } else {
                         if (verbose) {
                             (*loos) << "NA" << " ";
                             ancout << "\t" << "NA";
@@ -719,7 +715,7 @@ int main(int argc, char * argv[]) {
                             neg = true;
                         }
                         excount += 1;
-                    }else{
+                    } else {
                         if (verbose) {
                             (*loos) << "NA" << " ";
                         }
@@ -758,7 +754,7 @@ int main(int argc, char * argv[]) {
                                         if (verbose) {
                                             (*loos) << " - ";
                                         }
-                                    }else{
+                                    } else {
                                         sr.prepare_stochmap_reverse_all_nodes(excount,excount2);
                                         sr.prepare_ancstate_reverse();
                                         vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]),false);
@@ -772,7 +768,7 @@ int main(int argc, char * argv[]) {
                                         }
                                     }
                                     excount2 += 1;
-                                }else{
+                                } else {
                                     if (verbose) {
                                         (*loos) << "NA" << " ";
                                     }
@@ -783,13 +779,13 @@ int main(int argc, char * argv[]) {
                                 (*loos) << endl;
                             }
                             excount += 1;
-                        }else{
+                        } else {
                             for (int l=0;l<nstates;l++) {
                                 if (k==l) {
                                     if (verbose) {
                                         (*loos) << " - ";
                                     }
-                                }else{
+                                } else {
                                     if (verbose) {
                                         (*loos) << "NA" << " ";
                                     }

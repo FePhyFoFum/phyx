@@ -61,9 +61,9 @@ void RateModel::setup_Q() {
     sameQ = false;
 }
 
-void RateModel::setup_Q(vector<vector<double> > & inQ){
+void RateModel::setup_Q(vector<vector<double> > & inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
-	for(unsigned int j=0; j < Q.n_cols; j++) {
+	for (unsigned int j=0; j < Q.n_cols; j++) {
 	    Q(i,j) = inQ[i][j];
 	}
     }
@@ -92,15 +92,15 @@ void RateModel::set_n_qs(int number) {
 }
 
 void RateModel::set_Q_which(mat & inQ,int which) {
-    for (unsigned int i=0; i < Qs[which].n_rows; i++){
-	for (unsigned int j=0; j < Qs[which].n_cols; j++){
+    for (unsigned int i=0; i < Qs[which].n_rows; i++) {
+	for (unsigned int j=0; j < Qs[which].n_cols; j++) {
 	    Qs[which](i,j) = inQ(i,j);
 	}
     }
     for (unsigned int i=0; i < Qs[which].n_rows; i++) {
 	double su = 0;
 	for (unsigned int j=0; j < Qs[which].n_cols; j++) {
-	    if (i != j){
+	    if (i != j) {
 		su += Qs[which](i,j);
 	    }
 	}
@@ -122,11 +122,11 @@ mat & RateModel::get_Q() {
     return Q;
 }
 
-cx_mat RateModel::setup_P(double bl,bool store_p_matrices){
+cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
     //sameQ = false;
     eigvec.fill(0);
     eigval.fill(0);
-    bool isImag = get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
+    bool isImag = get_eigenvec_eigenval_from_Q(&eigval, &eigvec); // isImag is not used?
     //cout << eigval << endl;
     //cout << eigvec << endl;
     for (int i=0; i < nstates;i++) {
@@ -159,7 +159,7 @@ void RateModel::setup_P_simple(mat & p,double bl,bool store_p_matrices) {
     }
     mat C_inv = inv(eigvec_simple);
     p = eigvec_simple * eigval_simple * C_inv;
-/*    if(store_p_matrices == true){
+/*    if(store_p_matrices == true) {
 	stored_p_matrices[bl] = P;	
     }*/
     //return P;
@@ -210,8 +210,8 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
  */
 bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     if (sameQ == true) {
-	for(unsigned int i=0; i < Q.n_rows;i++) {
-	    for(unsigned int j=0; j < Q.n_cols;j++) {
+	for (unsigned int i=0; i < Q.n_rows;i++) {
+	    for (unsigned int j=0; j < Q.n_cols;j++) {
 		(*eigval)(i,j) = lasteigval(i,j);
 		(*eigvec)(i,j) = lasteigvec(i,j);
 	    }
@@ -352,7 +352,7 @@ bool test_transition(char a, char b) {
 
 void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, 
     map<string, vector<int> > & codon_index, vector<string> & codon_list) {
-    for (int i=0; i < 61; i++){
+    for (int i=0; i < 61; i++) {
 	for (int j=0; j < 61; j++) {
 	    int diff = 0;
 	    bool transit = false;
@@ -383,8 +383,8 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon
 
 void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H) {
     int count = 0;
-    for(unsigned int i=0; i < inmatrix.n_cols; i++){
-	for(unsigned int j=0; j < inmatrix.n_cols; j++){
+    for (unsigned int i=0; i < inmatrix.n_cols; i++) {
+	for (unsigned int j=0; j < inmatrix.n_cols; j++) {
 	    H[i+(j*inmatrix.n_cols)] = inmatrix(i,j)*t;
 	    count += 1;
 	}

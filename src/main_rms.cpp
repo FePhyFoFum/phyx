@@ -23,10 +23,10 @@ using namespace std;
 #include "seq_reader.h"
 
 void print_help() {
-    cout << "Removes unwanted Sequences" << endl;
+    cout << "Removes unwanted sequences" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
-    cout << "Usage: pxtlate [OPTION]... " << endl;
+    cout << "Usage: pxrms [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << endl;
     cout << " -r, --rmf=FILE      input list of sequences to be removed each on a separate line" << endl;
@@ -40,11 +40,10 @@ void print_help() {
 
 string versionline("pxrms 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv2\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
-
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
-	{"rmf", required_argument, NULL, 'r'},
+    {"rmf", required_argument, NULL, 'r'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -54,14 +53,13 @@ static struct option const long_options[] =
 int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
-    bool toremove = false;
+    bool toremove = false; // this is not used
     string seqf = "";
     string outf = "";
     string rmf = "";
 
     while (1) {
         int oi = -1;
-        int curind = optind;
         int c = getopt_long(argc, argv, "s:r:o:hV", long_options, &oi);
         if (c == -1) {
             break;
@@ -103,18 +101,21 @@ int main(int argc, char * argv[]) {
     istream* pios;
     ifstream* rstr;
     istream* rpios;
-    if(fileset == true){
+    
+    // not sure how these are supposed to work. why 2 checks of fileset?
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(fileset == true){
+    if (fileset == true) {
         rstr = new ifstream(rmf);
         rpios = rstr;
-    }else{
+    } else {
         rpios = &cin;
     }
+    
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
@@ -128,30 +129,32 @@ int main(int argc, char * argv[]) {
     string line;
     string seq_name;
     readline.open(rmf.c_str());
-    if (readline.is_open()){
-    	while (getline (readline, line)){
-    		to_remove.push_back(line);
-    	}
+    if (readline.is_open()) {
+        while (getline (readline, line)) {
+            to_remove.push_back(line);
+        }
     }
 
     int ft = test_seq_filetype_stream(*pios,retstring);
     //send sequences to be translated here
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
-    	seq_name = seq.get_id();
-    	if(find(to_remove.begin(), to_remove.end(), seq_name) != to_remove.end()){
-
-    	}else{
-    		*poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
-    	}
+    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+        seq_name = seq.get_id();
+        if (find(to_remove.begin(), to_remove.end(), seq_name) != to_remove.end()) {
+            
+            // what is supposed to go here?
+            
+        } else {
+            *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+        }
     }
     //fasta has a trailing one
-    if (ft == 2){
-    	seq_name = seq.get_id();
-    	if(find(to_remove.begin(), to_remove.end(), seq_name) != to_remove.end()){
+    if (ft == 2) {
+        seq_name = seq.get_id();
+        if (find(to_remove.begin(), to_remove.end(), seq_name) != to_remove.end()) {
 
-    	}else{
-    		*poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
-    	}
+        } else {
+            *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+        }
     }
 
     if (outfileset) {
@@ -160,5 +163,3 @@ int main(int argc, char * argv[]) {
     }
     return EXIT_SUCCESS;
 }
-
-

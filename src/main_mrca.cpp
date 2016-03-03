@@ -49,16 +49,16 @@ static struct option const long_options[] =
 
 */
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     TreeReader tr;
     
-    if (argc != 3){
+    if (argc != 3) {
         cout << "usage: pxmrca MRCA newickfile" << endl;
         exit(0);
     }
     
     ifstream infile(argv[1]);
-    if (!infile){
+    if (!infile) {
         cerr << "Could not open mrcafile." << endl;
         return 1;
     }
@@ -69,7 +69,7 @@ int main(int argc, char * argv[]){
         vector<string> searchtokens;
         tokenize(mrcaline, searchtokens, "     ");
         cout << "Read in " << searchtokens.size() << " tokens!" << endl;
-        for(unsigned int j=0; j < searchtokens.size(); j++){
+        for (unsigned int j=0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         vector<string> vec;
@@ -86,7 +86,7 @@ int main(int argc, char * argv[]){
     }
     vector<string> lines;
     string line;
-    while (getline(infile2, line)){
+    while (getline(infile2, line)) {
         lines.push_back(line);
     }
     infile2.close();
@@ -95,7 +95,7 @@ int main(int argc, char * argv[]){
     cout << tree->getExternalNodeCount() << endl;
 
     map<string,vector<string> >::iterator it;
-    for (it=mrcas.begin(); it!=mrcas.end(); it++){
+    for (it=mrcas.begin(); it != mrcas.end(); it++) {
         Node * nd = tree->getMRCA((*it).second);
         cout << (*it).first<<" "<< nd->get_num_leaves() << " " << nd->getName() << endl;
     }
