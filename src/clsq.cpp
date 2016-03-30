@@ -30,6 +30,9 @@ void SequenceCleaner::read_sequences (istream* pios) {
             numChar = (int)seq.get_sequence().size();
         }
     }
+    if (ft == 2) {
+		sequences[seq.get_id()] = seq.get_sequence();
+    }
     numTaxa = sequences.size();
 }
  // not used

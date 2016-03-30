@@ -30,7 +30,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -p, --percent=DOUBLE  percent allowed to be missing, default=50.0%" << endl;
+    cout << " -p, --percent=DOUBLE  percent allowed to be missing, default=.5" << endl;
     cout << "     --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
     cout << endl;
