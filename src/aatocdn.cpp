@@ -30,7 +30,7 @@ map <string, string> AAtoCDN::ChangeToCodon(map <string, string>& AminoAcid,
                     temp += NucleotideSequence[0];
                     temp += NucleotideSequence[1];
                     temp += NucleotideSequence[2];
-                    NucleotideSequence.erase(0, 2);
+                    NucleotideSequence.erase(0, 3);
                 }
             }
             CodonSequences[iter -> first] = temp;
