@@ -52,6 +52,13 @@ void SequenceCleaner::write_seqs (ostream* poos) {
     //    (*poos) << ">" << kv.first << endl;
     //    (*poos) << kv.second << endl;
     //}
+    if(trimmedSeqs.size() == 0){
+		    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
+				(*poos) << ">" << iter->first << endl;
+				(*poos) << "-" << endl;
+				
+			}
+	}
     for (iter = trimmedSeqs.begin(); iter != trimmedSeqs.end(); iter++) {
         (*poos) << ">" << iter->first << endl;
         (*poos) << iter->second << endl;
