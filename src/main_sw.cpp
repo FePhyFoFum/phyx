@@ -137,7 +137,8 @@ int main(int argc, char * argv[]) {
     istream* pios;
     ostream* poos;
     ifstream* fstr;
-    ofstream* ofstr; 
+    ofstream* ofstr;
+    ofstream* afstr;
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
@@ -150,17 +151,20 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
+    if (outalnfileset) {
+        afstr = new ofstream(outaf);
+    }
 
     int ft = test_seq_filetype_stream(*pios,retstring);
     while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
         seqs.push_back(seq);
     }
-    //fasta has a trailing one
+    // fasta has a trailing one
     if (ft == 2) {
         seqs.push_back(seq);
     }
 
-    //go all by all
+    // go all by all
     for (unsigned int i=0; i < seqs.size(); i++) {
         omp_set_num_threads(num_threads);
         #pragma omp parallel for
@@ -175,6 +179,9 @@ int main(int argc, char * argv[]) {
                     if (verbose) {
                         cout << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << endl;
                     }
+                    if (outalnfileset) {
+                        (*afstr) << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << endl;
+                    }
                 }
             }
         }
@@ -186,6 +193,9 @@ int main(int argc, char * argv[]) {
     if (outfileset) {
         ofstr->close();
         delete poos;
+    }
+    if (outalnfileset) {
+        afstr->close();
     }
     return EXIT_SUCCESS;
 }
