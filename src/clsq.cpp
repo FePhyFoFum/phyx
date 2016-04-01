@@ -12,7 +12,7 @@
 
 
 SequenceCleaner::SequenceCleaner(istream* pios, double& missing):numTaxa (0), 
-        numChar (0), missingAllowed(missing) {
+        numChar (0.0), missingAllowed(missing) {
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
 }
@@ -26,8 +26,8 @@ void SequenceCleaner::read_sequences (istream* pios) {
     // not doing that here; just assuming things are cool
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences[seq.get_id()] = seq.get_sequence();
-        if (numChar == 0) { // just getting this from an arbitrary sequence for now
-            numChar = (int)seq.get_sequence().size();
+        if (numChar == 0.0) { // just getting this from an arbitrary sequence for now
+            numChar = (double)seq.get_sequence().size();
         }
     }
     if (ft == 2) {
@@ -90,7 +90,9 @@ void SequenceCleaner::clean_sequences () {
     
     double MissingData[numChar];
     double PercentMissingData[numChar];
-    
+    for (int i = 0; i < numChar; i++) {
+		MissingData[i] = 0.0;
+	}
     string new_dna;
     unsigned int stillMissing = 0;
     
@@ -107,7 +109,8 @@ void SequenceCleaner::clean_sequences () {
         stillMissing = 0;
         for (unsigned int i = 0; i < new_dna.size(); i++) {
             PercentMissingData[i] =  MissingData[i] / (double)numTaxa;
-            if (PercentMissingData[i] >= missingAllowed) {
+            //cout << "Position: " << i << "Amount Missing: " << MissingData[i] << " Percent Missing: " << PercentMissingData[i] << "Number of Taxa: " <<  (double)numTaxa  << " Allowed Missing: " << missingAllowed << endl;
+            if (PercentMissingData[i] > missingAllowed) {
                 
                 // *** something missing here? ***
                 
@@ -137,6 +140,7 @@ void SequenceCleaner::CheckMissing(double MissingData [], string& dna){
         if (dna[i] == 'N' || dna[i] == '-' || dna[i] == 'n' || 
             dna[i] == 'X' ||  dna[i] == 'x'){
             MissingData[i]++;
+            cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
         }
     }
 }
