@@ -20,7 +20,7 @@ using namespace std;
 #include "seq_models.h"
 #include "pairwise_alignment.h"
 
-void print_help(){
+void print_help() {
     cout << "Conduct Smith-Waterman analysis for all the seqs in a file." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << "Output is a list of the scores and distances (and the alignments" << endl;
@@ -59,7 +59,7 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     bool going = true;
     bool fileset = false;
     bool outfileset = false;
@@ -72,7 +72,7 @@ int main(int argc, char * argv[]){
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
     bool verbose = false;
-    while(going){
+    while (going) {
         int oi = -1;
         int c = getopt_long(argc,argv,"s:o:a:t:m:n:vhV",long_options,&oi);
         if (c == -1){
@@ -93,7 +93,7 @@ int main(int argc, char * argv[]){
                 break;
             case 't':
                 seqtype = atoi(strdup(optarg));
-                if(seqtype > 1){
+                if (seqtype > 1) {
                     cout << "Don't recognize seqtype " << seqtype << ". Must be 0 (DNA) or 1 (AA)." << endl;
                     exit(0);
                 }
@@ -120,13 +120,15 @@ int main(int argc, char * argv[]){
         }
     }
     map<char, map<char,int> > sc_mat;
-    if(matrixfileset == true){
+    if (matrixfileset == true) {
         read_scoring_matrix(matf,sc_mat);
-    }else{
-        if (seqtype == 0){
+    } else {
+        if (seqtype == 0) {
             get_ednafull(sc_mat);
-        }else{//aa
-
+        } else { //aa
+            
+            // *** what is supposed to go here? ***
+             
         }
     }
     vector<Sequence> seqs;
@@ -136,52 +138,52 @@ int main(int argc, char * argv[]){
     ostream* poos;
     ifstream* fstr;
     ofstream* ofstr; 
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
 
     int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
         seqs.push_back(seq);
     }
     //fasta has a trailing one
-    if (ft == 2){
+    if (ft == 2) {
         seqs.push_back(seq);
     }
 
     //go all by all
-    for(unsigned int i=0; i < seqs.size(); i++){
+    for (unsigned int i=0; i < seqs.size(); i++) {
         omp_set_num_threads(num_threads);
         #pragma omp parallel for
-        for(unsigned int j=0; j < seqs.size(); j++){
-            if(j > i){
+        for (unsigned int j=0; j < seqs.size(); j++) {
+            if (j > i) {
                 string aln1;
                 string aln2;
                 double sc = sw(seqs[i],seqs[j],sc_mat,0, aln1, aln2);
                 #pragma omp critical
                 {
-                    cout << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << endl;
-                    if (verbose){
+                    (*poos) << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << endl;
+                    if (verbose) {
                         cout << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << endl;
                     }
                 }
             }
         }
     }
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
     }
-    if(outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }
