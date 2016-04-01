@@ -45,6 +45,8 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead) {
     root = new Node();
     BIRTHTIME[root] = currenttime;
     extantnodes.push_back(root);
+    // reset failures to zero. don't want to accumulate errors across replicates
+    failures = 0;
     while (check_stop_conditions()) {
         double dt = time_to_next_sp_event();
         currenttime += dt;
