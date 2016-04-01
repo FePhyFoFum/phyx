@@ -127,17 +127,20 @@ int main(int argc, char * argv[]) {
     map<string, string> aa_sequences, nuc_sequences, CodonSequences;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
-    while(read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
+    while (read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
         aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
     }
-    //fasta has a trailing one
+    // fasta has a trailing one
     if (ft == 2) {
         aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
     }
-    while(read_next_seq_from_stream(*nucpios, ft, retstring, nuc_seq)) {
+    
+    // don't assume nuc and aa alignments are the same type
+    ft = test_seq_filetype_stream(*nucpios, retstring);
+    while (read_next_seq_from_stream(*nucpios, ft, retstring, nuc_seq)) {
         nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
     }
-    //fasta has a trailing one
+    // fasta has a trailing one
     if (ft == 2) {
         nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
     }
