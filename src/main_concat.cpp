@@ -108,12 +108,12 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-
-    if (!fileset || inputFiles.size() < 2) {
-        cout << "Must specify 2 or more files to concatenate. Exiting." << endl;
+    
+    if (!fileset) {
+        cout << "Must specify 1 or more files to concatenate. Exiting." << endl;
         exit(0);
     }
-
+    
     ostream* poos;
     ofstream* ofstr;
 
