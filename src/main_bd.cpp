@@ -29,6 +29,7 @@ void print_help () {
     cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
     cout << " -b, --birth=DOUBLE  birth rate, default=1" << endl;
     cout << " -d, --death=DOUBLE  death rate, default=0" << endl;
+    cout << " -n, --nreps         number of replicates, default=1" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -s, --showd         show dead taxa" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
@@ -39,7 +40,7 @@ void print_help () {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxbd 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxbd 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -47,6 +48,7 @@ static struct option const long_options[] =
     {"time", required_argument, NULL, 't'},
     {"birth", required_argument, NULL, 'b'},
     {"death", required_argument, NULL, 'd'},
+    {"nreps", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
     {"showd", no_argument, NULL, 's'},
     {"seed", required_argument, NULL, 'x'},
@@ -62,15 +64,16 @@ int main (int argc, char * argv[]) {
     bool extantset = false;
     char * outf;
     int ext = 0;
+    int nreps = 1;
     double time = 0.0;
     double birth = 1.0;
     double death = 0.0;
     bool showd = false;
-    //bool extisall = false; // not used
+    
     int seed = -1;
     while (going) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"e:t:b:d:o:x:shV",long_options,&oi);
+        int c = getopt_long(argc,argv,"e:t:b:d:n:o:x:shV",long_options,&oi);
         if (c == -1){
             break;
         }
@@ -96,6 +99,9 @@ int main (int argc, char * argv[]) {
                     cout << "Death rate must be >= 0" << endl;
                     exit(0);
                 }
+                break;
+            case 'n':
+                nreps = atoi(strdup(optarg));
                 break;
             case 'o':
                 outfileset = true;
@@ -140,24 +146,27 @@ int main (int argc, char * argv[]) {
         poos = &cout;
     }
     
-    TreeReader tr;
     BirthDeathSimulator bd(ext, time, birth, death, seed);
-    Tree * bdtr = bd.make_tree(showd);
-    if (ext != 0) {
-        int countlimit = 100;
-        int count = 1;
-        // the following doesn't get called. the bd sim handles failures itself.
-        while (bdtr->getExtantNodeCount() != ext) {
-            delete (bdtr);
-            bdtr = bd.make_tree(showd);
-            if (count >= countlimit){
-                cout << "can't seem to get the tips right after " << countlimit << " trials" << endl;
-                break;
+    for (int i = 0; i < nreps; i++) {
+        Tree * bdtr = bd.make_tree(showd);
+        /*
+        if (ext != 0) {
+            int countlimit = 100;
+            int count = 1;
+            // the following doesn't get called. the bd sim handles failures itself.
+            while (bdtr->getExtantNodeCount() != ext) {
+                delete (bdtr);
+                bdtr = bd.make_tree(showd);
+                if (count >= countlimit) {
+                    cout << "can't seem to get the tips right after " << countlimit << " trials" << endl;
+                    break;
+                }
+                count ++;
             }
-            count ++;
         }
+        */
+        (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
     }
-    (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
     if (outfileset) {
         ofstr->close();
         delete poos;
