@@ -35,14 +35,15 @@ void SequenceConcatenater::read_sequences (string & seqf) {
     Sequence seq;
     int counter = 0;
     int length = 0;
-
+    
+    // phylip (1) NEXUS (0)
     if (ft == 1 || ft == 0) {
         if (ft == 1) {
             vector <string> fileDim = tokenize(retstring);
             numTaxa = stoi(fileDim[0]);
             numChar = stoi(fileDim[1]);
         } else {
-            get_nexus_dimensions (seqf, numTaxa, numChar);
+            get_nexus_dimensions(seqf, numTaxa, numChar);
         }
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
             length = (int)seq.get_sequence().size();
@@ -61,7 +62,7 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             delete pios;
             exit(1);
         }
-    } else { // will need error checking for other file types
+    } else if (ft == 2) { // fasta
         bool first = true;
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
             int curr = (int)seq.get_sequence().size();
@@ -79,8 +80,14 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             seqs.push_back(seq);
             counter++;
         }
+        // fasta has a trailing one
+        seqs.push_back(seq);
+        counter++;
         numTaxa = counter;
         numChar = length;
+    } else {
+        cout << "I don't know what that alignment file format is! Exiting." << endl;
+        exit(0);
     }
     numPartitions = 1;
     partitionSizes.push_back(numChar);
