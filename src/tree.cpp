@@ -127,7 +127,7 @@ void Tree::unRoot(Node & inroot) {
 bool Tree::reRoot(Node * inroot) {
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
-        tritomyRoot(inroot);//not sure if this should actually be the inroot instead of NULL
+        tritomyRoot(NULL); // not sure if this should actually be the inroot instead of NULL
     }
     //cout << this->root->getNewick(false) << endl;
     if (root == inroot) {
