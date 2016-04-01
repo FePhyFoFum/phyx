@@ -140,7 +140,7 @@ void SequenceCleaner::CheckMissing(double MissingData [], string& dna){
         if (dna[i] == 'N' || dna[i] == '-' || dna[i] == 'n' || 
             dna[i] == 'X' ||  dna[i] == 'x'){
             MissingData[i]++;
-            cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
+            //cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
         }
     }
 }
