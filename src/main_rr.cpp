@@ -14,6 +14,7 @@ using namespace std;
 #include "tree.h"
 #include "tree_reader.h"
 #include "utils.h"
+#include "tree_utils.h"
 
 void print_help(){
     cout << "This will reroot a tree file and produce a newick." << endl;
@@ -47,16 +48,20 @@ static struct option const long_options[] =
 
 bool reroot(Tree * tree, vector<string> & outgr);
 bool reroot(Tree * tree, vector<string> & outgr) {
+    if (!check_names_against_tree(tree, outgr)) {
+        return false;
+    }
     Node * m = tree->getMRCA(outgr);
-    if (m == NULL)
-    return false;
+    if (m == NULL) {
+        return false;
+    }
     if (m == tree->getRoot()) {
-    //check to see if the outgroups are just the children of the root
-    //if so, then do this
-    //tree->rootWithRootTips(outgr);
-    //if not, then do this
-    tree->getInternalMRCA(outgr);
-    return true;
+        //check to see if the outgroups are just the children of the root
+        //if so, then do this
+        //tree->rootWithRootTips(outgr);
+        //if not, then do this
+        tree->getInternalMRCA(outgr);
+        return true;
     }
     bool success = tree->reRoot(m);
     return success;
