@@ -125,7 +125,7 @@ int main(int argc, char * argv[]) {
         ofstr->close();
         delete poos;
     }
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
     }
