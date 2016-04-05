@@ -287,7 +287,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxconcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -381,9 +381,9 @@ pxseqgen: $(CPP_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
 	@echo 'building pxseqgen'
 	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
-pxconcat: $(CPP_OBJS) $(CONCAT_OBJ)
-	@echo 'building pxconcat'
-	$(CXX) -o "pxconcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS)
+pxcat: $(CPP_OBJS) $(CONCAT_OBJ)
+	@echo 'building pxcat'
+	$(CXX) -o "pxcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS)
 
 pxlog: $(CPP_OBJS) $(LOGMANIP_OBJ)
 	@echo 'building pxlog'
