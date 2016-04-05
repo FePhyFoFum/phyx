@@ -27,7 +27,7 @@ void print_help() {
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << "Individual files can be of different formats." << endl;
     cout << endl;
-    cout << "Usage: pxconcat [OPTION]... " << endl;
+    cout << "Usage: pxcat [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     list of input sequence files" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
@@ -39,7 +39,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxconcat 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv2\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxcat 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv2\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
