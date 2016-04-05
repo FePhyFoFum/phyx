@@ -221,7 +221,7 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
 
     }
     //prints the distance matrix maybe too verbose
-    /*
+    
     cout << "\t";
     for (int i = 0; i < SequenceName.size(); i++) {
 
@@ -235,7 +235,7 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
 
         }
         cout << endl;
-    }*/
+    }
     return Score;
 }
 
