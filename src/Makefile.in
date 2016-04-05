@@ -287,7 +287,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxconcat pxcontrates pxseqrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxconcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -393,9 +393,9 @@ pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)
 	@echo 'building pxcontrates'
 	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS) $(CPP_OBJS) $(CPP_LIBS) -lgfortran
 
-pxseqrecode: $(CPP_OBJS) $(SEQRECODE_OBJ)
-	@echo 'building pxseqrecode'
-	$(CXX) -o "pxseqrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxrecode: $(CPP_OBJS) $(SEQRECODE_OBJ)
+	@echo 'building pxrecode'
+	$(CXX) -o "pxrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxbp: $(CPP_OBJS) $(BP_OBJ)
 	@echo 'building pxbp'
