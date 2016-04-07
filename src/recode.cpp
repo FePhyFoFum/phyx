@@ -29,11 +29,15 @@ void SequenceRecoder::ry_recode (string &s) {
     for (unsigned int i = 0; i < s.length(); i++) {
         switch (s[i]) {
             case 'A':
+            case 'a':
             case 'G':
+            case 'g':
                 s[i] = 'R';
                 break;
             case 'C':
+            case 'c':
             case 'T':
+            case 't':
                 s[i] = 'Y';
                 break;
         }
