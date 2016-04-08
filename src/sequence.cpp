@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,28 +15,35 @@ using namespace std;
 #include "utils.h"
 #include "seq_utils.h"
 
-Sequence::Sequence():id(), seq(), length(0), aligned(), alphabet(DNA) {}
+// this is the constructor almost always used
+Sequence::Sequence():id(), seq(), length(0), aligned(), alphabet(NA) {}
 
 Sequence::Sequence(string _id, string _seq, bool _aligned) {
     id = _id;
     seq = _seq;
     length = seq.size();
     aligned = _aligned;
-    alphabet = DNA;
+    infer_alpha();
 }
+
+// *** this doesn't seem to be used ***
 Sequence::Sequence(string _id, string _seq) {
     id = _id;
     seq = _seq;
     length = seq.size();
     aligned = false;
-    alphabet = DNA;
+    infer_alpha();
 }
 
+// *** this doesn't seem to be used ***
 seqAlpha Sequence::get_alpha() {
     return alphabet;
 }
 
 string Sequence::get_alpha_name() {
+    if (alphabet == NA) {
+        infer_alpha();
+    }
     if (alphabet == DNA) {
         return "DNA";
     }
@@ -51,9 +59,61 @@ string Sequence::get_alpha_name() {
     return "";
 }
 
+// *** this doesn't seem to be used ***
 void Sequence::set_alpha(seqAlpha s) {
     alphabet = s;
 }
+
+// figure out the sequence type. for now, just DNA/AA
+void Sequence::infer_alpha () {
+    string str = seq;
+    
+    int dnaHit = 0;
+    int proteinHit = 0;
+    int validChars = 0;
+    
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    std::sort(str.begin(), str.end());
+    
+    // iterate over unique characters
+    string strcopy;
+    unique_copy(str.begin(), str.end(), back_inserter(strcopy));
+    for (size_t i=0; i < strcopy.length(); ++i) {
+	int num = count(str.begin(), str.end(), strcopy[i]);
+        if (is_prot_char(strcopy[i])) {
+            proteinHit += num;
+            validChars++;
+            // DNA chars are a subset of protein chars
+            if (is_dna_char(strcopy[i])) {
+                dnaHit += num;
+            }
+        }
+    }
+    if (proteinHit > dnaHit) {
+        alphabet = AA;
+    } else if (proteinHit == dnaHit) {
+        alphabet = DNA;
+    }
+}
+
+bool Sequence::is_dna_char (char & residue) {
+    bool isDNA = false;
+    std::size_t found = dnachars.find(residue);
+    if (found != std::string::npos) {
+        isDNA = true;
+    }
+    return isDNA;
+}
+
+bool Sequence::is_prot_char (char & residue) {
+    bool isAA = false;
+    std::size_t found = protchars.find(residue);
+    if (found != std::string::npos) {
+        isAA = true;
+    }
+    return isAA;
+}
+
 
 bool Sequence::is_aligned() {
     return aligned;

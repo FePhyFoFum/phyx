@@ -15,6 +15,10 @@ using namespace std;
  * TODO: need to make a alphabet guesser
  */
 
+// IUPAC codes
+string dnachars  = "ACGTURYSWKMBDHVN";
+string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
+
 /**
  * procedure to get the character of a nucleotide
  * from the set of positions

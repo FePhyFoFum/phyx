@@ -5,12 +5,16 @@
 #include <vector>
 using namespace std;
 
-//not sure if we need this or not
-//should maybe just store the DNA or AA?
-//could even store those as separate
+// not sure if we need this or not
+// should maybe just store the DNA or AA?
+// could even store those as separate
+// JWB: yes, this is clunky
 typedef enum {
-    DNA = 0, AA = 1, BINARY = 2, MULTI = 3, CODON = 4
+    DNA = 0, AA = 1, BINARY = 2, MULTI = 3, CODON = 4, NA = 5
 } seqAlpha; 
+
+extern string dnachars;
+extern string protchars;
 
 class Sequence{
 private:
@@ -31,6 +35,11 @@ public:
     seqAlpha get_alpha();
     string get_alpha_name();
     void set_alpha(seqAlpha);
+    
+    void infer_alpha ();
+    bool is_dna_char (char & residue);
+    bool is_prot_char(char & residue);
+    
     bool is_aligned();
     string get_sequence();
     string get_id();
