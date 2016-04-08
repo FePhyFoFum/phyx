@@ -84,6 +84,10 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
+    if (!fileset) {
+        cout << "you must specify an input file, for options try (-h)" << endl;
+        exit(0);
+    }
     
     ostream* poos;
     ofstream* ofstr;
