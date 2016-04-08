@@ -99,16 +99,17 @@ int main(int argc, char * argv[]){
     if (ft == 2) {
         seqs.push_back(seq);
     }
-    string rets = consensus_seq(seqs,0);
+    string alpha = seqs[0].get_alpha_name();
+    string rets = consensus_seq(seqs, alpha);
 
     (*poos) << ">consensus" << endl;
     (*poos) << rets << endl;
 
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
     }
-    if(outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

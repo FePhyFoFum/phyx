@@ -45,7 +45,7 @@ char get_dna_from_pos(set<int> ins) {
         }
         return 'A';
     }
-    if (ins.count(1)==1) {
+    if (ins.count(1) == 1) {
         if (ins.count(2) == 1) {
             if (ins.count(3) == 1) {
                 return 'B';
@@ -57,13 +57,13 @@ char get_dna_from_pos(set<int> ins) {
         }
         return 'C';
     }
-    if (ins.count(2)==1) {
+    if (ins.count(2) == 1) {
         if (ins.count(3) == 1) {
             return 'K';
         }
         return 'G';
     }
-    if (ins.count(3)==1) {
+    if (ins.count(3) == 1) {
         return 'T';
     }
     return('-');
@@ -104,23 +104,67 @@ set<int> get_dna_pos(char inc) {
     return ret;
 }
 
+char get_prot_char(set<char> inc) {
+    // if any is missing, consensus is missing
+    if (inc.count('X') == 1 || inc.count('-') == 1) {
+        return 'X';
+    }
+    if (inc.size() == 1) {
+        return *inc.begin();
+    }
+    
+    // there are a handful of ambiguity codes
+    // B = Aspartic acid (D) or Asparagine (N)
+    // Z = Glutamine (Q) or Glutamic acid (E)
+    int B = inc.count('D') + inc.count('N') + inc.count('B');
+    int Z = inc.count('Q') + inc.count('E') + inc.count('Z');
+    
+    if (B == inc.size()) {
+        return 'B';
+    }
+    if (Z == inc.size()) {
+        return 'Z';
+    }
+    
+    return 'X';
+}
+
+
 /**
- * 
- * int alpha: the alphabet with 0=dna, 1=aa
+ * string alpha: either "DNA" or "AA"
  */
-string consensus_seq(vector <Sequence> & seqs, int alpha) {
+string consensus_seq(vector <Sequence> & seqs, string & alpha) {
     int seqlength = seqs[0].get_sequence().length();
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     string retstring;
-    for (int i=0; i < seqlength; i++) {
-        set<int> fullset;
-        for (unsigned int j=0; j < seqs.size(); j++) {
-            set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
-            fullset.insert(tset.begin(), tset.end());
+    if (alpha == "DNA") {
+        for (int i=0; i < seqlength; i++) {
+            set<int> fullset;
+            for (unsigned int j=0; j < seqs.size(); j++) {
+                set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
+                fullset.insert(tset.begin(), tset.end());
+            }
+            retstring += get_dna_from_pos(fullset);
         }
-        retstring += get_dna_from_pos(fullset);
+    } else if (alpha == "AA") {
+        for (int i=0; i < seqlength; i++) {
+            set<char> fullset;
+            bool ambig = false;
+            for (unsigned int j=0; j < seqs.size(); j++) {
+                fullset.insert(seqs[j].get_sequence()[i]);
+                // break early if any ambiguous code is encountered
+                if (seqs[j].get_sequence()[i] == 'X' || seqs[j].get_sequence()[i] == '-') {
+                    ambig = true;
+                    break;
+                }
+            }
+            retstring += get_prot_char(fullset);
+        }
+    } else {
+        cout << "I don't know what kind of sequence that is..." << endl;
+        exit(0);
     }
     return retstring;
 }

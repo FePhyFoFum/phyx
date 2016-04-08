@@ -9,8 +9,9 @@ using namespace std;
 
 #include "sequence.h"
 
+char get_dna_from_pos(set<int> ins);
 set<int> get_dna_pos(char);
-string consensus_seq(vector<Sequence> &,int);
+string consensus_seq(vector<Sequence> &, string & alpha);
 char single_dna_complement(char inc);
 void write_phylip_alignment(vector<Sequence> & seqs, ostream * ostr);
 void write_nexus_alignment(vector<Sequence> & seqs, ostream * ostr);
