@@ -148,7 +148,25 @@ int main(int argc, char * argv[]){
                 map<Node*,vector<Node*> > tree_map;
 				create_tree_map_from_rootnode(tree,tree_map);
 				nni_from_tree_map(tree,tree_map);
-				(*poos) << tree->getRoot()->getNewick(true) << endl;
+				(*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                delete tree;
+                treeCounter++;
+            }
+        }
+    }else if (ft == 0) { // Nexus. need to worry about possible translation tables
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                //cout << "Working on tree #" << treeCounter << endl;
+                map<Node*,vector<Node*> > tree_map;
+				create_tree_map_from_rootnode(tree,tree_map);
+				nni_from_tree_map(tree,tree_map);
+				(*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
                 treeCounter++;
             }
