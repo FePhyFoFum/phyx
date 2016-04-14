@@ -139,7 +139,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                exists = reroot(tree, outgroups);
+                exists = reroot(tree, outgroups, silent);
                 if (!exists) {
                     cerr << "the outgroup taxa don't exist in this tree " << endl;
                 } else {
@@ -153,7 +153,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                exists = reroot(tree, outgroups);
+                exists = reroot(tree, outgroups, silent);
                 if (!exists) {
                     cerr << "the outgroup taxa don't exist in this tree " << endl;
                 } else {

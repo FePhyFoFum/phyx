@@ -124,20 +124,6 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
     return;
 }
 
-// maybe move this elsewhere...
-bool check_names_against_tree(Tree * tr, vector<string> names) {
-    bool allgood = true;
-    for (unsigned int i = 0; i < names.size(); i++) {
-    //cout << "Checking name '" << names[i] << "'." << endl;
-        Node * nd = tr->getExternalNode(names[i]);
-        if (nd == NULL) {
-            cout << "Taxon '" << names[i] << "' not found in tree." << endl;
-            allgood = false;
-        }
-    }
-    return allgood;
-}
-
 // moving to own function, as is generally useful
 bool is_rooted (Tree * tr) {
     bool rooted = false;
@@ -157,7 +143,6 @@ double get_tree_length (Tree * tr) {
    }
    return length;
 }
-
 
 /* Two possible approaches:
  * 1) get get_length_to_root for each external node
@@ -223,7 +208,6 @@ bool is_ultrametric_postorder (Tree * tr) {
     return ultrametric;
 }
 
-
 // postorder
 bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
     if (ultrametric) {
@@ -251,10 +235,31 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
     return ultrametric;
 }
 
+bool check_names_against_tree(Tree * tr, vector<string> names) {
+    bool allgood = true;
+    for (unsigned int i = 0; i < names.size(); i++) {
+    //cout << "Checking name '" << names[i] << "'." << endl;
+        Node * nd = tr->getExternalNode(names[i]);
+        if (nd == NULL) {
+            cout << "Taxon '" << names[i] << "' not found in tree." << endl;
+            allgood = false;
+        }
+    }
+    return allgood;
+}
 
-bool reroot(Tree * tree, vector<string> & outgr) {
-    if (!check_names_against_tree(tree, outgr)) {
-        return false;
+// if 'silent', don't complain if any outgroups are missing
+bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
+    bool success = false;
+    if (!silent) {
+        if (!check_names_against_tree(tree, outgr)) {
+            return false;
+        }
+    } else {
+        outgr = get_names_in_tree(tree, outgr);
+        if (outgr.empty()) {
+            return true;
+        }
     }
     Node * m = tree->getMRCA(outgr);
     if (m == NULL) {
@@ -268,6 +273,20 @@ bool reroot(Tree * tree, vector<string> & outgr) {
         tree->getInternalMRCA(outgr);
         return true;
     }
-    bool success = tree->reRoot(m);
+    success = tree->reRoot(m);
+    
     return success;
+}
+
+// return all names that are found in tree
+vector <string> get_names_in_tree(Tree * tr, vector<string> const& names) {
+    vector<string> matched;
+    for (unsigned int i = 0; i < names.size(); i++) {
+    //cout << "Checking name '" << names[i] << "'." << endl;
+        Node * nd = tr->getExternalNode(names[i]);
+        if (nd != NULL) {
+            matched.push_back(names[i]);
+        }
+    }
+    return matched;
 }
