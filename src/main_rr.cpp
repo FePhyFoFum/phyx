@@ -16,7 +16,7 @@ using namespace std;
 #include "utils.h"
 #include "tree_utils.h"
 
-void print_help(){
+void print_help() {
     cout << "This will reroot a tree file and produce a newick." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -25,6 +25,7 @@ void print_help(){
     cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
     cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl; 
     cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
+    cout << " -s, --silent         do not error if outgroup(s) not found" << endl;
     cout << "     --help           display this help and exit" << endl;
     cout << "     --version        display version and exit" << endl;
     cout << endl;
@@ -41,37 +42,18 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"outgroups",required_argument,NULL, 'g'},
     {"outf", required_argument, NULL, 'o'},
+    {"silent", no_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
 };
-
-bool reroot(Tree * tree, vector<string> & outgr);
-bool reroot(Tree * tree, vector<string> & outgr) {
-    if (!check_names_against_tree(tree, outgr)) {
-        return false;
-    }
-    Node * m = tree->getMRCA(outgr);
-    if (m == NULL) {
-        return false;
-    }
-    if (m == tree->getRoot()) {
-        //check to see if the outgroups are just the children of the root
-        //if so, then do this
-        //tree->rootWithRootTips(outgr);
-        //if not, then do this
-        tree->getInternalMRCA(outgr);
-        return true;
-    }
-    bool success = tree->reRoot(m);
-    return success;
-}
 
 int main(int argc, char * argv[]) {
     bool going = true;
     bool fileset = false;
     bool outgroupsset = false;
     bool outfileset = false;
+    bool silent = false;
     vector<string> outgroups;
 
     char * treef;
@@ -79,7 +61,7 @@ int main(int argc, char * argv[]) {
     char * outgroupsc;
     while (going) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "g:t:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "g:t:o:shV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -96,9 +78,12 @@ int main(int argc, char * argv[]) {
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
+            case 's':
+               silent = true;
+                break;
             case 'h':
-                    print_help();
-                    exit(0);
+                print_help();
+                exit(0);
             case 'V':
                 cout << versionline << endl;
                 exit(0);
@@ -109,9 +94,7 @@ int main(int argc, char * argv[]) {
     }
     if (outgroupsset == true) {
         vector<string> tokens2;
-        string del2(",");
-        tokens2.clear();
-        tokenize(outgroupsc, tokens2, del2);
+        tokenize(outgroupsc, tokens2, ",");
         for (unsigned int j=0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             outgroups.push_back(tokens2[j]);
@@ -157,7 +140,11 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 exists = reroot(tree, outgroups);
-                (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+                if (!exists) {
+                    cerr << "the outgroup taxa don't exist in this tree " << endl;
+                } else {
+                    (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+                }
                 delete tree;
             }
         }
@@ -165,9 +152,9 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going == true) {
+            if (going) {
                 exists = reroot(tree, outgroups);
-                if (exists == false) {
+                if (!exists) {
                     cerr << "the outgroup taxa don't exist in this tree " << endl;
                 } else {
                     (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;

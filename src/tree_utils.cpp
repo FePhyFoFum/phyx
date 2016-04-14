@@ -138,7 +138,7 @@ bool check_names_against_tree(Tree * tr, vector<string> names) {
     return allgood;
 }
 
-// moving to own function, as as generally useful
+// moving to own function, as is generally useful
 bool is_rooted (Tree * tr) {
     bool rooted = false;
     if (tr->getRoot()->getChildCount() == 2) {
@@ -249,4 +249,25 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
         }
     }
     return ultrametric;
+}
+
+
+bool reroot(Tree * tree, vector<string> & outgr) {
+    if (!check_names_against_tree(tree, outgr)) {
+        return false;
+    }
+    Node * m = tree->getMRCA(outgr);
+    if (m == NULL) {
+        return false;
+    }
+    if (m == tree->getRoot()) {
+        //check to see if the outgroups are just the children of the root
+        //if so, then do this
+        //tree->rootWithRootTips(outgr);
+        //if not, then do this
+        tree->getInternalMRCA(outgr);
+        return true;
+    }
+    bool success = tree->reRoot(m);
+    return success;
 }

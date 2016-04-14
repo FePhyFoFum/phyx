@@ -25,5 +25,6 @@ double get_tree_length (Tree * tr);
 bool is_ultrametric_tips (Tree * tr);
 bool is_ultrametric_postorder (Tree * tr);
 bool postorder_ultrametricity_check (Node * node, bool & ultrametric);
+bool reroot(Tree * tree, vector<string> & outgr);
 
 #endif /* _TREE_UTILS_H_ */
