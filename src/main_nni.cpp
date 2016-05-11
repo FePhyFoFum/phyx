@@ -102,7 +102,7 @@ int main(int argc, char * argv[]){
     } else {
         pios = &cin;
     }
-    srand(time(0));
+    srand(get_clock_seed());
     TreeReader tr;
     vector<string> lines;
 

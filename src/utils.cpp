@@ -13,6 +13,8 @@
 #include <cmath>
 #include <limits>
 #include <functional>
+#include <ctime>
+#include <chrono>
 
 using namespace std;
 
@@ -76,6 +78,12 @@ bool is_number (const string& s) {
         ++it;
     }
     return !s.empty() && it == s.end();
+}
+
+
+// higher resolution than time( NULL );
+unsigned int get_clock_seed () {
+    return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
 }
 
 

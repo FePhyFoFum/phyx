@@ -11,7 +11,6 @@
 #include <nlopt.hpp>
 #include <armadillo>
 #include <random>
-#include <ctime>
 #include <numeric>
 
 using namespace std;
@@ -179,6 +178,7 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     vector< vector <double> > rate_matrix(4, vector<double>(4, 0.33));
 
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
+    // NOTE: this uses order: A,T,C,G
     if (mm == true) {        
         rmatrix[0][2] = multirates[0]; //A->C
         rmatrix[2][0] = multirates[0]; //C->A
@@ -403,11 +403,10 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
 void SequenceGenerator::initialize () {
     // set the number generator being used
     if (seed != -1) { // user provided seed
-        srand(seed);
-        generator = mt19937(rand());
+        generator = mt19937(seed);
     } else {
-        random_device rand_dev;
-        generator = mt19937(rand_dev());
+        //random_device rand_dev;
+        generator = mt19937(get_clock_seed());
     }
     if (showancs) {
         label_internal_nodes();

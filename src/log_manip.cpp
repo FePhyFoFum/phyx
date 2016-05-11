@@ -35,7 +35,7 @@ void LogManipulator::count_tree_samples () {
 //:jkfract(jackfract), jackknife(false), partitioned(false), numPartitionedSites(0), numPartitions(0)
 //{
 //    if (seed == -1) {
-//        srand((unsigned)time(NULL));
+//        srand(get_clock_seed());
 //    } else {
 //        srand(seed);
 //    }

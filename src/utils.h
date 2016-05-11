@@ -10,6 +10,8 @@ vector <string> tokenize (string const& input);
 void trim_spaces (string& str);
 bool is_number (const string &);
 
+unsigned int get_clock_seed ();
+
 vector <double> parse_double_comma_list (string& str);
 
 // do stuff over vectors

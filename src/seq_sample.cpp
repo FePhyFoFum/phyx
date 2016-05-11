@@ -18,7 +18,7 @@ SequenceSampler::SequenceSampler (int const& seed, float const& jackfract, strin
 :jkfract(jackfract), jackknife(false), partitioned(false), numPartitionedSites(0), numPartitions(0)
 {
     if (seed == -1) {
-        srand((unsigned)time(NULL));
+        srand(get_clock_seed());
     } else {
         srand(seed);
     }
@@ -93,9 +93,7 @@ vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
 // sample WITHOUT replacement. not with partitioned models
 vector <int> SequenceSampler::get_jackknife_sites (int const& numchar) {
     int numsample = numchar * jkfract + 0.5;
-    
     vector <int> randsites = sample_without_replacement(numchar, numsample);
-    
     return randsites;
 }
 
