@@ -40,6 +40,10 @@ private:
     static map<char, int> nucMap;
     static string nucleotides;
     
+    mt19937 generator;
+    std::uniform_real_distribution<float> uniformDistrib;
+    std::gamma_distribution<float> gammaDistrib;
+    
     // set all values
     void initialize ();
     
@@ -66,7 +70,6 @@ private:
     string generate_random_sequence ();
     vector < vector <double> > construct_rate_matrix (vector <double> const& rates);
     void check_valid_sequence ();
-    mt19937 generator;
     float get_uniform_random_deviate ();
     float get_gamma_random_deviate (float);
     vector <float> set_site_rates ();

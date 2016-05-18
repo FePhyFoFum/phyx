@@ -14,7 +14,9 @@
 #include <numeric>
 
 using namespace std;
-using namespace arma;
+//using namespace arma;
+using arma::randn;
+using arma::mat;
 
 #include "seqgen.h"
 #include "utils.h"
@@ -170,9 +172,7 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
 void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vector<double> multirates, bool mm) {
 
     double brlength = 0.0;
-    //int count = 0; // not used for anything
     int rate_count = 0;
-    string str = "";
     int check = 0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
     vector< vector <double> > rate_matrix(4, vector<double>(4, 0.33));
@@ -180,18 +180,18 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
     if (mm == true) {        
-        rmatrix[0][2] = multirates[0]; //A->C
-        rmatrix[2][0] = multirates[0]; //C->A
-        rmatrix[0][3] = multirates[1]; //A->G
-        rmatrix[3][0] = multirates[1]; //G->A
-        rmatrix[0][1] = multirates[2]; //A->T
-        rmatrix[1][0] = multirates[2]; //T->A
-        rmatrix[2][3] = multirates[3]; //C->G
-        rmatrix[3][2] = multirates[3]; //G->C
-        rmatrix[1][2] = multirates[4]; //C->T
-        rmatrix[2][1] = multirates[4]; //T->C
-        rmatrix[1][3] = multirates[5]; //G->T
-        rmatrix[3][1] = multirates[5]; //T->G
+        rmatrix[0][2] = multirates[0]; // A->C
+        rmatrix[2][0] = multirates[0]; // C->A
+        rmatrix[0][3] = multirates[1]; // A->G
+        rmatrix[3][0] = multirates[1]; // G->A
+        rmatrix[0][1] = multirates[2]; // A->T
+        rmatrix[1][0] = multirates[2]; // T->A
+        rmatrix[2][3] = multirates[3]; // C->G
+        rmatrix[3][2] = multirates[3]; // G->C
+        rmatrix[1][2] = multirates[4]; // C->T
+        rmatrix[2][1] = multirates[4]; // T->C
+        rmatrix[1][3] = multirates[5]; // G->T
+        rmatrix[3][1] = multirates[5]; // T->G
         rmatrix[0][0] = (multirates[0]+multirates[1]+multirates[2]) * -1;
         rmatrix[1][1] = (multirates[2]+multirates[4]+multirates[5]) * -1;
         rmatrix[2][2] = (multirates[0]+multirates[3]+multirates[4]) * -1;
@@ -405,9 +405,18 @@ void SequenceGenerator::initialize () {
     if (seed != -1) { // user provided seed
         generator = mt19937(seed);
     } else {
-        //random_device rand_dev;
         generator = mt19937(get_clock_seed());
     }
+    
+    // construct uniform distribution from which random numbers will be generated
+    // this happens to be the default distribution, but good to be explicit
+    uniformDistrib = uniform_real_distribution<float>(0.0, 1.0);
+    
+    // construct gamma distribution (if necessary)
+    if (alpha != -1.0) {
+        gammaDistrib = gamma_distribution<float>(alpha,(1/alpha));
+    }
+    
     if (showancs) {
         label_internal_nodes();
     }
@@ -464,16 +473,12 @@ vector<Sequence> SequenceGenerator::get_sequences () {
 
 // call this whenever a random float is needed
 float SequenceGenerator::get_uniform_random_deviate () {
-    std::uniform_real_distribution<float> distribution(0.0, 1.0);
-    return distribution(generator);
+    return uniformDistrib(generator);
 }
 
 
 float SequenceGenerator::get_gamma_random_deviate (float alpha) {
-
-    //default_random_engine generator;
-    std::gamma_distribution<float> distribution(alpha,(1/alpha));
-    return distribution(generator);
+    return gammaDistrib(generator);
 }
 
 //SEQGEN::~SEQGEN() {
