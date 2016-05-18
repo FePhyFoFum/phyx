@@ -97,7 +97,7 @@ int main(int argc, char * argv[]) {
     vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
-            if (i == j) {//Fill Diagonal
+            if (i == j) { // Fill Diagonal
                 rmatrix[i][j] = -0.99;
             }
         }
@@ -139,6 +139,14 @@ int main(int argc, char * argv[]) {
             case 'r':
                 inrates = strdup(optarg);
                 userrates = parse_double_comma_list(inrates);
+                
+                // NOTE: will have to alter this check for a.a., non-reversible, etc.
+                if (userrates.size() != 6) {
+                    cout << "Error: must provide 6 substitution parameters. " <<
+                        "Only " << userrates.size() << " provided. Exiting." << endl;
+                    exit(0);
+                }
+                // NOTE: this uses order: A,T,C,G
                 rmatrix[0][2] = userrates[0];
                 rmatrix[2][0] = userrates[0];
                 rmatrix[0][3] = userrates[1];

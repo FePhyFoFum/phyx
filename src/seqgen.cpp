@@ -17,6 +17,7 @@ using namespace std;
 //using namespace arma;
 using arma::randn;
 using arma::mat;
+using arma::expmat;
 
 #include "seqgen.h"
 #include "utils.h"
@@ -175,7 +176,6 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     int rate_count = 0;
     int check = 0;
     vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
-    vector< vector <double> > rate_matrix(4, vector<double>(4, 0.33));
 
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
@@ -217,13 +217,15 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     // Pre-Order Traverse the tree
     for (int k = (tree->getNodeCount() - 2); k >= 0; k--) {
         brlength = tree->getNode(k)->getBL();
-        /*for (unsigned int i = 0; i < QMatrix.size(); i++) {
+        /*
+        for (unsigned int i = 0; i < QMatrix.size(); i++) {
             for (unsigned int j = 0; j < QMatrix.size(); j++) {
                 cout << QMatrix[i][j] << " ";
             }
             cout << "\n";
         }
-        cout << "\n";*/
+        cout << "\n";
+        */
         if (mm == true) {
             check = (int)round(multirates[0]);
             //cout << check << " " << rate_count << endl;
