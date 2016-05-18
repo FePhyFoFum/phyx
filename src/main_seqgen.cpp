@@ -93,6 +93,7 @@ int main(int argc, char * argv[]) {
     vector <double> multirates(4, 0.25);
     int nreps = 1; // not implemented at the moment
     int seed = -1;
+    int numpars = 0;
     float alpha = -1.0;
     vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
@@ -190,6 +191,13 @@ int main(int argc, char * argv[]) {
                 mm = true;
                 holdrates = strdup(optarg);
                 multirates = parse_double_comma_list(holdrates);
+                numpars = multirates.size();
+                if ((numpars - 6) % 7 != 0) {
+                    cout << "Error: must provide 6 background substitution "
+                        << "parameters and 7 values (1 node id + 6 subst. par.) "
+                        << "for each piecewise model. Exiting." << endl;
+                    exit(0);
+                }
                 break;
             case 'k':
                 ancseq = strdup(optarg);
