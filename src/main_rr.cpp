@@ -49,7 +49,6 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool fileset = false;
     bool outgroupsset = false;
     bool outfileset = false;
@@ -59,7 +58,7 @@ int main(int argc, char * argv[]) {
     char * treef;
     char * outf;
     char * outgroupsc;
-    while (going) {
+    while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "g:t:o:shV", long_options, &oi);
         if (c == -1) {
@@ -69,6 +68,7 @@ int main(int argc, char * argv[]) {
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'g':
                 outgroupsset = true;
@@ -88,7 +88,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -128,7 +128,7 @@ int main(int argc, char * argv[]) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
-    going = true;
+    bool going = true;
     bool exists;
     if (ft == 0) {
         map<string,string> translation_table;

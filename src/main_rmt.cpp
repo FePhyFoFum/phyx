@@ -14,7 +14,7 @@ using namespace std;
 #include "tree_reader.h"
 #include "utils.h"
 
-void print_help(){
+void print_help() {
     cout << "This will remove tips from a tree file and produce newick" << endl;
     cout << "Can read from stdin or file" << endl;
     cout << endl;
@@ -46,20 +46,19 @@ static struct option const long_options[] =
 };
 
 bool removetip(Tree * tree, vector<string> & names);
-bool removetip(Tree * tree,vector<string> & names){
-    for(int i=0;i<names.size();i++){
+bool removetip(Tree * tree,vector<string> & names) {
+    for (int i=0;i<names.size();i++) {
         Node * m = tree->getExternalNode(names[i]);
-        if (m != NULL){
+        if (m != NULL) {
             tree->pruneExternalNode(m);
-        }else{
+        } else {
             cerr << names[i] << " not in tree"  << endl;
         }
     }
     return true;
 }
 
-int main(int argc, char * argv[]){
-    bool going = true;
+int main(int argc, char * argv[]) {
     bool fileset = false;
     bool namesset = false;
     bool namefileset = false;
@@ -70,16 +69,17 @@ int main(int argc, char * argv[]){
     char * outf;
     char * namesc;
     char * namesfc;
-    while(going){
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"t:n:f:o:hV",long_options,&oi);
-        if (c == -1){
+        int c = getopt_long(argc, argv, "t:n:f:o:hV", long_options, &oi);
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'n':
                 namesset = true;
@@ -88,6 +88,7 @@ int main(int argc, char * argv[]){
             case 'f':
                 namefileset = true;
                 namesfc = strdup(optarg);
+                check_file_exists(namesfc);
                 break;
             case 'o':
                 outfileset = true;
@@ -100,28 +101,28 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
-    if(namesset == true){
+    if (namesset == true) {
         vector<string> tokens2;
         string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
-        for(unsigned int j=0;j<tokens2.size();j++){
+        for (unsigned int j=0;j<tokens2.size();j++) {
             trim_spaces(tokens2[j]);
             names.push_back(tokens2[j]);
         }
-    }else if(namefileset == true){
+    } else if (namefileset == true) {
         ifstream nfstr(namesfc);
         string tline;
-        while(getline(nfstr,tline)){
+        while (getline(nfstr,tline)) {
             trim_spaces(tline);
             names.push_back(tline);
         }
         nfstr.close();
-    }else{
+    } else {
         cerr << "you need to set the names of the tips you want to remove (-n)" << endl;
         exit(0);
     }
@@ -130,48 +131,49 @@ int main(int argc, char * argv[]){
     ostream * poos;
     ifstream * fstr;
     ofstream * ofstr;
-    if(fileset == true){
+    if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;
-    }else{
+    } else {
         pios = &cin;
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
     
     //read trees 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    if(ft != 0 && ft != 1){
+    if (ft != 0 && ft != 1) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
-    going = true;
+    bool going = true;
     bool exists;
-    if(ft == 0){
+    if (ft == 0) {
         map<string,string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
-        while(going){
-            tree = read_next_tree_from_stream_nexus(*pios,retstring,ttexists,&translation_table, &going);
-            if (going == true){
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (going == true) {
                 exists = removetip(tree,names);
-                (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
             }
         }
-    }else if(ft == 1){
+    } else if (ft == 1) {
         Tree * tree;
-        while(going){
-            tree = read_next_tree_from_stream_newick(*pios,retstring,&going);
-            if(going == true){
-                exists = removetip(tree,names);
-                if(exists == false) {
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (going == true) {
+                exists = removetip(tree, names);
+                if (exists == false) {
                     cerr << "the names don't exist in this tree " << endl;
                 } else {
                     (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
@@ -180,11 +182,11 @@ int main(int argc, char * argv[]){
             }
         }
     }
-    if(fileset){
+    if (fileset) {
         fstr->close();
         delete pios;
     }
-    if(outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

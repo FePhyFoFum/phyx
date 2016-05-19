@@ -16,7 +16,7 @@ using namespace std;
 #include "seq_reader.h"
 #include "utils.h"
 
-void print_help(){
+void print_help() {
     cout << "This will print out partitions found in seqfile." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -47,7 +47,6 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool fileset = false;
     bool tfileset = false;
     bool outfileset = false;
@@ -55,9 +54,9 @@ int main(int argc, char * argv[]) {
     char * seqf;
     char * treef;
     char * outf;
-    while(going){
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"s:t:o:hV",long_options,&oi);
+        int c = getopt_long(argc, argv, "s:t:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -65,11 +64,13 @@ int main(int argc, char * argv[]) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 't':
                 tfileset = true;
                 conditional = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 outfileset = true;
@@ -82,7 +83,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -96,7 +97,7 @@ int main(int argc, char * argv[]) {
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
-    } else{
+    } else {
         pios = &cin;
     }
     if (outfileset == true) {
@@ -135,7 +136,6 @@ int main(int argc, char * argv[]) {
     if (ft == 2) {
         seqs.push_back(seq);
     }
-
     
     // get the biparts for the trees
     vector<string> names;
@@ -177,7 +177,7 @@ int main(int argc, char * argv[]) {
                 skip += 1;
             }
         }
-        if(skip == numseqs) {
+        if (skip == numseqs) {
             continue;
         }
         sort(tbpa.begin(),tbpa.end());
@@ -208,7 +208,7 @@ int main(int argc, char * argv[]) {
                 break;
             }
         }
-        if (add == true){
+        if (add == true) {
             all_bp.push_back(tallbp);
             bp_count.push_back(1);
             seq_bipart_map.push_back(bp_count.size()-1);
@@ -323,7 +323,7 @@ int main(int argc, char * argv[]) {
                 vector<int> matches;
                 for (unsigned int i=0; i < all_bp.size(); i++) {
                     for (unsigned int m=0; m < all_bp[i].size(); m++) {
-                        if(all_bp[i][m].size() <= 1 || (all_bp[i][m].size() != nms_i.size() && all_bp[i][m].size() != nms_i2.size() ) ) {
+                        if (all_bp[i][m].size() <= 1 || (all_bp[i][m].size() != nms_i.size() && all_bp[i][m].size() != nms_i2.size() ) ) {
                             continue;
                         }
                         vector<int> v3;
@@ -352,7 +352,7 @@ int main(int argc, char * argv[]) {
         fstr->close();
         delete pios;
     }
-    if(outfileset) {
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

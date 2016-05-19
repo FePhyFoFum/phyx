@@ -57,8 +57,7 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main (int argc, char * argv[]) {
-    bool going = true;
+int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool timeset = false;
     bool extantset = false;
@@ -71,13 +70,13 @@ int main (int argc, char * argv[]) {
     bool showd = false;
     
     int seed = -1;
-    while (going) {
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"e:t:b:d:n:o:x:shV",long_options,&oi);
-        if (c == -1){
+        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:shV", long_options, &oi);
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 'e':
                 ext = atoi(strdup(optarg));
                 extantset = true;
@@ -120,7 +119,7 @@ int main (int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }

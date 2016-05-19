@@ -65,6 +65,7 @@ int main(int argc, char * argv[]) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -77,7 +78,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -115,7 +116,7 @@ int main(int argc, char * argv[]) {
 
     int ft = test_seq_filetype_stream(*pios, retstring);
     //send sequences to be translated here
-    while(read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         nuc_seq = seq.get_sequence();
         aa_seq = functions.Translate(nuc_seq);
         *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;

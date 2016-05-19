@@ -35,6 +35,14 @@ double EPSILON = 1e-7;
 #include "superdouble.h"
 
 
+void check_file_exists (const string& filename) {
+    std::ifstream infile(filename);
+    if (!infile.good()) {
+        cout << "File '" << filename << "' not found. Exiting." << endl;
+        exit(0);
+    }
+}
+
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters) {
     // Skip delimiters at beginning.
     string::size_type lastPos = str.find_first_not_of(delimiters, 0);

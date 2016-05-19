@@ -21,7 +21,7 @@ using namespace std;
 #include <armadillo>
 using namespace arma;
 
-void print_help(){
+void print_help() {
     cout << "Calculate Selection Model 0 with K and w with seqs and tree." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -49,28 +49,29 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
-    bool going = true;
+int main(int argc, char * argv[]) {
     bool sfileset = false;
     bool tfileset = false;
     bool outfileset = false;
     char * seqf;
     char * treef;
     char * outf;
-    while(going){
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"s:t:o:hV",long_options,&oi);
-        if (c == -1){
+        int c = getopt_long(argc, argv, "s:t:o:hV", long_options, &oi);
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 's':
                 sfileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 't':
                 tfileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 outfileset = true;
@@ -83,7 +84,7 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -93,22 +94,22 @@ int main(int argc, char * argv[]){
     ifstream* sfstr;
     ifstream* tfstr;
     ofstream* ofstr; 
-    if(sfileset == true){
+    if (sfileset == true) {
         sfstr = new ifstream(seqf);
         spios = sfstr;
     }
-    if(tfileset == true){
+    if (tfileset == true) {
         tfstr = new ifstream(treef);
         tpios = tfstr;
     }
-    if(tfileset == false || sfileset == false){
+    if (tfileset == false || sfileset == false) {
         cout << "you have to set the tree and seq files" << endl;
         exit(0);
     }
-    if(outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
-    }else{
+    } else {
         poos = &cout;
     }
     //read seqs
@@ -117,13 +118,13 @@ int main(int argc, char * argv[]){
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*spios,retstring);
-    while(read_next_seq_from_stream(*spios,ft,retstring,seq)){
+    while (read_next_seq_from_stream(*spios,ft,retstring,seq)) {
         (*poos) << seq.get_fasta();
         seqs.push_back(seq);
         Sequence tseq(seq.get_id(),"");
         sr_seqs.push_back(tseq);
     }
-    if(ft == 2){
+    if (ft == 2) {
         (*poos) << seq.get_fasta();
         seqs.push_back(seq);
         Sequence tseq(seq.get_id(),"");
@@ -132,15 +133,15 @@ int main(int argc, char * argv[]){
     
     //read trees 
     ft = test_tree_filetype_stream(*tpios, retstring);
-    if(ft != 1){
+    if (ft != 1) {
         cerr << "this really only works with newick" << endl;
         exit(0);
     }
-    going = true;
+    bool going = true;
     Tree * tree;
-    if(ft == 1){
-        while(going){
-            tree = read_next_tree_from_stream_newick(*tpios,retstring,&going);
+    if (ft == 1) {
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*tpios, retstring, &going);
             break;
         }
     }
@@ -183,7 +184,7 @@ int main(int argc, char * argv[]){
     tfstr->close();
     delete tpios;
 
-    if(outfileset){
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

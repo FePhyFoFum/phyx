@@ -20,7 +20,7 @@ using namespace std;
 #include "utils.h"
 #include "bd_sim.h"
 
-void print_help(){
+void print_help() {
     cout << "Get information about an mrca." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
@@ -68,6 +68,7 @@ int main(int argc, char * argv[]) {
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 outfileset = true;
@@ -84,7 +85,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -105,7 +106,6 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
-    
     if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;

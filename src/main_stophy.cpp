@@ -16,7 +16,7 @@ using namespace std;
 #include "sequence.h"
 #include "seq_utils.h"
 
-void print_help(){
+void print_help() {
     cout << "Convert seqfiles from nexus, phylip, or fastq to phylip." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -43,14 +43,13 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool fileset = false;
     bool outfileset = false;
     char * seqf;
     char * outf;
-    while(going){
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"s:o:hV",long_options,&oi);
+        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -58,6 +57,7 @@ int main(int argc, char * argv[]) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -70,7 +70,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -95,7 +95,7 @@ int main(int argc, char * argv[]) {
     }
 
     int ft = test_seq_filetype_stream(*pios,retstring);
-    while(read_next_seq_from_stream(*pios,ft,retstring,seq)){
+    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
         seqs.push_back(seq);
     }
     // fasta has a trailing one

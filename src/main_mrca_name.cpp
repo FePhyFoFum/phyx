@@ -27,7 +27,7 @@ using namespace std;
 #include "utils.h"
 #include "tree_utils.h"
 
-void print_help(){
+void print_help() {
     cout << "Label internal nodes with clade names." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
@@ -57,7 +57,7 @@ static struct option const long_options[] =
 };
 
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     TreeReader tr;
     char * outf;
     char * treef;
@@ -76,6 +76,7 @@ int main(int argc, char * argv[]){
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 outfileset = true;
@@ -92,7 +93,7 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -113,7 +114,6 @@ int main(int argc, char * argv[]){
     } else {
         poos = &cout;
     }
-    
     if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;
@@ -129,7 +129,7 @@ int main(int argc, char * argv[]){
     ifstream inmrca(mrcaf);
     string mrcaline;
     map<string, vector<string> > mrcas;
-    while (getline(inmrca, mrcaline)){
+    while (getline(inmrca, mrcaline)) {
         if (mrcaline.empty()) {
             continue;
         }
@@ -146,7 +146,7 @@ int main(int argc, char * argv[]){
 // collect tree(s)
     vector<string> lines;
     string line;
-    while (getline(*pios, line)){
+    while (getline(*pios, line)) {
         lines.push_back(line);
     }
     
@@ -154,7 +154,7 @@ int main(int argc, char * argv[]){
     for (unsigned int i = 0; i < lines.size(); i++) {
         Tree * tree = tr.readTree(lines[i]);
         map<string, vector<string> >::iterator it;
-        for (it = mrcas.begin(); it != mrcas.end(); it++){
+        for (it = mrcas.begin(); it != mrcas.end(); it++) {
             //cout << "Dealing with clade '" << (*it).first << "'" << endl;
             if (!check_names_against_tree(tree, (*it).second)) {
                 cout << "Check mrca file for typos." << endl;

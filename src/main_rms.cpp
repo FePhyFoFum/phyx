@@ -52,8 +52,8 @@ static struct option const long_options[] =
 
 int main(int argc, char * argv[]) {
     bool fileset = false;
+    bool rmfileset = false;
     bool outfileset = false;
-    bool toremove = false; // this is not used
     string seqf = "";
     string outf = "";
     string rmf = "";
@@ -68,10 +68,12 @@ int main(int argc, char * argv[]) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'r':
-                toremove = true;
+                rmfileset = true;
                 rmf = strdup(optarg);
+                check_file_exists(rmf);
                 break;
             case 'o':
                 outfileset = true;
@@ -84,7 +86,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -102,14 +104,13 @@ int main(int argc, char * argv[]) {
     ifstream* rstr;
     istream* rpios;
     
-    // not sure how these are supposed to work. why 2 checks of fileset?
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
     } else {
         pios = &cin;
     }
-    if (fileset == true) {
+    if (rmfileset == true) {
         rstr = new ifstream(rmf);
         rpios = rstr;
     } else {

@@ -113,6 +113,7 @@ int main(int argc, char * argv[]) {
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 outfileset = true;
@@ -147,7 +148,8 @@ int main(int argc, char * argv[]) {
                         "Only " << userrates.size() << " provided. Exiting." << endl;
                     exit(0);
                 }
-                // NOTE: this uses order: A,T,C,G
+                // NOTE: this uses order: A,T,C,G for matrix, but
+                //       A<->C,A<->G,A<->T,C<->G,C<->T,G<->T for subst. params.
                 rmatrix[0][2] = userrates[0];
                 rmatrix[2][0] = userrates[0];
                 rmatrix[0][3] = userrates[1];
@@ -209,7 +211,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }

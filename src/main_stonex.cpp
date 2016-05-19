@@ -43,12 +43,11 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool fileset = false;
     bool outfileset = false;
     char * seqf;
     char * outf;
-    while(going) {
+    while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
         if (c == -1) {
@@ -58,6 +57,7 @@ int main(int argc, char * argv[]) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;

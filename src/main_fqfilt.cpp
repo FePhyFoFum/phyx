@@ -15,7 +15,7 @@ using namespace std;
 #include "seq_reader.h"
 #include "sequence.h"
 
-void print_help(){
+void print_help() {
     cout << "Filter fastq files by mean quality." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
@@ -43,26 +43,26 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
-    bool going = true;
+int main(int argc, char * argv[]) {
     double meanfilt = 30;
     bool fileset = false;
     bool outfileset = false;
     char * seqf;
     char * outf;
-    while(going){
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"m:s:o:hV",long_options,&oi);
-        if (c == -1){
+        int c = getopt_long(argc, argv, "m:s:o:hV", long_options, &oi);
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 'm':
                 meanfilt = atof(optarg);
                 break;
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -75,7 +75,7 @@ int main(int argc, char * argv[]){
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }

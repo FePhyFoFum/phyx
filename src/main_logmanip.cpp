@@ -77,11 +77,13 @@ int main(int argc, char * argv[]) {
             case 'p':
                 pfileset = true;
                 parmf = strdup(optarg);
+                check_file_exists(parmf);
                 logtype = "parm";
                 break;
             case 't':
                 tfileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 logtype = "tree";
                 break;
             case 'o':
@@ -110,7 +112,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }

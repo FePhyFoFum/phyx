@@ -60,7 +60,6 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool fileset = false;
     bool outfileset = false;
     bool outalnfileset = false;
@@ -72,16 +71,17 @@ int main(int argc, char * argv[]) {
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
     bool verbose = false;
-    while (going) {
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"s:o:a:t:m:n:vhV",long_options,&oi);
-        if (c == -1){
+        int c = getopt_long(argc, argv, "s:o:a:t:m:n:vhV", long_options, &oi);
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -101,6 +101,7 @@ int main(int argc, char * argv[]) {
             case 'm':
                 matrixfileset = true;
                 matf = strdup(optarg);
+                check_file_exists(matf);
                 break;
             case 'n':
                 num_threads = atoi(strdup(optarg));
@@ -115,13 +116,13 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
     map<char, map<char,int> > sc_mat;
     if (matrixfileset == true) {
-        read_scoring_matrix(matf,sc_mat);
+        read_scoring_matrix(matf, sc_mat);
     } else {
         if (seqtype == 0) {
             get_ednafull(sc_mat);

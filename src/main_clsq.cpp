@@ -61,7 +61,7 @@ int main(int argc, char * argv[]) {
     while (1) {
         int oi = -1;
         //int curind = optind; // not used
-        int c = getopt_long(argc, argv,  "s:o:p:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -69,6 +69,7 @@ int main(int argc, char * argv[]) {
             case 's':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -85,7 +86,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -105,7 +106,6 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
-    
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;

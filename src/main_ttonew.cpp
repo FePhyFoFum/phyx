@@ -41,21 +41,21 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool fileset = false;
     bool outfileset = false;
     char * treef;
     char * outf;
-    while(going){
+    while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:hV", long_options, &oi);
-        if (c == -1){
+        if (c == -1) {
             break;
         }
-        switch(c){
+        switch(c) {
             case 't':
                 fileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 outfileset = true;
@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
     ostream * poos;
     ifstream * fstr;
     ofstream * ofstr;
-    if(fileset == true ) {
+    if (fileset == true ) {
         fstr = new ifstream(treef);
         pios = fstr;
     } else {
@@ -100,9 +100,9 @@ int main(int argc, char * argv[]) {
     map <string, string> translation_table;
     bool ttexists;
     ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-    going = true;
+    bool going = true;
     Tree * tree;
-    while(going){
+    while (going) {
         tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
             &translation_table, &going);
         if (going == true) {

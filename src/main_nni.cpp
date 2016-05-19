@@ -45,14 +45,14 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
 
     bool outfileset = false;
     bool fileset = false;
     char * outf;
     char * seqf;
 	/*
-    if (argc > 2){
+    if (argc > 2) {
         cout << "usage: pxnni newickfile" << endl;
         exit(0);
     }*/
@@ -66,6 +66,7 @@ int main(int argc, char * argv[]){
             case 't':
                 fileset = true;
                 seqf = strdup(optarg);
+                check_file_exists(seqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -78,8 +79,8 @@ int main(int argc, char * argv[]){
                 cout << "Version" << endl;
                 exit(0);
             default:
-                //print_error(argv[0],(char)c);
-                cout << "? Maybe try the help menu -h" << endl;
+                print_error(argv[0], (char)c);
+                //cout << "? Maybe try the help menu -h" << endl;
                 exit(0);
         }
     }
@@ -108,7 +109,7 @@ int main(int argc, char * argv[]){
 
     //reading from standard input for piping
     /*
-    if(argc == 1){
+    if (argc == 1) {
         for (std::string line; std::getline(std::cin, line);) {
             lines.push_back(line);
         }
@@ -121,19 +122,19 @@ int main(int argc, char * argv[]){
     }
     //reading from a file
     /*
-    if (argc == 2){
+    if (argc == 2) {
         ifstream infile(argv[1]);
-        if (!infile){
+        if (!infile) {
             cerr << "Could not open treefile." << endl;
             return 1;
         }
         string line;
-        while (getline(infile, line)){
+        while (getline(infile, line)) {
             lines.push_back(line);
         }
         infile.close();
     }*/
-    /*while (getline(infile, fstr)){
+    /*while (getline(infile, fstr)) {
         lines.push_back(line);
     }
     infile.close();*/
@@ -146,14 +147,14 @@ int main(int argc, char * argv[]){
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
                 map<Node*,vector<Node*> > tree_map;
-				create_tree_map_from_rootnode(tree,tree_map);
-				nni_from_tree_map(tree,tree_map);
-				(*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                create_tree_map_from_rootnode(tree,tree_map);
+                nni_from_tree_map(tree,tree_map);
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
                 treeCounter++;
             }
         }
-    }else if (ft == 0) { // Nexus. need to worry about possible translation tables
+    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
         map <string, string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
@@ -164,9 +165,9 @@ int main(int argc, char * argv[]){
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
                 map<Node*,vector<Node*> > tree_map;
-				create_tree_map_from_rootnode(tree,tree_map);
-				nni_from_tree_map(tree,tree_map);
-				(*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                create_tree_map_from_rootnode(tree,tree_map);
+                nni_from_tree_map(tree,tree_map);
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
                 treeCounter++;
             }

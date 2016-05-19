@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv,  "a:o:n:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "a:o:n:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -72,6 +72,7 @@ int main(int argc, char * argv[]) {
             case 'a':
                 fileset = true;
                 aaseqf = strdup(optarg);
+                check_file_exists(aaseqf);
                 break;
             case 'o':
                 outfileset = true;
@@ -80,6 +81,7 @@ int main(int argc, char * argv[]) {
             case 'n':
                 nucfile = true;
                 nucseqf = strdup(optarg);
+                check_file_exists(nucseqf);
                 break;
             case 'h':
                 print_help();
@@ -88,7 +90,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }

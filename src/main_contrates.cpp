@@ -68,18 +68,21 @@ int main(int argc, char * argv[]) {
             case 'c':
                 cfileset = true;
                 charf = strdup(optarg);
+                check_file_exists(charf);
                 break;
             case 't':
                 tfileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'o':
                 ofileset = true;
                 outf = strdup(optarg);
                 break;
             case 'a':
-                if (optarg[0] == '1')
+                if (optarg[0] == '1') {
                     analysis = 1;
+                }
                 break;
             case 'h':
                 print_help();
@@ -88,7 +91,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
@@ -101,7 +104,7 @@ int main(int argc, char * argv[]) {
     if (tfileset == true) {
         tfstr = new ifstream(treef);
         poos = tfstr;
-    }else{
+    } else {
         poos = &cin;
     }
 
@@ -113,7 +116,7 @@ int main(int argc, char * argv[]) {
     }
     string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
-    if(ft != 1 && ft != 2){
+    if (ft != 1 && ft != 2) {
         cout << "only fasta and phylip (with spaces) supported so far" << endl;
         exit(0);
     }
@@ -129,7 +132,8 @@ int main(int argc, char * argv[]) {
         seq.clear_cont_char();
         y++;
     }
-    if(ft == 2) {
+    
+    if (ft == 2) {
         seqs.push_back(seq);
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
@@ -140,7 +144,9 @@ int main(int argc, char * argv[]) {
     while (getline(*poos,retstring)) {
         trees.push_back(tr.readTree(retstring));
     }
-
+    
+    //cout << "Num trees = " << trees.size() << endl;
+    
     //conduct analyses for each character
     for (int c =0; c < nchars; c++) {
         cerr << "character: " << c << endl;
@@ -155,8 +161,9 @@ int main(int argc, char * argv[]) {
                 tv[0] = 0;
                 trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
             }
+            cout << "here i am0" << endl;
             calc_square_change_anc_states(trees[0],0);
-            for (int i=0; i < trees[0]->getInternalNodeCount(); i++){
+            for (int i=0; i < trees[0]->getInternalNodeCount(); i++) {
                 double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
                 trees[0]->getInternalNode(i)->deleteDoubleVector("val");
                 std::ostringstream s;
@@ -164,7 +171,8 @@ int main(int argc, char * argv[]) {
                 s << "[&value=" << tv << "]";
                 trees[0]->getInternalNode(i)->setName(s.str());
             }
-            for (int i=0; i < trees[0]->getExternalNodeCount(); i++){
+            cout << "here i am1" << endl;
+            for (int i=0; i < trees[0]->getExternalNodeCount(); i++) {
                 double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
                 trees[0]->getExternalNode(i)->deleteDoubleVector("val");
                 std::ostringstream s;
@@ -172,12 +180,13 @@ int main(int argc, char * argv[]) {
                 s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
                 trees[0]->getExternalNode(i)->setName(s.str());
             }
+            cout << "here i am2" << endl;
             cout << "#nexus\nbegin trees;\ntree a =";
             cout << trees[0]->getRoot()->getNewick(true);
             cout << ";\nend;\n" << endl;
         } else if (analysis == 1) {
             mat vcv;
-            int t_ind = 0;//TODO: do this over trees
+            int t_ind = 0; // TODO: do this over trees
             int c_ind = c;
             calc_vcv(trees[t_ind],vcv);
             int n = trees[t_ind]->getExternalNodeCount();

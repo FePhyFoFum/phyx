@@ -31,7 +31,7 @@ void print_help() {
     cout << endl; 
     cout << " -d, --dataf=FILE    input data file" <<endl;
     cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<endl;
-    cout << " -z, --dataz    data is in probability format (0,1,0,0)" << endl;
+    cout << " -z, --dataz         data is in probability format (0,1,0,0)" << endl;
     cout << " -t, --treef=FILE    input tree file" << endl;
     cout << " -c, --conf=FILE     configuration file" << endl;
     cout << " -o, --outanc=FILE   output file for ancestral calc" << endl;
@@ -117,10 +117,10 @@ int main(int argc, char * argv[]) {
     string periodstring;
     vector<string> ptokens;
     vector<double> period_times;
-    bool going = true;
-    while (going) {
+    
+    while (1) {
         int oi = -1;
-        int c = getopt_long(argc,argv,"d:t:c:o:n:m:a:l:p:hVwz",long_options,&oi);
+        int c = getopt_long(argc, argv, "d:t:c:o:n:m:a:l:p:hVwz", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -128,6 +128,7 @@ int main(int argc, char * argv[]) {
             case 'd':
                 datafileset = true;
                 dataf = strdup(optarg);
+                check_file_exists(dataf);
                 break;
             case 'z':
                 dataz = true;
@@ -139,10 +140,12 @@ int main(int argc, char * argv[]) {
             case 't':
                 treefileset = true;
                 treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'c':
                 conffileset = true;
                 conff = strdup(optarg);
+                check_file_exists(conff);
                 break;
             case 'o':
                 outancfileset = true;
@@ -176,7 +179,7 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0],(char)c);
+                print_error(argv[0], (char)c);
                 exit(0);
         }
     }
