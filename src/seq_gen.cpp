@@ -56,6 +56,59 @@ map <char, int> SequenceGenerator::nucMap = {
 string SequenceGenerator::nucleotides = "ATCG";
 */
  
+SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> const& basefreq,
+    vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
+    int const& nreps, int const& seed, float const& alpha, float const& pinvar, 
+    string const& ancseq, bool const& printpost, vector<double> const& multirates,
+    bool const& mm):tree(tree), seqlen(seqlength), nreps(nreps), seed(seed), alpha(alpha),
+    pinvar(pinvar), rootSequence(ancseq), basefreqs(basefreq), rmatrix(rmatrix), 
+    multirates(multirates), showancs(showancs), printnodelabels(printpost),
+    mm(mm) {
+    
+    initialize();
+    
+    // Print out the nodes names
+    if (printnodelabels == true) {
+        print_node_labels();
+    }
+    
+    preorder_tree_traversal(tree, showancs, multirates, mm);
+}
+
+
+// set all values
+void SequenceGenerator::initialize () {
+    // set the number generator being used
+    if (seed != -1) { // user provided seed
+        generator = mt19937(seed);
+    } else {
+        generator = mt19937(get_clock_seed());
+    }
+    
+    // construct uniform distribution from which random numbers will be generated
+    // this happens to be the default distribution, but good to be explicit
+    uniformDistrib = uniform_real_distribution<float>(0.0, 1.0);
+    
+    // construct gamma distribution (if necessary)
+    if (alpha != -1.0) {
+        gammaDistrib = gamma_distribution<float>(alpha,(1/alpha));
+    }
+    
+    if (showancs) {
+        label_internal_nodes();
+    }
+    if (rootSequence.length() == 0) {
+        rootSequence = generate_random_sequence();
+    } else {
+        check_valid_sequence();
+        // if root sequence is provided, set length to this
+        seqlen = rootSequence.size();
+    }
+    // set site-specific rate (pinvar and gamma)
+    site_rates = set_site_rates();
+}
+
+
 /* Use the P matrix probabilities and randomly draw numbers to see
  * if each individual state will undergo some type of change
  */
@@ -401,39 +454,6 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
 }
 
 
-// set all values
-void SequenceGenerator::initialize () {
-    // set the number generator being used
-    if (seed != -1) { // user provided seed
-        generator = mt19937(seed);
-    } else {
-        generator = mt19937(get_clock_seed());
-    }
-    
-    // construct uniform distribution from which random numbers will be generated
-    // this happens to be the default distribution, but good to be explicit
-    uniformDistrib = uniform_real_distribution<float>(0.0, 1.0);
-    
-    // construct gamma distribution (if necessary)
-    if (alpha != -1.0) {
-        gammaDistrib = gamma_distribution<float>(alpha,(1/alpha));
-    }
-    
-    if (showancs) {
-        label_internal_nodes();
-    }
-    if (rootSequence.length() == 0) {
-        rootSequence = generate_random_sequence();
-    } else {
-        check_valid_sequence();
-        // if root sequence is provided, set length to this
-        seqlen = rootSequence.size();
-    }
-    // set site-specific rate (pinvar and gamma)
-    site_rates = set_site_rates();
-}
-
-
 // make sure sequence contains only valid nucleotide characters
 void SequenceGenerator::check_valid_sequence () {
     // make sure uppercase
@@ -444,26 +464,6 @@ void SequenceGenerator::check_valid_sequence () {
             << found+1 << " (only A,C,G,T allowed). Exiting." << endl;
         exit(0);
     }
-}
-
-
-SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> const& basefreq,
-    vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha, float const& pinvar, 
-    string const& ancseq, bool const& printpost, vector<double> const& multirates,
-    bool const& mm):tree(tree), seqlen(seqlength), nreps(nreps), seed(seed), alpha(alpha),
-    pinvar(pinvar), rootSequence(ancseq), basefreqs(basefreq), rmatrix(rmatrix), 
-    multirates(multirates), showancs(showancs), printnodelabels(printpost),
-    mm(mm) {
-    
-    initialize();
-    
-    // Print out the nodes names
-    if (printnodelabels == true) {
-        print_node_labels();
-    }
-    
-    preorder_tree_traversal(tree, showancs, multirates, mm);
 }
 
 

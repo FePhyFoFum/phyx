@@ -233,7 +233,7 @@ int main(int argc, char * argv[]) {
     double TSCA = 0;
     //get the conflicting bipartitions
     //initialize results vectors
-    for (unsigned int i = 0;i < biparts.size();i++) {
+    for (unsigned int i = 0; i < biparts.size(); i++) {
         unsigned int sumc = sum_matrix_col(matrix,i);
         if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
             vector<string> nms;

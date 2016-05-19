@@ -205,7 +205,7 @@ char single_dna_complement(char inc) {
         return 'D';
     } else if (inc=='V') {
         return 'B';
-    } else{
+    } else {
         return 'N';
     }
 }
@@ -258,7 +258,7 @@ void create_vector_seq_codon_state_reconstructor(vector <Sequence> & origseqs,
     for (unsigned int i=0; i < origseqs.size(); i++) {
         string codon = origseqs[i].get_sequence().substr(start,3);
         string setsq = "";
-        for (int j=0;j<61;j++) {
+        for (int j=0; j < 61; j++) {
             setsq += "0";
         }
         for (unsigned int j=0; j < codon_pos[codon].size(); j++) {

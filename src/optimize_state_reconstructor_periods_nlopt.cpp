@@ -75,7 +75,7 @@ void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr,
     opt.set_maxeval(10000);
     
     vector<double> x(_nfree,0);
-    for (unsigned int k=0; k < _rm->size();k++) {
+    for (unsigned int k=0; k < _rm->size(); k++) {
         for (unsigned int i=0; i < _rm->at(k).get_Q().n_rows; i++) {
             for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {

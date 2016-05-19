@@ -105,42 +105,42 @@ string TLATE::Translate (string& dna) {
     string AminoAcid = "";
     string AAcid;
     for (unsigned int i = 0; i < dna.size(); i = i + 3) {
-		if (dna[i] == 'a'){
-			dna[i] = 'A';
-		}
-		if (dna[i] == 't'){
-			dna[i] = 'T';
-		}
-		if (dna[i] == 'c'){
-			dna[i] = 'C';
-		}
-		if (dna[i] == 'g'){
-			dna[i] = 'G';
-		}
-		if (dna[i+1] == 'a'){
-			dna[i+1] = 'A';
-		}
-		if (dna[i+1] == 't'){
-			dna[i+1] = 'T';
-		}
-		if (dna[i+1] == 'c'){
-			dna[i+1] = 'C';
-		}
-		if (dna[i+1] == 'g'){
-			dna[i+1] = 'G';
-		}
-		if (dna[i+2] == 'a'){
-			dna[i+2] = 'A';
-		}
-		if (dna[i+2] == 't'){
-			dna[i+2] = 'T';
-		}
-		if (dna[i+2] == 'c'){
-			dna[i+2] = 'C';
-		}
-		if (dna[i+2] == 'g'){
-			dna[i+2] = 'G';
-		}
+        if (dna[i] == 'a') {
+            dna[i] = 'A';
+        }
+        if (dna[i] == 't') {
+            dna[i] = 'T';
+        }
+        if (dna[i] == 'c') {
+            dna[i] = 'C';
+        }
+        if (dna[i] == 'g') {
+            dna[i] = 'G';
+        }
+        if (dna[i+1] == 'a') {
+            dna[i+1] = 'A';
+        }
+        if (dna[i+1] == 't') {
+            dna[i+1] = 'T';
+        }
+        if (dna[i+1] == 'c') {
+            dna[i+1] = 'C';
+        }
+        if (dna[i+1] == 'g') {
+            dna[i+1] = 'G';
+        }
+        if (dna[i+2] == 'a') {
+            dna[i+2] = 'A';
+        }
+        if (dna[i+2] == 't') {
+            dna[i+2] = 'T';
+        }
+        if (dna[i+2] == 'c') {
+            dna[i+2] = 'C';
+        }
+        if (dna[i+2] == 'g') {
+            dna[i+2] = 'G';
+        }
         codon = dna[i];
         codon += dna[i+1];
         codon += dna[i+2];

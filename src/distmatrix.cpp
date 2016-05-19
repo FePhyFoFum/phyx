@@ -67,7 +67,7 @@ map<string,int> BuildMatrix (map <string, string>& sequences) {
         cout << SequenceName[i] << "\t";
     }
     cout << endl;
-    for(int i = 0; i < Score.size(); i++) {
+    for (int i = 0; i < Score.size(); i++) {
         cout << SequenceName[i] << "\t";
         for (int j = 0; j < Score[i].size(); j++) {
             cout << Score[i][j] << "\t";

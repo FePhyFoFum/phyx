@@ -223,7 +223,7 @@ int main(int argc, char * argv[]) {
                 string del("=");
                 tokens.clear();
                 tokenize(line, tokens, del);
-                for (unsigned int j=0;j<tokens.size();j++) {
+                for (unsigned int j=0; j < tokens.size(); j++) {
                     trim_spaces(tokens[j]);
                 }
                 if (!strcmp(tokens[0].c_str(), "freeparams")) {
@@ -387,7 +387,7 @@ int main(int argc, char * argv[]) {
     if (ancstates.size() > 0 && outancfileset == true) {
         ancout.open(outanc,ios::out);
         ancout << "site\ttree\tMRCA\tlnL";
-        for (int i=0;i<nstates;i++) {
+        for (int i=0; i < nstates; i++) {
             ancout << "\tstate_" << i+1;
         }
         ancout << endl;
@@ -395,8 +395,8 @@ int main(int argc, char * argv[]) {
     if (stochnumber.size() > 0 && outstochnumfileset == true) {
         stnumout.open(outnum,ios::out);
         stnumout << "site\ttree\tMRCA\tlnL";
-        for (int i=0;i<nstates;i++) {
-            for (int j=0;j<nstates;j++) {
+        for (int i=0; i < nstates; i++) {
+            for (int j=0; j < nstates; j++) {
                 if (i != j) {
                     stnumout << "\tstate_" << i+1 << "->state_" << j+1;
                 }
@@ -407,7 +407,7 @@ int main(int argc, char * argv[]) {
     if (stochtime.size() > 0 && outstochtimefileset == true ) {
         sttimeout.open(outtime,ios::out);
         sttimeout << "site\ttree\tMRCA\tlnL";
-        for (int i=0;i<nstates;i++) {
+        for (int i=0; i < nstates; i++) {
             sttimeout << "\tstate_" << i+1;
         }
         sttimeout << endl;
@@ -419,7 +419,7 @@ int main(int argc, char * argv[]) {
         sttnumout_any << endl;
     }
     
-    for (int n = 0;n<nsites;n++) {
+    for (int n = 0; n < nsites; n++) {
         (*loos) << "site: " << n+1 << endl;
         /*
          * this converts the data and is a little long to accomodate datasets
@@ -439,14 +439,14 @@ int main(int argc, char * argv[]) {
                 }
                 string tseqs(nstates,'0');
                 if (searchtokens[n]=="?") {
-                    for (int mse = 0;mse<nstates;mse++) {
+                    for (int mse = 0; mse < nstates; mse++) {
                     tseqs.replace(mse,1,"1");
                     }
                 } else {
                     int pos = atoi(searchtokens[n].c_str());
                     tseqs.replace(pos,1,"1");
                 }
-                for (int i=0;i<nstates;i++) {
+                for (int i=0; i < nstates; i++) {
                     if (tseqs.at(i) =='1') {
                         existing_states[i] = 1;
                     }
@@ -538,11 +538,11 @@ int main(int argc, char * argv[]) {
                     ct = 1;
                 } else if (freeparams == "_all_") {
                     ct = 0;
-                    for (int k=0;k<nstates_site_n;k++) {
-                        for (int j=0;j<nstates_site_n;j++) {
+                    for (int k=0; k < nstates_site_n; k++) {
+                        for (int j=0; j < nstates_site_n; j++) {
                             if (k != j) {
-                            free_var(k,j) = ct;
-                            ct += 1;
+                                free_var(k,j) = ct;
+                                ct += 1;
                             }
                         }
                     }
@@ -557,7 +557,7 @@ int main(int argc, char * argv[]) {
                 if (estimate) {//optimize
                     optimize_sr_nlopt(&rm,&sr,&free_var,ct);
                 } else { // requires that the ratematrix is available
-                    for (int i=0;i<nstates_site_n;i++) {
+                    for (int i=0; i < nstates_site_n; i++) {
                         for (int j=0; j < nstates_site_n; j++) {
                             free_var(i,j) = ratematrix[i][j];
                         }
@@ -586,10 +586,10 @@ int main(int argc, char * argv[]) {
                     ct = 0;
                     for (unsigned int s=0; s < period_times.size(); s++) {
                         mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
-                        for (int k=0;k<nstates_site_n;k++) {
-                            for (int j=0;j<nstates_site_n;j++) {
+                        for (int k=0; k < nstates_site_n; k++) {
+                            for (int j=0; j < nstates_site_n; j++) {
                             if (k != j) {
-                                free_var(k,j) = ct;
+                                free_var(k, j) = ct;
                                 ct += 1;
                             }
                             }
@@ -628,7 +628,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << "ancestral states" <<endl;
             }
             sr.prepare_ancstate_reverse();
-            for (unsigned int j=0;j<ancstates.size();j++) {
+            for (unsigned int j=0; j < ancstates.size(); j++) {
             if (ancstates[j] == "_all_") {
                 vector<Superdouble> lhoods;
                 for (int l=0; l < tree->getInternalNodeCount(); l++) {
@@ -639,7 +639,7 @@ int main(int argc, char * argv[]) {
                     int excount = 0;
                     double highest = 0;
                     int high = 0;
-                    for (int k=0;k<nstates;k++) {
+                    for (int k=0; k < nstates; k++) {
                         if (existing_states[k] == 1) {
                             if (double(lhoods[excount]/totlike_sd) > highest) {
                                 highest= double(lhoods[excount]/totlike_sd);
@@ -664,7 +664,7 @@ int main(int argc, char * argv[]) {
                 totlike_sd = calculate_vector_Superdouble_sum(lhoods);
                 bool neg = false;
                 int excount = 0;
-                for (int k=0;k<nstates;k++) {
+                for (int k=0; k < nstates; k++) {
                     if (existing_states[k] == 1) {
                         if (verbose) {
                             (*loos) << double(lhoods[excount]/totlike_sd) << " ";//"(" << lhoods[excount] << ") ";
@@ -694,7 +694,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << "stochastic time" << endl;
             }
 
-            for (unsigned int j=0;j<stochtime.size();j++) {
+            for (unsigned int j=0; j < stochtime.size(); j++) {
             if (tree->getMRCA(mrcas[stochtime[j]])->isRoot() == false) {
                 vector<double> lhoods;
                 if (verbose) {
@@ -703,7 +703,7 @@ int main(int argc, char * argv[]) {
                 sttimeout << n+1 << "\t" << i+1 << "\t" << stochtime[j]<< "\t" << finallike;
                 bool neg = false;
                 int excount = 0;
-                for (int k=0;k<nstates;k++) {
+                for (int k=0; k < nstates; k++) {
                     if (existing_states[k]==1) {
                         sr.prepare_stochmap_reverse_all_nodes(excount,excount);
                         sr.prepare_ancstate_reverse();
@@ -739,7 +739,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << endl;
                 (*loos) << "stochastic number" << endl;
             }
-            for (unsigned int j=0;j<stochnumber.size();j++) {
+            for (unsigned int j=0; j < stochnumber.size(); j++) {
                 if (tree->getMRCA(mrcas[stochnumber[j]])->isRoot() == false) {
                     vector<double> lhoods;
                     if (verbose) {
@@ -748,12 +748,12 @@ int main(int argc, char * argv[]) {
                     stnumout << n+1 << "\t" << i+1 << "\t" << stochnumber[j]<< "\t" << finallike;
                     bool neg = false;
                     int excount = 0;
-                    for (int k=0;k<nstates;k++) {
+                    for (int k=0; k < nstates; k++) {
                         if (existing_states[k]==1) {
                             int excount2 = 0;
-                            for (int l=0;l<nstates;l++) {
-                                if (existing_states[l]==1) {
-                                    if (k==l) {
+                            for (int l=0; l < nstates; l++) {
+                                if (existing_states[l] == 1) {
+                                    if (k == l) {
                                         if (verbose) {
                                             (*loos) << " - ";
                                         }
@@ -783,8 +783,8 @@ int main(int argc, char * argv[]) {
                             }
                             excount += 1;
                         } else {
-                            for (int l=0;l<nstates;l++) {
-                                if (k==l) {
+                            for (int l=0; l < nstates; l++) {
+                                if (k == l) {
                                     if (verbose) {
                                         (*loos) << " - ";
                                     }
@@ -819,7 +819,7 @@ int main(int argc, char * argv[]) {
                 sr.prepare_stochmap_reverse_all_nodes_all_matrices();
                 sr.prepare_ancstate_reverse();
             }
-            for (unsigned int j=0;j<stochnumber_any.size();j++) {
+            for (unsigned int j=0; j < stochnumber_any.size(); j++) {
                 if (tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot() == false) {
                     vector<double> lhoods;
                     if (verbose) {

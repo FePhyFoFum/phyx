@@ -21,7 +21,7 @@ using namespace std;
 #include "tree_reader.h"
 #include "utils.h"
 
-TreeReader::TreeReader(){}
+TreeReader::TreeReader() {}
 
 /*
  * the tree pointer coming in should just be a new Tree()

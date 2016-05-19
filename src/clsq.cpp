@@ -52,13 +52,12 @@ void SequenceCleaner::write_seqs (ostream* poos) {
     //    (*poos) << ">" << kv.first << endl;
     //    (*poos) << kv.second << endl;
     //}
-    if(trimmedSeqs.size() == 0){
-		    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-				(*poos) << ">" << iter->first << endl;
-				(*poos) << "-" << endl;
-				
-			}
-	}
+    if (trimmedSeqs.size() == 0) {
+        for (iter = sequences.begin(); iter != sequences.end(); iter++) {
+            (*poos) << ">" << iter->first << endl;
+            (*poos) << "-" << endl;		
+        }
+    }
     for (iter = trimmedSeqs.begin(); iter != trimmedSeqs.end(); iter++) {
         (*poos) << ">" << iter->first << endl;
         (*poos) << iter->second << endl;
@@ -74,7 +73,7 @@ void SequenceCleaner::clean_sequences () {
     bool round_one = true;
     unsigned int StillMissing = 0;
     readline.open(fasta.c_str());
-    if (readline.is_open()){
+    if (readline.is_open()) {
         while (getline (readline, line)) {
             if (line[0] == '>') {
                 if (round_one == false) {
@@ -140,12 +139,12 @@ void SequenceCleaner::clean_sequences () {
     }
     //return trimmedSeqs;
 }
-void SequenceCleaner::CheckMissing(double MissingData [], string& dna){
+void SequenceCleaner::CheckMissing(double MissingData [], string& dna) {
 
     for (int i = 0; i < numChar; i++) {
         // use tolower
         if (dna[i] == 'N' || dna[i] == '-' || dna[i] == 'n' || 
-            dna[i] == 'X' ||  dna[i] == 'x'){
+            dna[i] == 'X' ||  dna[i] == 'x') {
             MissingData[i]++;
             //cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
         }

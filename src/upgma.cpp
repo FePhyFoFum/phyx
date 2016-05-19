@@ -111,10 +111,10 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
         //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std::cout, " "));
         jcount = 1;
         if (i != mini1 && i != mini2) {
-//            if(i != mini2) {
+//            if (i != mini2) {
             for (int j = 0; j < matrixsize; j++) {
                 if (j != mini1 && j != mini2) {
-                    //if(j != mini2) {
+                    //if (j != mini2) {
                         temp_matrix[icount][jcount] = NewMatrix[i][j];
                         jcount++;
                     //}
@@ -151,7 +151,7 @@ void Choose_Small(int& node_list, vector< vector<double> > const& Matrix,
             mini2 = idx;
         }
         
-//        for(int j = i + 1; j < node_list; j++) {
+//        for (int j = i + 1; j < node_list; j++) {
 //            if (Matrix[i][j] < MIN) {
 //                MIN = Matrix[i][j];
 //                mini1 = i;
@@ -228,7 +228,7 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
         cout << SequenceName[i] << "\t";
     }
     cout << endl;
-    for(int i = 0; i < Score.size(); i++) {
+    for (int i = 0; i < Score.size(); i++) {
         cout << SequenceName[i] << "\t";
         for (int j = 0; j < Score[i].size(); j++) {
             cout << Score[i][j] << "\t";
@@ -294,7 +294,7 @@ UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
 // populate these when reading in the sequences
 void UPGMA::set_name_key () {
     int count = 0;
-    for(iter = sequences.begin(); iter != sequences.end(); iter++) {
+    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
         NameKey[count] = iter -> first;
         names.push_back(iter -> first);
         count++;

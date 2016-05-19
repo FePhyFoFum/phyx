@@ -47,7 +47,7 @@ static struct option const long_options[] =
 
 bool removetip(Tree * tree, vector<string> & names);
 bool removetip(Tree * tree,vector<string> & names) {
-    for (int i=0;i<names.size();i++) {
+    for (int i=0; i < names.size(); i++) {
         Node * m = tree->getExternalNode(names[i]);
         if (m != NULL) {
             tree->pruneExternalNode(m);
@@ -110,7 +110,7 @@ int main(int argc, char * argv[]) {
         string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
-        for (unsigned int j=0;j<tokens2.size();j++) {
+        for (unsigned int j=0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             names.push_back(tokens2[j]);
         }

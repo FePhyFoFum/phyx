@@ -177,7 +177,7 @@ void Sequence::set_aligned(bool _aligned) {
 
 string Sequence::reverse_complement() {
     string rcomp = seq;
-    for (unsigned int i=0 ;i < rcomp.size(); i++) {
+    for (unsigned int i=0; i < rcomp.size(); i++) {
         rcomp.replace(i,1,1,single_dna_complement(seq[seq.size()-i-1]));
     }
     return rcomp;
@@ -185,7 +185,7 @@ string Sequence::reverse_complement() {
 
 void Sequence::perm_reverse_complement() {
     string rcomp = seq;
-    for (unsigned int i=0 ;i < rcomp.size(); i++) {
+    for (unsigned int i=0; i < rcomp.size(); i++) {
         rcomp.replace(i,1,1,single_dna_complement(seq[seq.size()-i-1]));
     }
     seq = rcomp;

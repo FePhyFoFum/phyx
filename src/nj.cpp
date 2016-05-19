@@ -161,7 +161,7 @@ void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbK
     for (int i = 0; i < msize; i++) {
         jcount = 1;
         if (i != mini1 && i != mini2) {
-//            if(i != mini2) {
+//            if (i != mini2) {
             for (int j = 0; j < msize; j++) {
                 if (j != mini1 && j != mini2) {
 //                    if (j != mini2) {
@@ -194,7 +194,7 @@ void Choose_Smallest(int& node_list, vector< vector<double> > const& Matrix,
             mini2 = idx;
         }
         
-//        for(int j = i + 1; j < node_list; j++) {
+//        for (int j = i + 1; j < node_list; j++) {
 //            if (Matrix[i][j] < MIN) {
 //                MIN = Matrix[i][j];
 //                mini1 = i;
@@ -334,7 +334,7 @@ NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
 // populate these when reading in the sequences
 void NJOI::set_name_key () {
     int count = 0;
-    for(iter = sequences.begin(); iter != sequences.end(); iter++) {
+    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
         NameKey[count] = iter -> first;
         names.push_back(iter -> first);
         count++;

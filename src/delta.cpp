@@ -17,37 +17,37 @@ using namespace std;
 #define LARGE 100000000
 #define PMAX 1000
 
-Delta::Delta(){}
+Delta::Delta() {}
 
-double Delta::shift(double p, double s, int c, int l, int r){
+double Delta::shift(double p, double s, int c, int l, int r) {
     if (p < 0 || s < 0 || p > PMAX || s > PMAX)
         return LARGE;
     double enp = exp(-p);
     double ens = exp(-s);
     double num = (enp*pow((1.0 - enp),(l - 1.0)))*(ens*pow((1.0 - ens),(r - 1.0)));
     double den = 0;
-    for (int i=0; i<(l+r-1);i++){
-        int il=i+1;
+    for (int i=0; i < (l+r-1); i++) {
+        int il = i + 1;
         den += (enp*pow((1 - enp),(il - 1)))*(ens*pow((1 - ens),((l + r) - il - 1)));
     }
     double bigleft = 0;
-    try{
+    try {
         bigleft = log(num/den);
-    }catch( char * str ) {
+    } catch( char * str ) {
         return LARGE;
     }
     double enc = exp(-c);
     num = (enc*pow((1.0 - enc),(l - 1.0)))*(enc*pow((1.0 - enc),(r - 1.0)));
     den = 0;
-    for (int i=0;i<(l+r-1);i++){
-        int il=i+1;
+    for (int i=0; i < (l+r-1); i++) {
+        int il = i + 1;
         den = den +(enc*pow((1 - enc),(il - 1)))*(enc*pow((1 - enc),((l + r) - il - 1)));
     }
 
     double bigright = 0;
-    try{
+    try {
         bigright = log(num/den);
-    }catch( char * str ) {
+    } catch( char * str ) {
         return LARGE;
     }
     //cout << "bl:" << bigleft << "\tbr:"<< bigright << endl;
@@ -58,7 +58,7 @@ double Delta::shift(double p, double s, int c, int l, int r){
  * use for over/underflow problems
  */
 
-double Delta::bigshift(double p, double s, int c, int l, int r){
+double Delta::bigshift(double p, double s, int c, int l, int r) {
     if (p < 0 || s < 0 || p > PMAX || s > PMAX)
             return LARGE;
     mpfr_class bp,bs,bc,bl,br;
@@ -67,7 +67,7 @@ double Delta::bigshift(double p, double s, int c, int l, int r){
     mpfr_class expnbs = exp(-bs);
     mpfr_class num = (expnbp*pow((1.0 - expnbp),(bl - 1.0)))*(expnbs*pow((1.0 - expnbs),(br - 1.0)));
     mpfr_class den = 0;
-    for (mpfr_class i=0; i<(l+r-1);i++){
+    for (mpfr_class i=0; i < (l+r-1); i++) {
         mpfr_class il=i+1;
         den = den +(expnbp*pow((1 - expnbp),(il - 1)))*(expnbs*pow((1 - expnbs),((bl + br) - il - 1)));
     }
@@ -80,15 +80,15 @@ double Delta::bigshift(double p, double s, int c, int l, int r){
     mpfr_class expnbc = exp(-bc);
     num = (expnbc*pow((1.0 - expnbc),(bl - 1.0)))*(expnbc*pow((1.0 - expnbc),(br - 1.0)));
     den = 0;
-    for (mpfr_class i=0;i<(l+r-1);i++){
+    for (mpfr_class i=0; i < (l+r-1); i++) {
         mpfr_class il=i+1;
         den = den +(expnbc*pow((1 - expnbc),(il - 1)))*(expnbc*pow((1 - expnbc),((bl + br) - il - 1)));
     }
 
     mpfr_class bigright = 0;
-    try{
+    try {
         bigright = log(num/den);
-    }catch( char * str ) {
+    } catch( char * str ) {
         return LARGE;
     }
     //cout << "bl:" << bigleft << "\tbr:"<< bigright << endl;
@@ -97,27 +97,27 @@ double Delta::bigshift(double p, double s, int c, int l, int r){
     return x;
 }
 
-double Delta::cdf(double del){
+double Delta::cdf(double del) {
     double pvalue = 1-gsl_cdf_gaussian_P(del, 1.3);
     return pvalue;
 }
 
-vector<double> Delta::delta(int l, int r,int o){
+vector<double> Delta::delta(int l, int r,int o) {
     OptimizeShift os(this);
     os.setCLR(1,l+r,o);
     vector<double> resout = os.optimize_shift();
     double out;
-    if (l > 100 || r > 100 || o > 100){
+    if (l > 100 || r > 100 || o > 100) {
         out =  bigshift(resout[0],resout[1],1,l+r,o);
-    }else{
+    } else {
         out =  shift(resout[0],resout[1],1,l+r,o);
     }
     os.setCLR(1,l,r);
     resout = os.optimize_shift();
     double in;
-    if (l > 100 || r > 100 || o > 100){
+    if (l > 100 || r > 100 || o > 100) {
         in = bigshift(resout[0],resout[1],1,l,r);
-    }else{
+    } else {
         in = shift(resout[0],resout[1],1,l,r);
     }
     vector<double> ret;
@@ -127,36 +127,35 @@ vector<double> Delta::delta(int l, int r,int o){
 }
 
 
+OptimizeShift::OptimizeShift(Delta * delt):delta(delt),maxiterations(10000),stoppingprecision(0.001),c(0),l(0),r(0) {}
 
-OptimizeShift::OptimizeShift(Delta * delt):delta(delt),maxiterations(10000),stoppingprecision(0.001),c(0),l(0),r(0){}
-
-void OptimizeShift::setCLR(int ce, int le, int ri){
-    c = ce;l = le;r = ri;
+void OptimizeShift::setCLR(int ce, int le, int ri) {
+    c = ce; l = le; r = ri;
 }
 
-double OptimizeShift::GetShift(const gsl_vector * variables){
+double OptimizeShift::GetShift(const gsl_vector * variables) {
     double p=gsl_vector_get(variables,0);
     double s=gsl_vector_get(variables,1);
     double shift;
-    if (c > 100 || l > 100 || r > 100){
+    if (c > 100 || l > 100 || r > 100) {
         shift = delta->bigshift(p,s,c,l,r);
-    }else{
+    } else {
         shift = delta->shift(p,s,c,l,r);
     }
-    if(shift == std::numeric_limits<double>::infinity() || isnan(shift)) {
+    if (shift == std::numeric_limits<double>::infinity() || isnan(shift)) {
         shift = 100000000;
     }
     return shift;
 }
 
 
-double OptimizeShift::GetShift_gsl(const gsl_vector * variables, void *obj){
+double OptimizeShift::GetShift_gsl(const gsl_vector * variables, void *obj) {
     double temp;
     temp = ((OptimizeShift*)obj)->GetShift(variables);
     return temp;
 }
 
-vector<double> OptimizeShift::optimize_shift(){
+vector<double> OptimizeShift::optimize_shift() {
     //need to check the performance on this
     const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2rand;
     gsl_multimin_fminimizer *s = NULL;
@@ -185,10 +184,10 @@ vector<double> OptimizeShift::optimize_shift(){
     minex_func.n = np;
     s = gsl_multimin_fminimizer_alloc (T, np);
     gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
-    do{
+    do {
         iter++;
         status = gsl_multimin_fminimizer_iterate(s);
-        if (status!=0) { //0 Means it's a success
+        if (status != 0) { //0 Means it's a success
             printf ("error: %s\n", gsl_strerror (status));
             break;
         }

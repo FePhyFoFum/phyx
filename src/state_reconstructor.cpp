@@ -70,7 +70,7 @@ void StateReconstructor::set_tree(Tree * tr) {
                         double s = 0;
                         if (pers.size() == 1)
                             s = pers[0];
-                        for (unsigned int k=0;k<j+1;k++) {
+                        for (unsigned int k=0; k < j+1; k++) {
                             s += pers[k];
                         }
                         if (t < s) {
@@ -209,7 +209,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node) {
         p = rm.stored_p_matrices[node.getBL()];
     }
     for (int j=0; j < nstates; j++) {
-        for (int k=0;k<nstates;k++) {
+        for (int k=0; k < nstates; k++) {
             v->at(j) += (distconds.at(k)*real(p(j, k)));
         }
     }
@@ -345,7 +345,7 @@ void StateReconstructor::reverse(Node * node) {
         }
         node->assocObject(revB,*revconds);
         delete revconds;
-        for (int i = 0;i<node->getChildCount(); i++) {
+        for (int i = 0; i < node->getChildCount(); i++) {
             reverse(node->getChild(i));
         }
     } else {
@@ -391,7 +391,7 @@ void StateReconstructor::reverse(Node * node) {
             EN = &stored_EN_matrices[node->getBL()];
             ER = &stored_ER_matrices[node->getBL()];
         }
-        for (int j=0;j < nstates; j++) {
+        for (int j=0; j < nstates; j++) {
             for (int i = 0; i < nstates; i++) {
                 revconds->at(j) += tempA[i]*real((*p)(i, j));//tempA needs to change each time
                 if (stochastic == true) {
@@ -409,7 +409,7 @@ void StateReconstructor::reverse(Node * node) {
         }
         node->assocObject(revB,*revconds); // leak
         delete revconds;
-        for (int i = 0;i<node->getChildCount(); i++) {
+        for (int i = 0; i < node->getChildCount(); i++) {
             reverse(node->getChild(i));
         }
     }

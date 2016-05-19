@@ -12,33 +12,33 @@ using namespace std;
 #include "sequence.h"
 #include "utils.h"
 
-void read_scoring_matrix(char * filename, map<char, map<char,int> > & sc_mat){
+void read_scoring_matrix(char * filename, map<char, map<char,int> > & sc_mat) {
     ifstream fstr(filename);
     sc_mat.clear();
     vector<char> order;
     bool first = true;
     string line;
-    while(getline(fstr,line)){
-        if (line[0] == '#'){
+    while (getline(fstr,line)) {
+        if (line[0] == '#') {
             continue;
-        }else{
+        } else {
             vector<string> tokens;
             string del(" \t");
             tokenize(line,tokens,del);
-            for(unsigned int i=0; i < tokens.size(); i++){
+            for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
-            if (first == true){
+            if (first == true) {
                 first = false;
-                for (unsigned int i=0; i < tokens.size(); i++){
+                for (unsigned int i=0; i < tokens.size(); i++) {
                     order.push_back(tokens[i][0]);
                 }
-                for (unsigned int j=0; j < order.size(); j++){
+                for (unsigned int j=0; j < order.size(); j++) {
                     sc_mat[order[j]] = map<char,int>();
                 }
                 continue;
             }
-            for (unsigned int j=0; j < order.size(); j++){
+            for (unsigned int j=0; j < order.size(); j++) {
                 sc_mat[tokens[0][0]][order[j]] = atoi(tokens[j+1].c_str()); //#changed from int to float
             }
         }
@@ -46,19 +46,19 @@ void read_scoring_matrix(char * filename, map<char, map<char,int> > & sc_mat){
     fstr.close();
 }
 
-void read_scoring_matrix_from_lines(vector<string> & lines, map<char,map<char,int> > & sc_mat){
+void read_scoring_matrix_from_lines(vector<string> & lines, map<char, map<char, int> > & sc_mat) {
     sc_mat.clear();
     vector<char> order;
     bool first = true;
-    for (unsigned int i=0; i < lines.size(); i++){
+    for (unsigned int i=0; i < lines.size(); i++) {
         string line = lines[i];
         if (line[0] == '#') {
             continue;
-        }else{
+        } else {
             vector<string> tokens;
             string del(" \t");
             tokenize(line,tokens,del);
-            for(unsigned int i=0; i < tokens.size(); i++){
+            for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
             if (first == true) {
@@ -78,7 +78,7 @@ void read_scoring_matrix_from_lines(vector<string> & lines, map<char,map<char,in
     }
 }
 
-void get_ednafull(map<char, map<char,int> > & sc_mat){
+void get_ednafull(map<char, map<char,int> > & sc_mat) {
     vector<string> sts;
     sts.push_back("#");
     sts.push_back("# This matrix was created by Todd Lowe   12/10/92");
@@ -108,7 +108,7 @@ void get_ednafull(map<char, map<char,int> > & sc_mat){
     read_scoring_matrix_from_lines(sts,sc_mat);
 }
 
-void get_blosum62(map<char, map<char,int> > & sc_mat){
+void get_blosum62(map<char, map<char,int> > & sc_mat) {
     vector<string> sts;
     sts.push_back("#  Matrix made by matblas from blosum62.iij");
     sts.push_back("#  * column uses minimum score");

@@ -58,7 +58,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
             continue;
         }
         vector<Node *> nds;
-        for (int j=0;j<tnd->getChildCount();j++) {
+        for (int j=0; j < tnd->getChildCount(); j++) {
             nds.push_back(tnd->getChild(j));
         }
         if (tnd->getParent() == tr->getRoot() && rooted == true) {

@@ -167,13 +167,13 @@ void BirthDeathSimulator::delete_dead_nodes() {
     /*
     vector<Node *> kill;
     set_distance_to_tip();
-    for (int i=0; i<tree->getExternalNodeCount();i++) {
+    for (int i=0; i<tree->getExternalNodeCount(); i++) {
         if (abs(get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()) > 3.55271e-14) {
             kill.push_back(tree->getExternalNode(i));
             cout << get_distance_from_tip(tree->getExternalNode(i)) << " "<< root->getHeight() << " " << get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()<<  endl;
         }
     }
-    for (unsigned int i=0;i<kill.size();i++) {
+    for (unsigned int i=0; i < kill.size(); i++) {
         delete_a_node(kill[i]);
     }*/
 }

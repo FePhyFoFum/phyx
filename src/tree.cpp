@@ -62,7 +62,7 @@ Node * Tree::getInternalNode(int num) {
  */
 Node * Tree::getInternalNode(string & name) {
     Node * ret = NULL;
-    for(int i=0; i < internalNodeCount; i++) {
+    for (int i=0; i < internalNodeCount; i++) {
         if (internalNodes.at(i)->getName() == name) {
             ret = internalNodes.at(i);
         }
@@ -77,14 +77,14 @@ int Tree::getExternalNodeCount() {
 int Tree::getExtantNodeCount() {
     setHeightFromRootToNodes();
     double largest = 0;
-    for(int i=0; i < externalNodeCount; i++) {
+    for (int i=0; i < externalNodeCount; i++) {
         double th = getExternalNode(i)->getHeight();
         if (th > largest) {
             largest = th;
         }
     }
     int count = 0;
-    for(int i=0; i < externalNodeCount; i++) {
+    for (int i=0; i < externalNodeCount; i++) {
         double th = getExternalNode(i)->getHeight();
         if (fabs(th-largest) < 0.00001) {
             count += 1;
@@ -404,7 +404,7 @@ void Tree::pruneExternalNode(Node * node) {
                 break;
             }
         }
-    }else{
+    } else {
         root = other;
     }
     delete node;

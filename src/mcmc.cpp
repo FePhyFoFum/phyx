@@ -53,7 +53,7 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
             startk = newk;
             startw = neww;
         }
-        if(i%sampleiter == 0) {
+        if (i%sampleiter == 0) {
             cout << "iter: "<< i << " like: " << curlike << " K: "<< startk <<" w: " << startw << endl;
         }
     }

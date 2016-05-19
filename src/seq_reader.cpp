@@ -149,7 +149,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             if (first == true && retstring.size() > 0) {
                 tline = retstring;
                 retstring = "";
-            } else{
+            } else {
                 if (!getline(stri, tline)) {
                     seq.set_sequence(curseq);
                     return false;
@@ -161,12 +161,12 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
-                } else{
+                } else {
                     seq.set_sequence(curseq);
                     retstring = tline;
                     return true;
                 }
-            } else{
+            } else {
                 curseq.append(tline);
             }
         }
@@ -211,7 +211,7 @@ int test_char_filetype_stream(istream & stri, string & retstring) {
         ret = 0;
     } else if (retstring[0] == '>') {
         ret = 2;
-    } else{    
+    } else {    
         vector<string> tokens;
         string del(" \t");
         tokenize(retstring,tokens,del);
@@ -244,7 +244,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
                 trim_spaces(tokens[0]);
                 if (is_number(tokens[0])) {
                     getline(stri,tline);
-                } else{
+                } else {
                     tline = retstring;
                 }
             }
@@ -257,7 +257,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
         }
         tokens.clear();
         tokenize(tline,tokens,del);
-        for(unsigned int i=0; i < tokens.size(); i++) {
+        for (unsigned int i=0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
         if (tokens[0].size() == 0) {
@@ -280,11 +280,11 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
             if (first == true && retstring.size() > 0) {
                 tline = retstring;
                 retstring = "";
-            } else{
+            } else {
                 if (!getline(stri, tline)) {
                     tokens.clear();
                     tokenize(curseq,tokens,del);
-                    for(unsigned int i=0; i < tokens.size(); i++) {
+                    for (unsigned int i=0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
                     if (tokens[0].size() == 0) {
@@ -302,11 +302,11 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
-                } else{
+                } else {
                     //split the tokens by spaces
                     tokens.clear();
                     tokenize(curseq,tokens,del);
-                    for(unsigned int i=0; i < tokens.size(); i++) {
+                    for (unsigned int i=0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
                     if (tokens[0].size() == 0) {
@@ -318,7 +318,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
                     retstring = tline;
                     return true;
                 }
-            } else{
+            } else {
                 curseq.append(tline);
             }
         }
@@ -411,7 +411,7 @@ bool read_phylip_file(string filen, vector <Sequence>& seqs) {
     while (getline(infile, tline)) {
         vector<string> searchtokens;
         tokenize(tline, searchtokens, "\t    ");
-        for(unsigned int j=0;j<searchtokens.size();j++) {
+        for (unsigned int j=0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         if (first == true) { //reading past the first line
@@ -455,14 +455,14 @@ bool read_fasta_file(string filen, vector <Sequence>& seqs) {
                 cur = Sequence();
                 cur.set_id(id_);
                 curseq = "";
-            } else{
+            } else {
                 cur.set_sequence(curseq);
                 seqs.push_back(cur);
                 cur = Sequence();
                 cur.set_id(id_);
                 curseq = "";
             }
-        } else{
+        } else {
             curseq += tline;
         }
     }
@@ -481,7 +481,7 @@ bool read_phylip_file_strec(string filen, vector <Sequence>& seqs) {
     while (getline(infile, tline)) {
         vector<string> searchtokens;
         tokenize(tline, searchtokens, "\t");
-        for(unsigned int j=0;j<searchtokens.size();j++) {
+        for (unsigned int j=0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         if (first == true) { //reading past the first line

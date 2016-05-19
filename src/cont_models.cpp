@@ -13,18 +13,18 @@ using namespace arma;
 #define E 2.718281828459045
 
 
-void calc_vcv(Tree * tree, mat & vcv){
+void calc_vcv(Tree * tree, mat & vcv) {
     int numlvs = tree->getExternalNodeCount();
     vcv = mat(numlvs,numlvs);
     int count = 0;
-    for (int i=0;i<numlvs;i++){
+    for (int i=0; i < numlvs; i++) {
         int count2 = 0;
-        for (int j=0;j<numlvs;j++){
-            if (i != j){
+        for (int j=0; j < numlvs; j++) {
+            if (i != j) {
                 Node * a = getMRCA_forVCV(tree->getExternalNode(i),tree->getExternalNode(j));
                 double length = get_length_to_root(a);
                 vcv(count,count2) = length;
-            }else{
+            } else {
                 double length = get_length_to_root(tree->getExternalNode(i));
                 vcv(count,count2) = length;
             }
@@ -40,7 +40,7 @@ void calc_vcv(Tree * tree, mat & vcv){
  * can be a little slow, so probably best to use
  * getMRCAFromPath_forVCV
  */
-Node * getMRCA_forVCV(Node * curn1,Node * curn2){
+Node * getMRCA_forVCV(Node * curn1,Node * curn2) {
     Node * mrca = NULL;
     //get path to root for first node
     vector<Node *> path1;
@@ -48,10 +48,11 @@ Node * getMRCA_forVCV(Node * curn1,Node * curn2){
     path1.push_back(parent);
     while (parent != NULL) {
         path1.push_back(parent);
-        if (parent->getParent() != NULL)
+        if (parent->getParent() != NULL) {
             parent = parent->getParent();
-        else
+        } else {
             break;
+        }
     }
     //find first match between this node and the first one
     parent = curn2;
@@ -75,7 +76,7 @@ Node * getMRCA_forVCV(Node * curn1,Node * curn2){
  * obtained path and finds the match with the second node
  */
 
-Node * getMRCAFromPath_forVCV(vector<Node *> * path1,Node * curn2){
+Node * getMRCAFromPath_forVCV(vector<Node *> * path1,Node * curn2) {
     Node * mrca = NULL;
     Node * parent = curn2;
     bool x = true;
@@ -102,11 +103,11 @@ x should be a vector
 mu should be a vector
 sigma should be vcv with sigma already applied
  */
-double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
+double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma) {
     unsigned int size = x.n_cols;
-    if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size){
+    if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET = det(sigma);
-        if (DET == 0){
+        if (DET == 0) {
             cerr << "The covariance matrix can't be singular" << endl;
             exit(0);
         }
@@ -117,19 +118,19 @@ double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
         double result = pow(E, -0.5 * big1);
         double final = norm_const * result;
         return final;
-    }else{
+    } else {
         cerr << "The dimensions of the input don't match" << endl;
         exit(0);
     }
 }
 
-double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
+double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma) {
     unsigned int size = x.n_cols;
-    if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size){
+    if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET;
         double sign;
         log_det(DET,sign,sigma);
-        if (DET == 0){
+        if (DET == 0) {
             cerr << "The covariance matrix can't be singular" << endl;
             exit(0);
         }
@@ -142,7 +143,7 @@ double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
         rowvec ancA = x - mu;
         double final = -.5 * (dot(invC2*trans(ancA),ancA))-0.5 * DET -0.5 * (size * log(2*PI));
         return final;
-    }else{
+    } else {
         cerr << "The dimensions of the input don't match" << endl;
         exit(0);
     }
@@ -152,11 +153,11 @@ double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma){
  * assumes that the characters are in get_cont_char and that the 
  * results will be in assocDoubleVector as val and valse
  */
-void calc_square_change_anc_states(Tree * tree, int index){
+void calc_square_change_anc_states(Tree * tree, int index) {
     int df = 0;
     int count = 0;
     map<Node *,int> nodenum;
-    for (int i=0;i<tree->getInternalNodeCount();i++){
+    for (int i=0; i < tree->getInternalNodeCount(); i++) {
         nodenum[tree->getInternalNode(i)] = count;
         count += 1;
         df += 1;
@@ -170,24 +171,25 @@ void calc_square_change_anc_states(Tree * tree, int index){
     vec mle;
     mat x = solve(trimatl(b.t())*b,fullVcp);
     count = 0;
-    for (int i=0;i<tree->getInternalNodeCount();i++){
+    for (int i=0; i < tree->getInternalNodeCount(); i++) {
         (*tree->getInternalNode(i)->getDoubleVector("val"))[index] = x(nodenum[tree->getInternalNode(i)],0);
         count += 1;
     }
 }
 
-void calc_postorder_square_change(Node * node,map<Node *,int> & nodenum, mat * fullMcp, mat * fullVcp, int index){
-    for(int i=0;i<node->getChildCount();i++){
+void calc_postorder_square_change(Node * node,map<Node *,int> & nodenum,
+    mat * fullMcp, mat * fullVcp, int index) {
+    for (int i=0; i < node->getChildCount(); i++) {
         calc_postorder_square_change(node->getChild(i),nodenum,fullMcp,fullVcp,index);    
     }
-    if (node->getChildCount() > 0){
+    if (node->getChildCount() > 0) {
         int nni = nodenum[node];
-        for (int j=0;j<node->getChildCount();j++){
+        for (int j=0; j < node->getChildCount(); j++) {
             double tbl = 2./node->getChild(j)->getBL();
             (*fullMcp)(nni,nni) += tbl;
-            if (node->getChild(j)->getChildCount() == 0){
+            if (node->getChild(j)->getChildCount() == 0) {
                 (*fullVcp)[nni] += (*node->getChild(j)->getDoubleVector("val"))[index] * tbl;
-            }else{
+            } else {
                 int nnj = nodenum[node->getChild(j)];
                 (*fullMcp)(nni,nnj) -= tbl;
                 (*fullMcp)(nnj,nni) -= tbl;

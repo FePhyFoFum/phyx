@@ -96,7 +96,7 @@ void StateReconstructorSimple::conditionals(vector<double> * v, Node & node,int 
     mat * p = &map_ps[node.getBL()];
     for (int j=0; j < nstates; j++) {
         v_storage[j] = 0;
-        for ( int k=0;k<nstates;k++) {
+        for ( int k=0; k < nstates; k++) {
             //v_storage[j] += (distconds.at(k)*(*p)(j,k));
             v_storage[j] += tdistconds->at(k)*(*p)(j, k);
         }
@@ -177,7 +177,7 @@ void StateReconstructorSimple::ancdist_conditional_lh(Node & node, int site) {
 //    } else {
 //    distconds = *((VectorNodeObject<double>*)node.getObject(dc));
 //    }
-//    for (unsigned int i=0;i<distconds.size();i++) {
+//    for (unsigned int i=0; i < distconds.size(); i++) {
 //    ((VectorNodeObject<double>*)node.getObject(dc))->at(i) = distconds.at(i);
 //    }
 }

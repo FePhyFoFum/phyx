@@ -338,7 +338,7 @@ vector<string> Node::get_leave_names() {
     stack<Node*> nodes;
     vector<string> names;
     nodes.push(this);
-    while(nodes.empty() == false) {
+    while (nodes.empty() == false) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {

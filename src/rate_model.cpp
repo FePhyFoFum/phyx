@@ -129,7 +129,7 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
     bool isImag = get_eigenvec_eigenval_from_Q(&eigval, &eigvec); // isImag is not used?
     //cout << eigval << endl;
     //cout << eigvec << endl;
-    for (int i=0; i < nstates;i++) {
+    for (int i=0; i < nstates; i++) {
         eigval(i, i) = exp(eigval(i, i) * bl);
     }
     cx_mat C_inv = inv(eigvec);
@@ -159,7 +159,7 @@ void RateModel::setup_P_simple(mat & p,double bl,bool store_p_matrices) {
     }
     mat C_inv = inv(eigvec_simple);
     p = eigvec_simple * eigval_simple * C_inv;
-/*    if(store_p_matrices == true) {
+/*    if (store_p_matrices == true) {
     stored_p_matrices[bl] = P;    
     }*/
     //return P;
@@ -210,8 +210,8 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
  */
 bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     if (sameQ == true) {
-        for (unsigned int i=0; i < Q.n_rows;i++) {
-            for (unsigned int j=0; j < Q.n_cols;j++) {
+        for (unsigned int i=0; i < Q.n_rows; i++) {
+            for (unsigned int j=0; j < Q.n_cols; j++) {
                 (*eigval)(i, j) = lasteigval(i, j);
                 (*eigvec)(i, j) = lasteigvec(i, j);
             }
