@@ -49,7 +49,6 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-    bool going = true;
     bool cfileset = false;
     bool tfileset = false;
     bool ofileset = false;
@@ -58,7 +57,7 @@ int main(int argc, char * argv[]) {
     char * charf;
     char * outf;
     int analysis = 0;
-    while (going) {
+    while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "c:t:o:a:hV", long_options, &oi);
         if (c == -1) {
@@ -122,7 +121,7 @@ int main(int argc, char * argv[]) {
     }
     Sequence seq;
     vector <Sequence> seqs;
-    map <string,int> seq_map;
+    map <string, int> seq_map;
     int y = 0;
     int nchars = 0 ;
     while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
@@ -148,9 +147,12 @@ int main(int argc, char * argv[]) {
     //cout << "Num trees = " << trees.size() << endl;
     
     //conduct analyses for each character
-    for (int c =0; c < nchars; c++) {
+    for (int c=0; c < nchars; c++) {
         cerr << "character: " << c << endl;
         if (analysis == 0) {
+            if (c == 0) {
+                cout << "#nexus" << endl << "begin trees;" << endl;
+            }
             for (int i=0; i < trees[0]->getExternalNodeCount(); i++) {
                 vector<Superdouble> tv (1);
                 tv[0] = seqs[seq_map[trees[0]->getExternalNode(i)->getName()]].get_cont_char(c);
@@ -161,8 +163,8 @@ int main(int argc, char * argv[]) {
                 tv[0] = 0;
                 trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
             }
-            cout << "here i am0" << endl;
-            calc_square_change_anc_states(trees[0],0);
+            //cout << "here i am0" << endl;
+            calc_square_change_anc_states(trees[0],0); // second character dies here
             for (int i=0; i < trees[0]->getInternalNodeCount(); i++) {
                 double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
                 trees[0]->getInternalNode(i)->deleteDoubleVector("val");
@@ -171,7 +173,6 @@ int main(int argc, char * argv[]) {
                 s << "[&value=" << tv << "]";
                 trees[0]->getInternalNode(i)->setName(s.str());
             }
-            cout << "here i am1" << endl;
             for (int i=0; i < trees[0]->getExternalNodeCount(); i++) {
                 double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
                 trees[0]->getExternalNode(i)->deleteDoubleVector("val");
@@ -180,10 +181,12 @@ int main(int argc, char * argv[]) {
                 s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
                 trees[0]->getExternalNode(i)->setName(s.str());
             }
-            cout << "here i am2" << endl;
-            cout << "#nexus\nbegin trees;\ntree a =";
-            cout << trees[0]->getRoot()->getNewick(true);
-            cout << ";\nend;\n" << endl;
+            cout << "tree tree" << c << " = ";
+            cout << trees[0]->getRoot()->getNewick(true) << ";" << endl;
+            if (c == (nchars - 1)) {
+                cout << "end;\n" << endl;
+            }
+            
         } else if (analysis == 1) {
             mat vcv;
             int t_ind = 0; // TODO: do this over trees
