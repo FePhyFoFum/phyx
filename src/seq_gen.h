@@ -49,7 +49,7 @@ private:
     
     // intermediate results
     map <Node *, string> seqs;
-    map <Node *, vector < vector <double> >> ancq;
+    map <Node *, vector < vector <double> > > ancq;
     vector < vector <double> > Qparent;
     
     // the result to return
@@ -62,7 +62,7 @@ private:
         vector <double> multirates, bool mm);
     vector <float> site_rates;
     vector < vector <double> > calculate_q_matrix ();
-    vector <vector<double>> calcQmatrix (vector<vector <double>>);
+    vector < vector<double> > calcQmatrix (vector<vector <double>>);
     vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix,
         float br);
     string simulate_sequence (string const& anc, vector < vector <double> >& Matrix,
