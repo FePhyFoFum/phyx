@@ -166,7 +166,7 @@ CPP_SRCS += \
 ./superdouble.cpp \
 ./cont_models.cpp \
 ./seq_sample.cpp \
-./seqgen.cpp \
+./seq_gen.cpp \
 ./concat.cpp \
 ./recode.cpp \
 ./clsq.cpp \
@@ -199,7 +199,7 @@ CPP_OBJS += \
 ./superdouble.o \
 ./cont_models.o \
 ./seq_sample.o \
-./seqgen.o \
+./seq_gen.o \
 ./concat.o \
 ./recode.o \
 ./clsq.o \
@@ -232,7 +232,7 @@ CPP_DEPS += \
 ./superdouble.d \
 ./cont_models.d \
 ./seq_sample.d \
-./seqgen.d \
+./seq_gen.d \
 ./concat.d \
 ./recode.d \
 ./clsq.d \

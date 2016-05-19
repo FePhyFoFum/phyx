@@ -271,7 +271,7 @@ RATE_DEPS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.f
-	$(FC) $(FFLAGS) -c $<
+	$(FC) $(FFLAGS) -c -w $<
 
 FORT_OBJS += \
 ./clock.o \
