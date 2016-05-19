@@ -180,7 +180,7 @@ CPP_SRCS += \
 ./superdouble.cpp \
 ./cont_models.cpp \
 ./seq_sample.cpp \
-./seqgen.cpp \
+./seq_gen.cpp \
 ./concat.cpp \
 ./recode.cpp \
 ./clsq.cpp \
@@ -198,7 +198,7 @@ RATE_SRCS += \
 ./branch_segment.cpp \
 ./mcmc.cpp \
 ./cont_models.cpp \
-./seqgen.cpp
+./seq_gen.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -232,7 +232,7 @@ RATE_OBJS += \
 ./branch_segment.o \
 ./mcmc.o \
 ./cont_models.o \
-./seqgen.o
+./seq_gen.o
 
 ## doesn't seem to be used
 CPP_DEPS += \
@@ -267,7 +267,7 @@ RATE_DEPS += \
 ./branch_segment.d \
 ./mcmc.d \
 ./cont_models.d \
-./seqgen.d
+./seq_gen.d
 
 # Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.f

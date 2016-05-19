@@ -15,7 +15,7 @@
 
 using namespace std;
 
-#include "seqgen.h"
+#include "seq_gen.h"
 #include "utils.h"
 #include "tree.h"
 #include "tree_reader.h"

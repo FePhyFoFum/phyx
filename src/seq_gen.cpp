@@ -19,7 +19,7 @@ using arma::randn;
 using arma::mat;
 using arma::expmat;
 
-#include "seqgen.h"
+#include "seq_gen.h"
 #include "utils.h"
 #include "node.h"
 #include "tree.h"
@@ -248,13 +248,13 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
                     rmatrix[2][2] = (multirates[1]+multirates[4]+multirates[5]) * -1;
                     rmatrix[3][3] = (multirates[2]+multirates[4]+multirates[6]) * -1;
 
-                    for (unsigned int i = 0; i < 7; i++){
+                    for (unsigned int i = 0; i < 7; i++) {
                         multirates.erase(multirates.begin() + 0);
                     }
                     //cout << "Size " << multirates.size() << endl;
                     //cout << multirates[0] << endl;
                     /*
-                    for (unsigned int i = 0; i < multirates.size(); i++){
+                    for (unsigned int i = 0; i < multirates.size(); i++) {
                         cout << multirates[i] << endl;
                     }*/        
                 }
