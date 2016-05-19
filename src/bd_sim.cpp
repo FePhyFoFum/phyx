@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <ctime>
+#include <random>
 
 using namespace std;
 
@@ -21,15 +22,20 @@ BirthDeathSimulator::BirthDeathSimulator(double estop, double tstop, double brat
     BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()) {
         if (seed == -1) {
             srand(get_clock_seed());
+            generator = mt19937(get_clock_seed());
         } else {
-            srand(seed);
+            //srand(seed);
+            generator = mt19937(seed);
         }
+        uniformDistrib = uniform_real_distribution<double>(0.0, 1.0);
     }
 
 BirthDeathSimulator::BirthDeathSimulator():failures(0),maxfailures(1000),birthrate(0.1),deathrate(0.05),
     sumrate(0.1+0.05),relative_birth_rate(0.1/(0.1+0.05)),extantstop(10),timestop(0),numofchanges(0),
     currenttime(0.0),extantnodes(vector<Node*>()),BIRTHTIME(map<Node*,double>()),DEATHTIME(map<Node*,double>()) {
-        srand(get_clock_seed());
+        //srand(get_clock_seed());
+        generator = mt19937(get_clock_seed());
+        uniformDistrib = uniform_real_distribution<double>(0.0, 1.0);
     }
 
 void BirthDeathSimulator::setup_parameters() {
@@ -114,12 +120,18 @@ bool BirthDeathSimulator::check_stop_conditions() {
 }
 
 double BirthDeathSimulator::time_to_next_sp_event() {
-    double num = rand() / double(RAND_MAX);
+    //double num = rand() / double(RAND_MAX);
+    double num = uniformDistrib(generator);
     return (-log(num))/ ( (extantnodes.size()) * sumrate);
 }
 
 void BirthDeathSimulator::event() {
-    int random_integer = 0+int((extantnodes.size()-1)*rand()/(RAND_MAX + 1.0));
+    //int random_integer = 0 + int((extantnodes.size()-1) * rand() / (RAND_MAX + 1.0));
+    //int random_integer = 0 + int((extantnodes.size()-1) * generator() / (generator.max() + 1.0));
+    std::uniform_int_distribution<int> intDistrib(0, (extantnodes.size()-1));
+    int random_integer = intDistrib(generator);
+    //cout << "extantnodes.size() = " << extantnodes.size() << "; random_integer = "
+    //    << random_integer << endl;
     Node * extant = extantnodes[random_integer];
     if (event_is_birth()) {
         node_birth(extant); // real speciation
@@ -213,7 +225,8 @@ void BirthDeathSimulator::delete_a_node(Node * innode) {
 }
 
 bool BirthDeathSimulator::event_is_birth() {
-    double x = rand() / double(RAND_MAX);
+    //double x = rand() / double(RAND_MAX);
+    double x = uniformDistrib(generator);
     if (x < relative_birth_rate) {
         return true;
     } else {

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <random>
 
 using namespace std;
 
@@ -27,6 +28,9 @@ private:
     map<Node*,double> DEATHTIME;
     Node* root;
     Tree* tree;
+    
+    mt19937 generator;
+    std::uniform_real_distribution<double> uniformDistrib;
 
     bool check_stop_conditions();
     double time_to_next_sp_event();
