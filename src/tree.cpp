@@ -93,6 +93,7 @@ int Tree::getExtantNodeCount() {
     return count;
 }
 
+// NOTE: this includes the root
 int Tree::getInternalNodeCount() {
     return internalNodeCount;
 }

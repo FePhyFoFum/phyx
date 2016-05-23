@@ -47,6 +47,10 @@ BD_SRC = main_bd.cpp
 BD_OBJ = main_bd.o
 BD_DEP = main_bd.d
 
+BD_INF_SRC = main_bd_inf.cpp
+BD_INF_OBJ = main_bd_inf.o
+BD_INF_DEP = main_bd_inf.d
+
 NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
 NNI_DEP = main_nni.d
@@ -287,7 +291,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxbdinf pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -312,6 +316,10 @@ pxconseq: $(CPP_OBJS) $(CONSEQ_OBJ)
 pxbd: $(CPP_OBJS) $(BD_OBJ)
 	@echo 'building pxbd'
 	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS)
+
+pxbdinf: $(CPP_OBJS) $(BD_INF_OBJ)
+	@echo 'building pxbdinf'
+	$(CXX) -o "pxbdinf" $(OPT_FLAGS) $(BD_INF_OBJ) $(CPP_OBJS)
 
 pxnni: $(CPP_OBJS) $(NNI_OBJ)
 	@echo 'building pxnni'
