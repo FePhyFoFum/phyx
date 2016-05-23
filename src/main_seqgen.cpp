@@ -68,6 +68,7 @@ static struct option const long_options[] =
     {"ancestors", no_argument, NULL, 'a'},
     {"printnodelabels", no_argument, NULL, 'p'},
     {"multimodel", required_argument, NULL, 'm'},
+    {"rootseq", required_argument, NULL, 'k'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
