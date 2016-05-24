@@ -15,6 +15,7 @@ private:
     double nintnodes;
     double nspeciation;
     double lambda;
+    double epsilon;
     
     
 

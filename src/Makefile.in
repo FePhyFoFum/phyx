@@ -216,6 +216,7 @@ CPP_OBJS += \
 ./seq_models.o \
 ./pairwise_alignment.o \
 ./bd_sim.o \
+./bd_inf.o \
 ./upgma.o \
 ./superdouble.o \
 ./seq_sample.o \
@@ -251,6 +252,7 @@ CPP_DEPS += \
 ./seq_models.d \
 ./pairwise_alignment.d \
 ./bd_sim.d \
+./bd_inf.d \
 ./upgma.d \
 ./superdouble.d \
 ./seq_sample.d \
