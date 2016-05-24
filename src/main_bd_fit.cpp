@@ -9,6 +9,7 @@
 #include <string>
 #include <cstring>
 #include <getopt.h>
+#include <cmath>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ using namespace std;
 #include "tree.h"
 #include "tree_utils.h"
 #include "utils.h"
-#include "bd_inf.h"
+#include "bd_fit.h"
 
 void print_help () {
     cout << "Birth-death inference" << endl;
@@ -120,51 +121,15 @@ int main(int argc, char * argv[]) {
     
     bool going = true;
     Tree * tree;
-    tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
-    
-    double treelength = get_tree_length(tree);
-    double numnodes = tree->getInternalNodeCount();
-    double numspeciations = numnodes - 1.0;
-    
-    // ML estimate of lambda
-    double lambda = numspeciations / treelength;
-    
-    double PI = 3.1415926535897932384626433832795;
-    double x = numnodes + 1;
-    double lfact_n = (x - 0.5)*log(x) - x + 0.5*log(2*PI) + 1.0/(12.0*x);
-    
-    double lik = numspeciations * log(lambda) - lambda * treelength + lfact_n;
-    
-    cout << endl << "num tips: " << tree->getExternalNodeCount() << endl;
-    cout << "tree length: " << treelength << endl;
-    cout << "lambda: " << lambda << endl;
-    cout << "likelihood: " << lik << endl;
-    
-    delete tree;
-    
-    /*
-    BirthDeathSimulator bd(ext, time, birth, death, seed);
-    for (int i = 0; i < nreps; i++) {
-        Tree * bdtr = bd.make_tree(showd);
-        
-        if (ext != 0) {
-            int countlimit = 100;
-            int count = 1;
-            // the following doesn't get called. the bd sim handles failures itself.
-            while (bdtr->getExtantNodeCount() != ext) {
-                delete (bdtr);
-                bdtr = bd.make_tree(showd);
-                if (count >= countlimit) {
-                    cout << "can't seem to get the tips right after " << countlimit << " trials" << endl;
-                    break;
-                }
-                count ++;
-            }
+    while (going) {
+        tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+        if (going) {
+            BDFit bd(tree, model);
+            bd.get_pars(poos);
+            delete tree;
         }
-        
-        (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
     }
-    */
+    
     if (outfileset) {
         ofstr->close();
         delete poos;
