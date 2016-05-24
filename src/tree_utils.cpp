@@ -49,6 +49,20 @@ double get_length_to_root(Node * n) {
     return length;
 }
 
+// assumes annotations are of form: [something]
+void remove_annotations(Tree * tr) {
+    // remove annotations for next character
+    for (int i=0; i < tr->getInternalNodeCount(); i++) {
+        tr->getInternalNode(i)->setName("");
+    }
+    for (int i=0; i < tr->getExternalNodeCount(); i++) {
+        string str = tr->getExternalNode(i)->getName();
+        std::size_t found = str.find_first_of("[");
+        str.erase(found);
+        tr->getExternalNode(i)->setName(str);
+    }
+}
+
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);

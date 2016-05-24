@@ -19,6 +19,8 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*, vector<Node*> > &);
 void nni_from_tree_map(Tree * tr, map<Node*, vector<Node*> > &);
 double get_length_to_root(Node * n);
 
+void remove_annotations(Tree * tr);
+
 bool is_rooted (Tree * tr);
 double get_tree_length (Tree * tr);
 bool is_ultrametric_tips (Tree * tr);
