@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
-#include <math.h>
+//#include <math.h>
+#include <cmath>
 #include <armadillo>
 
 using namespace arma;
@@ -8,9 +9,7 @@ using namespace arma;
 #include "tree_utils.h"
 #include "tree.h"
 #include "cont_models.h"
-
-#define PI 3.1415926535897932384626433832795
-#define E 2.718281828459045
+#include "constants.h" // for PI and E
 
 
 void calc_vcv(Tree * tree, mat & vcv) {
