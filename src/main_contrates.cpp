@@ -150,6 +150,7 @@ int main(int argc, char * argv[]) {
     for (int c=0; c < nchars; c++) {
         cerr << "character: " << c << endl;
         if (analysis == 0) {
+            cout << "Input tree: " << trees[0]->getRoot()->getNewick(true) << ";" << endl;
             if (c == 0) {
                 cout << "#nexus" << endl << "begin trees;" << endl;
             }
@@ -186,6 +187,8 @@ int main(int argc, char * argv[]) {
             if (c == (nchars - 1)) {
                 cout << "end;\n" << endl;
             }
+            // remove annotations
+            remove_annotations(trees[0]);
             
         } else if (analysis == 1) {
             mat vcv;
