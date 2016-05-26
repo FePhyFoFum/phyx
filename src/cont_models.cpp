@@ -165,6 +165,8 @@ void calc_square_change_anc_states(Tree * tree, int index) {
     df -= 1;
     mat fullMcp(df+1,df+1);
     vec fullVcp(df+1);
+    fullMcp.fill(0.0);
+    fullVcp.fill(0.0);
     calc_postorder_square_change(tree->getRoot(),nodenum,&fullMcp,&fullVcp,index);
     mat b = chol(fullMcp);
     vec mle;

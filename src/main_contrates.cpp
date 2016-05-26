@@ -150,7 +150,7 @@ int main(int argc, char * argv[]) {
     for (int c=0; c < nchars; c++) {
         cerr << "character: " << c << endl;
         if (analysis == 0) {
-            cout << "Input tree: " << trees[0]->getRoot()->getNewick(true) << ";" << endl;
+           // cout << "Input tree: " << trees[0]->getRoot()->getNewick(true) << ";" << endl;
             if (c == 0) {
                 cout << "#nexus" << endl << "begin trees;" << endl;
             }
@@ -164,7 +164,6 @@ int main(int argc, char * argv[]) {
                 tv[0] = 0;
                 trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
             }
-            //cout << "here i am0" << endl;
             calc_square_change_anc_states(trees[0],0); // second character dies here
             for (int i=0; i < trees[0]->getInternalNodeCount(); i++) {
                 double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
