@@ -69,6 +69,7 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     
     // Print out the nodes names
     if (printnodelabels == true) {
+        label_internal_nodes();
         print_node_labels();
         exit(0);
     }
