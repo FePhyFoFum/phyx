@@ -70,6 +70,7 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     // Print out the nodes names
     if (printnodelabels == true) {
         print_node_labels();
+        exit(0);
     }
     
     preorder_tree_traversal(tree, showancs, multirates, mm);
