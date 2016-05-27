@@ -9,6 +9,7 @@
 #include <string>
 #include <cstring>
 #include <getopt.h>
+#include <algorithm>
 #include <cmath>
 
 using namespace std;
@@ -124,9 +125,32 @@ int main(int argc, char * argv[]) {
     while (going) {
         tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
         if (going) {
-            BDFit bd(tree, model);
-            bd.get_pars(poos);
-            delete tree;
+            // in addition to checking ultramtericity, the following sets node heights
+            if (is_ultrametric_postorder(tree)) {
+                BDFit bd(tree, model);
+                bd.get_pars(poos);
+                /*
+                int n = tree->getInternalNodeCount();
+                
+                vector <double> els(n);
+                for (int i=0; i < n; i++) {
+                    cout << "node_" << i << " height: "
+                        << tree->getInternalNode(i)->getHeight() << endl;
+                    els[i] = tree->getInternalNode(i)->getHeight();
+                }
+                
+                cout << endl << "sorting vector (length = " << els.size() << ")" << endl << endl;
+                sort(els.begin(), els.end(), std::greater<double>());
+                
+                for (int i=0; i < n; i++) {
+                    cout << "node_" << i << " height: " << els[i] << endl;
+                }
+                */
+                delete tree;
+            } else {
+                cout << "Tree is not ultrametric. Exiting." << endl;
+                exit(0);
+            }
         }
     }
     

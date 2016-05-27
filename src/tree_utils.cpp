@@ -186,7 +186,7 @@ bool is_ultrametric_tips (Tree * tr) {
         ultrametric = true;
     }
     */
-    // this might be better, as it exists earlier on a fail.
+    // this might be better, as it exits earlier on a fail.
     /*
     vector <double>::iterator it = find_if_not(paths.begin()+1, paths.end(), bind(essentially_equal, placeholders::_1, paths[0]));
     if (it == end(paths)) {

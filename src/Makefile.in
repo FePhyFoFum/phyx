@@ -321,7 +321,7 @@ pxbd: $(CPP_OBJS) $(BD_OBJ)
 
 pxbdfit: $(CPP_OBJS) $(BD_FIT_OBJ)
 	@echo 'building pxbdfit'
-	$(CXX) -o "pxbdfit" $(OPT_FLAGS) $(BD_FIT_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxbdfit" $(OPT_FLAGS) $(BD_FIT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxnni: $(CPP_OBJS) $(NNI_OBJ)
 	@echo 'building pxnni'
