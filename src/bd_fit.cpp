@@ -122,7 +122,7 @@ void BDFit::fit_bd () {
     mu = lambda - r;
     
     likelihood = -minf;
-    cout << "found minimum after " << counter << " evaluations." << endl;
+    //cout << "found minimum after " << counter << " evaluations." << endl;
 }
 
 
