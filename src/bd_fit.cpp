@@ -152,6 +152,7 @@ double nlopt_bd_log_lik (const std::vector<double> &x, std::vector<double> &grad
 
 
 // calculate model-specific raw and small-sample-corrected AIC
+// 'n' here (numbr of data points) is taken as the number of terminals
 void BDFit::get_aic () {
     double K = 1.0;
     double n = ntips;

@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
     char * treef;
     char * outf;
     
-    string model = "yule";
+    string model = "bd";
     
     int seed = -1;
     while (1) {
@@ -129,23 +129,6 @@ int main(int argc, char * argv[]) {
             if (is_ultrametric_postorder(tree)) {
                 BDFit bd(tree, model);
                 bd.get_pars(poos);
-                /*
-                int n = tree->getInternalNodeCount();
-                
-                vector <double> els(n);
-                for (int i=0; i < n; i++) {
-                    cout << "node_" << i << " height: "
-                        << tree->getInternalNode(i)->getHeight() << endl;
-                    els[i] = tree->getInternalNode(i)->getHeight();
-                }
-                
-                cout << endl << "sorting vector (length = " << els.size() << ")" << endl << endl;
-                sort(els.begin(), els.end(), std::greater<double>());
-                
-                for (int i=0; i < n; i++) {
-                    cout << "node_" << i << " height: " << els[i] << endl;
-                }
-                */
                 delete tree;
             } else {
                 cout << "Tree is not ultrametric. Exiting." << endl;
