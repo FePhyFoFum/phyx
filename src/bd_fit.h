@@ -21,17 +21,21 @@ private:
     double r;
     double epsilon;
     double likelihood;
+    double aicc;
+    double aic;
     
     void fit_model ();
     void fit_yule ();
     void fit_bd ();
-    double nlopt_bd_log_lik (const std::vector<double> &x, std::vector<double> &grad,
-        void *data);
-    double foo (const std::vector<double> &x);
+    void get_aic ();
 
 public:
-    BDFit(Tree * intree, string const& modelflavour);
+    BDFit (Tree * intree, string const& modelflavour);
     void get_pars (ostream* poos);
 };
+
+// non-member function, as nlopt is weird with pointers...
+double nlopt_bd_log_lik (const std::vector<double> &x, std::vector<double> &grad,
+    void *data);
 
 #endif /* _BD_FIT_H_ */
