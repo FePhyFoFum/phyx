@@ -144,8 +144,6 @@ int main(int argc, char * argv[]) {
         trees.push_back(tr.readTree(retstring));
     }
     
-    //cout << "Num trees = " << trees.size() << endl;
-    
     //conduct analyses for each character
     for (int c=0; c < nchars; c++) {
         cerr << "character: " << c << endl;

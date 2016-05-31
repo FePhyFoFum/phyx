@@ -1,10 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-//#include <sstream>
 #include <cmath>
-//#include <limits>
-//#include <cstdlib>
 #include <algorithm>
 #include <nlopt.hpp>
 
@@ -63,13 +60,6 @@ void BDFit::fit_yule () {
     lambda = nspeciation / treelength;
     likelihood = nspeciation * log(lambda) - lambda * treelength
         + std::lgamma(nintnodes + 1.0);
-    /*
-    cout << "ntips: " << ntips << endl;
-    cout << "nintnodes: " << nintnodes << endl;
-    cout << "nspeciation: " << nspeciation << endl;
-    cout << "lambda: " << lambda << endl;
-    cout << "likelihood: " << likelihood << endl;
-    */
 }
 
 
@@ -152,7 +142,7 @@ double nlopt_bd_log_lik (const std::vector<double> &x, std::vector<double> &grad
 
 
 // calculate model-specific raw and small-sample-corrected AIC
-// 'n' here (numbr of data points) is taken as the number of terminals
+// 'n' here (number of data points) is taken as the number of terminals
 void BDFit::get_aic () {
     double K = 1.0;
     double n = ntips;
@@ -180,8 +170,8 @@ void BDFit::get_pars (ostream* poos) {
     } else {
         (*poos) << "lambda: " << lambda << endl;
         (*poos) << "mu: " << mu << endl;
-        (*poos) << "r: " << r << endl;
-        (*poos) << "epsilon: " << epsilon << endl;
+        (*poos) << "r (lambda-mu): " << r << endl;
+        (*poos) << "epsilon (mu/lambda): " << epsilon << endl;
     }
     
 }

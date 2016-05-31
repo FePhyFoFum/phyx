@@ -43,13 +43,13 @@ MRCANAME_SRC = main_mrca_name.cpp
 MRCANAME_OBJ = main_mrca_name.o
 MRCANAME_DEP = main_mrca_name.d
 
-BD_SRC = main_bd.cpp
-BD_OBJ = main_bd.o
-BD_DEP = main_bd.d
+BD_SIM_SRC = main_bd.cpp
+BD_SIM_OBJ = main_bd.o
+BD_SIM_DEP = main_bd.d
 
-BD_FIT_SRC = main_bd_fit.cpp
-BD_FIT_OBJ = main_bd_fit.o
-BD_FIT_DEP = main_bd_fit.d
+BD_FIT_SRC = main_bd_fit.cpp bd_fit.cpp
+BD_FIT_OBJ = main_bd_fit.o bd_fit.o
+BD_FIT_DEP = main_bd_fit.d bd_fit.d
 
 NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
@@ -216,7 +216,6 @@ CPP_OBJS += \
 ./seq_models.o \
 ./pairwise_alignment.o \
 ./bd_sim.o \
-./bd_fit.o \
 ./upgma.o \
 ./superdouble.o \
 ./seq_sample.o \
@@ -315,9 +314,9 @@ pxconseq: $(CPP_OBJS) $(CONSEQ_OBJ)
 	@echo 'building pxconseq'
 	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS)
 
-pxbd: $(CPP_OBJS) $(BD_OBJ)
+pxbd: $(CPP_OBJS) $(BD_SIM_OBJ)
 	@echo 'building pxbd'
-	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_SIM_OBJ) $(CPP_OBJS)
 
 pxbdfit: $(CPP_OBJS) $(BD_FIT_OBJ)
 	@echo 'building pxbdfit'
