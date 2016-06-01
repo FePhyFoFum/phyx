@@ -292,7 +292,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbd pxbdfit pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -314,9 +314,9 @@ pxconseq: $(CPP_OBJS) $(CONSEQ_OBJ)
 	@echo 'building pxconseq'
 	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS)
 
-pxbd: $(CPP_OBJS) $(BD_SIM_OBJ)
-	@echo 'building pxbd'
-	$(CXX) -o "pxbd" $(OPT_FLAGS) $(BD_SIM_OBJ) $(CPP_OBJS)
+pxbdsim: $(CPP_OBJS) $(BD_SIM_OBJ)
+	@echo 'building pxbdsim'
+	$(CXX) -o "pxbdsim" $(OPT_FLAGS) $(BD_SIM_OBJ) $(CPP_OBJS)
 
 pxbdfit: $(CPP_OBJS) $(BD_FIT_OBJ)
 	@echo 'building pxbdfit'

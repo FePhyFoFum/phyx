@@ -54,14 +54,12 @@ for n, x = (n+1); lfactorial(x) = (x - 0.5)*log(x) - x + 0.5*log(2*PI) + 1.0/(12
 
 Easier: factorial(n) = gamma(n+1)
         lfactorial(n) = std::lgamma(n+1)
-
 */
 void BDFit::fit_yule () {
     lambda = nspeciation / treelength;
     likelihood = nspeciation * log(lambda) - lambda * treelength
         + std::lgamma(nintnodes + 1.0);
 }
-
 
 
 void BDFit::fit_bd () {
