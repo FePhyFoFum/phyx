@@ -43,9 +43,9 @@ MRCANAME_SRC = main_mrca_name.cpp
 MRCANAME_OBJ = main_mrca_name.o
 MRCANAME_DEP = main_mrca_name.d
 
-BD_SIM_SRC = main_bd.cpp
-BD_SIM_OBJ = main_bd.o
-BD_SIM_DEP = main_bd.d
+BD_SIM_SRC = main_bd_sim.cpp
+BD_SIM_OBJ = main_bd_sim.o
+BD_SIM_DEP = main_bd_sim.d
 
 BD_FIT_SRC = main_bd_fit.cpp bd_fit.cpp
 BD_FIT_OBJ = main_bd_fit.o bd_fit.o
