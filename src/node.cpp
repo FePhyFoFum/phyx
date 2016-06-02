@@ -197,6 +197,7 @@ string Node::getNewick(bool bl) {
  * should be returning the stringnodeobjects as the names for internal
  * nodes
  */
+// this one does not seem to be used
 string Node::getNewick(bool bl, string obj) {
     string ret = "";
     for (int i=0; i < this->getChildCount(); i++) {

@@ -148,23 +148,13 @@ int main(int argc, char * argv[]) {
     BirthDeathSimulator bd(ext, time, birth, death, seed);
     for (int i = 0; i < nreps; i++) {
         Tree * bdtr = bd.make_tree(showd);
-        /*
-        if (ext != 0) {
-            int countlimit = 100;
-            int count = 1;
-            // the following doesn't get called. the bd sim handles failures itself.
-            while (bdtr->getExtantNodeCount() != ext) {
-                delete (bdtr);
-                bdtr = bd.make_tree(showd);
-                if (count >= countlimit) {
-                    cout << "can't seem to get the tips right after " << countlimit << " trials" << endl;
-                    break;
-                }
-                count ++;
-            }
+        if (bdtr->getExtantNodeCount() > 1) {
+            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
+        } else {
+            (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << endl;
         }
-        */
-        (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
+        
+        
     }
     if (outfileset) {
         ofstr->close();
