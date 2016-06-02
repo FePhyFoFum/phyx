@@ -54,20 +54,26 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead) {
     extantnodes.push_back(root);
     // reset failures to zero. don't want to accumulate errors across replicates
     failures = 0;
-    while (check_stop_conditions()) {
-        double dt = time_to_next_sp_event();
+    bool going = true;
+    while (going) {
+        double dt = time_to_next_event();
         currenttime += dt;
-        event();
-        if (extantnodes.size() < 1) {
-            failures += 1;
-            if (failures >= maxfailures) {
-                cout << "Reached maximum number of failures (" << failures << "). Quitting." << endl;
-                exit(0);
+        going = check_stop_conditions();
+        if (going) {
+            event();
+            if (extantnodes.size() < 1) {
+                failures += 1;
+                cout << "failed!" << endl;
+                if (failures >= maxfailures) {
+                    cout << "Reached maximum number of failures (" << failures
+                        << "). Quitting." << endl;
+                    exit(0);
+                }
+                setup_parameters();
+                root = new Node();//need to clean
+                BIRTHTIME[root] = currenttime;//need to clean
+                extantnodes.push_back(root);//empty
             }
-            setup_parameters();
-            root = new Node();//need to clean
-            BIRTHTIME[root] = currenttime;//need to clean
-            extantnodes.push_back(root);//empty
         }
     }
     
@@ -106,20 +112,23 @@ bool BirthDeathSimulator::check_stop_conditions() {
     bool keepgoing = true;
     if (extantstop > 0) {
         if ((int)extantnodes.size() >= extantstop) {
-            currenttime += time_to_next_sp_event();
+            // this ensures tips do not have 0 edge lengths
+            currenttime += time_to_next_event();
             keepgoing = false;
         }
     }
     if (timestop > 0) {
         if (currenttime >= timestop) {
-            //currenttime = timestop;
+            // definitely want this, or tree can be older than timestop
+            currenttime = timestop;
             keepgoing = false;
         }
     }
     return keepgoing;
 }
 
-double BirthDeathSimulator::time_to_next_sp_event() {
+// time until next event (rate = sum of birth + death)
+double BirthDeathSimulator::time_to_next_event() {
     //double num = rand() / double(RAND_MAX);
     double num = uniformDistrib(generator);
     return (-log(num))/ ( (extantnodes.size()) * sumrate);

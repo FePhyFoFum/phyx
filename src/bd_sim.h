@@ -33,7 +33,7 @@ private:
     std::uniform_real_distribution<double> uniformDistrib;
 
     bool check_stop_conditions();
-    double time_to_next_sp_event();
+    double time_to_next_event();
     void event();
     void node_death(Node *);
     void node_birth(Node *);
