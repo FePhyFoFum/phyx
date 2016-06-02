@@ -52,6 +52,10 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead) {
     root = new Node();
     BIRTHTIME[root] = currenttime;
     extantnodes.push_back(root);
+    
+    // actually want to start with 2 lineages
+    node_birth(extantnodes[0]);
+    
     // reset failures to zero. don't want to accumulate errors across replicates
     failures = 0;
     bool going = true;
