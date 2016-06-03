@@ -25,18 +25,17 @@ BirthDeathSimulator::BirthDeathSimulator(double estop, double tstop, double brat
         if (seed == -1) {
             generator = mt19937(get_clock_seed());
         } else {
-            //srand(seed);
             generator = mt19937(seed);
         }
         uniformDistrib = uniform_real_distribution<double>(0.0, 1.0);
     }
 
+// not used
 BirthDeathSimulator::BirthDeathSimulator():failures(0), maxfailures(1000),
     birthrate(0.1), deathrate(0.05), sumrate(0.1+0.05),
     relative_birth_rate(0.1/(0.1+0.05)), extantstop(10), timestop(0), numofchanges(0),
     currenttime(0.0), extantnodes(vector<Node*>()), BIRTHTIME(map<Node*, double>()),
     DEATHTIME(map<Node*, double>()) {
-        //srand(get_clock_seed());
         generator = mt19937(get_clock_seed());
         uniformDistrib = uniform_real_distribution<double>(0.0, 1.0);
     }
