@@ -23,7 +23,7 @@ using namespace std;
 void print_help () {
     cout << "Birth-death inference" << endl;
     cout << endl;
-    cout << "Usage: pxbdinf [OPTION]... " << endl;
+    cout << "Usage: pxbdfit [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
     cout << " -m, --model=STRING  diversification model; either 'yule' or 'bd' (default)" << endl;
@@ -36,7 +36,7 @@ void print_help () {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxbdinf 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv2\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxbdfit 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv2\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
