@@ -126,7 +126,8 @@ int main(int argc, char * argv[]) {
         tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
         if (going) {
             // in addition to checking ultramtericity, the following sets node heights
-            if (is_ultrametric_postorder(tree)) {
+            //if (is_ultrametric_postorder(tree)) {
+            if (is_ultrametric_tips(tree)) {
                 BDFit bd(tree, model);
                 bd.get_pars(poos);
                 delete tree;

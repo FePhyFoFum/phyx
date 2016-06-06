@@ -10,6 +10,8 @@
 #include <iterator>
 #include <functional>
 #include <iostream>
+#include <numeric>
+#include <algorithm>
 
 using namespace std;
 
@@ -17,6 +19,8 @@ using namespace std;
 #include "tree.h"
 #include "tree_utils.h"
 #include "utils.h"
+
+extern double EPSILON;
 
 int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2) {
     vector<Node *> vnd;
@@ -202,7 +206,23 @@ bool is_ultrametric_tips (Tree * tr) {
 
     exit(0);
     */
-
+    
+    // alternate approach: look at variance of paths, compare to EPSILON
+    double sum = std::accumulate(paths.begin(), paths.end(), 0.0);
+    double mean = sum / paths.size();
+    
+    std::vector<double> diff(paths.size());
+    std::transform(paths.begin(), paths.end(), diff.begin(),
+        std::bind2nd(std::minus<double>(), mean));
+    double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+    
+    double var = sq_sum / (double)paths.size();
+    
+    cout << "var = " << var << "; EPSILON = " << EPSILON << endl;
+    if (var < EPSILON) {
+        cout << "ultrametric!" << endl;
+    }
+    
     ultrametric = all_equal(paths);
 
     return ultrametric;
