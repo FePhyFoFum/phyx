@@ -37,6 +37,8 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
+string versionline("pxnni 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown");
+
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
@@ -54,11 +56,7 @@ int main(int argc, char * argv[]) {
     char * outf;
     char * seqf;
     int seed = -1;
-	/*
-    if (argc > 2) {
-        cout << "usage: pxnni newickfile" << endl;
-        exit(0);
-    }*/
+    
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:x:hV", long_options, &oi);
@@ -82,7 +80,7 @@ int main(int argc, char * argv[]) {
                 seed = atoi(strdup(optarg));
                 break;
             case 'V':
-                cout << "Version" << endl;
+                cout << versionline << endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -110,6 +108,7 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
     
+    // TODO: upgrade from srand
     if (seed != -1) {
         srand(seed);
     } else {
@@ -119,37 +118,13 @@ int main(int argc, char * argv[]) {
     TreeReader tr;
     vector<string> lines;
 
-    //reading from standard input for piping
-    /*
-    if (argc == 1) {
-        for (std::string line; std::getline(std::cin, line);) {
-            lines.push_back(line);
-        }
-    }*/
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
-    //reading from a file
-    /*
-    if (argc == 2) {
-        ifstream infile(argv[1]);
-        if (!infile) {
-            cerr << "Could not open treefile." << endl;
-            return 1;
-        }
-        string line;
-        while (getline(infile, line)) {
-            lines.push_back(line);
-        }
-        infile.close();
-    }*/
-    /*while (getline(infile, fstr)) {
-        lines.push_back(line);
-    }
-    infile.close();*/
+    
     int treeCounter = 0;
     bool going = true;
     if (ft == 1) { // newick. easy
@@ -185,13 +160,6 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    /*
-    Tree * tree = tr.readTree(lines[0]);
-    map<Node*,vector<Node*> > tree_map;
-    create_tree_map_from_rootnode(tree,tree_map);
-    nni_from_tree_map(tree,tree_map);
-	*/
-    //cout << tree->getRoot()->getNewick(true) << ";" << endl;
-    //delete tree;
+    
     return EXIT_SUCCESS;
 }
