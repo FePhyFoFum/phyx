@@ -29,6 +29,7 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
+    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
     cout << endl;
@@ -40,6 +41,7 @@ static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"outf", required_argument, NULL, 'o'},
+    {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -51,6 +53,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     char * outf;
     char * seqf;
+    int seed = -1;
 	/*
     if (argc > 2) {
         cout << "usage: pxnni newickfile" << endl;
@@ -58,7 +61,7 @@ int main(int argc, char * argv[]) {
     }*/
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -75,6 +78,9 @@ int main(int argc, char * argv[]) {
             case 'h':
                 print_help();
                 exit(0);
+            case 'x':
+                seed = atoi(strdup(optarg));
+                break;
             case 'V':
                 cout << "Version" << endl;
                 exit(0);
@@ -103,7 +109,13 @@ int main(int argc, char * argv[]) {
     } else {
         pios = &cin;
     }
-    srand(get_clock_seed());
+    
+    if (seed != -1) {
+        srand(seed);
+    } else {
+        srand(get_clock_seed());
+    }
+    
     TreeReader tr;
     vector<string> lines;
 
