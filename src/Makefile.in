@@ -292,7 +292,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxupgma pxclsq pxseqtest pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
