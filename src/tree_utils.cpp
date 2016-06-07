@@ -157,6 +157,25 @@ bool is_rooted (Tree * tr) {
 }
 
 
+bool is_binary (Tree * tr) {
+    bool binary = false;
+    
+    int nintnodes = tr->getInternalNodeCount();
+    int ntips = tr->getExternalNodeCount();
+    
+    if (is_rooted(tr)) {
+        if (nintnodes == ntips - 1) {
+            binary = true;
+        }
+    } else {
+        if (nintnodes = ntips - 2) {
+            binary = true;
+        }
+    }
+    return binary;
+}
+
+
 // sum of edge lengths
 double get_tree_length (Tree * tr) {
    double length = 0.0;

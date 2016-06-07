@@ -55,6 +55,10 @@ NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
 NNI_DEP = main_nni.d
 
+LS_TR_SRC = main_lstr.cpp
+LS_TR_OBJ = main_lstr.o
+LS_TR_DEP = main_lstr.d
+
 UPGMA_SRC = main_upgma.cpp
 UPGMA_OBJ = main_upgma.o
 UPGMA_DEP = main_upgma.d
@@ -187,6 +191,7 @@ CPP_SRCS += \
 ./seq_gen.cpp \
 ./concat.cpp \
 ./recode.cpp \
+./ls_tr.cpp \
 ./clsq.cpp \
 ./aatocdn.cpp \
 ./tlate.cpp \
@@ -221,6 +226,7 @@ CPP_OBJS += \
 ./seq_sample.o \
 ./concat.o \
 ./recode.o \
+./ls_tr.o \
 ./clsq.o \
 ./aatocdn.o \
 ./tlate.o \
@@ -257,6 +263,7 @@ CPP_DEPS += \
 ./seq_sample.d \
 ./concat.d \
 ./recode.d \
+./ls_tr.d \
 ./clsq.d \
 ./aatocdn.d \
 ./tlate.d \
@@ -292,7 +299,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxlstr pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -326,6 +333,10 @@ pxnni: $(CPP_OBJS) $(NNI_OBJ)
 	@echo 'building pxnni'
 	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
+pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
+	@echo 'building pxlstr'
+	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
+	
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
 	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)

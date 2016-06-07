@@ -22,6 +22,7 @@ double get_length_to_root(Node * n);
 void remove_annotations(Tree * tr);
 
 bool is_rooted (Tree * tr);
+bool is_binary (Tree * tr);
 double get_tree_length (Tree * tr);
 bool is_ultrametric_paths (Tree * tr);
 void set_node_heights (Node * node);

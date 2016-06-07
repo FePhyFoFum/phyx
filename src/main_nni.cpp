@@ -23,7 +23,7 @@ using namespace std;
 
 void print_help() {
     cout << "Nearest Neighbor Interchange Program" << endl;
-    cout << "This will take newick of nexus files" << endl;
+    cout << "This will take newick or nexus files" << endl;
     cout << endl;
     cout << "Usage: pxnni [OPTION]... " << endl;
     cout << endl;
@@ -84,7 +84,6 @@ int main(int argc, char * argv[]) {
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
-                //cout << "? Maybe try the help menu -h" << endl;
                 exit(0);
         }
     }
