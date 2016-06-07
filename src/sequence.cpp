@@ -79,7 +79,7 @@ void Sequence::infer_alpha () {
     string strcopy;
     unique_copy(str.begin(), str.end(), back_inserter(strcopy));
     for (size_t i=0; i < strcopy.length(); ++i) {
-	int num = count(str.begin(), str.end(), strcopy[i]);
+        int num = count(str.begin(), str.end(), strcopy[i]);
         if (is_prot_char(strcopy[i])) {
             proteinHit += num;
             validChars++;

@@ -31,7 +31,7 @@ void SequenceCleaner::read_sequences (istream* pios) {
         }
     }
     if (ft == 2) {
-		sequences[seq.get_id()] = seq.get_sequence();
+        sequences[seq.get_id()] = seq.get_sequence();
     }
     numTaxa = sequences.size();
 }
@@ -55,7 +55,7 @@ void SequenceCleaner::write_seqs (ostream* poos) {
     if (trimmedSeqs.size() == 0) {
         for (iter = sequences.begin(); iter != sequences.end(); iter++) {
             (*poos) << ">" << iter->first << endl;
-            (*poos) << "-" << endl;		
+            (*poos) << "-" << endl;
         }
     }
     for (iter = trimmedSeqs.begin(); iter != trimmedSeqs.end(); iter++) {
@@ -97,8 +97,8 @@ void SequenceCleaner::clean_sequences () {
     double MissingData[numChar];
     double PercentMissingData[numChar];
     for (int i = 0; i < numChar; i++) {
-		MissingData[i] = 0.0;
-	}
+        MissingData[i] = 0.0;
+    }
     string new_dna;
     unsigned int stillMissing = 0;
     
