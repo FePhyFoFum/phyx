@@ -27,6 +27,11 @@ void TreeInfo::calc_stats () {
     rooted_tree = is_rooted(tree);
     binary_tree = is_binary(tree);
     ultrametric_tree = is_ultrametric_paths(tree);
+    if (ultrametric_tree) {
+        rootheight = tree->getRoot()->getHeight();
+    } else {
+        rootheight = 0.0;
+    }
 }
 
 
@@ -38,5 +43,9 @@ void TreeInfo::get_stats (ostream* poos) {
     (*poos) << "branch lengths: " << std::boolalpha << has_branchlengths << endl;
     (*poos) << "treelength: " << treelength << endl;
     (*poos) << "ultrametric: " << std::boolalpha << ultrametric_tree << endl;
-    
+    if (ultrametric_tree) {
+        (*poos) << "rootheight: " << rootheight << endl;
+    } else {
+        (*poos) << "rootheight: NA" << endl;
+    }
 }

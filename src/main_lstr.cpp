@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
-                (*poos) << "tree #" << treeCounter << endl;
+                (*poos) << "tree #: " << treeCounter << endl;
                 TreeInfo ti(tree);
                 ti.get_stats(poos);
                 delete tree;
@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                (*poos) << "tree #" << treeCounter << endl;
+                (*poos) << "tree #: " << treeCounter << endl;
                 TreeInfo ti(tree);
                 ti.get_stats(poos);
                 delete tree;

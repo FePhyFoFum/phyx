@@ -18,8 +18,7 @@ private:
     double treelength;
     double nintnodes;
     double ntips;
-    double ageroot;
-    vector <double> branching_times;
+    double rootheight;
     
     void calc_stats ();
 
