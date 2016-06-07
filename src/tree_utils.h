@@ -23,7 +23,8 @@ void remove_annotations(Tree * tr);
 
 bool is_rooted (Tree * tr);
 double get_tree_length (Tree * tr);
-bool is_ultrametric_tips (Tree * tr);
+bool is_ultrametric_paths (Tree * tr);
+void set_node_heights (Node * node);
 bool is_ultrametric_postorder (Tree * tr);
 bool postorder_ultrametricity_check (Node * node, bool & ultrametric);
 

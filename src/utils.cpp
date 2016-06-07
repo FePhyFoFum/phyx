@@ -207,26 +207,6 @@ void print_error (char * pname, char arg) {
 }
 
 
-int sum_matrix_col (vector <vector <int> > & matrix,int col) {
-    int x=0;
-    for (unsigned int i=0; i < matrix.size(); i++) {
-        x += matrix[i][col];
-    }
-    return x;
-}
-
-
-int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
-    int x=0;
-    for (unsigned int i=0; i < matrix.size(); i++) {
-        if (matrix[i][col] < 0) {
-            x += matrix[i][col];
-        }
-    }
-    return x;
-}
-
-
 bool test_logical (vector <int> & matA, vector <int> & matB) {
     bool test = false;
     int match1 = 0;
@@ -249,9 +229,45 @@ bool test_logical (vector <int> & matA, vector <int> & matB) {
 }
 
 
+//------------------------------------------------------------------------//
 // simple math on vectors
+
+int sum_matrix_col (vector <vector <int> > & matrix,int col) {
+    int x=0;
+    for (unsigned int i=0; i < matrix.size(); i++) {
+        x += matrix[i][col];
+    }
+    return x;
+}
+
+
+int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
+    int x=0;
+    for (unsigned int i=0; i < matrix.size(); i++) {
+        if (matrix[i][col] < 0) {
+            x += matrix[i][col];
+        }
+    }
+    return x;
+}
+
+
 double mean (vector <double> & in) {
     return sum (in) / (double)in.size();
+}
+
+
+double variance (vector <double> & in) {
+    double meann = mean(in);
+    
+    std::vector<double> diff(in.size());
+    std::transform(in.begin(), in.end(), diff.begin(),
+        std::bind2nd(std::minus<double>(), meann));
+    double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+    
+    double var = sq_sum / (double)in.size();
+    
+    return var;
 }
 
 
@@ -265,6 +281,7 @@ int sum (vector <int> & in) {
 }
 
 
+// add element i in vec1 to element i in vec2
 vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
     
     // bail if sequences are of different lengths. should be caught earlier than this
@@ -278,6 +295,9 @@ vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
     std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<int>());
     return res;
 }
+
+
+//------------------------------------------------------------------------//
 
 
 string get_string_vector (vector <string> &sts) {
@@ -440,6 +460,9 @@ double logn (double x, double base) {
     return log10(x)/log10(base);
 }
 
+
+//------------------------------------------------------------------------//
+// equality checks //
 
 // check if 2 doubles are equal within some tolerance.
 bool essentially_equal (double a, double b) {

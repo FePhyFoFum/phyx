@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
         if (going) {
             // in addition to checking ultramtericity, the following sets node heights
             //if (is_ultrametric_postorder(tree)) {
-            if (is_ultrametric_tips(tree)) {
+            if (is_ultrametric_paths(tree)) {
                 BDFit bd(tree, model);
                 bd.get_pars(poos);
                 delete tree;

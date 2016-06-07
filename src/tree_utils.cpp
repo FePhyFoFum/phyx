@@ -41,6 +41,7 @@ int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2) {
     return count;
 }
 
+
 /*
  * calculates the branch lengths to the root
  */
@@ -52,6 +53,7 @@ double get_length_to_root(Node * n) {
     }
     return length;
 }
+
 
 // assumes annotations are of form: [something]
 void remove_annotations(Tree * tr) {
@@ -66,6 +68,7 @@ void remove_annotations(Tree * tr) {
         tr->getExternalNode(i)->setName(str);
     }
 }
+
 
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
     //check if rooted or unrooted
@@ -108,6 +111,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
     }    
 }
 
+
 void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
     bool success = false;
     while (success == false) {
@@ -142,6 +146,7 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
     return;
 }
 
+
 // moving to own function, as is generally useful
 bool is_rooted (Tree * tr) {
     bool rooted = false;
@@ -150,6 +155,7 @@ bool is_rooted (Tree * tr) {
     }
     return rooted;
 }
+
 
 // sum of edge lengths
 double get_tree_length (Tree * tr) {
@@ -162,6 +168,7 @@ double get_tree_length (Tree * tr) {
    return length;
 }
 
+
 /* Two possible approaches:
  * 1) get get_length_to_root for each external node
  *    - easy, but inefficient
@@ -170,7 +177,7 @@ double get_tree_length (Tree * tr) {
  *
 */
 // need to check if BLs are present
-bool is_ultrametric_tips (Tree * tr) {
+bool is_ultrametric_paths (Tree * tr) {
     bool ultrametric = false;
     if (!is_rooted(tr)) {
         return ultrametric;
@@ -208,26 +215,41 @@ bool is_ultrametric_tips (Tree * tr) {
     */
     
     // alternate approach: look at variance of paths, compare to EPSILON
-    double sum = std::accumulate(paths.begin(), paths.end(), 0.0);
-    double mean = sum / paths.size();
-    
-    std::vector<double> diff(paths.size());
-    std::transform(paths.begin(), paths.end(), diff.begin(),
-        std::bind2nd(std::minus<double>(), mean));
-    double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-    
-    double var = sq_sum / (double)paths.size();
-    
-    cout << "var = " << var << "; EPSILON = " << EPSILON << endl;
+    double var = variance(paths);
     if (var < EPSILON) {
-        cout << "ultrametric!" << endl;
+        ultrametric = true;
+        // if ultrametric, go ahead and set node heights
+        Node * root = tr->getRoot();
+        set_node_heights(root);
     }
     
-    ultrametric = all_equal(paths);
+    //ultrametric = all_equal(paths);
 
     return ultrametric;
 }
 
+
+// ultrametricity needs to be checked before this
+void set_node_heights (Node * node) {
+    if (node == NULL) {
+        return;
+    }
+    if (node->getChildCount() > 0) {
+        vector <double> heights;
+        //bool parentHeight = 0.0; // not used
+        for (int i = 0; i < node->getChildCount(); i++) {
+            set_node_heights(node->getChild(i));
+            heights.push_back(node->getChild(i)->getBL() + node->getChild(i)->getHeight());
+        }
+        node->setHeight(heights[0]);
+    }
+    if (node->isExternal()) { // tip
+        node->setHeight(0.0);
+    }
+}
+
+
+// seems to suffer from rounding error (all_equal)
 bool is_ultrametric_postorder (Tree * tr) {
     bool ultrametric = true;
     if (!is_rooted(tr)) {
@@ -241,6 +263,7 @@ bool is_ultrametric_postorder (Tree * tr) {
 
     return ultrametric;
 }
+
 
 // postorder
 bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
@@ -269,6 +292,7 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
     return ultrametric;
 }
 
+
 bool check_names_against_tree(Tree * tr, vector<string> names) {
     bool allgood = true;
     for (unsigned int i = 0; i < names.size(); i++) {
@@ -281,6 +305,7 @@ bool check_names_against_tree(Tree * tr, vector<string> names) {
     }
     return allgood;
 }
+
 
 // if 'silent', don't complain if any outgroups are missing
 bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
@@ -311,6 +336,7 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
     
     return success;
 }
+
 
 // return all names that are found in tree
 vector <string> get_names_in_tree(Tree * tr, vector<string> const& names) {

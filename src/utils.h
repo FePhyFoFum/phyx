@@ -20,6 +20,7 @@ vector <double> parse_double_comma_list (string& str);
 double sum (vector <double> & in);
 int sum (vector <int> & in);
 double mean (vector <double> & in);
+double variance (vector <double> & in);
 vector <int> sum (vector <int> & vec1, vector <int> & vec2);
 
 vector <vector <double> > processRateMatrixConfigFile (string filename, int numareas);
@@ -29,10 +30,10 @@ int random_int_range (int min, int max);
 vector <int> sample_without_replacement (int const& numTotal, int const& numSample);
 
 void print_error (char * pname, char arg);
+bool test_logical (vector <int> & matA, vector <int> & matB);
 
 int sum_matrix_col (vector <vector <int> > & matrix, int col);
 int sum_matrix_col_negs (vector <vector <int> > & matrix, int col);
-bool test_logical (vector <int> & matA, vector <int> & matB);
 
 string get_string_vector(vector <string> &sts);
 string get_string_vector(vector <int> &sts);
