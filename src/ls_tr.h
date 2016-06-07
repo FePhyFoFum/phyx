@@ -1,0 +1,31 @@
+#ifndef _LS_TR_H_
+#define _LS_TR_H_
+
+#include <string>
+
+using namespace std;
+
+#include "tree.h"
+
+class TreeInfo {
+private:
+    string model;
+    Tree* tree;
+    bool rooted_tree;
+    bool ultrametric_tree;
+    bool binary_tree;
+    bool has_branchlengths;
+    double treelength;
+    double nintnodes;
+    double ntips;
+    double ageroot;
+    vector <double> branching_times;
+    
+    void calc_stats ();
+
+public:
+    TreeInfo (Tree * intree);
+    void get_stats (ostream* poos);
+};
+
+#endif /* _LS_TR_H_ */
