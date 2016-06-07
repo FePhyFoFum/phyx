@@ -19,12 +19,12 @@ vector <double> parse_double_comma_list (string& str);
 // do stuff over vectors
 double sum (vector <double> & in);
 int sum (vector <int> & in);
+Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in);
 double mean (vector <double> & in);
 double variance (vector <double> & in);
 vector <int> sum (vector <int> & vec1, vector <int> & vec2);
 
 vector <vector <double> > processRateMatrixConfigFile (string filename, int numareas);
-Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in);
 int random_int_range (int min, int max);
 
 vector <int> sample_without_replacement (int const& numTotal, int const& numSample);
@@ -46,6 +46,7 @@ string get_valid_nexus_label (string const& inLabel);
 string get_safe_taxon_label (string const& inLabel);
 void quotify_label (string & token);
 
+// not currently used
 template<typename T> void print_vector (vector <T> & vec) {
     std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(std::cout, " "));
     cout << endl;

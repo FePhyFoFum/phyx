@@ -166,17 +166,6 @@ vector <vector <double> > processRateMatrixConfigFile (string filename, int nums
 }
 
 
-Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
-    Superdouble sum = 0;
-    for (unsigned int i=0; i < in.size(); i++) {
-        sum += in[i];
-        // cout << in[i] << " sum:" << sum << endl;
-    }
-    // cout << "endsum:" << sum << endl;
-    return sum;
-}
-
-
 int random_int_range (int min, int max) {
     return min + (rand() % (int)(max - min + 1));
 }
@@ -278,6 +267,17 @@ double sum (vector <double> & in) {
 
 int sum (vector <int> & in) {
     return accumulate(in.begin(), in.end(), 0);
+}
+
+
+Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
+    Superdouble sum = 0;
+    for (unsigned int i=0; i < in.size(); i++) {
+        sum += in[i];
+        // cout << in[i] << " sum:" << sum << endl;
+    }
+    // cout << "endsum:" << sum << endl;
+    return sum;
 }
 
 
