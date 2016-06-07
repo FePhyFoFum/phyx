@@ -32,7 +32,7 @@ void BDFit::fit_model () {
     nintnodes = tree->getInternalNodeCount();
     nspeciation = nintnodes - 1.0;
     ntips = tree->getExternalNodeCount();
-    
+    rootheight = tree->getRoot()->getHeight();
     if (model == "yule") {
         fit_yule();
     } else if (model == "bd") {
@@ -158,6 +158,7 @@ void BDFit::get_pars (ostream* poos) {
     (*poos) << "ntips: " << ntips << endl;
     (*poos) << "nspeciation: " << nspeciation << endl;
     (*poos) << "treelength: " << treelength << endl;
+    (*poos) << "rootheight: " << rootheight << endl;
     (*poos) << "model: " << model << endl;
     (*poos) << "likelihood: " << likelihood << endl;
     get_aic ();

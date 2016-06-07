@@ -16,6 +16,7 @@ private:
     double nspeciation;
     double ntips;
     vector <double> branching_times;
+    double rootheight;
     double lambda;
     double mu;
     double r;
