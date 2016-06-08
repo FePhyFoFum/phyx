@@ -24,6 +24,9 @@ private:
 
 public:
     TreeInfo (Tree * intree);
+    TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
+        bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
+        bool const& lengthcheck, ostream* poos);
     void get_stats (ostream* poos);
 };
 
