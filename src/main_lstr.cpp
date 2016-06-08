@@ -25,9 +25,15 @@ void print_help() {
     cout << "Usage: pxlstr [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
+    cout << " -r, --rooted        return whether the tree is rooted" << endl;
+    cout << " -a, --age           return the height of root" << endl;
+    cout << " -n, --ntips         return the number of terminals" << endl;
+    cout << " -u, --ultrametric   return whether tree is ultrametric" << endl;
+    cout << " -b, --binary        return whether tree is binary" << endl;
+    cout << " -l, --length        return the length of the tree" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
-    cout << "     --version       display version and exit" << endl;
+    cout << " -V, --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
@@ -38,6 +44,12 @@ string versionline("pxlstr 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv2\nwr
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
+    {"rooted", no_argument, NULL, 'r'},
+    {"age", no_argument, NULL, 'a'},
+    {"ntips", no_argument, NULL, 'n'},
+    {"ultrametric", no_argument, NULL, 'u'},
+    {"binary", no_argument, NULL, 'b'},
+    {"length", no_argument, NULL, 'l'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -48,12 +60,19 @@ int main(int argc, char * argv[]) {
 
     bool outfileset = false;
     bool fileset = false;
+    bool optionsset = false; // is true, do not return all properties
+    bool ultracheck = false;
+    bool binarycheck = false;
+    bool lengthcheck = false;
+    bool agecheck = false;
+    bool rootedcheck = false;
+    bool ntipcheck = false;
     char * outf;
     char * seqf;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:ranublo:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -62,6 +81,30 @@ int main(int argc, char * argv[]) {
                 fileset = true;
                 seqf = strdup(optarg);
                 check_file_exists(seqf);
+                break;
+            case 'r':
+                rootedcheck = true;
+                optionsset = true;
+                break;
+            case 'a':
+                agecheck = true;
+                optionsset = true;
+                break;
+            case 'n':
+                ntipcheck = true;
+                optionsset = true;
+                break;
+            case 'u':
+                ultracheck = true;
+                optionsset = true;
+                break;
+            case 'b':
+                binarycheck = true;
+                optionsset = true;
+                break;
+            case 'l':
+                lengthcheck = true;
+                optionsset = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -110,16 +153,22 @@ int main(int argc, char * argv[]) {
     
     int treeCounter = 0;
     bool going = true;
-    if (ft == 1) { // newick. easy
+    if (ft == 1) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
-                (*poos) << "tree #: " << treeCounter << endl;
-                TreeInfo ti(tree);
-                ti.get_stats(poos);
-                delete tree;
-                treeCounter++;
+                if (!optionsset) {
+                    (*poos) << "tree #: " << treeCounter << endl;
+                    TreeInfo ti(tree);
+                    ti.get_stats(poos);
+                    delete tree;
+                    treeCounter++;
+                } else {
+                    // only a single property
+                    TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
+                        ntipcheck, lengthcheck, poos);
+                }
             }
         }
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
@@ -131,11 +180,13 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                (*poos) << "tree #: " << treeCounter << endl;
-                TreeInfo ti(tree);
-                ti.get_stats(poos);
-                delete tree;
-                treeCounter++;
+                if (!optionsset) {
+                    (*poos) << "tree #: " << treeCounter << endl;
+                    TreeInfo ti(tree);
+                    ti.get_stats(poos);
+                    delete tree;
+                    treeCounter++;
+                }
             }
         }
     }
