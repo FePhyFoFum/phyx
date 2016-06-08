@@ -26,8 +26,8 @@ void print_help() {
     cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl; 
     cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
     cout << " -s, --silent         do not error if outgroup(s) not found" << endl;
-    cout << "     --help           display this help and exit" << endl;
-    cout << "     --version        display version and exit" << endl;
+    cout << " -h, --help           display this help and exit" << endl;
+    cout << " -V, --version        display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;

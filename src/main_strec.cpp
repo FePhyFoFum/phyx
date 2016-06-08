@@ -40,8 +40,8 @@ void print_help() {
     cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << endl;
     cout << " -p, --periods=NUMS  comma separated times" << endl;
     cout << " -l, --logf=FILE     log file, stout otherwise" << endl;
-    cout << "     --help          display this help and exit" << endl;
-    cout << "     --version       display version and exit" << endl;
+    cout << " -h, --help          display this help and exit" << endl;
+    cout << " -V, --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;

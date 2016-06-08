@@ -35,8 +35,8 @@ void print_help() {
     cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
     cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << "     --help          display this help and exit" << endl;
-    cout << "     --version       display version and exit" << endl;
+    cout << " -h,  --help          display this help and exit" << endl;
+    cout << " -V, --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;

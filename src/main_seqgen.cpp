@@ -45,8 +45,8 @@ void print_help() {
     cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
     cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
     cout << " -k, --rootseq=STRING   set root sequence. default is random (from basefreqs)" << endl;
-    cout << "     --help             display this help and exit" << endl;
-    cout << "     --version          display version and exit" << endl;
+    cout << " -h, --help             display this help and exit" << endl;
+    cout << " -V, --version          display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;

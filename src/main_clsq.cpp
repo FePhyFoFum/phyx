@@ -5,8 +5,6 @@
  *      Author: joe
  */
 
-
-
 //compile alone: g++ -std=c++11 main_clsq.cpp sequence.cpp seq_reader.cpp clsq.cpp seq_utils.cpp utils.cpp superdouble.cpp -o test
 #include <iostream>
 #include <string>
@@ -15,7 +13,6 @@
 #include <getopt.h>
 
 using namespace std;
-
 
 #include "clsq.h"
 #include "utils.h"
@@ -28,11 +25,11 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxclsq [OPTION]... " << endl;
     cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
+    cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
     cout << " -p, --percent=DOUBLE  percent allowed to be missing, default=.5" << endl;
-    cout << "     --help          display this help and exit" << endl;
-    cout << "     --version       display version and exit" << endl;
+    cout << " -h, --help            display this help and exit" << endl;
+    cout << " -V, --version         display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;

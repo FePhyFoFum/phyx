@@ -37,8 +37,8 @@ void print_help() {
     cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62"<<endl;
     cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << endl;
     cout << " -v, --verbose       make the output more verbose, turns off parallel" << endl;
-    cout << "     --help          display this help and exit"<<endl;
-    cout << "     --version       display version and exit"<<endl;
+    cout << " -h, --help          display this help and exit"<<endl;
+    cout << " -V, --version       display version and exit"<<endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
