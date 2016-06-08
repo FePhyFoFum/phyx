@@ -19,7 +19,7 @@ void print_help() {
     cout << "Can read from stdin or file" << endl;
     cout << endl;
     cout << "Usage: pxrmt [OPTION]... [FILE]..."<<endl;
-    cout << endl; 
+    cout << endl;
     cout << " -t, --treef=FILE     input tree file, stdin otherwise"<<endl;
     cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" <<endl;
     cout << " -f, --namesf=FILE    names in a file (each on a line)" << endl;

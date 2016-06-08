@@ -20,7 +20,7 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxfqfilt [OPTION]... [FILE]..."<<endl;
-    cout << endl; 
+    cout << endl;
     cout << " -m, --mean=VALUE    mean value under which seqs are filtered" << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;

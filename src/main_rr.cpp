@@ -21,9 +21,10 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxrr [OPTION]... [FILE]..." << endl;
-    cout << endl; 
+    cout << endl;
     cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
-    cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl; 
+    cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl;
+    cout << " -u, --unroot         unroot the tree" << endl;
     cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
     cout << " -s, --silent         do not error if outgroup(s) not found" << endl;
     cout << " -h, --help           display this help and exit" << endl;
@@ -32,15 +33,14 @@ void print_help() {
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
-/*
- * add you name if you contribute (probably add another line)
- */
-string versionline("pxrr 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
+
+string versionline("pxrr 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"outgroups",required_argument,NULL, 'g'},
+    {"unroot", no_argument, NULL, 'u'},
     {"outf", required_argument, NULL, 'o'},
     {"silent", no_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
@@ -53,6 +53,7 @@ int main(int argc, char * argv[]) {
     bool outgroupsset = false;
     bool outfileset = false;
     bool silent = false;
+    bool unroot = false;
     vector<string> outgroups;
 
     char * treef;
@@ -60,7 +61,7 @@ int main(int argc, char * argv[]) {
     char * outgroupsc;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "g:t:o:shV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:g:uo:shV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -73,6 +74,9 @@ int main(int argc, char * argv[]) {
             case 'g':
                 outgroupsset = true;
                 outgroupsc = strdup(optarg);
+                break;
+            case 'u':
+                unroot = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -99,7 +103,8 @@ int main(int argc, char * argv[]) {
             trim_spaces(tokens2[j]);
             outgroups.push_back(tokens2[j]);
         }
-    } else {
+    }
+    if (!outgroupsset && !unroot) {
         cerr << "you need to set the outgroup (-g)" << endl;
         exit(0);
     }
@@ -130,36 +135,65 @@ int main(int argc, char * argv[]) {
     }
     bool going = true;
     bool exists;
-    if (ft == 0) {
-        map<string,string> translation_table;
-        bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
-        Tree * tree;
-        while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
-                &translation_table, &going);
-            if (tree != NULL) {
-                exists = reroot(tree, outgroups, silent);
-                if (!exists) {
-                    cerr << "the outgroup taxa don't exist in this tree " << endl;
-                } else {
-                    (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+    if (!unroot) {
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (tree != NULL) {
+                    exists = reroot(tree, outgroups, silent);
+                    if (!exists) {
+                        cerr << "the outgroup taxa don't exist in this tree " << endl;
+                    } else {
+                        (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+                    }
+                    delete tree;
                 }
-                delete tree;
+            }
+        } else if (ft == 1) {
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going) {
+                    exists = reroot(tree, outgroups, silent);
+                    if (!exists) {
+                        cerr << "the outgroup taxa don't exist in this tree " << endl;
+                    } else {
+                        (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                    }
+                    delete tree;
+                }
             }
         }
-    } else if (ft == 1) {
-        Tree * tree;
-        while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going) {
-                exists = reroot(tree, outgroups, silent);
-                if (!exists) {
-                    cerr << "the outgroup taxa don't exist in this tree " << endl;
-                } else {
+    } else {
+        // unroot trees
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (tree != NULL) {
+                    tree->tritomyRoot(NULL);
                     (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                    delete tree;
                 }
-                delete tree;
+            }
+        } else if (ft == 1) {
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going) {
+                    tree->tritomyRoot(NULL);
+                    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                    delete tree;
+                }
             }
         }
     }

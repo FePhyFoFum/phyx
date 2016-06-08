@@ -21,7 +21,7 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxbpseq [OPTION]... [FILE]..." << endl;
-    cout << endl; 
+    cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;

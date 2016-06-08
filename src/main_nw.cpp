@@ -29,7 +29,7 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxnw [OPTION]... [FILE]..."<<endl;
-    cout << endl; 
+    cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<endl;
     cout << " -o, --outf=FILE     output score/distance file, stout otherwise"<<endl;
     cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise"<<endl;

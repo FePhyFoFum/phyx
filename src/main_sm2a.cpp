@@ -26,7 +26,7 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxsm2a [OPTION]... [FILE]..." << endl;
-    cout << endl; 
+    cout << endl;
     cout << " -s, --seqf=FILE     input sequence file" << endl;
     cout << " -t, --treef=FILE    input tree file" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;

@@ -41,7 +41,7 @@ void print_help() {
     cout << "                          use -p for the nodes labels" << endl;
     cout << " -p, --printnodelabels  print newick with internal node labels. default is no" << endl;
     cout << " -m, --multimodel=Input specify multiple models across tree" << endl;
-    cout << "                          input is as follows:" << endl; 
+    cout << "                          input is as follows:" << endl;
     cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
     cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
     cout << " -k, --rootseq=STRING   set root sequence. default is random (from basefreqs)" << endl;

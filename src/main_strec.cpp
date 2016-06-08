@@ -28,7 +28,7 @@ void print_help() {
     cout << "This will conduct state reconstruction analyses." << endl;
     cout << endl;
     cout << "Usage: pxstrec [OPTION]... [FILE]..." << endl;
-    cout << endl; 
+    cout << endl;
     cout << " -d, --dataf=FILE    input data file" <<endl;
     cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<endl;
     cout << " -z, --dataz         data is in probability format (0,1,0,0)" << endl;
@@ -571,7 +571,7 @@ int main(int argc, char * argv[]) {
                 sr.set_store_p_matrices(true);
                 finallike = sr.eval_likelihood();
                 if (verbose) {
-                    (*loos) << "final_likelihood: " << finallike << endl;  
+                    (*loos) << "final_likelihood: " << finallike << endl;
                 }
             } else { //optimize with periods
                 vector<mat> periods_free_var(period_times.size());
@@ -599,7 +599,7 @@ int main(int argc, char * argv[]) {
                 }
                 if (verbose) {
                     for (unsigned int s=0; s < period_times.size(); s++) {
-                        (*loos) << periods_free_var[s] << endl;            
+                        (*loos) << periods_free_var[s] << endl;
                     }
                     (*loos) << ct << endl;
                 }

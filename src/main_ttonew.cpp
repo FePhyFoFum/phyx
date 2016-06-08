@@ -17,7 +17,7 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxttonew [OPTION]... [FILE]..." << endl;
-    cout << endl; 
+    cout << endl;
     cout << " -t, --treef=FILE    input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;

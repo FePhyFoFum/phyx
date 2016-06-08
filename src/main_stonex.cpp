@@ -21,7 +21,7 @@ void print_help() {
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxstonex [OPTION]... [FILE]..." << endl;
-    cout << endl; 
+    cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
