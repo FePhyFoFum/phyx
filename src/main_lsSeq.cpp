@@ -25,7 +25,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
     cout << " -a, --all=option    output stats of all sequences" << endl;
-    cout << " -p, --prot=option   output stats for amino acids" << endl;
+    cout << " -p, --prot=option   output stats for amino acids default is DNA" << endl;
     cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << "     --version       display version and exit" << endl;
