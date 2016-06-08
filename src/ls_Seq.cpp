@@ -77,7 +77,6 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
 	Sequence seq;
 	string retstring;
 	int ft = test_seq_filetype_stream(*pios, retstring);
-	bool first = true;
 	if (prot == true){
 		Molecule = "ACDEFGHIKLMNPQRSTVWXY*";
 	}else{
