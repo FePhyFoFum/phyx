@@ -26,7 +26,7 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -r, --rooted        return whether the tree is rooted" << endl;
-    cout << " -a, --age           return the height of root" << endl;
+    cout << " -a, --age           return the height of root (must be rooted" << endl;
     cout << " -n, --ntips         return the number of terminals" << endl;
     cout << " -u, --ultrametric   return whether tree is ultrametric" << endl;
     cout << " -b, --binary        return whether tree is binary" << endl;
@@ -120,6 +120,11 @@ int main(int argc, char * argv[]) {
                 print_error(argv[0], (char)c);
                 exit(0);
         }
+    }
+    
+    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + ntipcheck) > 1) {
+        cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
+        exit(0);
     }
 
     istream* pios;
