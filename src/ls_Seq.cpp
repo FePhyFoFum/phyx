@@ -26,7 +26,12 @@ void Stats::AA_STAT_Getter(string& seq){
 	}
 	for (int i = 0; i < seq.length(); i++){
 		seq[i] = toupper(seq[i]);
-		AA_Total[seq[i]]++;
+		//Ensure theres no weird J or whatever characters
+		if (AA_Total.find(seq[i]) == AA_Total.end()) {
+			AA_Total['X']++;
+		}else{
+			AA_Total[seq[i]]++;
+		}
 	}
 }
 void Stats::GC_Getter(string& seq){
@@ -55,6 +60,20 @@ void Stats::GC_Getter(string& seq){
 				Missing++;
 			}
 	}
+	Nuc_Total.clear();
+	string Nuc_string = "ACGTN-";
+	for (int i = 0; i < Nuc_string.length(); i++){
+			Nuc_Total[Nuc_string[i]] = 0.0;
+	}
+	for (int i = 0; i < seq.length(); i++){
+		seq[i] = toupper(seq[i]);
+		//Ensure theres no weird J or whatever characters
+		if (Nuc_Total.find(seq[i]) == Nuc_Total.end()) {
+			Nuc_Total['N']++;
+		}else{
+			Nuc_Total[seq[i]]++;
+		}
+	}
 		
 }
 
@@ -64,6 +83,8 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
 	const char separator    = ' ';
 	const int nameWidth     = 10;
 	const int numWidth      = 10;
+	string Nuc_string = "ACGTN-";
+	string temp_seq;
 	if (prot == false){
 		Sequence seq;
 		string retstring;
@@ -79,40 +100,15 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
 			
 				cout << "Stats For " << seq.get_id() << endl;
 				temp_seq = seq.get_sequence();
-				cout << "Length of Sequence: " << temp_seq.length() << endl;
 				GC_Getter(temp_seq);
-				GC_Content = G + C;
-				Percent_A = A / temp_seq.length();
-				Percent_C = C / temp_seq.length();
-				Percent_G = G / temp_seq.length();
-				Percent_T = T / temp_seq.length();
-				Percent_GC = GC_Content / temp_seq.length();
-				Percent_Missing = Missing / temp_seq.length();
-				cout << "----------------------Nucleotide Composition Table-------------------------" << endl;
-				cout << left << setw(nameWidth) << setfill(separator) << "\t    A";
-				cout << left << setw(nameWidth) << setfill(separator) << "    C";
-				cout << left << setw(numWidth) << setfill(separator) << "    G";
-				cout << left << setw(numWidth) << setfill(separator) << "    T";
-				cout << left << setw(numWidth) << setfill(separator) << "    G+C";
-				cout << left << setw(numWidth) << setfill(separator) << "   Ambiguous";
-				cout << endl;
-				cout << left << setw(nameWidth) << setfill(separator) << "Total: ";
-				cout << left << setw(nameWidth) << setfill(separator) << A;
-				cout << left << setw(nameWidth) << setfill(separator) << C;
-				cout << left << setw(numWidth) << setfill(separator) << G;
-				cout << left << setw(numWidth) << setfill(separator) << T;
-				cout << left << setw(numWidth) << setfill(separator) << GC_Content;
-				cout << left << setw(numWidth) << setfill(separator) << Missing;
-				cout << endl;
-				cout << left << setw(nameWidth) << setfill(separator) << "Percent: ";
-				cout << left << setw(nameWidth) << setfill(separator) << Percent_A;
-				cout << left << setw(nameWidth) << setfill(separator) << Percent_C;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_G;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_T;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_GC;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_Missing;
-				cout << endl;
-				cout << "---------------------------------------------------------------------------" << endl;
+				cout << "Length of Sequence: " << temp_seq.length() << endl;
+				cout << "Nuc\tTotal\tPercent" << endl;
+				cout << "--------NUC TABLE---------" << endl;
+				for (int i = 0; i < Nuc_string.length(); i++){
+					cout << left << setw(nameWidth) << setfill(separator) << Nuc_string[i] << Nuc_Total[Nuc_string[i]] << "\t" << ((Nuc_Total[Nuc_string[i]] / temp_seq.length())*100.0) << endl;
+				}
+				cout << left << setw(nameWidth) << setfill(separator) << "G+C" << (Nuc_Total['G'] + Nuc_Total['C'])<< "\t" << (((Nuc_Total['G'] + Nuc_Total['C']) / temp_seq.length()*100.0)) << endl;
+				cout << "--------NUC TABLE---------" << endl;
 	
 			}
 			if (ft == 1){
@@ -128,87 +124,32 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
 			Concatenated += seq.get_sequence();
 			type = "Fasta";
 			if (all == true){
-			
-				cout << "Stats For " << seq.get_id() << endl;
 				temp_seq = seq.get_sequence();
-				cout << "Length of Sequence: " << temp_seq.length() << endl;
 				GC_Getter(temp_seq);
-				GC_Content = G + C;
-				Percent_A = A / temp_seq.length();
-				Percent_C = C / temp_seq.length();
-				Percent_G = G / temp_seq.length();
-				Percent_T = T / temp_seq.length();
-				Percent_GC = GC_Content / temp_seq.length();
-				Percent_Missing = Missing / temp_seq.length();
-				cout << "----------------------Nucleotide Composition Table-------------------------" << endl;
-				cout << left << setw(nameWidth) << setfill(separator) << "\t    A";
-				cout << left << setw(nameWidth) << setfill(separator) << "    C";
-				cout << left << setw(numWidth) << setfill(separator) << "    G";
-				cout << left << setw(numWidth) << setfill(separator) << "    T";
-				cout << left << setw(numWidth) << setfill(separator) << "    G+C";
-				cout << left << setw(numWidth) << setfill(separator) << "   Ambiguous";
-				cout << endl;
-				cout << left << setw(nameWidth) << setfill(separator) << "Total: ";
-				cout << left << setw(nameWidth) << setfill(separator) << A;
-				cout << left << setw(nameWidth) << setfill(separator) << C;
-				cout << left << setw(numWidth) << setfill(separator) << G;
-				cout << left << setw(numWidth) << setfill(separator) << T;
-				cout << left << setw(numWidth) << setfill(separator) << GC_Content;
-				cout << left << setw(numWidth) << setfill(separator) << Missing;
-				cout << endl;
-				cout << left << setw(nameWidth) << setfill(separator) << "Percent: ";
-				cout << left << setw(nameWidth) << setfill(separator) << Percent_A;
-				cout << left << setw(nameWidth) << setfill(separator) << Percent_C;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_G;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_T;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_GC;
-				cout << left << setw(numWidth) << setfill(separator) << Percent_Missing;
-				cout << endl;
-				cout << "---------------------------------------------------------------------------" << endl;
-	
+				cout << "Stats For " << seq.get_id() << endl;
+				cout << "Length of Sequence: " << temp_seq.length() << endl;
+				cout << "Nuc\tTotal\tPercent" << endl;
+				cout << "--------NUC TABLE---------" << endl;
+				for (int i = 0; i < Nuc_string.length(); i++){
+					cout << left << setw(nameWidth) << setfill(separator) << Nuc_string[i] << Nuc_Total[Nuc_string[i]] << "\t" << ((Nuc_Total[Nuc_string[i]] / temp_seq.length())*100.0) << endl;
+				}
+				cout << left << setw(nameWidth) << setfill(separator) << "G+C" << (Nuc_Total['G'] + Nuc_Total['C'])<< "\t" << (((Nuc_Total['G'] + Nuc_Total['C']) / temp_seq.length()*100.0)) << endl;
+				cout << "--------NUC TABLE---------" << endl;
 			}
 		}
-		GC_Getter(Concatenated);
-		GC_Content = G + C;
-		Percent_A = A / Concatenated.length();
-		Percent_C = C / Concatenated.length();
-		Percent_G = G / Concatenated.length();
-		Percent_T = T / Concatenated.length();
-		Percent_GC = GC_Content / Concatenated.length();
-		Percent_Missing = Missing / Concatenated.length();
-	
 		cout << "General Stats For All Sequences" << endl;
 		cout << "File Type: " << type << endl;
 		cout << "Number of Sequences: " << seqcount << endl;
 		cout << "Total Length of All Combined: " << Concatenated.length() << endl;
-		cout << "----------------------Nucleotide Composition Table-------------------------" << endl;
-		cout << left << setw(nameWidth) << setfill(separator) << "\t    A";
-		cout << left << setw(nameWidth) << setfill(separator) << "    C";
-		cout << left << setw(numWidth) << setfill(separator) << "    G";
-		cout << left << setw(numWidth) << setfill(separator) << "    T";
-		cout << left << setw(numWidth) << setfill(separator) << "    G+C";
-		cout << left << setw(numWidth) << setfill(separator) << "   Ambiguous";
-		cout << left << setw(numWidth) << setfill(separator) << "   All";
-		cout << endl;
-		cout << left << setw(nameWidth) << setfill(separator) << "Total: ";
-		cout << left << setw(nameWidth) << setfill(separator) << A;
-		cout << left << setw(nameWidth) << setfill(separator) << C;
-		cout << left << setw(numWidth) << setfill(separator) << G;
-		cout << left << setw(numWidth) << setfill(separator) << T;
-		cout << left << setw(numWidth) << setfill(separator) << GC_Content;
-		cout << left << setw(numWidth) << setfill(separator) << Missing;
-		cout << left << setw(numWidth) << setfill(separator) << Concatenated.length();
-		cout << endl;
-		cout << left << setw(nameWidth) << setfill(separator) << "Percent: ";
-		cout << left << setw(nameWidth) << setfill(separator) << Percent_A;
-		cout << left << setw(nameWidth) << setfill(separator) << Percent_C;
-		cout << left << setw(numWidth) << setfill(separator) << Percent_G;
-		cout << left << setw(numWidth) << setfill(separator) << Percent_T;
-		cout << left << setw(numWidth) << setfill(separator) << Percent_GC;
-		cout << left << setw(numWidth) << setfill(separator) << Percent_Missing;
-		cout << left << setw(numWidth) << setfill(separator) << "100.0";
-		cout << endl;
-		cout << "---------------------------------------------------------------------------" << endl;
+		GC_Getter(Concatenated);
+		cout << "Nuc\tTotal\tPercent" << endl;
+		cout << "--------NUC TABLE---------" << endl;
+		for (int i = 0; i < Nuc_string.length(); i++){
+			cout << left << setw(nameWidth) << setfill(separator) << Nuc_string[i] << Nuc_Total[Nuc_string[i]] << "\t" << ((Nuc_Total[Nuc_string[i]] / Concatenated.length())*100.0) << endl;
+		}
+		cout << left << setw(nameWidth) << setfill(separator) << "G+C" << (Nuc_Total['G'] + Nuc_Total['C'])<< "\t" << (((Nuc_Total['G'] + Nuc_Total['C']) / Concatenated.length()*100.0)) << endl;
+		cout << "--------NUC TABLE---------" << endl;
+		
 	}else{
 		//This is what to do if it is an amino acid sequence
 		Sequence seq;
@@ -275,3 +216,46 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
 		}
 	}
 }	
+/*
+		GC_Getter(Concatenated);
+		GC_Content = G + C;
+		Percent_A = A / Concatenated.length();
+		Percent_C = C / Concatenated.length();
+		Percent_G = G / Concatenated.length();
+		Percent_T = T / Concatenated.length();
+		Percent_GC = GC_Content / Concatenated.length();
+		Percent_Missing = Missing / Concatenated.length();
+	
+		cout << "General Stats For All Sequences" << endl;
+		cout << "File Type: " << type << endl;
+		cout << "Number of Sequences: " << seqcount << endl;
+		cout << "Total Length of All Combined: " << Concatenated.length() << endl;
+		cout << "----------------------Nucleotide Composition Table-------------------------" << endl;
+		cout << left << setw(nameWidth) << setfill(separator) << "\t    A";
+		cout << left << setw(nameWidth) << setfill(separator) << "    C";
+		cout << left << setw(numWidth) << setfill(separator) << "    G";
+		cout << left << setw(numWidth) << setfill(separator) << "    T";
+		cout << left << setw(numWidth) << setfill(separator) << "    G+C";
+		cout << left << setw(numWidth) << setfill(separator) << "   Ambiguous";
+		cout << left << setw(numWidth) << setfill(separator) << "   All";
+		cout << endl;
+		cout << left << setw(nameWidth) << setfill(separator) << "Total: ";
+		cout << left << setw(nameWidth) << setfill(separator) << A;
+		cout << left << setw(nameWidth) << setfill(separator) << C;
+		cout << left << setw(numWidth) << setfill(separator) << G;
+		cout << left << setw(numWidth) << setfill(separator) << T;
+		cout << left << setw(numWidth) << setfill(separator) << GC_Content;
+		cout << left << setw(numWidth) << setfill(separator) << Missing;
+		cout << left << setw(numWidth) << setfill(separator) << Concatenated.length();
+		cout << endl;
+		cout << left << setw(nameWidth) << setfill(separator) << "Percent: ";
+		cout << left << setw(nameWidth) << setfill(separator) << Percent_A;
+		cout << left << setw(nameWidth) << setfill(separator) << Percent_C;
+		cout << left << setw(numWidth) << setfill(separator) << Percent_G;
+		cout << left << setw(numWidth) << setfill(separator) << Percent_T;
+		cout << left << setw(numWidth) << setfill(separator) << Percent_GC;
+		cout << left << setw(numWidth) << setfill(separator) << Percent_Missing;
+		cout << left << setw(numWidth) << setfill(separator) << "100.0";
+		cout << endl;
+		cout << "---------------------------------------------------------------------------" << endl;
+		*/

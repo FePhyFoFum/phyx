@@ -31,6 +31,7 @@ private:
 	double Percent_T;
 	double Percent_GC;
 	double Percent_Missing;
+	map <char, double> Nuc_Total;
 	map <char,double> AA_Total;
 
 public:
