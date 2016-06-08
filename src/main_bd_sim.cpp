@@ -23,7 +23,7 @@ using namespace std;
 void print_help () {
     cout << "Birth-death simulator." << endl;
     cout << endl;
-    cout << "Usage: pxbd [OPTION]... " << endl;
+    cout << "Usage: pxbdsim [OPTION]... " << endl;
     cout << endl;
     cout << " -e, --extant=INT    number of extant species, alt to time" << endl;
     cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
