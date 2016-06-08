@@ -164,13 +164,11 @@ void BDFit::get_pars (ostream* poos) {
     get_aic ();
     (*poos) << "aic: " << aic << endl;
     (*poos) << "aicc: " << aicc << endl;
-    if (model == "yule") {
-        (*poos) << "lambda: " << lambda << endl;
-    } else {
-        (*poos) << "lambda: " << lambda << endl;
-        (*poos) << "mu: " << mu << endl;
-        (*poos) << "r (lambda-mu): " << r << endl;
-        (*poos) << "epsilon (mu/lambda): " << epsilon << endl;
+    (*poos) << "b: " << lambda << endl;
+    if (model == "bd") {
+        (*poos) << "d: " << mu << endl;
+        (*poos) << "r (b-d): " << r << endl;
+        (*poos) << "e (d/b): " << epsilon << endl;
     }
     
 }
