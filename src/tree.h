@@ -50,7 +50,7 @@ public:
     int getInternalNodeCount();
     Node * getRoot();
     void setRoot(Node * inroot);
-    void unRoot(Node & inroot);
+    void unRoot();
     bool reRoot(Node * inroot);
     void tritomyRoot(Node * toberoot);
     Node * getMRCA(vector<string> innodes);

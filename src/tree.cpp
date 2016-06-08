@@ -114,12 +114,12 @@ void Tree::setRoot(Node * inroot) {
     root = inroot;
 }
 
-void Tree::unRoot(Node & inroot) {
+void Tree::unRoot() {
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
-        tritomyRoot(&inroot);
+        tritomyRoot(NULL);
+        processRoot();
     }
-    processRoot();
 }
 
 /*
