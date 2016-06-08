@@ -28,7 +28,6 @@ void print_help () {
     cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
     cout << " -m, --model=STRING  diversification model; either 'yule' or 'bd' (default)" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -44,7 +43,6 @@ static struct option const long_options[] =
     {"model", required_argument, NULL, 'm'},
     {"outf", required_argument, NULL, 'o'},
     {"showd", no_argument, NULL, 's'},
-    {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -59,7 +57,6 @@ int main(int argc, char * argv[]) {
     
     string model = "bd";
     
-    int seed = -1;
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:m:o:x:hV", long_options, &oi);
@@ -79,9 +76,6 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
-                break;
-            case 'x':
-                seed = atoi(strdup(optarg));
                 break;
             case 'h':
                 print_help();
