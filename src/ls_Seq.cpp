@@ -36,30 +36,6 @@ void Stats::AA_STAT_Getter(string& seq){
 }
 void Stats::GC_Getter(string& seq){
 
-	G = 0.0; 
-	C = 0.0;
-	A = 0.0;
-	T = 0.0;
-	Missing = 0.0;
-	for (int i = 0; i < seq.length(); i++){
-		
-			if (seq[i] == 'A' or seq[i] == 'a'){
-				
-					A++;
-			}else if (seq[i] == 'C' or seq[i] == 'c'){
-				
-					C++;
-			}else if (seq[i] == 'G' or seq[i] == 'g'){
-				
-					G++;
-			}else if (seq[i] == 'T' or seq[i] == 't'){
-				
-					T++;
-			}else{
-				
-				Missing++;
-			}
-	}
 	Nuc_Total.clear();
 	string Nuc_string = "ACGTN-";
 	for (int i = 0; i < Nuc_string.length(); i++){

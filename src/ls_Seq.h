@@ -19,18 +19,6 @@ private:
 
 	string Concatenated;
 	string temp_seq;
-	double GC_Content;
-	double G; 
-	double C;
-	double A;
-	double T;
-	double Missing;
-	double Percent_A;
-	double Percent_C;
-	double Percent_G;
-	double Percent_T;
-	double Percent_GC;
-	double Percent_Missing;
 	map <char, double> Nuc_Total;
 	map <char,double> AA_Total;
 
