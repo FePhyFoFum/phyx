@@ -69,7 +69,7 @@ Tree * BirthDeathSimulator::make_tree(bool show_dead) {
             event();
             if (extantnodes.size() < 1) {
                 failures += 1;
-                cout << "failed!" << endl;
+                //cout << "failed!" << endl;
                 if (failures >= maxfailures) {
                     cout << "Reached maximum number of failures (" << failures
                         << "). Quitting." << endl;
