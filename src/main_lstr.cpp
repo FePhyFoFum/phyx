@@ -192,6 +192,10 @@ int main(int argc, char * argv[]) {
                     ti.get_stats(poos);
                     delete tree;
                     treeCounter++;
+                } else {
+                    // only a single property
+                    TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
+                        ntipcheck, lengthcheck, poos);
                 }
             }
         }
