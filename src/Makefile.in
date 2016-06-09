@@ -171,6 +171,10 @@ LOGMANIP_SRC = main_logmanip.cpp
 LOGMANIP_OBJ = main_logmanip.o
 LOGMANIP_DEP = main_logmanip.d
 
+LsSeq_SRC = main_lsSeq.cpp
+LsSeq_OBJ = main_lsSeq.o
+LsSeq_DEP = main_lsSeq.d
+
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
@@ -195,7 +199,8 @@ CPP_SRCS += \
 ./clsq.cpp \
 ./aatocdn.cpp \
 ./tlate.cpp \
-./nj.cpp
+./nj.cpp \
+./ls_Seq.cpp
 
 ## doesn't seem to be used
 RATE_SRCS += \
@@ -207,7 +212,8 @@ RATE_SRCS += \
 ./branch_segment.cpp \
 ./mcmc.cpp \
 ./cont_models.cpp \
-./seq_gen.cpp
+./seq_gen.cpp \
+./ls_Seq.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -231,7 +237,8 @@ CPP_OBJS += \
 ./aatocdn.o \
 ./tlate.o \
 ./nj.o \
-./log_manip.o
+./log_manip.o \
+./ls_Seq.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -299,7 +306,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxlstr pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxlstr pxlsSeq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -336,7 +343,11 @@ pxnni: $(CPP_OBJS) $(NNI_OBJ)
 pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
 	@echo 'building pxlstr'
 	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
-	
+
+pxlsSeq: $(CPP_OBJS) $(LsSeq_OBJ)
+	@echo 'bulding pxlsSeq'
+	$(CXX) -o "pxlsSeq" $(OPT_FLAGS) $(LsSeq_OBJ) $(CPP_OBJS)
+
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
 	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
