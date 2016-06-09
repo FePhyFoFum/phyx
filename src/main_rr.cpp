@@ -17,7 +17,7 @@ using namespace std;
 #include "tree_utils.h"
 
 void print_help() {
-    cout << "This will reroot a tree file and produce a newick." << endl;
+    cout << "This will reroot (or unroot) a tree file and produce a newick." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxrr [OPTION]... [FILE]..." << endl;

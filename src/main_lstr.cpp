@@ -20,6 +20,7 @@ using namespace std;
 
 void print_help() {
     cout << "Print tree summary" << endl;
+    cout << "By default returns all properties. Alternatively choose 1 property." << endl;
     cout << "This will take newick or nexus files" << endl;
     cout << endl;
     cout << "Usage: pxlstr [OPTION]... " << endl;
@@ -68,7 +69,7 @@ int main(int argc, char * argv[]) {
     bool rootedcheck = false;
     bool ntipcheck = false;
     char * outf;
-    char * seqf;
+    char * treef;
     
     while (1) {
         int oi = -1;
@@ -79,8 +80,8 @@ int main(int argc, char * argv[]) {
         switch(c) {
             case 't':
                 fileset = true;
-                seqf = strdup(optarg);
-                check_file_exists(seqf);
+                treef = strdup(optarg);
+                check_file_exists(treef);
                 break;
             case 'r':
                 rootedcheck = true;
@@ -140,7 +141,7 @@ int main(int argc, char * argv[]) {
     }
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new ifstream(treef);
         pios = fstr;
     } else {
         pios = &cin;
@@ -191,6 +192,10 @@ int main(int argc, char * argv[]) {
                     ti.get_stats(poos);
                     delete tree;
                     treeCounter++;
+                } else {
+                    // only a single property
+                    TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
+                        ntipcheck, lengthcheck, poos);
                 }
             }
         }
