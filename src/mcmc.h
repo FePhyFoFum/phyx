@@ -21,7 +21,6 @@ void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple &
     map<string,vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat &inq0,
     mat &inq1, mat & inq2);
 
-/// JWB junk
 void sm0_prof(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr,
     RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs, map<string,
     vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat &inq);

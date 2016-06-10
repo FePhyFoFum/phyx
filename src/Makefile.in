@@ -171,9 +171,9 @@ LOGMANIP_SRC = main_logmanip.cpp
 LOGMANIP_OBJ = main_logmanip.o
 LOGMANIP_DEP = main_logmanip.d
 
-LS_SEQ_SRC = main_lsSeq.cpp
-LS_SEQ_OBJ = main_lsSeq.o
-LS_SEQ_DEP = main_lsSeq.d
+LS_SEQ_SRC = main_lsseq.cpp
+LS_SEQ_OBJ = main_lsseq.o
+LS_SEQ_DEP = main_lsseq.d
 
 ## doesn't seem to be used
 CPP_SRCS += \
@@ -200,7 +200,7 @@ CPP_SRCS += \
 ./aatocdn.cpp \
 ./tlate.cpp \
 ./nj.cpp \
-./ls_Seq.cpp
+./ls_seq.cpp
 
 ## doesn't seem to be used
 RATE_SRCS += \
@@ -213,7 +213,7 @@ RATE_SRCS += \
 ./mcmc.cpp \
 ./cont_models.cpp \
 ./seq_gen.cpp \
-./ls_Seq.cpp
+./ls_seq.cpp
 
 CPP_OBJS += \
 ./utils.o \
@@ -238,7 +238,7 @@ CPP_OBJS += \
 ./tlate.o \
 ./nj.o \
 ./log_manip.o \
-./ls_Seq.o
+./ls_seq.o
 
 RATE_OBJS += \
 ./rate_model.o \

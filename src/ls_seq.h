@@ -7,7 +7,6 @@
 #include <map>
 #include <sstream>
 
-
 using namespace std;
 
 #include "utils.h"
@@ -17,15 +16,15 @@ using namespace std;
 class Stats {
 private:
 
-	string Concatenated;
-	string temp_seq;
-	string Molecule;
-	string type;
-	bool finished;
-	string Mol;
-	string name;
-	map <char, double> Total;
-	int seqcount;
+    string Concatenated;
+    string temp_seq;
+    string Molecule;
+    string type;
+    bool finished;
+    string Mol;
+    string name;
+    map <char, double> Total;
+    int seqcount;
 
 
 public:
