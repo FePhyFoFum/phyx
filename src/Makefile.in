@@ -171,9 +171,9 @@ LOGMANIP_SRC = main_logmanip.cpp
 LOGMANIP_OBJ = main_logmanip.o
 LOGMANIP_DEP = main_logmanip.d
 
-LsSeq_SRC = main_lsSeq.cpp
-LsSeq_OBJ = main_lsSeq.o
-LsSeq_DEP = main_lsSeq.d
+LS_SEQ_SRC = main_lsSeq.cpp
+LS_SEQ_OBJ = main_lsSeq.o
+LS_SEQ_DEP = main_lsSeq.d
 
 ## doesn't seem to be used
 CPP_SRCS += \
@@ -344,9 +344,9 @@ pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
 	@echo 'building pxlstr'
 	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
 
-pxlsseq: $(CPP_OBJS) $(LsSeq_OBJ)
+pxlsseq: $(CPP_OBJS) $(LS_SEQ_OBJ)
 	@echo 'bulding pxlsseq'
-	$(CXX) -o "pxlsseq" $(OPT_FLAGS) $(LsSeq_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxlsseq" $(OPT_FLAGS) $(LS_SEQ_OBJ) $(CPP_OBJS)
 
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
