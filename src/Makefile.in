@@ -15,7 +15,7 @@ ifneq "$(CXX)" "icc"
     OPT_FLAGS += -ffast-math -ftree-vectorize
 endif
 
-prefix = /usr/bin/
+prefix := @prefix@
 
 #######
 # FORTRAN BIT
