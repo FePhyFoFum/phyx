@@ -345,7 +345,7 @@ pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
 	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
 
 pxlsseq: $(CPP_OBJS) $(LsSeq_OBJ)
-	@echo 'bulding pxlsSeq'
+	@echo 'bulding pxlsseq'
 	$(CXX) -o "pxlsseq" $(OPT_FLAGS) $(LsSeq_OBJ) $(CPP_OBJS)
 
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
