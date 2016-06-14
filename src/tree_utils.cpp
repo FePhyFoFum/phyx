@@ -71,26 +71,35 @@ void remove_annotations(Tree * tr) {
 
 
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
+    
+    bool debug = true;
+    
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);
+    if (debug) cout << "tree is rooted: " << std::boolalpha << rooted << endl;
     for (int i=0; i < tr->getInternalNodeCount(); i++) {
         Node * tnd = tr->getInternalNode(i);
-        if (tnd->getParent() == NULL && rooted == true) {
+        if (debug) cout << "Focal node: " << tnd->getName() << endl;
+        if (tnd->getParent() == NULL && rooted == true) { // root on rooted tree
+            if (debug) cout << "  Node has no parent, as it is the root" << endl;
             continue;
         }
         vector<Node *> nds;
         for (int j=0; j < tnd->getChildCount(); j++) {
             nds.push_back(tnd->getChild(j));
+            if (debug) cout << "  Adding child node: " << tnd->getChild(j)->getName() << endl;
         }
         if (tnd->getParent() == tr->getRoot() && rooted == true) {
             for (int j=0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
+                    if (debug) cout << "  Adding sibling node: " << tnd->getChild(j)->getName() << endl;
                 }
             }
         } else {
             if (tnd->getParent() != NULL) {
                 nds.push_back(tnd->getParent());
+                if (debug) cout << "  Adding parent node: " << tnd->getParent()->getName() << endl;
             }
         }
         tree_map[tnd] = nds;
@@ -98,47 +107,75 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         vector<Node *> nds;
         Node * tnd = tr->getExternalNode(i);
+        if (debug) cout << "Focal node: " << tnd->getName() << endl;
         if (tnd->getParent() == tr->getRoot() && rooted == true) {
             for (int j=0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
+                    if (debug) cout << "  Adding sibling node: " << tnd->getParent()->getChild(j)->getName() << endl;
                 }
             }
         } else {
             nds.push_back(tnd->getParent());
+            if (debug) cout << "  Adding parent node: " << tnd->getParent()->getName() << endl;
         }
         tree_map[tnd] = nds;
-    }    
+    }
+    // print map<Node*, vector<Node*> >
+    if (debug) {
+        cout << endl << "TREE MAP:" << endl;
+        for (map<Node*,vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); it++) {
+            cout << "Node: " << it->first->getName() << endl;
+            vector<Node*> terp = it->second;
+            for (int i = 0; i < terp.size(); i++) {
+                cout << "  " << terp[i]->getName() << " ";
+            }
+            cout << endl;
+        }
+    }
 }
 
 
 void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
+    
+    bool debug = true;
+    
     bool success = false;
-    while (success == false) {
+    while (!success) {
         map<Node*,vector<Node*> >::iterator item = tree_map.begin();
-        int r = random_int_range(0,tree_map.size());
+        int r = random_int_range(0, tree_map.size());
+        
         std::advance( item, r );
         Node * first = (*item).first;
+        if (debug) cout << endl << "Node first (" << r << "): " << first->getName() << endl;
 
         int r2 = random_int_range(0,(*item).second.size());
+        
         item = tree_map.begin();
         std::advance( item, r2 );
         Node * middle = (*item).first;
         if (first == middle) {
+            if (debug) cout << "Bailing because first == middle..." << endl;
             continue;
         }
-
+        if (debug) cout << "Node middle (" << r2 << "): " << middle->getName() << endl;
+        
         int r3 = random_int_range(0,(*item).second.size());
         item = tree_map.begin();
-        std::advance( item, r3);
+        std::advance( item, r3 );
         Node * second = (*item).first;
+        
+        if (debug) cout << "Node second (" << r3 << "): " << second->getName() << endl;
+        
         //TODO: need to fix what happens when the parent is the root, seems to break down
-        if (first == second || second == middle || first == tr->getRoot() || second == tr->getRoot()
-           || first->getParent() == tr->getRoot() || second->getParent() == tr->getRoot()) {
+        if (first == second || second == middle || first == tr->getRoot()
+            || second == tr->getRoot() || first->getParent() == tr->getRoot()
+            || second->getParent() == tr->getRoot()) {
+            if (debug) cout << "Bailing on this combination..." << endl;
             continue;
         }
 
-        tr->exchangeNodes(first,second);
+        tr->exchangeNodes(first, second);
         tr->processRoot();
 
         success = true;
