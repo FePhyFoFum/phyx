@@ -70,6 +70,8 @@ void remove_annotations(Tree * tr) {
 }
 
 
+// treemap: key is focal node, value is vector of adjacent nodes
+// both keys and values can be internal or terminal nodes
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
     
     bool debug = true;
@@ -148,9 +150,9 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
         std::advance( item, r );
         Node * first = (*item).first;
         if (debug) cout << endl << "Node first (" << r << "): " << first->getName() << endl;
-
-        int r2 = random_int_range(0,(*item).second.size());
         
+        // ack. 'middle' is not necessarily in the middle at all
+        int r2 = random_int_range(0,(*item).second.size());
         item = tree_map.begin();
         std::advance( item, r2 );
         Node * middle = (*item).first;
@@ -160,6 +162,7 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
         }
         if (debug) cout << "Node middle (" << r2 << "): " << middle->getName() << endl;
         
+        // furthermore, 'second' need not be anywhere near 'first' or 'middle
         int r3 = random_int_range(0,(*item).second.size());
         item = tree_map.begin();
         std::advance( item, r3 );
