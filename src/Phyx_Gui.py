@@ -637,7 +637,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "~/pxupgma -h"
 		else: 
-			cmd = "~/pxtlate -s" + s.get()
+			cmd = "~/pxupgma -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
