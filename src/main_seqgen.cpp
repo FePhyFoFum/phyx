@@ -38,6 +38,7 @@ void print_help() {
     cout << " -w, --aaratemat=Input  comma-delimited Amino Acid rate matrix. default is All freq equal" << endl;
     cout << "                        order is ARNDCQEGHILKMFPSTWYV" << endl;
     cout << " -q, --aabasefreq=Input AA frequencies, order  ARNDCQEGHILKMFPSTWYV" << endl;
+    cout << " -c, --protein          Run as amino acid" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
     cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
     cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
@@ -72,6 +73,7 @@ static struct option const long_options[] =
     {"seed", required_argument, NULL, 'x'},
     {"ancestors", no_argument, NULL, 'a'},
     {"printnodelabels", no_argument, NULL, 'p'},
+    {"protein", no_argument, NULL, 'c'},
     {"multimodel", required_argument, NULL, 'm'},
     {"rootseq", required_argument, NULL, 'k'},
     {"help", no_argument, NULL, 'h'},
@@ -133,7 +135,7 @@ int main(int argc, char * argv[]) {
 	}*/
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apm:k:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apcm:k:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -271,6 +273,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'p':
                 printpost = true;
+                break;
+            case 'c':
+                MolDna = false;
                 break;
             case 'm':
                 mm = true;
