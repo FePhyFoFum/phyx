@@ -13,7 +13,7 @@ AC_PROG_FC
 
 AC_CHECK_LIB([m], [fabs])
 
-AC_PREFIX_DEFAULT(/usr/bin)
+AC_PREFIX_DEFAULT(/usr/local/bin)
 
 have_nlopt=no
 AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes])
