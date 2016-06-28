@@ -22,6 +22,7 @@ private:
     int seqlen;
     int nreps;
     int seed;
+    int x;
     
     float alpha;
     float pinvar;
@@ -29,16 +30,20 @@ private:
     string rootSequence;
     
     vector <double> basefreqs;
+    vector <double> aabasefreqs;
     vector < vector <double> > rmatrix;
     vector <double> multirates;
     
     bool showancs;
     bool printnodelabels;
     bool mm;
+    bool Mol;
     
     // hard-coded stuff
     static map<char, int> nucMap;
+    static map<char, int> aaMap;
     static string nucleotides;
+    static string AminoAcids;
     
     mt19937 generator;
     std::uniform_real_distribution<float> uniformDistrib;
@@ -80,7 +85,7 @@ public:
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
         int const& nreps, int const & seed, float const& alpha, float const& pinvar,
         string const& ancseq, bool const& printpost, vector<double> const& multirates,
-        bool const& mm);
+        bool const& mm, vector <double> const& aabasefreq, bool const& MolDna);
     
     // return results
     vector<Sequence> get_sequences ();

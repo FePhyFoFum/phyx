@@ -45,6 +45,30 @@ map <char, int> SequenceGenerator::nucMap = {
    {'T', 3}
 };
 string SequenceGenerator::nucleotides = "ACGT";
+string SequenceGenerator::AminoAcids = "ARNDCQEGHILKMFPSTWYV";
+map <char, int> SequenceGenerator::aaMap = {
+
+   {'A', 0},
+   {'R', 1},
+   {'N', 2},
+   {'D', 3},
+   {'C', 4},
+   {'Q', 5},
+   {'E', 6},
+   {'G', 7},
+   {'H', 8},
+   {'I', 9},
+   {'L', 10},
+   {'K', 11},
+   {'M', 12},
+   {'F', 13},
+   {'P', 14},
+   {'S', 15},
+   {'T', 16},
+   {'W', 17},
+   {'Y', 18},
+   {'V', 19}
+};
 
 /*
 map <char, int> SequenceGenerator::nucMap = {
@@ -60,20 +84,29 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
     int const& nreps, int const& seed, float const& alpha, float const& pinvar, 
     string const& ancseq, bool const& printpost, vector<double> const& multirates,
-    bool const& mm):tree(tree), seqlen(seqlength), nreps(nreps), seed(seed), alpha(alpha),
+    bool const& mm,  vector <double> const& aabasefreq, bool const& MolDna):tree(tree), seqlen(seqlength), nreps(nreps), seed(seed), alpha(alpha),
     pinvar(pinvar), rootSequence(ancseq), basefreqs(basefreq), rmatrix(rmatrix), 
     multirates(multirates), showancs(showancs), printnodelabels(printpost),
-    mm(mm) {
-    
+    mm(mm), aabasefreqs(aabasefreq), Mol(MolDna)  {
+	/*
+     for (unsigned int i = 0; i < rmatrix.size(); i++) {
+		for (unsigned int j = 0; j < rmatrix.size(); j++) {
+			cout << rmatrix[i][j] << " ";
+		}
+		cout << "\n";
+	}*/   
     initialize();
-    
+    if (MolDna == 1){
+			x = 4;
+	}else{
+			x = 20;
+	}
     // Print out the nodes names
     if (printnodelabels == true) {
         label_internal_nodes();
         print_node_labels();
         exit(0);
     }
-    
     preorder_tree_traversal(tree, showancs, multirates, mm);
 }
 
@@ -116,23 +149,34 @@ void SequenceGenerator::initialize () {
  */
 string SequenceGenerator::simulate_sequence (string const& anc, 
     vector < vector <double> >& QMatrix, float const& brlength) {
-
     std::vector<double>::iterator low;
-    vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
-    
+    vector < vector <double> > PMatrix(x, vector <double>(x, 0.0));
+    //int ancChar = 0;
     string newstring = anc; // instead of building, set size and replace
     for (int i = 0; i < seqlen; i++) {
         float RandNumb = get_uniform_random_deviate();
-        int ancChar = nucMap[anc[i]];
+        int ancChar = 0;
+        if (Mol == 1){
+			ancChar = nucMap[anc[i]];
+		}else{
+			ancChar = aaMap[anc[i]];
+			//cout << ancChar << endl;
+		}
         float brnew = brlength * site_rates[i];
         PMatrix = calculate_p_matrix(QMatrix, brnew);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < x; i++) {
             // this calculates a cumulative sum
             std::partial_sum(PMatrix[i].begin(), PMatrix[i].end(), PMatrix[i].begin(), plus<double>());
         }
         low = std::lower_bound (PMatrix[ancChar].begin(), PMatrix[ancChar].end(), RandNumb);
-        newstring[i] = nucleotides[low - PMatrix[ancChar].begin()];
+        
+        if (Mol == 1){
+			newstring[i] = nucleotides[low - PMatrix[ancChar].begin()];
+		}else{
+			newstring[i] = AminoAcids[low - PMatrix[ancChar].begin()];	
+		}
     }
+    //cout << newstring << endl;
     return newstring;
 }
 
@@ -142,8 +186,8 @@ string SequenceGenerator::simulate_sequence (string const& anc,
  */
 vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
 
-    vector < vector <double> > bigpi(4, vector <double>(4, 1.0));
-    vector < vector <double> > t(4, vector <double>(4, 0.0));
+    vector < vector <double> > bigpi(x, vector <double>(x, 1.0));
+    vector < vector <double> > t(x, vector <double>(x, 0.0));
     
     double tscale = 0.0;
     
@@ -151,7 +195,11 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i != j) {
-                bigpi[i][j] *= basefreqs[i] * basefreqs[j] * rmatrix[i][j];
+				if (Mol == 1){
+					bigpi[i][j] *= basefreqs[i] * basefreqs[j] * rmatrix[i][j];
+				}else{
+					bigpi[i][j] *= aabasefreqs[i] * aabasefreqs[j] * rmatrix[i][j];	
+				}
                 tscale += bigpi[i][j];
             } else {
                 bigpi[i][j] = 0.0;
@@ -180,7 +228,11 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
     //Divide and Transpose
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
-            bigpi[i][j] /= basefreqs[i];
+			if (Mol == i){
+				bigpi[i][j] /= basefreqs[i];
+			}else{
+				bigpi[i][j] /= aabasefreqs[i];
+			}
         }
     }
     return bigpi;
@@ -193,9 +245,9 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
  */
 vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vector <double> > QMatrix, float br) {
 
-    vector < vector <double> > Pmatrix(4, vector <double>(4, 0.0));
-    mat A = randn<mat>(4,4);
-    mat B = randn<mat>(4,4);
+    vector < vector <double> > Pmatrix(x, vector <double>(x, 0.0));
+    mat A = randn<mat>(x,x);
+    mat B = randn<mat>(x,x);
     int count = 0;
     //Q * t moved into Matrix form for armadillo
     for (unsigned int i = 0; i < QMatrix.size(); i++) {
@@ -230,8 +282,7 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     double brlength = 0.0;
     int rate_count = 0;
     int check = 0;
-    vector < vector <double> > QMatrix(4, vector <double>(4, 0.0));
-
+	vector < vector <double> > QMatrix(x, vector <double>(x, 0.0));
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
     if (mm == true) {        
@@ -258,7 +309,6 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
         //QMatrix = calculate_q_matrix();
     }
     QMatrix = calculate_q_matrix();
-
     Node * root = tree->getRoot();
     seqs[root] = rootSequence;
     ancq[root] = QMatrix;
@@ -317,7 +367,6 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
             }
         }
         QMatrix = calculate_q_matrix();
-
         //PMatrix = calculate_p_matrix(QMatrix, brlength);
         Node * dec = tree->getNode(k);
         Node * parent = tree->getNode(k)->getParent();
@@ -336,7 +385,6 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
         
         seqs[dec] = decSeq;
         ancq[dec] = QMatrix; // why store this?
-        
         if (showancs == true && tree->getNode(k)->isInternal() == true) {
             string tname = tree->getNode(k)->getName();
             Sequence seq(tname, decSeq);
@@ -359,6 +407,7 @@ void SequenceGenerator::print_node_labels() {
 
 
 void SequenceGenerator::label_internal_nodes() {
+
     int count = 1;
     string str = "Node";
     string nlabel = "";
@@ -408,16 +457,32 @@ vector <float> SequenceGenerator::set_site_rates () {
 string SequenceGenerator::generate_random_sequence () {
     
     string ancseq(seqlen, 'G');
-    vector <double> cumsum(4);
-    std::vector <double>::iterator low;
-    // cumulative sum
-    std::partial_sum(basefreqs.begin(), basefreqs.end(), cumsum.begin(), plus<double>());
+    if (Mol == 1){
+		//string ancseq(seqlen, 'G');
+		vector <double> cumsum(4);
+		std::vector <double>::iterator low;
+		// cumulative sum
+		std::partial_sum(basefreqs.begin(), basefreqs.end(), cumsum.begin(), plus<double>());
     
-    for (int i = 0; i < seqlen; i++) {
-        float RandNumb = get_uniform_random_deviate();
-        low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
-        ancseq[i] = nucleotides[low - cumsum.begin()];
-    }
+		for (int i = 0; i < seqlen; i++) {
+			float RandNumb = get_uniform_random_deviate();
+			low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+			ancseq[i] = nucleotides[low - cumsum.begin()];
+		}
+	}else{
+		//string ancseq(seqlen, 'G');
+		vector <double> cumsum(20);
+		std::vector <double>::iterator low;
+		// cumulative sum
+		std::partial_sum(aabasefreqs.begin(), aabasefreqs.end(), cumsum.begin(), plus<double>());
+    
+		for (int i = 0; i < seqlen; i++) {
+			float RandNumb = get_uniform_random_deviate();
+			low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+			ancseq[i] = AminoAcids[low - cumsum.begin()];
+		}	
+	}
+	//cout << ancseq << endl;
     return ancseq;
 }
 
@@ -426,7 +491,7 @@ string SequenceGenerator::generate_random_sequence () {
 vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <double> const& rates) {
     
     // initialize
-    vector < vector <double> > ratemat(4, vector<double>(4, 0.33));
+    vector < vector <double> > ratemat(x, vector<double>(4, 0.33));
     
     // planning ahead here for potential non-reversible matrices
     if (rates.size() == 6) {

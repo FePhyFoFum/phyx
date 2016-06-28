@@ -35,6 +35,9 @@ void print_help() {
     cout << " -i, --pinvar=FLOAT     proportion of invariable sites. default is 0.0" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
+    cout << " -w, --aaratemat=Input  comma-delimited Amino Acid rate matrix. default is All freq equal" << endl;
+    cout << "                        order is ARNDCQEGHILKMFPSTWYV" << endl;
+    cout << " -q, --aabasefreq=Input AA frequencies, order  ARNDCQEGHILKMFPSTWYV" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
     cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
     cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
@@ -63,6 +66,8 @@ static struct option const long_options[] =
     {"gamma", required_argument, NULL, 'g'},
     {"pinvar", required_argument, NULL, 'i'},
     {"ratemat", required_argument, NULL, 'r'},
+    {"aaratemat", required_argument, NULL, 'w'},
+    {"aabasef", required_argument, NULL, 'q'},
     {"nreps", required_argument, NULL, 'n'},
     {"seed", required_argument, NULL, 'x'},
     {"ancestors", no_argument, NULL, 'a'},
@@ -80,22 +85,37 @@ int main(int argc, char * argv[]) {
     bool printpost = false;
     bool showancs = false;
     bool mm = false;
+    bool MolDna = true;
     float pinvar = 0.0;
+    double tot;
     string yorn = "n";
     int seqlen = 1000;
+    int pos = 0;
+    int pos2 = 0;
     string infreqs;
     string inrates;
     string holdrates;
     string ancseq;
     char * outf;
     char * treef;
+    vector <double> diag(20, 0.0);
     vector <double> basefreq(4, 0.25);
+    vector <double> aabasefreq(20, 0.05);
     vector <double> userrates;
     vector <double> multirates(4, 0.25);
     int nreps = 1; // not implemented at the moment
     int seed = -1;
     int numpars = 0;
     float alpha = -1.0;
+    vector<vector <double>> dmatrix;
+    vector< vector <double> > aa_rmatrix(20, vector<double>(20, 1));
+        for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
+        for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
+            if (i == j) { // Fill Diagonal
+                aa_rmatrix[i][j] = -19.0;
+            }
+        }
+    }
     vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
@@ -104,9 +124,16 @@ int main(int argc, char * argv[]) {
             }
         }
     }
+    /*dmatrix = aa_rmatrix;
+    for (unsigned int i = 0; i < dmatrix.size(); i++) {
+		for (unsigned int j = 0; j < dmatrix.size(); j++) {
+			cout << dmatrix[i][j] << " ";
+		}
+		cout << "\n";
+	}*/
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:n:x:apm:k:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apm:k:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -175,11 +202,66 @@ int main(int argc, char * argv[]) {
                     cout << "\n";
                 }*/
                 break;
+            case 'w':
+                inrates = strdup(optarg);
+                userrates = parse_double_comma_list(inrates);
+                MolDna = false;
+                
+                // NOTE: will have to alter this check for a.a., non-reversible, etc.
+                if (userrates.size() != 190) {
+                    cout << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
+                        "Only " << userrates.size() << " provided. Exiting." << endl;
+                    exit(0);
+                }
+                pos = 0;
+                pos2 = 1;
+                //Fill the Matrix
+                for (unsigned int i = 0; i < userrates.size(); i++){
+						aa_rmatrix[pos][pos2] = userrates[i];
+						aa_rmatrix[pos2][pos] = userrates[i];
+						pos2++;
+						if (pos2 == 20){
+							pos += 1;
+							pos2 = (pos + 1);
+						}
+				}
+				//Replace Diagnol
+				for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
+					for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
+						if (i != j){
+							tot += aa_rmatrix[i][j];
+						}
+					}
+					aa_rmatrix[i][i] = (tot*-1);
+					tot = 0.0;
+				}
+				/*
+				for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
+					for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
+						cout << aa_rmatrix[i][j] << " ";
+					}
+					cout << "\n";
+				}*/
+                break;
             case 'n':
                 nreps = atoi(strdup(optarg));
                 break;
             case 'x':
                 seed = atoi(strdup(optarg));
+                break;
+            case 'q':
+			    MolDna = false;
+                infreqs = strdup(optarg);
+                aabasefreq = parse_double_comma_list(infreqs);
+                if (aabasefreq.size() != 20) {
+                    cout << "Error: must provide 20 base frequencies (" << aabasefreq.size()
+                        << " provided). Exiting." << endl;
+                    exit(0);
+                }
+                if (!essentially_equal(sum(aabasefreq), 1.0)) {
+                    cout << "Error: base frequencies must sum to 1.0. Exiting." << endl;
+                    exit(0);
+                }
                 break;
             case 'g':
                 alpha = atof(strdup(optarg));
@@ -216,6 +298,11 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
+    if (MolDna == true){
+		dmatrix = rmatrix;
+	}else{
+		dmatrix = aa_rmatrix;
+	}
     
     istream* pios;
     ostream* poos;
@@ -270,8 +357,8 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs,
-                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm);
+                SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
+                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm, aabasefreq, MolDna);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
@@ -293,8 +380,8 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
-                SequenceGenerator SGen(seqlen, basefreq, rmatrix, tree, showancs,
-                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm);
+                SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
+                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm, aabasefreq, MolDna);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
