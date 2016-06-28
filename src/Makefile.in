@@ -462,7 +462,7 @@ install:
 	install -m 0755 px* $(prefix)
 
 uninstall:
-	-$(RM) $(prefix)px*
+	-$(RM) $(prefix)/px*
 
 # Other Targets
 clean:
