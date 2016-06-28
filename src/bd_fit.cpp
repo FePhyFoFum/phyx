@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <numeric>
 #include <algorithm>
 #include <nlopt.hpp>
 
