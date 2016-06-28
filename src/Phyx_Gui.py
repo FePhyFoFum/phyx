@@ -253,17 +253,17 @@ class GUI:
 		#self.close_button.pack()
 	def aa(self):
 		if (h.get() != ""):
-			cmd = "~/pxaatocdn -h"
+			cmd = "pxaatocdn -h"
 		else: 
-			cmd = "~/pxaatocdn -a " + a.get() + " -n " + n.get()
+			cmd = "pxaatocdn -a " + a.get() + " -n " + n.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def bdfit(self):
 		if (h.get() != ""):
-			cmd = "~/pxbdfit -h"
+			cmd = "pxbdfit -h"
 		else: 
-			cmd = "~/pxbdfit -t " + t.get()
+			cmd = "pxbdfit -t " + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -271,9 +271,9 @@ class GUI:
 		os.system(cmd)
 	def bdsim(self):
 		if (h.get() != ""):
-			cmd = "~/pxbdsim -h"
+			cmd = "pxbdsim -h"
 		else: 
-			cmd = "~/pxbdsim "
+			cmd = "pxbdsim "
 			if (e.get() != ""):
 				cmd += " -e " + e.get()
 			if (t.get() != ""):
@@ -293,9 +293,9 @@ class GUI:
 		os.system(cmd)
 	def boot(self):
 		if (h.get() != ""):
-			cmd = "~/pxboot -h"
+			cmd = "pxboot -h"
 		else: 
-			cmd = "~/pxboot "
+			cmd = "pxboot "
 			if (s.get() != ""):
 				cmd += " -s " + s.get()
 			if (o.get() != ""):
@@ -309,25 +309,25 @@ class GUI:
 		os.system(cmd)
 	def bp(self):
 		if (h.get() != ""):
-			cmd = "~/pxbp -h"
+			cmd = "pxbp -h"
 		else: 
-			cmd = "~/pxbp -t" + t.get()
+			cmd = "pxbp -t" + t.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def bpseq(self):
 		if (h.get() != ""):
-			cmd = "~/pxbpseq -h"
+			cmd = "pxbpseq -h"
 		else: 
-			cmd = "~/pxbpseq -t" + t.get() + " -s " + s.get()
+			cmd = "pxbpseq -t" + t.get() + " -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def cat(self):
 		if (h.get() != ""):
-			cmd = "~/pxcat -h"
+			cmd = "pxcat -h"
 		else: 
-			cmd = "~/pxcat -s" + s.get()
+			cmd = "pxcat -s" + s.get()
 			if (p.get() != ""):
 				cmd += " -p " + p.get()
 			if (o.get() != ""):
@@ -335,9 +335,9 @@ class GUI:
 		os.system(cmd)
 	def clsq(self):
 		if (h.get() != ""):
-			cmd = "~/pxclsq -h"
+			cmd = "pxclsq -h"
 		else: 
-			cmd = "~/pxclsq -s" + s.get()
+			cmd = "pxclsq -s" + s.get()
 			if (p.get() != ""):
 				cmd += " -p " + p.get()
 			if (o.get() != ""):
@@ -345,17 +345,17 @@ class GUI:
 		os.system(cmd)
 	def conseq(self):
 		if (h.get() != ""):
-			cmd = "~/pxconseq -h"
+			cmd = "pxconseq -h"
 		else: 
-			cmd = "~/pxconseq -s" + s.get()
+			cmd = "pxconseq -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def contrates(self):
 		if (h.get() != ""):
-			cmd = "~/pxcontrates -h"
+			cmd = "pxcontrates -h"
 		else: 
-			cmd = "~/pxcontrates -s" + s.get()
+			cmd = "pxcontrates -s" + s.get()
 			if (c.get() != ""):
 				cmd += " -c " + c.get()
 			if (t.get() != ""):
@@ -367,9 +367,9 @@ class GUI:
 		os.system(cmd)
 	def fqfilt(self):
 		if (h.get() != ""):
-			cmd = "~/pxfqfilt -h"
+			cmd = "pxfqfilt -h"
 		else: 
-			cmd = "~/pxfqfilt -s" + s.get()
+			cmd = "pxfqfilt -s" + s.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (s.get() != ""):
@@ -379,9 +379,9 @@ class GUI:
 		os.system(cmd)
 	def lsseq(self):
 		if (h.get() != ""):
-			cmd = "~/pxlsseq -h"
+			cmd = "pxlsseq -h"
 		else: 
-			cmd = "~/pxlsseq -s" + s.get()
+			cmd = "pxlsseq -s" + s.get()
 			if (a.get() != ""):
 				cmd += " -a "
 			if (p.get() != ""):
@@ -391,9 +391,9 @@ class GUI:
 		os.system(cmd)
 	def lstr(self):
 		if (h.get() != ""):
-			cmd = "~/pxlstr -h"
+			cmd = "pxlstr -h"
 		else: 
-			cmd = "~/pxlstr -t" + t.get()
+			cmd = "pxlstr -t" + t.get()
 			if (a.get() != ""):
 				cmd += " -a "
 			if (r.get() != ""):
@@ -411,9 +411,9 @@ class GUI:
 		os.system(cmd)
 	def mrca(self):
 		if (h.get() != ""):
-			cmd = "~/pxmrca -h"
+			cmd = "pxmrca -h"
 		else: 
-			cmd = "~/pxmrca -t" + t.get()
+			cmd = "pxmrca -t" + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -421,9 +421,9 @@ class GUI:
 		os.system(cmd)
 	def mrcacut(self):
 		if (h.get() != ""):
-			cmd = "~/pxmrcacut -h"
+			cmd = "pxmrcacut -h"
 		else: 
-			cmd = "~/pxmrcacut -t" + t.get()
+			cmd = "pxmrcacut -t" + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -431,9 +431,9 @@ class GUI:
 		os.system(cmd)
 	def mrcaname(self):
 		if (h.get() != ""):
-			cmd = "~/pxmrcaname -h"
+			cmd = "pxmrcaname -h"
 		else: 
-			cmd = "~/pxmrcaname -t" + t.get()
+			cmd = "pxmrcaname -t" + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -441,9 +441,9 @@ class GUI:
 		os.system(cmd)
 	def nj(self):
 		if (h.get() != ""):
-			cmd = "~/pxnj -h"
+			cmd = "pxnj -h"
 		else: 
-			cmd = "~/pxnj -s" + s.get()
+			cmd = "pxnj -s" + s.get()
 			if (n.get() != ""):
 				cmd += " -n " + n.get()
 			if (o.get() != ""):
@@ -451,9 +451,9 @@ class GUI:
 		os.system(cmd)
 	def nni(self):
 		if (h.get() != ""):
-			cmd = "~/pxnni -h"
+			cmd = "pxnni -h"
 		else: 
-			cmd = "~/pxnni -t" + t.get()
+			cmd = "pxnni -t" + t.get()
 			if (x.get() != ""):
 				cmd += " -x " + x.get()
 			if (o.get() != ""):
@@ -461,9 +461,9 @@ class GUI:
 		os.system(cmd)
 	def nw(self):
 		if (h.get() != ""):
-			cmd = "~/pxnw -h"
+			cmd = "pxnw -h"
 		else: 
-			cmd = "~/pxnw -s" + s.get()
+			cmd = "pxnw -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 			if (a.get() != ""):
@@ -479,25 +479,25 @@ class GUI:
 		os.system(cmd)
 	def recode(self):
 		if (h.get() != ""):
-			cmd = "~/pxrecode -h"
+			cmd = "pxrecode -h"
 		else: 
-			cmd = "~/pxrecode -s" + s.get()
+			cmd = "pxrecode -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def revcomp(self):
 		if (h.get() != ""):
-			cmd = "~/pxrevcomp -h"
+			cmd = "pxrevcomp -h"
 		else: 
-			cmd = "~/pxrevcomp -s" + s.get()
+			cmd = "pxrevcomp -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def rms(self):
 		if (h.get() != ""):
-			cmd = "~/pxrms -h"
+			cmd = "pxrms -h"
 		else: 
-			cmd = "~/pxrms -s" + s.get()
+			cmd = "pxrms -s" + s.get()
 			if (r.get() != ""):
 				cmd += " -r " + r.get()
 			if (o.get() != ""):
@@ -505,9 +505,9 @@ class GUI:
 		os.system(cmd)
 	def rmt(self):
 		if (h.get() != ""):
-			cmd = "~/pxrmt -h"
+			cmd = "pxrmt -h"
 		else: 
-			cmd = "~/pxrmt -t" + t.get()
+			cmd = "pxrmt -t" + t.get()
 			if (n.get() != ""):
 				cmd += " -n " + n.get()
 			if (f.get() != ""):
@@ -517,9 +517,9 @@ class GUI:
 		os.system(cmd)
 	def rr(self):
 		if (h.get() != ""):
-			cmd = "~/pxrr -h"
+			cmd = "pxrr -h"
 		else: 
-			cmd = "~/pxrr -t" + t.get()
+			cmd = "pxrr -t" + t.get()
 			if (f.get() != ""):
 				cmd += " -f " + f.get()
 			if (u.get() != ""):
@@ -531,9 +531,9 @@ class GUI:
 		os.system(cmd)
 	def seqgen(self):
 		if (h.get() != ""):
-			cmd = "~/pxseqgen -h"
+			cmd = "pxseqgen -h"
 		else: 
-			cmd = "~/pxseqgen -t" + t.get()
+			cmd = "pxseqgen -t" + t.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 			if (l.get() != ""):
@@ -559,33 +559,33 @@ class GUI:
 		os.system(cmd)
 	def stofa(self):
 		if (h.get() != ""):
-			cmd = "~/pxstofa -h"
+			cmd = "pxstofa -h"
 		else: 
-			cmd = "~/pxstofa -s" + s.get()
+			cmd = "pxstofa -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def stonex(self):
 		if (h.get() != ""):
-			cmd = "~/pxstonex -h"
+			cmd = "pxstonex -h"
 		else: 
-			cmd = "~/pxstonex -s" + s.get()
+			cmd = "pxstonex -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def stophy(self):
 		if (h.get() != ""):
-			cmd = "~/pxstophy -h"
+			cmd = "pxstophy -h"
 		else: 
-			cmd = "~/pxstophy -s" + s.get()
+			cmd = "pxstophy -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def strec(self):
 		if (h.get() != ""):
-			cmd = "~/pxstrec -h"
+			cmd = "pxstrec -h"
 		else: 
-			cmd = "~/pxstrec -d" + d.get()
+			cmd = "pxstrec -d" + d.get()
 			if (w.get() != ""):
 				cmd += " -w "
 			if (z.get() != ""):
@@ -609,9 +609,9 @@ class GUI:
 		os.system(cmd)
 	def sw(self):
 		if (h.get() != ""):
-			cmd = "~/pxsw -h"
+			cmd = "pxsw -h"
 		else: 
-			cmd = "~/pxsw -s" + s.get()
+			cmd = "pxsw -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 			if (a.get() != ""):
@@ -627,17 +627,17 @@ class GUI:
 		os.system(cmd)
 	def tlate(self):
 		if (h.get() != ""):
-			cmd = "~/pxtlate -h"
+			cmd = "pxtlate -h"
 		else: 
-			cmd = "~/pxtlate -s" + s.get()
+			cmd = "pxtlate -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
 	def upgma(self):
 		if (h.get() != ""):
-			cmd = "~/pxupgma -h"
+			cmd = "pxupgma -h"
 		else: 
-			cmd = "~/pxupgma -s" + s.get()
+			cmd = "pxupgma -s" + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
