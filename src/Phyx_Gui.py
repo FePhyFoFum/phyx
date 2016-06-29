@@ -538,8 +538,14 @@ class GUI:
 				cmd += " -o " + o.get()
 			if (l.get() != ""):
 				cmd += " -l " + l.get()
+			if (c.get() != ""):
+				cmd += " -c "
 			if (b.get() != ""):
 				cmd += " -b " + b.get()
+			if (w.get() != ""):
+				cmd += " -w " + w.get()
+			if (q.get() != ""):
+				cmd += " -q " + q.get()
 			if (g.get() != ""):
 				cmd += " -g " + g.get()
 			if (r.get() != ""):
