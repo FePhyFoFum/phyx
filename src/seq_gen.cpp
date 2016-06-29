@@ -228,7 +228,7 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
     //Divide and Transpose
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
-			if (Mol == i){
+			if (Mol == 1){
 				bigpi[i][j] /= basefreqs[i];
 			}else{
 				bigpi[i][j] /= aabasefreqs[i];
@@ -525,12 +525,22 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
 void SequenceGenerator::check_valid_sequence () {
     // make sure uppercase
     std::transform(rootSequence.begin(), rootSequence.end(), rootSequence.begin(), ::toupper);
-    std::size_t found = rootSequence.find_first_not_of(nucleotides);
-    if (found != std::string::npos) {
-        cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
-            << found+1 << " (only A,C,G,T allowed). Exiting." << endl;
-        exit(0);
-    }
+    if (Mol == 1){
+		std::size_t found = rootSequence.find_first_not_of(nucleotides);
+		if (found != std::string::npos) {
+			cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
+				<< found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << endl;
+			exit(0);
+		}
+	}else{
+		std::size_t found = rootSequence.find_first_not_of(AminoAcids);
+		if (found != std::string::npos) {
+			cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
+				<< found+1 << " (only AA chars allowed). Exiting." << endl;
+			exit(0);
+		}		
+		
+	}
 }
 
 
