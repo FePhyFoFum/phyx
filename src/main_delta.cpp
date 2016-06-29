@@ -22,6 +22,13 @@ using namespace std;
 #include "omp.h"
 
 int main(int argc, char * argv[]) {
+	ofstream PhyxFile;
+    PhyxFile.open ("Phyx.log", ios::out | ios::app );
+	for (unsigned i = 0; i < argc;i++){
+			PhyxFile << argv[i] << " ";
+	}
+	PhyxFile << endl;
+	PhyxFile.close();
     TreeReader tr;
 
     if (argc != 4 && argc != 3) {

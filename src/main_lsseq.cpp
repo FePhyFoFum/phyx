@@ -46,7 +46,13 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]){
-    
+	ofstream PhyxFile;
+    PhyxFile.open ("Phyx.log", ios::out | ios::app );
+	for (unsigned i = 0; i < argc;i++){
+			PhyxFile << argv[i] << " ";
+	}
+	PhyxFile << endl;
+	PhyxFile.close();
     bool outfileset = false;
     bool fileset = false;
     bool all = false;

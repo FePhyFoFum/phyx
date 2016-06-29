@@ -82,6 +82,13 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
+	ofstream PhyxFile;
+    PhyxFile.open ("Phyx.log", ios::out | ios::app );
+	for (unsigned i = 0; i < argc;i++){
+			PhyxFile << argv[i] << " ";
+	}
+	PhyxFile << endl;
+	PhyxFile.close();
     bool outfileset = false;
     bool fileset = false;
     bool printpost = false;
@@ -133,6 +140,7 @@ int main(int argc, char * argv[]) {
 		}
 		cout << "\n";
 	}*/
+
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apcm:k:hV", long_options, &oi);

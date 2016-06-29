@@ -95,6 +95,13 @@ bool checkdata(Tree * intree, vector<Sequence> runseqs) {
 }
 
 int main(int argc, char * argv[]) {
+	ofstream PhyxFile;
+    PhyxFile.open ("Phyx.log", ios::out | ios::app );
+	for (unsigned i = 0; i < argc;i++){
+			PhyxFile << argv[i] << " ";
+	}
+	PhyxFile << endl;
+	PhyxFile.close();
     bool datafileset = false; // not used
     bool treefileset = false; // not used
     bool conffileset = false;
