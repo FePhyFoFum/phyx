@@ -24,8 +24,7 @@ class NJOI {
 private:
 
     map <string, string> sequences;
-    //map <string, int> NumbKey; // not used
-    map <string, string>::iterator iter; // not used
+    map <string, string>::iterator iter;
     vector<string> names;
     //string fasta;
     vector< vector<double> > Matrix;
