@@ -327,7 +327,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxcat -h"
 		else: 
-			cmd = "pxcat -s" + s.get()
+			cmd = "pxcat -s " + s.get()
 			if (p.get() != ""):
 				cmd += " -p " + p.get()
 			if (o.get() != ""):
@@ -337,7 +337,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxclsq -h"
 		else: 
-			cmd = "pxclsq -s" + s.get()
+			cmd = "pxclsq -s " + s.get()
 			if (p.get() != ""):
 				cmd += " -p " + p.get()
 			if (o.get() != ""):
@@ -347,7 +347,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxconseq -h"
 		else: 
-			cmd = "pxconseq -s" + s.get()
+			cmd = "pxconseq -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -355,7 +355,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxcontrates -h"
 		else: 
-			cmd = "pxcontrates -s" + s.get()
+			cmd = "pxcontrates -s " + s.get()
 			if (c.get() != ""):
 				cmd += " -c " + c.get()
 			if (t.get() != ""):
@@ -369,7 +369,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxfqfilt -h"
 		else: 
-			cmd = "pxfqfilt -s" + s.get()
+			cmd = "pxfqfilt -s " + s.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (s.get() != ""):
@@ -381,7 +381,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxlsseq -h"
 		else: 
-			cmd = "pxlsseq -s" + s.get()
+			cmd = "pxlsseq -s " + s.get()
 			if (a.get() != ""):
 				cmd += " -a "
 			if (p.get() != ""):
@@ -393,7 +393,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxlstr -h"
 		else: 
-			cmd = "pxlstr -t" + t.get()
+			cmd = "pxlstr -t " + t.get()
 			if (a.get() != ""):
 				cmd += " -a "
 			if (r.get() != ""):
@@ -413,7 +413,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxmrca -h"
 		else: 
-			cmd = "pxmrca -t" + t.get()
+			cmd = "pxmrca -t " + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -423,7 +423,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxmrcacut -h"
 		else: 
-			cmd = "pxmrcacut -t" + t.get()
+			cmd = "pxmrcacut -t " + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -433,7 +433,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxmrcaname -h"
 		else: 
-			cmd = "pxmrcaname -t" + t.get()
+			cmd = "pxmrcaname -t " + t.get()
 			if (m.get() != ""):
 				cmd += " -m " + m.get()
 			if (o.get() != ""):
@@ -443,7 +443,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxnj -h"
 		else: 
-			cmd = "pxnj -s" + s.get()
+			cmd = "pxnj -s " + s.get()
 			if (n.get() != ""):
 				cmd += " -n " + n.get()
 			if (o.get() != ""):
@@ -453,7 +453,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxnni -h"
 		else: 
-			cmd = "pxnni -t" + t.get()
+			cmd = "pxnni -t " + t.get()
 			if (x.get() != ""):
 				cmd += " -x " + x.get()
 			if (o.get() != ""):
@@ -463,7 +463,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxnw -h"
 		else: 
-			cmd = "pxnw -s" + s.get()
+			cmd = "pxnw -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 			if (a.get() != ""):
@@ -481,7 +481,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxrecode -h"
 		else: 
-			cmd = "pxrecode -s" + s.get()
+			cmd = "pxrecode -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -489,7 +489,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxrevcomp -h"
 		else: 
-			cmd = "pxrevcomp -s" + s.get()
+			cmd = "pxrevcomp -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -497,7 +497,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxrms -h"
 		else: 
-			cmd = "pxrms -s" + s.get()
+			cmd = "pxrms -s " + s.get()
 			if (r.get() != ""):
 				cmd += " -r " + r.get()
 			if (o.get() != ""):
@@ -507,7 +507,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxrmt -h"
 		else: 
-			cmd = "pxrmt -t" + t.get()
+			cmd = "pxrmt -t " + t.get()
 			if (n.get() != ""):
 				cmd += " -n " + n.get()
 			if (f.get() != ""):
@@ -519,7 +519,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxrr -h"
 		else: 
-			cmd = "pxrr -t" + t.get()
+			cmd = "pxrr -t " + t.get()
 			if (f.get() != ""):
 				cmd += " -f " + f.get()
 			if (u.get() != ""):
@@ -533,7 +533,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxseqgen -h"
 		else: 
-			cmd = "pxseqgen -t" + t.get()
+			cmd = "pxseqgen -t " + t.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 			if (l.get() != ""):
@@ -567,7 +567,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxstofa -h"
 		else: 
-			cmd = "pxstofa -s" + s.get()
+			cmd = "pxstofa -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -575,7 +575,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxstonex -h"
 		else: 
-			cmd = "pxstonex -s" + s.get()
+			cmd = "pxstonex -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -583,7 +583,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxstophy -h"
 		else: 
-			cmd = "pxstophy -s" + s.get()
+			cmd = "pxstophy -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -635,7 +635,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxtlate -h"
 		else: 
-			cmd = "pxtlate -s" + s.get()
+			cmd = "pxtlate -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
@@ -643,7 +643,7 @@ class GUI:
 		if (h.get() != ""):
 			cmd = "pxupgma -h"
 		else: 
-			cmd = "pxupgma -s" + s.get()
+			cmd = "pxupgma -s " + s.get()
 			if (o.get() != ""):
 				cmd += " -o " + o.get()
 		os.system(cmd)
