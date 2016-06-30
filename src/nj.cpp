@@ -66,7 +66,7 @@ void NJOI::FetchLengths(int const& NumbOfSequences, vector< vector<double> > con
  *NewMatrix: Has the adjusted values from the QMatrix calculation
 */
 void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
-    int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
+    int& NumbOfSequences, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
     double& brlength1, double& brlength2) {
     
     int msize = (int)NewMatrix.size();
@@ -86,7 +86,7 @@ void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>&
     names.insert(names.begin(), newname);
     
     //Make Smaller Matrix
-    vector< vector<double> > temp_matrix(node_list, vector<double>(node_list, 0.0));
+    vector< vector<double> > temp_matrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
     
     int count = 0;
     //Make a new First Row and Column
@@ -115,17 +115,17 @@ void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>&
         }
     }
     //cout << "NewMatrix.size() = " << NewMatrix.size() << "; temp_matrix.size() = "
-    //    << temp_matrix.size() << "; node_list = " << node_list << endl;
+    //    << temp_matrix.size() << "; NumbOfSequences = " << NumbOfSequences << endl;
     // NewMatrix is reduced b y1 in each dimension
     NewMatrix = temp_matrix;
 }
 
 // has to be a more efficient way of doing this!
-void NJOI::Choose_Smallest(int& node_list, vector< vector<double> > const& Matrix,
+void NJOI::Choose_Smallest(int& NumbOfSequences, vector< vector<double> > const& Matrix,
     int & mini1, int & mini2) {
     //super large value
     double MIN = 99999999999.99;
-    for (int i = 0; i < (node_list - 1); i++) {
+    for (int i = 0; i < (NumbOfSequences - 1); i++) {
         
         int idx = min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
         if (Matrix[i][idx] < MIN) {
@@ -134,7 +134,7 @@ void NJOI::Choose_Smallest(int& node_list, vector< vector<double> > const& Matri
             mini2 = idx;
         }
     }
-    node_list--;
+    NumbOfSequences--;
 }
 
 //NumbKeys Contains the names and their matching number
@@ -222,8 +222,6 @@ NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
             nchar = seq.get_length();
             first = false;
         }
-        NameKey[seqcount] = seq.get_id();
-        names.push_back(seq.get_id());
         seqcount++;
     }
     //fasta has a trailing one
@@ -234,18 +232,15 @@ NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
                 << seq.get_length() << " characters, was expecting " 
                 << nchar << "." << endl << "Exiting." << endl;
             exit(1);
-        }
-        NameKey[seqcount] = seq.get_id();
-        names.push_back(seq.get_id());
+        };
         seqcount++;
     }
     ntax = seqcount;
-    //set_name_key ();
+    set_name_key ();
     Matrix = BuildMatrix(sequences);
     TREEMAKE(names, NameKey, Matrix);
 }
 
-// populate these when reading in the sequences
 void NJOI::set_name_key () {
     int count = 0;
     for (iter = sequences.begin(); iter != sequences.end(); iter++) {

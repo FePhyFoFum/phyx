@@ -44,9 +44,9 @@ private:
     vector< vector<double> >& LengthMatrix, int const& mini1, int const& mini2,
         double & brlength1, double & brlength2);
     void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
-        int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
+        int& NumbOfSequences, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
         double& brlength1, double& brlength2);
-    void Choose_Smallest(int& node_list, vector< vector<double> > const& Matrix,
+    void Choose_Smallest(int& NumbOfSequences, vector< vector<double> > const& Matrix,
         int & mini1, int & mini2);
     
     
