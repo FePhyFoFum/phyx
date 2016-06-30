@@ -26,7 +26,7 @@ using namespace std;
  * ConvertedMatrix: Conversion to Q Matrix
  * LengthMatrix: Adjusted values for branch length calculations
  */
-void CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalMatrix, 
+void NJOI::CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalMatrix, 
     vector< vector<double> >& ConvertedMatrix, vector< vector<double> >& LengthMatrix) {
 
     ConvertedMatrix = OriginalMatrix;
@@ -52,7 +52,7 @@ void CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalMatrix,
  * NewMatrix: Has original distances
  * LengthMatrix: Has adjusted lengths
  */
-void FetchLengths(int const& NumbOfSequences, vector< vector<double> > const& NewMatrix,
+void NJOI::FetchLengths(int const& NumbOfSequences, vector< vector<double> > const& NewMatrix,
     vector< vector<double> >& LengthMatrix, int const& mini1, int const& mini2,
     double & brlength1, double & brlength2) {
 
@@ -65,7 +65,7 @@ void FetchLengths(int const& NumbOfSequences, vector< vector<double> > const& Ne
  *Updates the Tree info and bypasses using a tree structure by storing parts in an array
  *NewMatrix: Has the adjusted values from the QMatrix calculation
 */
-void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
+void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
     int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
     double& brlength1, double& brlength2) {
     
@@ -77,8 +77,8 @@ void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbK
     
     double ColRow = 0.0;
     double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
-    newname = "(" + names[mini1] + ":" + to_string(brlength2) +  ","
-        + names[mini2] + ":" + to_string(brlength1) +  ")";
+    newname = "(" + names[mini1] + ":" + to_string(brlength2 / (double)nchar) +  ","
+        + names[mini2] + ":" + to_string(brlength1 / (double)nchar) +  ")";
     
     // erase in backwards order as it preserves the indexes
     names.erase(names.begin()+mini2);
@@ -121,7 +121,7 @@ void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbK
 }
 
 // has to be a more efficient way of doing this!
-void Choose_Smallest(int& node_list, vector< vector<double> > const& Matrix,
+void NJOI::Choose_Smallest(int& node_list, vector< vector<double> > const& Matrix,
     int & mini1, int & mini2) {
     //super large value
     double MIN = 99999999999.99;
@@ -159,7 +159,8 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
         Tree_Update(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1,
             mini2, brlength1, brlength2);
     }
-    double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
+    //double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
+    double adjlength = (Matrix[mini1][mini2] / 2) / (double)nchar;
     newname = "(" + names[mini1] + ":" + to_string(adjlength) +  "," + names[mini2] + ":" + to_string(adjlength) +  ")";
     newickstring = newname + ";";
 }
