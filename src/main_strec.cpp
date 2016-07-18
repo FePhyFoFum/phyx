@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+
 using namespace std;
 
 #include "node.h"
@@ -22,6 +23,7 @@ using namespace std;
 #include "rate_model.h"
 #include "optimize_state_reconstructor_nlopt.h"
 #include "optimize_state_reconstructor_periods_nlopt.h"
+#include "log.h"
 
 
 void print_help() {
@@ -95,13 +97,9 @@ bool checkdata(Tree * intree, vector<Sequence> runseqs) {
 }
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     bool datafileset = false; // not used
     bool treefileset = false; // not used
     bool conffileset = false;

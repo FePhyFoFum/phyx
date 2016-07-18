@@ -17,6 +17,7 @@ using namespace std;
 #include "seq_utils.h"
 #include "utils.h"
 #include "mcmc.h"
+#include "log.h"
 
 #include <armadillo>
 using namespace arma;
@@ -50,13 +51,9 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     bool sfileset = false;
     bool tfileset = false;
     bool outfileset = false;

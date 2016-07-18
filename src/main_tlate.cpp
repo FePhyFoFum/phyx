@@ -14,13 +14,13 @@
 #include <cstring>
 #include <getopt.h>
 
-
 using namespace std;
 
 #include "tlate.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
+#include "log.h"
 
 void print_help() {
     cout << "Basic Translate Program Uses Codon Table 1." << endl;
@@ -50,13 +50,9 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     bool fileset = false;
     bool outfileset = false;
     string seqf = "";

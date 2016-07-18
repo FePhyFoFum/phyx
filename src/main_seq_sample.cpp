@@ -16,6 +16,7 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 #include "seq_sample.h"
+#include "log.h"
 
 void print_help() {
     cout << "Sequence alignment bootstrap or jackknife resampling." << endl;
@@ -51,13 +52,9 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     bool outfileset = false;
     bool fileset = false;
     bool partitioned = false;

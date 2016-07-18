@@ -9,6 +9,8 @@
 
 using namespace std;
 
+#include "log.h"
+
 void print_help() {
     cout << "Basic Positive selection test" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
@@ -36,15 +38,10 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]){
-	//cout << "Working" << endl; 
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
-	bool outfileset = false;
+    
+    log_call(argc, argv);
+    
+    bool outfileset = false;
     bool fileset = false;
     char * outf;
     char * seqf;

@@ -18,17 +18,14 @@ using namespace std;
 #include "tree.h"
 #include "utils.h"
 #include "delta.h"
+#include "log.h"
 
 #include "omp.h"
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     TreeReader tr;
 
     if (argc != 4 && argc != 3) {

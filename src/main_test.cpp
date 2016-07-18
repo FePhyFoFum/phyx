@@ -19,15 +19,12 @@ using namespace std;
 #include "utils.h"
 #include "sequence.h"
 #include "fasta_util.h"
+#include "log.h"
 
 int main(int argc, char * argv[]){
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     TreeReader tr;
 
     if (argc != 1){

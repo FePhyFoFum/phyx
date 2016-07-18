@@ -14,6 +14,7 @@ using namespace std;
 #include "utils.h"
 #include "seq_reader.h"
 #include "sequence.h"
+#include "log.h"
 
 void print_help() {
     cout << "Filter fastq files by mean quality." << endl;
@@ -44,13 +45,9 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     double meanfilt = 30;
     bool fileset = false;
     bool outfileset = false;

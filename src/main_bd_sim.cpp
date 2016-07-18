@@ -19,6 +19,7 @@ using namespace std;
 #include "tree.h"
 #include "utils.h"
 #include "bd_sim.h"
+#include "log.h"
 
 void print_help () {
     cout << "Birth-death simulator." << endl;
@@ -58,13 +59,9 @@ static struct option const long_options[] =
 };
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     bool outfileset = false;
     bool timeset = false;
     bool extantset = false;

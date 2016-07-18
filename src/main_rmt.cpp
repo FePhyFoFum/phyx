@@ -13,6 +13,7 @@ using namespace std;
 #include "tree.h"
 #include "tree_reader.h"
 #include "utils.h"
+#include "log.h"
 
 void print_help() {
     cout << "This will remove tips from a tree file and produce newick" << endl;
@@ -59,13 +60,9 @@ bool removetip(Tree * tree,vector<string> & names) {
 }
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();   
+    
+    log_call(argc, argv);
+      
     bool fileset = false;
     bool namesset = false;
     bool namefileset = false;

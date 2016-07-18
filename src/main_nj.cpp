@@ -27,6 +27,7 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
+#include "log.h"
 
 //g++ -std=c++11 njoi.cpp main_njoi.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 
@@ -67,13 +68,9 @@ void printInfo () {
 }
 
 int main(int argc, char * argv[]) {
-	ofstream PhyxFile;
-    PhyxFile.open ("Phyx.log", ios::out | ios::app );
-	for (unsigned i = 0; i < argc;i++){
-			PhyxFile << argv[i] << " ";
-	}
-	PhyxFile << endl;
-	PhyxFile.close();
+    
+    log_call(argc, argv);
+    
     bool fileset = false;
     bool outfileset = false;
     int threads = 1;
