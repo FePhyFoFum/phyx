@@ -180,6 +180,7 @@ LS_SEQ_DEP = main_lsseq.d
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
+./log.cpp \
 ./node.cpp \
 ./tree.cpp \
 ./tree_reader.cpp \
@@ -219,6 +220,7 @@ RATE_SRCS += \
 
 CPP_OBJS += \
 ./utils.o \
+./log.o \
 ./node.o \
 ./tree.o \
 ./tree_reader.o \
@@ -256,6 +258,7 @@ RATE_OBJS += \
 ## doesn't seem to be used
 CPP_DEPS += \
 ./utils.d \
+./log.d \
 ./node.d \
 ./tree.d \
 ./tree_reader.d \
