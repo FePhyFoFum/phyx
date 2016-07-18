@@ -88,19 +88,19 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     pinvar(pinvar), rootSequence(ancseq), basefreqs(basefreq), rmatrix(rmatrix), 
     multirates(multirates), showancs(showancs), printnodelabels(printpost),
     mm(mm), aabasefreqs(aabasefreq), Mol(MolDna)  {
-	/*
+    /*
      for (unsigned int i = 0; i < rmatrix.size(); i++) {
-		for (unsigned int j = 0; j < rmatrix.size(); j++) {
-			cout << rmatrix[i][j] << " ";
-		}
-		cout << "\n";
-	}*/   
+        for (unsigned int j = 0; j < rmatrix.size(); j++) {
+            cout << rmatrix[i][j] << " ";
+        }
+        cout << "\n";
+    }*/   
     initialize();
     if (MolDna == 1){
-			x = 4;
-	}else{
-			x = 20;
-	}
+        x = 4;
+    }else{
+        x = 20;
+    }
     // Print out the nodes names
     if (printnodelabels == true) {
         label_internal_nodes();
@@ -157,11 +157,11 @@ string SequenceGenerator::simulate_sequence (string const& anc,
         float RandNumb = get_uniform_random_deviate();
         int ancChar = 0;
         if (Mol == 1){
-			ancChar = nucMap[anc[i]];
-		}else{
-			ancChar = aaMap[anc[i]];
-			//cout << ancChar << endl;
-		}
+            ancChar = nucMap[anc[i]];
+        }else{
+            ancChar = aaMap[anc[i]];
+            //cout << ancChar << endl;
+        }
         float brnew = brlength * site_rates[i];
         PMatrix = calculate_p_matrix(QMatrix, brnew);
         for (int i = 0; i < x; i++) {
@@ -171,10 +171,10 @@ string SequenceGenerator::simulate_sequence (string const& anc,
         low = std::lower_bound (PMatrix[ancChar].begin(), PMatrix[ancChar].end(), RandNumb);
         
         if (Mol == 1){
-			newstring[i] = nucleotides[low - PMatrix[ancChar].begin()];
-		}else{
-			newstring[i] = AminoAcids[low - PMatrix[ancChar].begin()];	
-		}
+            newstring[i] = nucleotides[low - PMatrix[ancChar].begin()];
+        }else{
+            newstring[i] = AminoAcids[low - PMatrix[ancChar].begin()];    
+        }
     }
     //cout << newstring << endl;
     return newstring;
@@ -195,11 +195,11 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i != j) {
-				if (Mol == 1){
-					bigpi[i][j] *= basefreqs[i] * basefreqs[j] * rmatrix[i][j];
-				}else{
-					bigpi[i][j] *= aabasefreqs[i] * aabasefreqs[j] * rmatrix[i][j];	
-				}
+                if (Mol == 1){
+                    bigpi[i][j] *= basefreqs[i] * basefreqs[j] * rmatrix[i][j];
+                }else{
+                    bigpi[i][j] *= aabasefreqs[i] * aabasefreqs[j] * rmatrix[i][j];    
+                }
                 tscale += bigpi[i][j];
             } else {
                 bigpi[i][j] = 0.0;
@@ -228,11 +228,11 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
     //Divide and Transpose
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
-			if (Mol == 1){
-				bigpi[i][j] /= basefreqs[i];
-			}else{
-				bigpi[i][j] /= aabasefreqs[i];
-			}
+            if (Mol == 1){
+                bigpi[i][j] /= basefreqs[i];
+            }else{
+                bigpi[i][j] /= aabasefreqs[i];
+            }
         }
     }
     return bigpi;
@@ -282,7 +282,7 @@ void SequenceGenerator::preorder_tree_traversal (Tree * tree, bool showancs, vec
     double brlength = 0.0;
     int rate_count = 0;
     int check = 0;
-	vector < vector <double> > QMatrix(x, vector <double>(x, 0.0));
+    vector < vector <double> > QMatrix(x, vector <double>(x, 0.0));
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
     if (mm == true) {        
@@ -458,31 +458,31 @@ string SequenceGenerator::generate_random_sequence () {
     
     string ancseq(seqlen, 'G');
     if (Mol == 1){
-		//string ancseq(seqlen, 'G');
-		vector <double> cumsum(4);
-		std::vector <double>::iterator low;
-		// cumulative sum
-		std::partial_sum(basefreqs.begin(), basefreqs.end(), cumsum.begin(), plus<double>());
+        //string ancseq(seqlen, 'G');
+        vector <double> cumsum(4);
+        std::vector <double>::iterator low;
+        // cumulative sum
+        std::partial_sum(basefreqs.begin(), basefreqs.end(), cumsum.begin(), plus<double>());
     
-		for (int i = 0; i < seqlen; i++) {
-			float RandNumb = get_uniform_random_deviate();
-			low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
-			ancseq[i] = nucleotides[low - cumsum.begin()];
-		}
-	}else{
-		//string ancseq(seqlen, 'G');
-		vector <double> cumsum(20);
-		std::vector <double>::iterator low;
-		// cumulative sum
-		std::partial_sum(aabasefreqs.begin(), aabasefreqs.end(), cumsum.begin(), plus<double>());
+        for (int i = 0; i < seqlen; i++) {
+            float RandNumb = get_uniform_random_deviate();
+            low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+            ancseq[i] = nucleotides[low - cumsum.begin()];
+        }
+    }else{
+        //string ancseq(seqlen, 'G');
+        vector <double> cumsum(20);
+        std::vector <double>::iterator low;
+        // cumulative sum
+        std::partial_sum(aabasefreqs.begin(), aabasefreqs.end(), cumsum.begin(), plus<double>());
     
-		for (int i = 0; i < seqlen; i++) {
-			float RandNumb = get_uniform_random_deviate();
-			low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
-			ancseq[i] = AminoAcids[low - cumsum.begin()];
-		}	
-	}
-	//cout << ancseq << endl;
+        for (int i = 0; i < seqlen; i++) {
+            float RandNumb = get_uniform_random_deviate();
+            low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+            ancseq[i] = AminoAcids[low - cumsum.begin()];
+        }    
+    }
+    //cout << ancseq << endl;
     return ancseq;
 }
 
@@ -526,21 +526,21 @@ void SequenceGenerator::check_valid_sequence () {
     // make sure uppercase
     std::transform(rootSequence.begin(), rootSequence.end(), rootSequence.begin(), ::toupper);
     if (Mol == 1){
-		std::size_t found = rootSequence.find_first_not_of(nucleotides);
-		if (found != std::string::npos) {
-			cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
-				<< found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << endl;
-			exit(0);
-		}
-	}else{
-		std::size_t found = rootSequence.find_first_not_of(AminoAcids);
-		if (found != std::string::npos) {
-			cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
-				<< found+1 << " (only AA chars allowed). Exiting." << endl;
-			exit(0);
-		}		
-		
-	}
+        std::size_t found = rootSequence.find_first_not_of(nucleotides);
+        if (found != std::string::npos) {
+            cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
+                << found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << endl;
+            exit(0);
+        }
+    }else{
+        std::size_t found = rootSequence.find_first_not_of(AminoAcids);
+        if (found != std::string::npos) {
+            cout << "Error: illegal character '" << rootSequence[found] << "' at position " 
+                << found+1 << " (only AA chars allowed). Exiting." << endl;
+            exit(0);
+        }        
+        
+    }
 }
 
 

@@ -45,7 +45,7 @@ int main(int argc, char * argv[]){
     bool fileset = false;
     char * outf;
     char * seqf;
-	while (1) {
+    while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "i:o:hV", long_options, &oi);
         if (c == -1) {

@@ -131,11 +131,11 @@ int main(int argc, char * argv[]) {
     }
     /*dmatrix = aa_rmatrix;
     for (unsigned int i = 0; i < dmatrix.size(); i++) {
-		for (unsigned int j = 0; j < dmatrix.size(); j++) {
-			cout << dmatrix[i][j] << " ";
-		}
-		cout << "\n";
-	}*/
+        for (unsigned int j = 0; j < dmatrix.size(); j++) {
+            cout << dmatrix[i][j] << " ";
+        }
+        cout << "\n";
+    }*/
 
     while (1) {
         int oi = -1;
@@ -223,31 +223,31 @@ int main(int argc, char * argv[]) {
                 pos2 = 1;
                 //Fill the Matrix
                 for (unsigned int i = 0; i < userrates.size(); i++){
-						aa_rmatrix[pos][pos2] = userrates[i];
-						aa_rmatrix[pos2][pos] = userrates[i];
-						pos2++;
-						if (pos2 == 20){
-							pos += 1;
-							pos2 = (pos + 1);
-						}
-				}
-				//Replace Diagnol
-				for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
-					for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
-						if (i != j){
-							tot += aa_rmatrix[i][j];
-						}
-					}
-					aa_rmatrix[i][i] = (tot*-1);
-					tot = 0.0;
-				}
-				/*
-				for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
-					for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
-						cout << aa_rmatrix[i][j] << " ";
-					}
-					cout << "\n";
-				}*/
+                    aa_rmatrix[pos][pos2] = userrates[i];
+                    aa_rmatrix[pos2][pos] = userrates[i];
+                    pos2++;
+                    if (pos2 == 20){
+                        pos += 1;
+                        pos2 = (pos + 1);
+                    }
+                }
+                //Replace Diagonal
+                for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
+                    for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
+                        if (i != j){
+                            tot += aa_rmatrix[i][j];
+                        }
+                    }
+                    aa_rmatrix[i][i] = (tot*-1);
+                    tot = 0.0;
+                }
+                /*
+                for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
+                    for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
+                        cout << aa_rmatrix[i][j] << " ";
+                    }
+                    cout << "\n";
+                }*/
                 break;
             case 'n':
                 nreps = atoi(strdup(optarg));
@@ -256,7 +256,7 @@ int main(int argc, char * argv[]) {
                 seed = atoi(strdup(optarg));
                 break;
             case 'q':
-			    MolDna = false;
+                MolDna = false;
                 infreqs = strdup(optarg);
                 aabasefreq = parse_double_comma_list(infreqs);
                 if (aabasefreq.size() != 20) {
@@ -307,11 +307,11 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-    if (MolDna == true){
-		dmatrix = rmatrix;
-	}else{
-		dmatrix = aa_rmatrix;
-	}
+    if (MolDna == true) {
+        dmatrix = rmatrix;
+    } else {
+        dmatrix = aa_rmatrix;
+    }
     
     istream* pios;
     ostream* poos;
