@@ -18,4 +18,5 @@ autom4te.cache
 .autotools
 .settings
 nbproject
+phyx.log
 
