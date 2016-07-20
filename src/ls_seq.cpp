@@ -36,6 +36,7 @@ void Stats::STAT_Getter(string& seq, bool& prot){
         }
     }
 }
+
 void Stats::Printer(bool& prot){
     
         const char separator = ' ';

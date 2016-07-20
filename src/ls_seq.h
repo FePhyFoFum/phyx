@@ -1,3 +1,6 @@
+#ifndef _LS_SEQ_H_
+#define _LS_SEQ_H_
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -33,3 +36,5 @@ public:
     void STAT_Getter(string& seq, bool& prot);
     void Printer(bool& prot);
 };
+
+#endif /* _LS_SEQ_H_ */
