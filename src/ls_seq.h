@@ -1,20 +1,7 @@
 #ifndef _LS_SEQ_H_
 #define _LS_SEQ_H_
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <algorithm>
-#include <map>
-#include <sstream>
-
 using namespace std;
-
-#include "utils.h"
-#include "sequence.h"
-#include "seq_reader.h"
 
 class Stats {
 private:

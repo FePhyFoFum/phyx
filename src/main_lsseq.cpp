@@ -24,7 +24,7 @@ void print_help() {
     cout << "Usage: pxlsseq [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
-    cout << " -a, --all           output stats for individual sequences" << endl;
+    cout << " -i, --indiv         output stats for individual sequences" << endl;
     cout << " -p, --prot          output stats for amino acids default is DNA" << endl;
     cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
@@ -39,7 +39,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-    {"all", no_argument, NULL, 'a'},
+    {"indiv", no_argument, NULL, 'i'},
     {"prot", no_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -59,7 +59,7 @@ int main(int argc, char * argv[]){
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:aphV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:iphV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -73,7 +73,7 @@ int main(int argc, char * argv[]){
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
-            case 'a':
+            case 'i':
                 all = true;
                 break;
             case 'p':
