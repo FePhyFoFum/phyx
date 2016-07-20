@@ -119,10 +119,10 @@ char get_prot_char(set<char> inc) {
     int B = inc.count('D') + inc.count('N') + inc.count('B');
     int Z = inc.count('Q') + inc.count('E') + inc.count('Z');
     
-    if (B == inc.size()) {
+    if (B == (int)inc.size()) {
         return 'B';
     }
-    if (Z == inc.size()) {
+    if (Z == (int)inc.size()) {
         return 'Z';
     }
     

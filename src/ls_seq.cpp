@@ -10,22 +10,22 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-void Stats::STAT_Getter(string& seq, bool& prot){
+void Stats::STAT_Getter(string& seq, bool& prot) {
 
     Total.clear();
-    for (int i = 0; i < Molecule.length(); i++){
+    for (unsigned int i = 0; i < Molecule.length(); i++) {
         Total[Molecule[i]] = 0.0;
     }
-    for (int i = 0; i < seq.length(); i++){
+    for (unsigned int i = 0; i < seq.length(); i++) {
         seq[i] = toupper(seq[i]);
         //Ensure theres no weird J or whatever characters
         if (Total.find(seq[i]) == Total.end()) {
             if (prot == true){
                 Total['X']++;
-            }else{
+            } else {
                 Total['N']++;
             }
-        }else{
+        } else {
             Total[seq[i]]++;
         }
     }
@@ -55,7 +55,7 @@ void Stats::Printer (bool& prot, ostream* poos) {
         }
         (*poos) << "--------" << Mol << "TABLE---------" << endl;
         (*poos) << Mol << "\tTotal\tPercent" << endl;
-        for (int i = 0; i < Molecule.length(); i++) {
+        for (unsigned int i = 0; i < Molecule.length(); i++) {
             (*poos) << left << setw(nameWidth) << setfill(separator) << Molecule[i] << Total[Molecule[i]] << "\t" << ((Total[Molecule[i]] / divide)*100.0) << endl;
         }
         if (prot == false) {

@@ -223,14 +223,14 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
     //prints the distance matrix maybe too verbose
     
     cout << "\t";
-    for (int i = 0; i < SequenceName.size(); i++) {
+    for (unsigned int i = 0; i < SequenceName.size(); i++) {
 
         cout << SequenceName[i] << "\t";
     }
     cout << endl;
-    for (int i = 0; i < Score.size(); i++) {
+    for (unsigned int i = 0; i < Score.size(); i++) {
         cout << SequenceName[i] << "\t";
-        for (int j = 0; j < Score[i].size(); j++) {
+        for (unsigned int j = 0; j < Score[i].size(); j++) {
             cout << Score[i][j] << "\t";
 
         }

@@ -129,7 +129,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
         for (map<Node*,vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); it++) {
             cout << "Node: " << it->first->getName() << endl;
             vector<Node*> terp = it->second;
-            for (int i = 0; i < terp.size(); i++) {
+            for (unsigned int i = 0; i < terp.size(); i++) {
                 cout << "  " << terp[i]->getName() << " ";
             }
             cout << endl;
@@ -204,11 +204,11 @@ bool is_binary (Tree * tr) {
     int ntips = tr->getExternalNodeCount();
     
     if (is_rooted(tr)) {
-        if (nintnodes == ntips - 1) {
+        if (nintnodes == (ntips - 1)) {
             binary = true;
         }
     } else {
-        if (nintnodes = ntips - 2) {
+        if (nintnodes == (ntips - 2)) {
             binary = true;
         }
     }

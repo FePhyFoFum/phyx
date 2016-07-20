@@ -9,7 +9,7 @@ using namespace std;
 void log_call (int argc, char * argv[]) {
     ofstream phyxlog;
     phyxlog.open ("phyx.log", ios::out | ios::app);
-    for (unsigned i = 0; i < argc; i++) {
+    for (int i = 0; i < argc; i++) {
         phyxlog << argv[i];
         if (i < (argc - 1)) {
             phyxlog << " ";
