@@ -1,11 +1,3 @@
-/*
- * NJ.h
- *
- *  Created on: Jun 12, 2015
- *      Author: joe
- */
-
-//Compile g++ -std=c++11 NJOI.cpp main_NJOI.cpp utils.cpp -o test
 #ifndef _NJ_H_
 #define _NJ_H_
 

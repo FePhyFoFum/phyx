@@ -1,11 +1,5 @@
 #include <string>
-#include <fstream>
-#include <vector>
-#include <iterator>
-#include <algorithm>
-#include <functional>
 #include <map>
-#include <iterator>
 #include <iomanip>
 #include <iostream>
 
@@ -37,6 +31,7 @@ void Stats::STAT_Getter(string& seq, bool& prot){
     }
 }
 
+// *** this should not print to cout, but instead to pios ***
 void Stats::Printer(bool& prot){
     
         const char separator = ' ';
