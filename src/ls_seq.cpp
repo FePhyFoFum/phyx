@@ -31,7 +31,6 @@ void Stats::STAT_Getter(string& seq, bool& prot) {
     }
 }
 
-// *** this should not print to (*poos), but instead to poos ***
 void Stats::Printer (bool& prot, ostream* poos) {
     
         const char separator = ' ';
