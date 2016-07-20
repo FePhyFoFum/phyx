@@ -34,7 +34,7 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxrmt 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv2\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxrmt 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

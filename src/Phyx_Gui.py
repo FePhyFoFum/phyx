@@ -659,7 +659,7 @@ class GUI:
 		print "If the programs option does not require an argument"
 		print "simply type something into the box and it will activate"
 		print "that argument"
-		print "Copyright (C) 2015 FePhyFoFum\nLicense GPLv2\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)"
+		print "Copyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)"
 		print "========================================================="
 
 
