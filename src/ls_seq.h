@@ -5,7 +5,6 @@ using namespace std;
 
 class Stats {
 private:
-
     string Concatenated;
     string temp_seq;
     string Molecule;
@@ -18,10 +17,9 @@ private:
 
 
 public:
-    Stats();
-    Stats (istream* pios, bool& all, bool& prot);
+    Stats (istream* pios, bool& all, bool& prot, ostream* poos);
     void STAT_Getter(string& seq, bool& prot);
-    void Printer(bool& prot);
+    void Printer(bool& prot, ostream* poos);
 };
 
 #endif /* _LS_SEQ_H_ */

@@ -31,8 +31,8 @@ void Stats::STAT_Getter(string& seq, bool& prot){
     }
 }
 
-// *** this should not print to cout, but instead to pios ***
-void Stats::Printer(bool& prot){
+// *** this should not print to (*poos), but instead to poos ***
+void Stats::Printer (bool& prot, ostream* poos) {
     
         const char separator = ' ';
         const int nameWidth = 10;
@@ -42,30 +42,30 @@ void Stats::Printer(bool& prot){
         }else{
             Mol = "Nucl ";
         }
-        if (finished == true){
-            cout << "General Stats For All Sequences" << endl;
-            cout << "File Type: " << type << endl;
-            cout << "Number of Sequences: " << seqcount << endl;
-            cout << "Total Length of All Combined: " << Concatenated.length() << endl;
+        if (finished == true) {
+            (*poos) << "General Stats For All Sequences" << endl;
+            (*poos) << "File Type: " << type << endl;
+            (*poos) << "Number of Sequences: " << seqcount << endl;
+            (*poos) << "Total Length of All Combined: " << Concatenated.length() << endl;
             divide = Concatenated.length();
-        }else{
-            cout << "General Stats For " << name << endl;
-            cout << "Total Length: " << temp_seq.length() << endl;    
+        } else {
+            (*poos) << "General Stats For " << name << endl;
+            (*poos) << "Total Length: " << temp_seq.length() << endl;    
             divide = temp_seq.length();
         }
-        cout << "--------" << Mol << "TABLE---------" << endl;
-        cout << Mol << "\tTotal\tPercent" << endl;
-        for (int i = 0; i < Molecule.length(); i++){
-            cout << left << setw(nameWidth) << setfill(separator) << Molecule[i] << Total[Molecule[i]] << "\t" << ((Total[Molecule[i]] / divide)*100.0) << endl;
+        (*poos) << "--------" << Mol << "TABLE---------" << endl;
+        (*poos) << Mol << "\tTotal\tPercent" << endl;
+        for (int i = 0; i < Molecule.length(); i++) {
+            (*poos) << left << setw(nameWidth) << setfill(separator) << Molecule[i] << Total[Molecule[i]] << "\t" << ((Total[Molecule[i]] / divide)*100.0) << endl;
         }
-        if (prot == false){
-        cout << left << setw(nameWidth) << setfill(separator) << "G+C" << (Total['G'] + Total['C'])<< "\t" << (((Total['G'] + Total['C']) / divide)*100.0) << endl;
+        if (prot == false) {
+        (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C" << (Total['G'] + Total['C'])<< "\t" << (((Total['G'] + Total['C']) / divide)*100.0) << endl;
     }        
-    cout << "--------" << Mol << "TABLE---------" << endl;
+    (*poos) << "--------" << Mol << "TABLE---------" << endl;
 
 }
 
-Stats::Stats (istream* pios, bool& all, bool& prot) {
+Stats::Stats (istream* pios, bool& all, bool& prot, ostream* poos) {
 
     //Concatenated will be used for all stats
     finished = false;
@@ -73,9 +73,9 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
-    if (prot == true){
+    if (prot == true) {
         Molecule = "ACDEFGHIKLMNPQRSTVWXY*";
-    }else{
+    } else {
         Molecule = "ACGTN-";
     }
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
@@ -84,17 +84,16 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
         Concatenated += seq.get_sequence();
         temp_seq = seq.get_sequence();
         name = seq.get_id();
-        if (all == true){
+        if (all == true) {
             STAT_Getter(temp_seq, prot);
-            Printer(prot);
+            Printer(prot, poos);
         }
-        if (ft == 1){
+        if (ft == 1) {
             type = "Phylip";
         }
-        if (ft == 0){
+        if (ft == 0) {
             type = "Nexus";
         }
-    
     }
     if (ft == 2) {
         seqcount++;
@@ -102,12 +101,12 @@ Stats::Stats (istream* pios, bool& all, bool& prot) {
         temp_seq = seq.get_sequence();
         name = seq.get_id();
         type = "Fasta";
-        if (all == true){
+        if (all == true) {
             STAT_Getter(temp_seq, prot);
-            Printer(prot);
+            Printer(prot, poos);
         }
     }
     finished = true;
     STAT_Getter(Concatenated, prot);
-    Printer(prot);
+    Printer(prot, poos);
 }

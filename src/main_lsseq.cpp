@@ -108,7 +108,7 @@ int main(int argc, char * argv[]){
         poos = &cout;
     }
     
-    Stats ls_Seq(pios, all, prot);
+    Stats ls_Seq(pios, all, prot, poos);
     
     if (fileset) {
         fstr->close();
