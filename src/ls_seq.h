@@ -5,16 +5,15 @@ using namespace std;
 
 class Stats {
 private:
-    string Concatenated;
-    string temp_seq;
-    string Molecule;
-    string type;
-    bool finished;
-    string Mol;
-    string name;
-    map <char, double> Total;
-    int seqcount;
-
+    string concatenated_;
+    string temp_seq_;
+    string seq_chars_;
+    string type_;
+    bool finished_;
+    string seq_type_;
+    string name_;
+    map <char, double> total_;
+    int seqcount_;
 
 public:
     Stats (istream* pios, bool& all, bool& prot, ostream* poos);

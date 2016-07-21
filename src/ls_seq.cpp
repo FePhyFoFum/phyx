@@ -12,21 +12,21 @@ using namespace std;
 
 void Stats::STAT_Getter(string& seq, bool& prot) {
 
-    Total.clear();
-    for (unsigned int i = 0; i < Molecule.length(); i++) {
-        Total[Molecule[i]] = 0.0;
+    total_.clear();
+    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
+        total_[seq_chars_[i]] = 0.0;
     }
     for (unsigned int i = 0; i < seq.length(); i++) {
         seq[i] = toupper(seq[i]);
-        //Ensure theres no weird J or whatever characters
-        if (Total.find(seq[i]) == Total.end()) {
+        //Ensure there is no weird J or whatever characters
+        if (total_.find(seq[i]) == total_.end()) {
             if (prot == true){
-                Total['X']++;
+                total_['X']++;
             } else {
-                Total['N']++;
+                total_['N']++;
             }
         } else {
-            Total[seq[i]]++;
+            total_[seq[i]]++;
         }
     }
 }
@@ -37,75 +37,79 @@ void Stats::Printer (bool& prot, ostream* poos) {
         const int nameWidth = 10;
         double divide = 0.0;
         if (prot == true){
-            Mol = "Prot ";
+            seq_type_ = "Prot ";
         }else{
-            Mol = "Nucl ";
+            seq_type_ = "Nucl ";
         }
-        if (finished == true) {
+        if (finished_ == true) {
             (*poos) << "General Stats For All Sequences" << endl;
-            (*poos) << "File Type: " << type << endl;
-            (*poos) << "Number of Sequences: " << seqcount << endl;
-            (*poos) << "Total Length of All Combined: " << Concatenated.length() << endl;
-            divide = Concatenated.length();
+            (*poos) << "File Type: " << type_ << endl;
+            (*poos) << "Number of Sequences: " << seqcount_ << endl;
+            (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
+            divide = concatenated_.length();
         } else {
-            (*poos) << "General Stats For " << name << endl;
-            (*poos) << "Total Length: " << temp_seq.length() << endl;    
-            divide = temp_seq.length();
+            (*poos) << "General Stats For " << name_ << endl;
+            (*poos) << "Total Length: " << temp_seq_.length() << endl;    
+            divide = temp_seq_.length();
         }
-        (*poos) << "--------" << Mol << "TABLE---------" << endl;
-        (*poos) << Mol << "\tTotal\tPercent" << endl;
-        for (unsigned int i = 0; i < Molecule.length(); i++) {
-            (*poos) << left << setw(nameWidth) << setfill(separator) << Molecule[i] << Total[Molecule[i]] << "\t" << ((Total[Molecule[i]] / divide)*100.0) << endl;
+        (*poos) << "--------" << seq_type_ << "TABLE---------" << endl;
+        (*poos) << seq_type_ << "\tTotal\tPercent" << endl;
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
+            (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
+                << total_[seq_chars_[i]] << "\t"
+                << ((total_[seq_chars_[i]] / divide)*100.0) << endl;
         }
         if (prot == false) {
-        (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C" << (Total['G'] + Total['C'])<< "\t" << (((Total['G'] + Total['C']) / divide)*100.0) << endl;
+        (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
+            << (total_['G'] + total_['C']) << "\t"
+            << (((total_['G'] + total_['C']) / divide)*100.0) << endl;
     }        
-    (*poos) << "--------" << Mol << "TABLE---------" << endl;
+    (*poos) << "--------" << seq_type_ << "TABLE---------" << endl;
 
 }
 
 Stats::Stats (istream* pios, bool& all, bool& prot, ostream* poos) {
 
     //Concatenated will be used for all stats
-    finished = false;
-    seqcount = 0;
+    finished_ = false;
+    seqcount_ = 0;
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
     if (prot == true) {
-        Molecule = "ACDEFGHIKLMNPQRSTVWXY*";
+        seq_chars_ = "ACDEFGHIKLMNPQRSTVWXY*";
     } else {
-        Molecule = "ACGTN-";
+        seq_chars_ = "ACGTN-";
     }
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         
-        seqcount++;
-        Concatenated += seq.get_sequence();
-        temp_seq = seq.get_sequence();
-        name = seq.get_id();
+        seqcount_++;
+        concatenated_ += seq.get_sequence();
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
         if (all == true) {
-            STAT_Getter(temp_seq, prot);
+            STAT_Getter(temp_seq_, prot);
             Printer(prot, poos);
         }
         if (ft == 1) {
-            type = "Phylip";
+            type_ = "Phylip";
         }
         if (ft == 0) {
-            type = "Nexus";
+            type_ = "Nexus";
         }
     }
     if (ft == 2) {
-        seqcount++;
-        Concatenated += seq.get_sequence();
-        temp_seq = seq.get_sequence();
-        name = seq.get_id();
-        type = "Fasta";
+        seqcount_++;
+        concatenated_ += seq.get_sequence();
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
+        type_ = "Fasta";
         if (all == true) {
-            STAT_Getter(temp_seq, prot);
+            STAT_Getter(temp_seq_, prot);
             Printer(prot, poos);
         }
     }
-    finished = true;
-    STAT_Getter(Concatenated, prot);
+    finished_ = true;
+    STAT_Getter(concatenated_, prot);
     Printer(prot, poos);
 }
