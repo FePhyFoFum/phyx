@@ -3,15 +3,15 @@
 
 class SequenceSampler {
 private:
-    float jkfract;
-    bool jackknife;
-    bool partitioned;
-    vector <int> samplesites;
-    vector < vector <int> > partitions;
-    vector <string> partitionNames;
-    vector <int> sitePartitions; // not used
-    int numPartitionedSites;
-    int numPartitions;
+    float jkfract_;
+    bool jackknife_;
+    bool partitioned_;
+    vector <int> samplesites_;
+    vector < vector <int> > partitions_;
+    vector <string> partitionNames_;
+    vector <int> sitePartitions_; // not used
+    int numPartitionedSites_;
+    int numPartitions_;
     
     vector <int> get_bootstrap_sites (int const& numchar);
     vector <int> get_jackknife_sites (int const& numchar);

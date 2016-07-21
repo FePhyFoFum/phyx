@@ -15,34 +15,34 @@ using namespace std;
 #include "utils.h"
 
 SequenceSampler::SequenceSampler (int const& seed, float const& jackfract, string & partf)
-:jkfract(jackfract), jackknife(false), partitioned(false), numPartitionedSites(0), numPartitions(0)
-{
+:jkfract_(jackfract), jackknife_(false), partitioned_(false), numPartitionedSites_(0),
+numPartitions_(0) {
     if (seed == -1) {
         srand(get_clock_seed());
     } else {
         srand(seed);
     }
-    if (jkfract != 0.0) {
-        jackknife = true;
+    if (jkfract_ != 0.0) {
+        jackknife_ = true;
     }
     if (!partf.empty()) {
-        partitioned = true;
+        partitioned_ = true;
         parse_partitions(partf);
     }
 }
 
 // not used
 vector <int> SequenceSampler::get_sampled_sites () {
-    return samplesites;
+    return samplesites_;
 }
 
 string SequenceSampler::get_resampled_seq (string const& origseq) {
     string seq;
-    for (unsigned int i = 0; i < samplesites.size(); i++) {
+    for (unsigned int i = 0; i < samplesites_.size(); i++) {
         if (i == 0) {
-            seq = origseq[samplesites[i]];
+            seq = origseq[samplesites_[i]];
         } else {
-            seq += origseq[samplesites[i]];
+            seq += origseq[samplesites_[i]];
         }
     }
     return seq;
@@ -50,12 +50,12 @@ string SequenceSampler::get_resampled_seq (string const& origseq) {
 
 // this is done once, to populate site sample vector
 void SequenceSampler::sample_sites (int const& numchar) {
-    if (partitioned) {
-        samplesites = get_partitioned_bootstrap_sites();
-    } else if (!jackknife) {
-        samplesites = get_bootstrap_sites(numchar);
+    if (partitioned_) {
+        samplesites_ = get_partitioned_bootstrap_sites();
+    } else if (!jackknife_) {
+        samplesites_ = get_bootstrap_sites(numchar);
     } else {
-        samplesites = get_jackknife_sites(numchar);
+        samplesites_ = get_jackknife_sites(numchar);
     }
 }
 
@@ -75,15 +75,15 @@ vector <int> SequenceSampler::get_bootstrap_sites (int const& numchar) {
 
 // set up so same composition as original
 vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
-    vector <int> master(numPartitionedSites, 0);
+    vector <int> master(numPartitionedSites_, 0);
     
-    for (int i = 0; i < numPartitions; i++) {
-        int curNum = (int)partitions[i].size();
+    for (int i = 0; i < numPartitions_; i++) {
+        int curNum = (int)partitions_[i].size();
         //cout << "Partition #" << i << " contains " << curNum << " sites." << endl;
         vector <int> randsites = get_bootstrap_sites(curNum);
         for (int j = 0; j < curNum; j ++) {
         // put partitions back in same spot as original, so partition file does not need to change
-            master[partitions[i][j]] = partitions[i][randsites[j]];
+            master[partitions_[i][j]] = partitions_[i][randsites[j]];
         }
     }
     
@@ -92,7 +92,7 @@ vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
 
 // sample WITHOUT replacement. not with partitioned models
 vector <int> SequenceSampler::get_jackknife_sites (int const& numchar) {
-    int numsample = numchar * jkfract + 0.5;
+    int numsample = numchar * jkfract_ + 0.5;
     vector <int> randsites = sample_without_replacement(numchar, numsample);
     return randsites;
 }
@@ -117,13 +117,13 @@ void SequenceSampler::parse_partitions (string & partf) {
             continue;
         } else {
             temp = get_partition_sites(line);
-            partitions.push_back(temp);
+            partitions_.push_back(temp);
             temp.clear();
         }
     }
     infile.close();
     
-    numPartitions = (int)partitions.size();
+    numPartitions_ = (int)partitions_.size();
     calculate_num_partitioned_sites();
     
     // do error-checking here:
@@ -158,14 +158,14 @@ vector <int> SequenceSampler::get_partition_sites (string const& part) {
 // 1231231231231234444444444444
 // not used
 void SequenceSampler::get_site_partitions () {
-    vector <int> sites(numPartitionedSites, 0);
+    vector <int> sites(numPartitionedSites_, 0);
     
-    for (int i = 0; i < numPartitions; i++) {
-        for (unsigned int j = 0; j < partitions[i].size(); j++) {
-            sites[partitions[i][j]] = i;
+    for (int i = 0; i < numPartitions_; i++) {
+        for (unsigned int j = 0; j < partitions_[i].size(); j++) {
+            sites[partitions_[i][j]] = i;
         }
     }
-    sitePartitions = sites;
+    sitePartitions_ = sites;
 }
 
 // CHARSET GADPH = 2991-3406\3
@@ -178,7 +178,7 @@ void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & 
     }
     
     // ignore first token. will be either CHARSET of DNA,
-    partitionNames.push_back(tokens[1]);
+    partitionNames_.push_back(tokens[1]);
     //cout << "Processing partition '" << tokens[1] << "': ";
     
     if (is_number(tokens[2])) {
@@ -197,10 +197,10 @@ void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & 
 }
 
 void SequenceSampler::calculate_num_partitioned_sites () {
-    numPartitionedSites = 0;
+    numPartitionedSites_ = 0;
     
-    for (int i = 0; i < numPartitions; i++) {
-        numPartitionedSites += (int)partitions[i].size();
+    for (int i = 0; i < numPartitions_; i++) {
+        numPartitionedSites_ += (int)partitions_[i].size();
 //         cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << endl;
 //         for (unsigned int j = 0; j < partitions[i].size(); j++) {
 //             cout << partitions[i][j] << " ";
@@ -210,14 +210,14 @@ void SequenceSampler::calculate_num_partitioned_sites () {
 }
 
 int SequenceSampler::get_num_partitioned_sites () {
-    return numPartitionedSites;
+    return numPartitionedSites_;
 }
 
 // should do some error-checking e.g. for 1) missing sites, 2) overlapping partitions
 void SequenceSampler::check_valid_partitions () {
-    vector <int> allSites = partitions[0];
-    for (int i = 1; i < numPartitions; i++) {
-        allSites.insert(allSites.end(), partitions[i].begin(), partitions[i].end());
+    vector <int> allSites = partitions_[0];
+    for (int i = 1; i < numPartitions_; i++) {
+        allSites.insert(allSites.end(), partitions_[i].begin(), partitions_[i].end());
     }
     sort(allSites.begin(), allSites.end());
     
