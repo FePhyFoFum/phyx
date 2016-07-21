@@ -36,7 +36,7 @@ void print_help() {
     cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
     cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -h,  --help          display this help and exit" << endl;
+    cout << " -h,  --help         display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
@@ -61,7 +61,7 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    bool nucfile = false; // not used
+    bool nucfileset = false; // not used
     string aaseqf = "";
     string nucseqf = "";
     string outf = "";
@@ -83,7 +83,7 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'n':
-                nucfile = true;
+                nucfileset = true;
                 nucseqf = strdup(optarg);
                 check_file_exists(nucseqf);
                 break;
@@ -99,7 +99,11 @@ int main(int argc, char * argv[]) {
         }
     }
     if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
+        cout << "you must specify an input amino acid sequence file" << endl;
+        exit(0);
+    }
+    if (!nucfileset) {
+        cout << "you must specify an input nucleotide sequence file" << endl;
         exit(0);
     }
     ostream* poos;
@@ -130,7 +134,7 @@ int main(int argc, char * argv[]) {
     
     Sequence aa_seq, nuc_seq;
     string retstring;
-    map<string, string> aa_sequences, nuc_sequences, CodonSequences;
+    map<string, string> aa_sequences, nuc_sequences, codon_sequences;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     while (read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
@@ -153,8 +157,8 @@ int main(int argc, char * argv[]) {
 
     AAtoCDN functions;
     map<string, string>::iterator iter;
-    CodonSequences = functions.ChangeToCodon(aa_sequences, nuc_sequences);
-    for (iter = CodonSequences.begin(); iter != CodonSequences.end(); iter++) {
+    codon_sequences = functions.convert_to_codons(aa_sequences, nuc_sequences);
+    for (iter = codon_sequences.begin(); iter != codon_sequences.end(); iter++) {
         *poos << ">" << iter -> first << "\n" << iter -> second << endl;
     }
     if (outfileset) {

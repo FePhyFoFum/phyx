@@ -22,21 +22,21 @@ typedef struct {
 int counter = 0;
 
 BDFit::BDFit (Tree * intree, string const& modelflavour) {
-    tree = intree;
-    model = modelflavour;
+    tree_ = intree;
+    model_ = modelflavour;
     fit_model();
 }
 
 
 void BDFit::fit_model () {
-    treelength = get_tree_length(tree);
-    nintnodes = tree->getInternalNodeCount();
-    nspeciation = nintnodes - 1.0;
-    ntips = tree->getExternalNodeCount();
-    rootheight = tree->getRoot()->getHeight();
-    if (model == "yule") {
+    treelength_ = get_tree_length(tree_);
+    nintnodes_ = tree_->getInternalNodeCount();
+    nspeciation_ = nintnodes_ - 1.0;
+    ntips_ = tree_->getExternalNodeCount();
+    rootheight_ = tree_->getRoot()->getHeight();
+    if (model_ == "yule") {
         fit_yule();
-    } else if (model == "bd") {
+    } else if (model_ == "bd") {
         fit_bd();
     } else {
         cout << "Huh?!?" << endl;
@@ -57,24 +57,24 @@ Easier: factorial(n) = gamma(n+1)
         lfactorial(n) = std::lgamma(n+1)
 */
 void BDFit::fit_yule () {
-    lambda = nspeciation / treelength;
-    likelihood = nspeciation * log(lambda) - lambda * treelength
-        + std::lgamma(nintnodes + 1.0);
+    lambda_ = nspeciation_ / treelength_;
+    likelihood_ = nspeciation_ * log(lambda_) - lambda_ * treelength_
+        + std::lgamma(nintnodes_ + 1.0);
 }
 
 
 void BDFit::fit_bd () {
-    branching_times.resize(nintnodes);
-    for (int i=0; i < nintnodes; i++) {
-        branching_times[i] = tree->getInternalNode(i)->getHeight();
+    branching_times_.resize(nintnodes_);
+    for (int i=0; i < nintnodes_; i++) {
+        branching_times_[i] = tree_->getInternalNode(i)->getHeight();
     }
     
     // sort in descending order
-    sort(branching_times.begin(), branching_times.end(), std::greater<double>());
+    sort(branching_times_.begin(), branching_times_.end(), std::greater<double>());
     
     analysis_data a;
-    a.N = ntips;
-    a.bt = branching_times;
+    a.N = ntips_;
+    a.bt = branching_times_;
     
     // explore different algorithms here
     // the following give error: nlopt roundoff-limited
@@ -105,12 +105,12 @@ void BDFit::fit_bd () {
     double minf;
     nlopt::result result = opt.optimize(x, minf);
     
-    r = x[0];
-    epsilon = x[1];
-    lambda = r / (1 - epsilon);
-    mu = lambda - r;
+    r_ = x[0];
+    epsilon_ = x[1];
+    lambda_ = r_ / (1 - epsilon_);
+    mu_ = lambda_ - r_;
     
-    likelihood = -minf;
+    likelihood_ = -minf;
     //cout << "found minimum after " << counter << " evaluations." << endl;
 }
 
@@ -144,32 +144,32 @@ double nlopt_bd_log_lik (const std::vector<double> &x, std::vector<double> &grad
 // 'n' here (number of data points) is taken as the number of terminals
 void BDFit::get_aic () {
     double K = 1.0;
-    double n = ntips;
-    if (model == "bd") {
+    double n = ntips_;
+    if (model_ == "bd") {
         K = 2.0;
     }
-    aic = (-2.0 * likelihood) + (2.0 * K);
-    aicc = aic + (2 * K * (K + 1)) / (n - K - 1);
+    aic_ = (-2.0 * likelihood_) + (2.0 * K);
+    aicc_ = aic_ + (2 * K * (K + 1)) / (n - K - 1);
 }
 
 
 // probably want in terms of r/epsilon too
 // probably want to support model comparison, too
 void BDFit::get_pars (ostream* poos) {
-    (*poos) << "ntips: " << ntips << endl;
-    (*poos) << "nspeciation: " << nspeciation << endl;
-    (*poos) << "treelength: " << treelength << endl;
-    (*poos) << "rootheight: " << rootheight << endl;
-    (*poos) << "model: " << model << endl;
-    (*poos) << "likelihood: " << likelihood << endl;
+    (*poos) << "ntips: " << ntips_ << endl;
+    (*poos) << "nspeciation: " << nspeciation_ << endl;
+    (*poos) << "treelength: " << treelength_ << endl;
+    (*poos) << "rootheight: " << rootheight_ << endl;
+    (*poos) << "model: " << model_ << endl;
+    (*poos) << "likelihood: " << likelihood_ << endl;
     get_aic ();
-    (*poos) << "aic: " << aic << endl;
-    (*poos) << "aicc: " << aicc << endl;
-    (*poos) << "b: " << lambda << endl;
-    if (model == "bd") {
-        (*poos) << "d: " << mu << endl;
-        (*poos) << "r (b-d): " << r << endl;
-        (*poos) << "e (d/b): " << epsilon << endl;
+    (*poos) << "aic: " << aic_ << endl;
+    (*poos) << "aicc: " << aicc_ << endl;
+    (*poos) << "b: " << lambda_ << endl;
+    if (model_ == "bd") {
+        (*poos) << "d: " << mu_ << endl;
+        (*poos) << "r (b-d): " << r_ << endl;
+        (*poos) << "e (d/b): " << epsilon_ << endl;
     }
     
 }

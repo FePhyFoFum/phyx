@@ -5,37 +5,25 @@
  *      Author: joe
  */
 
-#ifndef _AATOCDN_H_
-#define _AATOCDN_H_
+#ifndef _AA_TO_CDN_H_
+#define _AA_TO_CDN_H_
 
-//#include <iostream>
-//#include <string>
-//#include <fstream>
-//#include <vector>
-//#include <sstream>
 #include <iterator>
-//#include <algorithm>
-//#include <map>
 #include <iterator>
 
-//using namespace std;
+using namespace std;
 
 class AAtoCDN {
 private:
-
-    //map <string, string> CodonAln; // not used
-    map <string, string> CodonSequences;
-    map <string, string>::iterator iter;
-    string AminoAcidSequence;
-    string NucleotideSequence;
-    //string temp; // not used
-    //string::iterator it; // not used
-    //int j; // not used
+    map <string, string> codon_sequences_;
+    map <string, string>::iterator iter_;
+    string amino_acid_sequence_;
+    string nucleotide_sequence_;
 
 public:
     AAtoCDN();
-    map<string, string> FastaToOneLine (string&);
-    map<string, string> ChangeToCodon (map <string, string>&, map <string,string>&);
+    map<string, string> convert_to_codons (map <string, string>& aa_sequences,
+    map<string, string>& nuc_sequences);
 
 };
 

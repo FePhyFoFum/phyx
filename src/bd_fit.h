@@ -9,21 +9,21 @@ using namespace std;
 
 class BDFit {
 private:
-    string model;
-    Tree* tree;
-    double treelength;
-    double nintnodes;
-    double nspeciation;
-    double ntips;
-    vector <double> branching_times;
-    double rootheight;
-    double lambda;
-    double mu;
-    double r;
-    double epsilon;
-    double likelihood;
-    double aicc;
-    double aic;
+    string model_;
+    Tree* tree_;
+    double treelength_;
+    double nintnodes_;
+    double nspeciation_;
+    double ntips_;
+    vector <double> branching_times_;
+    double rootheight_;
+    double lambda_;
+    double mu_;
+    double r_;
+    double epsilon_;
+    double likelihood_;
+    double aicc_;
+    double aic_;
     
     void fit_model ();
     void fit_yule ();

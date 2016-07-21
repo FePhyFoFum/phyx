@@ -13,31 +13,31 @@ using namespace std;
 
 #include "aatocdn.h"
 
-map <string, string> AAtoCDN::ChangeToCodon(map <string, string>& AminoAcid,
-    map<string, string>& Nucleotide) {
+map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequences,
+    map<string, string>& nuc_sequences) {
     
     string temp = "";
-    for (iter = AminoAcid.begin(); iter != AminoAcid.end(); iter++) {
-        if (Nucleotide.find(iter -> first) == Nucleotide.end()) {
-            cout << "Only in the AA File: " << iter -> first << endl;
+    for (iter_ = aa_sequences.begin(); iter_ != aa_sequences.end(); iter_++) {
+        if (nuc_sequences.find(iter_ -> first) == nuc_sequences.end()) {
+            cout << "Only in the AA File: " << iter_ -> first << endl;
         } else {
-            AminoAcidSequence = iter -> second;
-            NucleotideSequence = Nucleotide[iter -> first];
-            for (unsigned int i=0; i < AminoAcidSequence.size(); i++) {
-                if (AminoAcidSequence[i] == '-') {
+            amino_acid_sequence_ = iter_ -> second;
+            nucleotide_sequence_ = nuc_sequences[iter_ -> first];
+            for (unsigned int i=0; i < amino_acid_sequence_.size(); i++) {
+                if (amino_acid_sequence_[i] == '-') {
                     temp += "---";
                 } else {
-                    temp += NucleotideSequence[0];
-                    temp += NucleotideSequence[1];
-                    temp += NucleotideSequence[2];
-                    NucleotideSequence.erase(0, 3);
+                    temp += nucleotide_sequence_[0];
+                    temp += nucleotide_sequence_[1];
+                    temp += nucleotide_sequence_[2];
+                    nucleotide_sequence_.erase(0, 3);
                 }
             }
-            CodonSequences[iter -> first] = temp;
+            codon_sequences_[iter_ -> first] = temp;
             temp = "";
         }
     }
-    return CodonSequences;
+    return codon_sequences_;
 }
 
 AAtoCDN::AAtoCDN() {
