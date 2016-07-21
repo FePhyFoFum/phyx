@@ -6,12 +6,12 @@ private:
     float jkfract_;
     bool jackknife_;
     bool partitioned_;
-    vector <int> samplesites_;
+    vector <int> sample_sites_;
     vector < vector <int> > partitions_;
-    vector <string> partitionNames_;
-    vector <int> sitePartitions_; // not used
-    int numPartitionedSites_;
-    int numPartitions_;
+    vector <string> partition_names_;
+    vector <int> site_partitions_; // not used
+    int num_partitioned_sites_;
+    int num_partitions_;
     
     vector <int> get_bootstrap_sites (int const& numchar);
     vector <int> get_jackknife_sites (int const& numchar);

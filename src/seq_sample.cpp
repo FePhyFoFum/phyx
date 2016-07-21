@@ -15,8 +15,8 @@ using namespace std;
 #include "utils.h"
 
 SequenceSampler::SequenceSampler (int const& seed, float const& jackfract, string & partf)
-:jkfract_(jackfract), jackknife_(false), partitioned_(false), numPartitionedSites_(0),
-numPartitions_(0) {
+:jkfract_(jackfract), jackknife_(false), partitioned_(false), num_partitioned_sites_(0),
+num_partitions_(0) {
     if (seed == -1) {
         srand(get_clock_seed());
     } else {
@@ -33,16 +33,16 @@ numPartitions_(0) {
 
 // not used
 vector <int> SequenceSampler::get_sampled_sites () {
-    return samplesites_;
+    return sample_sites_;
 }
 
 string SequenceSampler::get_resampled_seq (string const& origseq) {
     string seq;
-    for (unsigned int i = 0; i < samplesites_.size(); i++) {
+    for (unsigned int i = 0; i < sample_sites_.size(); i++) {
         if (i == 0) {
-            seq = origseq[samplesites_[i]];
+            seq = origseq[sample_sites_[i]];
         } else {
-            seq += origseq[samplesites_[i]];
+            seq += origseq[sample_sites_[i]];
         }
     }
     return seq;
@@ -51,11 +51,11 @@ string SequenceSampler::get_resampled_seq (string const& origseq) {
 // this is done once, to populate site sample vector
 void SequenceSampler::sample_sites (int const& numchar) {
     if (partitioned_) {
-        samplesites_ = get_partitioned_bootstrap_sites();
+        sample_sites_ = get_partitioned_bootstrap_sites();
     } else if (!jackknife_) {
-        samplesites_ = get_bootstrap_sites(numchar);
+        sample_sites_ = get_bootstrap_sites(numchar);
     } else {
-        samplesites_ = get_jackknife_sites(numchar);
+        sample_sites_ = get_jackknife_sites(numchar);
     }
 }
 
@@ -75,9 +75,9 @@ vector <int> SequenceSampler::get_bootstrap_sites (int const& numchar) {
 
 // set up so same composition as original
 vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
-    vector <int> master(numPartitionedSites_, 0);
+    vector <int> master(num_partitioned_sites_, 0);
     
-    for (int i = 0; i < numPartitions_; i++) {
+    for (int i = 0; i < num_partitions_; i++) {
         int curNum = (int)partitions_[i].size();
         //cout << "Partition #" << i << " contains " << curNum << " sites." << endl;
         vector <int> randsites = get_bootstrap_sites(curNum);
@@ -123,7 +123,7 @@ void SequenceSampler::parse_partitions (string & partf) {
     }
     infile.close();
     
-    numPartitions_ = (int)partitions_.size();
+    num_partitions_ = (int)partitions_.size();
     calculate_num_partitioned_sites();
     
     // do error-checking here:
@@ -158,14 +158,14 @@ vector <int> SequenceSampler::get_partition_sites (string const& part) {
 // 1231231231231234444444444444
 // not used
 void SequenceSampler::get_site_partitions () {
-    vector <int> sites(numPartitionedSites_, 0);
+    vector <int> sites(num_partitioned_sites_, 0);
     
-    for (int i = 0; i < numPartitions_; i++) {
+    for (int i = 0; i < num_partitions_; i++) {
         for (unsigned int j = 0; j < partitions_[i].size(); j++) {
             sites[partitions_[i][j]] = i;
         }
     }
-    sitePartitions_ = sites;
+    site_partitions_ = sites;
 }
 
 // CHARSET GADPH = 2991-3406\3
@@ -178,7 +178,7 @@ void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & 
     }
     
     // ignore first token. will be either CHARSET of DNA,
-    partitionNames_.push_back(tokens[1]);
+    partition_names_.push_back(tokens[1]);
     //cout << "Processing partition '" << tokens[1] << "': ";
     
     if (is_number(tokens[2])) {
@@ -197,10 +197,10 @@ void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & 
 }
 
 void SequenceSampler::calculate_num_partitioned_sites () {
-    numPartitionedSites_ = 0;
+    num_partitioned_sites_ = 0;
     
-    for (int i = 0; i < numPartitions_; i++) {
-        numPartitionedSites_ += (int)partitions_[i].size();
+    for (int i = 0; i < num_partitions_; i++) {
+        num_partitioned_sites_ += (int)partitions_[i].size();
 //         cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << endl;
 //         for (unsigned int j = 0; j < partitions[i].size(); j++) {
 //             cout << partitions[i][j] << " ";
@@ -210,13 +210,13 @@ void SequenceSampler::calculate_num_partitioned_sites () {
 }
 
 int SequenceSampler::get_num_partitioned_sites () {
-    return numPartitionedSites_;
+    return num_partitioned_sites_;
 }
 
 // should do some error-checking e.g. for 1) missing sites, 2) overlapping partitions
 void SequenceSampler::check_valid_partitions () {
     vector <int> allSites = partitions_[0];
-    for (int i = 1; i < numPartitions_; i++) {
+    for (int i = 1; i < num_partitions_; i++) {
         allSites.insert(allSites.end(), partitions_[i].begin(), partitions_[i].end());
     }
     sort(allSites.begin(), allSites.end());

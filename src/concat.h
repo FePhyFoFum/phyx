@@ -3,13 +3,13 @@
 
 class SequenceConcatenater {
 private:
-    vector <Sequence> seqs;
-    int numPartitions;
-    int numChar;
-    int numTaxa;
-    int ft;
-    string filename;
-    vector <int> partitionSizes;
+    vector <Sequence> seqs_;
+    int num_partitions_;
+    int num_char_;
+    int num_taxa_;
+    int ft_;
+    string filename_;
+    vector <int> partition_sizes_;
     
     void read_sequences (string & seqf);
     void delete_sequence (SequenceConcatenater & newSeqs, int const& index);
