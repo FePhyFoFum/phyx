@@ -28,11 +28,12 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -r, --rooted        return whether the tree is rooted" << endl;
-    cout << " -a, --age           return the height of root (must be rooted" << endl;
+    cout << " -a, --age           return the height of root (must be rooted and ultrametric)" << endl;
     cout << " -n, --ntips         return the number of terminals" << endl;
     cout << " -u, --ultrametric   return whether tree is ultrametric" << endl;
     cout << " -b, --binary        return whether tree is binary" << endl;
     cout << " -l, --length        return the length of the tree" << endl;
+    cout << " -i, --tiplabels     return all tip labels (one per line)" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -52,6 +53,7 @@ static struct option const long_options[] =
     {"ultrametric", no_argument, NULL, 'u'},
     {"binary", no_argument, NULL, 'b'},
     {"length", no_argument, NULL, 'l'},
+    {"tiplabels", no_argument, NULL, 'i'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -71,12 +73,13 @@ int main(int argc, char * argv[]) {
     bool agecheck = false;
     bool rootedcheck = false;
     bool ntipcheck = false;
+    bool namecheck = false;
     char * outf;
     char * treef;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:ranublo:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:ranublio:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -108,6 +111,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 'l':
                 lengthcheck = true;
+                optionsset = true;
+                break;
+            case 'i':
+                namecheck = true;
                 optionsset = true;
                 break;
             case 'o':
@@ -176,7 +183,7 @@ int main(int argc, char * argv[]) {
                 } else {
                     // only a single property
                     TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
-                        ntipcheck, lengthcheck, poos);
+                        ntipcheck, lengthcheck, namecheck, poos);
                 }
             }
         }
@@ -198,7 +205,7 @@ int main(int argc, char * argv[]) {
                 } else {
                     // only a single property
                     TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
-                        ntipcheck, lengthcheck, poos);
+                        ntipcheck, lengthcheck, namecheck, poos);
                 }
             }
         }

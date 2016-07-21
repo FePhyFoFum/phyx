@@ -409,3 +409,14 @@ vector <string> get_names_in_tree(Tree * tr, vector<string> const& names) {
     }
     return matched;
 }
+
+
+// returns a sorted vector of all terminal labels
+vector <string> get_tip_labels (Tree * tr) {
+    vector <string> labels;
+    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
+        labels.push_back(tr->getExternalNode(i)->getName());
+    }
+    sort(labels.begin(), labels.end());
+    return labels;
+}

@@ -20,7 +20,7 @@ TreeInfo::TreeInfo (Tree * intree) {
 
 TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
     bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
-    bool const& lengthcheck, ostream* poos) {
+    bool const& lengthcheck, bool const& namecheck, ostream* poos) {
     tree = intree;
     if (ultracheck) {
         ultrametric_tree = is_ultrametric_paths(tree);
@@ -50,7 +50,12 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
         } else {
             (*poos) << "NA" << endl;
         }
-    } 
+    } else if (namecheck) {
+        tip_labels_ = get_tip_labels(tree);
+        for (unsigned int i = 0; i < tip_labels_.size(); i++) {
+            (*poos) << tip_labels_[i] << endl;
+        }
+    }
 }
 
 void TreeInfo::calc_stats () {
@@ -82,7 +87,6 @@ void TreeInfo::get_stats (ostream* poos) {
         (*poos) << "treelength: NA" << endl;
         (*poos) << "ultrametric: NA" << endl;
     }
-    
     if (ultrametric_tree) {
         (*poos) << "rootheight: " << rootheight << endl;
     } else {

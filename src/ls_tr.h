@@ -9,7 +9,6 @@ using namespace std;
 
 class TreeInfo {
 private:
-    string model;
     Tree* tree;
     bool rooted_tree;
     bool ultrametric_tree;
@@ -19,6 +18,7 @@ private:
     double nintnodes;
     double ntips;
     double rootheight;
+    vector <string> tip_labels_;
     
     void calc_stats ();
 
@@ -26,7 +26,7 @@ public:
     TreeInfo (Tree * intree);
     TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
         bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
-        bool const& lengthcheck, ostream* poos);
+        bool const& lengthcheck, bool const& namecheck, ostream* poos);
     void get_stats (ostream* poos);
 };
 

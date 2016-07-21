@@ -32,5 +32,6 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric);
 bool check_names_against_tree(Tree * tr, vector<string> names);
 bool reroot(Tree * tree, vector<string> & outgr, bool const& silent);
 vector <string> get_names_in_tree(Tree * tr, vector<string> const& names);
+vector <string> get_tip_labels (Tree * tr);
 
 #endif /* _TREE_UTILS_H_ */
