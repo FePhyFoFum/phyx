@@ -14,44 +14,44 @@ using namespace std;
 
 
 TreeInfo::TreeInfo (Tree * intree) {
-    tree = intree;
+    tree_ = intree;
     calc_stats();
 }
 
 TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
     bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
     bool const& lengthcheck, bool const& namecheck, ostream* poos) {
-    tree = intree;
+    tree_ = intree;
     if (ultracheck) {
-        ultrametric_tree = is_ultrametric_paths(tree);
-        (*poos) << std::boolalpha << ultrametric_tree << endl;
+        ultrametric_tree_ = is_ultrametric_paths(tree_);
+        (*poos) << std::boolalpha << ultrametric_tree_ << endl;
     } else if (binarycheck) {
-        binary_tree = is_binary(tree);
-        (*poos) << std::boolalpha << binary_tree << endl;
+        binary_tree_ = is_binary(tree_);
+        (*poos) << std::boolalpha << binary_tree_ << endl;
     } else if (agecheck) {
-        ultrametric_tree = is_ultrametric_paths(tree);
-        if (ultrametric_tree) {
-            rootheight = tree->getRoot()->getHeight();
-            (*poos) << rootheight << endl;
+        ultrametric_tree_ = is_ultrametric_paths(tree_);
+        if (ultrametric_tree_) {
+            rootheight_ = tree_->getRoot()->getHeight();
+            (*poos) << rootheight_ << endl;
         } else {
             (*poos) << "NA" << endl;
         }
     } else if (rootedcheck) {
-        rooted_tree = is_rooted(tree);
-        (*poos) << std::boolalpha << rooted_tree << endl;
+        rooted_tree_ = is_rooted(tree_);
+        (*poos) << std::boolalpha << rooted_tree_ << endl;
     } else if (ntipcheck) {
-        ntips = tree->getExternalNodeCount();
-        (*poos) << ntips << endl;
+        ntips_ = tree_->getExternalNodeCount();
+        (*poos) << ntips_ << endl;
     } else if (lengthcheck) {
-        treelength = get_tree_length(tree);
-        has_branchlengths = (treelength > 0.0) ? true : false;
-        if (has_branchlengths) {
-            (*poos) << treelength << endl;
+        treelength_ = get_tree_length(tree_);
+        has_branchlengths_ = (treelength_ > 0.0) ? true : false;
+        if (has_branchlengths_) {
+            (*poos) << treelength_ << endl;
         } else {
             (*poos) << "NA" << endl;
         }
     } else if (namecheck) {
-        tip_labels_ = get_tip_labels(tree);
+        tip_labels_ = get_tip_labels(tree_);
         for (unsigned int i = 0; i < tip_labels_.size(); i++) {
             (*poos) << tip_labels_[i] << endl;
         }
@@ -59,36 +59,36 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
 }
 
 void TreeInfo::calc_stats () {
-    treelength = get_tree_length(tree);
-    has_branchlengths = (treelength > 0.0) ? true : false;
-    nintnodes = tree->getInternalNodeCount();
-    ntips = tree->getExternalNodeCount();
-    rooted_tree = is_rooted(tree);
-    binary_tree = is_binary(tree);
-    ultrametric_tree = is_ultrametric_paths(tree);
-    if (ultrametric_tree) {
-        rootheight = tree->getRoot()->getHeight();
+    treelength_ = get_tree_length(tree_);
+    has_branchlengths_ = (treelength_ > 0.0) ? true : false;
+    nintnodes_ = tree_->getInternalNodeCount();
+    ntips_ = tree_->getExternalNodeCount();
+    rooted_tree_ = is_rooted(tree_);
+    binary_tree_ = is_binary(tree_);
+    ultrametric_tree_ = is_ultrametric_paths(tree_);
+    if (ultrametric_tree_) {
+        rootheight_ = tree_->getRoot()->getHeight();
     } else {
-        rootheight = 0.0;
+        rootheight_ = 0.0;
     }
 }
 
 
 void TreeInfo::get_stats (ostream* poos) {
-    (*poos) << "rooted: " << std::boolalpha << rooted_tree << endl;
-    (*poos) << "binary: " << std::boolalpha << binary_tree << endl;
-    (*poos) << "nterminal: " << ntips << endl;
-    (*poos) << "ninternal: " << nintnodes << endl;
-    (*poos) << "branch lengths: " << std::boolalpha << has_branchlengths << endl;
-    if (has_branchlengths) {
-        (*poos) << "treelength: " << treelength << endl;
-        (*poos) << "ultrametric: " << std::boolalpha << ultrametric_tree << endl;
+    (*poos) << "rooted: " << std::boolalpha << rooted_tree_ << endl;
+    (*poos) << "binary: " << std::boolalpha << binary_tree_ << endl;
+    (*poos) << "nterminal: " << ntips_ << endl;
+    (*poos) << "ninternal: " << nintnodes_ << endl;
+    (*poos) << "branch lengths: " << std::boolalpha << has_branchlengths_ << endl;
+    if (has_branchlengths_) {
+        (*poos) << "treelength: " << treelength_ << endl;
+        (*poos) << "ultrametric: " << std::boolalpha << ultrametric_tree_ << endl;
     } else {
         (*poos) << "treelength: NA" << endl;
         (*poos) << "ultrametric: NA" << endl;
     }
-    if (ultrametric_tree) {
-        (*poos) << "rootheight: " << rootheight << endl;
+    if (ultrametric_tree_) {
+        (*poos) << "rootheight: " << rootheight_ << endl;
     } else {
         (*poos) << "rootheight: NA" << endl;
     }

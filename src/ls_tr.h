@@ -9,15 +9,15 @@ using namespace std;
 
 class TreeInfo {
 private:
-    Tree* tree;
-    bool rooted_tree;
-    bool ultrametric_tree;
-    bool binary_tree;
-    bool has_branchlengths;
-    double treelength;
-    double nintnodes;
-    double ntips;
-    double rootheight;
+    Tree* tree_;
+    bool rooted_tree_;
+    bool ultrametric_tree_;
+    bool binary_tree_;
+    bool has_branchlengths_;
+    double treelength_;
+    double nintnodes_;
+    double ntips_;
+    double rootheight_;
     vector <string> tip_labels_;
     
     void calc_stats ();
