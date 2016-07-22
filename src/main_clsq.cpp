@@ -54,14 +54,12 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    //bool percentgiven = false; // not used
     string seqf = "";
-    string outf = ""; // not used at the moment
+    string outf = "";
     double percent = 0.5;
 
     while (1) {
         int oi = -1;
-        //int curind = optind; // not used
         int c = getopt_long(argc, argv, "s:o:p:hV", long_options, &oi);
         if (c == -1) {
             break;
@@ -77,7 +75,6 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-                //percentgiven = true;
                 percent = atof(strdup(optarg));
                 break;
             case 'h':
@@ -99,7 +96,6 @@ int main(int argc, char * argv[]) {
     ofstream* ofstr;
     istream* pios;
     ifstream* fstr;
-    //string temp;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -115,9 +111,6 @@ int main(int argc, char * argv[]) {
     }
     
     SequenceCleaner toClean(pios, percent);
-    
-    // check
-    //cout << "Read in " << toClean.get_num_taxa() << " taxa." << endl;
     
     // write sequences. currently only fasta format.
     toClean.write_seqs(poos);

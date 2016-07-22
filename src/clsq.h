@@ -23,12 +23,12 @@ using namespace std;
 class SequenceCleaner {
 private:
     
-    int numTaxa, numChar;
-    double missingAllowed;
-    string fasta, line, dna, name_hold;
-    map<string, string> sequences;
-    map<string, string>::iterator iter;
-    map<string, string> trimmedSeqs;
+    int num_taxa_, num_char_;
+    double missing_allowed_;
+    string fasta_, line_, dna_, name_hold_;
+    map<string, string> sequences_;
+    map<string, string>::iterator iter_;
+    map<string, string> trimmed_seqs_;
     void read_sequences (istream* pios);
     void CheckMissing(double MissingData [], string& dna);
     void clean_sequences();

@@ -11,8 +11,8 @@
 #include "seq_reader.h"
 
 
-SequenceCleaner::SequenceCleaner(istream* pios, double& missing):numTaxa (0), 
-        numChar (0.0), missingAllowed(missing) {
+SequenceCleaner::SequenceCleaner(istream* pios, double& missing):num_taxa_(0), 
+        num_char_(0.0), missing_allowed_(missing) {
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
 }
@@ -22,103 +22,72 @@ void SequenceCleaner::read_sequences (istream* pios) {
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
+    
     // should put error-checking here e.g. check that sequences are all the same length
     // not doing that here; just assuming things are cool
+    
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        sequences[seq.get_id()] = seq.get_sequence();
-        if (numChar == 0.0) { // just getting this from an arbitrary sequence for now
-            numChar = (double)seq.get_sequence().size();
+        sequences_[seq.get_id()] = seq.get_sequence();
+        if (num_char_ == 0.0) { // just getting this from an arbitrary (first) sequence for now
+            num_char_ = (double)seq.get_sequence().size();
         }
     }
     if (ft == 2) {
-        sequences[seq.get_id()] = seq.get_sequence();
+        sequences_[seq.get_id()] = seq.get_sequence();
     }
-    numTaxa = sequences.size();
+    num_taxa_ = sequences_.size();
 }
  // not used
 int SequenceCleaner::get_num_taxa () {
-    return numTaxa;
+    return num_taxa_;
 }
 
 // not used
 map<string, string> SequenceCleaner::get_trimmed_seqs () {
-    return trimmedSeqs;
+    return trimmed_seqs_;
 }
 
 void SequenceCleaner::write_seqs (ostream* poos) {
-    //cout << "About to write sequences for " << trimmedSeqs.size() << " taxa!" << endl;
-    // hmm. doesn't work...
-    //for (auto& kv : trimmedSeqs) {
-    //    (*poos) << ">" << kv.first << endl;
-    //    (*poos) << kv.second << endl;
-    //}
-    if (trimmedSeqs.size() == 0) {
-        for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-            (*poos) << ">" << iter->first << endl;
+    if (trimmed_seqs_.size() == 0) {
+        for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
+            (*poos) << ">" << iter_->first << endl;
             (*poos) << "-" << endl;
         }
     }
-    for (iter = trimmedSeqs.begin(); iter != trimmedSeqs.end(); iter++) {
-        (*poos) << ">" << iter->first << endl;
-        (*poos) << iter->second << endl;
+    for (iter_ = trimmed_seqs_.begin(); iter_ != trimmed_seqs_.end(); iter_++) {
+        (*poos) << ">" << iter_->first << endl;
+        (*poos) << iter_->second << endl;
     }
 }
 
 void SequenceCleaner::clean_sequences () {
     
-    /*
-    ifstream readline;
-    double NumbOfSequences = 0.0;
-    string new_dna;
-    bool round_one = true;
-    unsigned int StillMissing = 0;
-    readline.open(fasta.c_str());
-    if (readline.is_open()) {
-        while (getline (readline, line)) {
-            if (line[0] == '>') {
-                if (round_one == false) {
-                    line.erase (std::remove(line.begin(), line.end(), '>'), line.end());
-                    sequences[name_hold] = dna;
-                    dna = "";
-                } else {
-                    line.erase (std::remove(line.begin(), line.end(), '>'), line.end());
-                }
-                name_hold = line;
-            } else {
-                round_one = false;
-                dna += line;
-            }
-        }
-    }
-    sequences[name_hold] = dna;
-    int size = dna.size();
-    */
-    
-    double MissingData[numChar];
-    double PercentMissingData[numChar];
-    for (int i = 0; i < numChar; i++) {
+    double MissingData[num_char_];
+    double PercentMissingData[num_char_];
+    for (int i = 0; i < num_char_; i++) {
         MissingData[i] = 0.0;
     }
     string new_dna;
     unsigned int stillMissing = 0;
     
-    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-
-        new_dna = iter -> second;
+    for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
+        new_dna = iter_ -> second;
         CheckMissing(MissingData, new_dna);
         //NumbOfSequences++;
     }
-    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
+    for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
 
         string to_stay = "";
-        new_dna = iter -> second;
+        new_dna = iter_ -> second;
         stillMissing = 0;
         for (unsigned int i = 0; i < new_dna.size(); i++) {
-            PercentMissingData[i] =  MissingData[i] / (double)numTaxa;
+            PercentMissingData[i] =  MissingData[i] / (double)num_taxa_;
             //cout << "Position: " << i << "Amount Missing: " << MissingData[i] << " Percent Missing: " << PercentMissingData[i] << "Number of Taxa: " <<  (double)numTaxa  << " Allowed Missing: " << missingAllowed << endl;
-            if (PercentMissingData[i] > missingAllowed) {
+            if (PercentMissingData[i] > missing_allowed_) {
+                
                 
                 // *** something missing here? ***
+                
                 
             } else {
                 to_stay += new_dna[i];
@@ -132,16 +101,16 @@ void SequenceCleaner::clean_sequences () {
             }
         }
         if (stillMissing == to_stay.size()) {
-            cout << "Removed: " << iter -> first << endl;
+            cout << "Removed: " << iter_ -> first << endl;
         } else {
-            trimmedSeqs[iter -> first] = to_stay;
+            trimmed_seqs_[iter_ -> first] = to_stay;
         }
     }
-    //return trimmedSeqs;
 }
+
 void SequenceCleaner::CheckMissing(double MissingData [], string& dna) {
 
-    for (int i = 0; i < numChar; i++) {
+    for (int i = 0; i < num_char_; i++) {
         // use tolower
         if (dna[i] == 'N' || dna[i] == '-' || dna[i] == 'n' || 
             dna[i] == 'X' ||  dna[i] == 'x') {
