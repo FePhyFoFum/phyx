@@ -12,7 +12,7 @@
 
 
 SequenceCleaner::SequenceCleaner(istream* pios, double& missing):num_taxa_(0), 
-        num_char_(0.0), missing_allowed_(missing) {
+        num_char_(0), missing_allowed_(missing) {
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
 }
@@ -22,18 +22,30 @@ void SequenceCleaner::read_sequences (istream* pios) {
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    // should put error-checking here e.g. check that sequences are all the same length
-    // not doing that here; just assuming things are cool
+    int num_current_char = 0;
     
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences_[seq.get_id()] = seq.get_sequence();
-        if (num_char_ == 0.0) { // just getting this from an arbitrary (first) sequence for now
-            num_char_ = (double)seq.get_sequence().size();
+        num_current_char = seq.get_sequence().size();
+        if (num_char_ == 0) { // just getting this from an arbitrary (first) sequence for now
+            num_char_ = num_current_char;
+            continue;
+        } else {
+            if (num_current_char != num_char_) {
+                cout << "Error: sequences are not all of the same length. Exiting."
+                    << endl;
+                exit(0);
+            }
         }
     }
     if (ft == 2) {
         sequences_[seq.get_id()] = seq.get_sequence();
+        num_current_char = seq.get_sequence().size();
+        if (num_current_char != num_char_) {
+            cout << "Error: sequences are not all of the same length. Exiting."
+                << endl;
+            exit(0);
+        }
     }
     num_taxa_ = sequences_.size();
 }

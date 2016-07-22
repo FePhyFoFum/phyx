@@ -21,8 +21,9 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Cleans up Sequences and Removes position with too much Ambiguous data." << endl;
+    cout << "Cleans alignments by removing positions with too much ambiguous data." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
+    cout << "Results are written in fasta format." << endl;
     cout << endl;
     cout << "Usage: pxclsq [OPTION]... " << endl;
     cout << endl;
