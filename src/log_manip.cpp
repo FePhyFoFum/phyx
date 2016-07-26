@@ -14,14 +14,99 @@ using namespace std;
 #include "log_manip.h"
 #include "utils.h"
 
+// this doesn't quite work with an optional arg for input_files
+LogManipulator::LogManipulator(string const& logtype, vector <string> const& input_files,
+    istream* pios, ostream* poos) {
+    if (input_files.size() > 0) {
+        files_ = input_files;
+        num_files_ = input_files.size();
+    } else {
+        pios_ = pios;
+    }
+    logtype_ = logtype;
+    poos_ = poos;
+}
 
-LogManipulator::LogManipulator(string const& logtype, int const& burnin, int const& nthin,
-    int const& nrandom, int const& seed, bool const& count):logtype_(logtype),
-    burnin_(burnin), nthin_(nthin), nrandom_(nrandom), seed_(seed), count_(count) {
-    
+LogManipulator::LogManipulator(string const& logtype, vector <string> const& input_files,
+    ostream* poos) {
+    files_ = input_files;
+    num_files_ = input_files.size();
+    logtype_ = logtype;
+    poos_ = poos;
+}
+
+void LogManipulator::sample(int const& burnin, int const& nthin, int const& nrandom,
+    int const& seed) {
+    burnin_ = burnin;
+    nthin_= nthin;
+    nrandom_ = nrandom;
+    seed_ = seed;
+    if (logtype_ == "parm") {
+        sample_parameters ();
+    } else {
+        sample_trees ();
+    }
+}
+
+void LogManipulator::count () {
+    if (logtype_ == "parm") {
+        count_parameter_samples ();
+    } else {
+        count_tree_samples ();
+    }
 }
 
 void LogManipulator::count_parameter_samples () {
+    num_cols_ = 0;
+    if (!files_.empty()) {
+        for (int i=0; i < num_files_; i++) {
+            string curfile = files_[i];
+            infilestr_.open(curfile.c_str());
+            string line;
+            bool first_line = true;
+            int num_samps = 0;
+            while (getline(infilestr_, line)) {
+                if (line.empty() || check_comment_line(line)) {
+                    continue;
+                } else if (first_line) {
+                    vector <string> header = tokenize(line);
+                    int curpars = header.size();
+                    if (i == 0) { // first header
+                        num_cols_ = curpars;
+                        parm_columns_ = header;
+                    } else {
+                        // check that we've still got the same number of parameters i.e. files match
+                        if (curpars != num_cols_) {
+                            cout << "Error: number of parameters in file " << (i + 1)
+                                << "(" << curpars << ") does not match that from first file ("
+                                << num_cols_ << "). Exiting." << endl;
+                            exit(0);
+                        } else if (header != parm_columns_) {
+                            // check that headers are identical
+                            cout << "Error: header for file " << (i + 1)
+                                << "does not match that from first file. Exiting." << endl;
+                            exit(0);
+                        }
+                    }
+                    
+                    first_line = false;
+                    continue;
+                } else {
+                    num_samps++;
+                    continue;
+                }
+            }
+            indiv_totals_.push_back(num_samps);
+            infilestr_.close();
+        }
+        ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
+        (*poos_) << "Counted " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
+            << " variables across " << num_files_ << " files." << endl;
+    } else {
+        
+        // stream stuff will go here (maybe)
+        
+    }
     
 }
 
@@ -29,266 +114,61 @@ void LogManipulator::count_tree_samples () {
     
 }
 
+void LogManipulator::sample_parameters () {
+    if (!files_.empty()) {
+        for (int i=0; i < num_files_; i++) {
+            string curfile = files_[i];
+            infilestr_.open(curfile.c_str());
+            string line;
+            bool first_line = true;
+            int num_samps = 0;
+            while (getline(infilestr_, line)) {
+                if (line.empty() || check_comment_line(line)) {
+                    continue;
+                } else if (first_line) {
+                    vector <string> header = tokenize(line);
+                    int curpars = header.size();
+                    if (i == 0) { // first header
+                        num_cols_ = curpars;
+                        parm_columns_ = header;
+                        for (int j=0; j < num_cols_; j++) {
+                            (*poos_) << parm_columns_[j];
+                            if (j < (num_cols_ - 1)) {
+                                (*poos_) << "\t";
+                            }
+                        }
+                        (*poos_) << endl;
+                    } else {
+                        // check that we've still got the same number of parameters i.e. files match
+                        if (curpars != num_cols_) {
+                            cout << "Error: number of parameters in file " << (i + 1)
+                                << "(" << curpars << ") does not match that from first file ("
+                                << num_cols_ << "). Exiting." << endl;
+                            exit(0);
+                        } else if (header != parm_columns_) {
+                            // check that headers are identical
+                            cout << "Error: header for file " << (i + 1)
+                                << "does not match that from first file. Exiting." << endl;
+                            exit(0);
+                        }
+                    }
+                    
+                    first_line = false;
+                    continue;
+                } else {
+                    num_samps++;
+                    continue;
+                }
+            }
+            indiv_totals_.push_back(num_samps);
+            infilestr_.close();
+        }
+        ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
+        (*poos_) << "Counted " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
+            << " variables across " << num_files_ << " files." << endl;
+    }
+}
 
-//
-//SequenceSampler::SequenceSampler (int const& seed, float const& jackfract, string & partf)
-//:jkfract(jackfract), jackknife(false), partitioned(false), numPartitionedSites(0), numPartitions(0)
-//{
-//    if (seed == -1) {
-//        srand(get_clock_seed());
-//    } else {
-//        srand(seed);
-//    }
-//    if (jkfract != 0.0) {
-//        jackknife = true;
-//    }
-//    if (!partf.empty()) {
-//        partitioned = true;
-//        parse_partitions(partf);
-//    }
-//}
-//
-//// not used
-//vector <int> SequenceSampler::get_sampled_sites () {
-//    return samplesites;
-//}
-//
-//string SequenceSampler::get_resampled_seq (string const& origseq) {
-//    string seq;
-//    for (unsigned int i = 0; i < samplesites.size(); i++) {
-//        if (i == 0) {
-//            seq = origseq[samplesites[i]];
-//        } else {
-//            seq += origseq[samplesites[i]];
-//        }
-//    }
-//    return seq;
-//}
-//
-//// this is done once, to populate site sample vector
-//void SequenceSampler::sample_sites (int const& numchar) {
-//    if (partitioned) {
-//        samplesites = get_partitioned_bootstrap_sites();
-//    } else if (!jackknife) {
-//        samplesites = get_bootstrap_sites(numchar);
-//    } else {
-//        samplesites = get_jackknife_sites(numchar);
-//    }
-//}
-//
-//// sample with replacement.
-//vector <int> SequenceSampler::get_bootstrap_sites (int const& numchar) {
-//    vector <int> randsites (numchar); // numchar zero-initialized elements
-//    int randnum = 0;
-//    
-//    for (int i = 0; i < numchar; i++) {
-//        randnum = random_int_range(0, (numchar - 1));
-//        randsites[i] = randnum;
-//    }
-//    sort(randsites.begin(), randsites.end());
-//    
-//    return randsites;
-//}
-//
-//// set up so same composition as original
-//vector <int> SequenceSampler::get_partitioned_bootstrap_sites () {
-//    vector <int> master(numPartitionedSites, 0);
-//    
-//    for (int i = 0; i < numPartitions; i++) {
-//        int curNum = (int)partitions[i].size();
-//        //cout << "Partition #" << i << " contains " << curNum << " sites." << endl;
-//        vector <int> randsites = get_bootstrap_sites(curNum);
-//        for (int j = 0; j < curNum; j ++) {
-//        // put partitions back in same spot as original, so partition file does not need to change
-//            master[partitions[i][j]] = partitions[i][randsites[j]];
-//        }
-//    }
-//    
-//    return master;
-//}
-//
-//// sample WITHOUT replacement. not with partitioned models
-//vector <int> SequenceSampler::get_jackknife_sites (int const& numchar) {
-//    int numsample = numchar * jkfract + 0.5;
-//    
-//    vector <int> randsites = sample_without_replacement(numchar, numsample);
-//    
-//    return randsites;
-//}
-//
-//
-///*
-//grab partition information from separate file. example:
-//mtDNA_1st = 1-2066\3
-//TGFb2 = 5059-5721
-//TODO: update to 1) RAxML and 2) Nexus style
-// - RAxML: DNA, gene0 = 1-4243
-// - MrBayes: CHARSET gene0 = 1-4243;
-// * So, thrown out first token, and should work for both
-//*/
-//void SequenceSampler::parse_partitions (string & partf) {
-//    vector <int> temp;
-//    string line;
-//    ifstream infile(partf.c_str());
-//    
-//    while (getline(infile,line)) {
-//        if (line.size() < 1) {
-//            continue;
-//        } else {
-//            temp = get_partition_sites(line);
-//            partitions.push_back(temp);
-//            temp.clear();
-//        }
-//    }
-//    infile.close();
-//    
-//    numPartitions = (int)partitions.size();
-//    calculate_num_partitioned_sites();
-//    
-//    // do error-checking here:
-//    check_valid_partitions();
-//}
-//
-//// expecting pattern: (CHARSET/DNA,) name = start-end[\3][,]
-//// want to be flexible with spaces/lackthereof
-//// guaranteed to be ordered
-//vector <int> SequenceSampler::get_partition_sites (string const& part) {
-//    vector <int> sites;
-//    vector <string> tokens;
-//    int start = 0;
-//    int stop = 0;
-//    int interval = 1;
-//    
-//    string delim(" -=;\t\\");
-//    tokenize(part, tokens, delim);
-//    get_partition_parameters (tokens, start, stop, interval);
-//    
-//    int i = start;
-//    
-//    while (i <= stop) {
-//        sites.push_back(i);
-//        i += interval;
-//    }
-//    
-//    return sites;
-//}
-//
-//// opposite of get_partition_sites. want single vector listing site-specific partitions. e.g.
-//// 1231231231231234444444444444
-//// not used
-//void SequenceSampler::get_site_partitions () {
-//    vector <int> sites(numPartitionedSites, 0);
-//    
-//    for (int i = 0; i < numPartitions; i++) {
-//        for (unsigned int j = 0; j < partitions[i].size(); j++) {
-//            sites[partitions[i][j]] = i;
-//        }
-//    }
-//    sitePartitions = sites;
-//}
-//
-//// CHARSET GADPH = 2991-3406\3
-//// after being tokenized, should be of length 4 or 5 (latter when interval)
-//// convert from 1-start to 0-start
-//void SequenceSampler::get_partition_parameters (vector <string> & tokens, int & start, int & stop, int & interval) {
-//    if ((int)tokens.size() < 4 || (int)tokens.size() > 5) {
-//        cout << "Error: invalid/unsupported partition specification." << endl;
-//        exit (0);
-//    }
-//    
-//    // ignore first token. will be either CHARSET of DNA,
-//    partitionNames.push_back(tokens[1]);
-//    //cout << "Processing partition '" << tokens[1] << "': ";
-//    
-//    if (is_number(tokens[2])) {
-//        start = atoi(tokens[2].c_str()) - 1;
-//        //cout << "start = " << start;
-//    }
-//    if (is_number(tokens[3])) {
-//        stop = atoi(tokens[3].c_str()) - 1;
-//        //cout << "; stop = " << stop;
-//    }
-//    if (((int)tokens.size() == 5) && is_number(tokens[4])) {
-//        interval = atoi(tokens[4].c_str());
-//        //cout << "; interval = " << interval;
-//    }
-//    //cout << endl;
-//}
-//
-//void SequenceSampler::calculate_num_partitioned_sites () {
-//    numPartitionedSites = 0;
-//    
-//    for (int i = 0; i < numPartitions; i++) {
-//        numPartitionedSites += (int)partitions[i].size();
-////         cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << endl;
-////         for (unsigned int j = 0; j < partitions[i].size(); j++) {
-////             cout << partitions[i][j] << " ";
-////         }
-////         cout << endl;
-//    }
-//}
-//
-//int SequenceSampler::get_num_partitioned_sites () {
-//    return numPartitionedSites;
-//}
-//
-//// should do some error-checking e.g. for 1) missing sites, 2) overlapping partitions
-//void SequenceSampler::check_valid_partitions () {
-//    vector <int> allSites = partitions[0];
-//    for (int i = 1; i < numPartitions; i++) {
-//        allSites.insert(allSites.end(), partitions[i].begin(), partitions[i].end());
-//    }
-//    sort(allSites.begin(), allSites.end());
-//    
-//    int max = allSites.back();
-//    int count = (int)allSites.size();
-//    int diff = max - count + 1;
-//    
-//    if (diff != 0) { // sites are duplicated
-//        //cout << "Error in partitioning: maximum site value " << max << " does not equal site count " << count << "." << endl;
-//        find_duplicates_missing(allSites);
-//    }
-//}
-//
-//void SequenceSampler::find_duplicates_missing (vector <int> const& allSites) {
-//    vector <int> unique;
-//    vector <int> duplicates;
-//    vector <int> missing;
-//    
-//    int maxVal = allSites.back();
-//    
-//    vector <int> counts(maxVal, 0);
-//    for (unsigned int i = 0; i < allSites.size(); i++) {
-//        counts[allSites[i]]++;
-//    }
-//    
-//    for (int i = 0; i < maxVal; i++) {
-//        switch (counts[i]) {
-//            case 0:
-//                missing.push_back(i);
-//                break;
-//            case 1:
-//                unique.push_back(i);
-//                break;
-//            default:
-//                duplicates.push_back(i);
-//        }
-//    }
-//    
-//    if (duplicates.size() != 0) {
-//        cout << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
-//        for (unsigned int i = 0; i < duplicates.size(); i++) {
-//            cout << duplicates[i] << " ";
-//        }
-//        cout << endl;
-//    }
-//    if (missing.size() != 0) {
-//        cout << "Error: the following " << missing.size() << " sites are not found in any partition: ";
-//        for (unsigned int i = 0; i < missing.size(); i++) {
-//            cout << missing[i] << " ";
-//        }
-//        cout << endl;
-//    }
-//    cout << "Exiting." << endl;
-//    exit (0);
-//}
+void LogManipulator::sample_trees () {
+    
+}

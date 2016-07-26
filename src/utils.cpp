@@ -134,6 +134,15 @@ void trim_spaces (string& str) {
 }
 
 
+bool check_comment_line (string const& line) {
+    bool comment = false;
+    if (line[0] == '#' || line[0] == '[') {
+        comment = true;
+    }
+    return comment;
+}
+
+
 vector <vector <double> > processRateMatrixConfigFile (string filename, int numstates) {
     vector <double> cols(numstates,1);
     vector <vector <double> > ratematrix = vector <vector <double> > (numstates, cols);

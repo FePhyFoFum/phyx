@@ -14,12 +14,12 @@ using namespace std;
 void print_help() {
     cout << "MCMC log file manipulator." << endl;
     cout << "This will take parameter or tree log files." << endl;
-    cout << "Can read from stdin or file." << endl;
+    cout << "*NOTE* All values are in terms of number of SAMPLES (NOT generations)." << endl;
     cout << endl;
     cout << "Usage: pxlog [OPTION]... " << endl;
     cout << endl;
-    cout << " -p, --parmf=FILE    input parameter file, stdin otherwise" << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
+    cout << " -p, --parmf=FILE    input parameter log file(s)" << endl;
+    cout << " -t, --treef=FILE    input tree log file(s)" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << endl;
     cout << " -n, --thin=INT      interval of resampling" << endl;
@@ -57,11 +57,13 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool pfileset = false;
     bool tfileset = false;
+    vector <string> input_files;
     
     int burnin = 0;
     int nthin = 1;
     int nrandom = -1;
     int seed = -1;
+    bool verbose = false;
     
     bool count = false;
     
@@ -73,6 +75,7 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
+        int curind = optind;
         int c = getopt_long(argc, argv, "p:t:o:b:n:r:ax:hV", long_options, &oi);
         if (c == -1) {
             break;
@@ -80,14 +83,46 @@ int main(int argc, char * argv[]) {
         switch(c) {
             case 'p':
                 pfileset = true;
-                parmf = strdup(optarg);
-                check_file_exists(parmf);
+                curind = optind - 1;
+                while (curind < argc) {
+                    string temp = strdup(argv[curind]);
+                    curind++;
+                    if (temp[0] != '-') {
+                        ifstream infile(temp.c_str());
+                        if (infile.good()) { // check that file exists
+                            input_files.push_back(temp);
+                            infile.close();
+                        } else {
+                            cout << "Cannot find input file '" << temp << "'. Exiting." << endl;
+                            exit(0);
+                        }
+                    } else {
+                        optind = curind - 1;
+                        break;
+                    }
+                }
                 logtype = "parm";
                 break;
             case 't':
                 tfileset = true;
-                treef = strdup(optarg);
-                check_file_exists(treef);
+                curind = optind - 1;
+                while (curind < argc) {
+                    string temp = strdup(argv[curind]);
+                    curind++;
+                    if (temp[0] != '-') {
+                        ifstream infile(temp.c_str());
+                        if (infile.good()) { // check that file exists
+                            input_files.push_back(temp);
+                            infile.close();
+                        } else {
+                            cout << "Cannot find input file '" << temp << "'. Exiting." << endl;
+                            exit(0);
+                        }
+                    } else {
+                        optind = curind - 1;
+                        break;
+                    }
+                }
                 logtype = "tree";
                 break;
             case 'o':
@@ -121,10 +156,12 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios;
     ostream* poos;
-    ifstream* fstr;
     ofstream* ofstr;
+    
+    // not used at the moment: assumed that all input comes from files
+    istream* pios;
+    ifstream* fstr;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -133,10 +170,12 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
+    
     if (tfileset == true && pfileset == true) {
         cout << "Set tree file *or* parameter file, not both. Exiting." << endl;
         exit (0);
-    } else if (pfileset == true) {
+    }
+/*    } else if (pfileset == true) {
         fstr = new ifstream(parmf);
         pios = fstr;
     } else if (tfileset == true) {
@@ -145,38 +184,18 @@ int main(int argc, char * argv[]) {
     } else {
         pios = &cin;
     }
+*/
     
-    LogManipulator lm (logtype, burnin, nthin, nrandom, seed, count);
+    //LogManipulator lm (logtype, input_files, pios, poos);
+    LogManipulator lm (logtype, input_files, poos);
     
-    /*
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        if (first) { // need to read in first sequence to get numchar
-            numchar = (int)seq.get_sequence().size(); // check against partition information
-            if (partitioned) {
-                if (numchar != ss.get_num_partitioned_sites()) {
-                    cout << "Error: numSites in sequence (" << numchar <<
-                        ") does not match that in partition file (" << ss.get_num_partitioned_sites() <<
-                        ")." << endl;
-                }
-            }
-            ss.sample_sites(numchar);
-            first = false;
-        }
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
+    if (count) {
+        lm.count();
+    } else {
+        lm.sample(burnin, nthin, nrandom, seed);
     }
-    // have to deal with last sequence outside while loop. fix this.
-    // not sure if this is necessary and seems to produce duplicates at the end
-    if (ft == 2) {
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
-    }
-    */
     
-    if (tfileset || pfileset) {
-        fstr->close();
-        delete pios;
-    }
+    
     if (outfileset) {
         ofstr->close();
         delete poos;

@@ -13,12 +13,21 @@ private:
     
     bool count_;
     
+    vector <int> indiv_totals_;
     int ntotal_samples_;
+    int num_files_;
+    int num_cols_;
     
-    
+    vector <string> files_;
+    istream* pios_;
+    ostream* poos_;
+    ifstream infilestr_;
+    vector <string> parm_columns_;
     
     void count_parameter_samples ();
     void count_tree_samples ();
+    void sample_parameters ();
+    void sample_trees ();
     
     /*
     float jkfract;
@@ -45,8 +54,14 @@ private:
     void find_duplicates_missing (vector <int> const& allSites);
     */
 public:
-    LogManipulator(string const& logtype, int const& burnin, int const& nthin,
-        int const& nrandom, int const& seed, bool const& count);
+    // not using this one
+    LogManipulator(string const& logtype, vector <string> const& input_files,
+        istream* pios, ostream* poos);
+    LogManipulator(string const& logtype, vector <string> const& input_files,
+        ostream* poos);
+    void count ();
+    void sample(int const& burnin, int const& nthin, int const& nrandom,
+        int const& seed);
     /*
     SequenceSampler (int const& seed, float const& jackfract, string & partf);
     vector <int> get_sampled_sites ();

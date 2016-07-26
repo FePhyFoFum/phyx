@@ -14,6 +14,7 @@ void check_file_exists (const string& filename);
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters = " ");
 vector <string> tokenize (string const& input);
 void trim_spaces (string& str);
+bool check_comment_line (string const& line);
 bool is_number (const string &);
 
 unsigned int get_clock_seed ();
