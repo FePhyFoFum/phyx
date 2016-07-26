@@ -8,7 +8,7 @@
 #ifndef _BRANCH_SEGMENT_H_
 #define _BRANCH_SEGMENT_H_
 
-#include <vector>
+//#include <vector>
 
 class RateModel;
 
@@ -16,7 +16,6 @@ using namespace std;
 
 #include "vector_node_object.h"
 #include "superdouble.h"
-
 
 class BranchSegment{
 private:

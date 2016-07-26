@@ -326,6 +326,9 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
     return false;
 }
 
+
+
+// TODO: update this to use a stream
 void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
     numTaxa = numChar = 0;
     string tline;

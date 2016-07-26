@@ -8,13 +8,9 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
-#include <string>
-#include <vector>
+using namespace std;
 
 #include "node.h"
-
-//using namespace std;
-
 
 class Tree{
 private:

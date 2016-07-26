@@ -8,10 +8,10 @@
 #ifndef _TREE_UTILS_H_
 #define _TREE_UTILS_H_
 
-#include <map>
-#include <string>
-#include <vector>
+using namespace std;
+
 #include "node.h"
+
 class Tree;
 
 int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2);

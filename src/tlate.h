@@ -8,8 +8,9 @@
 #ifndef _TLATE_H_
 #define _TLATE_H_
 
-class TLATE {
+using namespace std;
 
+class TLATE {
 public:
     TLATE();
     string Translate(string& dna);

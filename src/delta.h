@@ -2,7 +2,7 @@
 #define _DELTA_H_
 
 #include <vector>
-#include <string>
+
 using namespace std;
 
 #include <gsl/gsl_vector.h>

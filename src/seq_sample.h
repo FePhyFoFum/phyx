@@ -1,6 +1,10 @@
 #ifndef _SEQSAMP_H_
 #define _SEQSAMP_H_
 
+#include <vector>
+
+using namespace std;
+
 class SequenceSampler {
 private:
     float jkfract_;

@@ -8,9 +8,9 @@
 #ifndef _STRING_NODE_OBJECT_H_
 #define _STRING_NODE_OBJECT_H_
 
-#include "node_object.h"
-#include <string>
 using namespace std;
+
+#include "node_object.h"
 
 class StringNodeObject: public string, public NodeObject{
 public:

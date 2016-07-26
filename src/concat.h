@@ -1,6 +1,12 @@
 #ifndef _CONCAT_H_
 #define _CONCAT_H_
 
+#include <vector>
+
+using namespace std;
+
+#include "sequence.h"
+
 class SequenceConcatenater {
 private:
     vector <Sequence> seqs_;

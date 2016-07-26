@@ -20,11 +20,11 @@ void print_help() {
     cout << endl;
     cout << " -p, --parmf=FILE    input parameter file, stdin otherwise" << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << endl;
     cout << " -n, --thin=INT      interval of resampling" << endl;
     cout << " -r, --rand=INT      number of random samples (without replacement)" << endl;
-    cout << " -c, --count         just count number of samples and exit" << endl;
+    cout << " -a, --attributes    just count number of samples and columns and exit" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -33,7 +33,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxlog 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxlog 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -43,7 +43,7 @@ static struct option const long_options[] =
     {"burnin", required_argument, NULL, 'b'},
     {"thin", required_argument, NULL, 'n'},
     {"rand", required_argument, NULL, 'r'},
-    {"count", required_argument, NULL, 'c'},
+    {"attributes", required_argument, NULL, 'a'},
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "p:t:o:b:n:r:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "p:t:o:b:n:r:ax:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -103,7 +103,7 @@ int main(int argc, char * argv[]) {
             case 'r':
                 nrandom = atoi(strdup(optarg));
                 break;
-            case 'c':
+            case 'a':
                 count = true;
                 break;
             case 'x':

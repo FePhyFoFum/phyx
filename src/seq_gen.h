@@ -10,6 +10,8 @@
 
 #include <random>
 
+using namespace std;
+
 #include "sequence.h"
 #include "tree.h"
 

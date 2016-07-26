@@ -26,7 +26,6 @@
 #ifndef _SUPERDOUBLE_H_
 #define _SUPERDOUBLE_H_
 
-#include <stdio.h>
 #include <cmath>
 #include <iostream>
 
@@ -56,10 +55,10 @@ public:
     void operator/= (Superdouble x);
     void operator+= (Superdouble x);
     void operator-= (Superdouble x);
-    bool operator < (const Superdouble &x)const ;
-    bool operator > (const Superdouble &x)const ;
-    bool operator >= (const Superdouble &x)const ;
-    bool operator <= (const Superdouble &x)const ;
+    bool operator < (const Superdouble &x)const;
+    bool operator > (const Superdouble &x)const;
+    bool operator >= (const Superdouble &x)const;
+    bool operator <= (const Superdouble &x)const;
     int getExponent();
     double getMantissa();
     Superdouble getLn();

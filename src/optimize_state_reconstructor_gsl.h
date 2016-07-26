@@ -2,7 +2,6 @@
 #ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_GSL_H_
 #define _OPTIMIZE_STATE_RECONSTRUCTOR_GSL_H_
 
-#include <vector>
 using namespace std;
 
 #include <armadillo>

@@ -1,8 +1,8 @@
 #ifndef _SEQUENCE_H_
 #define _SEQUENCE_H_
 
-#include <string>
 #include <vector>
+
 using namespace std;
 
 // not sure if we need this or not

@@ -1,9 +1,6 @@
 #ifndef _MCMC_H_
 #define _MCMC_H_
 
-#include <vector>
-#include <map>
-
 #include "state_reconstructor_simple.h"
 #include "rate_model.h"
 #include "tree.h"

@@ -5,7 +5,7 @@
  *      Author: joe
  */
 
-//#include <iostream>
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -224,7 +224,6 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
     
     cout << "\t";
     for (unsigned int i = 0; i < SequenceName.size(); i++) {
-
         cout << SequenceName[i] << "\t";
     }
     cout << endl;

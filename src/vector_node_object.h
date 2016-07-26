@@ -8,9 +8,11 @@
 #ifndef _VECTOR_NODE_OBJECT_H_
 #define _VECTOR_NODE_OBJECT_H_
 
-#include "node_object.h"
 #include <vector>
+
 using namespace std;
+
+#include "node_object.h"
 
 template<class T>
 class VectorNodeObject: public vector<T>, public NodeObject{

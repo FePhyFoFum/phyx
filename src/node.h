@@ -8,8 +8,6 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
-#include <string>
-#include <vector>
 #include <map>
 #include <set>
 

@@ -4,16 +4,16 @@
 class LogManipulator {
 private:
     
-    string logtype;
+    string logtype_;
     
-    int burnin;
-    int nthin;
-    int nrandom;
-    int seed;
+    int burnin_;
+    int nthin_;
+    int nrandom_;
+    int seed_;
     
-    bool count;
+    bool count_;
     
-    int ntotalsamples;
+    int ntotal_samples_;
     
     
     

@@ -5,14 +5,9 @@
  *      Author: joe
  */
 
-#include <string>
-#include <fstream>
 #include <vector>
-#include <iterator>
 #include <algorithm>
-#include <functional>
 #include <map>
-#include <iterator>
 
 using namespace std;
 
@@ -77,8 +72,8 @@ void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>&
     
     double ColRow = 0.0;
     double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
-    newname = "(" + names[mini1] + ":" + to_string(brlength2 / (double)nchar) +  ","
-        + names[mini2] + ":" + to_string(brlength1 / (double)nchar) +  ")";
+    newname = "(" + names[mini1] + ":" + to_string(brlength2 / (double)nchar_) +  ","
+        + names[mini2] + ":" + to_string(brlength1 / (double)nchar_) +  ")";
     
     // erase in backwards order as it preserves the indexes
     names.erase(names.begin()+mini2);
@@ -160,9 +155,10 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
             mini2, brlength1, brlength2);
     }
     //double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
-    double adjlength = (Matrix[mini1][mini2] / 2) / (double)nchar;
-    newname = "(" + names[mini1] + ":" + to_string(adjlength) +  "," + names[mini2] + ":" + to_string(adjlength) +  ")";
-    newickstring = newname + ";";
+    double adjlength = (Matrix[mini1][mini2] / 2) / (double)nchar_;
+    newname = "(" + names[mini1] + ":" + to_string(adjlength) +  "," + names[mini2]
+        + ":" + to_string(adjlength) +  ")";
+    newick_string_ = newname + ";";
 }
 
 
@@ -201,7 +197,7 @@ NJOI::NJOI() {
 
 }
 
-NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
+NJOI::NJOI (istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(threads) {
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
@@ -210,46 +206,46 @@ NJOI::NJOI (istream* pios, int & threads):ntax(0), nchar(0), nthreads(threads) {
     // some error checking. should be in general seq reader class
     bool first = true;
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        sequences[seq.get_id()] = seq.get_sequence();
+        sequences_[seq.get_id()] = seq.get_sequence();
         if (!first) {
-            if ((int)seq.get_length() != nchar) {
+            if ((int)seq.get_length() != nchar_) {
                 cout << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
-                    << nchar << "." << endl << "Exiting." << endl;
+                    << nchar_ << "." << endl << "Exiting." << endl;
                 exit(1);
             }
         } else {
-            nchar = seq.get_length();
+            nchar_ = seq.get_length();
             first = false;
         }
         seqcount++;
     }
     //fasta has a trailing one
     if (ft == 2) {
-        sequences[seq.get_id()] = seq.get_sequence();
-        if ((int)seq.get_length() != nchar) {
+        sequences_[seq.get_id()] = seq.get_sequence();
+        if ((int)seq.get_length() != nchar_) {
             cout << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
-                << nchar << "." << endl << "Exiting." << endl;
+                << nchar_ << "." << endl << "Exiting." << endl;
             exit(1);
         };
         seqcount++;
     }
-    ntax = seqcount;
+    ntax_ = seqcount;
     set_name_key ();
-    Matrix = BuildMatrix(sequences);
-    TREEMAKE(names, NameKey, Matrix);
+    Matrix = BuildMatrix(sequences_);
+    TREEMAKE(names_, name_key_, Matrix);
 }
 
 void NJOI::set_name_key () {
     int count = 0;
-    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-        NameKey[count] = iter -> first;
-        names.push_back(iter -> first);
+    for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
+        name_key_[count] = iter_ -> first;
+        names_.push_back(iter_ -> first);
         count++;
     }
 }
 
 string NJOI::get_newick () {
-    return newickstring;
+    return newick_string_;
 }

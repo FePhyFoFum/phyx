@@ -311,7 +311,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconseq pxbdsim pxbdfit pxnni pxlstr pxlsseq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpseq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlsseq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -329,9 +329,9 @@ pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ)
 	@echo 'building pxmrcaname'
 	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS)
 
-pxconseq: $(CPP_OBJS) $(CONSEQ_OBJ)
-	@echo 'building pxconseq'
-	$(CXX) -o "pxconseq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS)
+pxconsq: $(CPP_OBJS) $(CONSEQ_OBJ)
+	@echo 'building pxconsq'
+	$(CXX) -o "pxconsq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS)
 
 pxbdsim: $(CPP_OBJS) $(BD_SIM_OBJ)
 	@echo 'building pxbdsim'
@@ -410,7 +410,7 @@ pxsw: $(CPP_OBJS) $(SW_OBJ)
 	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS)
 
 pxboot: $(CPP_OBJS) $(SEQSAMP_OBJ)
-	@echo 'building pxseqsamp'
+	@echo 'building pxboot'
 	$(CXX) -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS)
 
 pxseqgen: $(CPP_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
@@ -437,9 +437,9 @@ pxbp: $(CPP_OBJS) $(BP_OBJ)
 	@echo 'building pxbp'
 	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS)
 
-pxbpseq: $(CPP_OBJS) $(BPSEQ_OBJ)
-	@echo 'building pxbpseq'
-	$(CXX) -o "pxbpseq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxbpsq: $(CPP_OBJS) $(BPSEQ_OBJ)
+	@echo 'building pxbpsq'
+	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxttonew: $(CPP_OBJS) $(TONEW_OBJ)
 	@echo 'building pxttonew'

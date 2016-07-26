@@ -8,7 +8,6 @@
 #ifndef _NODE_OBJECT_H_
 #define _NODE_OBJECT_H_
 
-#include <string>
 using namespace std;
 
 class NodeObject{

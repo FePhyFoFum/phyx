@@ -1,10 +1,7 @@
 #ifndef _SEQ_MODELS_H_
 #define _SEQ_MODELS_H_
 
-#include <vector>
 #include <map>
-#include <set>
-#include <string>
 
 using namespace std;
 

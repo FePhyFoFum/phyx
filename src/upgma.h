@@ -8,6 +8,11 @@
 #ifndef _UPGMA_H_
 #define _UPGMA_H_
 
+#include <vector>
+#include <map>
+
+using namespace std;
+
 class UPGMA {
 private:
 

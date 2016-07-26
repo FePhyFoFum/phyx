@@ -16,8 +16,8 @@ using namespace std;
 
 
 LogManipulator::LogManipulator(string const& logtype, int const& burnin, int const& nthin,
-    int const& nrandom, int const& seed, bool const& count):logtype(logtype),
-    burnin(burnin), nthin(nthin), nrandom(nrandom), seed(seed), count(count) {
+    int const& nrandom, int const& seed, bool const& count):logtype_(logtype),
+    burnin_(burnin), nthin_(nthin), nrandom_(nrandom), seed_(seed), count_(count) {
     
 }
 

@@ -2,10 +2,6 @@
 #ifndef _STATE_RECONSTRUCTOR_SIMPLE_H_
 #define _STATE_RECONSTRUCTOR_SIMPLE_H_
 
-#include <map>
-#include <string>
-#include <vector>
-
 using namespace std;
 
 #include "tree.h"

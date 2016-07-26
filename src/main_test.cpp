@@ -3,14 +3,27 @@
  *
  */
 
+/*
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <set>
+*/
+
+#include <cstdlib>
+#include <iostream>
+
+// g++ -std=c++11 main_test.cpp -o JWB_test
+
+//g++ -std=c++11 nj.cpp main_nj.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp log.cpp -o test
+
 
 using namespace std;
 
+#include "optimize_cont_models_nlopt.h"
+
+/*
 #include "node.h"
 #include "tree_reader.h"
 #include "string_node_object.h"
@@ -20,11 +33,13 @@ using namespace std;
 #include "sequence.h"
 #include "fasta_util.h"
 #include "log.h"
+*/
 
 int main(int argc, char * argv[]){
     
-    log_call(argc, argv);
+    //log_call(argc, argv);
     
+    /*
     TreeReader tr;
 
     if (argc != 1){
@@ -43,5 +58,9 @@ int main(int argc, char * argv[]){
     cout << "writing file" << endl;
     string outfile = "test.fasta";
     pr.writeFileFromVector(outfile,seqs);
+    */
+    
+    cout << "werked" << endl;
+    
     return EXIT_SUCCESS;
 }

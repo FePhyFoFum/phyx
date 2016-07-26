@@ -1,8 +1,6 @@
 #ifndef _BD_FIT_H_
 #define _BD_FIT_H_
 
-#include <string>
-
 using namespace std;
 
 #include "tree.h"

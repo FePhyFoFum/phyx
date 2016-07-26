@@ -1,6 +1,8 @@
 #ifndef _LS_SEQ_H_
 #define _LS_SEQ_H_
 
+#include <map>
+
 using namespace std;
 
 class Stats {

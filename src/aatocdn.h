@@ -8,8 +8,7 @@
 #ifndef _AA_TO_CDN_H_
 #define _AA_TO_CDN_H_
 
-#include <iterator>
-#include <iterator>
+#include <map>
 
 using namespace std;
 
@@ -22,8 +21,8 @@ private:
 
 public:
     AAtoCDN();
-    map<string, string> convert_to_codons (map <string, string>& aa_sequences,
-    map<string, string>& nuc_sequences);
+    map <string, string> convert_to_codons (map <string, string>& aa_sequences,
+    map <string, string>& nuc_sequences);
 
 };
 

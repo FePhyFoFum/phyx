@@ -3,6 +3,10 @@
 
 #include <vector>
 #include <iterator>
+#include <iostream>
+
+using namespace std;
+
 #include "superdouble.h"
 
 void check_file_exists (const string& filename);

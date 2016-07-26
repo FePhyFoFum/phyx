@@ -1,8 +1,6 @@
 #ifndef _BD_SIM_H_
 #define _BD_SIM_H_
 
-#include <string>
-#include <vector>
 #include <random>
 
 using namespace std;

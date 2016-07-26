@@ -8,17 +8,9 @@
 #ifndef _CLSQ_H_
 #define _CLSQ_H_
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <iterator>
-#include <algorithm>
 #include <map>
-#include <iterator>
-using namespace std;
 
+using namespace std;
 
 class SequenceCleaner {
 private:

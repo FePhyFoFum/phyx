@@ -5,15 +5,7 @@
  *      Author: joe
  */
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <iterator>
 #include <map>
-#include <cstring>
-#include <getopt.h>
 
 using namespace std;
 

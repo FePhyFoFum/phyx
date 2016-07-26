@@ -1,33 +1,27 @@
 #ifndef _NJ_H_
 #define _NJ_H_
 
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <iterator>
-#include <algorithm>
 #include <map>
+#include <vector>
 
 using namespace std;
+
 class NJOI {
 private:
 
-    map <string, string> sequences;
-    map <string, string>::iterator iter;
-    vector<string> names;
+    map <string, string> sequences_;
+    map <string, string>::iterator iter_;
+    vector<string> names_;
     //string fasta;
     vector< vector<double> > Matrix;
     void set_name_key ();
 
     // additions:
-    int ntax;
-    int nchar;
-    int nthreads;
-    string seqfile;
-    map<int, string> NameKey;
-    string newickstring; // temporary
+    int ntax_;
+    int nchar_;
+    int nthreads_; // not implemented yet
+    map<int, string> name_key_;
+    string newick_string_; // temporary
     
     void CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalMatrix, 
         vector< vector<double> >& ConvertedMatrix, vector< vector<double> >& LengthMatrix);
@@ -39,7 +33,6 @@ private:
         double& brlength1, double& brlength2);
     void Choose_Smallest(int& NumbOfSequences, vector< vector<double> > const& Matrix,
         int & mini1, int & mini2);
-    
     
 public:
     NJOI();

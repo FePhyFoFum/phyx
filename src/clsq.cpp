@@ -5,11 +5,13 @@
  *      Author: joe
  */
 
+#include <iostream>
+
+using namespace std;
 
 #include "clsq.h"
 #include "sequence.h"
 #include "seq_reader.h"
-
 
 SequenceCleaner::SequenceCleaner(istream* pios, double& missing):num_taxa_(0), 
         num_char_(0), missing_allowed_(missing) {

@@ -16,6 +16,7 @@
 #include <armadillo>
 using namespace arma;
 
-void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr, vector<mat> * _free_mask, int _nfree);
+void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr,
+    vector<mat> * _free_mask, int _nfree);
 
 #endif /* _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_ */

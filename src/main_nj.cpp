@@ -29,7 +29,7 @@ using namespace std;
 #include "utils.h"
 #include "log.h"
 
-//g++ -std=c++11 njoi.cpp main_njoi.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
+//g++ -std=c++11 nj.cpp main_nj.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp log.cpp -o test
 
 void print_help() {
     cout << "Basic Neighbour-Joining Tree Maker." << endl;
