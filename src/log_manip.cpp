@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <ctime>
 #include <fstream>
+#include <numeric>
 
 using namespace std;
 
