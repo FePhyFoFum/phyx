@@ -311,7 +311,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlsseq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlssq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -349,9 +349,9 @@ pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
 	@echo 'building pxlstr'
 	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
 
-pxlsseq: $(CPP_OBJS) $(LS_SEQ_OBJ)
-	@echo 'bulding pxlsseq'
-	$(CXX) -o "pxlsseq" $(OPT_FLAGS) $(LS_SEQ_OBJ) $(CPP_OBJS)
+pxlssq: $(CPP_OBJS) $(LS_SEQ_OBJ)
+	@echo 'bulding pxlssq'
+	$(CXX) -o "pxlssq" $(OPT_FLAGS) $(LS_SEQ_OBJ) $(CPP_OBJS)
 
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
