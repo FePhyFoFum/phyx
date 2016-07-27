@@ -16,6 +16,7 @@ using namespace std;
 #include "utils.h"
 
 // this doesn't quite work with an optional arg for input_files
+// so doesn't currently read from stream (because need to specify parameter vs.tree)
 LogManipulator::LogManipulator(string const& logtype, vector <string> const& input_files,
     istream* pios, ostream* poos) {
     if (input_files.size() > 0) {
@@ -29,11 +30,12 @@ LogManipulator::LogManipulator(string const& logtype, vector <string> const& inp
 }
 
 LogManipulator::LogManipulator(string const& logtype, vector <string> const& input_files,
-    ostream* poos) {
+    ostream* poos, bool const& verbose) {
     files_ = input_files;
     num_files_ = input_files.size();
     logtype_ = logtype;
     poos_ = poos;
+    verbose_ = verbose;
 }
 
 void LogManipulator::sample(int const& burnin, int const& nthin, int const& nrandom,
@@ -42,7 +44,7 @@ void LogManipulator::sample(int const& burnin, int const& nthin, int const& nran
     nthin_= nthin;
     nrandom_ = nrandom;
     seed_ = seed;
-    if (logtype_ == "parm") {
+    if (logtype_ == "parameter") {
         sample_parameters ();
     } else {
         sample_trees ();
@@ -50,13 +52,14 @@ void LogManipulator::sample(int const& burnin, int const& nthin, int const& nran
 }
 
 void LogManipulator::count () {
-    if (logtype_ == "parm") {
+    if (logtype_ == "parameter") {
         count_parameter_samples ();
     } else {
         count_tree_samples ();
     }
 }
 
+// TODO: should counting allow burnin/thinning?
 void LogManipulator::count_parameter_samples () {
     num_cols_ = 0;
     if (!files_.empty()) {
@@ -100,29 +103,52 @@ void LogManipulator::count_parameter_samples () {
             indiv_totals_.push_back(num_samps);
             infilestr_.close();
         }
-        ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
-        (*poos_) << "Counted " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
-            << " variables across " << num_files_ << " files." << endl;
+        //ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
+        //(*poos_) << "Counted " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
+        //    << " variables across " << num_files_ << " files." << endl;
     } else {
         
         // stream stuff will go here (maybe)
         
     }
-    
+    ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
 }
 
 void LogManipulator::count_tree_samples () {
     
 }
 
+void LogManipulator::get_sample_counts () {
+    if (logtype_ == "parameter") {
+        for (int i = 0; i < num_files_; i++) {
+            (*poos_) << files_[i] << ":\t" << indiv_totals_[i] << " samples of "
+                << (num_cols_ - 1) << " variables." << endl;
+        }
+        if (num_files_ > 1) {
+            (*poos_) << "Counted " << ntotal_samples_ << " total samples of "
+                << (num_cols_ - 1) << " variables across " << num_files_ << " files." << endl;
+        }
+    } else {
+        for (int i = 0; i < num_files_; i++) {
+            (*poos_) << files_[i] << "\t" << indiv_totals_[i] << " trees." << endl;
+        }
+        if (num_files_ > 1) {
+            (*poos_) << "Counted " << ntotal_samples_ << " total trees across "
+                << num_files_ << " files." << endl;
+        }
+    }
+}
+
 void LogManipulator::sample_parameters () {
     if (!files_.empty()) {
+        ntotal_samples_ = 0;
         for (int i=0; i < num_files_; i++) {
             string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             string line;
             bool first_line = true;
-            int num_samps = 0;
+            int par_counter = 0; // this is the raw number of lines in a file
+            int sample_counter = 0; // this is the number of samples retained. needed?
             while (getline(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
@@ -156,14 +182,30 @@ void LogManipulator::sample_parameters () {
                     first_line = false;
                     continue;
                 } else {
-                    if ((num_samps - burnin_) > 0 && (num_samps - burnin_) < nthin_) {
-                        num_samps++;
-                        (*poos_) << line << endl;
+                    if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
+                        // skip because does not match sampling parameters
+                        par_counter++;
+                        continue;
+                    } else if ((par_counter - burnin_) == 0) {
+                        // keep first post-burnin sample from a file
+                        par_counter++;
+                        write_reformatted_sample(line, ntotal_samples_);
+                        sample_counter++;
+                        ntotal_samples_++;
+                        continue;
+                    } else if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
+                        par_counter++;
+                        write_reformatted_sample(line, ntotal_samples_);
+                        sample_counter++;
+                        ntotal_samples_++;
+                        continue;
+                    } else {
+                        // skip because have not yet exceeded burnin
+                        par_counter++;
                     }
-                    continue;
                 }
             }
-            indiv_totals_.push_back(num_samps);
+            indiv_totals_.push_back(sample_counter);
             infilestr_.close();
         }
         ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
@@ -174,4 +216,15 @@ void LogManipulator::sample_parameters () {
 
 void LogManipulator::sample_trees () {
     
+}
+
+void LogManipulator::write_reformatted_sample (string & sample, int & sample_num) {
+    if (logtype_ == "parameter") {
+        vector <string> terp = tokenize(sample);
+        (*poos_) << sample_num;
+        for (int i = 1; i < num_cols_; i++) {
+            (*poos_) << "\t" << terp[i];
+        }
+        (*poos_) << endl;
+    }
 }

@@ -13,7 +13,8 @@ using namespace std;
 
 void print_help() {
     cout << "MCMC log file manipulator." << endl;
-    cout << "This will take parameter or tree log files." << endl;
+    cout << "Can combine and resample parameters or trees across files." << endl;
+    cout << "Log files need not contain the same number of samples." << endl;
     cout << "*NOTE* All values are in terms of number of SAMPLES (NOT generations)." << endl;
     cout << endl;
     cout << "Usage: pxlog [OPTION]... " << endl;
@@ -24,8 +25,9 @@ void print_help() {
     cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << endl;
     cout << " -n, --thin=INT      interval of resampling" << endl;
     cout << " -r, --rand=INT      number of random samples (without replacement)" << endl;
-    cout << " -a, --attributes    just count number of samples and columns and exit" << endl;
+    cout << " -i, --info          calculate file attributes and exit" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
+    cout << " -v, --verbose       make the output more verbose" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -43,8 +45,9 @@ static struct option const long_options[] =
     {"burnin", required_argument, NULL, 'b'},
     {"thin", required_argument, NULL, 'n'},
     {"rand", required_argument, NULL, 'r'},
-    {"attributes", required_argument, NULL, 'a'},
+    {"info", required_argument, NULL, 'i'},
     {"seed", required_argument, NULL, 'x'},
+    {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -76,7 +79,7 @@ int main(int argc, char * argv[]) {
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "p:t:o:b:n:r:ax:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "p:t:o:b:n:r:ix:vhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -101,7 +104,7 @@ int main(int argc, char * argv[]) {
                         break;
                     }
                 }
-                logtype = "parm";
+                logtype = "parameter";
                 break;
             case 't':
                 tfileset = true;
@@ -138,11 +141,14 @@ int main(int argc, char * argv[]) {
             case 'r':
                 nrandom = atoi(strdup(optarg));
                 break;
-            case 'a':
+            case 'i':
                 count = true;
                 break;
             case 'x':
                 seed = atoi(strdup(optarg));
+                break;
+            case 'v':
+                verbose = true;
                 break;
             case 'h':
                 print_help();
@@ -187,10 +193,11 @@ int main(int argc, char * argv[]) {
 */
     
     //LogManipulator lm (logtype, input_files, pios, poos);
-    LogManipulator lm (logtype, input_files, poos);
+    LogManipulator lm (logtype, input_files, poos, verbose);
     
     if (count) {
         lm.count();
+        lm.get_sample_counts();
     } else {
         lm.sample(burnin, nthin, nrandom, seed);
     }
