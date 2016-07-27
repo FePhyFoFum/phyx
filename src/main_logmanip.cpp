@@ -202,7 +202,6 @@ int main(int argc, char * argv[]) {
         lm.sample(burnin, nthin, nrandom, seed);
     }
     
-    
     if (outfileset) {
         ofstr->close();
         delete poos;

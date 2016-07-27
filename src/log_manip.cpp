@@ -100,7 +100,7 @@ void LogManipulator::count_parameter_samples () {
                     continue;
                 }
             }
-            indiv_totals_.push_back(num_samps);
+            indiv_sample_totals_.push_back(num_samps);
             infilestr_.close();
         }
         //ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
@@ -111,7 +111,7 @@ void LogManipulator::count_parameter_samples () {
         // stream stuff will go here (maybe)
         
     }
-    ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
+    ntotal_samples_ = accumulate(indiv_sample_totals_.begin(), indiv_sample_totals_.end(), 0);
 }
 
 void LogManipulator::count_tree_samples () {
@@ -121,7 +121,7 @@ void LogManipulator::count_tree_samples () {
 void LogManipulator::get_sample_counts () {
     if (logtype_ == "parameter") {
         for (int i = 0; i < num_files_; i++) {
-            (*poos_) << files_[i] << ":\t" << indiv_totals_[i] << " samples of "
+            (*poos_) << files_[i] << ":\t" << indiv_sample_totals_[i] << " samples of "
                 << (num_cols_ - 1) << " variables." << endl;
         }
         if (num_files_ > 1) {
@@ -130,7 +130,7 @@ void LogManipulator::get_sample_counts () {
         }
     } else {
         for (int i = 0; i < num_files_; i++) {
-            (*poos_) << files_[i] << "\t" << indiv_totals_[i] << " trees." << endl;
+            (*poos_) << files_[i] << "\t" << indiv_sample_totals_[i] << " trees." << endl;
         }
         if (num_files_ > 1) {
             (*poos_) << "Counted " << ntotal_samples_ << " total trees across "
@@ -205,12 +205,19 @@ void LogManipulator::sample_parameters () {
                     }
                 }
             }
-            indiv_totals_.push_back(sample_counter);
+            indiv_raw_counts_.push_back(par_counter);
+            indiv_sample_totals_.push_back(sample_counter);
             infilestr_.close();
         }
-        ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
-        (*poos_) << "Counted " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
-            << " variables across " << num_files_ << " files." << endl;
+        if (verbose_) {
+            for (int i = 0; i < num_files_; i++) {
+                cout << files_[i] << ":\t" << indiv_sample_totals_[i]
+                    << " samples retained (from original " << indiv_raw_counts_[i]
+                    << " samples) for " << (num_cols_ - 1) << " variables." << endl;
+            }
+            (*poos_) << "Retained " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
+                << " variables across " << num_files_ << " files." << endl;
+        }
     }
 }
 

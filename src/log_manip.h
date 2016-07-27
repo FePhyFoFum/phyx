@@ -16,7 +16,8 @@ private:
     bool count_; // just count (i.e. do not edit)
     bool verbose_;
     
-    vector <int> indiv_totals_; // counts per file
+    vector <int> indiv_sample_totals_; // sample counts per file
+    vector <int> indiv_raw_counts_; // all samples in a file, including those not retained
     int ntotal_samples_;
     int num_files_;
     int num_cols_;
