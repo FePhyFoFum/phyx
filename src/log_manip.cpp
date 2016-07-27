@@ -153,11 +153,13 @@ void LogManipulator::sample_parameters () {
                             exit(0);
                         }
                     }
-                    
                     first_line = false;
                     continue;
                 } else {
-                    num_samps++;
+                    if ((num_samps - burnin_) > 0 && (num_samps - burnin_) < nthin_) {
+                        num_samps++;
+                        (*poos_) << line << endl;
+                    }
                     continue;
                 }
             }
