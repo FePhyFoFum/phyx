@@ -176,7 +176,7 @@ void LogManipulator::sample_parameters () {
             infilestr_.open(curfile.c_str());
             string line;
             bool first_line = true;
-            int par_counter = 0; // this is the raw number of lines in a file
+            int par_counter = 0; // this is the raw number of parameter lines in a file
             int sample_counter = 0;
             while (getline(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
@@ -240,26 +240,116 @@ void LogManipulator::sample_parameters () {
         }
         if (verbose_) {
             for (int i = 0; i < num_files_; i++) {
-                cout << files_[i] << ":\t" << indiv_sample_totals_[i]
+                cout << files_[i] << ": " << indiv_sample_totals_[i]
                     << " samples retained (from original " << indiv_raw_counts_[i]
                     << " samples) for " << (num_cols_ - 1) << " variables." << endl;
             }
             (*poos_) << "Retained " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
-                << " variables across " << num_files_ << " files." << endl;
+                << " variables across " << num_files_ << " input files." << endl;
         }
     }
 }
 
 void LogManipulator::sample_trees () {
-    
+    if (!files_.empty()) {
+        ntotal_samples_ = 0;
+        for (int i=0; i < num_files_; i++) {
+            string curfile = files_[i];
+            infilestr_.open(curfile.c_str());
+            string line;
+            int tree_counter = 0; // this is the raw number of tree lines in a file
+            int sample_counter = 0;
+            bool trees_encountered = false;
+            while (getline(infilestr_, line)) {
+                if (line.empty() || check_comment_line(line)) {
+                    if (i == 0) {
+                        // keep comment information from top of first file
+                        (*poos_) << line << endl;
+                    }
+                    continue;
+                } else {
+                    vector <string> tokens = tokenize(line);
+                    string first = tokens[0];
+                    std::transform(first.begin(), first.end(), first.begin(), ::tolower);
+                    if (first == "tree") {
+                        if (tree_counter == 0) {
+                            trees_encountered = true;
+                        }
+                        if (ntotal_samples_ == 0) {
+                            // grab tree naming scheme
+                            get_tree_name_prefix(line);
+                        }
+                        if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) < nthin_) {
+                            // skip because does not match sampling parameters
+                            tree_counter++;
+                            continue;
+                        } else if ((tree_counter - burnin_) == 0) {
+                            // keep first post-burnin sample from a file
+                            tree_counter++;
+                            write_reformatted_sample(line, ntotal_samples_);
+                            sample_counter++;
+                            ntotal_samples_++;
+                            continue;
+                        } else if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) % nthin_ == 0) {
+                            tree_counter++;
+                            write_reformatted_sample(line, ntotal_samples_);
+                            sample_counter++;
+                            ntotal_samples_++;
+                            continue;
+                        } else {
+                            // skip because have not yet exceeded burnin
+                            tree_counter++;
+                        }
+                    } else { // not a tree line. only care about first file here. don't want anything below trees
+                        // keep header from first file
+                        // likely includes translation table
+                        if (i == 0 && !trees_encountered) {
+                            (*poos_) << line << endl;
+                        }
+                    }
+                }
+            }
+            indiv_raw_counts_.push_back(tree_counter);
+            indiv_sample_totals_.push_back(sample_counter);
+            infilestr_.close();
+        }
+        (*poos_) << "End;" << endl;
+        
+        if (verbose_) {
+            for (int i = 0; i < num_files_; i++) {
+                cout << files_[i] << ": " << indiv_sample_totals_[i]
+                    << " tree samples retained (from original " << indiv_raw_counts_[i]
+                    << " samples)." << endl;
+            }
+            (*poos_) << "Retained " << ntotal_samples_ << " total tree samples across "
+                << num_files_ << " input files." << endl;
+        }
+    }
+}
+
+// gen.NNN from Mrbayes, STATE_NNN from BEAST
+// try to be general here, though: take whatever precedes the sample number
+void LogManipulator::get_tree_name_prefix (string & sample) {
+    vector <string> terp = tokenize(sample);
+    string tree_name = terp[1];
+    std::size_t found = tree_name.find_first_of("0123456789");
+    tree_name.replace(tree_name.begin(), tree_name.end(), tree_name.begin(), tree_name.begin()+found);
+    tree_name_prefix_ = tree_name;
 }
 
 void LogManipulator::write_reformatted_sample (string & sample, int & sample_num) {
+    vector <string> terp = tokenize(sample);
     if (logtype_ == "parameter") {
-        vector <string> terp = tokenize(sample);
         (*poos_) << sample_num;
         for (int i = 1; i < num_cols_; i++) {
             (*poos_) << "\t" << terp[i];
+        }
+        (*poos_) << endl;
+    } else {
+        // format should be: tree tree_name lots_of_other_optional_things
+        (*poos_) << "tree " << tree_name_prefix_ << sample_num;
+        for (unsigned int i = 2; i < terp.size(); i++) {
+            (*poos_) << " " << terp[i];
         }
         (*poos_) << endl;
     }

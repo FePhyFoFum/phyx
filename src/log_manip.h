@@ -22,6 +22,8 @@ private:
     int num_files_;
     int num_cols_;
     
+    string tree_name_prefix_;
+    
     vector <string> files_;
     istream* pios_;
     ostream* poos_;
@@ -33,6 +35,7 @@ private:
     void sample_parameters ();
     void sample_trees ();
     void write_reformatted_sample (string & sample, int & sample_num);
+    void get_tree_name_prefix (string & sample);
     
 public:
     // not using this one
