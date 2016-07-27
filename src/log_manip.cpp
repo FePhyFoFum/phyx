@@ -115,13 +115,42 @@ void LogManipulator::count_parameter_samples () {
 }
 
 void LogManipulator::count_tree_samples () {
-    
+    if (!files_.empty()) {
+        for (int i=0; i < num_files_; i++) {
+            string curfile = files_[i];
+            infilestr_.open(curfile.c_str());
+            string line;
+            int num_samps = 0;
+            while (getline(infilestr_, line)) {
+                if (line.empty() || check_comment_line(line)) {
+                    continue;
+                } else {
+                    vector <string> tokens = tokenize(line);
+                    string first = tokens[0];
+                    std::transform(first.begin(), first.end(), first.begin(), ::tolower);
+                    if (first == "tree") {
+                        num_samps++;
+                    }
+                }
+            }
+            indiv_sample_totals_.push_back(num_samps);
+            infilestr_.close();
+        }
+        //ntotal_samples_ = accumulate(indiv_totals_.begin(), indiv_totals_.end(), 0);
+        //(*poos_) << "Counted " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
+        //    << " variables across " << num_files_ << " files." << endl;
+    } else {
+        
+        // stream stuff will go here (maybe)
+        
+    }
+    ntotal_samples_ = accumulate(indiv_sample_totals_.begin(), indiv_sample_totals_.end(), 0);
 }
 
 void LogManipulator::get_sample_counts () {
     if (logtype_ == "parameter") {
         for (int i = 0; i < num_files_; i++) {
-            (*poos_) << files_[i] << ":\t" << indiv_sample_totals_[i] << " samples of "
+            (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " samples of "
                 << (num_cols_ - 1) << " variables." << endl;
         }
         if (num_files_ > 1) {
@@ -130,10 +159,10 @@ void LogManipulator::get_sample_counts () {
         }
     } else {
         for (int i = 0; i < num_files_; i++) {
-            (*poos_) << files_[i] << "\t" << indiv_sample_totals_[i] << " trees." << endl;
+            (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " trees." << endl;
         }
         if (num_files_ > 1) {
-            (*poos_) << "Counted " << ntotal_samples_ << " total trees across "
+            (*poos_) << "Counted " << ntotal_samples_ << " total tree samples across "
                 << num_files_ << " files." << endl;
         }
     }
@@ -148,7 +177,7 @@ void LogManipulator::sample_parameters () {
             string line;
             bool first_line = true;
             int par_counter = 0; // this is the raw number of lines in a file
-            int sample_counter = 0; // this is the number of samples retained. needed?
+            int sample_counter = 0;
             while (getline(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
