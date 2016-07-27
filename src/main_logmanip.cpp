@@ -24,8 +24,8 @@ void print_help() {
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << endl;
     cout << " -n, --thin=INT      interval of resampling" << endl;
-    cout << " -r, --rand=INT      number of random samples (without replacement)" << endl;
-    cout << " -i, --info          calculate file attributes and exit" << endl;
+    cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << endl;
+    cout << " -i, --info          calculate log file attributes and exit" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -v, --verbose       make the output more verbose" << endl;
     cout << " -h, --help          display this help and exit" << endl;
