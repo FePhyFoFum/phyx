@@ -1,6 +1,11 @@
 #ifndef _LOG_MANIP_H_
 #define _LOG_MANIP_H_
 
+#include <vector>
+#include <fstream>
+
+using namespace std;
+
 class LogManipulator {
 private:
     

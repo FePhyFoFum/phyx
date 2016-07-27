@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#include "optimize_cont_models_nlopt.h"
+#include "log_manip.h"
 
 /*
 #include "node.h"
