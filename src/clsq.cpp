@@ -125,9 +125,7 @@ void SequenceCleaner::clean_sequences () {
 void SequenceCleaner::CheckMissing(double MissingData [], string& dna) {
 
     for (int i = 0; i < num_char_; i++) {
-        // use tolower
-        if (dna[i] == 'N' || dna[i] == '-' || dna[i] == 'n' || 
-            dna[i] == 'X' ||  dna[i] == 'x') {
+        if (tolower(dna[i]) == 'n' || dna[i] == '-' || tolower(dna[i]) == 'x') {
             MissingData[i]++;
             //cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
         }
