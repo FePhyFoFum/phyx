@@ -72,9 +72,9 @@ int main(int argc, char * argv[]) {
     
     string logtype;
     
-    char * outf;
-    char * treef;
-    char * parmf;
+    char * outf = NULL;
+    char * treef = NULL;
+    char * parmf = NULL;
     
     while (1) {
         int oi = -1;
@@ -162,12 +162,12 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ostream* poos;
-    ofstream* ofstr;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
     
     // not used at the moment: assumed that all input comes from files
-    istream* pios;
-    ifstream* fstr;
+    istream* pios = NULL;
+    ifstream* fstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

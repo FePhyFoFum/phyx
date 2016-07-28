@@ -61,7 +61,7 @@ int main(int argc, char * argv[]) {
     bool logparts = false;
     vector <string> inputFiles;
     SequenceConcatenater result;
-    char * outf;
+    char * outf = NULL;
     string partf = "";
 
     while (1) {
@@ -118,8 +118,8 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    ostream* poos;
-    ofstream* ofstr;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
 
     if (outfileset == true) {
         ofstr = new ofstream(outf);

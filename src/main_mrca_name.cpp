@@ -63,9 +63,9 @@ int main(int argc, char * argv[]) {
     log_call(argc, argv);
     
     TreeReader tr;
-    char * outf;
-    char * treef;
-    char * mrcaf;
+    char * outf = NULL;
+    char * treef = NULL;
+    char * mrcaf = NULL;
     bool outfileset = false;
     bool fileset = false;
     bool mrcaset = false;
@@ -107,10 +107,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf, ios::app);

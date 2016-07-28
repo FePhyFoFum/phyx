@@ -70,6 +70,23 @@ void remove_annotations(Tree * tr) {
 }
 
 
+void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
+    int num_names = names.size();
+    int counter = 0;
+    for (int i=0; i < num_names; i++) {
+        Node * m = tree->getExternalNode(names[i]);
+        if (m != NULL) {
+            tree->pruneExternalNode(m);
+            counter++;
+        } else {
+            if (!silent) {
+                cerr << names[i] << " not in tree"  << endl;
+            }
+        }
+    }
+}
+
+
 // treemap: key is focal node, value is vector of adjacent nodes
 // both keys and values can be internal or terminal nodes
 void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_map) {

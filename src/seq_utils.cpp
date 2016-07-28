@@ -151,12 +151,12 @@ string consensus_seq(vector <Sequence> & seqs, string & alpha) {
     } else if (alpha == "AA") {
         for (int i=0; i < seqlength; i++) {
             set<char> fullset;
-            bool ambig = false;
+            //bool ambig = false; // doesn't do anything
             for (unsigned int j=0; j < seqs.size(); j++) {
                 fullset.insert(seqs[j].get_sequence()[i]);
                 // break early if any ambiguous code is encountered
                 if (seqs[j].get_sequence()[i] == 'X' || seqs[j].get_sequence()[i] == '-') {
-                    ambig = true;
+                    //ambig = true;
                     break;
                 }
             }

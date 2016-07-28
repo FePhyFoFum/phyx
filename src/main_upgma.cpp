@@ -62,7 +62,6 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
-        int curind = optind;
         int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
         if (c == -1) {
             break;
@@ -93,10 +92,11 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    ostream* poos;
-    ofstream* ofstr;
-    ifstream* fstr;
-    istream* pios;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    ifstream* fstr = NULL;
+    istream* pios = NULL;
+    
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;

@@ -56,8 +56,8 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool tfileset = false;
     
-    char * treef;
-    char * outf;
+    char * treef = NULL;
+    char * outf = NULL;
     
     string model = "bd";
     
@@ -93,10 +93,10 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
 
     if (outfileset == true) {
         ofstr = new ofstream(outf);

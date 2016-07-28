@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool timeset = false;
     bool extantset = false;
-    char * outf;
+    char * outf = NULL;
     int ext = 0;
     int nreps = 1;
     double time = 0.0;
@@ -140,8 +140,9 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    ostream* poos;
-    ofstream* ofstr; 
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;

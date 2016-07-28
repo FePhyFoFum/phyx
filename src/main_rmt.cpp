@@ -13,6 +13,7 @@ using namespace std;
 #include "tree.h"
 #include "tree_reader.h"
 #include "utils.h"
+#include "tree_utils.h"
 #include "log.h"
 
 void print_help() {
@@ -21,12 +22,13 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxrmt [OPTION]... [FILE]..."<<endl;
     cout << endl;
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise"<<endl;
-    cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" <<endl;
+    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
+    cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << endl;
     cout << " -f, --namesf=FILE    names in a file (each on a line)" << endl;
-    cout << " -o, --outf=FILE      output tree file, stout otherwise"<<endl;
-    cout << " -h, --help           display this help and exit"<<endl;
-    cout << " -V, --version        display version and exit"<<endl;
+    cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
+    cout << " -s, --silent         suppress warnings of missing tips" << endl;
+    cout << " -h, --help           display this help and exit" << endl;
+    cout << " -V, --version        display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
@@ -41,23 +43,11 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"names",required_argument,NULL,'n'},
     {"outf", required_argument, NULL, 'o'},
+    {"silent", required_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
 };
-
-bool removetip(Tree * tree, vector<string> & names);
-bool removetip(Tree * tree,vector<string> & names) {
-    for (int i=0; i < names.size(); i++) {
-        Node * m = tree->getExternalNode(names[i]);
-        if (m != NULL) {
-            tree->pruneExternalNode(m);
-        } else {
-            cerr << names[i] << " not in tree"  << endl;
-        }
-    }
-    return true;
-}
 
 int main(int argc, char * argv[]) {
     
@@ -67,15 +57,16 @@ int main(int argc, char * argv[]) {
     bool namesset = false;
     bool namefileset = false;
     bool outfileset = false;
+    bool silent = false;
     vector<string> names;
 
-    char * treef;
-    char * outf;
-    char * namesc;
-    char * namesfc;
+    char * treef = NULL;
+    char * outf = NULL;
+    char * namesc = NULL;
+    char * namesfc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:n:f:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:n:f:o:shV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -97,6 +88,9 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                break;
+            case 's':
+                silent = true;
                 break;
             case 'h':
                 print_help();
@@ -131,10 +125,11 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
 
-    istream * pios;
-    ostream * poos;
-    ifstream * fstr;
-    ofstream * ofstr;
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
+    
     if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;
@@ -156,7 +151,6 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     bool going = true;
-    bool exists;
     if (ft == 0) {
         map<string,string> translation_table;
         bool ttexists;
@@ -166,7 +160,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (going == true) {
-                exists = removetip(tree,names);
+                remove_tips(tree, names, silent);
                 (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
             }
@@ -176,12 +170,8 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going == true) {
-                exists = removetip(tree, names);
-                if (exists == false) {
-                    cerr << "the names don't exist in this tree " << endl;
-                } else {
-                    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
-                }
+                remove_tips(tree, names, silent);
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
             }
         }

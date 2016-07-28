@@ -51,8 +51,8 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
-    char * outf;
-    char * seqf;
+    char * outf = NULL;
+    char * seqf = NULL;
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:p:f:x:hV", long_options, &oi);
@@ -86,10 +86,10 @@ int main(int argc, char * argv[]) {
 //        exit(0);
 //    }
     
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

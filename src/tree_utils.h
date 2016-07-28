@@ -20,6 +20,7 @@ void nni_from_tree_map(Tree * tr, map<Node*, vector<Node*> > &);
 double get_length_to_root(Node * n);
 
 void remove_annotations(Tree * tr);
+void remove_tips(Tree * tree, vector<string> & names, bool const& silent);
 
 bool is_rooted (Tree * tr);
 bool is_binary (Tree * tr);

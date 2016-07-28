@@ -74,8 +74,8 @@ int main(int argc, char * argv[]) {
     bool rootedcheck = false;
     bool ntipcheck = false;
     bool namecheck = false;
-    char * outf;
-    char * treef;
+    char * outf = NULL;
+    char * treef = NULL;
     
     while (1) {
         int oi = -1;
@@ -138,10 +138,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
 
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

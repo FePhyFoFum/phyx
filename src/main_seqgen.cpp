@@ -35,10 +35,10 @@ void print_help() {
     cout << " -i, --pinvar=FLOAT     proportion of invariable sites. default is 0.0" << endl;
     cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
     cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
-    cout << " -w, --aaratemat=Input  comma-delimited Amino Acid rate matrix. default is All freq equal" << endl;
+    cout << " -w, --aaratemat=Input  comma-delimited amino acid rate matrix. default is all freqs equal" << endl;
     cout << "                        order is ARNDCQEGHILKMFPSTWYV" << endl;
-    cout << " -q, --aabasefreq=Input AA frequencies, order  ARNDCQEGHILKMFPSTWYV" << endl;
-    cout << " -c, --protein          Run as amino acid" << endl;
+    cout << " -q, --aabasefreq=Input AA frequencies, order: ARNDCQEGHILKMFPSTWYV" << endl;
+    cout << " -c, --protein          run as amino acid" << endl;
     cout << " -n, --nreps=INT        number of replicates" << endl;
     cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
     cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
@@ -89,8 +89,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool printpost = false;
     bool showancs = false;
-    bool mm = false;
-    bool MolDna = true;
+    bool is_dna = true;
     float pinvar = 0.0;
     double tot;
     string yorn = "n";
@@ -101,13 +100,13 @@ int main(int argc, char * argv[]) {
     string inrates;
     string holdrates;
     string ancseq;
-    char * outf;
-    char * treef;
+    char * outf = NULL;
+    char * treef = NULL;
     vector <double> diag(20, 0.0);
     vector <double> basefreq(4, 0.25);
     vector <double> aabasefreq(20, 0.05);
     vector <double> userrates;
-    vector <double> multirates(4, 0.25);
+    vector <double> multirates;;
     int nreps = 1; // not implemented at the moment
     int seed = -1;
     int numpars = 0;
@@ -211,7 +210,7 @@ int main(int argc, char * argv[]) {
             case 'w':
                 inrates = strdup(optarg);
                 userrates = parse_double_comma_list(inrates);
-                MolDna = false;
+                is_dna = false;
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 190) {
@@ -256,7 +255,7 @@ int main(int argc, char * argv[]) {
                 seed = atoi(strdup(optarg));
                 break;
             case 'q':
-                MolDna = false;
+                is_dna = false;
                 infreqs = strdup(optarg);
                 aabasefreq = parse_double_comma_list(infreqs);
                 if (aabasefreq.size() != 20) {
@@ -279,10 +278,9 @@ int main(int argc, char * argv[]) {
                 printpost = true;
                 break;
             case 'c':
-                MolDna = false;
+                is_dna = false;
                 break;
             case 'm':
-                mm = true;
                 holdrates = strdup(optarg);
                 multirates = parse_double_comma_list(holdrates);
                 numpars = multirates.size();
@@ -307,16 +305,17 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-    if (MolDna == true) {
+    if (is_dna) {
         dmatrix = rmatrix;
     } else {
         dmatrix = aa_rmatrix;
     }
     
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
+    
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
@@ -367,7 +366,7 @@ int main(int argc, char * argv[]) {
             if (tree != NULL) {
                 //cout << "Working on tree #" << treeCounter << endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
-                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm, aabasefreq, MolDna);
+                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
@@ -390,7 +389,7 @@ int main(int argc, char * argv[]) {
             if (going == true) {
                 cout << "Working on tree #" << treeCounter << endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
-                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, mm, aabasefreq, MolDna);
+                    nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);
                 vector <Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];

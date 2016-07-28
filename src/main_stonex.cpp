@@ -49,8 +49,8 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    char * seqf;
-    char * outf;
+    char * seqf = NULL;
+    char * outf = NULL;
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
@@ -81,10 +81,12 @@ int main(int argc, char * argv[]) {
     vector<Sequence> seqs;
     Sequence seq;
     string retstring;
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr; 
+    
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
+    
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;

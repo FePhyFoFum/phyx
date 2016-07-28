@@ -55,9 +55,9 @@ int main(int argc, char * argv[]) {
     bool tfileset = false;
     bool outfileset = false;
     bool conditional = false; // not used
-    char * seqf;
-    char * treef;
-    char * outf;
+    char * seqf = NULL;
+    char * treef = NULL;
+    char * outf = NULL;
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:t:o:hV", long_options, &oi);
@@ -92,12 +92,13 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios;
-    istream* piost;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
-    ifstream* tfstr;
+    istream* pios = NULL;
+    istream* piost = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
+    ifstream* tfstr = NULL;
+    
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;

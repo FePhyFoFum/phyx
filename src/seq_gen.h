@@ -19,45 +19,46 @@ class SequenceGenerator {
 
 private:
     // constant values
-    Tree * tree;
+    Tree * tree_;
     
-    int seqlen;
-    int nreps;
-    int seed;
-    int x;
+    int seqlen_;
+    int nreps_;
+    int seed_;
+    int nstates_; // number of character states
     
-    float alpha;
-    float pinvar;
+    float alpha_;
+    float pinvar_;
     
-    string rootSequence;
+    string root_sequence_;
     
-    vector <double> basefreqs;
-    vector <double> aabasefreqs;
-    vector < vector <double> > rmatrix;
-    vector <double> multirates;
+    vector <double> base_freqs_;
+    vector <double> aa_freqs_;
+    vector < vector <double> > rmatrix_;
+    vector <double> multi_rates_;
+    vector <float> site_rates_;
     
-    bool showancs;
-    bool printnodelabels;
-    bool mm;
-    bool Mol;
+    bool show_ancs_;
+    bool print_node_labels_;
+    bool multi_model_;
+    bool is_dna_;
     
     // hard-coded stuff
-    static map<char, int> nucMap;
-    static map<char, int> aaMap;
-    static string nucleotides;
-    static string AminoAcids;
+    static map<char, int> nuc_map_;
+    static map<char, int> aa_map_;
+    static string nucleotides_;
+    static string amino_acids_;
     
-    mt19937 generator;
-    std::uniform_real_distribution<float> uniformDistrib;
-    std::gamma_distribution<float> gammaDistrib;
+    mt19937 generator_;
+    std::uniform_real_distribution<float> uniformDistrib_;
+    std::gamma_distribution<float> gammaDistrib_;
+    
     
     // set all values
     void initialize ();
     
     // intermediate results
-    map <Node *, string> seqs;
-    map <Node *, vector < vector <double> > > ancq;
-    vector < vector <double> > Qparent;
+    map <Node *, string> seqs_;
+    map <Node *, vector < vector <double> > > ancq_;
     
     // the result to return
     vector <Sequence> res;
@@ -65,9 +66,8 @@ private:
     // los funciones
     void print_node_labels ();
     void label_internal_nodes();
-    void preorder_tree_traversal (Tree * tree, bool showancs,
-        vector <double> multirates, bool mm);
-    vector <float> site_rates;
+    void preorder_tree_traversal ();
+    //vector <float> site_rates;
     vector < vector <double> > calculate_q_matrix ();
     vector < vector<double> > calcQmatrix (vector<vector <double>>);
     vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix,
@@ -87,7 +87,7 @@ public:
         vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
         int const& nreps, int const & seed, float const& alpha, float const& pinvar,
         string const& ancseq, bool const& printpost, vector<double> const& multirates,
-        bool const& mm, vector <double> const& aabasefreq, bool const& MolDna);
+        vector <double> const& aabasefreq, bool const& is_dna);
     
     // return results
     vector<Sequence> get_sequences ();

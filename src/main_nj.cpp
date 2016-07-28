@@ -109,10 +109,10 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ostream* poos;
-    ofstream* ofstr;
-    ifstream* fstr;
-    istream* pios;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    ifstream* fstr = NULL;
+    istream* pios = NULL;
     
     if (fileset == true) {
         fstr = new ifstream(seqf);

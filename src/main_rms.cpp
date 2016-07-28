@@ -100,12 +100,12 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     //outfile prep
-    ostream* poos;
-    ofstream* ofstr;
-    ifstream* fstr;
-    istream* pios;
-    ifstream* rstr;
-    istream* rpios;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    ifstream* fstr = NULL;
+    istream* pios = NULL;
+    ifstream* rstr = NULL;
+    istream* rpios = NULL; // not used?
     
     if (fileset == true) {
         fstr = new ifstream(seqf);

@@ -69,10 +69,10 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool outalnfileset = false;
     bool matrixfileset = false;
-    char * seqf;
-    char * outf;
-    char * outaf;
-    char * matf;
+    char * seqf = NULL;
+    char * outf = NULL;
+    char * outaf = NULL;
+    char * matf = NULL;
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
     bool verbose = false;
@@ -140,10 +140,12 @@ int main(int argc, char * argv[]) {
     vector<Sequence> seqs;
     Sequence seq;
     string retstring;
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr; 
+    
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
+    
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;

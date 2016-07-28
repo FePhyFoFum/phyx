@@ -93,10 +93,10 @@ int main(int argc, char * argv[]) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
     }
-    ostream* poos;
-    ofstream* ofstr;
-    istream* pios;
-    ifstream* fstr;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    istream* pios = NULL;
+    ifstream* fstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

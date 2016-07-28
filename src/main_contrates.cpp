@@ -57,9 +57,9 @@ int main(int argc, char * argv[]) {
     bool tfileset = false;
     bool ofileset = false;
     
-    char * treef;
-    char * charf;
-    char * outf;
+    char * treef = NULL;
+    char * charf = NULL;
+    char * outf = NULL;
     int analysis = 0;
     while (1) {
         int oi = -1;
@@ -99,10 +99,10 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    istream* pios;
-    istream* poos;
-    ifstream* cfstr;
-    ifstream* tfstr;
+    istream* pios = NULL;
+    istream* poos = NULL;
+    ifstream* cfstr = NULL;
+    ifstream* tfstr = NULL;
 
     if (tfileset == true) {
         tfstr = new ifstream(treef);

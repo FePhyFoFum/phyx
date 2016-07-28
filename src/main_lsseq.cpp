@@ -54,8 +54,8 @@ int main(int argc, char * argv[]){
     bool fileset = false;
     bool all = false;
     bool prot = false;
-    char * outf;
-    char * seqf;
+    char * outf = NULL;
+    char * seqf = NULL;
     
     while (1) {
         int oi = -1;
@@ -90,10 +90,10 @@ int main(int argc, char * argv[]){
                 exit(0);
         }
     }
-    ostream* poos;
-    ofstream* ofstr;
-    ifstream* fstr;
-    istream* pios;
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    ifstream* fstr = NULL;
+    istream* pios = NULL;
     
     if (fileset == true) {
         fstr = new ifstream(seqf);

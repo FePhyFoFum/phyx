@@ -60,9 +60,9 @@ int main(int argc, char * argv[]) {
     bool unroot = false;
     vector<string> outgroups;
 
-    char * treef;
-    char * outf;
-    char * outgroupsc;
+    char * treef = NULL;
+    char * outf = NULL;
+    char * outgroupsc = NULL;
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:g:uo:shV", long_options, &oi);
@@ -113,10 +113,11 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
 
-    istream * pios;
-    ostream * poos;
-    ifstream * fstr;
-    ofstream * ofstr;
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
+    
     if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;

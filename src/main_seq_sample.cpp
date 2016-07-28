@@ -60,8 +60,8 @@ int main(int argc, char * argv[]) {
     bool partitioned = false;
     float jackfract = 0.0;
     int numchar = 0;
-    char * outf;
-    char * seqf;
+    char * outf = NULL;
+    char * seqf = NULL;
     string partf = "";
     int seed = -1;
     while (1) {
@@ -106,10 +106,10 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

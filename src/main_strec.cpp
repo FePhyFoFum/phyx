@@ -111,14 +111,14 @@ int main(int argc, char * argv[]) {
     bool datawide = false;
     bool periodsset = false;
     bool dataz = false; //the datafile will have probabilities
-    char * conff;
-    char * treef;
-    char * dataf;
-    char * logf;
-    char * outanc;
-    char * outnum;
-    char * outnumany;
-    char * outtime;
+    char * conff = NULL;
+    char * treef = NULL;
+    char * dataf = NULL;
+    char * logf = NULL;
+    char * outanc = NULL;
+    char * outnum = NULL;
+    char * outnumany = NULL;
+    char * outtime = NULL;
     string periodstring;
     vector<string> ptokens;
     vector<double> period_times;
@@ -188,8 +188,10 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-    ofstream* logout;
-    ostream* loos;
+    
+    ofstream* logout = NULL;
+    ostream* loos = NULL;
+    
     if (logfileset == true) {
         logout = new ofstream(logf);
         loos = logout;

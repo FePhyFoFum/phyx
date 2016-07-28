@@ -106,12 +106,13 @@ int main(int argc, char * argv[]) {
         cout << "you must specify an input nucleotide sequence file" << endl;
         exit(0);
     }
-    ostream* poos;
-    ofstream* ofstr;
-    ifstream* fstr;
-    istream* pios;
-    ifstream* nucfstr;
-    istream* nucpios;
+    
+    ostream* poos = NULL;
+    ofstream* ofstr = NULL;
+    ifstream* fstr = NULL;
+    istream* pios = NULL;
+    ifstream* nucfstr = NULL;
+    istream* nucpios = NULL;
     
     if (fileset == true) {
         fstr = new ifstream(aaseqf);
