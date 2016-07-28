@@ -21,7 +21,7 @@ void print_help() {
     cout << "Print sequence file summary" << endl;
     cout << "This will take fasta, phylip or nexus file formats" << endl;
     cout << endl;
-    cout << "Usage: pxlsseq [OPTION]... " << endl;
+    cout << "Usage: pxlssq [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
     cout << " -i, --indiv         output stats for individual sequences" << endl;
@@ -33,7 +33,7 @@ void print_help() {
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
-string versionline("pxlsseq 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown and Stephen A. Smith (blackrim)");
+string versionline("pxlssq 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown and Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
