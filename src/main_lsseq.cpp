@@ -27,7 +27,7 @@ void print_help() {
     cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
     cout << " -i, --indiv         output stats for individual sequences" << endl;
     cout << " -n, --nseq          return the number of sequences" << endl;
-    cout << " -c, --nchar         return the number of characters" << endl;
+    cout << " -c, --nchar         return the number of characters (only if aligned)" << endl;
     cout << " -l, --labels        return all taxon labels (one per line)" << endl;
     cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
     cout << " -a, --aligned       return whether sequences are aligned (same length)" << endl;
@@ -63,7 +63,7 @@ int main(int argc, char * argv[]){
     
     bool outfileset = false;
     bool fileset = false;
-    bool all = false;
+    bool indiv = false;
     bool force_protein = false; // i.e. if inference fails
     bool optionsset = false; // is true, do not return all properties
     bool get_labels = false;
@@ -91,7 +91,7 @@ int main(int argc, char * argv[]){
                 outf = strdup(optarg);
                 break;
             case 'i':
-                all = true;
+                indiv = true;
                 break;
             case 'n':
                 get_nseq = true;
@@ -150,7 +150,16 @@ int main(int argc, char * argv[]){
         poos = &cout;
     }
     
-    SeqInfo ls_Seq(pios, all, force_protein, poos);
+    
+    SeqInfo ls_Seq(pios, poos, indiv, force_protein);
+    if (optionsset) {
+        // get single property
+        ls_Seq.get_property (get_labels, check_aligned, get_nseq,
+            get_freqs, get_nchar);
+    } else {
+        // the original behaviour
+        ls_Seq.summarize();
+    }
     
     if (fileset) {
         fstr->close();

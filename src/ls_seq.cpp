@@ -2,6 +2,7 @@
 #include <map>
 #include <iomanip>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -68,8 +69,81 @@ void SeqInfo::print_stats (ostream* poos) {
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
 }
 
+// just grab labels, disregard the rest
 void SeqInfo::collect_taxon_labels () {
-    
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios_, retstring);
+    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+        name_ = seq.get_id();
+        taxon_labels_.push_back(name_);
+    }
+    if (ft == 2) {
+        name_ = seq.get_id();
+        taxon_labels_.push_back(name_);
+    }
+    sort(taxon_labels_.begin(), taxon_labels_.end());
+}
+
+// assumed aligned if all seqs are the same length
+void SeqInfo::check_is_aligned () {
+    int ref_seq_length = 0;
+    vector <int> seq_sizes;
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios_, retstring);
+    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+        int terp = seq.get_sequence().size();
+        seq_sizes.push_back(terp);
+    }
+    if (ft == 2) {
+        int terp = seq.get_sequence().size();
+        seq_sizes.push_back(terp);
+    }
+    if (std::adjacent_find( seq_sizes.begin(), seq_sizes.end(), std::not_equal_to<int>()) == seq_sizes.end() ) {
+        aligned_ = true;
+    } else {
+        aligned_ = false;
+    }
+}
+
+void SeqInfo::get_nseqs () {
+    seqcount_ = 0;
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios_, retstring);
+    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+        seqcount_++;
+    }
+    if (ft == 2) {
+        seqcount_++;
+    }
+    sort(taxon_labels_.begin(), taxon_labels_.end());
+}
+
+void SeqInfo::get_nchars () {
+    int ref_seq_length = 0;
+    vector <int> seq_sizes;
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios_, retstring);
+    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+        int terp = seq.get_sequence().size();
+        seq_sizes.push_back(terp);
+    }
+    if (ft == 2) {
+        int terp = seq.get_sequence().size();
+        seq_sizes.push_back(terp);
+    }
+    if (std::adjacent_find( seq_sizes.begin(), seq_sizes.end(), std::not_equal_to<int>()) == seq_sizes.end() ) {
+        aligned_ = true;
+        seq_length_ = seq_sizes[0];
+        cout << "seqs are aligned" << endl;
+    } else {
+        aligned_ = false;
+        seq_length_ = -1;
+        cout << "not aligned!" << endl;
+    }
 }
 
 void SeqInfo::set_alphabet () {
@@ -80,12 +154,102 @@ void SeqInfo::set_alphabet () {
     }
 }
 
-SeqInfo::SeqInfo (istream* pios, bool& all, bool const& force_protein, ostream* poos) {
+SeqInfo::SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein) {
+    // set parameters
+    output_indiv_ = (indiv == true) ? true : false;
+    if (force_protein) {
+        is_protein_ = true;
+    }
+    pios_ = pios;
+    poos_ = poos;
+}
+
+void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
+        bool const& get_nseq, bool const& get_freqs, bool const& get_nchar) {
+    
+    if (get_labels) {
+        collect_taxon_labels();
+        for (unsigned int i = 0; i < taxon_labels_.size(); i++) {
+            (*poos_) << taxon_labels_[i] << endl;
+        }
+    } else if (check_aligned) {
+        check_is_aligned();
+        (*poos_) << std::boolalpha << aligned_ << endl;
+    } else if (get_nseq) {
+        get_nseqs ();
+        (*poos_) << seqcount_ << endl;
+    } else if (get_freqs) {
+        // use original code
+        
+    } else if (get_nchar) {
+        get_nchars ();
+        if (seq_length_ != -1) {
+            (*poos_) << seq_length_ << endl;
+        } else {
+            // not aligned
+            (*poos_) << "NA" << endl;
+        }
+    }
+}
+
+void SeqInfo::summarize () {
 
     //Concatenated will be used for all stats
     finished_ = false;
     seqcount_ = 0;
-    output_indiv_ = (all == true) ? true : false;
+    
+    bool first = true;
+    
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios_, retstring);
+    
+    file_type_ = get_filetype_string(ft);
+    
+    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+        if (first) {
+            // infer sequence type rather than setting it
+            if (!is_protein_) {
+                string alpha_name = seq.get_alpha_name();
+                if (alpha_name == "AA") {
+                    //cout << "I believe this is: " << alpha_name << "!" << endl;
+                    is_protein_ = true;
+                }
+            }
+            set_alphabet ();
+            first = false;
+        }
+        seqcount_++;
+        concatenated_ += seq.get_sequence();
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
+        if (output_indiv_) {
+            count_chars_indiv_seq(temp_seq_);
+            print_stats(poos_);
+        }
+    }
+    if (ft == 2) {
+        seqcount_++;
+        concatenated_ += seq.get_sequence();
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
+        if (output_indiv_) {
+            count_chars_indiv_seq(temp_seq_);
+            print_stats(poos_);
+        }
+    }
+    finished_ = true;
+    count_chars_indiv_seq(concatenated_);
+    print_stats(poos_);
+}
+
+
+SeqInfo::SeqInfo (istream* pios, bool& indiv, bool const& force_protein, ostream* poos) {
+
+    //Concatenated will be used for all stats
+    finished_ = false;
+    seqcount_ = 0;
+    output_indiv_ = (indiv == true) ? true : false;
     
     bool first = true;
     
