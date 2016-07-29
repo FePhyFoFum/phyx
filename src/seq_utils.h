@@ -8,6 +8,7 @@ using namespace std;
 
 #include "sequence.h"
 
+string guess_alignment_type (string & sequence);
 char get_dna_from_pos(set<int> ins);
 set<int> get_dna_pos(char);
 string consensus_seq(vector<Sequence> &, string & alpha);

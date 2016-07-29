@@ -6,12 +6,26 @@
 #include <string>
 #include <algorithm>
 #include <cstdlib>
+#include <map>
 
 using namespace std;
 
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
+
+// for printing purposes
+map <int, string> filetype_map = {
+   {0, "nexus"},
+   {1, "phylip"},
+   {2, "fasta"},
+   {3, "fastq"}
+};
+
+string get_filetype_string (int const& ft) {
+    string ftype = filetype_map[ft];
+    return ftype;
+}
 
 /*
  * tests the filetype by checking the first string and guessing based on

@@ -65,6 +65,7 @@ void Sequence::set_alpha(seqAlpha s) {
 }
 
 // figure out the sequence type. for now, just DNA/AA
+// not perfect: for _very_ short AA seqs it is possible all chars are valid nuc chars
 void Sequence::infer_alpha () {
     string str = seq;
     

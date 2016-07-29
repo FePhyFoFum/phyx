@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#include "log_manip.h"
+#include "seq_reader.h"
 
 /*
 #include "node.h"

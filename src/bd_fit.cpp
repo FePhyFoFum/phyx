@@ -12,7 +12,6 @@ using namespace std;
 #include "tree.h"
 #include "node.h"
 #include "tree_utils.h"
-//#include "constants.h" // for PI. not needed anymore  since lgamma used instead
 
 typedef struct {
     int N;

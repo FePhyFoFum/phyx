@@ -44,8 +44,10 @@ map <char, int> SequenceGenerator::nuc_map_ = {
    {'G', 2},
    {'T', 3}
 };
+
 string SequenceGenerator::nucleotides_ = "ACGT";
 string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
+
 map <char, int> SequenceGenerator::aa_map_ = {
 
    {'A', 0},

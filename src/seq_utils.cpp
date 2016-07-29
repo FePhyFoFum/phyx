@@ -81,25 +81,40 @@ set<int> get_dna_pos(char inc) {
     } else if (inc == 'T') {
         ret.insert(3);
     } else if (inc == '-' || inc == 'N') {
-        ret.insert(0);ret.insert(1);ret.insert(2);ret.insert(3);
+        ret.insert(0);
+        ret.insert(1);
+        ret.insert(2);
+        ret.insert(3);
     } else if (inc == 'Y') {
-        ret.insert(1);ret.insert(3);
+        ret.insert(1);
+        ret.insert(3);
     } else if (inc == 'R') {
-        ret.insert(0);ret.insert(2);
+        ret.insert(0);
+        ret.insert(2);
     } else if (inc == 'W') {
-        ret.insert(0);ret.insert(3);
+        ret.insert(0);
+        ret.insert(3);
     } else if (inc == 'M') {
-        ret.insert(0);ret.insert(1);
+        ret.insert(0);
+        ret.insert(1);
     } else if (inc == 'B') {
-        ret.insert(1);ret.insert(2);ret.insert(3);
+        ret.insert(1);
+        ret.insert(2);
+        ret.insert(3);
     } else if (inc == 'V') {
-        ret.insert(0);ret.insert(1);ret.insert(2);
+        ret.insert(0);
+        ret.insert(1);
+        ret.insert(2);
     } else if (inc == 'S') {
-        ret.insert(1);ret.insert(2);
+        ret.insert(1);
+        ret.insert(2);
     } else if (inc == 'K') {
-        ret.insert(2);ret.insert(3);
+        ret.insert(2);
+        ret.insert(3);
     } else if (inc == 'H') {
-        ret.insert(0);ret.insert(1);ret.insert(3);
+        ret.insert(0);
+        ret.insert(1);
+        ret.insert(3);
     }
     return ret;
 }

@@ -19,13 +19,19 @@ using namespace std;
 
 void print_help() {
     cout << "Print sequence file summary" << endl;
+    cout << "By default returns all properties. Alternatively choose 1 property." << endl;
     cout << "This will take fasta, phylip or nexus file formats" << endl;
     cout << endl;
     cout << "Usage: pxlssq [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
     cout << " -i, --indiv         output stats for individual sequences" << endl;
-    cout << " -p, --prot          output stats for amino acids default is DNA" << endl;
+    cout << " -n, --nseq          return the number of sequences" << endl;
+    cout << " -c, --nchar         return the number of characters" << endl;
+    cout << " -l, --labels        return all taxon labels (one per line)" << endl;
+    cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
+    cout << " -a, --aligned       return whether sequences are aligned (same length)" << endl;
+    cout << " -f, --freqs         return character state frequencies" << endl;
     cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -40,7 +46,12 @@ static struct option const long_options[] =
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"indiv", no_argument, NULL, 'i'},
+    {"nseq", no_argument, NULL, 'n'},
+    {"nchar", no_argument, NULL, 'c'},
+    {"labels", no_argument, NULL, 'l'},
     {"prot", no_argument, NULL, 'p'},
+    {"aligned", no_argument, NULL, 'a'},
+    {"freqs", no_argument, NULL, 'f'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -53,13 +64,19 @@ int main(int argc, char * argv[]){
     bool outfileset = false;
     bool fileset = false;
     bool all = false;
-    bool prot = false;
+    bool force_protein = false; // i.e. if inference fails
+    bool optionsset = false; // is true, do not return all properties
+    bool get_labels = false;
+    bool check_aligned = false;
+    bool get_nseq = false;
+    bool get_nchar = false;
+    bool get_freqs = false;
     char * outf = NULL;
     char * seqf = NULL;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:iphV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:inclpafhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -76,8 +93,28 @@ int main(int argc, char * argv[]){
             case 'i':
                 all = true;
                 break;
+            case 'n':
+                get_nseq = true;
+                optionsset = true;
+                break;
+            case 'c':
+                get_nchar = true;
+                optionsset = true;
+                break;
+            case 'l':
+                get_labels = true;
+                optionsset = true;
+                break;
             case 'p':
-                prot = true;
+                force_protein = true;
+                break;
+            case 'a':
+                check_aligned = true;
+                optionsset = true;
+                break;
+            case 'f':
+                get_freqs = true;
+                optionsset = true;
                 break;
             case 'h':
                 print_help();
@@ -95,6 +132,11 @@ int main(int argc, char * argv[]){
     ifstream* fstr = NULL;
     istream* pios = NULL;
     
+    if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar) > 1) {
+        cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
+        exit(0);
+    }
+    
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
@@ -108,7 +150,7 @@ int main(int argc, char * argv[]){
         poos = &cout;
     }
     
-    Stats ls_Seq(pios, all, prot, poos);
+    SeqInfo ls_Seq(pios, all, force_protein, poos);
     
     if (fileset) {
         fstr->close();
