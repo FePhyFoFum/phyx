@@ -138,11 +138,9 @@ void SeqInfo::get_nchars () {
     if (std::adjacent_find( seq_sizes.begin(), seq_sizes.end(), std::not_equal_to<int>()) == seq_sizes.end() ) {
         aligned_ = true;
         seq_length_ = seq_sizes[0];
-        cout << "seqs are aligned" << endl;
     } else {
         aligned_ = false;
         seq_length_ = -1;
-        cout << "not aligned!" << endl;
     }
 }
 
@@ -187,7 +185,7 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
             (*poos_) << seq_length_ << endl;
         } else {
             // not aligned
-            (*poos_) << "NA" << endl;
+            (*poos_) << "sequences are not aligned" << endl;
         }
     }
 }
