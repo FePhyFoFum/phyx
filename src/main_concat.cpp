@@ -154,7 +154,7 @@ int main(int argc, char * argv[]) {
 
     // log partition information. currently only RAxML-style.
     if (logparts) {
-        result.write_partition_information(partf);
+        result.write_partition_information(inputFiles, partf);
     }
 
     return EXIT_SUCCESS;

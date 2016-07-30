@@ -59,12 +59,12 @@ void SeqInfo::print_stats (ostream* poos) {
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
                 << total_[seq_chars_[i]] << "\t"
-                << ((total_[seq_chars_[i]] / divide)*100.0) << endl;
+                << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
         }
         if (!is_protein_) {
         (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
             << (total_['G'] + total_['C']) << "\t"
-            << (((total_['G'] + total_['C']) / divide)*100.0) << endl;
+            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
     }        
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
 }

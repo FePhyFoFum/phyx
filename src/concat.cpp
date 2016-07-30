@@ -151,13 +151,20 @@ vector <int> SequenceConcatenater::get_partition_sizes () {
     return partition_sizes_;
 }
 
-void SequenceConcatenater::write_partition_information (string & partfile) {
+void SequenceConcatenater::write_partition_information (vector <string> const& inputFiles,
+    string & partfile) {
     ofstream outfile(partfile.c_str());
     int charIndex = 1;
     int stopIndex = 1;
+    
+    // need to check seq type when writing this
+    // use infer_alpha
+    // but: are mixed seq types allowed? prolly...
+    //     - so: need to check each one
+    
     for (unsigned int i = 0; i < partition_sizes_.size(); i++) {
         stopIndex = charIndex + partition_sizes_[i] - 1;
-        outfile << "DNA, gene" << i << " = " << charIndex << "-" << stopIndex << endl;
+        outfile << "DNA, " << inputFiles[i] << " = " << charIndex << "-" << stopIndex << endl;
         charIndex = stopIndex + 1;
     }
     outfile.close();
