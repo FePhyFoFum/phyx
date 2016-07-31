@@ -349,22 +349,25 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
     string temp;
     ifstream infile(filen.c_str());
     while (getline(infile, tline)) {
-        std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
-        if (tline.compare(0, 10, "DIMENSIONS") == 0) {
-        // get rid of '=' and ';'. tokens then easy to deal with.
-        replace(tline.begin(), tline.end(), '=', ' ');
-        replace(tline.begin(), tline.end(), ';', ' ');
-        vector <string> searchtokens = tokenize(tline);
-            for (unsigned int i = 0; i < searchtokens.size(); i++) {
-                if (searchtokens[i].substr(0, 4) == "NTAX") {
-                    i++;
-                    numTaxa = stoi(searchtokens[i]);
-                } else if (searchtokens[i].substr(0, 4) == "NCHA") {
-                    i++;
-                    numChar = stoi(searchtokens[i]);
+        if (!tline.empty()) {
+            std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
+            vector <string> searchtokens = tokenize(tline);
+            if (searchtokens[0] == "DIMENSIONS") {
+            // get rid of '=' and ';'. tokens then easy to deal with.
+                replace(tline.begin(), tline.end(), '=', ' ');
+                replace(tline.begin(), tline.end(), ';', ' ');
+                searchtokens = tokenize(tline);
+                for (unsigned int i = 0; i < searchtokens.size(); i++) {
+                    if (searchtokens[i].substr(0, 4) == "NTAX") {
+                        i++;
+                        numTaxa = stoi(searchtokens[i]);
+                    } else if (searchtokens[i].substr(0, 4) == "NCHA") {
+                        i++;
+                        numChar = stoi(searchtokens[i]);
+                    }
                 }
+                break;
             }
-            break;
         }
     }
     infile.close();
