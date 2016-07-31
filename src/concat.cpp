@@ -44,8 +44,6 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             num_char_ = stoi(fileDim[1]);
         } else {
             get_nexus_dimensions(seqf, num_taxa_, num_char_);
-            cout << "Nexus file has " << num_taxa_ << " taxa and "
-                << num_char_ << " characters." << endl;
         }
         while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
             length = (int)seq.get_sequence().size();
