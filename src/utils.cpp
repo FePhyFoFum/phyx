@@ -136,7 +136,9 @@ void trim_spaces (string& str) {
 
 bool check_comment_line (string const& line) {
     bool comment = false;
-    if (line[0] == '#' || line[0] == '[') {
+    string trimmed = line;
+    trim_spaces(trimmed); // get rid of leading spaces
+    if (trimmed[0] == '#' || trimmed[0] == '[') {
         comment = true;
     }
     return comment;

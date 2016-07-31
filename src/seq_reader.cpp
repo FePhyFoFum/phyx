@@ -60,6 +60,7 @@ int test_seq_filetype_stream(istream & stri, string & retstring) {
 /*
  * returns the next string in the getline if there is one
  * TODO: nexus interleaved is not going to work here
+ * TODO: skip Nexus comment lines
  */
 bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq) {
     string tline;
@@ -85,7 +86,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         }
         getline(stri, tline);
         trim_spaces(tline);
-        while (tline.size() == 0) {
+        while (tline.size() == 0  || check_comment_line(tline)) {
             if (getline(stri,tline)) {
                 trim_spaces(tline);
             } else {
