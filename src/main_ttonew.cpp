@@ -19,8 +19,8 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxttonew [OPTION]... [FILE]..." << endl;
     cout << endl;
-    cout << " -t, --treef=FILE    input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
+    cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
