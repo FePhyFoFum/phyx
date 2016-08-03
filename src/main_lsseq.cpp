@@ -27,6 +27,7 @@ void print_help() {
     cout << " -i, --indiv         output stats for individual sequences" << endl;
     cout << " -n, --nseq          return the number of sequences" << endl;
     cout << " -c, --nchar         return the number of characters (only if aligned)" << endl;
+    cout << "                        - for unaligned seqs, use with -i flag" << endl;
     cout << " -l, --labels        return all taxon labels (one per line)" << endl;
     cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
     cout << " -a, --aligned       return whether sequences are aligned (same length)" << endl;

@@ -10,7 +10,7 @@ class SeqInfo {
 private:
     string concatenated_;
     string temp_seq_;
-    string seq_chars_; // the alphabet (DNA or AA)
+    string seq_chars_; // the alphabet (DNA or AA only at present)
     string file_type_;
     bool finished_;
     bool is_protein_;
@@ -22,18 +22,22 @@ private:
     
     // new stuff
     vector <string> taxon_labels_;
-    bool aligned_;
+    vector <int> seq_lengths_;
+    bool is_aligned_;
     int seq_length_;
     istream* pios_;
     ostream* poos_;
+    int longest_tax_label_;
     
     void collect_taxon_labels ();
     void check_is_aligned ();
     void get_nseqs ();
     void get_nchars ();
     void set_alphabet ();
-    void count_chars_indiv_seq(string& seq);
-    void print_stats(ostream* poos);
+    void count_chars_indiv_seq (string& seq);
+    void print_stats (ostream* poos);
+    void print_stats_alt (ostream* poos);
+    void get_longest_taxon_label ();
 
 public:
     SeqInfo (istream* pios, bool& indiv, bool const& force_protein, ostream* poos);

@@ -15,6 +15,7 @@ void print_help() {
     cout << "MCMC log file manipulator." << endl;
     cout << "Can combine and resample parameters or trees across files." << endl;
     cout << "Log files need not contain the same number of samples." << endl;
+    cout << "Parameter log files are expected to be whitespace delimited." << endl;
     cout << "*NOTE* All values are in terms of number of SAMPLES (NOT generations)." << endl;
     cout << endl;
     cout << "Usage: pxlog [OPTION]... " << endl;

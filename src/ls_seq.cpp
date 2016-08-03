@@ -11,7 +11,7 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-// for each character in the alphabet
+// for each character in the alphabet 'seq_chars_'
 void SeqInfo::count_chars_indiv_seq(string& seq) {
 
     total_.clear();
@@ -35,37 +35,74 @@ void SeqInfo::count_chars_indiv_seq(string& seq) {
 
 void SeqInfo::print_stats (ostream* poos) {
     
-        const char separator = ' ';
-        const int nameWidth = 10;
-        double divide = 0.0;
-        if (is_protein_) {
-            seq_type_ = "Prot";
-        } else {
-            seq_type_ = "Nucl";
-        }
-        if (finished_ == true) {
-            (*poos) << "General Stats For All Sequences" << endl;
-            (*poos) << "File type: " << file_type_ << endl;
-            (*poos) << "Number of sequences: " << seqcount_ << endl;
-            (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
-            divide = concatenated_.length();
-        } else {
-            (*poos) << "General Stats For " << name_ << endl;
-            (*poos) << "Total Length: " << temp_seq_.length() << endl;    
-            divide = temp_seq_.length();
-        }
-        (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-        (*poos) << seq_type_ << "\tTotal\tPercent" << endl;
-        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
-                << total_[seq_chars_[i]] << "\t"
-                << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
-        }
-        if (!is_protein_) {
-        (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
-            << (total_['G'] + total_['C']) << "\t"
-            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
-    }        
+    const char separator = ' ';
+    const int nameWidth = 10;
+    double divide = 0.0;
+    if (is_protein_) {
+        seq_type_ = "Prot";
+    } else {
+        seq_type_ = "Nucl";
+    }
+    if (finished_) {
+        (*poos) << "General Stats For All Sequences" << endl;
+        (*poos) << "File type: " << file_type_ << endl;
+        (*poos) << "Number of sequences: " << seqcount_ << endl;
+        (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
+        divide = concatenated_.length();
+    } else {
+        (*poos) << "General Stats For " << name_ << endl;
+        (*poos) << "Total Length: " << temp_seq_.length() << endl;    
+        divide = temp_seq_.length();
+    }
+    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
+    (*poos) << seq_type_ << "\tTotal\tPercent" << endl;
+    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
+        (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
+            << total_[seq_chars_[i]] << "\t"
+            << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
+    }
+    if (!is_protein_) {
+    (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
+        << (total_['G'] + total_['C']) << "\t"
+        << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
+    }
+    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
+}
+
+// transpose original atbel
+void SeqInfo::print_stats_alt (ostream* poos) {
+    
+    const char separator = ' ';
+    const int nameWidth = 10;
+    double divide = 0.0;
+    if (is_protein_) {
+        seq_type_ = "Prot";
+    } else {
+        seq_type_ = "Nucl";
+    }
+    if (finished_) {
+        (*poos) << "General Stats For All Sequences" << endl;
+        (*poos) << "File type: " << file_type_ << endl;
+        (*poos) << "Number of sequences: " << seqcount_ << endl;
+        (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
+        divide = concatenated_.length();
+    } else {
+        (*poos) << "General Stats For " << name_ << endl;
+        (*poos) << "Total Length: " << temp_seq_.length() << endl;    
+        divide = temp_seq_.length();
+    }
+    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
+    (*poos) << seq_type_ << "\tTotal\tPercent" << endl;
+    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
+        (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
+            << total_[seq_chars_[i]] << "\t"
+            << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
+    }
+    if (!is_protein_) {
+    (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
+        << (total_['G'] + total_['C']) << "\t"
+        << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
+    }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
 }
 
@@ -87,23 +124,22 @@ void SeqInfo::collect_taxon_labels () {
 
 // assumed aligned if all seqs are the same length
 void SeqInfo::check_is_aligned () {
-    int ref_seq_length = 0;
-    vector <int> seq_sizes;
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios_, retstring);
     while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
         int terp = seq.get_sequence().size();
-        seq_sizes.push_back(terp);
+        seq_lengths_.push_back(terp);
     }
     if (ft == 2) {
         int terp = seq.get_sequence().size();
-        seq_sizes.push_back(terp);
+        seq_lengths_.push_back(terp);
     }
-    if (std::adjacent_find( seq_sizes.begin(), seq_sizes.end(), std::not_equal_to<int>()) == seq_sizes.end() ) {
-        aligned_ = true;
+    // check if all seqs are the same length
+    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+        is_aligned_ = true;
     } else {
-        aligned_ = false;
+        is_aligned_ = false;
     }
 }
 
@@ -122,25 +158,39 @@ void SeqInfo::get_nseqs () {
 }
 
 void SeqInfo::get_nchars () {
-    int ref_seq_length = 0;
-    vector <int> seq_sizes;
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios_, retstring);
     while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
         int terp = seq.get_sequence().size();
-        seq_sizes.push_back(terp);
+        name_ = seq.get_id();
+        taxon_labels_.push_back(name_);
+        seq_lengths_.push_back(terp);
     }
     if (ft == 2) {
         int terp = seq.get_sequence().size();
-        seq_sizes.push_back(terp);
+        name_ = seq.get_id();
+        taxon_labels_.push_back(name_);
+        seq_lengths_.push_back(terp);
     }
-    if (std::adjacent_find( seq_sizes.begin(), seq_sizes.end(), std::not_equal_to<int>()) == seq_sizes.end() ) {
-        aligned_ = true;
-        seq_length_ = seq_sizes[0];
+    // check if all seqs are the same length
+    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+        is_aligned_ = true;
+        seq_length_ = seq_lengths_[0];
     } else {
-        aligned_ = false;
+        is_aligned_ = false;
         seq_length_ = -1;
+    }
+    seqcount_ = (int)seq_lengths_.size();
+}
+
+// get the longest label. for printing purposes
+void SeqInfo::get_longest_taxon_label () {
+    longest_tax_label_ = 0;
+    for (int i = 0; i < seqcount_; i++) {
+        if (taxon_labels_[i].size() > longest_tax_label_) {
+            longest_tax_label_ = taxon_labels_[i].size();
+        }
     }
 }
 
@@ -162,6 +212,7 @@ SeqInfo::SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_p
     poos_ = poos;
 }
 
+// return wichever property set to true
 void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         bool const& get_nseq, bool const& get_freqs, bool const& get_nchar) {
     
@@ -172,7 +223,7 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         }
     } else if (check_aligned) {
         check_is_aligned();
-        (*poos_) << std::boolalpha << aligned_ << endl;
+        (*poos_) << std::boolalpha << is_aligned_ << endl;
     } else if (get_nseq) {
         get_nseqs ();
         (*poos_) << seqcount_ << endl;
@@ -181,12 +232,26 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         
     } else if (get_nchar) {
         get_nchars ();
-        if (seq_length_ != -1) {
-            (*poos_) << seq_length_ << endl;
-        } else {
-            // not aligned
-            (*poos_) << "sequences are not aligned" << endl;
+        if (!output_indiv_) { // single return value
+            if (seq_length_ != -1) {
+                (*poos_) << seq_length_ << endl;
+            } else {
+                // not aligned
+                (*poos_) << "sequences are not aligned" << endl;
+            }
+        } else { // individual lengths
+            get_longest_taxon_label();
+            for (int i = 0; i < seqcount_; i++) {
+                int diff = longest_tax_label_ - taxon_labels_[i].size();
+                (*poos_) << taxon_labels_[i];
+                if (diff > 0) {
+                    string pad = std::string(diff, ' ');
+                    (*poos_) << pad;
+                }
+                (*poos_) << " " << seq_lengths_[i] << endl;
+            }
         }
+        
     }
 }
 
