@@ -205,6 +205,7 @@ void SeqInfo::set_alphabet () {
 SeqInfo::SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein) {
     // set parameters
     output_indiv_ = (indiv == true) ? true : false;
+    is_protein_ = false;
     if (force_protein) {
         is_protein_ = true;
     }
@@ -271,13 +272,12 @@ void SeqInfo::summarize () {
     
     while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
         if (first) {
-            // infer sequence type rather than setting it
             if (!is_protein_) {
                 string alpha_name = seq.get_alpha_name();
                 if (alpha_name == "AA") {
-                    //cout << "I believe this is: " << alpha_name << "!" << endl;
                     is_protein_ = true;
                 }
+                //cout << "I believe this is: " << alpha_name << "!" << endl;
             }
             set_alphabet ();
             first = false;
