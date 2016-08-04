@@ -176,7 +176,6 @@ void SeqInfo::return_freq_table (ostream* poos) {
 }
 
 void SeqInfo::print_stats (ostream* poos) {
-    
     const char separator = ' ';
     const int colWidth = 10;
     double divide = 0.0;
@@ -185,40 +184,36 @@ void SeqInfo::print_stats (ostream* poos) {
     } else {
         seq_type_ = "Nucl";
     }
-    if (finished_) {
-        (*poos) << "General Stats For All Sequences" << endl;
-        (*poos) << "File type: " << file_type_ << endl;
-        (*poos) << "Number of sequences: " << seqcount_ << endl;
-        if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
-            is_aligned_ = true;
-        } else {
-            is_aligned_ = false;
-        }
-        (*poos_) << "Is aligned: " << std::boolalpha << is_aligned_ << endl;
-        if (is_aligned_) {
-            seq_length_ = seq_lengths_[0];
-            (*poos_) << "Sequence length: " << seq_length_ << endl;
-        }
-        (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl; // not really useful, is it?
-        divide = concatenated_.length();
+    
+    //(*poos) << "General Stats For All Sequences" << endl;
+    (*poos) << "File type: " << file_type_ << endl;
+    (*poos) << "Number of sequences: " << seqcount_ << endl;
+    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+        is_aligned_ = true;
     } else {
-        (*poos) << "General Stats For " << name_ << endl;
-        (*poos) << "Total Length: " << temp_seq_.length() << endl;    
-        divide = temp_seq_.length();
+        is_aligned_ = false;
     }
+    (*poos_) << "Is aligned: " << std::boolalpha << is_aligned_ << endl;
+    if (is_aligned_) {
+        seq_length_ = seq_lengths_[0];
+        (*poos_) << "Sequence length: " << seq_length_ << endl;
+    }
+    //(*poos) << "Total Length of All Combined: " << concatenated_.length() << endl; // not really useful, is it?
+    divide = concatenated_.length();
+    
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
     (*poos) << left << setw(6) << setfill(separator) << seq_type_ << " "
         << setw(colWidth) << setfill(separator) << "Total" << " "
-        << setw(colWidth) << setfill(separator) << "Percent" << endl;
+        << setw(colWidth) << setfill(separator) << "Proportion" << endl;
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
         (*poos) << left << setw(6) << setfill(separator) << seq_chars_[i] << " "
             << setw(colWidth) << setfill(separator) << total_[seq_chars_[i]] << " "
-            << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
+            << ((total_[seq_chars_[i]] / divide)) << endl;
     }
     if (!is_protein_) {
         (*poos) << left << setw(6) << setfill(separator) << "G+C" << " "
             << setw(colWidth) << setfill(separator) << (total_['G'] + total_['C']) << " "
-            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
+            << (((total_['G'] + total_['C']) / divide)) << endl;
     }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
 }
@@ -374,9 +369,7 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
 }
 
 void SeqInfo::summarize () {
-
     // Concatenated will be used for all stats
-    finished_ = false;
     seqcount_ = 0;
     
     bool first = true;
@@ -418,10 +411,8 @@ void SeqInfo::summarize () {
     if (output_indiv_) {
         // new one
         return_freq_table(poos_);
-        (*poos_) << endl;
+    } else {
+        count_chars_indiv_seq(concatenated_);
+        print_stats(poos_);
     }
-    
-    finished_ = true;
-    count_chars_indiv_seq(concatenated_);
-    print_stats(poos_);
 }
