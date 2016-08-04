@@ -36,7 +36,7 @@ void SeqInfo::count_chars_indiv_seq(string& seq) {
 void SeqInfo::print_stats (ostream* poos) {
     
     const char separator = ' ';
-    const int nameWidth = 10;
+    const int colWidth = 10;
     double divide = 0.0;
     if (is_protein_) {
         seq_type_ = "Prot";
@@ -55,21 +55,23 @@ void SeqInfo::print_stats (ostream* poos) {
         divide = temp_seq_.length();
     }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-    (*poos) << seq_type_ << "\tTotal\tPercent" << endl;
+    (*poos) << left << setw(6) << setfill(separator) << seq_type_
+        << setw(colWidth) << setfill(separator) << "Total"
+        << setw(colWidth) << setfill(separator) << "Percent" << endl;
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
-            << total_[seq_chars_[i]] << "\t"
+        (*poos) << left << setw(6) << setfill(separator) << seq_chars_[i]
+            << setw(colWidth) << setfill(separator) << total_[seq_chars_[i]]
             << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
     }
     if (!is_protein_) {
-    (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
-        << (total_['G'] + total_['C']) << "\t"
-        << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
+        (*poos) << left << setw(6) << setfill(separator) << "G+C"
+            << setw(colWidth) << setfill(separator) << (total_['G'] + total_['C'])
+            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
     }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
 }
 
-// transpose original atbel
+// transpose original table
 void SeqInfo::print_stats_alt (ostream* poos) {
     
     const char separator = ' ';
@@ -99,11 +101,22 @@ void SeqInfo::print_stats_alt (ostream* poos) {
             << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
     }
     if (!is_protein_) {
-    (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
-        << (total_['G'] + total_['C']) << "\t"
-        << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
+        (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
+            << (total_['G'] + total_['C']) << "\t"
+            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
     }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
+    
+    get_longest_taxon_label();
+    for (int i = 0; i < seqcount_; i++) {
+        int diff = longest_tax_label_ - taxon_labels_[i].size();
+        (*poos_) << taxon_labels_[i];
+        if (diff > 0) {
+            string pad = std::string(diff, ' ');
+            (*poos_) << pad;
+        }
+        (*poos_) << " " << seq_lengths_[i] << endl;
+    }
 }
 
 // just grab labels, disregard the rest
@@ -213,7 +226,7 @@ SeqInfo::SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_p
     poos_ = poos;
 }
 
-// return wichever property set to true
+// return whichever property set to true
 void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         bool const& get_nseq, bool const& get_freqs, bool const& get_nchar) {
     
