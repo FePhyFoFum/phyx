@@ -23,6 +23,8 @@ private:
     // new stuff
     vector <string> taxon_labels_;
     vector <int> seq_lengths_;
+    vector <int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
+    vector < vector <int> > indiv_char_counts_;
     bool is_aligned_;
     int seq_length_;
     istream* pios_;
@@ -35,9 +37,11 @@ private:
     void get_nchars ();
     void set_alphabet ();
     void count_chars_indiv_seq (string& seq);
+    void count_chars(string& seq);
     void print_stats (ostream* poos);
-    void print_stats_alt (ostream* poos);
+    void return_freq_table (ostream* poos);
     void get_longest_taxon_label ();
+    void calculate_freqs ();
 
 public:
     SeqInfo (istream* pios, bool& indiv, bool const& force_protein, ostream* poos);

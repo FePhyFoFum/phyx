@@ -13,13 +13,14 @@ using namespace std;
 
 // for each character in the alphabet 'seq_chars_'
 void SeqInfo::count_chars_indiv_seq(string& seq) {
-
+    
+    std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
+    
     total_.clear();
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
         total_[seq_chars_[i]] = 0.0;
     }
     for (unsigned int i = 0; i < seq.length(); i++) {
-        seq[i] = toupper(seq[i]);
         // Ensure there is no weird J or whatever characters (includes '?')
         if (total_.find(seq[i]) == total_.end()) {
             if (is_protein_) {
@@ -30,6 +31,147 @@ void SeqInfo::count_chars_indiv_seq(string& seq) {
         } else {
             total_[seq[i]]++;
         }
+    }
+}
+
+// alternate to above, accumulate char counts across seqs
+void SeqInfo::count_chars (string& seq) {
+    int sum = 0;
+    
+    std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
+    
+    if (output_indiv_) {
+        vector <int> icounts(seq_chars_.length(), 0);
+        
+        for (int i = 0; i < seq_chars_.length(); i++) {
+            int num = count(seq.begin(), seq.end(), seq_chars_[i]);
+            char_counts_[i] += num;
+            icounts[i] += num;
+            sum += num;
+        }
+        // add invalid char counts, add to missing char count
+        if (sum < seq.length()) {
+            char_counts_.back() += (seq.length() - sum);
+            icounts.back() += (seq.length() - sum);
+        }
+        indiv_char_counts_.push_back(icounts);
+        // this is cool, but unnecessary here
+        //std::transform(char_counts_.begin(), char_counts_.end(), icounts.begin(), char_counts_.begin(), std::plus<int>());
+        
+    } else {
+        for (int i = 0; i < seq_chars_.length(); i++) {
+            int num = count(seq.begin(), seq.end(), seq_chars_[i]);
+            char_counts_[i] += num;
+            sum += num;
+        }
+        // add invalid char counts, add to missing char count
+        if (sum < seq.length()) {
+            char_counts_.back() += (seq.length() - sum);
+        }
+    }
+}
+
+// calculate character state frequencies
+void SeqInfo::calculate_freqs () {
+    bool first = true;
+    Sequence seq;
+    string retstring;
+    int ft = test_seq_filetype_stream(*pios_, retstring);
+    file_type_ = get_filetype_string(ft);
+    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+        if (first) {
+            if (!is_protein_) {
+                string alpha_name = seq.get_alpha_name();
+                if (alpha_name == "AA") {
+                    is_protein_ = true;
+                }
+            }
+            set_alphabet ();
+            first = false;
+        }
+        seqcount_++;
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
+        seq_lengths_.push_back(temp_seq_.length());
+        count_chars(temp_seq_);
+        taxon_labels_.push_back(name_);
+    }
+    if (ft == 2) {
+        seqcount_++;
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
+        seq_lengths_.push_back(temp_seq_.length());
+        count_chars(temp_seq_);
+        taxon_labels_.push_back(name_);
+    }
+}
+
+// alt to print_stats. essential difference is transposed results
+void SeqInfo::return_freq_table (ostream* poos) {
+    const char separator = ' ';
+    const int colWidth = 10;
+    if (output_indiv_) {
+        // need to take into account longest_tax_label_
+        get_longest_taxon_label();
+        string pad = std::string(longest_tax_label_, ' ');
+        // header
+        (*poos) << pad << " ";
+        for (int i = 0; i < seq_chars_.length(); i++) {
+            (*poos) << left << setw(colWidth) << setfill(separator)
+                << seq_chars_[i];
+            if (i != seq_chars_.length() - 1) {
+                (*poos) << " ";
+            }
+        }
+        (*poos) << endl;
+        
+        
+        for (int i = 0; i < seqcount_; i++) {
+            int diff = longest_tax_label_ - taxon_labels_[i].size();
+            (*poos_) << taxon_labels_[i];
+            if (diff > 0) {
+                pad = std::string(diff, ' ');
+                (*poos_) << pad;
+            }
+            (*poos_) << " ";
+            for (int j = 0; j < seq_chars_.length(); j++) {
+                (*poos) << left << setw(colWidth) << setfill(separator)
+                    << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i];
+                if (j != seq_chars_.length() - 1) {
+                    (*poos) << " ";
+                }
+            }
+            (*poos) << endl;
+        }
+    } else {
+        // header
+        for (int i = 0; i < seq_chars_.length(); i++) {
+            (*poos) << left << setw(colWidth) << setfill(separator)
+                << seq_chars_[i];
+            if (i != seq_chars_.length() - 1) {
+                (*poos) << " ";
+            }
+        }
+        (*poos) << endl;
+        // counts
+        for (int i = 0; i < seq_chars_.length(); i++) {
+            (*poos) << left << setw(colWidth) << setfill(separator)
+                << char_counts_[i];
+            if (i != seq_chars_.length() - 1) {
+                (*poos) << " ";
+            }
+        }
+        (*poos) << endl;
+        // freqs
+        int total_num_chars = sum(char_counts_);
+        for (int i = 0; i < seq_chars_.length(); i++) {
+            (*poos) << fixed << left << setw(colWidth) << setfill(separator)
+                << (double)char_counts_[i] / (double)total_num_chars;
+            if (i != seq_chars_.length() - 1) {
+                (*poos) << " ";
+            }
+        }
+        (*poos) << endl;
     }
 }
 
@@ -52,7 +194,6 @@ void SeqInfo::print_stats (ostream* poos) {
         } else {
             is_aligned_ = false;
         }
-        cout << "seq_lengths_ is of size: " << seq_lengths_.size() << endl;
         (*poos_) << "Is aligned: " << std::boolalpha << is_aligned_ << endl;
         if (is_aligned_) {
             seq_length_ = seq_lengths_[0];
@@ -77,45 +218,6 @@ void SeqInfo::print_stats (ostream* poos) {
     if (!is_protein_) {
         (*poos) << left << setw(6) << setfill(separator) << "G+C" << " "
             << setw(colWidth) << setfill(separator) << (total_['G'] + total_['C']) << " "
-            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
-    }
-    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-}
-
-// transpose original table. gah: will require a completely different read in method
-void SeqInfo::print_stats_alt (ostream* poos) {
-    
-    const char separator = ' ';
-    const int colWidth = 10;
-    double divide = 0.0;
-    if (is_protein_) {
-        seq_type_ = "Prot";
-    } else {
-        seq_type_ = "Nucl";
-    }
-    if (finished_) {
-        (*poos) << "General Stats For All Sequences" << endl;
-        (*poos) << "File type: " << file_type_ << endl;
-        (*poos) << "Number of sequences: " << seqcount_ << endl;
-        (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
-        divide = concatenated_.length();
-    } else {
-        (*poos) << "General Stats For " << name_ << endl;
-        (*poos) << "Total Length: " << temp_seq_.length() << endl;    
-        divide = temp_seq_.length();
-    }
-    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-    (*poos) << left << setw(6) << setfill(separator) << seq_type_
-        << setw(colWidth) << setfill(separator) << "Total"
-        << setw(colWidth) << setfill(separator) << "Percent" << endl;
-    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos) << left << setw(6) << setfill(separator) << seq_chars_[i]
-            << setw(colWidth) << setfill(separator) << total_[seq_chars_[i]]
-            << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
-    }
-    if (!is_protein_) {
-        (*poos) << left << setw(6) << setfill(separator) << "G+C"
-            << setw(colWidth) << setfill(separator) << (total_['G'] + total_['C'])
             << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
     }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
@@ -215,6 +317,7 @@ void SeqInfo::set_alphabet () {
     } else {
         seq_chars_ = "ACGTN-";
     }
+    char_counts_.resize(seq_chars_.size(), 0);
 }
 
 SeqInfo::SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein) {
@@ -245,7 +348,8 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         (*poos_) << seqcount_ << endl;
     } else if (get_freqs) {
         // use original code
-        
+        calculate_freqs();
+        return_freq_table(poos_);
     } else if (get_nchar) {
         get_nchars ();
         if (!output_indiv_) { // single return value
@@ -267,13 +371,12 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
                 (*poos_) << " " << seq_lengths_[i] << endl;
             }
         }
-        
     }
 }
 
 void SeqInfo::summarize () {
 
-    //Concatenated will be used for all stats
+    // Concatenated will be used for all stats
     finished_ = false;
     seqcount_ = 0;
     
@@ -292,7 +395,7 @@ void SeqInfo::summarize () {
                 if (alpha_name == "AA") {
                     is_protein_ = true;
                 }
-                //cout << "I believe this is: " << alpha_name << "!" << endl;
+                // cout << "I believe this is: " << alpha_name << "!" << endl;
             }
             set_alphabet ();
             first = false;
@@ -302,6 +405,8 @@ void SeqInfo::summarize () {
         temp_seq_ = seq.get_sequence();
         name_ = seq.get_id();
         seq_lengths_.push_back(temp_seq_.length());
+        count_chars(temp_seq_);
+        taxon_labels_.push_back(name_);
         if (output_indiv_) {
             count_chars_indiv_seq(temp_seq_);
             print_stats(poos_);
@@ -313,6 +418,8 @@ void SeqInfo::summarize () {
         temp_seq_ = seq.get_sequence();
         name_ = seq.get_id();
         seq_lengths_.push_back(temp_seq_.length());
+        count_chars(temp_seq_);
+        taxon_labels_.push_back(name_);
         if (output_indiv_) {
             count_chars_indiv_seq(temp_seq_);
             print_stats(poos_);
@@ -321,9 +428,12 @@ void SeqInfo::summarize () {
     finished_ = true;
     count_chars_indiv_seq(concatenated_);
     print_stats(poos_);
+    
+    // new one
+    //return_freq_table(poos_);
 }
 
-
+// not using this one anymore
 SeqInfo::SeqInfo (istream* pios, bool& indiv, bool const& force_protein, ostream* poos) {
 
     //Concatenated will be used for all stats
