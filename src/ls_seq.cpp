@@ -47,6 +47,56 @@ void SeqInfo::print_stats (ostream* poos) {
         (*poos) << "General Stats For All Sequences" << endl;
         (*poos) << "File type: " << file_type_ << endl;
         (*poos) << "Number of sequences: " << seqcount_ << endl;
+        if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+            is_aligned_ = true;
+        } else {
+            is_aligned_ = false;
+        }
+        cout << "seq_lengths_ is of size: " << seq_lengths_.size() << endl;
+        (*poos_) << "Is aligned: " << std::boolalpha << is_aligned_ << endl;
+        if (is_aligned_) {
+            seq_length_ = seq_lengths_[0];
+            (*poos_) << "Sequence length: " << seq_length_ << endl;
+        }
+        (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl; // not really useful, is it?
+        divide = concatenated_.length();
+    } else {
+        (*poos) << "General Stats For " << name_ << endl;
+        (*poos) << "Total Length: " << temp_seq_.length() << endl;    
+        divide = temp_seq_.length();
+    }
+    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
+    (*poos) << left << setw(6) << setfill(separator) << seq_type_ << " "
+        << setw(colWidth) << setfill(separator) << "Total" << " "
+        << setw(colWidth) << setfill(separator) << "Percent" << endl;
+    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
+        (*poos) << left << setw(6) << setfill(separator) << seq_chars_[i] << " "
+            << setw(colWidth) << setfill(separator) << total_[seq_chars_[i]] << " "
+            << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
+    }
+    if (!is_protein_) {
+        (*poos) << left << setw(6) << setfill(separator) << "G+C" << " "
+            << setw(colWidth) << setfill(separator) << (total_['G'] + total_['C']) << " "
+            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
+    }
+    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
+}
+
+// transpose original table. gah: will require a completely different read in method
+void SeqInfo::print_stats_alt (ostream* poos) {
+    
+    const char separator = ' ';
+    const int colWidth = 10;
+    double divide = 0.0;
+    if (is_protein_) {
+        seq_type_ = "Prot";
+    } else {
+        seq_type_ = "Nucl";
+    }
+    if (finished_) {
+        (*poos) << "General Stats For All Sequences" << endl;
+        (*poos) << "File type: " << file_type_ << endl;
+        (*poos) << "Number of sequences: " << seqcount_ << endl;
         (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
         divide = concatenated_.length();
     } else {
@@ -69,54 +119,6 @@ void SeqInfo::print_stats (ostream* poos) {
             << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
     }
     (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-}
-
-// transpose original table
-void SeqInfo::print_stats_alt (ostream* poos) {
-    
-    const char separator = ' ';
-    const int nameWidth = 10;
-    double divide = 0.0;
-    if (is_protein_) {
-        seq_type_ = "Prot";
-    } else {
-        seq_type_ = "Nucl";
-    }
-    if (finished_) {
-        (*poos) << "General Stats For All Sequences" << endl;
-        (*poos) << "File type: " << file_type_ << endl;
-        (*poos) << "Number of sequences: " << seqcount_ << endl;
-        (*poos) << "Total Length of All Combined: " << concatenated_.length() << endl;
-        divide = concatenated_.length();
-    } else {
-        (*poos) << "General Stats For " << name_ << endl;
-        (*poos) << "Total Length: " << temp_seq_.length() << endl;    
-        divide = temp_seq_.length();
-    }
-    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-    (*poos) << seq_type_ << "\tTotal\tPercent" << endl;
-    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos) << left << setw(nameWidth) << setfill(separator) << seq_chars_[i]
-            << total_[seq_chars_[i]] << "\t"
-            << ((total_[seq_chars_[i]] / divide) * 100.0) << endl;
-    }
-    if (!is_protein_) {
-        (*poos) << left << setw(nameWidth) << setfill(separator) << "G+C"
-            << (total_['G'] + total_['C']) << "\t"
-            << (((total_['G'] + total_['C']) / divide) * 100.0) << endl;
-    }
-    (*poos) << "--------" << seq_type_ << " TABLE---------" << endl;
-    
-    get_longest_taxon_label();
-    for (int i = 0; i < seqcount_; i++) {
-        int diff = longest_tax_label_ - taxon_labels_[i].size();
-        (*poos_) << taxon_labels_[i];
-        if (diff > 0) {
-            string pad = std::string(diff, ' ');
-            (*poos_) << pad;
-        }
-        (*poos_) << " " << seq_lengths_[i] << endl;
-    }
 }
 
 // just grab labels, disregard the rest
@@ -299,6 +301,7 @@ void SeqInfo::summarize () {
         concatenated_ += seq.get_sequence();
         temp_seq_ = seq.get_sequence();
         name_ = seq.get_id();
+        seq_lengths_.push_back(temp_seq_.length());
         if (output_indiv_) {
             count_chars_indiv_seq(temp_seq_);
             print_stats(poos_);
@@ -309,6 +312,7 @@ void SeqInfo::summarize () {
         concatenated_ += seq.get_sequence();
         temp_seq_ = seq.get_sequence();
         name_ = seq.get_id();
+        seq_lengths_.push_back(temp_seq_.length());
         if (output_indiv_) {
             count_chars_indiv_seq(temp_seq_);
             print_stats(poos_);
