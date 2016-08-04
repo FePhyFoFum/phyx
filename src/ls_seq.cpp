@@ -118,14 +118,10 @@ void SeqInfo::return_freq_table (ostream* poos) {
         (*poos) << pad << " ";
         for (int i = 0; i < seq_chars_.length(); i++) {
             (*poos) << left << setw(colWidth) << setfill(separator)
-                << seq_chars_[i];
-            if (i != seq_chars_.length() - 1) {
-                (*poos) << " ";
-            }
+                << seq_chars_[i] << " ";
         }
-        (*poos) << endl;
-        
-        
+        // return nchar for individual seqs
+        (*poos) << left << setw(colWidth) << setfill(separator) << "Nchar" << endl;
         for (int i = 0; i < seqcount_; i++) {
             int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
@@ -136,12 +132,9 @@ void SeqInfo::return_freq_table (ostream* poos) {
             (*poos_) << " ";
             for (int j = 0; j < seq_chars_.length(); j++) {
                 (*poos) << left << setw(colWidth) << setfill(separator)
-                    << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i];
-                if (j != seq_chars_.length() - 1) {
-                    (*poos) << " ";
-                }
+                    << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i] << " ";
             }
-            (*poos) << endl;
+            (*poos) << left << setw(colWidth) << setfill(separator) << seq_lengths_[i] << endl;
         }
     } else {
         // header
@@ -368,6 +361,7 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
     }
 }
 
+// TODO: get rid of the concatenated_ business
 void SeqInfo::summarize () {
     // Concatenated will be used for all stats
     seqcount_ = 0;
