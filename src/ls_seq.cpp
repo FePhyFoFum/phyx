@@ -347,7 +347,6 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         get_nseqs ();
         (*poos_) << seqcount_ << endl;
     } else if (get_freqs) {
-        // use original code
         calculate_freqs();
         return_freq_table(poos_);
     } else if (get_nchar) {
@@ -385,7 +384,6 @@ void SeqInfo::summarize () {
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios_, retstring);
-    
     file_type_ = get_filetype_string(ft);
     
     while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
@@ -395,7 +393,6 @@ void SeqInfo::summarize () {
                 if (alpha_name == "AA") {
                     is_protein_ = true;
                 }
-                // cout << "I believe this is: " << alpha_name << "!" << endl;
             }
             set_alphabet ();
             first = false;
@@ -407,10 +404,6 @@ void SeqInfo::summarize () {
         seq_lengths_.push_back(temp_seq_.length());
         count_chars(temp_seq_);
         taxon_labels_.push_back(name_);
-        if (output_indiv_) {
-            count_chars_indiv_seq(temp_seq_);
-            print_stats(poos_);
-        }
     }
     if (ft == 2) {
         seqcount_++;
@@ -420,71 +413,15 @@ void SeqInfo::summarize () {
         seq_lengths_.push_back(temp_seq_.length());
         count_chars(temp_seq_);
         taxon_labels_.push_back(name_);
-        if (output_indiv_) {
-            count_chars_indiv_seq(temp_seq_);
-            print_stats(poos_);
-        }
     }
+    
+    if (output_indiv_) {
+        // new one
+        return_freq_table(poos_);
+        (*poos_) << endl;
+    }
+    
     finished_ = true;
     count_chars_indiv_seq(concatenated_);
     print_stats(poos_);
-    
-    // new one
-    //return_freq_table(poos_);
-}
-
-// not using this one anymore
-SeqInfo::SeqInfo (istream* pios, bool& indiv, bool const& force_protein, ostream* poos) {
-
-    //Concatenated will be used for all stats
-    finished_ = false;
-    seqcount_ = 0;
-    output_indiv_ = (indiv == true) ? true : false;
-    
-    bool first = true;
-    
-    Sequence seq;
-    string retstring;
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    file_type_ = get_filetype_string(ft);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        if (first) {
-            // infer sequence type rather than setting it
-            if (force_protein) {
-                is_protein_ = true;
-            } else {
-                string alpha_name = seq.get_alpha_name();
-                if (alpha_name == "AA") {
-                    //cout << "I believe this is: " << alpha_name << "!" << endl;
-                    is_protein_ = true;
-                }
-            }
-            set_alphabet ();
-            
-            first = false;
-        }
-        seqcount_++;
-        concatenated_ += seq.get_sequence();
-        temp_seq_ = seq.get_sequence();
-        name_ = seq.get_id();
-        if (output_indiv_) {
-            count_chars_indiv_seq(temp_seq_);
-            print_stats(poos);
-        }
-    }
-    if (ft == 2) {
-        seqcount_++;
-        concatenated_ += seq.get_sequence();
-        temp_seq_ = seq.get_sequence();
-        name_ = seq.get_id();
-        if (output_indiv_) {
-            count_chars_indiv_seq(temp_seq_);
-            print_stats(poos);
-        }
-    }
-    finished_ = true;
-    count_chars_indiv_seq(concatenated_);
-    print_stats(poos);
 }
