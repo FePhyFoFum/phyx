@@ -76,6 +76,7 @@ void SeqInfo::calculate_freqs () {
     bool first = true;
     Sequence seq;
     string retstring;
+    seqcount_ = 0;
     int ft = test_seq_filetype_stream(*pios_, retstring);
     file_type_ = get_filetype_string(ft);
     while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
