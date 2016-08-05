@@ -244,7 +244,7 @@ void LogManipulator::sample_parameters () {
                     << " samples retained (from original " << indiv_raw_counts_[i]
                     << " samples) for " << (num_cols_ - 1) << " variables." << endl;
             }
-            (*poos_) << "Retained " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
+            cout << "Retained " << ntotal_samples_ << " total samples and " << (num_cols_ - 1)
                 << " variables across " << num_files_ << " input files." << endl;
         }
     }
