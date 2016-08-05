@@ -149,7 +149,7 @@ int main(int argc, char * argv[]) {
     for (unsigned int i=0; i < seqs.size(); i++) {
         string tname = seqs[i].get_id();
         name_index[tname] = i;
-        cout << tname << " " << i << endl;
+        (*poos) << tname << " " << i << endl;
         names.push_back(tname);
         name_st_index[i] = tname;
     }
@@ -220,8 +220,8 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    cout << numseqs << " sequences with " << numcols << " cols" <<   endl;
-    cout << all_bp.size() << " unique parts found" << endl;
+    (*poos) << numseqs << " sequences with " << numcols << " cols" <<   endl;
+    (*poos) << all_bp.size() << " unique parts found" << endl;
     
     // calculate the ICA
     // get the parts that are not compatible
@@ -274,7 +274,7 @@ int main(int argc, char * argv[]) {
             }
         }
         if (conflict_nums.size() == 1) {
-            cout << i  << " ("<<bp_count[i] << ") no conflict " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
+            (*poos) << i  << " ("<<bp_count[i] << ") no conflict " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
             bp_ica[i] = 1;
             continue;
         }
@@ -293,9 +293,9 @@ int main(int argc, char * argv[]) {
         ACA += ICA;
         ICA *= sign;
         bp_ica[i] = ICA;
-        cout << i <<" ("  << bp_count[i] << ")\t" << ICA << " " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
+        (*poos) << i <<" ("  << bp_count[i] << ")\t" << ICA << " " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
     }
-    cout << " " << ACA << endl;
+    (*poos) << " " << ACA << endl;
  
     //cout << get_string_vector(seq_bipart_map) << endl;
 
@@ -307,7 +307,7 @@ int main(int argc, char * argv[]) {
             copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
             for (int j=0; j < trees[t]->getInternalNodeCount(); j++) {
                 vector<string> nms = trees[t]->getInternalNode(j)->get_leave_names();
-                cout << get_string_vector(nms) << endl;
+                (*poos) << get_string_vector(nms) << endl;
                 vector<int> nms_i;
                 set<string> nms_s;
                 copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
@@ -334,18 +334,18 @@ int main(int argc, char * argv[]) {
                         vector<int> v3;
                         set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),nms_i.begin(),nms_i.end(),back_inserter(v3));
                         if (v3.size() == nms_i.size()) {
-                            cout << i << " (" << bp_ica[i] << ") ";
+                            (*poos) << i << " (" << bp_ica[i] << ") ";
                             break;
                         }
                         vector<int> v4;
                         set_intersection(all_bp[i][m].begin(),all_bp[i][m].end(),nms_i2.begin(),nms_i2.end(),back_inserter(v4));
                         if (v4.size() == nms_i2.size()) {
-                            cout << i << " (" << bp_ica[i] << ") ";
+                            (*poos) << i << " (" << bp_ica[i] << ") ";
                             break;
                         }
                     }//each part of the bipart
                 }//each bipart
-                cout << endl;
+                (*poos) << endl;
             }//each internal node
         }//each tree
         tfstr->close();
