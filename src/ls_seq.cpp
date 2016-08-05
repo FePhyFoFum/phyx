@@ -51,8 +51,8 @@ void SeqInfo::count_chars (string& seq) {
         }
         // add invalid char counts, add to missing char count
         if (sum < seq.length()) {
-            char_counts_.back() += (seq.length() - sum);
-            icounts.back() += (seq.length() - sum);
+            char_counts_[char_counts_.size() - 1] += (seq.length() - sum);
+            icounts[icounts.size() - 1] += (seq.length() - sum);
         }
         indiv_char_counts_.push_back(icounts);
         // this is cool, but unnecessary here
@@ -66,7 +66,7 @@ void SeqInfo::count_chars (string& seq) {
         }
         // add invalid char counts, add to missing char count
         if (sum < seq.length()) {
-            char_counts_.back() += (seq.length() - sum);
+            char_counts_[char_counts_.size() - 1] += (seq.length() - sum);
         }
     }
 }
@@ -301,7 +301,7 @@ void SeqInfo::get_longest_taxon_label () {
 
 void SeqInfo::set_alphabet () {
     if (is_protein_) {
-        seq_chars_ = "ACDEFGHIKLMNPQRSTVWXY*";
+        seq_chars_ = "ACDEFGHIKLMNPQRSTVWXY-*";
     } else {
         seq_chars_ = "ACGTN-";
     }
