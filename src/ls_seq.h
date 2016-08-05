@@ -44,7 +44,6 @@ private:
     void calculate_freqs ();
 
 public:
-    //SeqInfo (istream* pios, bool& indiv, bool const& force_protein, ostream* poos);
     SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein);
     void summarize ();
     void get_property (bool const& get_labels, bool const& check_aligned,
