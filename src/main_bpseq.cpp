@@ -274,7 +274,7 @@ int main(int argc, char * argv[]) {
             }
         }
         if (conflict_nums.size() == 1) {
-            cout << i  << " ("<<bp_count[i] << ") no conflict" << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
+            cout << i  << " ("<<bp_count[i] << ") no conflict " << get_string_vector(all_bp[i][0]) << " | " <<  get_string_vector(all_bp[i][1]) << " | " << get_string_vector(all_bp[i][2]) << " | " << get_string_vector(all_bp[i][3]) << endl;
             bp_ica[i] = 1;
             continue;
         }
