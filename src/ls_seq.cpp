@@ -117,11 +117,11 @@ void SeqInfo::return_freq_table (ostream* poos) {
         // header
         (*poos) << pad << " ";
         for (int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << left << setw(colWidth) << setfill(separator)
+            (*poos) << right << setw(colWidth) << setfill(separator)
                 << seq_chars_[i] << " ";
         }
         // return nchar for individual seqs
-        (*poos) << left << setw(colWidth) << setfill(separator) << "Nchar" << endl;
+        (*poos) << right << setw(colWidth) << setfill(separator) << "Nchar" << endl;
         for (int i = 0; i < seqcount_; i++) {
             int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
@@ -131,15 +131,15 @@ void SeqInfo::return_freq_table (ostream* poos) {
             }
             (*poos_) << " ";
             for (int j = 0; j < seq_chars_.length(); j++) {
-                (*poos) << left << setw(colWidth) << setfill(separator)
+                (*poos) << right << setw(colWidth) << setfill(separator)
                     << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i] << " ";
             }
-            (*poos) << left << setw(colWidth) << setfill(separator) << seq_lengths_[i] << endl;
+            (*poos) << right << setw(colWidth) << setfill(separator) << seq_lengths_[i] << endl;
         }
     } else {
         // header
         for (int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << left << setw(colWidth) << setfill(separator)
+            (*poos) << right << setw(colWidth) << setfill(separator)
                 << seq_chars_[i];
             if (i != seq_chars_.length() - 1) {
                 (*poos) << " ";
@@ -148,7 +148,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
         (*poos) << endl;
         // counts
         for (int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << left << setw(colWidth) << setfill(separator)
+            (*poos) << right << setw(colWidth) << setfill(separator)
                 << char_counts_[i];
             if (i != seq_chars_.length() - 1) {
                 (*poos) << " ";
@@ -158,7 +158,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
         // freqs
         int total_num_chars = sum(char_counts_);
         for (int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << fixed << left << setw(colWidth) << setfill(separator)
+            (*poos) << fixed << right << setw(colWidth) << setfill(separator)
                 << (double)char_counts_[i] / (double)total_num_chars;
             if (i != seq_chars_.length() - 1) {
                 (*poos) << " ";
@@ -301,9 +301,9 @@ void SeqInfo::get_longest_taxon_label () {
 
 void SeqInfo::set_alphabet () {
     if (is_protein_) {
-        seq_chars_ = "ACDEFGHIKLMNPQRSTVWXY-*";
+        seq_chars_ = "ACDEFGHIKLMNPQRSTVWY-X";
     } else {
-        seq_chars_ = "ACGTN-";
+        seq_chars_ = "ACGT-N";
     }
     char_counts_.resize(seq_chars_.size(), 0);
 }
