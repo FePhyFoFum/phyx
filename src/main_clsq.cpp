@@ -29,7 +29,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
-    cout << " -p, --percent=DOUBLE  percent allowed to be missing, default=.5" << endl;
+    cout << " -p, --prop=DOUBLE     proportion allowed to be missing, default=0.5" << endl;
     cout << " -h, --help            display this help and exit" << endl;
     cout << " -V, --version         display version and exit" << endl;
     cout << endl;
@@ -43,7 +43,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-    {"percent", required_argument, NULL, 'p'},
+    {"proportion", required_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     string seqf = "";
     string outf = "";
-    double percent = 0.5;
+    double proportion = 0.5;
 
     while (1) {
         int oi = -1;
@@ -76,7 +76,7 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-                percent = atof(strdup(optarg));
+                proportion = atof(strdup(optarg));
                 break;
             case 'h':
                 print_help();
@@ -111,7 +111,7 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
     
-    SequenceCleaner toClean(pios, percent);
+    SequenceCleaner toClean(pios, proportion);
     
     // write sequences. currently only fasta format.
     toClean.write_seqs(poos);
