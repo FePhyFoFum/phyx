@@ -1,3 +1,0 @@
-KIM = s28 s87	
-THURSTON=s19 s21                     
-LEE	=s292 s296 s307

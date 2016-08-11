@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: main.aux
+The style file: natbib.bst
+Database file #1: document.bib
+Warning--entry type for "MaddisonMaddison2016" isn't style-file defined
+--line 45 of file document.bib
+You've used 17 entries,
+            2378 wiz_defined-function locations,
+            654 strings with 7355 characters,
+and the built_in function-call counts, 8596 in all, are:
+= -- 823
+> -- 483
+< -- 10
++ -- 145
+- -- 139
+* -- 828
+:= -- 1479
+add.period$ -- 73
+call.type$ -- 17
+change.case$ -- 111
+chr.to.int$ -- 17
+cite$ -- 17
+duplicate$ -- 314
+empty$ -- 561
+format.name$ -- 174
+if$ -- 1719
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 16
+newline$ -- 87
+num.names$ -- 68
+pop$ -- 92
+preamble$ -- 1
+purify$ -- 111
+quote$ -- 0
+skip$ -- 221
+stack$ -- 0
+substring$ -- 593
+swap$ -- 56
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 153
+warning$ -- 0
+while$ -- 67
+width$ -- 0
+write$ -- 220
+(There was 1 warning)
