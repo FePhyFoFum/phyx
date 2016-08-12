@@ -4,46 +4,46 @@ The top-level auxiliary file: main.aux
 The style file: natbib.bst
 Database file #1: document.bib
 Warning--entry type for "MaddisonMaddison2016" isn't style-file defined
---line 45 of file document.bib
-You've used 17 entries,
+--line 57 of file document.bib
+You've used 18 entries,
             2378 wiz_defined-function locations,
-            654 strings with 7355 characters,
-and the built_in function-call counts, 8596 in all, are:
-= -- 823
-> -- 483
-< -- 10
-+ -- 145
-- -- 139
-* -- 828
-:= -- 1479
-add.period$ -- 73
-call.type$ -- 17
-change.case$ -- 111
-chr.to.int$ -- 17
-cite$ -- 17
-duplicate$ -- 314
-empty$ -- 561
-format.name$ -- 174
-if$ -- 1719
+            660 strings with 7462 characters,
+and the built_in function-call counts, 9028 in all, are:
+= -- 868
+> -- 494
+< -- 11
++ -- 148
+- -- 142
+* -- 865
+:= -- 1552
+add.period$ -- 77
+call.type$ -- 18
+change.case$ -- 117
+chr.to.int$ -- 18
+cite$ -- 18
+duplicate$ -- 332
+empty$ -- 596
+format.name$ -- 178
+if$ -- 1807
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 16
-newline$ -- 87
-num.names$ -- 68
-pop$ -- 92
+missing$ -- 17
+newline$ -- 92
+num.names$ -- 72
+pop$ -- 96
 preamble$ -- 1
-purify$ -- 111
+purify$ -- 117
 quote$ -- 0
-skip$ -- 221
+skip$ -- 233
 stack$ -- 0
-substring$ -- 593
-swap$ -- 56
+substring$ -- 633
+swap$ -- 59
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 153
+type$ -- 162
 warning$ -- 0
-while$ -- 67
+while$ -- 71
 width$ -- 0
-write$ -- 220
+write$ -- 233
 (There was 1 warning)

@@ -1,7 +1,6 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  12 AUG 2016 13:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  12 AUG 2016 14:17
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
@@ -289,11 +288,11 @@ File: ly1phv.fd 2001/02/01 scalable font definitions for LY1/phv using Berry na
 mes.
 )
 Package epstopdf Info: Source file: <OUP_First_SBk_Bot_8401.eps>
-(epstopdf)                    date: 2016-08-12 12:28:24
+(epstopdf)                    date: 2016-08-12 12:23:45
 (epstopdf)                    size: 407286 bytes
 (epstopdf)             Output file: <OUP_First_SBk_Bot_8401-eps-converted-to.pd
 f>
-(epstopdf)                    date: 2016-08-12 12:28:24
+(epstopdf)                    date: 2016-08-12 12:23:45
 (epstopdf)                    size: 9259 bytes
 (epstopdf)             Command: <repstopdf --outfile=OUP_First_SBk_Bot_8401-eps
 -converted-to.pdf OUP_First_SBk_Bot_8401.eps>
@@ -438,107 +437,74 @@ LaTeX Font Warning: Font shape `LY1/phb/bx/n' undefined
 (Font)              using `LY1/phb/m/n' instead on input line 121.
 
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 139.
+(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 146.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Overfull \hbox (6.00015pt too wide) in paragraph at lines 163--163
+Overfull \hbox (6.00015pt too wide) in paragraph at lines 164--164
 []\LY1/pcr/m/n/8 for x in *.phy; do pxclsq -s $x.fa -p 0.0; done &&[] 
  []
 
 
-Overfull \hbox (20.40016pt too wide) in paragraph at lines 163--163
+Overfull \hbox (20.40016pt too wide) in paragraph at lines 164--164
 []\LY1/pcr/m/n/8 pxcat -s *.fa | pxnj | pxrr -g s1,s2 | pxrmt -n s1,s2[] 
  []
 
 Package epstopdf Info: Source file: <Fig1.eps>
-(epstopdf)                    date: 2016-08-12 12:28:24
+(epstopdf)                    date: 2016-08-12 12:23:45
 (epstopdf)                    size: 18919 bytes
 (epstopdf)             Output file: <Fig1-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-08-12 12:28:24
+(epstopdf)                    date: 2016-08-12 12:23:45
 (epstopdf)                    size: 14962 bytes
 (epstopdf)             Command: <repstopdf --outfile=Fig1-eps-converted-to.pdf 
 Fig1.eps>
-(epstopdf)             \includegraphics on input line 168.
+(epstopdf)             \includegraphics on input line 169.
 Package epstopdf Info: Output file is already uptodate.
 <Fig1-eps-converted-to.pdf, id=21, 597.23125pt x 360.34625pt>
 File: Fig1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Fig1-eps-converted-to.pdf>
-Package pdftex.def Info: Fig1-eps-converted-to.pdf used on input line 168.
+Package pdftex.def Info: Fig1-eps-converted-to.pdf used on input line 169.
 (pdftex.def)             Requested size: 244.6937pt x 147.63844pt.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <6.5> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 169.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 170.
 
 
 LaTeX Font Warning: Font shape `LY1/phb/m/it' undefined
-(Font)              using `LY1/phb/m/n' instead on input line 169.
+(Font)              using `LY1/phb/m/n' instead on input line 170.
 
 (./main.bbl
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 7.
+(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 6.
 LaTeX Font Info:    Font shape `LY1/phv/m/it' in size <8> not available
-(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 23.
+(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 20.
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
 [2 <./Fig1-eps-converted-to.pdf>]
-Underfull \hbox (badness 1127) in paragraph at lines 70--73
+Underfull \hbox (badness 1127) in paragraph at lines 75--78
 []\LY1/ptm/m/n/7 Smith, T. and Waterman, M. (1981).  Identification of common m
 olecular
  []
 
 )
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.0pt when 194.5pt
+Extra height:10.0pt when 208.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+Extra height:0.0pt when 209.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.0pt when 195.5pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.0pt when 196.5pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.0pt when 197.5pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:29.0pt when 198.5pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-Extra height:0.0pt when 199.5pt
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-(2)Left:199.5pt Right:191.0pt Output:199.5pt
+(2)Left:209.0pt Right:209.0pt Output:209.0pt
 - LAST -
 Extra skip:0.0pt
-Left:199.5pt
-Right:191.0pt
-Output:199.5pt
+Left:209.0pt
+Right:209.0pt
+Output:209.0pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -559,10 +525,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 3711 strings out of 493089
- 46414 string characters out of 6134842
- 119538 words of memory out of 5000000
- 7099 multiletter control sequences out of 15000+600000
+ 3712 strings out of 493089
+ 46428 string characters out of 6134842
+ 119574 words of memory out of 5000000
+ 7100 multiletter control sequences out of 15000+600000
  48689 words of font info for 95 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  38i,10n,28p,534b,358s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -578,7 +544,7 @@ s/type1/urw/helvetic/uhvro8ac.pfb></usr/local/texlive/2015/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/tim
 es/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a
 .pfb>
-Output written on main.pdf (3 pages, 143532 bytes).
+Output written on main.pdf (3 pages, 143593 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  50 compressed objects within 1 object stream
