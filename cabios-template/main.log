@@ -1,6 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 AUG 2016 18:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  12 AUG 2016 13:53
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
@@ -288,11 +289,11 @@ File: ly1phv.fd 2001/02/01 scalable font definitions for LY1/phv using Berry na
 mes.
 )
 Package epstopdf Info: Source file: <OUP_First_SBk_Bot_8401.eps>
-(epstopdf)                    date: 2015-11-25 10:49:46
+(epstopdf)                    date: 2016-08-12 12:28:24
 (epstopdf)                    size: 407286 bytes
 (epstopdf)             Output file: <OUP_First_SBk_Bot_8401-eps-converted-to.pd
 f>
-(epstopdf)                    date: 2015-11-25 10:49:46
+(epstopdf)                    date: 2016-08-12 12:28:24
 (epstopdf)                    size: 9259 bytes
 (epstopdf)             Command: <repstopdf --outfile=OUP_First_SBk_Bot_8401-eps
 -converted-to.pdf OUP_First_SBk_Bot_8401.eps>
@@ -376,10 +377,16 @@ Underfull \hbox (badness 10000) detected at line 41
  []
 
 
+Underfull \hbox (badness 1221) in paragraph at lines 45--56
+\LY1/ptm/m/n/8 Sukumaran and Holder (2010); \LY1/pcr/m/n/8 PAL2NAL\LY1/ptm/m/n/
+8 : Suyama \LY1/ptm/m/it/8 et al. \LY1/ptm/m/n/8 (2006);
+ []
+
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <7> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 108.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 92.
 
 Overfull \hbox (1.12001pt too wide) has occurred while \output is active
  []
@@ -390,83 +397,89 @@ Overfull \hbox (1.12001pt too wide) has occurred while \output is active
 
 
  <./OUP_First_SBk_Bot_8401-eps-converted-to.pdf>]
-LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 128.
+Underfull \hbox (badness 2359) in paragraph at lines 93--101
+[]\LY1/ptm/m/n/8 Processing large data matrices is only one step required for
+ []
 
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 121.
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 128.
+(Font)              size <7> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 128.
+(Font)              size <5> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <7.5> not available
-(Font)              size <7> substituted on input line 128.
+(Font)              size <7> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <3.75> not available
-(Font)              size <5> substituted on input line 128.
+(Font)              size <5> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <7.5> not available
-(Font)              size <7> substituted on input line 128.
+(Font)              size <7> substituted on input line 121.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <3.75> not available
-(Font)              size <5> substituted on input line 128.
+(Font)              size <5> substituted on input line 121.
 
-LaTeX Font Info:    Try loading font information for LY1+phb on input line 128.
+LaTeX Font Info:    Try loading font information for LY1+phb on input line 121.
 
-LaTeX Font Info:    No file LY1phb.fd. on input line 128.
+LaTeX Font Info:    No file LY1phb.fd. on input line 121.
 
 LaTeX Font Warning: Font shape `LY1/phb/m/n' undefined
-(Font)              using `LY1/ptm/m/n' instead on input line 128.
+(Font)              using `LY1/ptm/m/n' instead on input line 121.
 
 
 LaTeX Font Warning: Font shape `LY1/phb/bx/n' undefined
-(Font)              using `LY1/phb/m/n' instead on input line 128.
+(Font)              using `LY1/phb/m/n' instead on input line 121.
+
+LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 139.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Overfull \hbox (6.00015pt too wide) in paragraph at lines 166--166
+Overfull \hbox (6.00015pt too wide) in paragraph at lines 163--163
 []\LY1/pcr/m/n/8 for x in *.phy; do pxclsq -s $x.fa -p 0.0; done &&[] 
  []
 
 
-Overfull \hbox (20.40016pt too wide) in paragraph at lines 166--166
+Overfull \hbox (20.40016pt too wide) in paragraph at lines 163--163
 []\LY1/pcr/m/n/8 pxcat -s *.fa | pxnj | pxrr -g s1,s2 | pxrmt -n s1,s2[] 
  []
 
 Package epstopdf Info: Source file: <Fig1.eps>
-(epstopdf)                    date: 2016-06-27 15:20:50
+(epstopdf)                    date: 2016-08-12 12:28:24
 (epstopdf)                    size: 18919 bytes
 (epstopdf)             Output file: <Fig1-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-07-20 12:19:09
+(epstopdf)                    date: 2016-08-12 12:28:24
 (epstopdf)                    size: 14962 bytes
 (epstopdf)             Command: <repstopdf --outfile=Fig1-eps-converted-to.pdf 
 Fig1.eps>
-(epstopdf)             \includegraphics on input line 171.
+(epstopdf)             \includegraphics on input line 168.
 Package epstopdf Info: Output file is already uptodate.
 <Fig1-eps-converted-to.pdf, id=21, 597.23125pt x 360.34625pt>
 File: Fig1-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Fig1-eps-converted-to.pdf>
-Package pdftex.def Info: Fig1-eps-converted-to.pdf used on input line 171.
+Package pdftex.def Info: Fig1-eps-converted-to.pdf used on input line 168.
 (pdftex.def)             Requested size: 244.6937pt x 147.63844pt.
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <6.5> not available
-(Font)              Font shape `LY1/phv/b/n' tried instead on input line 172.
+(Font)              Font shape `LY1/phv/b/n' tried instead on input line 169.
 
 
 LaTeX Font Warning: Font shape `LY1/phb/m/it' undefined
-(Font)              using `LY1/phb/m/n' instead on input line 172.
+(Font)              using `LY1/phb/m/n' instead on input line 169.
 
-LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `LY1/ptm/b/n' tried instead on input line 191.
 (./main.bbl
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `LY1/ptm/b/n' tried instead on input line 7.
 LaTeX Font Info:    Font shape `LY1/phv/m/it' in size <8> not available
-(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 69.
+(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 23.
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
@@ -484,48 +497,48 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.0pt when 104.5pt
+Extra height:29.0pt when 194.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.0pt when 105.5pt
+Extra height:29.0pt when 195.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.0pt when 106.5pt
+Extra height:29.0pt when 196.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.0pt when 107.5pt
+Extra height:29.0pt when 197.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:29.0pt when 108.5pt
+Extra height:29.0pt when 198.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:0.0pt when 109.5pt
+Extra height:0.0pt when 199.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(2)Left:109.5pt Right:101.0pt Output:109.5pt
+(2)Left:199.5pt Right:191.0pt Output:199.5pt
 - LAST -
 Extra skip:0.0pt
-Left:109.5pt
-Right:101.0pt
-Output:109.5pt
+Left:199.5pt
+Right:191.0pt
+Output:199.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -548,7 +561,7 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  3711 strings out of 493089
  46414 string characters out of 6134842
- 117538 words of memory out of 5000000
+ 119538 words of memory out of 5000000
  7099 multiletter control sequences out of 15000+600000
  48689 words of font info for 95 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
@@ -565,7 +578,7 @@ s/type1/urw/helvetic/uhvro8ac.pfb></usr/local/texlive/2015/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/tim
 es/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a
 .pfb>
-Output written on main.pdf (3 pages, 139658 bytes).
+Output written on main.pdf (3 pages, 143532 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  50 compressed objects within 1 object stream

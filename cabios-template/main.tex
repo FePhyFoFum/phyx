@@ -42,37 +42,34 @@ online.}
 
 \section{Introduction}
 
-The sheer scale of data with which phylogenomics concerns itself makes the
-tasks of data processing and analysis onerous undertakings. While a number of
+Phylogenetic and phylogenomic analyses now involve massive datasets making traditional approaches for analysis and manipulation of data onerous undertakings. While a number of
 phylogenetic toolkits exist (\texttt{ETE}: \citet{HuertaCepas2016};
 \texttt{newick utilities}: \citet{JunierZdobnov2010}; \texttt{Mesquite}:
 \citet{MaddisonMaddison2016}, \texttt{ape}: \citet{Popescu2012},
 \texttt{phyutility}: \citet{SmithDunn2008}; \texttt{DendroPy}:
 \citet{SukumaranHolder2010}; \texttt{PAL2NAL}: \citet{Suyama2006};
-\texttt{SequenceMatrix}: \citet{Vaidya2011}), none is a panacea, as individual
-packages are limited by the file formats supported, memory requirements,
+\texttt{SequenceMatrix}: \citet{Vaidya2011}), each individual
+packages is limited by the file formats supported, memory requirements,
 requiring the loading of separate environments (i.e. R or python), or
 utilizing a graphical user interface which may not be conducive to high
 throughput processes.
 
-In an effort to provide a flexible and efficient means by which to conduct
-phylogenomic research we present \texttt{phyx}, a set of programs to carry
-out a wide range of phylogenetic tasks. Written in C++ and modelled after
+In an effort to provide a more flexible and efficient software package for processing phylogenetic data and for conducting phylogenomic research we present \texttt{phyx}, a set of programs to carry
+out a wide range of phylogenetic tasks. Written in C++ and modeled after
 Unix/GNU/Linux command line tools, individual programs perform a single task,
-have individual man pages, and operate on standard I/O streams. A result of
-this stream-centric paradigm is that, for most programs, only a single sequence
+have individual manual (i.e., man) pages, and operate on standard I/O streams. A result of
+this stream-centric approach is that, for most programs, only a single sequence
 or tree is in memory at any moment. Thus, large data sets can be
 processed with minimal memory requirements. \texttt{phyx}'s
 ever-growing complement of programs currently consists of 35+ programs
-(Table~\ref{Tab:01}) focused on exploring, manipulating, analyzing,
+(see Table~\ref{Tab:01} for a subset) focused on exploring, manipulating, analyzing,
 and simulating phylogenetic objects (alignments, trees, and MCMC logs).
 As with standard Unix command line tools, these programs can be piped
 (together with non-\texttt{phyx} tools), allowing the easy construction
-of efficient analytical pipelines. \texttt{phyx} logs all program calls
-to a plain text file, an executable record which can be submitted as
+of efficient analytical pipelines. \texttt{phyx} also logs all program calls
+to a plain text file, which is an executable record that can be submitted as
 part of a manuscript for reviewing and replicability purposes. We feel
-\texttt{phyx} provides a convenient, lightweight complement to existing
-phylogenetic toolkits.
+\texttt{phyx} provides a convenient and more inclusive toolkit than existing options for phylogenomic and phylogenetic data processing and analysis. 
 
 \begin{methods}
 \section{Methods}
@@ -81,27 +78,23 @@ We briefly describe below some of the current features of \texttt{phyx}.
 
 \subsection{File processing, manipulation, and conversion}
 
-File manipulation and conversion is an especially tedious and error-prone
-aspect of phylogenetic analysis, made more so by the volume of data
+File manipulation and conversion is a tedious and error-prone, but often required,
+component of phylogenetic analysis, made more so by the volume of data
 available in current phylogenomics studies. \texttt{phyx} supports the
 popular formats for sequence alignments (fasta, fastq, phylip, and Nexus)
 and trees (newick and Nexus), and provides lightweight, high-throughput
 utilities to convert data among formats without the user needing to
-provide the format of the original data. Alignments can be further
+provide the format of the original data as \texttt{phyx} will attempt to auto-detect the original format. Alignments can be further
 manipulated by removing individual taxa, resampling (bootstrap or
 jackknifing), sequence recoding, translation to protein, reverse
 complementation, filtering by quality scores or the amount of missing
 data, and concatenation across mixed alignment formats. 
 
-Processing large data matrices is typically only one step of what is now
-required for phylogenomic analyses; in order to perform downstream
-analyses (e.g. orthology detection \citep{YangSmith2014}, mapping gene
-trees to species tree \citep{Smith2015}, or gene tree/species tree
-reconciliation \citep{Mirarab2014}) it is now also essential to be able
-to manipulate individual gene trees constructed from these data.
+Processing large data matrices is only one step required for phylogenomic analyses. In order to perform downstream analyses (e.g. orthology detection \citep{YangSmith2014}, mapping gene
+trees to species tree \citep{Smith2015}, or gene tree/species tree reconciliation \citep{Mirarab2014}) it is now also essential to be able to manipulate individual gene trees constructed from these data.
 \texttt{phyx} enables fast, efficient manipulations such as pruning
 individual taxa, extracting subclades, and rerooting/unrooting trees.
-Finally, MCMC analyses have become common in the field, and often involve
+Finally, Bayesian MCMC analyses involving phylogenies have become common in the biological sciences, and often involve
 large log files generated from replicated analyses. \texttt{phyx} enables
 both the concatenation and resampling (burnin and/or thinning) of MCMC
 tree or parameter logs for downstream summary.
@@ -109,7 +102,7 @@ tree or parameter logs for downstream summary.
 % maybe order this table more intelligently
 % other things to add/remove?
 \begin{table}[!t]
-\processtable{Selected \texttt{phyx} programs and their functions\label{Tab:01}} {\begin{tabular}{@{}llll@{}}\toprule Program &
+\processtable{Selected \texttt{phyx} programs and their functions\label{Tab:01}. See github for additional details and full program list.} {\begin{tabular}{@{}llll@{}}\toprule Program &
 Function\\\midrule
 pxlssq/pxlstr & list attributes of alignments/trees\\
 pxrms/pxrmt & remove taxa from alignments/trees\\
@@ -143,13 +136,17 @@ tree.
 
 Data simulation is an essential tool with which to explore model
 sensitivity and adequacy through parametric bootstrapping or posterior
-predictive analyses. \texttt{phyx} currently enables simulation of both
+predictive analyses (\textbf{someone have a good REF?}). \texttt{phyx} currently enables simulation of both
 birth-death trees (see example in Figure~\ref{fig:01}) and nucleotide or
 protein alignments given a tree and substitution model parameters.
 
+\subsection{Comparison to existing programs}
+
+\textbf{I think it could be worthwhile to add a comparison of just a couple tools. This would probably just be runtime comparisons for maybe two analyses. Something on trees and something on sequences. For comparison programs, maybe R? phyutility? newick utilities?}
+
 \subsection{Example pipeline}%i don't know about this example; it is not that simple
 
-Here we illustrate how \texttt{phyx} programs can be linked via piping
+As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how five \texttt{phyx} programs can be linked via piping
 and a simple shell loop to perform a full analytical pipeline:
 \begin{enumerate}
 \item Clean alignments individually using a Unix for loop (pxclsq).
@@ -177,9 +174,8 @@ pxcat -s *.fa | pxnj | pxrr -g s1,s2 | pxrmt -n s1,s2
 
 \texttt{phyx} was designed to complement existing phylogenetic toolkits by
 enabling the exploration, manipulation, analysis, and simulation of
-phylogenetic objects straight from the command line. Moreover, by conforming
-to a stream-centric paradigm, memory requirements are reduced to the point
-where even large volumes of data can be processed on personal laptop
+phylogenetic objects directly from the command line. Moreover, by conforming
+to a stream-centric approach, memory requirements are reduced significantly so that large volumes of data can be processed on personal laptop
 computers. \vspace*{-10pt}
 
 \section*{Acknowledgements}
@@ -188,7 +184,7 @@ We thank Ya Yang for testing the software and for helpful discussions and commen
 
 \section*{Funding}
 
-This work has been supported by the Caryophyllales grant and the AVATOL grant \textbf{(Don't forget to put these here: REMINDER FOR STEPHEN)}\vspace*{-12pt}
+This work has been supported by the Caryophyllales grant and the AVATOL grant \textbf{STEPHEN IS PUTTING THIS TO MAKE SURE STEPHEN ADDS THESE!}\vspace*{-12pt}
 
 \bibliographystyle{natbib}
 %\bibliographystyle{achemnat}
