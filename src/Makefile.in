@@ -173,6 +173,10 @@ LOGMANIP_SRC = main_logmanip.cpp
 LOGMANIP_OBJ = main_logmanip.o
 LOGMANIP_DEP = main_logmanip.d
 
+VCFTOFA_SRC = main_vcftofa.cpp
+VCFTOFA_OBJ = main_vcftofa.o
+VCFTOFA_DEP = main_vcftofa.d
+
 LS_SEQ_SRC = main_lsseq.cpp
 LS_SEQ_OBJ = main_lsseq.o
 LS_SEQ_DEP = main_lsseq.d
@@ -242,6 +246,7 @@ CPP_OBJS += \
 ./tlate.o \
 ./nj.o \
 ./log_manip.o \
+./vcf_reader.o \
 ./ls_seq.o
 
 RATE_OBJS += \
@@ -311,7 +316,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlssq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlssq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog pxvcftofa
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -424,6 +429,10 @@ pxcat: $(CPP_OBJS) $(CONCAT_OBJ)
 pxlog: $(CPP_OBJS) $(LOGMANIP_OBJ)
 	@echo 'building pxlog'
 	$(CXX) -o "pxlog" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS)
+
+pxvcftofa: $(CPP_OBJS) $(VCFTOFA_OBJ)
+	@echo 'building pxvcftofa'
+	$(CXX) -o "pxvcftofa" $(OPT_FLAGS) $(VCFTOFA_OBJ) $(CPP_OBJS)
 
 pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)
 	@echo 'building pxcontrates'

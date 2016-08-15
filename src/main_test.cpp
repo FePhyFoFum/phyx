@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#include "seq_reader.h"
+#include "vcf_reader.h"
 
 /*
 #include "node.h"
