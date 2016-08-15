@@ -30,6 +30,7 @@ void print_help() {
     cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
     cout << " -p, --prop=DOUBLE     proportion allowed to be missing, default=0.5" << endl;
+    cout << " -a, --mol=bool        use for Amino Acid, default=dna" << endl;
     cout << " -h, --help            display this help and exit" << endl;
     cout << " -V, --version         display version and exit" << endl;
     cout << endl;
@@ -44,6 +45,7 @@ static struct option const long_options[] =
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"proportion", required_argument, NULL, 'p'},
+    {"moleclule", required_argument, NULL, 'a'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -55,13 +57,14 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
+    bool MolDna = true;
     string seqf = "";
     string outf = "";
     double proportion = 0.5;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:ahV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -77,6 +80,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'p':
                 proportion = atof(strdup(optarg));
+                break;
+            case 'a':
+                MolDna = false;
                 break;
             case 'h':
                 print_help();
@@ -111,7 +117,7 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
     
-    SequenceCleaner toClean(pios, proportion);
+    SequenceCleaner toClean(pios, proportion, MolDna);
     
     // write sequences. currently only fasta format.
     toClean.write_seqs(poos);

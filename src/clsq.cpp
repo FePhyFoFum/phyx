@@ -13,8 +13,10 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-SequenceCleaner::SequenceCleaner(istream* pios, double& missing):num_taxa_(0), 
+SequenceCleaner::SequenceCleaner(istream* pios, double& missing, bool& MolDna):num_taxa_(0), 
         num_char_(0), missing_allowed_(missing) {
+	//cout << MolDna << endl;
+	type = MolDna;
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
 }
@@ -86,7 +88,7 @@ void SequenceCleaner::clean_sequences () {
     
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
         new_dna = iter_ -> second;
-        CheckMissing(MissingData, new_dna);
+        CheckMissing(MissingData, new_dna, type);
         //NumbOfSequences++;
     }
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
@@ -108,12 +110,21 @@ void SequenceCleaner::clean_sequences () {
             }
         }
         stillMissing = 0;
-        for (unsigned int j = 0; j < to_stay.size(); j++) {
-            if (to_stay[j] == 'N' || to_stay[j] == '-' ||  to_stay[j] == 'n'
-                ||  to_stay[j] == 'X' || to_stay[j] == 'x') {
-                stillMissing += 1;
-            }
-        }
+        if (type == true){
+			for (unsigned int j = 0; j < to_stay.size(); j++) {
+				if (to_stay[j] == 'N' || to_stay[j] == '-' ||  to_stay[j] == 'n'
+					||  to_stay[j] == 'X' || to_stay[j] == 'x') {
+					stillMissing += 1;
+				}
+			}
+		}else{
+			for (unsigned int j = 0; j < to_stay.size(); j++) {
+				if (to_stay[j] == '-' ||  to_stay[j] == 'X' || to_stay[j] == 'x') {
+					stillMissing += 1;
+				}
+			}
+			
+		}
         if (stillMissing == to_stay.size()) {
             cout << "Removed: " << iter_ -> first << endl;
         } else {
@@ -122,14 +133,23 @@ void SequenceCleaner::clean_sequences () {
     }
 }
 
-void SequenceCleaner::CheckMissing(double MissingData [], string& dna) {
+void SequenceCleaner::CheckMissing(double MissingData [], string& dna, bool& type) {
 
-    for (int i = 0; i < num_char_; i++) {
-        if (tolower(dna[i]) == 'n' || dna[i] == '-' || tolower(dna[i]) == 'x') {
-            MissingData[i]++;
-            //cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
-        }
-    }
+	if (type == true){
+		for (int i = 0; i < num_char_; i++) {
+			if (tolower(dna[i]) == 'n' || dna[i] == '-' || tolower(dna[i]) == 'x') {
+				MissingData[i]++;
+				//cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
+			}
+		}
+	}else{
+		for (int i = 0; i < num_char_; i++) {
+			if (dna[i] == '-' || tolower(dna[i]) == 'x') {
+				MissingData[i]++;
+				//cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
+			}
+		}
+	}
 }
 
 SequenceCleaner::~SequenceCleaner() {
