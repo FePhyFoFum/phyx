@@ -14,12 +14,13 @@ using namespace std;
 
 void print_help() {
     cout << "Convert vcf file to fasta." << endl;
+    cout << "Currently only handles haploid data; phased data will come soon." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxvcftofa [OPTION]... [FILE]..." << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input vcf file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output fastasequence file, stout otherwise" << endl;
+    cout << " -o, --outf=FILE     output fasta sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -92,7 +93,8 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    
+    VcfReader vcf(pios);
+    vcf.write_seqs(poos);
     
     if (fileset) {
         fstr->close();
