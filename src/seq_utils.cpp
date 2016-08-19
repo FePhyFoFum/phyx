@@ -226,14 +226,20 @@ char single_dna_complement(char inc) {
     }
 }
 
-void write_phylip_alignment(vector <Sequence> & seqs, ostream * ostr) {
+void write_phylip_alignment(vector <Sequence> & seqs, bool const& uppercase, ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
     (*ostr) << seqs.size() << " " << seqlength << endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
-        (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+        if (uppercase) {
+            string terp = seqs[i].get_sequence();
+            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            (*ostr) << seqs[i].get_id() << "\t" << terp << endl;
+        } else {
+            (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+        }
     }
 }
 
