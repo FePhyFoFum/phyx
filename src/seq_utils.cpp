@@ -4,6 +4,7 @@
 #include <map>
 #include <assert.h>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -240,7 +241,7 @@ void write_phylip_alignment(vector <Sequence> & seqs, ostream * ostr) {
  * this is not for concatenation. only single gene regions
  * another one needs to be written for concatenation
  */
-void write_nexus_alignment(vector <Sequence> & seqs, ostream * ostr) {
+void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
     string datatype = seqs[0].get_alpha_name();
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
@@ -256,7 +257,13 @@ void write_nexus_alignment(vector <Sequence> & seqs, ostream * ostr) {
     (*ostr) << "\tMATRIX\n" << endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
-        (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;
+        if (uppercase) {
+            string terp = seqs[i].get_sequence();
+            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << terp << endl;
+        } else {
+            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;
+        }
         //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
     }
     (*ostr) << ";\nend;\n" << endl;

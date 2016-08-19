@@ -25,6 +25,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
+    cout << " -u, --uppercase     export characters in uppercase" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -32,12 +33,13 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxstonex 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxstonex 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
+    {"uppercase", no_argument, NULL, 'u'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -49,11 +51,12 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
+    bool toupcase = false;
     char * seqf = NULL;
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:uhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -66,6 +69,9 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                break;
+            case 'u':
+                toupcase = true;
                 break;
             case 'h':
                 print_help();
@@ -110,7 +116,7 @@ int main(int argc, char * argv[]) {
     if (ft == 2) {
         seqs.push_back(seq);
     }
-    write_nexus_alignment(seqs, poos);
+    write_nexus_alignment(seqs, toupcase, poos);
     
     if (fileset == true) {
         fstr->close();
