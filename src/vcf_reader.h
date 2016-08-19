@@ -17,7 +17,7 @@ private:
 
 public:
     VcfReader(istream* pios);
-    void write_seqs (ostream* poos);
+    void write_seqs (bool const& uppercase, ostream* poos);
 };
 
 

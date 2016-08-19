@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -88,9 +89,15 @@ vector <string> VcfReader::get_alts (const string& str) {
     return res;
 }
 
-void VcfReader::write_seqs (ostream* poos) {
+void VcfReader::write_seqs (bool const& uppercase, ostream* poos) {
     for (unsigned int i = 0; i < taxa_.size(); i++) {
         (*poos) << ">" << taxa_[i] << endl;
-        (*poos) << seqs_[i] << endl;
+        if (uppercase) {
+            string terp = seqs_[i];
+            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            (*poos) << terp << endl;
+        } else {
+            (*poos) << seqs_[i] << endl;
+        }
     }
 }

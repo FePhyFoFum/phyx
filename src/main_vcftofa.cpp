@@ -21,6 +21,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE     input vcf file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta sequence file, stout otherwise" << endl;
+    cout << " -u, --uppercase     export characters in uppercase" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -34,6 +35,7 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
+    {"uppercase", no_argument, NULL, 'u'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -45,11 +47,12 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
+    bool toupcase = false;
     char * seqf = NULL;
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:uhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -62,6 +65,9 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                break;
+            case 'u':
+                toupcase = true;
                 break;
             case 'h':
                 print_help();
@@ -94,7 +100,7 @@ int main(int argc, char * argv[]) {
     }
     
     VcfReader vcf(pios);
-    vcf.write_seqs(poos);
+    vcf.write_seqs(toupcase, poos);
     
     if (fileset) {
         fstr->close();
