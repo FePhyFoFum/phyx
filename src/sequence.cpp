@@ -218,6 +218,22 @@ string Sequence::get_fasta() {
     return retstr;
 }
 
+string Sequence::get_fasta(bool const& uppercase) {
+    string retstr;
+    retstr.append(">");
+    retstr.append(id);
+    retstr.append("\n");
+    if (uppercase) {
+        string terp = seq;
+        std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+        retstr.append(terp);
+    } else {
+        retstr.append(seq);
+    }
+    retstr.append("\n");
+    return retstr;
+}
+
 string Sequence::get_fastq() {
     string retstr;
     retstr.append("@");

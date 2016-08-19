@@ -60,6 +60,7 @@ public:
     string reverse_complement();
     void perm_reverse_complement();
     string get_fasta();
+    string get_fasta(bool const& uppercase);
     string get_fastq();
 
 };
