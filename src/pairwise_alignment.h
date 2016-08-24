@@ -1,5 +1,5 @@
 #ifndef _PAIRWISE_ALIGNMENT_H_
-#define _PARIWISE_ALIGNMENT_H_
+#define _PAIRWISE_ALIGNMENT_H_
 
 #include <map>
 
