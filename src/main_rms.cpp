@@ -29,7 +29,8 @@ void print_help() {
     cout << "Usage: pxrms [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << endl;
-    cout << " -r, --rmf=FILE      input list of sequences to be removed each on a separate line" << endl;
+    cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << endl;
+    cout << " -f, --namesf=FILE   names in a file (each on a line)" << endl;
     cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -43,7 +44,8 @@ string versionline("pxrms 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwri
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
-    {"rmf", required_argument, NULL, 'r'},
+    {"names",required_argument,NULL,'n'},
+    {"namesf", required_argument, NULL, 'f'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -55,15 +57,19 @@ int main(int argc, char * argv[]) {
     log_call(argc, argv);
        
     bool fileset = false;
-    bool rmfileset = false;
     bool outfileset = false;
+    bool namesset = false;
+    bool namefileset = false;
+    char * namesc = NULL;
+    char * namesfc = NULL;
     string seqf = "";
     string outf = "";
     string rmf = "";
+    vector <string> names;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:r:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:n:f:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -73,10 +79,14 @@ int main(int argc, char * argv[]) {
                 seqf = strdup(optarg);
                 check_file_exists(seqf);
                 break;
-            case 'r':
-                rmfileset = true;
-                rmf = strdup(optarg);
-                check_file_exists(rmf);
+            case 'n':
+                namesset = true;
+                namesc = strdup(optarg);
+                break;
+            case 'f':
+                namefileset = true;
+                namesfc = strdup(optarg);
+                check_file_exists(namesfc);
                 break;
             case 'o':
                 outfileset = true;
@@ -95,31 +105,46 @@ int main(int argc, char * argv[]) {
     }
 
     // only taking files at the moment (not stdin)
+    /*
     if (!fileset) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
     }
-    //outfile prep
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
-    ifstream* fstr = NULL;
+    */
+    
     istream* pios = NULL;
-    ifstream* rstr = NULL;
-    istream* rpios = NULL; // not used?
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
+    
+    if (namesset == true) {
+        vector <string> tokens2;
+        string del2(",");
+        tokens2.clear();
+        tokenize(namesc, tokens2, del2);
+        for (unsigned int j=0; j < tokens2.size(); j++) {
+            trim_spaces(tokens2[j]);
+            names.push_back(tokens2[j]);
+        }
+    } else if (namefileset == true) {
+        ifstream nfstr(namesfc);
+        string tline;
+        while (getline(nfstr,tline)) {
+            trim_spaces(tline);
+            names.push_back(tline);
+        }
+        nfstr.close();
+    } else {
+        cerr << "you need to set the names of the tips you want to remove (-n)" << endl;
+        exit(0);
+    }
     
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
     } else {
         pios = &cin;
-    }
-    if (rmfileset == true) {
-        rstr = new ifstream(rmf);
-        rpios = rstr;
-    } else {
-        rpios = &cin;
-    }
-    
+    }    
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
@@ -128,22 +153,16 @@ int main(int argc, char * argv[]) {
     }
     Sequence seq;
     string retstring;
-    vector<string> to_remove;
+    
     ifstream readline;
     string line;
     string seq_name;
-    readline.open(rmf.c_str());
-    if (readline.is_open()) {
-        while (getline (readline, line)) {
-            to_remove.push_back(line);
-        }
-    }
 
     int ft = test_seq_filetype_stream(*pios,retstring);
     //send sequences to be translated here
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seq_name = seq.get_id();
-        if (find(to_remove.begin(), to_remove.end(), seq_name) != to_remove.end()) {
+        if (find(names.begin(), names.end(), seq_name) != names.end()) {
             
             // what is supposed to go here?
             
@@ -154,7 +173,7 @@ int main(int argc, char * argv[]) {
     //fasta has a trailing one
     if (ft == 2) {
         seq_name = seq.get_id();
-        if (find(to_remove.begin(), to_remove.end(), seq_name) != to_remove.end()) {
+        if (find(names.begin(), names.end(), seq_name) != names.end()) {
 
         } else {
             *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
