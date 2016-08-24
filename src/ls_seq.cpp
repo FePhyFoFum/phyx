@@ -36,14 +36,14 @@ void SeqInfo::count_chars_indiv_seq(string& seq) {
 
 // alternate to above, accumulate char counts across seqs
 void SeqInfo::count_chars (string& seq) {
-    int sum = 0;
+    unsigned int sum = 0;
     
     std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
     
     if (output_indiv_) {
         vector <int> icounts(seq_chars_.length(), 0);
         
-        for (int i = 0; i < seq_chars_.length(); i++) {
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             int num = count(seq.begin(), seq.end(), seq_chars_[i]);
             char_counts_[i] += num;
             icounts[i] += num;
@@ -59,7 +59,7 @@ void SeqInfo::count_chars (string& seq) {
         //std::transform(char_counts_.begin(), char_counts_.end(), icounts.begin(), char_counts_.begin(), std::plus<int>());
         
     } else {
-        for (int i = 0; i < seq_chars_.length(); i++) {
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             int num = count(seq.begin(), seq.end(), seq_chars_[i]);
             char_counts_[i] += num;
             sum += num;
@@ -117,7 +117,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
         string pad = std::string(longest_tax_label_, ' ');
         // header
         (*poos) << pad << " ";
-        for (int i = 0; i < seq_chars_.length(); i++) {
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos) << right << setw(colWidth) << setfill(separator)
                 << seq_chars_[i] << " ";
         }
@@ -131,7 +131,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
                 (*poos_) << pad;
             }
             (*poos_) << " ";
-            for (int j = 0; j < seq_chars_.length(); j++) {
+            for (unsigned int j = 0; j < seq_chars_.length(); j++) {
                 (*poos) << right << setw(colWidth) << setfill(separator)
                     << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i] << " ";
             }
@@ -139,7 +139,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
         }
     } else {
         // header
-        for (int i = 0; i < seq_chars_.length(); i++) {
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos) << right << setw(colWidth) << setfill(separator)
                 << seq_chars_[i];
             if (i != seq_chars_.length() - 1) {
@@ -148,7 +148,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
         }
         (*poos) << endl;
         // counts
-        for (int i = 0; i < seq_chars_.length(); i++) {
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos) << right << setw(colWidth) << setfill(separator)
                 << char_counts_[i];
             if (i != seq_chars_.length() - 1) {
@@ -158,7 +158,7 @@ void SeqInfo::return_freq_table (ostream* poos) {
         (*poos) << endl;
         // freqs
         int total_num_chars = sum(char_counts_);
-        for (int i = 0; i < seq_chars_.length(); i++) {
+        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos) << fixed << right << setw(colWidth) << setfill(separator)
                 << (double)char_counts_[i] / (double)total_num_chars;
             if (i != seq_chars_.length() - 1) {
@@ -294,7 +294,7 @@ void SeqInfo::get_nchars () {
 void SeqInfo::get_longest_taxon_label () {
     longest_tax_label_ = 0;
     for (int i = 0; i < seqcount_; i++) {
-        if (taxon_labels_[i].size() > longest_tax_label_) {
+        if ((int)taxon_labels_[i].size() > longest_tax_label_) {
             longest_tax_label_ = taxon_labels_[i].size();
         }
     }
