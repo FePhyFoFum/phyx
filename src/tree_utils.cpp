@@ -401,12 +401,16 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
         return false;
     }
     if (m == tree->getRoot()) {
-        //check to see if the outgroups are just the children of the root
-        //if so, then do this
-        //tree->rootWithRootTips(outgr);
-        //if not, then do this
-        tree->getInternalMRCA(outgr);
-        return true;
+        // check to see if the outgroups are just the children of the root
+        // if so, then do this
+        // tree->rootWithRootTips(outgr); // this function does not exist
+        // if not, then do this
+        // tree->getInternalMRCA(outgr); // this function is only partly written
+        
+        // this can fail if there is a polytomy at the root which includes outgroups
+        // if it fails, take complement of outgroup, root on that
+        vector <string> ingroup = get_complement_tip_set(tree, outgr);
+        m = tree->getMRCA(ingroup);
     }
     success = tree->reRoot(m);
     
@@ -415,8 +419,8 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
 
 
 // return all names that are found in tree
-vector <string> get_names_in_tree(Tree * tr, vector<string> const& names) {
-    vector<string> matched;
+vector <string> get_names_in_tree (Tree * tr, vector<string> const& names) {
+    vector <string> matched;
     for (unsigned int i = 0; i < names.size(); i++) {
     //cout << "Checking name '" << names[i] << "'." << endl;
         Node * nd = tr->getExternalNode(names[i]);
@@ -425,6 +429,20 @@ vector <string> get_names_in_tree(Tree * tr, vector<string> const& names) {
         }
     }
     return matched;
+}
+
+
+vector <string> get_complement_tip_set (Tree * tr, vector<string> const& orig_names) {
+    vector <string> comp = get_tip_labels(tr);
+     std::vector<string>::iterator it;
+    for (unsigned int i = 0; i < orig_names.size(); i++) {
+        // remove bad names
+        it = std::find(comp.begin(), comp.end(), orig_names[i]);
+        if (it != comp.end()) {
+            comp.erase(it);
+        }
+    }
+    return comp;
 }
 
 

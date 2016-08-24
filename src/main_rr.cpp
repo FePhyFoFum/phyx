@@ -58,7 +58,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool silent = false;
     bool unroot = false;
-    vector<string> outgroups;
+    vector <string> outgroups;
 
     char * treef = NULL;
     char * outf = NULL;
