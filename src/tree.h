@@ -48,6 +48,7 @@ public:
     void setRoot(Node * inroot);
     void unRoot();
     bool reRoot(Node * inroot);
+    void duplicateRootSupport();
     void tritomyRoot(Node * toberoot);
     Node * getMRCA(vector<string> innodes);
     Node * getMRCA(vector<Node *> innodes);

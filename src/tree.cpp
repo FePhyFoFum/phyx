@@ -147,7 +147,42 @@ bool Tree::reRoot(Node * inroot) {
         processReRoot(newRoot);
         setRoot(newRoot);
         processRoot();
+        // duplicate support information (if present) for display purposes
+        duplicateRootSupport();
         return true;
+    }
+}
+
+void Tree::duplicateRootSupport () {
+    vector<Node*> kids = root->getChildren();
+    bool supfound = false;
+    vector <string> sups;
+    int numnodes = 0; // want to guard against when only 1 outgroup
+    for (unsigned int i = 0; i < kids.size(); i++) {
+        if (kids[i]->isInternal()) {
+            numnodes++;
+            string x = kids[i]->getName(); // support stored in name property
+            if (x != "") {
+                supfound = true;
+                sups.push_back(x);
+            }
+        }
+    }
+    if (supfound) {
+        if (numnodes > (int)sups.size()) {
+            if (sups.size() == 1) {
+                for (unsigned int i = 0; i < kids.size(); i++) {
+                    if (kids[i]->isInternal()) {
+                        string x = kids[i]->getName();
+                        if (x == "") {
+                            kids[i]->setName(sups[0]);
+                        }
+                    }
+                }
+            } else {
+                cout << "i don't know how this might happen..." << endl;
+            }
+        }
     }
 }
 

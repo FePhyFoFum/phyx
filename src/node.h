@@ -19,7 +19,7 @@ using namespace std;
 
 class Node{
 private:
-    double BL;//branch lengths
+    double BL; //branch lengths
     double height; // could be from tip or from root
     double depth;
     int number;
@@ -34,7 +34,7 @@ private:
 public:
     Node();
     Node(Node * parent);
-    Node(double bl,int number,string name, Node * parent);
+    Node(double bl, int number, string name, Node * parent);
 
 
     int get_num_leaves();
@@ -68,7 +68,7 @@ public:
     string getNewick(bool bl, string obj);
     Node * getParent();
     int getChildCount();
-    void assocObject(string name,NodeObject & obj);
+    void assocObject(string name, NodeObject & obj);
     void assocDoubleVector(string name, vector<Superdouble> & obj);
     vector<Superdouble> * getDoubleVector(string name);
     void deleteDoubleVector(string name);
