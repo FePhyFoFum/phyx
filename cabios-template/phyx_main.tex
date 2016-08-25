@@ -1,5 +1,5 @@
 \documentclass{bioinfo}
-\copyrightyear{2015} \pubyear{2015}
+\copyrightyear{2016} \pubyear{2016}
 
 \access{Advance Access Publication Date: Day Month Year}
 \appnotes{Manuscript Category}
@@ -10,7 +10,7 @@
 \subtitle{Phylogenetics}
 
 \title[phyx]{phyx: Phylogenetic tools for Unix}
-\author[Sample \textit{et~al}.]{Corresponding Author, Co-Author, and Stephen A. Smith\,$^{*}$}
+\author[Sample \textit{et~al}.]{Author, Co-Author, and Stephen A. Smith\,$^{*}$}
 \address{Department of Ecology \& Evolutionary Biology, University of Michigan, Ann Arbor, MI 48109, USA}
 
 \corresp{$^\ast$To whom correspondence should be addressed.}
@@ -141,10 +141,6 @@ simulation of both
 birth-death trees (see example in Figure~\ref{fig:01}) and nucleotide or
 protein alignments given a tree and substitution model parameters.
 
-\subsection{Comparison to existing programs}
-
-\textbf{I think it could be worthwhile to add a comparison of just a couple tools. This would probably just be runtime comparisons for maybe two analyses. Something on trees and something on sequences. For comparison programs, maybe R? phyutility? newick utilities?}
-
 \subsection{Example pipeline}%i don't know about this example; it is not that simple
 
 As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how five \texttt{phyx} programs can be linked via piping
@@ -162,6 +158,15 @@ which would take the form:
 for x in *.phy; do pxclsq -s $x.fa -p 0.0; done &&
 pxcat -s *.fa | pxnj | pxrr -g s1,s2 | pxrmt -n s1,s2
 \end{verbatim}
+
+\subsection{Comparison to existing programs}
+
+% is this sufficient, or do we need to incorporate some actual results here? (JWB)
+
+We demonstrate the relative performance of some \texttt{phyx} programs in
+the Supplementary Data, available at \textit{Bioinformatics} online.
+
+%\textbf{I think it could be worthwhile to add a comparison of just a couple tools. This would probably just be runtime comparisons for maybe two analyses. Something on trees and something on sequences. For comparison programs, maybe R? phyutility? newick utilities?}
 
 \end{methods}
 
@@ -194,6 +199,6 @@ This work has been supported by the Caryophyllales grant and the AVATOL grant \t
 %\bibliographystyle{bioinformatics}
 %
 %\bibliographystyle{plain}
-\bibliography{document}
+\bibliography{phyx}
 
 \end{document}

@@ -1,0 +1,34 @@
+\begin{thebibliography}{1}
+
+\bibitem{Bouckaert2014}
+R.~Bouckaert, J.~Heled, D.~K\"{u}hnert, T.~Vaughan, C.-H. Wu, D.~Xie, M.~A.
+  Suchard, A.~Rambaut, and A.~J. Drummond.
+\newblock Beast 2: A software platform for bayesian evolutionary analysis.
+\newblock {\em PLoS Comput Biol}, 10(4):1--6, 04 2014.
+
+\bibitem{DrummondRambaut2007}
+A.~J. Drummond and A.~Rambaut.
+\newblock {BEAST}: Bayesian evolutionary analysis by sampling trees.
+\newblock {\em BMC Evolutionary Biology}, 7(1):1--8, 2007.
+
+\bibitem{Magallon2015}
+S.~Magall\'{o}n, S.~Gómez-Acevedo, L.~L. Sánchez-Reyes, and
+  T.~Hern\'{a}ndez-Hern\'{a}ndez.
+\newblock A metacalibrated time-tree documents the early rise of flowering
+  plant phylogenetic diversity.
+\newblock {\em New Phytologist}, 207(2):437--453, 2015.
+\newblock 2014-18158.
+
+\bibitem{SmithDunn2008}
+S.~A. Smith and C.~W. Dunn.
+\newblock Phyutility: a phyloinformatics tool for trees, alignments and
+  molecular data.
+\newblock {\em Bioinformatics}, 24(5):715--716, 2008.
+
+\bibitem{Suyama2006}
+M.~Suyama, D.~Torrents, and P.~Bork.
+\newblock {PAL2NAL}: robust conversion of protein sequence alignments into the
+  corresponding codon alignments.
+\newblock {\em Nucleic Acids Research}, 34(suppl 2):W609--W612, 2006.
+
+\end{thebibliography}
