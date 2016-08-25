@@ -18,19 +18,16 @@ We briefly describe below the performance of \texttt{phyx} relative to other
 existing tools.
 
 \subsection{Sequence cleaning}
-\textbf{TODO: JFW} Texty texty texty text texty texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Mention something here about phyutility \cite{SmithDunn2008} dying.
+\textbf{TODO: JFW} Cleaning sequences to ensure a certain level
+of matrix occupancy has become common place in many phylogenomic
+pipelines{Agalma,Yang2014}. Here we compare two programs Gblocks{Gblocks}
+and phyutility \cite{SmithDunn2008} to the sequence cleaning procedure of
+Phyx (pxclsq). The file sizes ranged from 10 sequences in the file (234Kb), to 100,000
+sequences (2.3Gb) with all being 23,950 base pairs in length. We found that Phyx outperformed both Gblocks and Phyutility in all dataset sizes and for the largest
+dataset Phyutility was not able to clean the dataset due to a
+memory allocation error. The test was conducted on a laptop 
+containing 4 processors and 16Gb of memory, with 14Gb of that
+memory being allocated for phyutility.
 
 \begin{figure}[!h]
     \centering
@@ -41,20 +38,14 @@ Mention something here about phyutility \cite{SmithDunn2008} dying.
 \end{figure}
 
 \subsection{Conversion of proteins to codons}
-\textbf{TODO: JFW} Texty texty texty text texty texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Texty texty texty text texty texty texty text texty texty text.
-Mention something here about PAL2NAL \cite{Suyama2006} having to
-have all seqs in the same order.
+\textbf{TODO: JFW} Converting the alignment of proteins to
+their corresponding nucleotide file is useful in helping ensure
+accuracy in the nucleotide alignment. Here we tested files that
+were between 10 sequences of 801bp for the amino acid alignment(8.0kb) 
+and 100,000 sequences of(77M). We found that in all situations
+Phyx performed was faster than PAL2NAL\cite{Suyama2006} and a major advantage is that the sequences are not required to be in the same order, thus helping to avoid potentially
+aligning a nucleotide sequence with something other than its corresponding
+amino acid alignment.
 
 \begin{figure}[!h]
     \centering
@@ -111,7 +102,7 @@ newer version, consuming 2.4 GB of RAM for the full 5 file concatenation.
 RAM while executing far more slowly.
 
 \section{Conclusions}\label{conclusions}
-We worked hard, and achieved very little.
+We worked hard, and achieved very little (A little too true).
 
 %\bibliographystyle{natbib} % want this one, but acting wonky
 \bibliographystyle{abbrv}
