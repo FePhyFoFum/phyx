@@ -376,7 +376,7 @@ void SeqInfo::summarize () {
     
     while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
         if (first) {
-            if (!is_protein_) {
+            if (!is_protein_) { // if not forced to be protein, test
                 string alpha_name = seq.get_alpha_name();
                 if (alpha_name == "AA") {
                     is_protein_ = true;

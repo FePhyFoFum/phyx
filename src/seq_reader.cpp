@@ -110,17 +110,17 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         } else {
             return false;
         }
-    } else if (ftype == 1) { // phylip
+    } else if (ftype == 1) { // phylip. TODO: this crashes if has a trailing empty line (JWB)
         vector<string> tokens;
         string del(" \t");
         string tline;
-        //check to see if we are at the beginning of the file
+        // check to see if we are at the beginning of the file
         if (retstring.size() > 0) {
-            tokenize(retstring,tokens,del);
+            tokenize(retstring, tokens, del);
             if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
                 if (is_number(tokens[0])) {
-                    getline(stri,tline);
+                    getline(stri, tline);
                 } else {
                     tline = retstring;
                 }
@@ -128,12 +128,15 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             retstring = "";
         }
         if (tline.size() == 0) {
-            if (!getline(stri,tline)) {
+            if (!getline(stri, tline)) {
+                return false;
+            }
+            if (tline.size() == 0) {
                 return false;
             }
         }
         tokens.clear();
-        tokenize(tline,tokens,del);
+        tokenize(tline, tokens, del);
         for (unsigned int i=0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
