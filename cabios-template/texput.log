@@ -1,20 +1,20 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 AUG 2016 17:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Arch Linux) (preloaded format=pdflatex 2015.12.27)  29 AUG 2016 16:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**document.tex
+**phyx.tex
 
 ! Emergency stop.
-<*> document.tex
-                
+<*> phyx.tex
+            
 *** (job aborted, file error in nonstop mode)
 
  
 Here is how much of TeX's memory you used:
- 2 strings out of 493089
- 95 string characters out of 6134842
- 53199 words of memory out of 5000000
- 3590 multiletter control sequences out of 15000+600000
+ 3 strings out of 493054
+ 110 string characters out of 6140585
+ 53374 words of memory out of 5000000
+ 3628 multiletter control sequences out of 15000+600000
  3640 words of font info for 14 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  0i,0n,0p,1b,6s stack positions out of 5000i,500n,10000p,200000b,80000s
