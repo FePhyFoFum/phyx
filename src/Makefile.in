@@ -57,29 +57,25 @@ NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
 NNI_DEP = main_nni.d
 
-LS_TR_SRC = main_lstr.cpp
-LS_TR_OBJ = main_lstr.o
-LS_TR_DEP = main_lstr.d
-
-UPGMA_SRC = main_upgma.cpp
-UPGMA_OBJ = main_upgma.o
-UPGMA_DEP = main_upgma.d
+UPGMA_SRC = upgma.cpp main_upgma.cpp
+UPGMA_OBJ = upgma.o main_upgma.o
+UPGMA_DEP = upgma.d main_upgma.d
 
 SEQT_SRC = main_seq_test.cpp
 SEQT_OBJ = main_seq_test.o
 SEQT_DEP = main_seq_test.d
 
-TOFA_SRC = main_stofa.cpp
-TOFA_OBJ = main_stofa.o
-TOFA_DEP = main_stofa.d
+2FA_SRC = main_s2fa.cpp
+2FA_OBJ = main_s2fa.o
+2FA_DEP = main_s2fa.d
 
-TOPHY_SRC = main_stophy.cpp
-TOPHY_OBJ = main_stophy.o
-TOPHY_DEP = main_stophy.d
+2PHY_SRC = main_s2phy.cpp
+2PHY_OBJ = main_s2phy.o
+2PHY_DEP = main_s2phy.d
 
-TONEX_SRC = main_stonex.cpp
-TONEX_OBJ = main_stonex.o
-TONEX_DEP = main_stonex.d
+2NEX_SRC = main_s2nex.cpp
+2NEX_OBJ = main_s2nex.o
+2NEX_DEP = main_s2nex.d
 
 FQFILT_SRC = main_fqfilt.cpp
 FQFILT_OBJ = main_fqfilt.o
@@ -97,17 +93,17 @@ SW_SRC = main_sw.cpp
 SW_OBJ = main_sw.o
 SW_DEP = main_sw.d
 
-SEQSAMP_SRC = main_seq_sample.cpp
-SEQSAMP_OBJ = main_seq_sample.o
-SEQSAMP_DEP = main_seq_sample.d
+SEQSAMP_SRC = seq_sample.cpp main_seq_sample.cpp
+SEQSAMP_OBJ = seq_sample.o main_seq_sample.o
+SEQSAMP_DEP = seq_sample.d main_seq_sample.d
 
 SEQGEN_SRC = main_seqgen.cpp
 SEQGEN_OBJ = main_seqgen.o
 SEQGEN_DEP = main_seqgen.d
 
-CONCAT_SRC = main_concat.cpp
-CONCAT_OBJ = main_concat.o
-CONCAT_DEP = main_concat.d
+CONCAT_SRC = concat.cpp main_concat.cpp
+CONCAT_OBJ = concat.o main_concat.o
+CONCAT_DEP = concat.d main_concat.d
 
 LOGMANIP_SRC = main_logmanip.cpp
 LOGMANIP_OBJ = main_logmanip.o
@@ -117,9 +113,9 @@ CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
 CONTRATES_OBJ = main_contrates.o optimize_cont_models_nlopt.o
 CONTRATES_DEP = main_contrates.d optimize_cont_models_nlopt.d
 
-SEQRECODE_SRC = main_recode.cpp
-SEQRECODE_OBJ = main_recode.o
-SEQRECODE_DEP = main_recode.d
+SEQRECODE_SRC = recode.cpp main_recode.cpp
+SEQRECODE_OBJ = recode.o main_recode.o
+SEQRECODE_DEP = recode.d main_recode.d
 
 BP_SRC = main_bp.cpp
 BP_OBJ = main_bp.o
@@ -129,9 +125,9 @@ BPSEQ_SRC = main_bpseq.cpp
 BPSEQ_OBJ = main_bpseq.o
 BPSEQ_DEP = main_bpseq.d
 
-TONEW_SRC = main_ttonew.cpp
-TONEW_OBJ = main_ttonew.o
-TONEW_DEP = main_ttonew.d
+2NEW_SRC = main_t2new.cpp
+2NEW_OBJ = main_t2new.o
+2NEW_DEP = main_t2new.d
 
 RR_SRC = main_rr.cpp
 RR_OBJ = main_rr.o
@@ -149,37 +145,41 @@ SM2A_SRC = main_sm2a.cpp
 SM2A_OBJ = main_sm2a.o
 SM2A_DEP = main_sm2a.d
 
-CLSQ_SRC = main_clsq.cpp
-CLSQ_OBJ = main_clsq.o
-CLSQ_DEP = main_clsq.d
+CLSQ_SRC = clsq.cpp main_clsq.cpp
+CLSQ_OBJ = clsq.o main_clsq.o
+CLSQ_DEP = clsq.d main_clsq.d
 
-AATOC_SRC = main_aatocdn.cpp
-AATOC_OBJ = main_aatocdn.o
-AATOC_DEP = main_aatocdn.d
+AA2C_SRC = aa2cdn.cpp main_aa2cdn.cpp
+AA2C_OBJ = aa2cdn.o main_aa2cdn.o
+AA2C_DEP = aa2cdn.d main_aa2cdn.d
 
-TLATE_SRC = main_tlate.cpp
-TLATE_OBJ = main_tlate.o
-TLATE_DEP = main_tlate.d
+TLATE_SRC = tlate.cpp main_tlate.cpp
+TLATE_OBJ = tlate.o main_tlate.o
+TLATE_DEP = tlate.d main_tlate.d
 
 RMS_SRC = main_rms.cpp
 RMS_OBJ = main_rms.o
 RMS_DEP = main_rms.d
 
-NJ_SRC = main_nj.cpp
-NJ_OBJ = main_nj.o
-NJ_DEP = main_nj.d
+NJ_SRC = nj.cpp main_nj.cpp
+NJ_OBJ = nj.o main_nj.o
+NJ_DEP = nj.d main_nj.d
 
-LOGMANIP_SRC = main_logmanip.cpp
-LOGMANIP_OBJ = main_logmanip.o
-LOGMANIP_DEP = main_logmanip.d
+LOGMANIP_SRC = log_manip.cpp main_logmanip.cpp
+LOGMANIP_OBJ = log_manip.o main_logmanip.o
+LOGMANIP_DEP = log_manip.d main_logmanip.d
 
-VCFTOFA_SRC = main_vcftofa.cpp
-VCFTOFA_OBJ = main_vcftofa.o
-VCFTOFA_DEP = main_vcftofa.d
+VCF2FA_SRC = vcf_reader.cpp main_vcf2fa.cpp
+VCF2FA_OBJ = vcf_reader.o main_vcf2fa.o
+VCF2FA_DEP = vcf_reader.d main_vcf2fa.d
 
-LS_SEQ_SRC = main_lsseq.cpp
-LS_SEQ_OBJ = main_lsseq.o
-LS_SEQ_DEP = main_lsseq.d
+LS_SQ_SRC = seqinfo.cpp main_lssq.cpp
+LS_SQ_OBJ = seqinfo.o main_lssq.o
+LS_SQ_DEP = seqinfo.d main_lssq.d
+
+LS_TR_SRC = treeinfo.cpp main_lstr.cpp
+LS_TR_OBJ = treeinfo.o main_lstr.o
+LS_TR_DEP = treeinfo.d main_lstr.d
 
 ## doesn't seem to be used
 CPP_SRCS += \
@@ -195,19 +195,7 @@ CPP_SRCS += \
 ./seq_models.cpp \
 ./pairwise_alignment.cpp \
 ./bd_sim.cpp \
-./upgma.cpp \
-./superdouble.cpp \
-./cont_models.cpp \
-./seq_sample.cpp \
-./seq_gen.cpp \
-./concat.cpp \
-./recode.cpp \
-./ls_tr.cpp \
-./clsq.cpp \
-./aatocdn.cpp \
-./tlate.cpp \
-./nj.cpp \
-./ls_seq.cpp
+./superdouble.cpp  
 
 ## doesn't seem to be used
 RATE_SRCS += \
@@ -219,8 +207,7 @@ RATE_SRCS += \
 ./branch_segment.cpp \
 ./mcmc.cpp \
 ./cont_models.cpp \
-./seq_gen.cpp \
-./ls_seq.cpp
+./seq_gen.cpp 
 
 CPP_OBJS += \
 ./utils.o \
@@ -235,19 +222,7 @@ CPP_OBJS += \
 ./seq_models.o \
 ./pairwise_alignment.o \
 ./bd_sim.o \
-./upgma.o \
-./superdouble.o \
-./seq_sample.o \
-./concat.o \
-./recode.o \
-./ls_tr.o \
-./clsq.o \
-./aatocdn.o \
-./tlate.o \
-./nj.o \
-./log_manip.o \
-./vcf_reader.o \
-./ls_seq.o
+./superdouble.o 
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -275,16 +250,7 @@ CPP_DEPS += \
 ./pairwise_alignment.d \
 ./bd_sim.d \
 ./bd_fit.d \
-./upgma.d \
-./superdouble.d \
-./seq_sample.d \
-./concat.d \
-./recode.d \
-./ls_tr.d \
-./clsq.d \
-./aatocdn.d \
-./tlate.d \
-./nj.d
+./superdouble.d  
 
 ## doesn't seem to be used
 RATE_DEPS += \
@@ -316,7 +282,7 @@ FORT_OBJS += \
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlssq pxupgma pxclsq pxstofa pxstophy pxstonex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxttonew pxrr pxsm0 pxsm2a pxaatocdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog pxvcftofa
+all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxnni pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxt2new pxrr pxsm0 pxsm2a pxaa2cdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog pxvcf2fa
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -354,9 +320,9 @@ pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
 	@echo 'building pxlstr'
 	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
 
-pxlssq: $(CPP_OBJS) $(LS_SEQ_OBJ)
+pxlssq: $(CPP_OBJS) $(LS_SQ_OBJ)
 	@echo 'bulding pxlssq'
-	$(CXX) -o "pxlssq" $(OPT_FLAGS) $(LS_SEQ_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxlssq" $(OPT_FLAGS) $(LS_SQ_OBJ) $(CPP_OBJS)
 
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
@@ -378,25 +344,25 @@ pxtlate: $(CPP_OBJS) $(TLATE_OBJ)
 	@echo 'building pxclsq'
 	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxaatocdn: $(CPP_OBJS) $(AATOC_OBJ)
-	@echo 'building pxaatocdn'
-	$(CXX) -o "pxaatocdn" $(OPT_FLAGS) $(AATOC_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxaa2cdn: $(CPP_OBJS) $(AA2C_OBJ)
+	@echo 'building pxaa2cdn'
+	$(CXX) -o "pxaa2cdn" $(OPT_FLAGS) $(AA2C_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxseqtest: $(CPP_OBJS) $(SEQT_OBJ)
 	@echo 'building pxseqtest'
 	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxstofa: $(CPP_OBJS) $(TOFA_OBJ)
-	@echo 'building pxstofa'
-	$(CXX) -o "pxstofa" $(OPT_FLAGS) $(TOFA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxs2fa: $(CPP_OBJS) $(2FA_OBJ)
+	@echo 'building pxs2fa'
+	$(CXX) -o "pxs2fa" $(OPT_FLAGS) $(2FA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxstophy: $(CPP_OBJS) $(TOPHY_OBJ)
-	@echo 'building pxstophy'
-	$(CXX) -o "pxstophy" $(OPT_FLAGS) $(TOPHY_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxs2phy: $(CPP_OBJS) $(2PHY_OBJ)
+	@echo 'building pxs2phy'
+	$(CXX) -o "pxs2phy" $(OPT_FLAGS) $(2PHY_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxstonex: $(CPP_OBJS) $(TONEX_OBJ)
-	@echo 'building pxstonex'
-	$(CXX) -o "pxstonex" $(OPT_FLAGS) $(TONEX_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxs2nex: $(CPP_OBJS) $(2NEX_OBJ)
+	@echo 'building pxs2nex'
+	$(CXX) -o "pxs2nex" $(OPT_FLAGS) $(2NEX_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxfqfilt: $(CPP_OBJS) $(FQFILT_OBJ)
 	@echo 'building pxfqfilt'
@@ -430,9 +396,9 @@ pxlog: $(CPP_OBJS) $(LOGMANIP_OBJ)
 	@echo 'building pxlog'
 	$(CXX) -o "pxlog" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS)
 
-pxvcftofa: $(CPP_OBJS) $(VCFTOFA_OBJ)
-	@echo 'building pxvcftofa'
-	$(CXX) -o "pxvcftofa" $(OPT_FLAGS) $(VCFTOFA_OBJ) $(CPP_OBJS)
+pxvcf2fa: $(CPP_OBJS) $(VCF2FA_OBJ)
+	@echo 'building pxvcf2fa'
+	$(CXX) -o "pxvcf2fa" $(OPT_FLAGS) $(VCF2FA_OBJ) $(CPP_OBJS)
 
 pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)
 	@echo 'building pxcontrates'
@@ -450,9 +416,9 @@ pxbpsq: $(CPP_OBJS) $(BPSEQ_OBJ)
 	@echo 'building pxbpsq'
 	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
-pxttonew: $(CPP_OBJS) $(TONEW_OBJ)
-	@echo 'building pxttonew'
-	$(CXX) -o "pxttonew" $(OPT_FLAGS) $(TONEW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+pxt2new: $(CPP_OBJS) $(2NEW_OBJ)
+	@echo 'building pxt2new'
+	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(2NEW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
 
 pxrr: $(CPP_OBJS) $(RR_OBJ)
 	@echo 'building pxrr'

@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#include "aatocdn.h"
+#include "aa2cdn.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
@@ -31,7 +31,7 @@ void print_help() {
     cout << "This will get rid of any sequences found in either only the Nucleotide or the Amino Acid Alignment" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
-    cout << "Usage: pxaatocdn [OPTION]... " << endl;
+    cout << "Usage: pxaa2cdn [OPTION]... " << endl;
     cout << endl;
     cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
     cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
@@ -43,7 +43,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxaatocdn 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxaa2cdn 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#include "ls_tr.h"
+#include "treeinfo.h"
 #include "tree_reader.h"
 #include "tree.h"
 #include "utils.h"

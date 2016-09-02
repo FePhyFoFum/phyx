@@ -13,7 +13,7 @@ using namespace std;
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
-#include "ls_seq.h"
+#include "seqinfo.h"
 #include "log.h"
 
 void print_help() {

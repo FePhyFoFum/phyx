@@ -36,7 +36,6 @@ private:
         int & mini1, int & mini2);
     
 public:
-    NJOI();
     NJOI (istream* pios, int & threads);
     map<string, string> FastaToOneLine(string& fasta);
     vector< vector<double> > BuildMatrix(map<string, string>& sequences);

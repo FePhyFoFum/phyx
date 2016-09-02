@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#include "aatocdn.h"
+#include "aa2cdn.h"
 
 map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequences,
     map<string, string>& nuc_sequences) {

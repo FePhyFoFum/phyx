@@ -192,10 +192,6 @@ vector< vector<double> > NJOI::BuildMatrix (map <string, string>& sequences) {
 }
 
 
-NJOI::NJOI() {
-    // TODO Auto-generated constructor stub
-
-}
 
 NJOI::NJOI (istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(threads) {
     Sequence seq;

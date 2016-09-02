@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#include "ls_tr.h"
+#include "treeinfo.h"
 #include "tree.h"
 #include "node.h"
 #include "tree_utils.h"

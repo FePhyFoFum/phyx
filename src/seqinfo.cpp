@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#include "ls_seq.h"
+#include "seqinfo.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
