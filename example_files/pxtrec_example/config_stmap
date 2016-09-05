@@ -1,0 +1,16 @@
+#treefile = test.tre
+#datafile = test.data.narrow
+#mrca = ROOT taxon_4 taxon_12
+#mrca = 9_10 taxon_9 taxon_10
+mrca = 9_4 taxon_9 taxon_4
+#mrca = 9_10 Homo_sapiens Pan
+#mrca = 9_4 Homo_sapiens M_sylvanus
+#mrca = 9_3 Homo_sapiens Pongo
+stochtime = 9_4
+stochnumber_any = 9_4
+stochnumber = 9_4
+ancstates = _all_
+#outanc = test.tre.anc
+#outstnum_any = test.tre.nus
+#freeparams = _all_
+#datawide
