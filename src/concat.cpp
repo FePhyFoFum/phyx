@@ -159,13 +159,27 @@ void SequenceConcatenater::write_partition_information (vector <string> const& i
     int stopIndex = 1;
     
     // need to check seq type when writing this
-    // use infer_alpha
+    // use infer_alpha / get_alpha_name
     // but: are mixed seq types allowed? prolly...
     //     - so: need to check each one
     
     for (unsigned int i = 0; i < partition_sizes_.size(); i++) {
         stopIndex = charIndex + partition_sizes_[i] - 1;
-        outfile << "DNA, " << inputFiles[i] << " = " << charIndex << "-" << stopIndex << endl;
+        bool going = true;
+        string alpha = "";
+        int j = 0;
+        while (going) {
+            Sequence terp = seqs_[j];
+            string subseq = terp.get_sequence().substr((charIndex - 1), partition_sizes_[i]);
+            // check if all are the same character (presumably all N, but useful either way)
+            if (subseq.find_first_not_of(subseq.front()) != std::string::npos) {
+                terp.set_sequence(subseq);
+                alpha = terp.get_alpha_name();
+                going = false;
+            }
+            j++;
+        }
+        outfile << alpha << ", " << inputFiles[i] << " = " << charIndex << "-" << stopIndex << endl;
         charIndex = stopIndex + 1;
     }
     outfile.close();

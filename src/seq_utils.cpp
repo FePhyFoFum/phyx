@@ -12,10 +12,6 @@ using namespace std;
 #include "sequence.h"
 #include "utils.h"
 
-/**
- * TODO: need to make a alphabet guesser
- */
-
 // IUPAC codes
 string dnachars  = "ACGTURYSWKMBDHVN";
 string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
