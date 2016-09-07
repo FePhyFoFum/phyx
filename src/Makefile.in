@@ -45,13 +45,13 @@ MRCANAME_SRC = main_mrca_name.cpp
 MRCANAME_OBJ = main_mrca_name.o
 MRCANAME_DEP = main_mrca_name.d
 
-BD_SIM_SRC = main_bd_sim.cpp
-BD_SIM_OBJ = main_bd_sim.o
-BD_SIM_DEP = main_bd_sim.d
+BD_SIM_SRC = bd_sim.cpp main_bd_sim.cpp
+BD_SIM_OBJ = bd_sim.o main_bd_sim.o
+BD_SIM_DEP = bd_sim.d main_bd_sim.d
 
-BD_FIT_SRC = main_bd_fit.cpp bd_fit.cpp
-BD_FIT_OBJ = main_bd_fit.o bd_fit.o
-BD_FIT_DEP = main_bd_fit.d bd_fit.d
+BD_FIT_SRC = bd_fit.cpp main_bd_fit.cpp
+BD_FIT_OBJ = bd_fit.o main_bd_fit.o
+BD_FIT_DEP = bd_fit.d main_bd_fit.d
 
 NNI_SRC = main_nni.cpp
 NNI_OBJ = main_nni.o
@@ -181,6 +181,10 @@ LS_TR_SRC = treeinfo.cpp main_lstr.cpp
 LS_TR_OBJ = treeinfo.o main_lstr.o
 LS_TR_DEP = treeinfo.d main_lstr.d
 
+COMPTEST_SRC = comp_test.cpp main_comp_test.cpp
+COMPTEST_OBJ = comp_test.o main_comp_test.o
+COMPTEST_DEP = comp_test.d main_comp_test.d
+
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
@@ -194,7 +198,6 @@ CPP_SRCS += \
 ./seq_utils.cpp \
 ./seq_models.cpp \
 ./pairwise_alignment.cpp \
-./bd_sim.cpp \
 ./superdouble.cpp  
 
 ## doesn't seem to be used
@@ -221,7 +224,6 @@ CPP_OBJS += \
 ./seq_utils.o \
 ./seq_models.o \
 ./pairwise_alignment.o \
-./bd_sim.o \
 ./superdouble.o 
 
 RATE_OBJS += \
@@ -248,8 +250,6 @@ CPP_DEPS += \
 ./seq_utils.d \
 ./seq_models.d \
 ./pairwise_alignment.d \
-./bd_sim.d \
-./bd_fit.d \
 ./superdouble.d  
 
 ## doesn't seem to be used
@@ -436,6 +436,10 @@ pxsm0: $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
 pxsm2a: $(CPP_OBJS) $(RATE_OBJS) $(SM2A_OBJ) $(FORT_OBJS)
 	@echo 'building pxsm2a'
 	$(CXX) -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+
+pxcomp: $(CPP_OBJS) $(COMPTEST_OBJ)
+	@echo 'building pxcomp'
+	$(CXX) -o "pxcomp" $(OPT_FLAGS) $(COMPTEST_OBJ) $(CPP_OBJS)
 
 install:
 	install -m 0755 px* $(prefix)
