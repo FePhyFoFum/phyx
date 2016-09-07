@@ -25,9 +25,9 @@ FC := @FC@
 FFLAGS	= -O3
 .f.o:;  $(FC) $(FFLAGS) -c $<
 
-CONSEQ_SRC = main_conseq.cpp
-CONSEQ_OBJ = main_conseq.o
-CONSEQ_DEP = main_conseq.d
+CONSEQ_SRC = main_consq.cpp
+CONSEQ_OBJ = main_consq.o
+CONSEQ_DEP = main_consq.d
 
 STREC_SRC = main_strec.cpp
 STREC_OBJ = main_strec.o
@@ -93,9 +93,9 @@ SW_SRC = main_sw.cpp
 SW_OBJ = main_sw.o
 SW_DEP = main_sw.d
 
-SEQSAMP_SRC = seq_sample.cpp main_seq_sample.cpp
-SEQSAMP_OBJ = seq_sample.o main_seq_sample.o
-SEQSAMP_DEP = seq_sample.d main_seq_sample.d
+SEQSAMP_SRC = seq_sample.cpp main_boot.cpp
+SEQSAMP_OBJ = seq_sample.o main_boot.o
+SEQSAMP_DEP = seq_sample.d main_boot.d
 
 SEQGEN_SRC = main_seqgen.cpp
 SEQGEN_OBJ = main_seqgen.o
@@ -104,10 +104,6 @@ SEQGEN_DEP = main_seqgen.d
 CONCAT_SRC = concat.cpp main_concat.cpp
 CONCAT_OBJ = concat.o main_concat.o
 CONCAT_DEP = concat.d main_concat.d
-
-LOGMANIP_SRC = main_logmanip.cpp
-LOGMANIP_OBJ = main_logmanip.o
-LOGMANIP_DEP = main_logmanip.d
 
 CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
 CONTRATES_OBJ = main_contrates.o optimize_cont_models_nlopt.o
@@ -165,9 +161,9 @@ NJ_SRC = nj.cpp main_nj.cpp
 NJ_OBJ = nj.o main_nj.o
 NJ_DEP = nj.d main_nj.d
 
-LOGMANIP_SRC = log_manip.cpp main_logmanip.cpp
-LOGMANIP_OBJ = log_manip.o main_logmanip.o
-LOGMANIP_DEP = log_manip.d main_logmanip.d
+LOGMANIP_SRC = log_manip.cpp main_log.cpp
+LOGMANIP_OBJ = log_manip.o main_log.o
+LOGMANIP_DEP = log_manip.d main_log.d
 
 VCF2FA_SRC = vcf_reader.cpp main_vcf2fa.cpp
 VCF2FA_OBJ = vcf_reader.o main_vcf2fa.o
@@ -181,9 +177,9 @@ LS_TR_SRC = treeinfo.cpp main_lstr.cpp
 LS_TR_OBJ = treeinfo.o main_lstr.o
 LS_TR_DEP = treeinfo.d main_lstr.d
 
-COMPTEST_SRC = comp_test.cpp main_comp_test.cpp
-COMPTEST_OBJ = comp_test.o main_comp_test.o
-COMPTEST_DEP = comp_test.d main_comp_test.d
+COMPTEST_SRC = comp_test.cpp main_comp.cpp
+COMPTEST_OBJ = comp_test.o main_comp.o
+COMPTEST_DEP = comp_test.d main_comp.d
 
 ## doesn't seem to be used
 CPP_SRCS += \
