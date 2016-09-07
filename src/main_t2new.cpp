@@ -17,7 +17,7 @@ void print_help() {
     cout << "This will convert a tree file to newick." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxttonew [OPTION]... [FILE]..." << endl;
+    cout << "Usage: pxt2new [OPTION]... [FILE]..." << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
@@ -30,7 +30,7 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxttonew 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxt2new 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

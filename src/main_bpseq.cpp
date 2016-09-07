@@ -21,7 +21,7 @@ void print_help() {
     cout << "This will print out partitions found in seqfile." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxbpseq [OPTION]... [FILE]..." << endl;
+    cout << "Usage: pxbpsq [OPTION]... [FILE]..." << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
@@ -35,7 +35,7 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxbpseq 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxbpsq 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

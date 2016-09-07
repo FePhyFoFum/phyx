@@ -17,7 +17,7 @@ void print_help() {
     cout << "Currently only handles haploid data; phased data will come soon." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxvcftofa [OPTION]... [FILE]..." << endl;
+    cout << "Usage: pxvcf2fa [OPTION]... [FILE]..." << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input vcf file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta sequence file, stout otherwise" << endl;
