@@ -21,7 +21,7 @@ void print_help() {
     cout << "Convert seqfiles from nexus, phylip, or fastq to nexus." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxstonex [OPTION]... [FILE]..." << endl;
+    cout << "Usage: pxs2nex [OPTION]... [FILE]..." << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
@@ -33,7 +33,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxstonex 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+string versionline("pxs2nex 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
