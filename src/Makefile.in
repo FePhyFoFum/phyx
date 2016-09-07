@@ -3,7 +3,18 @@ RM := rm -f
 ## ./configure CXX=/usr/local/bin/g++-5
 CXX := @CXX@
 
-CPP_LIBS = -llapack -lblas -lpthread -lm -lnlopt_cxx -larmadillo
+##set the nlopt around
+HNLOPT := @HNLOPT@
+HARM := @HARM@
+
+CPP_LIBS = -llapack -lblas -lpthread -lm
+ifeq "$(HNLOPT)" "Y"
+    CPP_LIBS += -lnlopt_cxx 
+endif
+
+ifeq "$(HARM)" "Y"
+    CPP_LIBS += -larmadillo
+endif
 
 # gsl:
 #-lgsl -lgslcblas
@@ -17,11 +28,21 @@ endif
 
 prefix := @prefix@
 
+NLOPT_PROGRAMS :=
+ifeq "$(HNLOPT)" "Y"
+    NLOPT_PROGRAMS += pxbdfit
+endif
+
 #######
 # FORTRAN BIT
 ######
 # Don't assume location of gfortran e.g. with HomeBrew on MAC
 FC := @FC@
+GFORTRAN_PROGRAMS := 
+ifeq "$(FC)" "gfortran"
+    GFORTRAN_PROGRAMS += pxstrec pxseqgen pxcontrates pxsm0 pxsm2a
+endif
+
 FFLAGS	= -O3
 .f.o:;  $(FC) $(FFLAGS) -c $<
 
@@ -283,7 +304,7 @@ FORT_OBJS += \
 
 # All Target
 # pxnni not included for now
-all: pxstrec pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxbdfit pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxcontrates pxrecode pxbp pxbpsq pxt2new pxrr pxsm0 pxsm2a pxaa2cdn pxtlate pxrms pxrmt pxnj pxseqgen pxlog pxvcf2fa
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa $(GFORTRAN_PROGRAMS) $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'

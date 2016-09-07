@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include <nlopt.hpp>
 
 using namespace std;
 

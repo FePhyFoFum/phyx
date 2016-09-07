@@ -16,6 +16,7 @@ AC_CHECK_LIB([m], [fabs])
 AC_PREFIX_DEFAULT(/usr/local/bin)
 
 have_nlopt=no
+AC_SUBST([HNLOPT],[Y])
 AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes])
 
 if test "x${have_nlopt}" = xno; then
@@ -25,10 +26,12 @@ The nlopt library is required for optimization.
 phyx was developed with nlopt compiled with these flags
  ./configure --with-cxx --without-octave --without-matlab
 --------------------------------------------------------])
+   AC_SUBST([HNLOPT],[N])
 fi
 
 #need to find a better lib to search for
 have_arma=no
+AC_SUBST([HARM],[Y])
 AC_SEARCH_LIBS([wrapper_sgesv_], [armadillo], [have_arma=yes])
 
 if test "x${have_arma}" = xno; then
@@ -39,6 +42,7 @@ operations.
 phyx was developed with armadillo compiled with these flags
  ./configure
 --------------------------------------------------------])
+    AC_SUBST([HARM],[N])
 fi
 
 # Checks for header files.
