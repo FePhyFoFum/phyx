@@ -44,7 +44,7 @@ endif
 # Don't assume location of gfortran e.g. with HomeBrew on MAC
 FC := @FC@
 GFORTRAN_PROGRAMS := 
-ifeq "$(FC)" "gfortran"
+ifneq (,$(findstring gfortran,$(FC)))
     GFORTRAN_PROGRAMS += pxstrec pxseqgen pxcontrates pxsm0 pxsm2a
 endif
 
