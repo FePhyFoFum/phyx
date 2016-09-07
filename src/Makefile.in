@@ -6,6 +6,7 @@ CXX := @CXX@
 ##set the nlopt around
 HNLOPT := @HNLOPT@
 HARM := @HARM@
+HOMP := @HOMP@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm
 ifeq "$(HNLOPT)" "Y"
@@ -22,6 +23,10 @@ endif
 #-g -pg
 
 OPT_FLAGS := @OPT_FLAGS@
+ifeq "$(HOMP)" "Y"
+    OPT_FLAGS += -DOMP
+endif
+
 ifneq "$(CXX)" "icc"
     OPT_FLAGS += -ffast-math -ftree-vectorize
 endif

@@ -10,7 +10,10 @@
 #include <vector>
 #include <cstring>
 #include <getopt.h>
+
+#ifdef OMP
 #include <omp.h>
+#endif
 
 using namespace std;
 
@@ -170,7 +173,9 @@ int main(int argc, char * argv[]) {
 
     //go all by all
     for (unsigned int i=0; i < seqs.size(); i++) {
+#ifdef OMP
         omp_set_num_threads(num_threads);
+#endif        
         #pragma omp parallel for
         for (unsigned int j=0; j < seqs.size(); j++) {
             if (j > i) {

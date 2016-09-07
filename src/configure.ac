@@ -64,8 +64,10 @@ AC_CHECK_FUNCS([floor pow sqrt])
 
 OPT_FLAGS="-O3 -std=c++11"
 
+AC_SUBST([HOMP],[N])
 if `$CXX -v 2>&1 | grep 'gcc version' >/dev/null 2>&1` ; then
    OPT_FLAGS+=" -fopenmp"
+   AC_SUBST([HOMP],[Y])
 fi
 
 #AC_CANONICAL_HOST
