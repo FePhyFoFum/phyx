@@ -146,11 +146,11 @@ protein alignments given a tree and substitution model parameters.
 As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how five \texttt{phyx} programs can be linked via piping
 and a simple shell loop to perform a full analytical pipeline:
 \begin{enumerate}
-\item Clean alignments individually using a Unix for loop (pxclsq).
-\item Concatenate cleaned alignments into a supermatrix (pxcat).
+\item Clean alignments individually using a Unix for loop (\texttt{pxclsq}).
+\item Concatenate cleaned alignments into a supermatrix (\texttt{pxcat}).
 \item Infer a ML tree (raxml \citep{Stamatakis2014}).
-\item Re-root the tree on the outgroups (pxrr).
-\item Remove the outgroups (pxrmt).
+\item Re-root the tree on the outgroups (\texttt{pxrr}).
+\item Remove the outgroups (\texttt{pxrmt}).
 \end{enumerate}
 which would take the form:
 
@@ -168,8 +168,6 @@ pxcat -s *.phyx -o out.concat -p models && raxml -T 2
 
 We demonstrate the relative performance of some \texttt{phyx} programs in
 the Supplementary Data, available at \textit{Bioinformatics} online.
-
-%\textbf{I think it could be worthwhile to add a comparison of just a couple tools. This would probably just be runtime comparisons for maybe two analyses. Something on trees and something on sequences. For comparison programs, maybe R? phyutility? newick utilities?}
 
 \end{methods}
 
