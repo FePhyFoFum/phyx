@@ -86,6 +86,12 @@ Springer, M.~S., Meredith, R.~W., Gatesy, J., Emerling, C.~A., Park, J.,
   diversification inferred from a species supermatrix.
 \newblock {\em PLoS ONE\/}, {\bf 7}(11), 1--23.
 
+\bibitem[Stamatakis(2014)Stamatakis]{Stamatakis2014}
+Stamatakis, A. (2014).
+\newblock {RAxML} version 8: a tool for phylogenetic analysis and post-analysis
+  of large phylogenies.
+\newblock {\em Bioinformatics\/}, {\bf 30}(9), 1312--1313.
+
 \bibitem[Sukumaran and Holder(2010)Sukumaran and Holder]{SukumaranHolder2010}
 Sukumaran, J. and Holder, M.~T. (2010).
 \newblock {DendroPy}: a python library for phylogenetic computing.

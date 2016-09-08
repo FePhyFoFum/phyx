@@ -4,46 +4,46 @@ The top-level auxiliary file: phyx_main.aux
 The style file: natbib.bst
 Database file #1: phyx.bib
 Warning--entry type for "MaddisonMaddison2016" isn't style-file defined
---line 86 of file phyx.bib
-You've used 18 entries,
+--line 114 of file phyx.bib
+You've used 19 entries,
             2378 wiz_defined-function locations,
-            660 strings with 7468 characters,
-and the built_in function-call counts, 9028 in all, are:
-= -- 868
-> -- 494
-< -- 11
-+ -- 148
-- -- 142
-* -- 865
-:= -- 1552
-add.period$ -- 77
-call.type$ -- 18
-change.case$ -- 117
-chr.to.int$ -- 18
-cite$ -- 18
-duplicate$ -- 332
-empty$ -- 596
-format.name$ -- 178
-if$ -- 1807
+            666 strings with 7618 characters,
+and the built_in function-call counts, 9460 in all, are:
+= -- 913
+> -- 505
+< -- 12
++ -- 151
+- -- 145
+* -- 902
+:= -- 1625
+add.period$ -- 81
+call.type$ -- 19
+change.case$ -- 123
+chr.to.int$ -- 19
+cite$ -- 19
+duplicate$ -- 350
+empty$ -- 631
+format.name$ -- 182
+if$ -- 1895
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 17
-newline$ -- 92
-num.names$ -- 72
-pop$ -- 96
+missing$ -- 18
+newline$ -- 97
+num.names$ -- 76
+pop$ -- 100
 preamble$ -- 1
-purify$ -- 117
+purify$ -- 123
 quote$ -- 0
-skip$ -- 233
+skip$ -- 245
 stack$ -- 0
-substring$ -- 633
-swap$ -- 59
+substring$ -- 673
+swap$ -- 62
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 162
+type$ -- 171
 warning$ -- 0
-while$ -- 71
+while$ -- 75
 width$ -- 0
-write$ -- 233
+write$ -- 246
 (There was 1 warning)
