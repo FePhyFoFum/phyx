@@ -1,0 +1,77 @@
+INSTALLATION
+
+phyx requires a few dependencies. Since installation of these dependencies differs on Linux vs. mac, we've separated the instructions below.
+
+## Linux install ##
+
+# install general dependencies
+sudo apt-get install git
+sudo apt-get install autotools-dev
+sudo apt-get install autoconf
+sudo apt-get install automake
+sudo apt-get install cmake
+sudo apt-get install libtool
+sudo apt-get install liblapack-dev
+sudo apt-get install libatlas-cpp-0.6-dev
+
+# clone the phyx repo (if you haven't already)
+git clone git@github.com:FePhyFoFum/phyx.git
+
+# install nlopt dependency (default is C, we need C++; not available from apt-get)
+cd phyx/deps
+tar -xvzf nlopt-2.4.2.tar.gz
+cd nlopt-2.4.2
+./configure --with-cxx --without-octave --without-matlab
+make
+sudo make install
+
+# install armadillo dependency
+# note: it is possible to get from apt-get, but need version >= 5.2
+# sudo apt-get install libarmadillo6
+# sudo apt-get install libarmadillo-dev
+# on debian it was necessary to use backports: sudo apt-get -t jessie-backports install libarmadillo-dev
+# if that is not possible, compile the provided code:
+cd phyx/deps
+tar -xvzf armadillo-7.400.2.tgz
+cd armadillo-7.400.2
+./configure
+make
+sudo make install
+
+# finally, install phyx
+cd phyx/src
+autoreconf -fi
+./configure
+make
+# if you want to install it so it is available anywhere in your system, do:
+sudo make install
+
+## mac install ##
+
+# install the homebrew package manager (http://brew.sh/)
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+# get access to science packages
+brew tap homebrew/science
+
+# install gcc (can take a while, but enables use of openmp and fortran)
+brew install --without-multilib gcc
+
+# install dependencies
+brew install git
+brew install --use-gcc automake
+brew install --use-gcc autoconf
+brew install --use-gcc libtool
+brew install --use-gcc cmake
+brew install --use-gcc --c++11 nlopt
+brew install --use-gcc --c++11 armadillo
+
+# on to phyx. first, clone the repository:
+git clone git@github.com:FePhyFoFum/phyx.git
+cd phyx/src
+autoreconf -fi
+./configure CXX=/usr/local/bin/g++-6
+make
+# if you want to install it so it is available anywhere in your system, do:
+sudo make install
+
