@@ -47,8 +47,8 @@ Installation will be from source code (provided in the deps directory).
 
 ### Armadillo
 
-	tar -xvzf armadillo-5.200.1.tar.gz
-	cd armadillo-5.200.1
+	tar -xvzf armadillo-7.400.2.tar.gz
+	cd armadillo-7.400.2
 	cmake .
 	make
 	sudo make install
