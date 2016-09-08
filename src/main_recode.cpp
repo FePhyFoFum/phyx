@@ -118,9 +118,10 @@ int main(int argc, char * argv[]) {
         (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
     }
 // have to deal with last sequence outside while loop. fix this.
-    (*poos) << ">" << seq.get_id() << endl;
-    (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
-    
+    if (ft == 2) {
+        (*poos) << ">" << seq.get_id() << endl;
+        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
+    }
     if (fileset) {
         fstr->close();
         delete pios;
