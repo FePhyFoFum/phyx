@@ -27,7 +27,6 @@ sudo make install
 
 # install armadillo dependency
 # note: it is possible to get from apt-get, but need version >= 5.2
-# sudo apt-get install libarmadillo6
 # sudo apt-get install libarmadillo-dev
 # on debian it was necessary to use backports: sudo apt-get -t jessie-backports install libarmadillo-dev
 # if that is not possible, compile the provided code:
@@ -66,7 +65,7 @@ brew install --use-gcc cmake
 brew install --use-gcc --c++11 nlopt
 brew install --use-gcc --c++11 armadillo
 
-# on to phyx. first, clone the repository:
+# on to phyx. first, clone the repository (if you haven't already):
 git clone git@github.com:FePhyFoFum/phyx.git
 cd phyx/src
 autoreconf -fi
