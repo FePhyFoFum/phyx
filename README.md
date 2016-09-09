@@ -1,3 +1,4 @@
+![phyx Logo](logo.png)
 phyx performs phylogenetics analyses
 
 See installation instructions and a list of the current programs on the [wiki](https://github.com/FePhyFoFum/phyx/wiki).
