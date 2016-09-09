@@ -1,4 +1,5 @@
-<img src="logo.png" alt="phyx logo" style="width: 20px;"/>
+<img src="logo.png" alt="phyx logo" width=100px/>
+
 phyx performs phylogenetics analyses
 
 See installation instructions and a list of the current programs on the [wiki](https://github.com/FePhyFoFum/phyx/wiki).
