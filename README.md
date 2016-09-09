@@ -4,4 +4,4 @@
 
 Authors: Joseph Brown, Joseph Walker, and Stephen A. Smith
 
-License: GPL https://www.gnu.org/licenses/gpl-2.0.html
+License: GPL https://www.gnu.org/licenses/gpl-3.0.html
