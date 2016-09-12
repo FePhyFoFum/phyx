@@ -474,5 +474,5 @@ clean:
 	-$(RM) *.o *.d px*
 
 distclean:
-	-$(RM) *.o *.d px* configure config.log config.h config.status Makefile
+	-$(RM) *.o *.d px* configure config.log config.h config.status config.h.in Makefile
 
