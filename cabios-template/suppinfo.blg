@@ -1,46 +1,46 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Arch Linux)
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: suppinfo.aux
 The style file: natbib.bst
 Database file #1: phyx.bib
-You've used 8 entries,
+You've used 9 entries,
             2378 wiz_defined-function locations,
-            594 strings with 5762 characters,
-and the built_in function-call counts, 4025 in all, are:
-= -- 382
-> -- 231
-< -- 4
-+ -- 69
-- -- 67
-* -- 387
-:= -- 703
-add.period$ -- 37
-call.type$ -- 8
-change.case$ -- 51
-chr.to.int$ -- 8
-cite$ -- 8
-duplicate$ -- 152
-empty$ -- 259
-format.name$ -- 81
-if$ -- 797
+            601 strings with 5914 characters,
+and the built_in function-call counts, 4457 in all, are:
+= -- 427
+> -- 242
+< -- 5
++ -- 72
+- -- 70
+* -- 424
+:= -- 776
+add.period$ -- 41
+call.type$ -- 9
+change.case$ -- 57
+chr.to.int$ -- 9
+cite$ -- 9
+duplicate$ -- 170
+empty$ -- 294
+format.name$ -- 85
+if$ -- 885
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 8
-newline$ -- 44
-num.names$ -- 32
-pop$ -- 42
+missing$ -- 9
+newline$ -- 49
+num.names$ -- 36
+pop$ -- 46
 preamble$ -- 1
-purify$ -- 51
+purify$ -- 57
 quote$ -- 0
-skip$ -- 103
+skip$ -- 115
 stack$ -- 0
-substring$ -- 258
-swap$ -- 28
+substring$ -- 298
+swap$ -- 31
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 72
+type$ -- 81
 warning$ -- 0
-while$ -- 33
+while$ -- 37
 width$ -- 0
-write$ -- 108
+write$ -- 121

@@ -74,7 +74,7 @@ part of a manuscript for reviewing and replicability purposes.
 \begin{methods}
 \section{Methods}
 
-We briefly describe below some of the current features of \texttt{phyx}.
+%We briefly describe below some of the current features of \texttt{phyx}.
 
 \subsection{File processing, manipulation, and conversion}
 
@@ -98,8 +98,6 @@ Finally, Bayesian MCMC analyses involving phylogenies have become common in the 
 large log files generated from replicated analyses. \texttt{phyx} enables
 both the concatenation and resampling (burnin and/or thinning) of MCMC
 tree or parameter logs for downstream summary.
-
-% maybe order this table more intelligently
 % other things to add/remove?
 \begin{table}[!t]
 \processtable{Selected \texttt{phyx} programs and their functions\label{Tab:01}. See github for additional details and full program list.} {\begin{tabular}{@{}llll@{}}\toprule Program &
@@ -108,29 +106,28 @@ pxlssq/pxlstr & list attributes of alignments/trees\\
 pxrms/pxrmt & remove taxa from alignments/trees\\
 pxboot & alignment bootstrap/jackknife resampling\\
 pxclsq & remove missing/ambiguous sites from an alignment\\
-pxstofa/phy/nex & convert alignment to fasta/phylip/Nexus format\\
+pxs2fa/phy/nex & convert alignment to fasta/phylip/Nexus format\\
 pxlog & concatenate and resample MCMC parameter/tree logs\\
 pxfqfilt & filter fastq files by quality\\
 pxrr & reroot/unroot trees\\
 pxtlate &  translate nucleotide sequences\\
 pxsw/pxnw & pairwise sequence alignment\\
-pxnj & neighbour-joining tree inference\\
+%pxnj & neighbour-joining tree inference\\
 pxstrec & ancestral state reconstruction, stochastic mapping\\
 pxbdfit/pxbdsim & birth-death tree inference/simulator\\
 pxseqgen & simulate nucleotide/protein sequences on user tree\\\botrule
 \end{tabular}}{}
 \end{table}
-
 \subsection{Analysis and simulation}
 
 In addition to file manipulation, \texttt{phyx} provides a growing
 number of tools for data analysis and simulation. Analytical capabilities
 presently include pairwise sequence alignment using either the
-\citet{NeedlemanWunsch1970} or \citet{SmithWaterman1981} algorithms,
-tree inference using the neighbour-joining criterion \citep{SaitouNei1987},
-ancestral state reconstruction and stochastic mapping of discrete characters
-\citep{Nielsen2002}, fitting of Brownian or OU models to continuous
-characters \citep{ButlerKing2004}, fitting birth-death models to trees, and
+Needleman-Wunsch or Smith-Waterman algorithms,
+tree inference using the neighbour-joining criterion,
+ancestral state reconstruction and stochastic mapping of discrete characters,
+fitting of Brownian or OU models to continuous
+characters, fitting birth-death models to trees, and
 computing alignment column bipartitions either in isolation or on a user
 tree.
 
@@ -140,27 +137,6 @@ predictive analyses \citep{Bollback2002}. \texttt{phyx} currently enables
 simulation of both
 birth-death trees (see example in Figure~\ref{fig:01}) and nucleotide or
 protein alignments given a tree and substitution model parameters.
-
-\subsection{Example pipeline}%i don't know about this example; it is not that simple
-
-As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how five \texttt{phyx} programs can be linked via piping
-and a simple shell loop to perform a full analytical pipeline:
-\begin{enumerate}
-\item Clean alignments individually using a Unix for loop (\texttt{pxclsq}).
-\item Concatenate cleaned alignments into a supermatrix (\texttt{pxcat}).
-\item Infer a ML tree (raxml \citep{Stamatakis2014}).
-\item Re-root the tree on the outgroups (\texttt{pxrr}).
-\item Remove the outgroups (\texttt{pxrmt}).
-\end{enumerate}
-which would take the form:
-
-\begin{verbatim}
-for x in *.fa; do pxclsq -s $x -p 0.0 -o $x.phyx; done &&
-pxcat -s *.phyx -o out.concat -p models && raxml -T 2
--m GTRCAT -p 12345 -q models -s out.concat -n RAxMLout
-&& pxrr -g s1,s2 -t RAxML_bestTree.RAxMLout | pxrmt
--n s1,s2 -o trimmed.tre
-\end{verbatim}
 
 \subsection{Comparison to existing programs}
 
@@ -172,10 +148,10 @@ the Supplementary Data, available at \textit{Bioinformatics} online.
 \end{methods}
 
 \begin{figure}[!tpb]%figure1
-\centerline{\includegraphics[width=86mm]{Fig1.eps}}
+% Fig1_smallgrey.eps, Fig1_smallblack.eps, and Fig1_small_nolines.eps available
+\centerline{\includegraphics[width=86mm]{Fig1_smallred.eps}}
 \caption{Parametric bootstrapping of a diversification process. The primate phylogeny of \cite{Springer2012} was fit to a birth-death model (pxbdfit). To explore the breadth of plausible diversification outcomes the maximum likelihood parameters (b: 0.339487, d: 0.268944) were used to simulate (pxbdsim) 25000 phylogenies conditioned on either the extant diversity (367, left) or root age (66.7066 Ma, right) of the empirical tree.}\label{fig:01}
 \end{figure}
-
 
 \section{Conclusion}
 

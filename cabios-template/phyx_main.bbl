@@ -5,12 +5,6 @@ Bollback, J.~P. (2002).
 \newblock Bayesian model adequacy and choice in phylogenetics.
 \newblock {\em Molecular Biology and Evolution\/}, {\bf 19}(7), 1171--1180.
 
-\bibitem[Butler and King(2004)Butler and King]{ButlerKing2004}
-Butler, M.~A. and King, A.~A. (2004).
-\newblock Phylogenetic comparative analysis: A modeling approach for adaptive
-  evolution.
-\newblock {\em The American Naturalist\/}, {\bf 164}(6), 683--695.
-
 \bibitem[Huerta-Cepas {\em et~al.}(2016)Huerta-Cepas, Serra, and
   Bork]{HuertaCepas2016}
 Huerta-Cepas, J., Serra, F., and Bork, P. (2016).
@@ -36,28 +30,11 @@ Mirarab, S., Reaz, R., Bayzid, M.~S., Zimmermann, T., Swenson, M.~S., and
 \newblock {ASTRAL}: genome-scale coalescent-based species tree estimation.
 \newblock {\em Bioinformatics\/}, {\bf 30}(17), i541--i548.
 
-\bibitem[Needleman and Wunsch(1970)Needleman and Wunsch]{NeedlemanWunsch1970}
-Needleman, S.~B. and Wunsch, C.~D. (1970).
-\newblock A general method applicable to the search for similarities in the
-  amino acid sequence of two proteins.
-\newblock {\em Journal of Molecular Biology\/}, {\bf 48}(3), 443--453.
-
-\bibitem[Nielsen(2002)Nielsen]{Nielsen2002}
-Nielsen, R. (2002).
-\newblock Mapping mutations on phylogenies.
-\newblock {\em Systematic Biology\/}, {\bf 51}(5), 729--739.
-
 \bibitem[Popescu {\em et~al.}(2012)Popescu, Huber, and Paradis]{Popescu2012}
 Popescu, A.-A., Huber, K.~T., and Paradis, E. (2012).
 \newblock ape 3.0: New tools for distance-based phylogenetics and evolutionary
   analysis in r.
 \newblock {\em Bioinformatics\/}, {\bf 28}(11), 1536--1537.
-
-\bibitem[Saitou and Nei(1987)Saitou and Nei]{SaitouNei1987}
-Saitou, N. and Nei, M. (1987).
-\newblock The neighbor-joining method: a new method for reconstructing
-  phylogenetic trees.
-\newblock {\em Molecular Biology and Evolution\/}, {\bf 4}(4), 406--425.
 
 \bibitem[Smith and Dunn(2008)Smith and Dunn]{SmithDunn2008}
 Smith, S.~A. and Dunn, C.~W. (2008).
@@ -71,11 +48,6 @@ Smith, S.~A., Moore, M.~J., Brown, J.~W., and Yang, Y. (2015).
   gene duplications with examples from animals and plants.
 \newblock {\em BMC Evolutionary Biology\/}, {\bf 15}(1), 1--15.
 
-\bibitem[Smith and Waterman(1981)Smith and Waterman]{SmithWaterman1981}
-Smith, T. and Waterman, M. (1981).
-\newblock Identification of common molecular subsequences.
-\newblock {\em Journal of Molecular Biology\/}, {\bf 147}(1), 195--197.
-
 \bibitem[Springer {\em et~al.}(2012)Springer, Meredith, Gatesy, Emerling, Park,
   Rabosky, Stadler, Steiner, Ryder, Jane\v{c}ka, Fisher, and
   Murphy]{Springer2012}
@@ -85,12 +57,6 @@ Springer, M.~S., Meredith, R.~W., Gatesy, J., Emerling, C.~A., Park, J.,
 \newblock Macroevolutionary dynamics and historical biogeography of primate
   diversification inferred from a species supermatrix.
 \newblock {\em PLoS ONE\/}, {\bf 7}(11), 1--23.
-
-\bibitem[Stamatakis(2014)Stamatakis]{Stamatakis2014}
-Stamatakis, A. (2014).
-\newblock {RAxML} version 8: a tool for phylogenetic analysis and post-analysis
-  of large phylogenies.
-\newblock {\em Bioinformatics\/}, {\bf 30}(9), 1312--1313.
 
 \bibitem[Sukumaran and Holder(2010)Sukumaran and Holder]{SukumaranHolder2010}
 Sukumaran, J. and Holder, M.~T. (2010).

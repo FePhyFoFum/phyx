@@ -7,14 +7,35 @@
 \begin{document}
 \title{Supplementary information for \texttt{phyx} (Phylogenetic tools for Unix)}
 
-\author{Author, Co-Author, Stephen A. Smith\\\\
+\author{Joseph W. Brown$^{\dagger}$, Joseph F. Walker$^{\dagger}$, and Stephen A. Smith\\\\
 \normalsize{Department of Ecology \& Evolutionary Biology}\\
-\normalsize{University of Michigan, Ann Arbor, MI 48109, USA}}
+\normalsize{University of Michigan, Ann Arbor, MI 48109, USA}\\
+\normalsize{$^{\dagger}$Equal contribution}}
 % address is not supported by article class?!? the above is hacky workaround
 %\address{Department of Ecology \& Evolutionary Biology, University of Michigan, Ann Arbor, MI 48109, USA}
 %\date{\today}
 \date{} % no date
 \maketitle
+
+\section{Example pipeline}
+As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how five \texttt{phyx} programs can be linked via piping
+and a simple shell loop to perform a full analytical pipeline:
+\begin{enumerate}
+\item Clean alignments individually using a Unix for loop (\texttt{pxclsq}).
+\item Concatenate cleaned alignments into a supermatrix (\texttt{pxcat}).
+\item Infer a ML tree (raxml \citep{Stamatakis2014}).
+\item Re-root the tree on the outgroups (\texttt{pxrr}).
+\item Remove the outgroups (\texttt{pxrmt}).
+\end{enumerate}
+which would take the form:
+
+\begin{verbatim}
+for x in *.fa; do pxclsq -s $x -p 0.0 -o $x.phyx; done &&
+pxcat -s *.phyx -o out.concat -p models && raxml -T 2
+-m GTRCAT -p 12345 -q models -s out.concat -n RAxMLout
+&& pxrr -g s1,s2 -t RAxML_bestTree.RAxMLout | pxrmt
+-n s1,s2 -o trimmed.tre
+\end{verbatim}
 
 \section{Performance}
 We briefly describe below the performance of \texttt{phyx} relative to other

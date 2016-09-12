@@ -38,6 +38,12 @@ Smith, S.~A. and Dunn, C.~W. (2008).
   molecular data.
 \newblock {\em Bioinformatics\/}, {\bf 24}(5), 715--716.
 
+\bibitem[Stamatakis(2014)Stamatakis]{Stamatakis2014}
+Stamatakis, A. (2014).
+\newblock {RAxML} version 8: a tool for phylogenetic analysis and post-analysis
+  of large phylogenies.
+\newblock {\em Bioinformatics\/}, {\bf 30}(9), 1312--1313.
+
 \bibitem[Suyama {\em et~al.}(2006)Suyama, Torrents, and Bork]{Suyama2006}
 Suyama, M., Torrents, D., and Bork, P. (2006).
 \newblock {PAL2NAL}: robust conversion of protein sequence alignments into the
