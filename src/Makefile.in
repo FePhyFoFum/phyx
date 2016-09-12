@@ -349,15 +349,15 @@ pxlssq: $(CPP_OBJS) $(LS_SQ_OBJ)
 
 pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
 	@echo 'building pxupgma'
-	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS)
 
 pxnj: $(CPP_OBJS) $(NJ_OBJ)
 	@echo 'building pxnj'
-	$(CXX) -o "pxnj" $(OPT_FLAGS) $(NJ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxnj" $(OPT_FLAGS) $(NJ_OBJ) $(CPP_OBJS)
 
 pxclsq: $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'
-	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS)
 
 pxrms: $(CPP_OBJS) $(RMS_OBJ)
 	@echo 'building pxrms'
@@ -365,31 +365,31 @@ pxrms: $(CPP_OBJS) $(RMS_OBJ)
 
 pxtlate: $(CPP_OBJS) $(TLATE_OBJ)
 	@echo 'building pxclsq'
-	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS)
 
 pxaa2cdn: $(CPP_OBJS) $(AA2C_OBJ)
 	@echo 'building pxaa2cdn'
-	$(CXX) -o "pxaa2cdn" $(OPT_FLAGS) $(AA2C_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxaa2cdn" $(OPT_FLAGS) $(AA2C_OBJ) $(CPP_OBJS)
 
 pxseqtest: $(CPP_OBJS) $(SEQT_OBJ)
 	@echo 'building pxseqtest'
-	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS)
 
 pxs2fa: $(CPP_OBJS) $(2FA_OBJ)
 	@echo 'building pxs2fa'
-	$(CXX) -o "pxs2fa" $(OPT_FLAGS) $(2FA_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxs2fa" $(OPT_FLAGS) $(2FA_OBJ) $(CPP_OBJS)
 
 pxs2phy: $(CPP_OBJS) $(2PHY_OBJ)
 	@echo 'building pxs2phy'
-	$(CXX) -o "pxs2phy" $(OPT_FLAGS) $(2PHY_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxs2phy" $(OPT_FLAGS) $(2PHY_OBJ) $(CPP_OBJS)
 
 pxs2nex: $(CPP_OBJS) $(2NEX_OBJ)
 	@echo 'building pxs2nex'
-	$(CXX) -o "pxs2nex" $(OPT_FLAGS) $(2NEX_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxs2nex" $(OPT_FLAGS) $(2NEX_OBJ) $(CPP_OBJS)
 
 pxfqfilt: $(CPP_OBJS) $(FQFILT_OBJ)
 	@echo 'building pxfqfilt'
-	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS)
 
 pxrevcomp: $(CPP_OBJS) $(REVCOMP_OBJ)
 	@echo 'building pxrevcomp'
@@ -429,7 +429,7 @@ pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)
 
 pxrecode: $(CPP_OBJS) $(SEQRECODE_OBJ)
 	@echo 'building pxrecode'
-	$(CXX) -o "pxrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS)
 
 pxbp: $(CPP_OBJS) $(BP_OBJ)
 	@echo 'building pxbp'
@@ -437,11 +437,11 @@ pxbp: $(CPP_OBJS) $(BP_OBJ)
 
 pxbpsq: $(CPP_OBJS) $(BPSEQ_OBJ)
 	@echo 'building pxbpsq'
-	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS)
 
 pxt2new: $(CPP_OBJS) $(2NEW_OBJ)
 	@echo 'building pxt2new'
-	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(2NEW_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(2NEW_OBJ) $(CPP_OBJS)
 
 pxrr: $(CPP_OBJS) $(RR_OBJ)
 	@echo 'building pxrr'
