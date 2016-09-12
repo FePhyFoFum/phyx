@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
     char * seqf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:f:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
