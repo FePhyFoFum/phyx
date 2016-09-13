@@ -103,6 +103,7 @@ map <string, string> FastaToOneLine (string& fasta) {
             }
         }
     }
+    readline.close();
     sequences[name_hold] = dna;
     return sequences;
 }
