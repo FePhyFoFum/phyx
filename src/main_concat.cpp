@@ -25,12 +25,19 @@ using namespace std;
 
 void print_help() {
     cout << "Sequence file concatenation." << endl;
+    cout << "Can use wildcards e.g.:" << endl;
+    cout << "  pxcat -s *.phy -o my_cat_file.fa" << endl;
+    cout << "However, if the argument list is too long (shell limit), put filenames in a file:" << endl;
+    cout << "  for x in *.phy; do echo $x >> flist.txt; done" << endl;
+    cout << "and call using the -f option:" << endl;
+    cout << "  pxcat -f flist.txt -o my_cat_file.fa" << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << "Individual files can be of different formats." << endl;
     cout << endl;
     cout << "Usage: pxcat [OPTION]... " << endl;
     cout << endl;
-    cout << " -s, --seqf=FILE     list of input sequence files" << endl;
+    cout << " -s, --seqf=FILE     list of input sequence files (space delimited)" << endl;
+    cout << " -f, --flistFILE     file listing input files (one per line)" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -p, --partf=FILE    output partition file, none otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
@@ -45,6 +52,7 @@ string versionline("pxcat 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwri
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
+    {"flist", required_argument, NULL, 'f'},
     {"outf", required_argument, NULL, 'o'},
     {"partf", required_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
@@ -63,11 +71,12 @@ int main(int argc, char * argv[]) {
     SequenceConcatenater result;
     char * outf = NULL;
     string partf = "";
+    string listf ="";
 
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "s:o:p:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:f:o:p:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -93,6 +102,23 @@ int main(int argc, char * argv[]) {
                     }
                 }
                 break;
+            case 'f':
+                fileset = true;
+                listf = strdup(optarg);
+                //string temp = strdup(optarg);
+                /*
+                string fname = strdup(optarg);
+                string line;
+                ifstream listf;
+                listf.open(fname.c_str());
+                while (getline (listf, line)) {
+                    if (!line.empty()) {
+                        inputFiles.push_back(line);
+                    }
+                }
+                listf.close();
+                */
+                break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
@@ -116,6 +142,17 @@ int main(int argc, char * argv[]) {
     if (!fileset) {
         cout << "Must specify 1 or more files to concatenate. Exiting." << endl;
         exit(0);
+    }
+    if (listf != "") {
+        string line;
+        ifstream ifs;
+        ifs.open(listf.c_str());
+        while (getline (ifs, line)) {
+            if (!line.empty()) {
+                inputFiles.push_back(line);
+            }
+        }
+        ifs.close();
     }
     
     ostream* poos = NULL;
