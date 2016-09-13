@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
     SequenceConcatenater result;
     char * outf = NULL;
     string partf = "";
-    string listf ="";
+    string listf = "";
 
     while (1) {
         int oi = -1;
@@ -132,8 +132,7 @@ int main(int argc, char * argv[]) {
     }
     if (listf != "") {
         string line;
-        ifstream ifs;
-        ifs.open(listf.c_str());
+        ifstream ifs(listf.c_str());
         while (getline (ifs, line)) {
             if (!line.empty()) {
                 inputFiles.push_back(line);
