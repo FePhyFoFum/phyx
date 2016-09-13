@@ -105,19 +105,6 @@ int main(int argc, char * argv[]) {
             case 'f':
                 fileset = true;
                 listf = strdup(optarg);
-                //string temp = strdup(optarg);
-                /*
-                string fname = strdup(optarg);
-                string line;
-                ifstream listf;
-                listf.open(fname.c_str());
-                while (getline (listf, line)) {
-                    if (!line.empty()) {
-                        inputFiles.push_back(line);
-                    }
-                }
-                listf.close();
-                */
                 break;
             case 'o':
                 outfileset = true;
