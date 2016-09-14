@@ -21,8 +21,8 @@ void print_help() {
     cout << "Usage: pxrnt [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -c, --cnames=FILE   file containing current taxon labels" << endl;
-    cout << " -n, --nnames=FILE   file containing new taxon labels" << endl;
+    cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << endl;
+    cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
