@@ -35,7 +35,7 @@ string versionline("pxrlt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwri
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 'f'},
+    {"treef", required_argument, NULL, 't'},
     {"cnames", required_argument, NULL, 'c'},
     {"nnames", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
@@ -132,47 +132,12 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
                 rn.rename_tree(tree);
-                //exists = reroot(tree, outgroups, silent);
-                //if (!exists) {
-                //    cerr << "the outgroup taxa don't exist in this tree " << endl;
-                //} else {
-                    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
-                //}
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
             }
         }
     }
     
-    /*
-    if (fileset == true) {
-        fstr = new ifstream(seqf);
-        pios = fstr;
-    } else {
-        pios = &cin;
-    }
-    
-    SequenceRecoder sr;
-    
-    Sequence seq;
-    string retstring;
-    //bool first = true;
-    
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
-    }
-// have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
-    }
-    if (fileset) {
-        fstr->close();
-        delete pios;
-    }
-    */
     if (outfileset) {
         ofstr->close();
         delete poos;
