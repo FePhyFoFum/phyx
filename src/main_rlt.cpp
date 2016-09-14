@@ -18,7 +18,7 @@ void print_help() {
     cout << "This will take nexus and newick inputs." << endl;
     cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << endl;
     cout << endl;
-    cout << "Usage: pxrnt [OPTION]... " << endl;
+    cout << "Usage: pxrlt [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << endl;
@@ -31,7 +31,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxrnt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxrlt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
