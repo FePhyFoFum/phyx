@@ -5,16 +5,16 @@
 
 using namespace std;
 
-#include "rename.h"
+#include "relabel.h"
 #include "tree.h"
 #include "utils.h"
 
 
-Rename::Rename (string & cnamesf, string nnamesf) {
+Relabel::Relabel (string & cnamesf, string nnamesf) {
     store_name_lists (cnamesf, nnamesf);
 }
 
-void Rename::store_name_lists (string & cnamesf, string nnamesf) {
+void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     vector <string> terp;
     string line;
     int ccount = 0;
@@ -61,7 +61,7 @@ void Rename::store_name_lists (string & cnamesf, string nnamesf) {
     */
 }
 
-void Rename::rename_tree (Tree * tr) {
+void Relabel::relabel_tree (Tree * tr) {
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         string str = tr->getExternalNode(i)->getName();
         if (name_map_.find(str) != name_map_.end()) {
@@ -77,5 +77,14 @@ void Rename::rename_tree (Tree * tr) {
                 cout << "Tree label '" << str << "' NOT found in name list!" << endl;
             }
         }  
+    }
+}
+
+void Relabel::relabel_sequence (Sequence & seq) {
+    string str = seq.get_id();
+    if (name_map_.find(str) != name_map_.end()) {
+        seq.set_id(name_map_[str]);
+    } else {
+        cout << "Erg. Cannot match label '" << str << "'." << endl;
     }
 }

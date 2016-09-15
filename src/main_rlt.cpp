@@ -10,7 +10,7 @@ using namespace std;
 
 #include "utils.h"
 #include "tree_reader.h"
-#include "rename.h"
+#include "relabel.h"
 #include "log.h"
 
 void print_help() {
@@ -117,7 +117,7 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    Rename rn (cnamef, nnamef);
+    Relabel rl (cnamef, nnamef);
     
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                rn.rename_tree(tree);
+                rl.relabel_tree(tree);
                 (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
             }

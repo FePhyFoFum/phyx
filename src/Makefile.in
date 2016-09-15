@@ -207,9 +207,13 @@ COMPTEST_SRC = comp_test.cpp main_comp.cpp
 COMPTEST_OBJ = comp_test.o main_comp.o
 COMPTEST_DEP = comp_test.d main_comp.d
 
-RELABEL_TREE_SRC = rename.cpp main_rlt.cpp
-RELABEL_TREE_OBJ = rename.o main_rlt.o
-RELABEL_TREE_DEP = rename.d main_rlt.d
+RELABEL_TREE_SRC = relabel.cpp main_rlt.cpp
+RELABEL_TREE_OBJ = relabel.o main_rlt.o
+RELABEL_TREE_DEP = relabel.d main_rlt.d
+
+RELABEL_SEQ_SRC = relabel.cpp main_rls.cpp
+RELABEL_SEQ_OBJ = relabel.o main_rls.o
+RELABEL_SEQ_DEP = relabel.d main_rls.d
 
 ## doesn't seem to be used
 CPP_SRCS += \
@@ -309,7 +313,7 @@ FORT_OBJS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt $(GFORTRAN_PROGRAMS) $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls $(GFORTRAN_PROGRAMS) $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -470,6 +474,10 @@ pxcomp: $(CPP_OBJS) $(COMPTEST_OBJ)
 pxrlt: $(CPP_OBJS) $(RELABEL_TREE_OBJ)
 	@echo 'building pxrlt'
 	$(CXX) -o "pxrlt" $(OPT_FLAGS) $(RELABEL_TREE_OBJ) $(CPP_OBJS)
+
+pxrls: $(CPP_OBJS) $(RELABEL_SEQ_OBJ)
+	@echo 'building pxrls'
+	$(CXX) -o "pxrls" $(OPT_FLAGS) $(RELABEL_SEQ_OBJ) $(CPP_OBJS)
 
 install:
 	install -m 0755 px* $(prefix)
