@@ -50,7 +50,7 @@ terminal to that directory:
 5. Finally, install phyx:
 
     cd phyx/src
-    autoreconf -fi
+    autoconf
     ./configure
     make
 If you want to install it so it is available anywhere in your system, do:
@@ -93,7 +93,7 @@ Make sure to get access to science packages:
 
     git clone git@github.com:FePhyFoFum/phyx.git
     cd phyx/src
-    autoreconf -fi
+    autoconf
     ./configure CXX=/usr/local/bin/g++-6
     make
 
@@ -137,6 +137,7 @@ and browse in the terminal to that directory:
 
 5. Compile phyx. Now you can go to the src directory of phyx and type:
 
+    autoconf
     ./configure
     make
 
