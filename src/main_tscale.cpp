@@ -18,7 +18,7 @@ void print_help() {
     cout << "Tree rescaling by providing either scaling factor or root height." << endl;
     cout << "This will take nexus and newick inputs." << endl;
     cout << endl;
-    cout << "Usage: pxsclt [OPTION]... " << endl;
+    cout << "Usage: pxtscale [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE        input tree file, stdin otherwise" << endl;
     cout << " -s, --scale=DOUBLE      edge length scaling factor" << endl;
@@ -31,7 +31,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxsclt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxtscale 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

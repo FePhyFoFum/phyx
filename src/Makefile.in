@@ -215,9 +215,9 @@ RELABEL_SEQ_SRC = relabel.cpp main_rls.cpp
 RELABEL_SEQ_OBJ = relabel.o main_rls.o
 RELABEL_SEQ_DEP = relabel.d main_rls.d
 
-RESCALE_TREE_SRC = tscale.cpp main_sclt.cpp
-RESCALE_TREE_OBJ = tscale.o main_sclt.o
-RESCALE_TREE_DEP = tscale.d main_sclt.d
+RESCALE_TREE_SRC = tscale.cpp main_tscale.cpp
+RESCALE_TREE_OBJ = tscale.o main_tscale.o
+RESCALE_TREE_DEP = tscale.d main_tscale.d
 
 ## doesn't seem to be used
 CPP_SRCS += \
@@ -483,9 +483,9 @@ pxrls: $(CPP_OBJS) $(RELABEL_SEQ_OBJ)
 	@echo 'building pxrls'
 	$(CXX) -o "pxrls" $(OPT_FLAGS) $(RELABEL_SEQ_OBJ) $(CPP_OBJS)
 
-pxsclt: $(CPP_OBJS) $(RESCALE_TREE_OBJ)
-	@echo 'building pxsclt'
-	$(CXX) -o "pxsclt" $(OPT_FLAGS) $(RESCALE_TREE_OBJ) $(CPP_OBJS)
+pxtscale: $(CPP_OBJS) $(RESCALE_TREE_OBJ)
+	@echo 'building pxtscale'
+	$(CXX) -o "pxtscale" $(OPT_FLAGS) $(RESCALE_TREE_OBJ) $(CPP_OBJS)
 
 install:
 	install -m 0755 px* $(prefix)
