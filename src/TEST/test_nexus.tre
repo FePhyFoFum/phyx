@@ -1,0 +1,4 @@
+#NEXUS
+Begin trees;
+tree foo = (((TaxonA:0.1,TaxonB:0.03):0.125,TaxonC:0.25):0.4,(TaxonD:0.23,TaxonE:0.16):0.3);
+end;
