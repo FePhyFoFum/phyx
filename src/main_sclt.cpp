@@ -151,6 +151,29 @@ int main(int argc, char * argv[]) {
                 delete tree;
             }
         }
+    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                if (heightset) {
+                    // have to check ultrametricity
+                    bool isultra = is_ultrametric_paths(tree);
+                    if (!isultra) {
+                        cout << "Setting root height only works for ultrametric trees. Exiting."
+                            << endl;
+                        exit(0);
+                    }
+                }
+                ts.rescale(tree);
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                delete tree;
+            }
+        }
     }
     
     if (outfileset) {
