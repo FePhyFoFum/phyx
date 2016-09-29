@@ -244,6 +244,17 @@ double get_tree_length (Tree * tr) {
    return length;
 }
 
+void rescale_tree(Tree * tr, double const& scalef) {
+    int numNodes = tr->getNodeCount();
+    for (int i = 0; i < numNodes; i++) {
+        double terp = tr->getNode(i)->getBL();
+        if (terp != 0.0) {
+            double newlength = terp * scalef;
+            tr->getNode(i)->setBL(newlength);
+        }
+    }
+}
+
 
 /* Two possible approaches:
  * 1) get get_length_to_root for each external node

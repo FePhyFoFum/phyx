@@ -10,34 +10,34 @@ using namespace std;
 
 #include "utils.h"
 #include "tree_reader.h"
-#include "relabel.h"
+#include "tscale.h"
+#include "tree_utils.h"
 #include "log.h"
 
 void print_help() {
-    cout << "Taxon relabelling for trees." << endl;
+    cout << "Tree rescaling by providing either scaling factor or root height." << endl;
     cout << "This will take nexus and newick inputs." << endl;
-    cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << endl;
     cout << endl;
-    cout << "Usage: pxrlt [OPTION]... " << endl;
+    cout << "Usage: pxsclt [OPTION]... " << endl;
     cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << endl;
-    cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
+    cout << " -t, --treef=FILE        input tree file, stdin otherwise" << endl;
+    cout << " -s, --scale=DOUBLE      edge length scaling factor" << endl;
+    cout << " -r, --rootheight=DOUBLE height of root (tree must be ultrametric)" << endl;
+    cout << " -o, --outf=FILE         output file, stout otherwise" << endl;
+    cout << " -h, --help              display this help and exit" << endl;
+    cout << " -V, --version           display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxrlt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxsclt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"cnames", required_argument, NULL, 'c'},
-    {"nnames", required_argument, NULL, 'n'},
+    {"scale", required_argument, NULL, 's'},
+    {"rootheight", required_argument, NULL, 'r'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -50,15 +50,17 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    bool cfileset = false;
-    bool nfileset = false;
+    double rootheight = 0.0;
+    double scalef = 1.0;
+    bool heightset = false;
+    bool scaleset = false;
     char * outf = NULL;
     char * treef = NULL;
     string cnamef = "";
     string nnamef = "";
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:c:n:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:s:r:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -68,15 +70,13 @@ int main(int argc, char * argv[]) {
                 treef = strdup(optarg);
                 check_file_exists(treef);
                 break;
-            case 'c':
-                cfileset = true;
-                cnamef = strdup(optarg);
-                check_file_exists(cnamef.c_str());
+            case 's':
+                scaleset = true;
+                scalef = atof(strdup(optarg));
                 break;
-            case 'n':
-                nfileset = true;
-                nnamef = strdup(optarg);
-                check_file_exists(nnamef.c_str());
+            case 'r':
+                heightset = true;
+                rootheight = atof(strdup(optarg));
                 break;
             case 'o':
                 outfileset = true;
@@ -99,8 +99,8 @@ int main(int argc, char * argv[]) {
     ifstream* fstr = NULL;
     ofstream* ofstr = NULL;
     
-    if (!nfileset | !cfileset) {
-        cout << "Must supply both name files (-c for current, -n for new)." << endl;
+    if (heightset && scaleset) {
+        cout << "Supply only 'rootheight' or 'scale', not both. Exiting." << endl;
         exit(0);
     }
     
@@ -117,12 +117,18 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    Relabel rl (cnamef, nnamef);
+    TScale ts;
+    
+    if (heightset) {
+        ts.set_rootheight(rootheight);
+    } else {
+        ts.set_scalef(scalef);
+    }
     
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        cerr << "This really only works with nexus or newick" << endl;
         exit(0);
     }
     bool going = true;
@@ -131,15 +137,21 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                rl.relabel_tree(tree);
+                if (heightset) {
+                    // have to check ultrametricity
+                    bool isultra = is_ultrametric_paths(tree);
+                    if (!isultra) {
+                        cout << "Setting root height only works for ultrametric trees. Exiting."
+                            << endl;
+                        exit(0);
+                    }
+                }
+                ts.rescale(tree);
                 (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
                 delete tree;
             }
         }
     }
-    
-    // TODO: add missing Nexus stuff
-    
     
     if (outfileset) {
         ofstr->close();

@@ -19,7 +19,7 @@ using namespace std;
 
 class Node{
 private:
-    double BL; //branch lengths
+    double BL; // branch length, points to parent
     double height; // could be from tip or from root
     double depth;
     int number;
