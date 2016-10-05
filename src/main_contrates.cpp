@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
     
     bool cfileset = false;
     bool tfileset = false;
-    bool ofileset = false;
+    bool outfileset = false;
     
     char * treef = NULL;
     char * charf = NULL;
@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'o':
-                ofileset = true;
+                outfileset = true;
                 outf = strdup(optarg);
                 break;
             case 'a':
@@ -104,6 +104,10 @@ int main(int argc, char * argv[]) {
     ifstream* cfstr = NULL;
     ifstream* tfstr = NULL;
 
+    ostream * poouts = NULL;
+    ofstream * ofstr = NULL;
+    
+
     if (tfileset == true) {
         tfstr = new ifstream(treef);
         poos = tfstr;
@@ -117,6 +121,17 @@ int main(int argc, char * argv[]) {
     } else {
         cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
     }
+
+    //out file
+    //
+    if (outfileset == true){
+        ofstr = new ofstream(outf);
+        poouts = ofstr;
+    } else{
+        poouts = &cout;
+    }
+    //
+
     string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if (ft != 1 && ft != 2) {
@@ -154,39 +169,41 @@ int main(int argc, char * argv[]) {
         if (analysis == 0) {
            // cout << "Input tree: " << trees[0]->getRoot()->getNewick(true) << ";" << endl;
             if (c == 0) {
-                cout << "#nexus" << endl << "begin trees;" << endl;
+                (*poouts) << "#nexus" << endl << "begin trees;" << endl;
             }
-            for (int i=0; i < trees[0]->getExternalNodeCount(); i++) {
-                vector<Superdouble> tv (1);
-                tv[0] = seqs[seq_map[trees[0]->getExternalNode(i)->getName()]].get_cont_char(c);
-                trees[0]->getExternalNode(i)->assocDoubleVector("val",tv);
+            for (int x = 0; x < trees.size(); x++){
+                for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
+                    vector<Superdouble> tv (1);
+                    tv[0] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);
+                    trees[x]->getExternalNode(i)->assocDoubleVector("val",tv);
+                }
+                for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
+                    vector<Superdouble> tv (1);
+                    tv[0] = 0;
+                    trees[x]->getInternalNode(i)->assocDoubleVector("val",tv);
+                }
+                calc_square_change_anc_states(trees[x],0); // second character dies here
+                for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
+                    double tv = (*trees[x]->getInternalNode(i)->getDoubleVector("val"))[0];
+                    trees[x]->getInternalNode(i)->deleteDoubleVector("val");
+                    std::ostringstream s;
+                    s.precision(9);
+                    s << "[&value=" << tv << "]";
+                    trees[x]->getInternalNode(i)->setName(s.str());
+                }
+                for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
+                    double tv = (*trees[x]->getExternalNode(i)->getDoubleVector("val"))[0];
+                    trees[x]->getExternalNode(i)->deleteDoubleVector("val");
+                    std::ostringstream s;
+                    s.precision(9);
+                    s << fixed << trees[x]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
+                    trees[x]->getExternalNode(i)->setName(s.str());
+                }
+                (*poouts) << "tree tree" << c << " = ";
+                (*poouts) << trees[x]->getRoot()->getNewick(true) << ";" << endl;
             }
-            for (int i=0; i < trees[0]->getInternalNodeCount(); i++) {
-                vector<Superdouble> tv (1);
-                tv[0] = 0;
-                trees[0]->getInternalNode(i)->assocDoubleVector("val",tv);
-            }
-            calc_square_change_anc_states(trees[0],0); // second character dies here
-            for (int i=0; i < trees[0]->getInternalNodeCount(); i++) {
-                double tv = (*trees[0]->getInternalNode(i)->getDoubleVector("val"))[0];
-                trees[0]->getInternalNode(i)->deleteDoubleVector("val");
-                std::ostringstream s;
-                s.precision(9);
-                s << "[&value=" << tv << "]";
-                trees[0]->getInternalNode(i)->setName(s.str());
-            }
-            for (int i=0; i < trees[0]->getExternalNodeCount(); i++) {
-                double tv = (*trees[0]->getExternalNode(i)->getDoubleVector("val"))[0];
-                trees[0]->getExternalNode(i)->deleteDoubleVector("val");
-                std::ostringstream s;
-                s.precision(9);
-                s << fixed << trees[0]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
-                trees[0]->getExternalNode(i)->setName(s.str());
-            }
-            cout << "tree tree" << c << " = ";
-            cout << trees[0]->getRoot()->getNewick(true) << ";" << endl;
             if (c == (nchars - 1)) {
-                cout << "end;\n" << endl;
+                (*poouts) << "end;\n" << endl;
             }
             // remove annotations
             remove_annotations(trees[0]);
@@ -223,6 +240,10 @@ int main(int argc, char * argv[]) {
     if (tfileset) {
         tfstr->close();
         delete poos;
+    }
+    if (outfileset) {
+        ofstr->close();
+        delete poouts;
     }
     return EXIT_SUCCESS;
 }
