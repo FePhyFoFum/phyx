@@ -8,7 +8,7 @@ using namespace std;
 
 void log_call (int argc, char * argv[]) {
     ofstream phyxlog;
-    phyxlog.open ("phyx.log", ios::out | ios::app);
+    phyxlog.open ("phyx.logfile", ios::out | ios::app);
     for (int i = 0; i < argc; i++) {
         phyxlog << argv[i];
         if (i < (argc - 1)) {
