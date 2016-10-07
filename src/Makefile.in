@@ -219,6 +219,10 @@ RESCALE_TREE_SRC = tscale.cpp main_tscale.cpp
 RESCALE_TREE_OBJ = tscale.o main_tscale.o
 RESCALE_TREE_DEP = tscale.d main_tscale.d
 
+TCOL_SRC = main_tcol.cpp
+TCOL_OBJ = main_tcol.o
+TCOL_DEP = main_tcol.d
+
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
@@ -486,6 +490,11 @@ pxrls: $(CPP_OBJS) $(RELABEL_SEQ_OBJ)
 pxtscale: $(CPP_OBJS) $(RESCALE_TREE_OBJ)
 	@echo 'building pxtscale'
 	$(CXX) -o "pxtscale" $(OPT_FLAGS) $(RESCALE_TREE_OBJ) $(CPP_OBJS)
+	
+pxtcol: $(CPP_OBJS) $(TCOL_OBJ)
+	@echo 'building pxtcol'
+	$(CXX) -o "pxtcol" $(OPT_FLAGS) $(TCOL_OBJ) $(CPP_OBJS)
+
 
 install:
 	install -m 0755 px* $(prefix)

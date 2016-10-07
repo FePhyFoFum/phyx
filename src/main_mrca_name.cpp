@@ -32,6 +32,8 @@ void print_help() {
     cout << "Label internal nodes with clade names." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
+    cout << "If no MRCA file is present, this will label anything" << endl;
+    cout << "that isn't labeled" << endl;
     cout << endl;
     cout << "Usage: pxmrcaname [OPTION]... " << endl;
     cout << endl;
@@ -103,8 +105,8 @@ int main(int argc, char * argv[]) {
     }
     
     if (!mrcaset) {
-        cout << "Must supply mrca file." << endl;
-        exit(0);
+        cerr << "Because no file was provided, all the internal nodes" << endl;
+        cerr << "will be labeled" << endl;
     }
     
     istream* pios = NULL;
@@ -130,45 +132,96 @@ int main(int argc, char * argv[]) {
        expecting (new) format:
        MRCANAME = tip1 tip2 ... 
     */
-    ifstream inmrca(mrcaf);
-    string mrcaline;
     map<string, vector<string> > mrcas;
-    while (getline(inmrca, mrcaline)) {
-        if (mrcaline.empty()) {
-            continue;
+    if (mrcaset){
+        ifstream inmrca(mrcaf);
+        string mrcaline;
+        while (getline(inmrca, mrcaline)) {
+            if (mrcaline.empty()) {
+                continue;
+            }
+            vector<string> searchtokens;
+            tokenize(mrcaline, searchtokens, "=");
+            string mrcaname = searchtokens[0];
+            trim_spaces(mrcaname);
+            searchtokens.erase(searchtokens.begin());
+            searchtokens = tokenize(searchtokens[0]);
+            mrcas[mrcaname] = searchtokens;
         }
-        vector<string> searchtokens;
-        tokenize(mrcaline, searchtokens, "=");
-        string mrcaname = searchtokens[0];
-        trim_spaces(mrcaname);
-        searchtokens.erase(searchtokens.begin());
-        searchtokens = tokenize(searchtokens[0]);
-        mrcas[mrcaname] = searchtokens;
+        inmrca.close();
     }
-    inmrca.close();
     
 // collect tree(s)
-    vector<string> lines;
-    string line;
-    while (getline(*pios, line)) {
-        lines.push_back(line);
+    
+    string retstring;
+    int ft = test_tree_filetype_stream(*pios, retstring);
+    if (ft != 0 && ft != 1) {
+        cerr << "This really only works with nexus or newick" << endl;
+        exit(0);
     }
     
-// allow multiple trees
-    for (unsigned int i = 0; i < lines.size(); i++) {
-        Tree * tree = tr.readTree(lines[i]);
-        map<string, vector<string> >::iterator it;
-        for (it = mrcas.begin(); it != mrcas.end(); it++) {
-            //cout << "Dealing with clade '" << (*it).first << "'" << endl;
-            if (!check_names_against_tree(tree, (*it).second)) {
-                cout << "Check mrca file for typos." << endl;
-                exit (0);
+    int count = 0;
+    bool going = true;
+    if (ft == 1) {
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (going) {
+                if(mrcaset){
+                    map<string, vector<string> >::iterator it;
+                    for (it = mrcas.begin(); it != mrcas.end(); it++) {
+                        //cout << "Dealing with clade '" << (*it).first << "'" << endl;
+                        if (!check_names_against_tree(tree, (*it).second)) {
+                            cout << "Check mrca file for typos." << endl;
+                            exit (0);
+                        }
+                        Node * nd = tree->getMRCA((*it).second);
+                        nd->setName((*it).first);
+                    }
+                }else{
+                    for(int i=0; i<tree->getInternalNodeCount();i++){
+                        if (tree->getInternalNode(i)->getName().size()==0){
+                            tree->getInternalNode(i)->setName("px"+std::to_string(count));
+                            count ++;
+                        }
+                    }
+                }
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                delete tree;
             }
-            Node * nd = tree->getMRCA((*it).second);
-            nd->setName((*it).first);
         }
-        (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
-        delete tree;
+    }else{
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                if(mrcaset){
+                    map<string, vector<string> >::iterator it;
+                    for (it = mrcas.begin(); it != mrcas.end(); it++) {
+                        //cout << "Dealing with clade '" << (*it).first << "'" << endl;
+                        if (!check_names_against_tree(tree, (*it).second)) {
+                            cout << "Check mrca file for typos." << endl;
+                            exit (0);
+                        }
+                        Node * nd = tree->getMRCA((*it).second);
+                        nd->setName((*it).first);
+                    }
+                }else{
+                    for(int i=0; i<tree->getInternalNodeCount();i++){
+                        if (tree->getInternalNode(i)->getName().size()==0){
+                            tree->getInternalNode(i)->setName("px"+std::to_string(count));
+                            count ++;
+                        }
+                    }
+                }
+                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                delete tree;
+            }
+        }
     }
     
     if (fileset) {

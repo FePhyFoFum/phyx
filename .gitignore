@@ -19,5 +19,7 @@ autom4te.cache
 .autotools
 .settings
 nbproject
+phyx.logfile
 phyx.log
-
+.idea*
+examples_old*
