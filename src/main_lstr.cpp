@@ -54,6 +54,7 @@ static struct option const long_options[] =
     {"binary", no_argument, NULL, 'b'},
     {"length", no_argument, NULL, 'l'},
     {"tiplabels", no_argument, NULL, 'i'},
+    {"rtvar",no_argument, NULL, 'v'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -74,12 +75,13 @@ int main(int argc, char * argv[]) {
     bool rootedcheck = false;
     bool ntipcheck = false;
     bool namecheck = false;
+    bool rtvarcheck = false;
     char * outf = NULL;
     char * treef = NULL;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:ranublio:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:vranublio:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -117,6 +119,10 @@ int main(int argc, char * argv[]) {
                 namecheck = true;
                 optionsset = true;
                 break;
+            case 'v':
+                rtvarcheck = true;
+                optionsset = true;
+                break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
@@ -133,7 +139,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + ntipcheck) > 1) {
+    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + +rtvarcheck+ ntipcheck) > 1) {
         cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
         exit(0);
     }
@@ -183,7 +189,7 @@ int main(int argc, char * argv[]) {
                 } else {
                     // only a single property
                     TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
-                        ntipcheck, lengthcheck, namecheck, poos);
+                        ntipcheck, lengthcheck, namecheck, rtvarcheck, poos);
                 }
             }
         }
@@ -205,7 +211,7 @@ int main(int argc, char * argv[]) {
                 } else {
                     // only a single property
                     TreeInfo ti(tree, ultracheck, binarycheck, agecheck, rootedcheck,
-                        ntipcheck, lengthcheck, namecheck, poos);
+                        ntipcheck, lengthcheck, namecheck, rtvarcheck, poos);
                 }
             }
         }

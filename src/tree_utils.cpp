@@ -54,6 +54,18 @@ double get_length_to_root(Node * n) {
     return length;
 }
 
+/*
+ * calculate the variance between the lengths to the root and the tips
+ */
+double get_root_tip_var(Tree * tr){
+    vector <double> paths;
+    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
+        paths.push_back(get_length_to_root(tr->getExternalNode(i)));
+    }
+    double var = variance(paths);
+
+    return var;
+}
 
 // assumes annotations are of form: [something]
 void remove_annotations(Tree * tr) {

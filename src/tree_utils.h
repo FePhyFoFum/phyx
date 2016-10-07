@@ -18,6 +18,7 @@ int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2);
 void create_tree_map_from_rootnode(Tree * tr, map<Node*, vector<Node*> > &);
 void nni_from_tree_map(Tree * tr, map<Node*, vector<Node*> > &);
 double get_length_to_root(Node * n);
+double get_root_tip_var(Tree * tr);
 void rescale_tree(Tree * tr, double const& scalef);
 
 void remove_annotations(Tree * tr);
