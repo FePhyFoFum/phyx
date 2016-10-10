@@ -26,9 +26,15 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
         ultrametric_tree_ = is_ultrametric_paths(tree_);
         (*poos) << std::boolalpha << ultrametric_tree_ << endl;
     } else if(rtvarcheck){
-        rtvar_ = get_root_tip_var(tree_);
-        (*poos) << rtvar_ << endl;
-    }else if (binarycheck) {
+        treelength_ = get_tree_length(tree_);
+        has_branchlengths_ = (treelength_ > 0.0) ? true : false;
+        if (has_branchlengths_) {
+            rtvar_ = get_root_tip_var(tree_);
+            (*poos) << rtvar_ << endl;
+        } else {
+            (*poos) << "NA" << endl;
+        }
+    } else if (binarycheck) {
         binary_tree_ = is_binary(tree_);
         (*poos) << std::boolalpha << binary_tree_ << endl;
     } else if (agecheck) {

@@ -34,6 +34,7 @@ void print_help() {
     cout << " -b, --binary        return whether tree is binary" << endl;
     cout << " -l, --length        return the length of the tree" << endl;
     cout << " -i, --tiplabels     return all tip labels (one per line)" << endl;
+    cout << " -v, --rtvar         return root-to-tip variance" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -139,7 +140,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + +rtvarcheck+ ntipcheck) > 1) {
+    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck) > 1) {
         cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
         exit(0);
     }
