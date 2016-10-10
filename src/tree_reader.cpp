@@ -35,6 +35,7 @@ Tree * TreeReader::readTree(string trees) {
     char nextChar = pb.c_str()[x];
     bool start = true;
     bool keepGoing = true;
+    bool in_quote = false;
     Node * currNode = NULL;
     while (keepGoing == true) {
         if (nextChar == '(') {
@@ -56,22 +57,32 @@ Tree * TreeReader::readTree(string trees) {
             nextChar = pb.c_str()[x];
             string nam = "";
             bool goingName = true;
+            
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                 || nextChar == ';'|| nextChar == '[') {
                 goingName = false;
+            }else if (nextChar == '"' || nextChar == '\''){
+                in_quote = true;
             }
             while (goingName == true) {
                 nam = nam + nextChar;
                 x++;
                 nextChar = pb.c_str()[x];
-                if (nextChar == ',' || nextChar == ')' || nextChar == ':'
+                if (in_quote == false){
+                    if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                     || nextChar == ';'|| nextChar == '[') {
-                    goingName = false;
-                    break;
+                        goingName = false;
+                        break;
+                    }
+                    x--;
+                }else{
+                   if (nextChar == '"' || nextChar == '\''){
+                       goingName = false;
+                       break;
+                   }
                 }
             } // work on edge
             currNode->setName(nam);
-            x--;
         } else if (nextChar == ';') {
             keepGoing = false;
         } else if (nextChar == ':') {
@@ -119,17 +130,34 @@ Tree * TreeReader::readTree(string trees) {
             currNode = newNode;
             string nodeName = "";
             bool goingName = true;
-            while (goingName == true) {
-                nodeName = nodeName + nextChar;
+            if (nextChar == '"' || nextChar == '\''){
+                in_quote = true;
+            }
+            if(in_quote == false){
+                while (goingName == true) {
+                    nodeName = nodeName + nextChar;
+                    x++;
+                    nextChar = pb.c_str()[x];
+                    if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar == '[') {
+                        goingName = false;
+                        break;
+                    }
+                }
+                x--;
+            }else{
                 x++;
                 nextChar = pb.c_str()[x];
-                if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar == '[') {
-                    goingName = false;
-                    break;
-                }
+                while (goingName == true) {
+                    nodeName = nodeName + nextChar;
+                    x++;
+                    nextChar = pb.c_str()[x];
+                    if (nextChar == '"' || nextChar == '\''){
+                        goingName = false;
+                        break;
+                    }
+                } 
             }
             newNode->setName(nodeName);
-            x--;
         }
         if (x < pb.length() - 1) { // added
             x++;
@@ -147,6 +175,7 @@ Tree * read_tree_string(string trees) {
     char nextChar = pb.c_str()[x];
     bool start = true;
     bool keepGoing = true;
+    bool in_quote = false;
     Node * currNode = NULL;
     while (keepGoing == true) {
         if (nextChar == '(') {
@@ -168,22 +197,32 @@ Tree * read_tree_string(string trees) {
             nextChar = pb.c_str()[x];
             string nam = "";
             bool goingName = true;
+            
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                 || nextChar == ';'|| nextChar == '[') {
                 goingName = false;
+            }else if (nextChar == '"' || nextChar == '\''){
+                in_quote = true;
             }
             while (goingName == true) {
                 nam = nam + nextChar;
                 x++;
                 nextChar = pb.c_str()[x];
-                if (nextChar == ',' || nextChar == ')' || nextChar == ':'
+                if (in_quote == false){
+                    if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                     || nextChar == ';'|| nextChar == '[') {
-                    goingName = false;
-                    break;
+                        goingName = false;
+                        break;
+                    }
+                    x--;
+                }else{
+                   if (nextChar == '"' || nextChar == '\''){
+                       goingName = false;
+                       break;
+                   }
                 }
             } // work on edge
             currNode->setName(nam);
-            x--;
         } else if (nextChar == ';') {
             keepGoing = false;
         } else if (nextChar == ':') {
@@ -205,7 +244,7 @@ Tree * read_tree_string(string trees) {
             currNode->setBL(edd);
             x--;
         }
-        // note
+        //note
         else if (nextChar == '[') {
             x++;
             nextChar = pb.c_str()[x];
@@ -231,17 +270,34 @@ Tree * read_tree_string(string trees) {
             currNode = newNode;
             string nodeName = "";
             bool goingName = true;
-            while (goingName == true) {
-                nodeName = nodeName + nextChar;
+            if (nextChar == '"' || nextChar == '\''){
+                in_quote = true;
+            }
+            if(in_quote == false){
+                while (goingName == true) {
+                    nodeName = nodeName + nextChar;
+                    x++;
+                    nextChar = pb.c_str()[x];
+                    if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar == '[') {
+                        goingName = false;
+                        break;
+                    }
+                }
+                x--;
+            }else{
                 x++;
                 nextChar = pb.c_str()[x];
-                if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar == '[') {
-                    goingName = false;
-                    break;
-                }
+                while (goingName == true) {
+                    nodeName = nodeName + nextChar;
+                    x++;
+                    nextChar = pb.c_str()[x];
+                    if (nextChar == '"' || nextChar == '\''){
+                        goingName = false;
+                        break;
+                    }
+                } 
             }
             newNode->setName(nodeName);
-            x--;
         }
         if (x < pb.length() - 1) { // added
             x++;
