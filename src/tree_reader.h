@@ -19,6 +19,7 @@ public:
     Tree * readTree(string trees);
 };
 
+Tree * read_tree_string_OLD(string trees);
 Tree * read_tree_string(string trees);
 int test_tree_filetype(string filen);
 int test_tree_filetype_stream(istream & stri, string & retstring);
