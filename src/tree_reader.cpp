@@ -38,6 +38,7 @@ Tree * TreeReader::readTree(string trees) {
     bool in_quote = false;
     Node * currNode = NULL;
     while (keepGoing == true) {
+		cout << nextChar << endl;
         if (nextChar == '(') {
             if (start == true) {
                 Node * root = new Node();
@@ -57,7 +58,6 @@ Tree * TreeReader::readTree(string trees) {
             nextChar = pb.c_str()[x];
             string nam = "";
             bool goingName = true;
-            
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                 || nextChar == ';'|| nextChar == '[') {
                 goingName = false;
@@ -74,7 +74,6 @@ Tree * TreeReader::readTree(string trees) {
                         goingName = false;
                         break;
                     }
-                    x--;
                 }else{
                    if (nextChar == '"' || nextChar == '\''){
                        goingName = false;
@@ -83,6 +82,9 @@ Tree * TreeReader::readTree(string trees) {
                 }
             } // work on edge
             currNode->setName(nam);
+            if (in_quote == false){
+				x--;
+			}
         } else if (nextChar == ';') {
             keepGoing = false;
         } else if (nextChar == ':') {
