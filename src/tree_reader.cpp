@@ -627,12 +627,18 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
 /*
  * this is simple as each line is a tree
  */
+// adding a simple check: if line is empty, assume we're done
 Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going) {
     string tline;
     if (retstring.size() > 0) {
         tline = retstring;
         retstring = "";
     } else if (!getline(stri, tline)) {
+        (*going) = false;
+        return NULL;
+    }
+    if (tline.size() == 0) {
+        //cout << "You've got yerself an empty line, there." << endl;
         (*going) = false;
         return NULL;
     }
