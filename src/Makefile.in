@@ -321,7 +321,7 @@ FORT_OBJS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls $(GFORTRAN_PROGRAMS) $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale $(GFORTRAN_PROGRAMS) $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
 	@echo 'building pxstrec'
