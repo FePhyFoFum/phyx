@@ -38,7 +38,7 @@ Tree * TreeReader::readTree(string trees) {
     bool in_quote = false;
     Node * currNode = NULL;
     while (keepGoing == true) {
-		cout << nextChar << endl;
+	//cout << nextChar << endl;
         if (nextChar == '(') {
             if (start == true) {
                 Node * root = new Node();
