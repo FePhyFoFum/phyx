@@ -206,7 +206,6 @@ Tree * read_tree_string(string trees) {
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                 || nextChar == ';'|| nextChar == '[') {
                 goingName = false;
-                x--;
             } else if (nextChar == '"' || nextChar == '\'') {
                 in_quote = true;
                 quoteType = nextChar;
@@ -219,7 +218,6 @@ Tree * read_tree_string(string trees) {
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                     || nextChar == ';'|| nextChar == '[') {
                         goingName = false;
-                        x--;
                         break;
                     }
                 } else {
@@ -295,10 +293,10 @@ Tree * read_tree_string(string trees) {
                     nextChar = pb.c_str()[x];
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar == '[') {
                         goingName = false;
-                        x--;
                         break;
                     }
                 }
+                x--;
             } else {
                 x++;
                 nextChar = pb.c_str()[x];
