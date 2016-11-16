@@ -98,7 +98,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'h':
                 print_help();
-                printInfo(); // temp
+                //printInfo(); // temp
                 exit(0);
             case 'V':
                 cout << versionline << endl;
