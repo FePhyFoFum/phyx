@@ -64,4 +64,8 @@ double logn (double x, double base);
 bool essentially_equal (double a, double b);
 bool all_equal (vector <double> vals);
 
+
+//a basic poll checker for stream inputs
+bool check_for_input_to_stream();
+
 #endif /* _UTILS_H_ */

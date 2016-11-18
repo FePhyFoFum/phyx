@@ -511,9 +511,9 @@ distclean:
 
 check:
 	@echo 'to run tests...'
-	@echo 'python TEST/run_tests.py'
+	@echo 'python run_tests.py'
 
 test:
 	@echo 'to run tests...'
-	@echo 'python TEST/run_tests.py'
+	@echo 'python run_tests.py'
 
