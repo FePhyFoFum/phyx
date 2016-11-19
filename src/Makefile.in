@@ -510,10 +510,8 @@ distclean:
 	-$(RM) *.o *.d px* configure config.log config.h config.status Makefile
 
 check:
-	@echo 'to run tests...'
-	@echo 'python run_tests.py'
+	python run_tests.py
 
 test:
-	@echo 'to run tests...'
-	@echo 'python run_tests.py'
+	python run_tests.py
 
