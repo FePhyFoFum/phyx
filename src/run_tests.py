@@ -117,6 +117,8 @@ def test_program(name):
         return True
     else:
         print bcolors.FAIL+"FAILED"+bcolors.ENDC
+        print "intended output:",t
+        print "your output:",x
         return False
 
 if __name__ == "__main__":
