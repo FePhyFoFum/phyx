@@ -221,8 +221,8 @@ Tree * read_tree_string(string trees) {
                         break;
                     }
                 } else {
-                   if (nextChar == nextChar) {
-                       nodeName = nodeName + nextChar;
+                   if (nextChar == quoteType) {
+                       //nodeName = nodeName + nextChar;
                        goingName = false;
                        break;
                    }
