@@ -21,13 +21,21 @@ using namespace std;
 #include "bd_fit.h"
 #include "log.h"
 
+/*
+Give two options:
+1. pass in 2 trees
+2. pass in 1 distribution of trees
+ */
+
 void print_help () {
-    cout << "Birth-death inference" << endl;
+    cout << "Calculate tree distances. RF to begin with, others to follow" << endl;
+    cout << "Either pass in 2 trees with `t` and `a`, or a single distribution with `t`." << endl;
     cout << endl;
-    cout << "Usage: pxbdfit [OPTION]... " << endl;
+    cout << "Usage: pxtdist [OPTION]... " << endl;
     cout << endl;
-    cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
-    cout << " -m, --model=STRING  diversification model; either 'yule' or 'bd' (default)" << endl;
+    cout << " -t, --treef=FILE    reference treefile, stdin otherwise" << endl;
+    cout << " -a, --alttree=FILE  alternate treefile" << endl;
+    cout << " -d, --dist=STRING   distance metric, default='RF'" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -36,12 +44,13 @@ void print_help () {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxbdfit 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxtdist 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"model", required_argument, NULL, 'm'},
+    {"alttree", required_argument, NULL, 'a'},
+    {"dist", required_argument, NULL, 'd'},
     {"outf", required_argument, NULL, 'o'},
     {"showd", no_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
@@ -55,15 +64,17 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
+    bool alttfileset = false;
     
     char * treef = NULL;
+    char * alttreef = NULL;
     char * outf = NULL;
     
-    string model = "bd";
+    string dist = "bd";
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:m:o:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:a:d:o:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -73,9 +84,13 @@ int main(int argc, char * argv[]) {
                 treef = strdup(optarg);
                 check_file_exists(treef);
                 break;
-            case 'm':
-                // need to check valid models here
-                model = strdup(optarg);
+            case 'a':
+                alttfileset = true;
+                alttreef = strdup(optarg);
+                check_file_exists(alttreef);
+                break;
+            case 'd':
+                dist = strdup(optarg);
                 break;
             case 'o':
                 outfileset = true;
