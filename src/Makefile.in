@@ -509,3 +509,9 @@ clean:
 distclean:
 	-$(RM) *.o *.d px* configure config.log config.h config.status Makefile
 
+check:
+	python run_tests.py
+
+test:
+	python run_tests.py
+

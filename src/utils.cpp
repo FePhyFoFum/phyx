@@ -14,6 +14,8 @@
 #include <functional>
 #include <ctime>
 #include <chrono>
+#include <poll.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -503,3 +505,14 @@ bool all_equal (vector <double> vals) {
     return equal;
 }
 
+
+bool check_for_input_to_stream(){
+    struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
+    int ret = 0;
+    ret = poll(&pfd, 1, 500);
+    if (ret == 0){
+        return false;
+    }else{
+        return true;
+    }
+}
