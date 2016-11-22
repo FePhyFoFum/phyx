@@ -250,6 +250,9 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     return isImag;
 }
 
+//taking out fortran
+//
+/*
 extern"C" {
     void wrapalldmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
     void wrapsingledmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
@@ -260,15 +263,16 @@ void RateModel::setup_fortran_P_whichQ(int which, mat & P, double t) {
     Q = Qs[which];
     setup_fortran_P(P,t,false);
 }
-
+*/
+//taking out fortran
 /*
  * runs the basic padm fortran expokit full matrix exp
- */
+ *
 void RateModel::setup_fortran_P(mat & P, double t, bool store_p_matrices) {
-    /*
-      return P, the matrix of dist-to-dist transition probabilities,
-      from the model's rate matrix (Q) over a time duration (t)
-    */
+    //
+    //  return P, the matrix of dist-to-dist transition probabilities,
+    //  from the model's rate matrix (Q) over a time duration (t)
+    //
     int ideg = 6;
     int m = Q.n_rows; // square so you only need the rows
     int ldh = m;
@@ -302,7 +306,7 @@ void RateModel::setup_fortran_P(mat & P, double t, bool store_p_matrices) {
     }
     
 }
-
+*/
 void RateModel::set_sameQ(bool s) {
     sameQ = s;
 }
@@ -381,6 +385,8 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon
     }
 }
 
+//take out fortran
+/*
 void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H) {
     int count = 0;
     for (unsigned int i=0; i < inmatrix.n_cols; i++) {
@@ -390,3 +396,4 @@ void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double *
         }
     }
 }
+*/

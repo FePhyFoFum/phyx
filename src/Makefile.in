@@ -17,8 +17,6 @@ ifeq "$(HARM)" "Y"
     CPP_LIBS += -larmadillo
 endif
 
-# gsl:
-#-lgsl -lgslcblas
 # profiling:
 #-g -pg
 
@@ -38,18 +36,7 @@ ifeq "$(HNLOPT)" "Y"
     NLOPT_PROGRAMS += pxbdfit
 endif
 
-#######
-# FORTRAN BIT
-######
-# Don't assume location of gfortran e.g. with HomeBrew on MAC
-FC := @FC@
-GFORTRAN_PROGRAMS := 
-ifneq (,$(findstring gfortran,$(FC)))
-    GFORTRAN_PROGRAMS += pxstrec pxseqgen pxcontrates pxsm0 pxsm2a
-endif
-
 FFLAGS	= -O3
-.f.o:;  $(FC) $(FFLAGS) -c $<
 
 CONSEQ_SRC = main_consq.cpp
 CONSEQ_OBJ = main_consq.o
@@ -159,13 +146,14 @@ RMT_SRC = main_rmt.cpp
 RMT_OBJ = main_rmt.o
 RMT_DEP = main_rmt.d
 
-SM0_SRC = main_sm0.cpp
-SM0_OBJ = main_sm0.o
-SM0_DEP = main_sm0.d
+#removing for fortran, updating for non-fortran in process
+#SM0_SRC = main_sm0.cpp
+#SM0_OBJ = main_sm0.o
+#SM0_DEP = main_sm0.d
 
-SM2A_SRC = main_sm2a.cpp
-SM2A_OBJ = main_sm2a.o
-SM2A_DEP = main_sm2a.d
+#SM2A_SRC = main_sm2a.cpp
+#SM2A_OBJ = main_sm2a.o
+#SM2A_DEP = main_sm2a.d
 
 CLSQ_SRC = clsq.cpp main_clsq.cpp
 CLSQ_OBJ = clsq.o main_clsq.o
@@ -242,13 +230,14 @@ CPP_SRCS += \
 RATE_SRCS += \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
-./state_reconstructor_simple.cpp \
 ./optimize_state_reconstructor_nlopt.cpp \
 ./optimize_state_reconstructor_periods_nlopt.cpp \
 ./branch_segment.cpp \
-./mcmc.cpp \
 ./cont_models.cpp \
 ./seq_gen.cpp 
+#removing to get rid of fortran. update in process
+#./mcmc.cpp \
+#./state_reconstructor_simple.cpp \
 
 CPP_OBJS += \
 ./utils.o \
@@ -267,13 +256,14 @@ CPP_OBJS += \
 RATE_OBJS += \
 ./rate_model.o \
 ./state_reconstructor.o \
-./state_reconstructor_simple.o \
 ./optimize_state_reconstructor_nlopt.o \
 ./optimize_state_reconstructor_periods_nlopt.o \
 ./branch_segment.o \
-./mcmc.o \
 ./cont_models.o \
 ./seq_gen.o
+#removing to get rid of fortran. update in process
+#./mcmc.o \
+#./state_reconstructor_simple.o \
 
 ## doesn't seem to be used
 CPP_DEPS += \
@@ -294,19 +284,21 @@ CPP_DEPS += \
 RATE_DEPS += \
 ./rate_model.d \
 ./state_reconstructor.d \
-./state_reconstructor_simple.d \
 ./optimize_state_reconstructor_nlopt.d \
 ./optimize_state_reconstructor_periods_nlopt.d \
 ./branch_segment.d \
-./mcmc.d \
 ./cont_models.d \
 ./seq_gen.d
+#removing to get rid of fortran. update in process
+#./mcmc.d \
+#./state_reconstructor_simple.d \
+
 
 # Each subdirectory must supply rules for building sources it contributes
-%.o: ./%.f
-	$(FC) $(FFLAGS) -c -w $<
+#%.o: ./%.f
+#	$(FC) $(FFLAGS) -c -w $<
 
-FORT_OBJS += \
+#FORT_OBJS += \
 ./clock.o \
 ./my_expokit.o \
 ./mataid.o \
@@ -321,11 +313,11 @@ FORT_OBJS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale $(GFORTRAN_PROGRAMS) $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxcontrates $(NLOPT_PROGRAMS)
 
-pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) $(FORT_OBJS)
+pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
-	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo 'building pxmrca'
@@ -425,7 +417,7 @@ pxboot: $(CPP_OBJS) $(SEQSAMP_OBJ)
 
 pxseqgen: $(CPP_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
 	@echo 'building pxseqgen'
-	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPP_LIBS) #$(FORT_OBJS)  -lgfortran
 
 pxcat: $(CPP_OBJS) $(CONCAT_OBJ)
 	@echo 'building pxcat'
@@ -441,7 +433,7 @@ pxvcf2fa: $(CPP_OBJS) $(VCF2FA_OBJ)
 
 pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)
 	@echo 'building pxcontrates'
-	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS) $(CPP_OBJS) $(CPP_LIBS) -lgfortran
+	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(CPP_OBJS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
 
 pxrecode: $(CPP_OBJS) $(SEQRECODE_OBJ)
 	@echo 'building pxrecode'
@@ -467,13 +459,14 @@ pxrmt: $(CPP_OBJS) $(RMT_OBJ)
 	@echo 'building pxrmt'
 	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS)
 
-pxsm0: $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
-	@echo 'building pxsm0'
-	$(CXX) -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+#removing until fortran update
+#pxsm0: $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
+#	@echo 'building pxsm0'
+#	$(CXX) -o "pxsm0" $(OPT_FLAGS) $(SM0_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
-pxsm2a: $(CPP_OBJS) $(RATE_OBJS) $(SM2A_OBJ) $(FORT_OBJS)
-	@echo 'building pxsm2a'
-	$(CXX) -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
+#pxsm2a: $(CPP_OBJS) $(RATE_OBJS) $(SM2A_OBJ) $(FORT_OBJS)
+#	@echo 'building pxsm2a'
+#	$(CXX) -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
 pxcomp: $(CPP_OBJS) $(COMPTEST_OBJ)
 	@echo 'building pxcomp'
