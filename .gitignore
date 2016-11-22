@@ -4,7 +4,6 @@
 tags
 px*
 Makefile
-configure
 config.h
 config.log
 config.status
