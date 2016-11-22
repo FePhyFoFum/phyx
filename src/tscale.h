@@ -1,9 +1,9 @@
 #ifndef _TSCALE_H_
 #define _TSCALE_H_
 
-using namespace std;
-
 #include "tree.h"
+
+using namespace std;
 
 class TScale {
 private:

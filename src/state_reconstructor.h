@@ -2,14 +2,14 @@
 #ifndef _STATE_RECONSTRUCTOR_H_
 #define _STATE_RECONSTRUCTOR_H_
 
-using namespace std;
-
 #include "tree.h"
 #include "node.h"
 #include "rate_model.h"
 #include "vector_node_object.h"
 #include "sequence.h"
 #include "superdouble.h"
+
+using namespace std;
 
 class StateReconstructor{
 

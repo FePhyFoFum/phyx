@@ -12,10 +12,10 @@
 
 class RateModel;
 
-using namespace std;
-
 #include "vector_node_object.h"
 #include "superdouble.h"
+
+using namespace std;
 
 class BranchSegment{
 private:

@@ -1,10 +1,11 @@
 
-using namespace std;
 
 #include "tscale.h"
 #include "tree.h"
 #include "utils.h"
 #include "tree_utils.h"
+
+using namespace std;
 
 TScale::TScale () {
     
