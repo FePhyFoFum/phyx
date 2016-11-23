@@ -109,7 +109,7 @@ Installation Instructions may be found at: https://github.com/FePhyFoFum/phyx
 \end{flushleft}
 \section{List of programs and features of Phyx}
 
-The following is a list of the programs that are currently available, for all options a program offers type the program then (-h) and a list of features will be displayed.
+The following is a list of the programs that are currently available, for all options a program offers type the program then (-h) and a list of features will be displayed. Below is a list of programs with examples on how to run them, not all options are included as programs are updated regularly with new options being added. The most up to date list of options for each program can be found in the help menu.
 
 \subsection{repeatability}
 
@@ -124,12 +124,17 @@ pxaa2cdn -a amino acid alignment -n nucleotide alignment || pxclsq -p 0.0
 || pxnj -n 3 -o output tree file
 \end{verbatim}
 \end{flushleft}
+
+\subsection{examples}
+
+A list of example files can be found in the example files/ folder. File names should match those in the manual.
+
 \subsection{pxaa2cdn}
 
 Often times a coding DNA alignment does not end up with the data divided into sets of three (codons) and as a result this may introduce bias into the analysis or make positive selection tests difficult. This program allows the user to first align the amino acid alignment, then using the alignment the user inputs the corresponding nucleotide sequences and the program will give the codon aligned sequence.
 \begin{flushleft}
 \begin{verbatim}
-pxaa2cdn -a "AA Alignment" -n "Unaligned nucleotides" -o "Output (Codon Alignment)"
+pxaa2cdn -a AA_Alignment.fa -n Unaligned_Nucleotide.fa -o CDN_aln.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -138,7 +143,7 @@ pxaa2cdn -a "AA Alignment" -n "Unaligned nucleotides" -o "Output (Codon Alignmen
 Diversification has becoming a rapidly expanding field and as a result tools to analyze the data are essential. This program will fit a diversification model to a tree. The model which is chosen with (-m) may be either the default a birth-death model (bd) or a yule model (yule). The program will return the model parameters (b,d,r,e), likelihood, aic and tree statistics.
 \begin{flushleft}
 \begin{verbatim}
-pxbdfit -t tree_file -m "yule"
+pxbdfit -t bd.tre -m "yule"
 \end{verbatim}
 \end{flushleft}
 
@@ -157,7 +162,10 @@ pxbdsim -e 100 -s -b 1 -d 0.5 -o output_tree_file
 Using a variety of statistical methods for evaluating certainty of phylogenetic trees is essential as all methods have both positives and negatives associated with them. This program will allow the user to create datasets for two of the most commonly used methods (Bootstrap and Jackknife). The proportion of data to be incorporated in a Jackknife may be specified with (-f) and a random seed may be specified with (-x).
 \begin{flushleft}
 \begin{verbatim}
-pxboot -s alignment -x random seed -f 50 -o output of 50% jackknife
+Example Jackknife
+pxboot -s Alignment -x 112233 -f .50 -o output_of_50_jackknife
+Example Bootstrap
+pxboot -s Alignment -p parts -o output_of_bootstrap
 \end{verbatim}
 \end{flushleft}
 
@@ -167,7 +175,7 @@ Analyzing similarities among phylogenetic trees has become a growing part of phy
 
 \begin{flushleft}
 \begin{verbatim}
-pxbp -t tree_file -o bipartitions
+pxbp -t Tree.tre -o bp_output
 \end{verbatim}
 \end{flushleft}
 
@@ -183,28 +191,28 @@ When developing a supermatrix for an analysis concatenation of the genes is esse
 \begin{flushleft}
 \begin{verbatim}
 An example where the sequences to be concatenated are in a variety of formats
-pxcat -s *.fa *.phy *.nex  -p partition file -o output matrix
+pxcat -s *.fas *.fa *.phy -p Parts -o Supermatrix
 \end{verbatim}
 \end{flushleft}
 
 \subsection{pxclsq}
 
-Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is allowed to be missing (-p), it is important to specify if Amino Acids are being used with the option (-a).
+Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is allowed to be missing (-p), it is important to specify if Amino Acids are being used with the option (-a). Will print to screen the name of and remove any sequences that are left with only ambiguous characters.
 
 \begin{flushleft}
 \begin{verbatim}
-An example to clean an amino acid sequence down to only columns with at least 50% data.
-pxclsq -s sequence -p 0.5 -a
+An example to clean a nucleotide alignment down to only columns with 40% data allowed to be missing.
+pxclsq -s Alignment -p 0.4
 \end{verbatim}
 \end{flushleft}
 
 \subsection{pxconsq}
 
-This program will allow the user to get the consensus sequence from different file types
+This program will allow the user to get the consensus sequence 
 
 \begin{flushleft}
 \begin{verbatim}
-pxconsq -s sequence
+pxconsq -s Alignment
 \end{verbatim}
 \end{flushleft}
 
@@ -225,7 +233,7 @@ Filtering based on a certain quality score is essential for processing raw fastq
 
 \begin{flushleft}
 \begin{verbatim}
-pxfqfilt -s fastq sequence -m 10
+pxfqfilt -s fqfilt_test.fastq -m 10
 \end{verbatim}
 \end{flushleft}
 
@@ -271,12 +279,12 @@ pxlstr -t Tree.tre
 
 \subsection{pxmrca}
 
-This program will provide the information regarding the most recent common ancestor. Specifically the user provides the species in a clade of interest using an MRCA file formatted as follows:
+This program will provide the information regarding the most recent common ancestor, giving number of tips in the tree and number of tips for each clade specified. The clade that will be analyzed is the smallest clade containing the tips specified. Specifically the user provides the species in a clade of interest using an MRCA file formatted as follows:
 MRCANAME = tip1 tip2
 
 \begin{flushleft}
 \begin{verbatim}
-pxmrca -t tree -m mrcafile
+pxmrca -t mrca_test.tre -m mrca.txt
 \end{verbatim}
 \end{flushleft}
 
@@ -310,7 +318,7 @@ This program will create a basic neighbor joining tree.
 
 \begin{flushleft}
 \begin{verbatim}
-pxnj -s Alignment
+pxnj -s Alignment.aln
 \end{verbatim}
 \end{flushleft}
 
@@ -320,7 +328,7 @@ This program will do pairwise alignments using the needleman-wunsch algorithm. I
 
 \begin{flushleft}
 \begin{verbatim}
-pxnw -s Alignment
+pxnw -s Alignment.aln
 \end{verbatim}
 \end{flushleft}
 
@@ -330,7 +338,7 @@ This program will recode dna to specify only transitions/tranversions (RY coding
 
 \begin{flushleft}
 \begin{verbatim}
-pxrecode -s SeqFile
+pxrecode -s Nucleotide.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -340,7 +348,7 @@ This program will provide the reverse complement of dna sequences in a file.
 
 \begin{flushleft}
 \begin{verbatim}
-pxrevcomp -s SeqFile
+pxrevcomp -s Nucleotide.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -361,7 +369,7 @@ This program provides a way to re-label the tips of trees by specifying a list o
 
 \begin{flushleft}
 \begin{verbatim}
-pxrlt -s TreeFile -c CurrentNames -n NewNames
+pxrlt -t kingdoms.tre -c kingdoms.oldnames.txt -n kingdoms.newnames.txt
 \end{verbatim}
 \end{flushleft}
 
@@ -371,8 +379,7 @@ This program will remove sequences from a sequence file, either by typing them o
 
 \begin{flushleft}
 \begin{verbatim}
-Example to remove sequences called Taxon1 and Taxon2
-pxrms -s SeqFile -n Taxon1,Taxon2
+pxrms -s Nucleotide.fa -f List.txt
 \end{verbatim}
 \end{flushleft}
 
@@ -382,8 +389,8 @@ This program will remove tips from a tree file, either by typing them on the com
 
 \begin{flushleft}
 \begin{verbatim}
-Example to remove tips called Taxon1 and Taxon2
-pxrms -t Tree -n Taxon1,Taxon2
+Example to remove a tips called s1
+pxrmt -t rmt_test.tre -n s1
 \end{verbatim}
 \end{flushleft}
 
@@ -393,7 +400,7 @@ This program will re-root a tree file, based on specified the outgroups (-g), or
 
 \begin{flushleft}
 \begin{verbatim}
-Example: pxrr -t Tree -g outgroup1,outgroup2
+Example: pxrr -t rr_test.tre -g s1,s2
 \end{verbatim}
 \end{flushleft}
 
@@ -404,7 +411,7 @@ This programs are all designed in a similar vain, with the ability to convert a 
 
 \begin{flushleft}
 \begin{verbatim}
-Example: pxs2* -s file_of_some_format
+Example: pxs2* -s Alignment
 \end{verbatim}
 \end{flushleft}
 
@@ -419,6 +426,10 @@ For multimodel simulations it is easiest to print out the node labels on your tr
 
 \begin{flushleft}
 \begin{verbatim}
+example_file example:
+
+pxseqgen -t seqgen_test.tre
+
 if the model you want for the tree is: (.33,.33,.33,.33,.33) where values 
 correspond to (A<->C,A<->G,A<->T,C<->G,C<->T,G<->T)
 
@@ -435,7 +446,6 @@ pxseqgen -t tree_file -o output_alignment
 \end{verbatim}
 \end{flushleft}
 
-
 %Not quite sure what to put for pxsm0 and pxsm2a
 \subsection{pxsm0}
 
@@ -449,7 +459,7 @@ This is a program that does some ancestral state reconstruction and stochastic m
 
 \begin{flushleft}
 \begin{verbatim}
-pxstrec -d test.data-t tree_file -c config -o test.tre.anc
+pxstrec -d test.data.narrow -t test.tre -c config_stmap
 \end{verbatim}
 \end{flushleft}
 \end{document}
@@ -460,7 +470,7 @@ This program will do pairwise alignments using the Smith-Waterman algorithm. It 
 
 \begin{flushleft}
 \begin{verbatim}
-pxsw -s Alignment
+pxsw -s Alignment.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -470,18 +480,18 @@ This will convert a tree file to a newick file
 
 \begin{flushleft}
 \begin{verbatim}
-pxt2new -t tree_file
+pxt2new -t Tree.nex
 \end{verbatim}
 \end{flushleft}
 
-\subsection{pxt2new}
+\subsection{pxtlate}
 
 This program will take an input coding dna seq and translate it to the standard dna codon table, table 1 from genbank.
 
 
 \begin{flushleft}
 \begin{verbatim}
-pxtlate -s Sequences
+pxtlate -s Sequence.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -501,7 +511,7 @@ Provides publication quality Unweighted Paired group Method with Arithmatic Mean
 
 \begin{flushleft}
 \begin{verbatim}
-pxtscale -s Sequence
+pxtscale -t ultra.tre -s 2.0
 \end{verbatim}
 \end{flushleft}
 
@@ -511,7 +521,7 @@ Currently only handles haploid data; phased data will come soon.
 
 \begin{flushleft}
 \begin{verbatim}
-pxvcf2fa -s vcf_file -u
+pxvcf2fa -s vcf_file
 \end{verbatim}
 \end{flushleft}
 
