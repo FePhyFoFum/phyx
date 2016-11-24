@@ -1,0 +1,2 @@
+pxrms -h
+pxrms -s Nucleotide.fa -f List.txt

@@ -1,0 +1,3 @@
+pxrr -t rr_test.tre -g s1
+pxrr -t rr_test.tre -g s1 -o out.tre
+pxrr -t rr_test.tre -g s1,s2 -o out.tre

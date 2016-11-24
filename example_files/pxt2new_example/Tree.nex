@@ -1,0 +1,8 @@
+#NEXUS
+BEGIN TAXA;
+  TAXLABELS A B C;
+END;
+
+BEGIN TREES;
+  TREE tree1 = ((A,B),C);
+END;

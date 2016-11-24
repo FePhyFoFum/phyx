@@ -1,0 +1,7 @@
+pxrlt -h
+pxrms -h
+pxrlt -h
+pxs2fa -h
+pxs2nex -h
+pxs2phy -h
+pxrls -s test.fa -c oldnames.txt -n newnames.txt

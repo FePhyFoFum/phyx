@@ -1,0 +1,7 @@
+pxfqfilt -h
+pxfqfilt -s fqfilt_test.fastq
+pxfqfilt -s fqfilt_test.fastq -m 40
+pxfqfilt -s fqfilt_test.fastq -m 10
+pxfqfilt -h
+pxfqfilt -s fqfilt_test.fastq
+pxfqfilt -s fqfilt_test.fastq ls

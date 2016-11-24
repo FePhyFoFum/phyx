@@ -1,0 +1,5 @@
+pxmrcacut -t mrca_test.tre -m mrca.txt
+pxmrcacut -t mrca_test.tre -m mrca.txt
+pxmrcacut -h
+pxmrcacut -t mrca_test.tre -m mrca.txt
+pxmrcacut -t mrca_test.tre -m mrca.txt

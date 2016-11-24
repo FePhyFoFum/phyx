@@ -1,0 +1,6 @@
+pxvcf2fa -s vcf_file
+pxvcf2fa
+pxvcf2fa -s vcf_file
+pxvcf2fa -v
+pxvcf2fa -V
+pxvcf2fa -s vcf_file

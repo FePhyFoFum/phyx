@@ -1,0 +1,2 @@
+pxrmt -h
+pxrmt -t rmt_test.tre -n s1

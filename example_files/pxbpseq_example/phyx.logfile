@@ -1,0 +1,5 @@
+pxbpsq -s Sequences.fa -t ultra_100.tre
+pxboot -h
+pxcat -h
+pxclsq -h
+pxconsq -h
