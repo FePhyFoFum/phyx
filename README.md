@@ -27,7 +27,7 @@ The instructions below assume homebrew, which is convenient for dealing with dep
 
 3. On to phyx. first, clone the repository (if you haven't already):
 
-        git clone git@github.com:FePhyFoFum/phyx.git
+        git clone https://github.com/FePhyFoFum/phyx.git
 
 4. Install the final dependency, armadillo, (included with phyx):
 
@@ -62,19 +62,23 @@ If you want to install it so it is available anywhere in your system, do:
         make
         sudo make install
         ln -s autoconf-2.69 /usr/local/autoconf
+        
+3. On to phyx. first, clone the repository (if you haven't already):
 
-3. Install cmake and install Armadillo. Get cmake from https://cmake.org/download/. I got https://cmake.org/files/v3.6/cmake-3.6.2-Darwin-x86_64.tar.gz. Get armadillo from the `deps` directory or http://arma.sourceforge.net/download.html, get the stable one. Untar it. Double click the Cmake.app. Click "Browse source..." and choose the armadillo folder that was created after untaring. Click "Browse build..." and choose the same folder as browse source. Click "Configure" and then click "Generate". Go to the terminal and browse to that armadillo folder and type:
+        git clone https://github.com/FePhyFoFum/phyx.git
+
+4. Install cmake and install Armadillo. Get cmake from https://cmake.org/download/. I got https://cmake.org/files/v3.6/cmake-3.6.2-Darwin-x86_64.tar.gz. Get armadillo from the `deps` directory or http://arma.sourceforge.net/download.html, get the stable one. Untar it. Double click the Cmake.app. Click "Browse source..." and choose the armadillo folder that was created after untaring. Click "Browse build..." and choose the same folder as browse source. Click "Configure" and then click "Generate". Go to the terminal and browse to that armadillo folder and type:
 
         make
         sudo make install
 
-4. Install nlopt. Get armadillo from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
+5. Install nlopt. Get armadillo from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
 
         ./configure --with-cxx --without-octave --without-matlab
         make
         sudo make install
 
-5. Compile phyx. Now you can go to the src directory of phyx and type:
+6. Compile phyx. Now you can go to the src directory of phyx and type:
 
         ./configure
         make
@@ -100,7 +104,7 @@ These instructions work for most ubuntu versions as well as debian.
         sudo apt-get install libatlas-cpp-0.6-dev
 2. Clone the phyx repo (if you haven't already):
 
-        git clone git@github.com:FePhyFoFum/phyx.git
+        git clone https://github.com/FePhyFoFum/phyx.git
 3. Install nlopt dependency (default is C, we need C++; not available from apt-get):
 
         cd phyx/deps
