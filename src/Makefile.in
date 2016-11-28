@@ -130,9 +130,9 @@ BP_SRC = main_bp.cpp
 BP_OBJ = main_bp.o
 BP_DEP = main_bp.d
 
-BPSEQ_SRC = main_bpseq.cpp
-BPSEQ_OBJ = main_bpseq.o
-BPSEQ_DEP = main_bpseq.d
+#BPSEQ_SRC = main_bpseq.cpp
+#BPSEQ_OBJ = main_bpseq.o
+#BPSEQ_DEP = main_bpseq.d
 
 2NEW_SRC = main_t2new.cpp
 2NEW_OBJ = main_t2new.o
@@ -313,7 +313,7 @@ RATE_DEPS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxbpsq pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxcontrates $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxcontrates $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -443,9 +443,9 @@ pxbp: $(CPP_OBJS) $(BP_OBJ)
 	@echo 'building pxbp'
 	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS)
 
-pxbpsq: $(CPP_OBJS) $(BPSEQ_OBJ)
-	@echo 'building pxbpsq'
-	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS)
+#pxbpsq: $(CPP_OBJS) $(BPSEQ_OBJ)
+#	@echo 'building pxbpsq'
+#	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS)
 
 pxt2new: $(CPP_OBJS) $(2NEW_OBJ)
 	@echo 'building pxt2new'

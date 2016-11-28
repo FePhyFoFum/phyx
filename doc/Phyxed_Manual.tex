@@ -1,43 +1,36 @@
-\documentclass[12pt,letterpaper]{article}
-\usepackage{longtable}
-\usepackage{fixltx2e}
-\usepackage{textcomp}
+\documentclass[12pt,letterpaper]{memoir}
+%\usepackage{longtable}
+%\usepackage{fixltx2e}
+%\usepackage{textcomp}
 \usepackage{fullpage}
-\usepackage{amsfonts}
+%\usepackage{amsfonts}
 \usepackage{verbatim}
 \usepackage[english]{babel}
-\usepackage{pifont}
+%\usepackage{pifont}
 \usepackage{color}
-\usepackage{setspace}
-\usepackage{lscape}
-\usepackage{indentfirst}
-\usepackage[normalem]{ulem}
-\usepackage{booktabs}
-\usepackage{natbib}
-\usepackage{float}
-\usepackage{latexsym}
+%\usepackage{setspace}
+%\usepackage[normalem]{ulem}
+%\usepackage{natbib}
+%\usepackage{float}
+%\usepackage{latexsym}
 \usepackage{url}
 \usepackage{epsfig}
 \usepackage{graphicx}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{bm}
-\usepackage{array}
-\usepackage{ifthen}
-\usepackage{caption}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{bm}
+%\usepackage{array}
+%\usepackage{ifthen}
+%\usepackage{caption}
 \usepackage{hyperref}
-\usepackage{amsthm}
-\usepackage{amstext}
-\usepackage{etoolbox}
-\usepackage{setspace}% http://ctan.org/pkg/setspace
-\AtBeginEnvironment{longtable}{\singlespacing}
+%\usepackage{amsthm}
+%\usepackage{amstext}
+%\usepackage{etoolbox}
+%\usepackage{setspace}% http://ctan.org/pkg/setspace
 
 
-\linespread{1.66}
-% All text should be double-spaced
-% with occasional exceptions for tables. 
-\raggedright
-\setlength{\parindent}{0.5in}
+\linespread{1}
+
 
 \setcounter{secnumdepth}{0}
 % Our sections are not numbered and our papers do not have
@@ -50,32 +43,6 @@
 
 %\pagestyle{empty}
 
-\renewcommand{\section}[1]{%
-\bigskip
-\begin{center}
-\begin{Large}
-\normalfont\scshape #1
-\medskip
-\end{Large}
-\end{center}}
-
-\renewcommand{\subsection}[1]{%
-\bigskip
-\begin{center}
-\begin{large}
-\normalfont\itshape #1
-\end{large}
-\end{center}}
-
-\renewcommand{\subsubsection}[1]{%
-\vspace{2ex}
-\noindent
-\textit{#1.}---}
-
-\renewcommand{\tableofcontents}{}
-
-\bibpunct{(}{)}{;}{a}{}{,}  % this is a citation format command for natbib
-
 \pagenumbering{arabic}
 
 \begin{document}
@@ -83,20 +50,20 @@
 \begin{flushright}
 Version dated: \today
 \end{flushright}
-\noindent{\Large \bf Phyx: Phylogenetic tools for Unix}
+\noindent{\Large \textbf{Phyx: Phylogenetic tools for Unix}}
 \bigskip
 
-\noindent {\normalsize \sc Joseph W. Brown$^{\dagger}$, Joseph F. Walker$^{\dagger}$, and Stephen A. Smith}\\
-\noindent {\small \it 
+\noindent {\normalsize Joseph W. Brown$^{\dagger}$, Joseph F. Walker$^{\dagger}$, and Stephen A. Smith*}\\
+\noindent {\small 
 Department of Ecology and Evolutionary Biology, University of Michigan, Ann Arbor, Michigan, 48109, USA}\\
 \noindent {\small
 $^{\dagger}$Joint first authors.}\\
+\noindent {\small
+$^{*}$Corresponding author}\\
 
 \medskip
-\noindent{\bf Author Emails:} \href{josephwb@umich.edu}{josephwb@umich.edu}, \href{jfwalker@umich.edu}{jfwalker@umich.edu}, and \href{eebsmith@umich.edu}{eebsmith@umich.edu}.\\
+\noindent{Emails:} \href{josephwb@umich.edu}{josephwb@umich.edu}, \href{jfwalker@umich.edu}{jfwalker@umich.edu}, and \href{eebsmith@umich.edu}{eebsmith@umich.edu}.\\
 \medskip
-
-\vspace{1in}
 
 \section{What is Phyx?}\label{abstract}
 Phyx (pronounced "fix") is a set of data analysis programs modeled after POSIX-style command-line tools, to help them be easily incorporated in bioinformatic pipelines. The majority of Phyx programs focus on phylogenetic analyses, which includes a variety of programs to clean data matrices, simulate data, and perform basic phylogenetic analyses. Phyx is an ever expanding library of programs, and we welcome any feature requests through github issue submissions: \href{https://github.com/FePhyFoFum/phyx/issues}{https://github.com/FePhyFoFum/phyx/issues}. 
@@ -107,7 +74,7 @@ All programs are open source and Phyx operates under the GPL3 licence: \href{htt
 Installation instructions for both unix and mac may be found at the Phyx wiki: \href{https://github.com/FePhyFoFum/phyx/wiki/Installation}{https://github.com/FePhyFoFum/phyx/wiki/Installation}.
 \end{flushleft}
 
-\section{List of programs and features of Phyx}
+\section{Features of Phyx}
 
 The following is a list of the programs that are currently available. For all programs typing the argument \texttt{-h} will produce a list of program options. Below is a list of current programs with examples on how to run them. Programs are updated regularly with new options being added. The most up to date list of options for each program can be found in the help menu.
 
@@ -130,7 +97,7 @@ pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment || pxclsq -p 0.0
 \end{verbatim}
 \end{flushleft}
 
-\subsection{Examples}
+\section{Examples}
 
 A list of example files can be found in the "example\_files" folder. Subfolder names correspond to individual program names.
 
@@ -183,11 +150,6 @@ Analyzing similarities among phylogenetic trees has become a growing part of phy
 pxbp -t Tree.tre -o bp_output
 \end{verbatim}
 \end{flushleft}
-
-
-\subsection{pxbpsq}
-
-***Would someone mind taking a look at this I think there is an error for the last bipartition*** \texttt{<- STEPHEN}
 
 \subsection{pxcat}
 
@@ -301,7 +263,7 @@ pxmrcacut -t tree -m mrca_file
 \end{verbatim}
 \end{flushleft}
 
-\subsection{mrcaname}
+\subsection{pxmrcaname}
 
 This program allows the user to label the internal nodes with clade names. The program takes in an mrca file in the same format as (pxmrca and pxmrcacut)
 
@@ -444,13 +406,6 @@ pxseqgen -t tree_file -o output_alignment
 -m .33,.33,.33,.33,.33,.33,2,.3,.3,.2,.5,.4,.2
 \end{verbatim}
 \end{flushleft}
-
-%Not quite sure what to put for pxsm0 and pxsm2a
-\subsection{pxsm0}
-
-This program is designed to calculate a selection model
-
-\subsection{pxsm2a}
 
 \subsection{pxstrec}
 
