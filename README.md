@@ -10,7 +10,7 @@ License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
 
 ## Mac install
-Mac has become increasingly difficult to support at the command line with changes every version on location and standards for compilation tools. in particular, Mac now defaults to clang, and clang does not support OpenMP.  For 10.9, we have found that you can install using the clang included with mac using the simple instructions and [homebrew] (http://brew.sh/) *or* using a fresh installation of gcc from [here](http://hpc.sourceforge.net/). Instructions for both are below. For simple instructions click [here](#install-with-homebrew), and for advanced instructions click [here](#install-with-hpc-gcc).
+Mac has become increasingly difficult to support at the command line with changes every version on location and standards for compilation tools. in particular, Mac now defaults to clang, and clang does not support OpenMP.  For 10.9, we have found that you can install using the clang included with mac using the simple instructions and [homebrew] (http://brew.sh/) *or* using a fresh installation of gcc from [here](http://hpc.sourceforge.net/). Instructions for both are below. For simple instructions click [here](#install-with-homebrew-simple-instructions), and for advanced instructions click [here](#install-with-hpc-gcc-advanced-instructions).
 
 ### Install with Homebrew (simple instructions)
 The instructions below assume homebrew, which is convenient for dealing with dependencies.
