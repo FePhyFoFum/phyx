@@ -6,7 +6,7 @@ Authors: Joseph W. Brown, Joseph F. Walker, and Stephen A. Smith
 
 License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 
-# Installation instructions (also on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation)). 
+# Installation instructions 
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
 
 ## Mac install
