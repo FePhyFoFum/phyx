@@ -48,11 +48,10 @@ phylogenetic toolkits exist including but not limited to \texttt{ETE} \citep{Hue
 \citep{MaddisonMaddison2016}, \texttt{ape} \citep{Popescu2012},
 \texttt{phyutility} \citep{SmithDunn2008}, \texttt{DendroPy}
 \citep{SukumaranHolder2010}, \texttt{PAL2NAL} \citep{Suyama2006}, and
-\texttt{SequenceMatrix} \citep{Vaidya2011}). However, each individual
-packages is limited by the file formats supported, memory requirements,
-requiring the loading of separate environments (i.e. R or python), or
-utilizing a graphical user interface which may not be conducive to high
-throughput processes.
+\texttt{SequenceMatrix} \citep{Vaidya2011}). However, despite each
+individual package providing a suire of benefits, there is a niche
+to be fulfilled for programs that are conducive to high throughput
+processes and the convenience of a POSIX style interface.
 
 In an effort to provide a more flexible and efficient software package for processing phylogenetic data and for conducting phylogenomic research we present \texttt{phyx}, a set of programs to carry
 out a wide range of phylogenetic tasks. Written in C++ and modeled after
@@ -69,7 +68,7 @@ As with standard Unix command line tools, these programs can be piped
 of efficient analytical pipelines. \texttt{phyx} also logs all program calls
 to a plain text file, which is an executable record that can be submitted as
 part of a manuscript for reviewing and replicability purposes. 
-\texttt{phyx} thus provides a more convenient, lightweight, and inclusive toolkit than existing options for phylogenomic and phylogenetic data processing and analysis. 
+\texttt{phyx} thus provides a convenient, lightweight, and inclusive toolkit consisting of programs spanning the wide breadth of programs utilized by researchers performing phylogenomic analyses. 
 
 \begin{methods}
 \section{Methods}
@@ -88,7 +87,7 @@ provide the format of the original data as \texttt{phyx} will attempt to auto-de
 manipulated by removing individual taxa, resampling (bootstrap or
 jackknifing), sequence recoding, translation to protein, reverse
 complementation, filtering by quality scores or the amount of missing
-data, and concatenation across mixed alignment formats. 
+data, and concatenation across mixed alignment formats.
 
 Processing large data matrices is only one step required for phylogenomic analyses. In order to perform downstream analyses (e.g. orthology detection \citep{YangSmith2014}, mapping gene
 trees to species tree \citep{Smith2015}, or gene tree/species tree reconciliation \citep{Mirarab2014}) it is now also essential to be able to manipulate individual gene trees constructed from these data.
