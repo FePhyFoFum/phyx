@@ -40,7 +40,7 @@ The instructions below assume homebrew, which is convenient for dealing with dep
 
 5. Install phyx
 
-		cd ../src
+		cd ../../src
 		./configure
 		make
 		python run_tests.py
