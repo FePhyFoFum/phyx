@@ -1,0 +1,85 @@
+\begin{thebibliography}{}
+
+\bibitem[Bollback(2002)Bollback]{Bollback2002}
+Bollback, J.~P. (2002).
+\newblock Bayesian model adequacy and choice in phylogenetics.
+\newblock {\em Molecular Biology and Evolution\/}, {\bf 19}(7), 1171--1180.
+
+\bibitem[Huerta-Cepas {\em et~al.}(2016)Huerta-Cepas, Serra, and
+  Bork]{HuertaCepas2016}
+Huerta-Cepas, J., Serra, F., and Bork, P. (2016).
+\newblock {ETE} 3: Reconstruction, analysis, and visualization of phylogenomic
+  data.
+\newblock {\em Molecular Biology and Evolution\/}, {\bf 33}(6), 1635--1638.
+
+\bibitem[Junier and Zdobnov(2010)Junier and Zdobnov]{JunierZdobnov2010}
+Junier, T. and Zdobnov, E.~M. (2010).
+\newblock The newick utilities: high-throughput phylogenetic tree processing in
+  the unix shell.
+\newblock {\em Bioinformatics\/}, {\bf 26}(13), 1669--1670.
+
+\bibitem[Maddison and Maddison(2016)Maddison and
+  Maddison]{MaddisonMaddison2016}
+Maddison, W.~P. and Maddison, D.~R. (2016).
+\newblock Mesquite: a modular system for evolutionary analysis.
+
+\bibitem[Mirarab {\em et~al.}(2014)Mirarab, Reaz, Bayzid, Zimmermann, Swenson,
+  and Warnow]{Mirarab2014}
+Mirarab, S., Reaz, R., Bayzid, M.~S., Zimmermann, T., Swenson, M.~S., and
+  Warnow, T. (2014).
+\newblock {ASTRAL}: genome-scale coalescent-based species tree estimation.
+\newblock {\em Bioinformatics\/}, {\bf 30}(17), i541--i548.
+
+\bibitem[Popescu {\em et~al.}(2012)Popescu, Huber, and Paradis]{Popescu2012}
+Popescu, A.-A., Huber, K.~T., and Paradis, E. (2012).
+\newblock ape 3.0: New tools for distance-based phylogenetics and evolutionary
+  analysis in r.
+\newblock {\em Bioinformatics\/}, {\bf 28}(11), 1536--1537.
+
+\bibitem[Smith and Dunn(2008)Smith and Dunn]{SmithDunn2008}
+Smith, S.~A. and Dunn, C.~W. (2008).
+\newblock Phyutility: a phyloinformatics tool for trees, alignments and
+  molecular data.
+\newblock {\em Bioinformatics\/}, {\bf 24}(5), 715--716.
+
+\bibitem[Smith {\em et~al.}(2015)Smith, Moore, Brown, and Yang]{Smith2015}
+Smith, S.~A., Moore, M.~J., Brown, J.~W., and Yang, Y. (2015).
+\newblock Analysis of phylogenomic datasets reveals conflict, concordance, and
+  gene duplications with examples from animals and plants.
+\newblock {\em BMC Evolutionary Biology\/}, {\bf 15}(1), 1--15.
+
+\bibitem[Springer {\em et~al.}(2012)Springer, Meredith, Gatesy, Emerling, Park,
+  Rabosky, Stadler, Steiner, Ryder, Jane\v{c}ka, Fisher, and
+  Murphy]{Springer2012}
+Springer, M.~S., Meredith, R.~W., Gatesy, J., Emerling, C.~A., Park, J.,
+  Rabosky, D.~L., Stadler, T., Steiner, C., Ryder, O.~A., Jane\v{c}ka, J.~E.,
+  Fisher, C.~A., and Murphy, W.~J. (2012).
+\newblock Macroevolutionary dynamics and historical biogeography of primate
+  diversification inferred from a species supermatrix.
+\newblock {\em PLoS ONE\/}, {\bf 7}(11), 1--23.
+
+\bibitem[Sukumaran and Holder(2010)Sukumaran and Holder]{SukumaranHolder2010}
+Sukumaran, J. and Holder, M.~T. (2010).
+\newblock {DendroPy}: a python library for phylogenetic computing.
+\newblock {\em Bioinformatics\/}, {\bf 26}(12), 1569--1571.
+
+\bibitem[Suyama {\em et~al.}(2006)Suyama, Torrents, and Bork]{Suyama2006}
+Suyama, M., Torrents, D., and Bork, P. (2006).
+\newblock {PAL2NAL}: robust conversion of protein sequence alignments into the
+  corresponding codon alignments.
+\newblock {\em Nucleic Acids Research\/}, {\bf 34}(suppl 2), W609--W612.
+
+\bibitem[Vaidya {\em et~al.}(2011)Vaidya, Lohman, and Meier]{Vaidya2011}
+Vaidya, G., Lohman, D.~J., and Meier, R. (2011).
+\newblock Sequencematrix: concatenation software for the fast assembly of
+  multi-gene datasets with character set and codon information.
+\newblock {\em Cladistics\/}, {\bf 27}(2), 171--180.
+
+\bibitem[Yang and Smith(2014)Yang and Smith]{YangSmith2014}
+Yang, Y. and Smith, S.~A. (2014).
+\newblock Orthology inference in nonmodel organisms using transcriptomes and
+  low-coverage genomes: Improving accuracy and matrix occupancy for
+  phylogenomics.
+\newblock {\em Molecular Biology and Evolution\/}, {\bf 31}(11), 3081--3092.
+
+\end{thebibliography}
