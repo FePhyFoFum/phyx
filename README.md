@@ -7,9 +7,86 @@ Authors: Joseph W. Brown, Joseph F. Walker, and Stephen A. Smith
 License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 
 # Installation instructions (also on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation)). 
-phyx requires a few dependencies. Since installation of these dependencies differs on Linux vs. mac, we've separated the instructions below.
+phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
+
+## Mac install
+Mac has become increasingly difficult to support at the command line with changes every version on location and standards for compilation tools. in particular, Mac now defaults to clang, and clang does not support OpenMP.  For 10.9, we have found that you can install using the clang included with mac using the simple instructions and [homebrew] (http://brew.sh/) *or* using a fresh installation of gcc from [here](http://hpc.sourceforge.net/). Instructions for both are below. For simple instructions click [here](#install-with-homebrew), and for advanced instructions click [here](#install-with-hpc-gcc).
+
+### Install with Homebrew (simple instructions)
+The instructions below assume homebrew, which is convenient for dealing with dependencies.
+
+1. Install the homebrew package manager:
+
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+2. Install dependencies from homebrew:
+
+        brew install git
+        brew install cmake
+        brew install homebrew/science/nlopt
+
+3. On to phyx. first, clone the repository (if you haven't already):
+
+        git clone git@github.com:FePhyFoFum/phyx.git
+
+4. Install the final dependency, armadillo, (included with phyx):
+
+		cd phyx/deps
+		tar -xzf armadillo-7.400.2.tgz
+		cd armadillo-7.400.2
+		./configure
+		make
+		sudo make install
+
+5. Install phyx
+
+		cd ../src
+		./configure
+		make
+		python run_tests.py
+
+If you want to install it so it is available anywhere in your system, do:
+
+        sudo make install
+
+### Install with HPC GCC (advanced instructions)
+1. Install gcc and gfortran. Download gcc-6.2-bin.tar.gz or more recent from http://hpc.sourceforge.net/. Install with:
+        
+        sudo tar -xvf gcc-6.2-bin.tar -C /
+
+2. Install autoconf from http://ftp.gnu.org/gnu/autoconf/. Get autoconf-latest.tar.gz, then:
+
+        tar -xzf autoconf-latest.tar.gz
+        cd autoconf-2.69
+        ./configure --prefix=/usr/local/autoconf-2.69
+        make
+        sudo make install
+        ln -s autoconf-2.69 /usr/local/autoconf
+
+3. Install cmake and install Armadillo. Get cmake from https://cmake.org/download/. I got https://cmake.org/files/v3.6/cmake-3.6.2-Darwin-x86_64.tar.gz. Get armadillo from the `deps` directory or http://arma.sourceforge.net/download.html, get the stable one. Untar it. Double click the Cmake.app. Click "Browse source..." and choose the armadillo folder that was created after untaring. Click "Browse build..." and choose the same folder as browse source. Click "Configure" and then click "Generate". Go to the terminal and browse to that armadillo folder and type:
+
+        make
+        sudo make install
+
+4. Install nlopt. Get armadillo from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
+
+        ./configure --with-cxx --without-octave --without-matlab
+        make
+        sudo make install
+
+5. Compile phyx. Now you can go to the src directory of phyx and type:
+
+        ./configure
+        make
+        python run_tests.py
+        sudo make install
+
+and all the programs should compile without issue. 
+
 
 ## Linux install
+
+These instructions work for most ubuntu versions as well as debian. 
 
 1. Install general dependencies:
 
@@ -50,76 +127,10 @@ If that is not possible, compile the provided code:
 5. Finally, install phyx:
 
         cd phyx/src
-        autoreconf -fi
         ./configure
         make
+        python run_tests.py
 If you want to install it so it is available anywhere in your system, do:
 
         sudo make install
 
-## Mac install
-Mac has become increasingly difficult to support at the command line with changes every version on location and standards for compilation tools. in particular, Mac now defaults to clang, and clang does not support OpenMP and doesn't link to gfortran (both used by phyx).  For 10.9, we have found that it is good to install gcc from [here] (http://hpc.sourceforge.net/) or [homebrew] (http://brew.sh/). Instructions for both are below.
-
-### Install with Homebrew
-The instructions below assume homebrew, which is convenient for dealing with dependencies.
-
-1. Install the homebrew package manager:
-
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-Get access to science packages with:
-
-        brew tap homebrew/science
-2. Install gcc (can take a while, but enables use of openmp and fortran):
-
-        brew install --without-multilib gcc
-3. Install dependencies from homebrew:
-
-        brew install git
-        brew install --use-gcc automake
-        brew install --use-gcc autoconf
-        brew install --use-gcc libtool
-        brew install --use-gcc cmake
-        brew install --use-gcc --c++11 nlopt
-        brew install --use-gcc --c++11 armadillo
-4. On to phyx. first, clone the repository (if you haven't already):
-
-        git clone git@github.com:FePhyFoFum/phyx.git
-        cd phyx/src
-        autoreconf -fi
-        ./configure CXX=/usr/local/bin/g++-6
-        make
-If you want to install it so it is available anywhere in your system, do:
-
-        sudo make install
-
-### HPC GCC Install
-1. Install gcc and gfortran. Download gcc-6.2-bin.tar.gz or more recent from http://hpc.sourceforge.net/. Install with:
-        
-        sudo tar -xvf gcc-6.2-bin.tar -C /
-
-2. Install autoconf from http://ftp.gnu.org/gnu/autoconf/. Get autoconf-latest.tar.gz, then:
-
-        tar -xzf autoconf-latest.tar.gz
-        cd autoconf-2.69
-        ./configure --prefix=/usr/local/autoconf-2.69
-        make
-        sudo make install
-        ln -s autoconf-2.69 /usr/local/autoconf
-
-3. Install cmake and install Armadillo. Get cmake from https://cmake.org/download/. I got https://cmake.org/files/v3.6/cmake-3.6.2-Darwin-x86_64.tar.gz. Get armadillo from the `deps` directory or http://arma.sourceforge.net/download.html, get the stable one. Untar it. Double click the Cmake.app. Click "Browse source..." and choose the armadillo folder that was created after untaring. Click "Browse build..." and choose the same folder as browse source. Click "Configure" and then click "Generate". Go to the terminal and browse to that armadillo folder and type:
-
-        make
-        sudo make install
-
-4. Install nlopt. Get armadillo from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
-
-        ./configure --with-cxx --without-octave --without-matlab
-        make
-        sudo make install
-
-5. Compile phyx. Now you can go to the src directory of phyx and type:
-
-        ./configure
-        make
-
-and all the programs should compile without issue. 
