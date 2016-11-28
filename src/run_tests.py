@@ -65,8 +65,8 @@ def test_program(name):
         cm = "./pxt2new -t TEST/test_nexus.tre"
         t = '(((TaxonA:0.10000000000000000555,TaxonB:0.02999999999999999889):0.125,TaxonC:0.25):0.4000000000000000222,(TaxonD:0.23000000000000000999,TaxonE:0.16000000000000000333):0.2999999999999999889);\n'
     elif name == "pxbdsim":
-        cm = "./pxbdsim -e 5 -x 1"
-        t = '((taxon_1:0.30855693426109653821,taxon_2:0.30855693426109653821):0.63137104627199058804,(taxon_3:0.93851839959563365667,(taxon_4:0.53977584969885905597,taxon_5:0.53977584969885905597):0.39874254989677465622):0.0014095809374534387821);\n'
+        cm = "./pxbdsim -e 5 -x 1 | grep -o taxon | wc -l"
+        t = '5\n'
     elif name == "pxs2fa":
         cm = "./pxs2fa -s TEST/Concat_Sequence2.NEX"
         t = '>Sequence1\nAAATTTCCCTTTCCCTTTAAA\n>Sequence2\nGGGGGGGGGGCCCCCCCCCCA\n>Sequence3\nCCCCCCCCCCCCAAAAAAAAA\n>Sequence9\nAAATTTCCCTTTCCCTTTAAA\n>Sequence10\nGGGGGGGGGGCCCCCCCCCCA\n>Sequence11\nCCCCCCCCCCCCAAAAAAAAA\n>Sequence8\nTTTTTTTTCCCCCCCGGGGGA\n'
