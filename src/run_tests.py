@@ -121,6 +121,10 @@ def test_program(name):
         print "your output:",x
         return False
 
+# this are skipped in the testing because they are preliminary, tests will
+# be added as they become more permanent.
+notest = ["pxclsq","pxrlt","pxbpsq","pxaa2cdn","pxvcf2fa","pxlog","pxrls"]
+
 if __name__ == "__main__":
     if len(sys.argv) != 1:
         print "python run_tests.py"
@@ -132,6 +136,8 @@ if __name__ == "__main__":
     print "================="
     for i in os.listdir("."):
         if i[:2] == "px":
+            if i in notest:
+                continue
             t = test_program(i)
             if t == True:
                 passed += 1
