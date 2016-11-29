@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  29 NOV 2016 07:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  29 NOV 2016 07:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -227,7 +227,7 @@ Here is how much of TeX's memory you used:
  5322 multiletter control sequences out of 15000+600000
  8929 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,8n,23p,1411b,269s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,8n,23p,1419b,269s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texl
 ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive
@@ -241,7 +241,7 @@ ist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2015/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2015/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on suppinfo_edits.pdf (4 pages, 177661 bytes).
+Output written on suppinfo_edits.pdf (4 pages, 177719 bytes).
 PDF statistics:
  91 PDF objects out of 1000 (max. 8388607)
  63 compressed objects within 1 object stream
