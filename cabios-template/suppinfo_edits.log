@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  29 NOV 2016 07:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  29 NOV 2016 07:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -170,33 +170,33 @@ Package epstopdf Info: Source file: <clsq.eps>
 (epstopdf)                    size: 11014 bytes
 (epstopdf)             Command: <repstopdf --outfile=clsq-eps-converted-to.pdf 
 clsq.eps>
-(epstopdf)             \includegraphics on input line 49.
+(epstopdf)             \includegraphics on input line 48.
 Package epstopdf Info: Output file is already uptodate.
 
 <clsq-eps-converted-to.pdf, id=15, 458.71375pt x 333.245pt>
 File: clsq-eps-converted-to.pdf Graphic file (type pdf)
 
 <use clsq-eps-converted-to.pdf>
-Package pdftex.def Info: clsq-eps-converted-to.pdf used on input line 49.
+Package pdftex.def Info: clsq-eps-converted-to.pdf used on input line 48.
 (pdftex.def)             Requested size: 216.81pt x 157.50993pt.
-Package epstopdf Info: Source file: <aatocdn.eps>
+Package epstopdf Info: Source file: <aa2cdn.eps>
 (epstopdf)                    date: 2016-11-28 15:12:23
 (epstopdf)                    size: 4995 bytes
-(epstopdf)             Output file: <aatocdn-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-11-28 15:12:23
-(epstopdf)                    size: 10642 bytes
-(epstopdf)             Command: <repstopdf --outfile=aatocdn-eps-converted-to.p
-df aatocdn.eps>
-(epstopdf)             \includegraphics on input line 60.
+(epstopdf)             Output file: <aa2cdn-eps-converted-to.pdf>
+(epstopdf)                    date: 2016-11-29 07:30:33
+(epstopdf)                    size: 10560 bytes
+(epstopdf)             Command: <repstopdf --outfile=aa2cdn-eps-converted-to.pd
+f aa2cdn.eps>
+(epstopdf)             \includegraphics on input line 59.
 Package epstopdf Info: Output file is already uptodate.
 
-<aatocdn-eps-converted-to.pdf, id=16, 458.71375pt x 333.245pt>
-File: aatocdn-eps-converted-to.pdf Graphic file (type pdf)
+<aa2cdn-eps-converted-to.pdf, id=16, 458.71375pt x 333.245pt>
+File: aa2cdn-eps-converted-to.pdf Graphic file (type pdf)
 
-<use aatocdn-eps-converted-to.pdf>
-Package pdftex.def Info: aatocdn-eps-converted-to.pdf used on input line 60.
+<use aa2cdn-eps-converted-to.pdf>
+Package pdftex.def Info: aa2cdn-eps-converted-to.pdf used on input line 59.
 (pdftex.def)             Requested size: 216.81pt x 157.50993pt.
- [2 <./clsq-eps-converted-to.pdf> <./aatocdn-eps-converted-to.pdf>]
+ [2 <./clsq-eps-converted-to.pdf> <./aa2cdn-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <log.eps>
 (epstopdf)                    date: 2016-11-28 15:12:23
 (epstopdf)                    size: 5261 bytes
@@ -205,14 +205,14 @@ Package epstopdf Info: Source file: <log.eps>
 (epstopdf)                    size: 11070 bytes
 (epstopdf)             Command: <repstopdf --outfile=log-eps-converted-to.pdf l
 og.eps>
-(epstopdf)             \includegraphics on input line 72.
+(epstopdf)             \includegraphics on input line 71.
 Package epstopdf Info: Output file is already uptodate.
 
 <log-eps-converted-to.pdf, id=36, 458.71375pt x 333.245pt>
 File: log-eps-converted-to.pdf Graphic file (type pdf)
 
 <use log-eps-converted-to.pdf>
-Package pdftex.def Info: log-eps-converted-to.pdf used on input line 72.
+Package pdftex.def Info: log-eps-converted-to.pdf used on input line 71.
 (pdftex.def)             Requested size: 216.81pt x 157.50993pt.
  (./suppinfo_edits.bbl
 Missing character: There is no Ã in font cmr7!
@@ -222,12 +222,12 @@ Missing character: There is no ¡ in font cmr7!
  [3 <./log-eps-converted-to.pdf>]) [4] (./suppinfo_edits.aux) ) 
 Here is how much of TeX's memory you used:
  1858 strings out of 493089
- 25770 string characters out of 6134842
+ 25765 string characters out of 6134842
  89279 words of memory out of 5000000
  5322 multiletter control sequences out of 15000+600000
  8929 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,8n,23p,1419b,269s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,8n,23p,1481b,269s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texl
 ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive
@@ -241,7 +241,7 @@ ist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2015/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmti7.pfb></usr/local/texlive/2015/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2015/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on suppinfo_edits.pdf (4 pages, 177719 bytes).
+Output written on suppinfo_edits.pdf (4 pages, 177444 bytes).
 PDF statistics:
  91 PDF objects out of 1000 (max. 8388607)
  63 compressed objects within 1 object stream

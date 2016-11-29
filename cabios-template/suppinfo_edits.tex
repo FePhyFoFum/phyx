@@ -18,7 +18,7 @@
 \maketitle
 
 \section{Example pipeline}
-As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how five \texttt{phyx} programs can be linked via piping
+As described above, \texttt{phyx} uses a stream-centric approach to input and output that allows for programs to be used together without intermediate files. Here, we illustrate how four \texttt{phyx} programs can be linked via piping
 and a simple shell loop to perform a full analytical pipeline:
 \begin{enumerate}
 \item Clean alignments individually using a Unix for loop (\texttt{pxclsq}).
@@ -38,11 +38,10 @@ pxcat -s *.phyx -o out.concat -p models && raxml -T 2
 \end{verbatim}
 
 \section{Performance}
-We briefly describe below the performance of \texttt{phyx} relative to other
-existing tools.
+We briefly describe below the performance of \texttt{phyx} relative to other existing tools.
 
 \subsection{Sequence cleaning}
-Cleaning sequences to ensure a certain level of matrix occupancy has become common place in many phylogenomic pipelines \citep{Dunn2013,YangSmith2014}. Here we compare two programs Gblocks \citep{Gblocks} and phyutility \citep{SmithDunn2008} to the sequence cleaning procedure of \texttt{phyx} (pxclsq). The file sizes ranged from 10 sequences in the file (234Kb), to 100,000 sequences (2.3Gb) with all being 23,950 base pairs in length (see Supp. Figure 1). The implementation for sequence cleaning in pxclsq is highly similar to phyutility, in that it focuses on column occupancy as a means of determining whether a sequence region should be clean. Although, it differs in one key aspect, for amino acids pxclsq treats the ambiguous character "X" as missing data, whereas, Phyutility does not which as a result we analyzed DNA to ensure an even comparison. Gblocks implements a more sophisticated method of cleaning sequences and therefore for the comparison we attempted to keep the Gblocks sequence cleaning to focus solely on column occupancy. We found that \texttt{phyx} outperformed both Gblocks and Phyutility in all dataset sizes and for the largest dataset Phyutility was not able to clean the dataset due to a memory allocation error. The test was conducted on a laptop  containing 4 processors and 16Gb of memory, with 14Gb of that memory being allocated for phyutility.
+Cleaning sequences to ensure a certain level of matrix occupancy has become common place in many phylogenomic pipelines \citep{Dunn2013,YangSmith2014}. Here we compare two programs Gblocks \citep{Gblocks} and phyutility \citep{SmithDunn2008} to the sequence cleaning procedure of \texttt{phyx} (\texttt{pxclsq}). The file sizes ranged from 10 sequences in the file (234 kB), to 100,000 sequences (2.3 GB) with all being 23,950 base pairs in length (see Supp. Figure 1). The implementation for sequence cleaning in \texttt{pxclsq} is highly similar to phyutility, in that it focuses on column occupancy as a means of determining whether a sequence region should be cleaned (that is, removed). However, it differs in one key respect: for amino acids \texttt{pxclsq} treats the ambiguous character "X" as missing data, whereas Phyutility does not; we therefore restricted analyzes to DNA to ensure equivalent inputs. Additionally, because Gblocks implements a more sophisticated range of methods for cleaning sequences, we attempted to restrict the Gblocks sequence cleaning to focus solely on column occupancy. We found that \texttt{phyx} outperformed both Gblocks and Phyutility in all dataset sizes and for the largest dataset Phyutility was not able to clean the dataset due to a memory allocation error. The test was conducted on a laptop  containing 4 processors and 16 GB of memory, with 14 GB of that memory being allocated for phyutility.
 
 \begin{figure}[H]
     \centering
@@ -53,12 +52,12 @@ Cleaning sequences to ensure a certain level of matrix occupancy has become comm
 \end{figure}
 
 \subsection{Conversion of proteins to codons}
-Converting the alignment of proteins to their corresponding nucleotide file is useful in helping ensure accuracy in the nucleotide alignment. Here we tested the processing efficiency of files consisting of 801 amino acid residue sequences for between 10 and 10,000 taxa (file sizes ranging from 8 kB to 77 MB). We found that \texttt{phyx} was faster than PAL2NAL \citep{Suyama2006} under each condition. Also, \texttt{phyx} does not require that the sequences be in the same order, thus reducing error and specifically avoiding aligning a nucleotide sequence with something other than its corresponding amino acid alignment.
+Converting the alignment of proteins to their corresponding nucleotide file is useful in helping ensure accuracy in the nucleotide alignment. Here we tested the processing efficiency of files consisting of 801 amino acid residue sequences for between 10 and 10,000 taxa (file sizes ranging from 8 kB to 77 MB). We found that \texttt{phyx} program \texttt{aa2cdn} was faster than PAL2NAL \citep{Suyama2006} under each condition. Also, unlike PAL2NAL, \texttt{aa2cdn} does not require that the sequences be in the same order, thus reducing error and specifically avoiding aligning a nucleotide sequence with something other than its corresponding amino acid sequence.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=3.0in]{aatocdn}
-    \caption{Comparison of timings to convert protein alignmentss to
+    \includegraphics[width=3.0in]{aa2cdn}
+    \caption{Comparison of timings to convert protein alignments to
     their corresponding codon alignments.}
     \label{proteincodonfigure}
 \label{fig:S2}
