@@ -22,7 +22,7 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Get the number of descendant tips of an mrca." << endl;
+    cout << "Get the number of descendant tips of internal nodes specified by mrca statements." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
     cout << endl;
