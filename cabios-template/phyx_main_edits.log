@@ -1,15 +1,15 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  28 NOV 2016 15:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.24)  29 NOV 2016 12:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **phyx_main_edits.tex
 (./phyx_main_edits.tex
-LaTeX2e <2015/01/01>
-Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+LaTeX2e <2014/05/01>
+Babel <3.9l> and hyphenation patterns for 2 languages loaded.
 (./bioinfo.cls
 Document Class: bioinfo 2003/02/08 0.1
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
-Package: inputenc 2015/03/17 v1.2c Input encoding file
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2014/04/30 v1.2b Input encoding file
 \inpenc@prehook=\toks14
 \inpenc@posthook=\toks15
 ) (./crop.sty
@@ -18,61 +18,58 @@ Package: crop 2001/11/16 v1.6 cropmarks (mf)
 \CROP@height=\dimen103
 \CROP@index=\count79
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 94.
+Package graphics Info: Driver file: pdftex.def on input line 91.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count80
 ))
 \CROP@offset=\count81
 Package crop Info: Local config file crop.cfg used on input line 344.
-
-(./crop.cfg))
+ (./crop.cfg))
 Package crop Info: using pdf(la)tex graphics driver on input line 31.
  (./graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
 )
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2013/01/14 v2.14 AMS math features
 \@mathmargin=\skip41
 
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks17
 \ex@=\dimen106
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen107
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count82
@@ -119,18 +116,18 @@ Package: array 1998/05/13 v2.3m Tabular extension package (FMi)
 \NC@list=\toks22
 \extratabsurround=\skip44
 \backup@length=\skip45
-) (./color.sty
+)
+(./color.sty
 Package: color 1999/02/16 v1.0i Standard LaTeX Color (DPC)
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg
+ (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 125.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
@@ -151,8 +148,8 @@ Package: stfloats 1999/10/22
 \@dblbotnum=\count94
 \c@dblbotnumber=\count95
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amscls/amsthm.sty
-Package: amsthm 2015/03/04 v2.20.2
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2009/07/02 v2.20.1
 \thm@style=\toks24
 \thm@bodyfont=\toks25
 \thm@headfont=\toks26
@@ -162,23 +159,24 @@ Package: amsthm 2015/03/04 v2.20.2
 \thm@postskip=\skip47
 \thm@headsep=\skip48
 \dth@everypar=\toks29
-)
-(./chngpage.sty
+) (./chngpage.sty
 Package: chngpage 2001/01/31 v1.1b change page layout
 \c@cp@cnt=\count96
 \c@cp@tempcnt=\count97
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/times.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ly1/ly1enc.def
+(/usr/share/texlive/texmf-dist/tex/latex/ly1/ly1enc.def
 File: ly1enc.def 2009/07/22 v0.7 TeX 'n ANSI encoding (DPC/KB)
 )
-LaTeX Font Info:    Try loading font information for LY1+ptm on input line 105.
+LaTeX Font Info:    Try loading font information for LY1+ptm on input line 100.
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ly1/ly1ptm.fd
+(/usr/share/texlive/texmf-dist/tex/latex/ly1/ly1ptm.fd
 File: ly1ptm.fd 2001/02/01 font definitions for LY1/ptm using Berry names.
 ))
 \c@section=\count98
@@ -221,7 +219,7 @@ LaTeX Font Info:    ... okay on input line 7.
 LaTeX Font Info:    Checking defaults for LY1/ptm/m/n on input line 7.
 LaTeX Font Info:    ... okay on input line 7.
 
-(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count106
 \scratchdimen=\dimen121
@@ -234,15 +232,15 @@ LaTeX Font Info:    ... okay on input line 7.
 \MPnumerator=\count110
 \makeMPintoPDFobject=\count111
 \everyMPtoPDFconversion=\toks31
-) (/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
@@ -251,22 +249,22 @@ Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 )
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
@@ -278,22 +276,22 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    Try loading font information for LY1+phv on input line 42.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ly1/ly1phv.fd
+(/usr/share/texlive/texmf-dist/tex/latex/ly1/ly1phv.fd
 File: ly1phv.fd 2001/02/01 scalable font definitions for LY1/phv using Berry na
 mes.
 )
 Package epstopdf Info: Source file: <OUP_First_SBk_Bot_8401.eps>
-(epstopdf)                    date: 2016-11-28 15:12:22
+(epstopdf)                    date: 2016-11-29 12:44:02
 (epstopdf)                    size: 407286 bytes
 (epstopdf)             Output file: <OUP_First_SBk_Bot_8401-eps-converted-to.pd
 f>
-(epstopdf)                    date: 2016-11-28 15:12:22
+(epstopdf)                    date: 2016-11-29 12:44:02
 (epstopdf)                    size: 9259 bytes
 (epstopdf)             Command: <repstopdf --outfile=OUP_First_SBk_Bot_8401-eps
 -converted-to.pdf OUP_First_SBk_Bot_8401.eps>
@@ -315,12 +313,12 @@ LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <12> not available
 (Font)              Font shape `LY1/phv/b/n' tried instead on input line 42.
 LaTeX Font Info:    Try loading font information for U+msa on input line 42.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 42.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 42.
@@ -354,7 +352,7 @@ LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <10> not available
 LaTeX Font Info:    Font shape `LY1/phv/bx/n' in size <9> not available
 (Font)              Font shape `LY1/phv/b/n' tried instead on input line 42.
 LaTeX Font Info:    Try loading font information for LY1+pcr on input line 42.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ly1/ly1pcr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/ly1/ly1pcr.fd
 File: ly1pcr.fd 2001/02/01 font definitions for LY1/pcr using Berry names.
 )
 LaTeX Font Info:    Font shape `LY1/phv/m/it' in size <9> not available
@@ -395,7 +393,7 @@ Overfull \hbox (1.12001pt too wide) has occurred while \output is active
  []
  []
 
-[1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 
@@ -443,10 +441,10 @@ Underfull \hbox (badness 2359) in paragraph at lines 94--122
  []
 
 Package epstopdf Info: Source file: <Fig1_smallblack.eps>
-(epstopdf)                    date: 2016-11-28 15:12:22
+(epstopdf)                    date: 2016-11-29 12:44:02
 (epstopdf)                    size: 18532 bytes
 (epstopdf)             Output file: <Fig1_smallblack-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-11-28 15:19:23
+(epstopdf)                    date: 2016-11-29 12:44:13
 (epstopdf)                    size: 14292 bytes
 (epstopdf)             Command: <repstopdf --outfile=Fig1_smallblack-eps-conver
 ted-to.pdf Fig1_smallblack.eps>
@@ -470,28 +468,49 @@ LaTeX Font Warning: Font shape `LY1/phb/m/it' undefined
 LaTeX Font Info:    Font shape `LY1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `LY1/ptm/b/n' tried instead on input line 6.
 LaTeX Font Info:    Font shape `LY1/phv/m/it' in size <8> not available
-(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 85.
+(Font)              Font shape `LY1/phv/m/sl' tried instead on input line 84.
 
 Overfull \hbox (252.0pt too wide) has occurred while \output is active
 [][] 
  []
 
 [2 <./Fig1_smallblack-eps-converted-to.pdf>])
-Overfull \vbox (4.5pt too high) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Extra height:0.0pt when 14.5pt
+Extra height:10.0pt when 23.5pt
 
-Overfull \vbox (4.5pt too high) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(2)Left:14.5pt Right:10.0pt Output:14.5pt
+Extra height:10.0pt when 24.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 25.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 26.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 27.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:10.0pt when 28.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Extra height:0.0pt when 29.5pt
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+(2)Left:29.5pt Right:29.0pt Output:29.5pt
 - LAST -
 Extra skip:0.0pt
-Left:14.5pt
-Right:10.0pt
-Output:14.5pt
-
-Overfull \vbox (4.5pt too high) has occurred while \output is active []
-
+Left:29.5pt
+Right:29.0pt
+Output:29.5pt
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -512,26 +531,25 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 3705 strings out of 493089
- 46493 string characters out of 6134842
- 117326 words of memory out of 5000000
- 7093 multiletter control sequences out of 15000+600000
+ 3706 strings out of 495020
+ 46080 string characters out of 6181324
+ 112297 words of memory out of 5000000
+ 6824 multiletter control sequences out of 15000+600000
  47558 words of font info for 94 fonts, out of 8000000 for 9000
- 1145 hyphenation exceptions out of 8191
+ 18 hyphenation exceptions out of 8191
  38i,11n,28p,545b,360s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}</usr/lo
-cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy9.pfb></us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2
-015/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2015/tex
-mf-dist/fonts/type1/urw/helvetic/uhvr8ac.pfb></usr/local/texlive/2015/texmf-dis
-t/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/local/texlive/2015/texmf-dist/font
-s/type1/urw/helvetic/uhvro8ac.pfb></usr/local/texlive/2015/texmf-dist/fonts/typ
-e1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/tim
-es/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a
-.pfb>
-Output written on phyx_main_edits.pdf (3 pages, 132978 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}</usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy9.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
+/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uh
+vr8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8ac.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on phyx_main_edits.pdf (3 pages, 133028 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  50 compressed objects within 1 object stream
