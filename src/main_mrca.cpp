@@ -22,7 +22,7 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Get information about an mrca." << endl;
+    cout << "Get the number of descendant tips of an mrca." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
     cout << endl;
@@ -147,12 +147,12 @@ int main(int argc, char * argv[]) {
     
     for (unsigned int i = 0; i < lines.size(); i++) {
         Tree * tree = tr.readTree(lines[i]);
-        cout << tree->getExternalNodeCount() << endl;
+        //(*poos) << "total " << tree->getExternalNodeCount() << endl;
         
         map<string,vector<string> >::iterator it;
         for (it=mrcas.begin(); it != mrcas.end(); it++) {
             Node * nd = tree->getMRCA((*it).second);
-            cout << (*it).first << " " << nd->get_num_leaves() << " "
+            (*poos) << (*it).first << " " << nd->get_num_leaves() << " "
                 << nd->getName() << endl;
         }
         delete tree;

@@ -152,7 +152,7 @@ int main(int argc, char * argv[]) {
     
     for (unsigned int i = 0; i < lines.size(); i++) {
         Tree * tree = tr.readTree(lines[i]);
-        cout << tree->getExternalNodeCount() << endl;
+        //cout << tree->getExternalNodeCount() << endl;
 
         map<string,vector<string> >::iterator it;
         for (it = mrcas.begin(); it != mrcas.end(); it++) {
