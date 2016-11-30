@@ -8,13 +8,17 @@
 #ifndef _TLATE_H_
 #define _TLATE_H_
 
+#include <map>
+
 using namespace std;
 
 class TLATE {
+private:
+    map <string, string> table_;
+    
 public:
-    TLATE();
-    string Codon_to_AA (string& sequences);
-    string Translate (string& dna);
+    TLATE (string const& table);
+    string translate (string& dna);
     //virtual ~tlate();
 };
 

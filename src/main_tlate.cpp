@@ -23,12 +23,16 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Basic Translate Program Uses Codon Table 1." << endl;
+    cout << "Translate DNA alignment to amino acids." << endl;
+    cout << "NOTE: assumes sequences are in frame." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
     cout << "Usage: pxtlate [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << endl;
+    cout << " -t, --table=STRING  which translation table to use. currently available:" << endl;
+    cout << "                       'std' (standard, default)" << endl;
+    cout << "                       'vmt' (vertebrate mtDNA)" << endl;
     cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -43,6 +47,7 @@ string versionline("pxtlate 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nw
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
+    {"table", required_argument, NULL, 't'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -57,10 +62,11 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     string seqf = "";
     string outf = "";
+    string tab = "std";
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:t:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -69,6 +75,10 @@ int main(int argc, char * argv[]) {
                 fileset = true;
                 seqf = strdup(optarg);
                 check_file_exists(seqf);
+                break;
+            case 't':
+                fileset = true;
+                tab = strdup(optarg);
                 break;
             case 'o':
                 outfileset = true;
@@ -108,7 +118,7 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    TLATE tl;
+    TLATE tl (tab);
     
     Sequence seq;
     string retstring;
@@ -119,13 +129,13 @@ int main(int argc, char * argv[]) {
     // send sequences to be translated here
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         nuc_seq = seq.get_sequence();
-        aa_seq = tl.Translate(nuc_seq);
+        aa_seq = tl.translate(nuc_seq);
         (*poos) << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
     // fasta has a trailing one
     if (ft == 2) {
         nuc_seq = seq.get_sequence();
-        aa_seq = tl.Translate(nuc_seq);
+        aa_seq = tl.translate(nuc_seq);
         (*poos) << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
 
