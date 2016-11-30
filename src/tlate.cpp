@@ -16,8 +16,8 @@ using namespace std;
 #include "seq_reader.h"
 
 // uses standard code (https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG1)
-// why is this not a member function?
-string Codon_to_AA (string& sequences) {
+// why is this not a member function? doesn't even have a header?
+string TLATE::Codon_to_AA (string& sequences) {
 
     map <string, string> AA_table;
     string AA = "";

@@ -13,7 +13,8 @@ using namespace std;
 class TLATE {
 public:
     TLATE();
-    string Translate(string& dna);
+    string Codon_to_AA (string& sequences);
+    string Translate (string& dna);
     //virtual ~tlate();
 };
 
