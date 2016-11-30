@@ -33,6 +33,8 @@ void print_help() {
     cout << " -t, --table=STRING  which translation table to use. currently available:" << endl;
     cout << "                       'std' (standard, default)" << endl;
     cout << "                       'vmt' (vertebrate mtDNA)" << endl;
+    cout << "                       'ivmt' (invertebrate mtDNA)" << endl;
+    cout << "                       'ymt' (yeast mtDNA)" << endl;
     cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
