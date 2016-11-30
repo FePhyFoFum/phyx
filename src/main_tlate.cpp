@@ -108,21 +108,24 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
+    TLATE tl;
+    
     Sequence seq;
-    TLATE functions;
     string retstring;
     string aa_seq;
     string nuc_seq;
 
     int ft = test_seq_filetype_stream(*pios, retstring);
-    //send sequences to be translated here
+    // send sequences to be translated here
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         nuc_seq = seq.get_sequence();
-        aa_seq = functions.Translate(nuc_seq);
+        aa_seq = tl.Translate(nuc_seq);
         *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
-    //fasta has a trailing one
+    // fasta has a trailing one
     if (ft == 2) {
+        nuc_seq = seq.get_sequence();
+        aa_seq = tl.Translate(nuc_seq);
         *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
 
