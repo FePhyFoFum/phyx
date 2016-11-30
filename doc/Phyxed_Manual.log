@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.24)  30 NOV 2016 12:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.24)  30 NOV 2016 16:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -697,10 +697,10 @@ r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Phyxed_Manual.pdf (10 pages, 91254 bytes).
+Output written on Phyxed_Manual.pdf (10 pages, 91335 bytes).
 PDF statistics:
- 143 PDF objects out of 1000 (max. 8388607)
- 124 compressed objects within 2 object streams
+ 142 PDF objects out of 1000 (max. 8388607)
+ 123 compressed objects within 2 object streams
  52 named destinations out of 1000 (max. 500000)
  25 words of extra memory for PDF output out of 10000 (max. 10000000)
 
