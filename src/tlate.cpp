@@ -103,9 +103,7 @@ string TLATE::Translate (string& dna) {
     std::transform(dna.begin(), dna.end(), dna.begin(), ::toupper);
     
     for (unsigned int i = 0; i < dna.size(); i = i + 3) {
-        codon = dna[i];
-        codon += dna[i+1];
-        codon += dna[i+2];
+        codon = dna.substr(i, 3);
         AAcid = Codon_to_AA(codon);
         AminoAcid += AAcid;
         codon = "";
