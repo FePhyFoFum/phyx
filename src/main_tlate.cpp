@@ -85,12 +85,6 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-
-    // only taking files at the moment (not stdin)
-    if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
-        exit(0);
-    }
     
     ostream* poos = NULL;
     ofstream* ofstr = NULL;
