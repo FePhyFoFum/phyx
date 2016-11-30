@@ -372,7 +372,7 @@ pxrms: $(CPP_OBJS) $(RMS_OBJ)
 	$(CXX) -o "pxrms" $(OPT_FLAGS) $(RMS_OBJ) $(CPP_OBJS)
 
 pxtlate: $(CPP_OBJS) $(TLATE_OBJ)
-	@echo 'building pxclsq'
+	@echo 'building pxtlate'
 	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS)
 
 pxaa2cdn: $(CPP_OBJS) $(AA2C_OBJ)
