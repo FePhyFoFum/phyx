@@ -120,13 +120,13 @@ int main(int argc, char * argv[]) {
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         nuc_seq = seq.get_sequence();
         aa_seq = tl.Translate(nuc_seq);
-        *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
+        (*poos) << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
     // fasta has a trailing one
     if (ft == 2) {
         nuc_seq = seq.get_sequence();
         aa_seq = tl.Translate(nuc_seq);
-        *poos << ">" << seq.get_id() << "\n" << aa_seq << endl;
+        (*poos) << ">" << seq.get_id() << "\n" << aa_seq << endl;
     }
 
     if (outfileset) {
