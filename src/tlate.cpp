@@ -6,6 +6,7 @@
  */
 
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,7 +15,9 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-string Codon_to_AA(string& sequences) {
+// uses standard code (https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG1)
+// why is this not a member function?
+string Codon_to_AA (string& sequences) {
 
     map <string, string> AA_table;
     string AA = "";
@@ -96,43 +99,10 @@ string TLATE::Translate (string& dna) {
     string codon = "";
     string AminoAcid = "";
     string AAcid;
+    
+    std::transform(dna.begin(), dna.end(), dna.begin(), ::toupper);
+    
     for (unsigned int i = 0; i < dna.size(); i = i + 3) {
-        if (dna[i] == 'a') {
-            dna[i] = 'A';
-        }
-        if (dna[i] == 't') {
-            dna[i] = 'T';
-        }
-        if (dna[i] == 'c') {
-            dna[i] = 'C';
-        }
-        if (dna[i] == 'g') {
-            dna[i] = 'G';
-        }
-        if (dna[i+1] == 'a') {
-            dna[i+1] = 'A';
-        }
-        if (dna[i+1] == 't') {
-            dna[i+1] = 'T';
-        }
-        if (dna[i+1] == 'c') {
-            dna[i+1] = 'C';
-        }
-        if (dna[i+1] == 'g') {
-            dna[i+1] = 'G';
-        }
-        if (dna[i+2] == 'a') {
-            dna[i+2] = 'A';
-        }
-        if (dna[i+2] == 't') {
-            dna[i+2] = 'T';
-        }
-        if (dna[i+2] == 'c') {
-            dna[i+2] = 'C';
-        }
-        if (dna[i+2] == 'g') {
-            dna[i+2] = 'G';
-        }
         codon = dna[i];
         codon += dna[i+1];
         codon += dna[i+2];
