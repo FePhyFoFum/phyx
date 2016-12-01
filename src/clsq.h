@@ -17,6 +17,7 @@ private:
     
     int num_taxa_, num_char_;
     bool type;
+    bool verbose_;
     double missing_allowed_;
     string fasta_, line_, dna_, name_hold_;
     map<string, string> sequences_;
@@ -27,7 +28,8 @@ private:
     void clean_sequences();
 
 public:
-    SequenceCleaner(istream* pios, double& MissingAllowed, bool& MolDna);
+    SequenceCleaner(istream* pios, double& MissingAllowed, bool& MolDna,
+        bool const& verbose);
     int get_num_taxa (); // not used
     map<string, string> get_trimmed_seqs (); // not used
     void write_seqs (ostream* poos);

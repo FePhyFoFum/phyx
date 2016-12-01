@@ -13,10 +13,11 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-SequenceCleaner::SequenceCleaner(istream* pios, double& missing, bool& MolDna):num_taxa_(0), 
-        num_char_(0), missing_allowed_(missing) {
+SequenceCleaner::SequenceCleaner(istream* pios, double& missing, bool& MolDna,
+        bool const& verbose):num_taxa_(0), num_char_(0), missing_allowed_(missing) {
     //cout << MolDna << endl;
     type = MolDna;
+    verbose_ = verbose;
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
 }
@@ -126,7 +127,9 @@ void SequenceCleaner::clean_sequences () {
             
         }
         if (stillMissing == to_stay.size()) {
-            cout << "Removed: " << iter_ -> first << endl;
+            if (verbose_) {
+                cout << "Removed: " << iter_ -> first << endl;
+            }
         } else {
             trimmed_seqs_[iter_ -> first] = to_stay;
         }
