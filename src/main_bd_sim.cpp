@@ -30,7 +30,7 @@ void print_help () {
     cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
     cout << " -b, --birth=DOUBLE  birth rate, default=1" << endl;
     cout << " -d, --death=DOUBLE  death rate, default=0" << endl;
-    cout << " -n, --nreps         number of replicates, default=1" << endl;
+    cout << " -n, --nreps=INT     number of replicates, default=1" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -s, --showd         show dead taxa" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
