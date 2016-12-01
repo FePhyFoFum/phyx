@@ -29,7 +29,7 @@ void print_help() {
     cout << endl;
     cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
-    cout << " -p, --prop=DOUBLE     proportion allowed to be missing, default=0.5" << endl;
+    cout << " -p, --prop=DOUBLE     proportion required to be present, default=0.5" << endl;
     cout << " -a, --aminoacid       use for amino acid, default is DNA" << endl;
     cout << " -v, --verbose         more verbose output (i.e. if entire seqs are removed)" << endl;
     cout << " -h, --help            display this help and exit" << endl;

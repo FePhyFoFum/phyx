@@ -13,10 +13,11 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-SequenceCleaner::SequenceCleaner(istream* pios, double& missing, bool& MolDna,
-        bool const& verbose):num_taxa_(0), num_char_(0), missing_allowed_(missing) {
+SequenceCleaner::SequenceCleaner(istream* pios, double& proportion, bool& MolDna,
+        bool const& verbose):num_taxa_(0), num_char_(0), required_present_(proportion) {
     //cout << MolDna << endl;
-    type = MolDna;
+    missing_allowed_ = 1.0 - required_present_;
+    type_ = MolDna;
     verbose_ = verbose;
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
@@ -89,7 +90,7 @@ void SequenceCleaner::clean_sequences () {
     
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
         new_dna = iter_ -> second;
-        CheckMissing(MissingData, new_dna, type);
+        CheckMissing(MissingData, new_dna, type_);
         //NumbOfSequences++;
     }
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
@@ -111,7 +112,7 @@ void SequenceCleaner::clean_sequences () {
             }
         }
         stillMissing = 0;
-        if (type == true){
+        if (type_) {
             for (unsigned int j = 0; j < to_stay.size(); j++) {
                 if (to_stay[j] == 'N' || to_stay[j] == '-' ||  to_stay[j] == 'n'
                     ||  to_stay[j] == 'X' || to_stay[j] == 'x') {

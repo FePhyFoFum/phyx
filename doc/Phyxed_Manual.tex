@@ -164,12 +164,13 @@ pxcat -s *.fas *.fa *.phy -p Parts -o Supermatrix
 
 \subsection{pxclsq}
 
-Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is allowed to be missing (\texttt{-p}), it is important to specify if Amino Acids are being used with the option \texttt{-a}. Will print to screen the name of and remove any sequences that are left with only ambiguous characters.
+Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is required to be present (\texttt{-p}), it is important to specify if amino acids are being used with the option \texttt{-a}. Will print to screen the name of and remove any sequences that are left with only ambiguous characters.
 
 \begin{flushleft}
 \begin{verbatim}
-An example to clean a nucleotide alignment down to only columns with 40% data allowed to be missing:
-pxclsq -s Alignment -p 0.4
+An example to clean a nucleotide alignment down to only columns with a
+maximum of 40% data allowed to be missing:
+pxclsq -s Alignment -p 0.6
 \end{verbatim}
 \end{flushleft}
 

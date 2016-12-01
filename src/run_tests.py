@@ -112,6 +112,9 @@ def test_program(name):
     elif name == "pxrls":
         cm = "pxrls -s TEST/test.fa -c TEST/oldnames.txt -n TEST/newnames.txt"
         t = '>Cinclus_mexicanus\nAAATTTCCCTGTCCCTTTAA\n>Anodorhynchus_hyacinthinus\nGCTCGAGGGGCCCCAAGACC\n>Stellula_calliope\nACGCTCCCCCTTAAAAATGA\n>Anser_anser\nTCCTTGTTCAACTCCGGTGG\n>Gallus_gallus\nTTACTATTCCCCCCCGCCGG\n'
+    elif name == "pxclsq":
+        cm = "./pxclsq -s TEST/Alignment -p 0.6"
+        t = '>Sequence1\nAAATTTCCCTTTCCCTTTAAAAAATTTCCCTTTCCCTTTAAA\n>Sequence10\nGGGGGGGGGGCCCCCCCCCCAGGGGGGGGGGCCCCCCCCCCA\n>Sequence11\nCCCCCCCCCCCCAAAAAAAAACCCCCCCCCCCCAAAAAAAAA\n>Sequence2\nGGGGGGGGGGCCCCCCCCCCAGGGGGGGGGGCCCCCCCCCCA\n>Sequence3\nCCCCCCCCCCCCAAAAAAAAACCCCCCCCCCCCAAAAAAAAA\n>Sequence8\nTTTTTTTTCCCCCCCGGGGGATTTTTTTTCCCCCCCGGGGGA\n>Sequence9\nAAATTTCCCTTTCCCTTTAAAAAATTTCCCTTTCCCTTTAAA\n'
     elif name == "pxstrec":
         cm = "./pxstrec -t TEST/test.strec.tre -d TEST/test.data.narrow -c TEST/test.conf | tail -1"
         t = '0.316161 \n'
@@ -132,7 +135,7 @@ def test_program(name):
 
 # this are skipped in the testing because they are preliminary, tests will
 # be added as they become more permanent.
-notest = ["pxclsq","pxbpsq","pxaa2cdn","pxlog"]
+notest = ["pxbpsq","pxaa2cdn","pxlog"]
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
