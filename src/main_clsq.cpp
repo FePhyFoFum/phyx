@@ -30,7 +30,7 @@ void print_help() {
     cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
     cout << " -p, --prop=DOUBLE     proportion allowed to be missing, default=0.5" << endl;
-    cout << " -a, --mol=bool        use for Amino Acid, default=dna" << endl;
+    cout << " -a, --aminoacid       use for amino acid, default is DNA" << endl;
     cout << " -h, --help            display this help and exit" << endl;
     cout << " -V, --version         display version and exit" << endl;
     cout << endl;
@@ -44,8 +44,8 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-    {"proportion", required_argument, NULL, 'p'},
-    {"moleclule", required_argument, NULL, 'a'},
+    {"prop", required_argument, NULL, 'p'},
+    {"aminoacid", required_argument, NULL, 'a'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
