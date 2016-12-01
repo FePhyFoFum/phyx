@@ -92,7 +92,7 @@ Phyx will track the programs and commands input to a file called "phyx.logfile".
 By optionally reading from \texttt{stdin} and writing to \texttt{stout}, Phyx provides the ability of programs to pipe the output of one into another, allowing for an efficient processing of data. An example of this would be to if someone wanted to perform a codon alignment, then remove all columns with missing data, and finally make a rough neighbor-joining tree.
 \begin{flushleft}
 \begin{verbatim}
-pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment || pxclsq -p 0.0 
+pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment || pxclsq -p 1.0 
 || pxnj -n 3 -o output_tree_file
 \end{verbatim}
 \end{flushleft}
@@ -164,7 +164,7 @@ pxcat -s *.fas *.fa *.phy -p Parts -o Supermatrix
 
 \subsection{pxclsq}
 
-Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is required to be present (\texttt{-p}), it is important to specify if amino acids are being used with the option \texttt{-a}. Will print to screen the name of and remove any sequences that are left with only ambiguous characters.
+Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is required to be present (\texttt{-p}). The program attempts to detect the sequence type (DNA or protein); if it fails,  a protein interpretation can be forced with the \texttt{-a} argument. If the verbose \texttt{-v} argument is used the program will print to screen the name of any sequences that are entirely removed (i.e. are left with only ambiguous characters after other columns have be removed).
 
 \begin{flushleft}
 \begin{verbatim}
