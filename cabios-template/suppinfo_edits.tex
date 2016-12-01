@@ -38,14 +38,14 @@ pxcat -s *.phyx -o out.concat -p models && raxml -T 2
 \end{verbatim}
 
 \section{Performance}
-We briefly describe below the performance of \texttt{phyx} relative to other existing tools.
+We briefly describe below the performance (speed) of some \texttt{phyx} programs relative to other existing tools.
 
 \subsection{Sequence cleaning}
-Cleaning sequences to ensure a certain level of matrix occupancy has become common place in many phylogenomic pipelines \citep{Dunn2013,YangSmith2014}. Here we compare two programs Gblocks \citep{Gblocks} and phyutility \citep{SmithDunn2008} to the sequence cleaning procedure of \texttt{phyx} (\texttt{pxclsq}). The file sizes ranged from 10 sequences in the file (234 kB), to 100,000 sequences (2.3 GB) with all being 23,950 base pairs in length (see Supp. Figure 1). The implementation for sequence cleaning in \texttt{pxclsq} is highly similar to phyutility, in that it focuses on column occupancy as a means of determining whether a sequence region should be cleaned (that is, removed). However, it differs in one key respect: for amino acids \texttt{pxclsq} treats the ambiguous character "X" as missing data, whereas Phyutility does not; we therefore restricted analyzes to DNA to ensure equivalent inputs. Additionally, because Gblocks implements a more sophisticated range of methods for cleaning sequences, we attempted to restrict the Gblocks sequence cleaning to focus solely on column occupancy. We found that \texttt{phyx} outperformed both Gblocks and Phyutility in all dataset sizes and for the largest dataset Phyutility was not able to clean the dataset due to a memory allocation error. The test was conducted on a laptop  containing 4 processors and 16 GB of memory, with 14 GB of that memory being allocated for phyutility.
+Cleaning sequences to ensure a certain level of matrix occupancy has become common place in many phylogenomic pipelines \citep{Dunn2013,YangSmith2014}. Here we compare two programs Gblocks \citep{Gblocks} and phyutility \citep{SmithDunn2008} to the sequence cleaning procedure of \texttt{phyx} (\texttt{pxclsq}). The file sizes ranged from 10 sequences in the file (234 kB), to 100,000 sequences (2.3 GB), with all being 23,950 base pairs in length (see Supp. Figure 1). The implementation for sequence cleaning in \texttt{pxclsq} is highly similar to phyutility, in that it focuses on column occupancy as a means of determining whether a sequence region should be cleaned (that is, removed). However, it differs in one key respect: for amino acids \texttt{pxclsq} treats the ambiguous character "X" as missing data, whereas Phyutility does not; we therefore restricted analyzes to DNA to ensure equivalent inputs. Additionally, because Gblocks implements a more sophisticated range of methods for cleaning sequences, we attempted to restrict the Gblocks sequence cleaning to focus solely on column occupancy. We found that \texttt{phyx} outperformed both Gblocks and Phyutility in all dataset sizes and for the largest dataset Phyutility was not able to clean the dataset due to a memory allocation error. The test was conducted on a laptop  containing 4 processors and 16 GB of memory, with 14 GB of that memory being allocated for phyutility.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=3.0in]{clsq.eps}
+    \includegraphics[width=5.0in]{clsq.eps}
     \caption{Comparison of alignment cleaning timings.}
     \label{cleaningfigure}
 \label{fig:S1}
@@ -56,7 +56,7 @@ Converting the alignment of proteins to their corresponding nucleotide file is u
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=3.0in]{aa2cdn}
+    \includegraphics[width=5.0in]{aa2cdn}
     \caption{Comparison of timings to convert protein alignments to
     their corresponding codon alignments.}
     \label{proteincodonfigure}
@@ -68,7 +68,7 @@ MCMC log files from Bayesian phylogenetic analyses have become common phylogenet
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=3.0in]{log}
+    \includegraphics[width=5.0in]{log}
     \caption{Comparison of MCMC log manipulation timings. Each log file
     is 2.6 GB and contains 20000 trees.}
     \label{logfigure}
