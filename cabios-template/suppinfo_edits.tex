@@ -32,7 +32,7 @@ and a simple shell loop to perform a full analytical pipeline:
 which would take the form:
 
 \begin{verbatim}
-for x in *.fa; do pxclsq -s $x -p 0.0 -o $x.phyx; done &&
+for x in *.fa; do pxclsq -s $x -p 1.0 -o $x.phyx; done &&
 pxcat -s *.phyx -o out.concat -p models && raxml -T 2
 -m GTRCAT -p 12345 -q models -s out.concat -n RAxMLout
 && pxrr -g s1,s2 -t RAxML_bestTree.RAxMLout | pxrmt
