@@ -30,7 +30,7 @@ void print_help() {
     cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
     cout << " -p, --prop=DOUBLE     proportion required to be present, default=0.5" << endl;
-    cout << " -a, --aminoacid       use for amino acid, default is DNA" << endl;
+    cout << " -a, --aminoacid       force interpret as protein (if inference fails)" << endl;
     cout << " -v, --verbose         more verbose output (i.e. if entire seqs are removed)" << endl;
     cout << " -h, --help            display this help and exit" << endl;
     cout << " -V, --version         display version and exit" << endl;
@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    bool MolDna = true;
+    bool force_protein = false;
     string seqf = "";
     string outf = "";
     double proportion = 0.5;
@@ -85,7 +85,7 @@ int main(int argc, char * argv[]) {
                 proportion = atof(strdup(optarg));
                 break;
             case 'a':
-                MolDna = false;
+                force_protein = true;
                 break;
             case 'v':
                 verbose = true;
@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    SequenceCleaner toClean(pios, proportion, MolDna, verbose);
+    SequenceCleaner toClean(pios, proportion, force_protein, verbose);
     
     // write sequences. currently only fasta format.
     toClean.write_seqs(poos);

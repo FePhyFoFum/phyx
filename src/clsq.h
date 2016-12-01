@@ -16,7 +16,7 @@ class SequenceCleaner {
 private:
     
     int num_taxa_, num_char_;
-    bool type_;
+    bool is_dna_;
     bool verbose_;
     double missing_allowed_;
     double required_present_;
@@ -29,7 +29,7 @@ private:
     void clean_sequences();
 
 public:
-    SequenceCleaner(istream* pios, double& proportion, bool& MolDna,
+    SequenceCleaner(istream* pios, double& proportion, bool& force_protein,
         bool const& verbose);
     int get_num_taxa (); // not used
     map<string, string> get_trimmed_seqs (); // not used

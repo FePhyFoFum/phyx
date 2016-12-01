@@ -13,28 +13,36 @@ using namespace std;
 #include "sequence.h"
 #include "seq_reader.h"
 
-SequenceCleaner::SequenceCleaner(istream* pios, double& proportion, bool& MolDna,
+SequenceCleaner::SequenceCleaner(istream* pios, double& proportion, bool& force_protein,
         bool const& verbose):num_taxa_(0), num_char_(0), required_present_(proportion) {
     //cout << MolDna << endl;
     missing_allowed_ = 1.0 - required_present_;
-    type_ = MolDna;
+    is_dna_ = !force_protein;
     verbose_ = verbose;
     read_sequences (pios); // read in sequences on initialization
     clean_sequences ();
 }
 
 void SequenceCleaner::read_sequences (istream* pios) {
-    
     Sequence seq;
     string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
     int num_current_char = 0;
+    bool first = true;
     
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences_[seq.get_id()] = seq.get_sequence();
         num_current_char = seq.get_sequence().size();
-        if (num_char_ == 0) { // just getting this from an arbitrary (first) sequence for now
-            num_char_ = num_current_char;
+        if (first) {
+            num_char_ = num_current_char; // just getting this from an arbitrary (first) sequence for now
+            if (is_dna_) {
+                string alpha_name = seq.get_alpha_name();
+                if (alpha_name == "AA") {
+                    is_dna_ = false;
+                    //cout << "I believe this is a protein!" << endl;
+                }
+            }
+            first = false;
             continue;
         } else {
             if (num_current_char != num_char_) {
@@ -90,7 +98,7 @@ void SequenceCleaner::clean_sequences () {
     
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
         new_dna = iter_ -> second;
-        CheckMissing(MissingData, new_dna, type_);
+        CheckMissing(MissingData, new_dna, is_dna_);
         //NumbOfSequences++;
     }
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
@@ -112,7 +120,7 @@ void SequenceCleaner::clean_sequences () {
             }
         }
         stillMissing = 0;
-        if (type_) {
+        if (is_dna_) {
             for (unsigned int j = 0; j < to_stay.size(); j++) {
                 if (to_stay[j] == 'N' || to_stay[j] == '-' ||  to_stay[j] == 'n'
                     ||  to_stay[j] == 'X' || to_stay[j] == 'x') {
