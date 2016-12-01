@@ -1,2 +1,0 @@
-pxstrec -h
-pxstrec -d test.data.narrow -t test.tre -c config_stmap

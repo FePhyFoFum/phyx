@@ -1,4 +1,0 @@
-pxcontrates -c contrates_file.txt -t contrates_tree.tre
-pxcontrates -c contrates_file.txt -t contrates_tree.tre -a 1
-pxfqfilt 0-h
-pxcontrates -c contrates_file.txt -t contrates_tree.tre -a 1
