@@ -4,24 +4,24 @@
   Wu, Xie, Suchard, Rambaut, and Drummond]{Bouckaert2014}
 Bouckaert, R., Heled, J., K\"{u}hnert, D., Vaughan, T., Wu, C.-H., Xie, D.,
   Suchard, M.~A., Rambaut, A., and Drummond, A.~J. (2014).
-\newblock Beast 2: A software platform for bayesian evolutionary analysis.
-\newblock {\em PLoS Comput Biol\/}, {\bf 10}(4), 1--6.
+\newblock {BEAST} 2: A software platform for {Bayesian} evolutionary analysis.
+\newblock {\em PLoS Computational Biology\/}, {\bf 10}(4), 1--6.
 
 \bibitem[Castresana(2000)Castresana]{Gblocks}
 Castresana, J. (2000).
 \newblock Selection of conserved blocks from multiple alignments for their use
   in phylogenetic analysis.
-\newblock {\em Molecular Biology and Evolution\/}, {\bf 17}, 540--552.
+\newblock {\em Molecular Biology and Evolution\/}, {\bf 17}(4), 540--552.
 
 \bibitem[Drummond and Rambaut(2007)Drummond and Rambaut]{DrummondRambaut2007}
 Drummond, A.~J. and Rambaut, A. (2007).
-\newblock {BEAST}: Bayesian evolutionary analysis by sampling trees.
+\newblock {BEAST}: {Bayesian} evolutionary analysis by sampling trees.
 \newblock {\em BMC Evolutionary Biology\/}, {\bf 7}(1), 1--8.
 
 \bibitem[Dunn {\em et~al.}(2013)Dunn, Howison, and Zapata]{Dunn2013}
 Dunn, C.~W., Howison, M., and Zapata, F. (2013).
 \newblock Agalma: an automated phylogenomics workflow.
-\newblock {\em BMC Bioinf\/}, {\bf 14}, 330.
+\newblock {\em BMC Bioinformatics\/}, {\bf 14}, 330.
 
 \bibitem[Magall\'{o}n {\em et~al.}(2015)Magall\'{o}n, Gómez-Acevedo,
   Sánchez-Reyes, and Hern\'{a}ndez-Hern\'{a}ndez]{Magallon2015}

@@ -5,14 +5,14 @@ The style file: natbib.bst
 Database file #1: phyx.bib
 You've used 9 entries,
             2378 wiz_defined-function locations,
-            601 strings with 5926 characters,
-and the built_in function-call counts, 4457 in all, are:
+            601 strings with 5950 characters,
+and the built_in function-call counts, 4462 in all, are:
 = -- 427
 > -- 242
 < -- 5
 + -- 72
 - -- 70
-* -- 424
+* -- 427
 := -- 776
 add.period$ -- 41
 call.type$ -- 9
@@ -20,9 +20,9 @@ change.case$ -- 57
 chr.to.int$ -- 9
 cite$ -- 9
 duplicate$ -- 170
-empty$ -- 294
+empty$ -- 295
 format.name$ -- 85
-if$ -- 885
+if$ -- 886
 int.to.chr$ -- 1
 int.to.str$ -- 0
 missing$ -- 9
