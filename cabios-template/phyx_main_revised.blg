@@ -1,13 +1,13 @@
 This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: phyx_main_edits.aux
+The top-level auxiliary file: phyx_main_revised.aux
 The style file: natbib.bst
 Database file #1: phyx.bib
 Warning--entry type for "MaddisonMaddison2016" isn't style-file defined
---line 114 of file phyx.bib
+--line 115 of file phyx.bib
 You've used 13 entries,
             2378 wiz_defined-function locations,
-            623 strings with 6659 characters,
+            623 strings with 6663 characters,
 and the built_in function-call counts, 6694 in all, are:
 = -- 629
 > -- 395
