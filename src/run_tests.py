@@ -135,7 +135,7 @@ def test_program(name):
 
 # this are skipped in the testing because they are preliminary, tests will
 # be added as they become more permanent.
-notest = ["pxbpsq","pxaa2cdn","pxlog"]
+notest = ["pxbpsq","pxaa2cdn","pxlog","pxnni"]
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:

@@ -207,17 +207,17 @@ pxfqfilt -s fqfilt_test.fastq -m 10
 
 \subsection{pxlog}
 
-This program is an MCMC log manipulator and concatenator. Resamples parameter or tree MCMC samples using some burnin and thinning across an arbitrary number of log files. NOTE: resampling parameters are in terms of number of samples, not number of generations. To determine the attributes of the log files, you can first use the \texttt{-i} flag:
+This program is an MCMC log manipulator and concatenator. Resamples parameter or tree MCMC samples using some burnin and thinning across an arbitrary number of log files. Input files may be indicated using wildcards e.g. '*.trees'. NOTE: resampling parameters are in terms of number of samples, not number of generations. To determine the attributes of the log files, you can first use the \texttt{-i} flag:
 
 \begin{flushleft}
 \begin{verbatim}
-pxlog -t tree_files -i
+pxlog -t *.trees -i
 \end{verbatim}
 \end{flushleft}
 and then sample accordingly:
 \begin{flushleft}
 \begin{verbatim}
-pxlog -t tree_files -b some_burnin -n some_thinning
+pxlog -t *.trees -b 75 -n 2 -o some_output_filename
 \end{verbatim}
 \end{flushleft}
 
