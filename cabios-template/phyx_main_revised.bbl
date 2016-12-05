@@ -69,12 +69,6 @@ Suyama, M., Torrents, D., and Bork, P. (2006).
   corresponding codon alignments.
 \newblock {\em Nucleic Acids Research\/}, {\bf 34}(suppl 2), W609--W612.
 
-\bibitem[Vaidya {\em et~al.}(2011)Vaidya, Lohman, and Meier]{Vaidya2011}
-Vaidya, G., Lohman, D.~J., and Meier, R. (2011).
-\newblock Sequencematrix: concatenation software for the fast assembly of
-  multi-gene datasets with character set and codon information.
-\newblock {\em Cladistics\/}, {\bf 27}(2), 171--180.
-
 \bibitem[Yang and Smith(2014)Yang and Smith]{YangSmith2014}
 Yang, Y. and Smith, S.~A. (2014).
 \newblock Orthology inference in nonmodel organisms using transcriptomes and

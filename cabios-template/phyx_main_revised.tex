@@ -38,7 +38,6 @@ https://github.com/FePhyFoFum/phyx\\
 \textbf{Contact:} \href{eebsmith@umich.edu}{eebsmith@umich.edu}\\
 \textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics}
 online.}
-
 \maketitle
 
 \section{Introduction}
@@ -47,13 +46,12 @@ Phylogenetic and phylogenomic analyses now involve massive datasets making tradi
 phylogenetic toolkits exist including but not limited to \texttt{ETE} \citep{HuertaCepas2016}, \texttt{newick utilities} \citep{JunierZdobnov2010}, \texttt{Mesquite}
 \citep{MaddisonMaddison2016}, \texttt{ape} \citep{Popescu2012},
 \texttt{phyutility} \citep{SmithDunn2008}, \texttt{DendroPy}
-\citep{SukumaranHolder2010}, \texttt{PAL2NAL} \citep{Suyama2006}, and
-\texttt{SequenceMatrix} \citep{Vaidya2011}).
+\citep{SukumaranHolder2010}, \texttt{PAL2NAL} \citep{Suyama2006}
+% removing this non-essential reference for space purposes
+%, and \texttt{SequenceMatrix} \citep{Vaidya2011})
+.
 % i will re-write the following sentence (JWB)
-However, despite each
-individual package providing a suite of benefits, there is a niche
-to be fulfilled for programs that are conducive to high throughput
-processes and the convenience of a POSIX style interface.
+However, despite each individual package providing a suite of benefits, there is a niche to be fulfilled for programs that are conducive to high throughput processes and the convenience of a POSIX style interface.
 
 In an effort to provide a more flexible and efficient software package for processing phylogenetic data and for conducting phylogenomic research we present \texttt{phyx}, a set of programs to carry
 out a wide range of phylogenetic tasks. Written in C++ and modeled after
@@ -70,12 +68,10 @@ As with standard Unix command line tools, these programs can be piped
 of efficient analytical pipelines. \texttt{phyx} also logs all program calls
 to a plain text file, which is an executable record that can be submitted as
 part of a manuscript for reviewing and replicability purposes. 
-\texttt{phyx} thus provides a convenient, lightweight, and inclusive toolkit consisting of programs spanning the wide breadth of programs utilized by researchers performing phylogenomic analyses. 
+\texttt{phyx} thus provides a convenient, lightweight, and inclusive toolkit consisting of programs spanning the wide breadth of programs utilized by researchers performing phylogenomic analyses.
 
 \begin{methods}
 \section{Methods}
-
-%We briefly describe below some of the current features of \texttt{phyx}.
 
 \subsection{File processing, manipulation, and conversion}
 
@@ -99,7 +95,7 @@ Finally, Bayesian MCMC analyses involving phylogenies have become common in the 
 large log files generated from replicated analyses. \texttt{phyx} enables
 both the concatenation and resampling (burnin and/or thinning) of MCMC
 tree or parameter logs for downstream summary.
-% other things to add/remove?
+
 \begin{table}[!t]
 \processtable{Selected \texttt{phyx} programs and their functions\label{Tab:01}. See github for additional details and full program list.} {\begin{tabular}{@{}llll@{}}\toprule Program &
 Function\\\midrule
@@ -119,6 +115,7 @@ pxbdfit/pxbdsim & birth-death tree inference/simulator\\
 pxseqgen & simulate nucleotide/protein sequences on user tree\\\botrule
 \end{tabular}}{}
 \end{table}
+
 \subsection{Analysis and simulation}
 
 In addition to file manipulation, \texttt{phyx} provides a growing
@@ -140,9 +137,6 @@ birth-death trees (see example in Figure~\ref{fig:01}) and nucleotide or
 protein alignments given a tree and substitution model parameters.
 
 \subsection{Comparison to existing programs}
-
-% is this sufficient, or do we need to incorporate some actual results here? (JWB)
-
 We demonstrate the relative performance of some \texttt{phyx} programs in
 the Supplementary Data, available at \textit{Bioinformatics} online.
 
