@@ -63,12 +63,6 @@ Sukumaran, J. and Holder, M.~T. (2010).
 \newblock {DendroPy}: a python library for phylogenetic computing.
 \newblock {\em Bioinformatics\/}, {\bf 26}(12), 1569--1571.
 
-\bibitem[Suyama {\em et~al.}(2006)Suyama, Torrents, and Bork]{Suyama2006}
-Suyama, M., Torrents, D., and Bork, P. (2006).
-\newblock {PAL2NAL}: robust conversion of protein sequence alignments into the
-  corresponding codon alignments.
-\newblock {\em Nucleic Acids Research\/}, {\bf 34}(suppl 2), W609--W612.
-
 \bibitem[Yang and Smith(2014)Yang and Smith]{YangSmith2014}
 Yang, Y. and Smith, S.~A. (2014).
 \newblock Orthology inference in nonmodel organisms using transcriptomes and

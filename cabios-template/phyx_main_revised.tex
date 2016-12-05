@@ -1,4 +1,6 @@
 \documentclass{bioinfo}
+\setlength{\textfloatsep}{0.1cm}
+
 \copyrightyear{2016} \pubyear{2016}
 
 \access{Advance Access Publication Date: Day Month Year}
@@ -20,87 +22,36 @@ $^{\dagger}$The authors wish it to be known that, in their opinion, the first tw
 
 \editor{Associate Editor: XXXXXXX}
 
-\abstract{\textbf{Summary:} The ease with which phylogenomic data can
-be generated has drastically escalated the computational
-burden for even routine phylogenetic investigations. To address this, we
-present \texttt{phyx}: a collection of programs written in C++ to
-explore, manipulate, analyze, and simulate phylogenetic objects
-(alignments, trees, and MCMC logs). Modelled after Unix/GNU/Linux
-command line tools, individual programs perform a single task and
-operate on standard I/O streams that can be piped to form complex analytical
-pipelines quickly and easily. Because of the stream-centric
-paradigm, memory requirements are minimized, and hence \texttt{phyx}
-is capable of processing very large data sets.\\
-\textbf{Availability and Implementation:} \texttt{phyx} runs on
-POSIX-compliant operating systems. Source code and documentation are freely
-available under the GNU General Public License at
-https://github.com/FePhyFoFum/phyx\\
+\abstract{\textbf{Summary:} The ease with which phylogenomic data can be generated has drastically escalated the computational burden for even routine phylogenetic investigations. To address this, we present \texttt{phyx}: a collection of programs written in C++ to explore, manipulate, analyze, and simulate phylogenetic objects (alignments, trees, and MCMC logs). Modelled after Unix/GNU/Linux command line tools, individual programs perform a single task and operate on standard I/O streams that can be piped to quickly and easily form complex analytical pipelines. Because of the stream-centric paradigm, memory requirements are minimized \textcolor{red}{(often only a single tree or sequence in memory at any instance)}, and hence \texttt{phyx} is capable of efficiently processing very large data sets.\\
+\textbf{Availability and Implementation:} \texttt{phyx} runs on POSIX-compliant operating systems. Source code, installation instructions, documentation, and example files are freely available under the GNU General Public License at \href{https://github.com/FePhyFoFum/phyx}{https://github.com/FePhyFoFum/phyx}\\
 \textbf{Contact:} \href{eebsmith@umich.edu}{eebsmith@umich.edu}\\
-\textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics}
-online.}
+\textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics} online.}
 \maketitle
 
 \section{Introduction}
 
-Phylogenetic and phylogenomic analyses now involve massive datasets making traditional approaches for analysis and manipulation of data onerous undertakings. A number of
-phylogenetic toolkits exist including but not limited to \texttt{ETE} \citep{HuertaCepas2016}, \texttt{newick utilities} \citep{JunierZdobnov2010}, \texttt{Mesquite}
-\citep{MaddisonMaddison2016}, \texttt{ape} \citep{Popescu2012},
-\texttt{phyutility} \citep{SmithDunn2008}, \texttt{DendroPy}
-\citep{SukumaranHolder2010}, \texttt{PAL2NAL} \citep{Suyama2006}
-% removing this non-essential reference for space purposes
-%, and \texttt{SequenceMatrix} \citep{Vaidya2011})
-.
-% i will re-write the following sentence (JWB)
-However, despite each individual package providing a suite of benefits, there is a niche to be fulfilled for programs that are conducive to high throughput processes and the convenience of a POSIX style interface.
+Phylogenetic and phylogenomic analyses now involve massive datasets which makes traditional approaches for the analysis and manipulation of data onerous undertakings. A number of phylogenetic toolkits exist including but not limited to \texttt{ETE} \citep{HuertaCepas2016}, \texttt{newick utilities} \citep{JunierZdobnov2010}, \texttt{Mesquite} \citep{MaddisonMaddison2016}, \texttt{ape} \citep{Popescu2012}, \texttt{phyutility} \citep{SmithDunn2008}, and \texttt{DendroPy} \citep{SukumaranHolder2010}.
+% removing these non-essential references for space purposes
+%, \texttt{PAL2NAL} \citep{Suyama2006}, and \texttt{SequenceMatrix} \citep{Vaidya2011})
+\textcolor{red}{Of course, no individual software package is exhaustive in its functionality (i.e. methods and supported file formats), so these packages largely complement one another, both in terms of novel and overlapping functionalities (i.e. confirming computed values), with differences (e.g. in memory requirements and speed) sometimes making certain packages more conducive to particular workflows. However, despite the rich diversity of existing tools, there is a niche to be fulfilled for programs that are conducive to high throughput processes and the convenience of a POSIX-style interface.}
 
-In an effort to provide a more flexible and efficient software package for processing phylogenetic data and for conducting phylogenomic research we present \texttt{phyx}, a set of programs to carry
-out a wide range of phylogenetic tasks. Written in C++ and modeled after
-Unix/GNU/Linux command line tools, individual programs perform a single task,
-have individual manual (i.e., man) pages, and operate on standard I/O streams. A result of
-this stream-centric approach is that, for most programs, only a single sequence
-or tree is in memory at any moment. Thus, large data sets can be
-processed with minimal memory requirements. \texttt{phyx}'s
-ever-growing complement of programs currently consists of 35+ programs
-(see Table~\ref{Tab:01} for a subset) focused on exploring, manipulating, analyzing,
-and simulating phylogenetic objects (alignments, trees, and MCMC logs).
-As with standard Unix command line tools, these programs can be piped
-(together with non-\texttt{phyx} tools), allowing the easy construction
-of efficient analytical pipelines. \texttt{phyx} also logs all program calls
-to a plain text file, which is an executable record that can be submitted as
-part of a manuscript for reviewing and replicability purposes. 
-\texttt{phyx} thus provides a convenient, lightweight, and inclusive toolkit consisting of programs spanning the wide breadth of programs utilized by researchers performing phylogenomic analyses.
+In an effort to provide a more flexible and efficient software package for processing phylogenetic data and for conducting phylogenomic research we present \texttt{phyx}, a set of programs to carry out a wide range of phylogenetic tasks. Written in C++ and modeled after Unix/GNU/Linux command line tools, individual programs perform a single task, have individual manual (i.e., man) pages, and operate on standard I/O streams. A result of this stream-centric approach is that, for most programs, only a single sequence or tree is in memory at any moment. Thus, large data sets can be processed with minimal memory requirements. \texttt{phyx}'s ever-growing complement of programs currently consists of 35+ programs (see Table~\ref{Tab:01} for a subset) focused on exploring, manipulating, analyzing, and simulating phylogenetic objects (alignments, trees, and MCMC logs). As with standard Unix command line tools, these programs can be piped (together with non-\texttt{phyx} tools), allowing the easy construction of efficient analytical pipelines. \texttt{phyx} also logs all program calls to a plain text file, which is an executable record that can be submitted as part of a manuscript for reviewing and replicability purposes. \texttt{phyx} thus provides a convenient, lightweight, and inclusive toolkit consisting of programs spanning the wide breadth of programs utilized by researchers performing phylogenomic analyses.\vspace*{-12pt}
 
 \begin{methods}
 \section{Methods}
 
 \subsection{File processing, manipulation, and conversion}
 
-File manipulation and conversion is a tedious and error-prone, but often required,
-component of phylogenetic analysis, made more burdensome by the volume of data
-available in current phylogenomics studies. \texttt{phyx} supports the
-popular formats for sequence alignments (fasta, fastq, phylip, and Nexus)
-and trees (newick and Nexus), and provides lightweight, high-throughput
-utilities to convert data among formats without the user needing to
-provide the format of the original data as \texttt{phyx} will attempt to auto-detect the original format. Alignments can be further
-manipulated by removing individual taxa, resampling (bootstrap or
-jackknifing), sequence recoding, translation to protein, reverse
-complementation, filtering by quality scores or the amount of missing
-data, and concatenation across mixed alignment formats.
+File manipulation and conversion is a tedious and error-prone, but often required, component of phylogenetic analysis, made more burdensome by the volume of data available in current phylogenomics studies. \texttt{phyx} supports the popular formats for sequence alignments (fasta, fastq, phylip, and Nexus) and trees (newick and Nexus), and provides lightweight, high-throughput utilities to convert data among formats without the user needing to provide the format of the original data as \texttt{phyx} will attempt to auto-detect the original format. Alignments can be further manipulated by removing individual taxa, resampling (bootstrap or jackknifing), sequence recoding, translation to protein, reverse complementation, filtering by quality scores or the amount of missing data, and concatenation across mixed alignment formats.
 
-Processing large data matrices is only one step required for phylogenomic analyses. In order to perform downstream analyses (e.g. orthology detection \citep{YangSmith2014}, mapping gene
-trees to species tree \citep{Smith2015}, or gene tree/species tree reconciliation \citep{Mirarab2014}) it is now also essential to be able to manipulate individual gene trees constructed from these data.
-\texttt{phyx} enables fast, efficient manipulations such as pruning
-individual taxa, extracting subclades, and rerooting/unrooting trees.
-Finally, Bayesian MCMC analyses involving phylogenies have become common in the biological sciences, and often involve
-large log files generated from replicated analyses. \texttt{phyx} enables
-both the concatenation and resampling (burnin and/or thinning) of MCMC
-tree or parameter logs for downstream summary.
+Processing large data matrices is only one step required for phylogenomic analyses. In order to perform downstream analyses (e.g. orthology detection \citep{YangSmith2014}, mapping gene trees to species tree \citep{Smith2015}, or gene tree/species tree reconciliation \citep{Mirarab2014}) it is now also essential to be able to manipulate individual gene trees constructed from these data. \texttt{phyx} enables fast, efficient manipulations such as pruning individual taxa, extracting subclades, and rerooting/unrooting trees. Finally, Bayesian MCMC analyses involving phylogenies have become common in the biological sciences, and often involve large log files generated from replicated analyses. \texttt{phyx} enables both the concatenation and resampling (burnin and/or thinning) of MCMC tree or parameter logs for downstream summary.
 
-\begin{table}[!t]
+\begin{table}[t]
 \processtable{Selected \texttt{phyx} programs and their functions\label{Tab:01}. See github for additional details and full program list.} {\begin{tabular}{@{}llll@{}}\toprule Program &
 Function\\\midrule
 pxlssq/pxlstr & list attributes of alignments/trees\\
 pxrms/pxrmt & remove taxa from alignments/trees\\
+pxrls/pxrlt & relabel taxa in alignments/trees\\
 pxboot & alignment bootstrap/jackknife resampling\\
 pxclsq & remove missing/ambiguous sites from an alignment\\
 pxs2fa/phy/nex & convert alignment to fasta/phylip/Nexus format\\
@@ -109,56 +60,37 @@ pxfqfilt & filter fastq files by quality\\
 pxrr & reroot/unroot trees\\
 pxtlate &  translate nucleotide sequences\\
 pxsw/pxnw & pairwise sequence alignment\\
-%pxnj & neighbour-joining tree inference\\
 pxstrec & ancestral state reconstruction, stochastic mapping\\
 pxbdfit/pxbdsim & birth-death tree inference/simulator\\
 pxseqgen & simulate nucleotide/protein sequences on user tree\\\botrule
 \end{tabular}}{}
 \end{table}
 
-\subsection{Analysis and simulation}
-
-In addition to file manipulation, \texttt{phyx} provides a growing
-number of tools for data analysis and simulation. Analytical capabilities
-presently include pairwise sequence alignment using either the
-Needleman-Wunsch or Smith-Waterman algorithms,
-tree inference using the neighbour-joining criterion,
-ancestral state reconstruction and stochastic mapping of discrete characters,
-fitting of Brownian or OU models to continuous
-characters, fitting birth-death models to trees, and
-computing alignment column bipartitions either in isolation or on a user
-tree.
-
-Data simulation is an essential tool with which to explore model
-sensitivity and adequacy through parametric bootstrapping or posterior
-predictive analyses \citep{Bollback2002}. \texttt{phyx} currently enables
-simulation of both
-birth-death trees (see example in Figure~\ref{fig:01}) and nucleotide or
-protein alignments given a tree and substitution model parameters.
-
-\subsection{Comparison to existing programs}
-We demonstrate the relative performance of some \texttt{phyx} programs in
-the Supplementary Data, available at \textit{Bioinformatics} online.
-
-\end{methods}
-
-\begin{figure}[!tpb]%figure1
+\begin{figure}[b]%figure1
 % Fig1_smallgrey.eps, Fig1_smallblack.eps, and Fig1_small_nolines.eps available
 \centerline{\includegraphics[width=86mm]{Fig1_smallblack.eps}}
+\vspace*{-5mm}
 \caption{Parametric bootstrapping of a diversification process. The primate phylogeny of \cite{Springer2012} was fit to a birth-death model (pxbdfit). To explore the breadth of plausible diversification outcomes the maximum likelihood parameters (b: 0.339487, d: 0.268944) were used to simulate (pxbdsim) 25000 phylogenies conditioned on either the extant diversity (367, left) or root age (66.7066 Ma, right) of the empirical tree.}\label{fig:01}
 \end{figure}
 
+\subsection{Analysis and simulation}
+
+In addition to file manipulation, \texttt{phyx} provides a growing number of tools for data analysis and simulation. Analytical capabilities presently include pairwise sequence alignment using either the Needleman-Wunsch or Smith-Waterman algorithms, tree inference using the neighbour-joining criterion, ancestral state reconstruction and stochastic mapping of discrete characters, fitting of Brownian or OU models to continuous characters, fitting birth-death models to trees, and computing alignment column bipartitions either in isolation or on a user tree.
+
+Data simulation is an essential tool with which to explore model sensitivity and adequacy through parametric bootstrapping or posterior predictive analyses \citep{Bollback2002}. \texttt{phyx} currently enables simulation of both birth-death trees (see example in Figure~\ref{fig:01}) and nucleotide or protein alignments given a tree and substitution model parameters.
+
+\subsection{Comparison to existing programs}
+\textcolor{red}{While we view \texttt{phyx} as a complement to existing tools,} we demonstrate the relative performance \textcolor{red}{(speed and memory requirements)} of some \texttt{phyx} programs \textcolor{red}{for common phylogenomics tasks} in the Supplementary Data, available at \textit{Bioinformatics} online.
+
+\end{methods}
+
 \section{Conclusion}
 
-\texttt{phyx} was designed to complement existing phylogenetic toolkits by
-enabling the exploration, manipulation, analysis, and simulation of
-phylogenetic objects directly from the command line. Moreover, by conforming
-to a stream-centric approach, memory requirements are reduced significantly so that large volumes of data can be processed on personal laptop
-computers. \vspace*{-10pt}
+\texttt{phyx} was designed to complement existing phylogenetic toolkits by enabling the exploration, manipulation, analysis, and simulation of phylogenetic objects directly from the command line. Moreover, by conforming to a stream-centric approach, memory requirements are reduced significantly so that large volumes of data can be processed on even personal laptop computers.\vspace*{-10pt}
 
 \section*{Acknowledgements}
 
-We thank Ya Yang, Jeff Johnson, and three anonymous reviewers for helpful suggestions that significantly improved the manuscript, and Ning Wang and Jeff Johnson for testing.\vspace*{-12pt}
+We thank Ya Yang, Jeff Johnson, \textcolor{red}{and three anonymous reviewers} for helpful suggestions that significantly improved the manuscript, and Ning Wang, Jeff Johnson, \textcolor{red}{and Ross Mounce} for testing.\vspace*{-12pt}
 
 \section*{Funding}
 

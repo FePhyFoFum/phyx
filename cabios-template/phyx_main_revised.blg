@@ -1,49 +1,49 @@
-This is BibTeX, Version 0.99d (TeX Live 2015)
+This is BibTeX, Version 0.99d (TeX Live 2015/dev/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: phyx_main_revised.aux
 The style file: natbib.bst
 Database file #1: phyx.bib
 Warning--entry type for "MaddisonMaddison2016" isn't style-file defined
 --line 115 of file phyx.bib
-You've used 12 entries,
+You've used 11 entries,
             2378 wiz_defined-function locations,
-            615 strings with 6443 characters,
-and the built_in function-call counts, 6184 in all, are:
-= -- 580
-> -- 367
+            606 strings with 6231 characters,
+and the built_in function-call counts, 5656 in all, are:
+= -- 529
+> -- 339
 < -- 6
-+ -- 109
-- -- 107
-* -- 606
-:= -- 1074
-add.period$ -- 52
-call.type$ -- 12
-change.case$ -- 77
-chr.to.int$ -- 12
-cite$ -- 12
-duplicate$ -- 222
-empty$ -- 397
-format.name$ -- 129
-if$ -- 1229
++ -- 101
+- -- 99
+* -- 552
+:= -- 985
+add.period$ -- 47
+call.type$ -- 11
+change.case$ -- 71
+chr.to.int$ -- 11
+cite$ -- 11
+duplicate$ -- 202
+empty$ -- 361
+format.name$ -- 120
+if$ -- 1123
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 11
-newline$ -- 62
-num.names$ -- 48
-pop$ -- 66
+missing$ -- 10
+newline$ -- 57
+num.names$ -- 44
+pop$ -- 60
 preamble$ -- 1
-purify$ -- 77
+purify$ -- 71
 quote$ -- 0
-skip$ -- 153
+skip$ -- 141
 stack$ -- 0
-substring$ -- 424
-swap$ -- 40
+substring$ -- 383
+swap$ -- 36
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 108
+type$ -- 99
 warning$ -- 0
-while$ -- 47
+while$ -- 43
 width$ -- 0
-write$ -- 155
+write$ -- 142
 (There was 1 warning)
