@@ -18,6 +18,7 @@ using namespace std;
 #include "node.h"
 #include "tree.h"
 #include "tree_utils.h"
+#include "tree_reader.h"
 #include "utils.h"
 
 extern double EPSILON;
@@ -432,8 +433,47 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
         
         // this can fail if there is a polytomy at the root which includes outgroups
         // if it fails, take complement of outgroup, root on that
+        
+        //cout << "trying to root on ingroup instead" << endl;
         vector <string> ingroup = get_complement_tip_set(tree, outgr);
         m = tree->getMRCA(ingroup);
+        if (m == tree->getRoot()) {
+            //cout << "doh: mrca of ingroup is the same node!" << endl;
+            bool done = false;
+            // root randomly, then do desired rooting
+            Node * n = NULL;
+            while (!done) {
+                for (int i = 0; i < ingroup.size(); i++) {
+                    n = tree->getExternalNode(ingroup[i]);
+                    Node * p = n->getParent();
+                    if (p != tree->getRoot()) {
+                        //cout << "yay! can try with parent of " << ingroup[i] << endl;
+                        done = true;
+                        break;
+                    } else {
+                        //cout << "nope: can't use " << ingroup[i] << endl;
+                    }
+                    if (i == (ingroup.size() - 1)) {
+                        done = true;
+                    }
+                }
+            }
+            success = tree->reRoot(n);
+            string intermediate = tree->getRoot()->getNewick(true) + ";";
+            //cout << "intermediate result: " << intermediate << endl;
+            delete tree; // apparently necessary
+            tree = read_tree_string(intermediate);
+            m = tree->getMRCA(outgr);
+            /*
+            if (m == NULL) {
+                cout << "WTF?!?" << endl;
+            } else if (m == tree->getRoot()) {
+                cout << "how is that possible?" << endl;
+            } else {
+                cout << "huh?" << endl;
+            }
+            */
+        }
     }
     success = tree->reRoot(m);
     

@@ -5,7 +5,6 @@
  *      Author: joe
  */
 
-//compile alone: g++ -std=c++11 main_clsq.cpp sequence.cpp seq_reader.cpp clsq.cpp seq_utils.cpp utils.cpp superdouble.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
