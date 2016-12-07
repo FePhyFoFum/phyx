@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.24)  2 DEC 2016 15:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2015/dev/Debian) (preloaded format=pdflatex 2016.6.24)  7 DEC 2016 13:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -618,12 +618,6 @@ Overfull \vbox (14.49998pt too high) has occurred while \output is active []
 
 
 [2]
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 160--160
-[]\OT1/cmtt/m/n/12 An example where the sequences to be concatenated are in a v
-ariety of formats:[] 
- []
-
-
 Overfull \vbox (14.49998pt too high) has occurred while \output is active []
 
 
@@ -644,12 +638,6 @@ Overfull \vbox (14.49998pt too high) has occurred while \output is active []
 
 
 [7]
-Overfull \hbox (24.24522pt too wide) in paragraph at lines 404--404
-[]\OT1/cmtt/m/n/12 -m A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<-
->T,C<->G,C<->T,G<->T[] 
- []
-
-
 Overfull \vbox (14.49998pt too high) has occurred while \output is active []
 
 
@@ -662,39 +650,40 @@ Overfull \vbox (14.49998pt too high) has occurred while \output is active []
 Class memoir Warning: The material used in the headers is too large
 (14.49998pt) for the given head height (0.0pt), it is recommended to
 either increase the head height or redesign the header
-(in both cases you will find help in the memoir manual). on input line 482.
+(in both cases you will find help in the memoir manual). on input line 487.
 
 
 Overfull \vbox (14.49998pt too high) has occurred while \output is active []
 
 
 [10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 482.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 482.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 487.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 487.
  (./Phyxed_Manual.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 482.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 482.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 487.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 487.
 Package rerunfilecheck Info: File `Phyxed_Manual.out' has not changed.
 (rerunfilecheck)             Checksum: 68BEA8F06E6E8E46584CE763B595B2DF;145.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 482.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 487.
  ) 
 Here is how much of TeX's memory you used:
  8960 strings out of 495020
  128012 string characters out of 6181324
- 250235 words of memory out of 5000000
+ 249235 words of memory out of 5000000
  12070 multiletter control sequences out of 15000+600000
  8672 words of font info for 31 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 36i,11n,29p,1085b,382s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,11n,29p,1085b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on Phyxed_Manual.pdf (10 pages, 91788 bytes).
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on Phyxed_Manual.pdf (10 pages, 99092 bytes).
 PDF statistics:
- 142 PDF objects out of 1000 (max. 8388607)
- 123 compressed objects within 2 object streams
+ 146 PDF objects out of 1000 (max. 8388607)
+ 126 compressed objects within 2 object streams
  52 named destinations out of 1000 (max. 500000)
  25 words of extra memory for PDF output out of 10000 (max. 10000000)
 

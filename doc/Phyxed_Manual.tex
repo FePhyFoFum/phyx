@@ -132,11 +132,14 @@ pxbdsim -e 100 -s -b 1 -d 0.5 -o output_tree_file
 \subsection{pxboot}
 
 Using a variety of statistical methods for evaluating certainty of phylogenetic trees is essential as all methods have both positives and negatives associated with them. This program will allow the user to create resampled datasets for two of the most commonly used methods: non-parametric bootstrapping and the jackknife. The proportion of data to be incorporated in a jackknife may be specified with \texttt{-f} and a random seed may be specified with \texttt{-x}.
+
 \begin{flushleft}
-\begin{verbatim}
 Example jackknife:
+\begin{verbatim}
 pxboot -s Alignment -x 112233 -f 0.50 -o output_of_50_jackknife
+\end{verbatim}
 Example bootstrap:
+\begin{verbatim}
 pxboot -s Alignment -p parts -o output_of_bootstrap
 \end{verbatim}
 \end{flushleft}
@@ -156,9 +159,9 @@ pxbp -t Tree.tre -o bp_output
 When developing a supermatrix for an analysis concatenation of the genes is essential and manual programs that perform this for thousands of genes at once are capable of saving users a lot of time importing each gene into visualization software. This program allows the user to specify a variety of different file types to be concatenated together and can print partition information to a file with the \texttt{-p} argument.
 
 \begin{flushleft}
-\begin{verbatim}
 An example where the sequences to be concatenated are in a variety of formats:
-pxcat -s *.fas *.fa *.phy -p Parts -o Supermatrix
+\begin{verbatim}
+pxcat -s *.fas *.fa *.phy -p Parts.txt -o Supermatrix.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -167,9 +170,9 @@ pxcat -s *.fas *.fa *.phy -p Parts -o Supermatrix
 Having a large amount of missing data in a column of a supermatrix, may be due to errors in alignment or a variety of other factors. Therefore, removing highly ambiguous columns of data may help better estimate a model of evolution for a dataset. This program allows the user to specify a proportion of data that is required to be present (\texttt{-p}). The program attempts to detect the sequence type (DNA or protein); if it fails,  a protein interpretation can be forced with the \texttt{-a} argument. If the verbose \texttt{-v} argument is used the program will print to screen the name of any sequences that are entirely removed (i.e. are left with only ambiguous characters after other columns have be removed).
 
 \begin{flushleft}
-\begin{verbatim}
 An example to clean a nucleotide alignment down to only columns with a
-maximum of 40% data allowed to be missing:
+maximum of 40\% data allowed to be missing:
+\begin{verbatim}
 pxclsq -s Alignment -p 0.6
 \end{verbatim}
 \end{flushleft}
@@ -189,8 +192,8 @@ pxconsq -s Alignment
 Comparing continuous characters across phylogenies provides a valuable tool for understanding the evolution of such characters. Two of the most commonly used models are Brownian and OU models, and this program can be used to estimate the rate of character evolution. The input for this is a fasta file where instead of nucleotide data there is tab delimited character states and a tree file for this to mapped onto. The program may then perform an ancestral state reconstruction (\texttt{-a 0} or default) or test for model fit between OU and Brownian motion (\texttt{-a 1}).
 
 \begin{flushleft}
-\begin{verbatim}
 Example model test for a set of characters across a tree:
+\begin{verbatim}
 pxcontrates -c contrates_file.txt -t contrates_tree.tre -a 1
 \end{verbatim}
 \end{flushleft}
@@ -316,7 +319,7 @@ pxrevcomp -s Nucleotide.fa
 
 \subsection{pxrls}
 
-This program allows the user to rename taxa by giving a sequence file and specifying files listing current \texttt{-c} and new names \texttt{-n}; name ordering in the files must be identical.
+This program allows the user to rename taxa by giving a sequence file and specifying files listing current \texttt{-c} and new names \texttt{-n}; name ordering in the files must be identical, with one taxon per line.
 
 \begin{flushleft}
 \begin{verbatim}
@@ -327,7 +330,7 @@ pxrls -s SeqFile -c CurrentNames -n NewNames
 
 \subsection{pxrlt}
 
-This program provides a way to relabel the tips of trees by giving a tree file and specifying files listing current \texttt{-c} and new names \texttt{-n}; name ordering in the files must be identical.
+This program provides a way to relabel the tips of trees by giving a tree file and specifying files listing current \texttt{-c} and new names \texttt{-n}; name ordering in the files must be identical, with one taxon per line.
 
 \begin{flushleft}
 \begin{verbatim}
@@ -337,22 +340,22 @@ pxrlt -t kingdoms.tre -c kingdoms.oldnames.txt -n kingdoms.newnames.txt
 
 \subsection{pxrms}
 
-This program will remove sequences from a sequence file, either by typing them on the command line using \texttt{-n} or by specifying a file using \texttt{-f}.
+This program will remove sequences from a sequence file, either by typing them on the command line using \texttt{-n} (comma-delimited) or by specifying a file using \texttt{-f} (one taxon per line).
 
 \begin{flushleft}
 \begin{verbatim}
-pxrms -s Nucleotide.fa -f List.txt
+pxrms -s Nucleotide.fa -f taxa_to_delete.txt
 \end{verbatim}
 \end{flushleft}
 
 \subsection{pxrmt}
 
-This program will remove tips from a tree file, either by typing them on the command line using \texttt{-n} or by specifying a file using \texttt{-f}.
+This program will remove tips from a tree file, either by typing them on the command line using \texttt{-n} (comma-delimited) or by specifying a file using \texttt{-f} (one taxon per line).
 
 \begin{flushleft}
+Example to remove tips s1, s6, and s8:
 \begin{verbatim}
-Example to remove a tips called s1
-pxrmt -t rmt_test.tre -n s1
+pxrmt -t rmt_test.tre -n s1,s6,s8
 \end{verbatim}
 \end{flushleft}
 
@@ -361,8 +364,9 @@ pxrmt -t rmt_test.tre -n s1
 This program will re-root trees in a tree file based on specified outgroups (\texttt{-g}), or the program can unroot a tree (\texttt{-u}). For re-rooting, if not all the outgroups are found in the tree the program will re-root the tree based on the outgroups that are available. It provides a useful tool for re-rooting thousands of trees which can then be used for analyzing gene discordance across phylogenies.
 
 \begin{flushleft}
+Example to root on the outgroups s1 and s2:
 \begin{verbatim}
-Example: pxrr -t rr_test.tre -g s1,s2
+pxrr -t rr_test.tre -g s1,s2
 \end{verbatim}
 \end{flushleft}
 
@@ -373,7 +377,7 @@ This programs are all designed in a similar vain, with the ability to convert a 
 
 \begin{flushleft}
 \begin{verbatim}
-Example: pxs2* -s Alignment
+pxs2* -s Alignment
 \end{verbatim}
 \end{flushleft}
 
@@ -387,22 +391,23 @@ For multimodel simulations it is easiest to print out the node labels on your tr
 
 
 \begin{flushleft}
+example\_file example (which uses a simple JC69 model):
 \begin{verbatim}
-example_file example:
-
 pxseqgen -t seqgen_test.tre
+\end{verbatim}
 
-if the model you want for the tree is: (.33,.33,.33,.33,.33) where values 
-correspond to (A<->C,A<->G,A<->T,C<->G,C<->T,G<->T)
+Substitution model parameters are always given in the following order (with no spaces):
 
-and the model you want to change to at node two is: (.30,.30,.20,.50,.40)
-where values correspond to (A<->C,A<->G,A<->T,C<->G,C<->T,G<->T)
+A$<$-$>$C,A$<$-$>$G,A$<$-$>$T,C$<$-$>$G,C$<$-$>$T,G$<$-$>$T.
+\newline
+\newline
+Multi-model commands are given as the following:
+pxseqgen -t tree\_file -m A$<$-$>$C,A$<$-$>$G,A$<$-$>$T,C$<$-$>$G,C$<$-$>$T,G$<$-$>$T,Node\#,A$<$-$>$C,A$<$-$>$G,A$<$-$>$T,C$<$-$>$G,C$<$-$>$T,G$<$-$>$T
+\newline
+\newline
+If, for example, the model you want for the tree is (.33,.33,.33,.33,.33) and you want the model to change at node two to (.30,.30,.20,.50,.40), the command would be as follows: 
 
-The command would be as follows: 
-
-pxseqgen -t tree_file -o output_alignment 
--m A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
-
+\begin{verbatim}
 pxseqgen -t tree_file -o output_alignment 
 -m .33,.33,.33,.33,.33,.33,2,.3,.3,.2,.5,.4,.2
 \end{verbatim}
