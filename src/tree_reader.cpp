@@ -58,11 +58,12 @@ Tree * TreeReader::readTree(string trees) {
             currNode = currNode->getParent();
             x++;
             nextChar = pb.c_str()[x];
+            //cout << "Working on: " << nextChar << endl;
             string nodeName = "";
             bool goingName = true;
             in_quote = false;
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
-                || nextChar == ';'|| nextChar == '[') {
+                || nextChar == ';' || nextChar == '[') {
                 goingName = false;
             } else if (nextChar == '"' || nextChar == '\'') {
                 in_quote = true;
@@ -75,7 +76,7 @@ Tree * TreeReader::readTree(string trees) {
                     x++;
                     nextChar = pb.c_str()[x];
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
-                        || nextChar == '[') {
+                        || nextChar == '[' || nextChar == ';') {
                         goingName = false;
                         break;
                     }
