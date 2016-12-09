@@ -462,17 +462,9 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
             string intermediate = tree->getRoot()->getNewick(true) + ";";
             //cout << "intermediate result: " << intermediate << endl;
             delete tree; // apparently necessary
-            tree = read_tree_string(intermediate);
+            TreeReader tr;
+            tree = tr.readTree(intermediate);
             m = tree->getMRCA(outgr);
-            /*
-            if (m == NULL) {
-                cout << "WTF?!?" << endl;
-            } else if (m == tree->getRoot()) {
-                cout << "how is that possible?" << endl;
-            } else {
-                cout << "huh?" << endl;
-            }
-            */
         }
     }
     success = tree->reRoot(m);

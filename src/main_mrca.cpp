@@ -53,8 +53,6 @@ int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
-    TreeReader tr;
-    
     char * outf = NULL;
     char * treef = NULL;
     char * mrcaf = NULL;
@@ -144,6 +142,8 @@ int main(int argc, char * argv[]) {
     while (getline(*pios, line)) {
         lines.push_back(line);
     }
+    
+    TreeReader tr;
     
     for (unsigned int i = 0; i < lines.size(); i++) {
         Tree * tree = tr.readTree(lines[i]);
