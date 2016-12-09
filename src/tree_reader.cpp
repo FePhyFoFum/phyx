@@ -67,28 +67,49 @@ Tree * TreeReader::readTree(string trees) {
             } else if (nextChar == '"' || nextChar == '\'') {
                 in_quote = true;
                 quoteType = nextChar;
-            }
-            while (goingName == true) {
                 nodeName = nodeName + nextChar;
-                x++;
-                nextChar = pb.c_str()[x];
-                if (in_quote == false) {
+            }
+            if (!in_quote) {
+                while (goingName) {
+                    nodeName = nodeName + nextChar;
+                    x++;
+                    nextChar = pb.c_str()[x];
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
-                    || nextChar == ';'|| nextChar == '[') {
+                        || nextChar == '[') {
                         goingName = false;
                         break;
                     }
-                } else {
-                   if (nextChar == quoteType) {
-                       //nodeName = nodeName + nextChar;
-                       goingName = false;
-                       break;
-                   }
                 }
-            } // work on edge
-            currNode->setName(nodeName);
-            if (in_quote == false) {
                 x--;
+            } else {
+                x++;
+                nextChar = pb.c_str()[x];
+                while (goingName) {
+                    nodeName = nodeName + nextChar;
+                    x++;
+                    nextChar = pb.c_str()[x];
+                    if (nextChar == quoteType) {
+                        nodeName = nodeName + nextChar;
+                        if (quoteType == '"') {
+                            goingName = false;
+                            break;
+                        } else {
+                            // check for double single quotes
+                            x++;
+                            nextChar = pb.c_str()[x];
+                            if (nextChar != quoteType) {
+                                x--;
+                                nextChar = pb.c_str()[x];
+                                goingName = false;
+                                break;
+                            }
+                        }
+                    }
+                } 
+            }// work on edge
+            currNode->setName(nodeName);
+            if (!in_quote) {
+                //x--;
             }
         } else if (nextChar == ';') {
             keepGoing = false;
