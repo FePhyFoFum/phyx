@@ -291,7 +291,8 @@ Tree * read_tree_string(string trees) {
                     nodeName = nodeName + nextChar;
                     x++;
                     nextChar = pb.c_str()[x];
-                    if (nextChar == ',' || nextChar == ')' || nextChar == ':' || nextChar == '[') {
+                    if (nextChar == ',' || nextChar == ')' || nextChar == ':'
+                        || nextChar == '[') {
                         goingName = false;
                         break;
                     }
@@ -305,9 +306,21 @@ Tree * read_tree_string(string trees) {
                     x++;
                     nextChar = pb.c_str()[x];
                     if (nextChar == quoteType) {
-                        goingName = false;
                         nodeName = nodeName + nextChar;
-                        break;
+                        if (quoteType == '"') {
+                            goingName = false;
+                            break;
+                        } else {
+                            // check for double single quotes
+                            x++;
+                            nextChar = pb.c_str()[x];
+                            if (nextChar != quoteType) {
+                                x--;
+                                nextChar = pb.c_str()[x];
+                                goingName = false;
+                                break;
+                            }
+                        }
                     }
                 } 
             }

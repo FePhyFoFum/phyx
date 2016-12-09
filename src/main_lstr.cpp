@@ -183,7 +183,7 @@ int main(int argc, char * argv[]) {
     if (ft == 1) {
         Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
                 if (!optionsset) {
                     (*poos) << "tree #: " << treeCounter << endl;
