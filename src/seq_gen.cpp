@@ -250,7 +250,7 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
  */
-vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vector <double> > QMatrix,
+vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vector <double> > const& QMatrix,
     float br) {
 
     vector < vector <double> > Pmatrix(nstates_, vector <double>(nstates_, 0.0));

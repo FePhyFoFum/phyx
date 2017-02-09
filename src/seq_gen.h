@@ -70,7 +70,7 @@ private:
     //vector <float> site_rates;
     vector < vector <double> > calculate_q_matrix ();
     vector < vector<double> > calcQmatrix (vector<vector <double>>);
-    vector < vector <double> > calculate_p_matrix (vector < vector <double> > QMatrix,
+    vector < vector <double> > calculate_p_matrix (vector < vector <double> > const&QMatrix,
         float br);
     string simulate_sequence (string const& anc, vector < vector <double> >& Matrix,
         float const& brlength);
