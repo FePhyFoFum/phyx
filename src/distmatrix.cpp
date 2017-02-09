@@ -5,6 +5,9 @@
  *      Author: joe
  */
 
+
+// NOTE: this file is not presently used
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -20,7 +23,7 @@ using namespace std;
 //Calculate the difference between two strings
 float CalcSeqDiffs(string& sequence1, string& sequence2) {
     float score = 0;
-    for (float i = 0; i < sequence1.size(); i++) {
+    for (unsigned int i = 0; i < sequence1.size(); i++) {
         if (sequence1[i] != sequence2[i]) {
             score++;
         }
