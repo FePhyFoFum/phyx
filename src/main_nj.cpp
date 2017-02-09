@@ -35,7 +35,7 @@ void print_help() {
     cout << "Basic Neighbour-Joining Tree Maker." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
-    cout << "Usage: pxnjoi [OPTION]... " << endl;
+    cout << "Usage: pxnj [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output newick file, stout otherwise" << endl;
