@@ -96,9 +96,9 @@ void SequenceConcatenater::read_sequences (string & seqf) {
 
 // where stuff actually happens
 void SequenceConcatenater::concatenate(SequenceConcatenater & newSeqs) {
-    string old_filler(num_char_, 'N');
+    string old_filler(num_char_, '-');
     int new_seq_len = newSeqs.get_sequence_length();
-    string new_filler(new_seq_len, 'N');
+    string new_filler(new_seq_len, '-');
     num_char_ += new_seq_len;
     for (int i = 0; i != num_taxa_; i++) {
         bool match_found = false;
