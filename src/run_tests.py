@@ -24,7 +24,7 @@ def test_program(name):
         t = 'File type: fasta\nNumber of sequences: 5\nIs aligned: true\nSequence length: 20\n--------Nucl TABLE---------\nNucl   Total      Proportion\nA      20         0.2\nC      37         0.37\nG      18         0.18\nT      25         0.25\n-      0          0\nN      0          0\nG+C    55         0.55\n--------Nucl TABLE---------\n'
     elif name == "pxbp":
         cm = "./pxbp -t TEST/test.tre"
-        t = '1 trees \n3 unique clades found\nTaxonA TaxonB \t1\nTaxonA TaxonB TaxonC \t1\nTaxonD TaxonE \t1\nTSCA: 0\n'
+        t = '1 trees \n3 unique clades found\nTaxonA TaxonB 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1\nTaxonA TaxonB TaxonC 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1\nTaxonD TaxonE 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1\nTSCA: 3\n'
     elif name == "pxbdfit":
         cm = "./pxbdfit -t TEST/ultra_100.tre"
         t = 'ntips: 10\nnspeciation: 8\ntreelength: 8.67581\nrootheight: 1.74148\nmodel: bd\nlikelihood: 4.18076\naic: -4.36152\naicc: -2.64723\nb: 1.05759\nd: 0.319273\nr (b-d): 0.738315\ne (d/b): 0.301888\n'
