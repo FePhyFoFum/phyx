@@ -22,6 +22,7 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
     cout << " -v, --verbose       give more output" << endl;
+    cout << " -e, --edgeall       force edgewise (not node) and assume all taxa are present in all trees" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -39,6 +40,7 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"verbose", no_argument, NULL, 'v'},
     {"outf", required_argument, NULL, 'o'},
+    {"edgeall", no_argument, NULL, 'e'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -51,11 +53,12 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     bool verbose = false;
+    bool edgewisealltaxa = false;
     char * treef = NULL;
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:vhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:vehV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -71,6 +74,9 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                break;
+            case 'e':
+                edgewisealltaxa = true;
                 break;
             case 'h':
                 print_help();
@@ -157,10 +163,7 @@ int main(int argc, char * argv[]) {
         int numch = trees[i]->getRoot()->getChildCount();
         if (numch > 2){
             unrooted = true;
-        //    cout << "tree " << i << " " << "(U)" << endl;
-        }//else{ 
-        //    cout << "tree " << i << " " << "(R)" << endl;
-        //}
+        }
         vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
         set<string> rt_nms_set;
         copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
@@ -184,12 +187,9 @@ int main(int argc, char * argv[]) {
             vector<int> nms_i;
             set<string> nms_s;
             copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
-            //cout << "  " ;
             for (unsigned int k=0; k < nms.size(); k++) {
                 nms_i.push_back(name_index[nms[k]]);
-            //    cout << nms[k] << " , ";
             }
-            //cout << endl;
             sort(nms_i.begin(),nms_i.end());
             //get the other side of the bipart
             vector<int> nms_i2;
@@ -198,41 +198,60 @@ int main(int argc, char * argv[]) {
             it = set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                 nms_s.end(), nms_s2.begin());
             nms_s2.resize(it-nms_s2.begin());
-            //cout << " 2 ";
             for (unsigned int k=0; k < nms_s2.size(); k++) {
                 nms_i2.push_back(name_index[nms_s2[k]]);
-            //    cout << nms_s2[k] << " , ";
             }
-            //cout << endl;
             //check to see if the bipart is new
-            if ((int)count(biparts.begin(), biparts.end(), nms_i) == 0 && 
-            (int)count(biparts2.begin(), biparts2.end(), nms_i2) == 0) {
-                biparts.push_back(nms_i);
-                biparts2.push_back(nms_i2);
-                not_included.push_back(not_included_i);
-                bp_count.push_back(1);
-            } else {
-                //TODO: need to fix this to check the other side of the bipart
-                //get index 
-                //could use a map
-                size_t index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
-                //TODO: make sure that this does also check that hte not included are correct
-                bp_count[index] += 1;
-            }
-            /*
-             * do the otherside
-             */
-            if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
-                if ((int)count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
-            (int)count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
-                    biparts.push_back(nms_i2);
-                    biparts2.push_back(nms_i);
+            if( edgewisealltaxa == false){
+                //this is nodewise and we dont' assume we have all the taxa
+                if ((int)count(biparts.begin(), biparts.end(), nms_i) == 0 && 
+                (int)count(biparts2.begin(), biparts2.end(), nms_i2) == 0) {
+                    biparts.push_back(nms_i);
+                    biparts2.push_back(nms_i2);
                     not_included.push_back(not_included_i);
                     bp_count.push_back(1);
-                }else{
-                    size_t index = find(biparts.begin(),biparts.end(),nms_i2)-biparts.begin();
+                } else {
+                    //get index 
+                    size_t index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
                     bp_count[index] += 1;
                 }
+                /*
+                 * do the otherside for unrooted
+                 */
+                if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
+                    if ((int)count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
+                (int)count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
+                        biparts.push_back(nms_i2);
+                        biparts2.push_back(nms_i);
+                        not_included.push_back(not_included_i);
+                        bp_count.push_back(1);
+                    }else{
+                        size_t index = find(biparts.begin(),biparts.end(),nms_i2)-biparts.begin();
+                        bp_count[index] += 1;
+                    }
+                }
+            }else{
+                //this is edgewise and we assume all the taxa 
+                //this is for reporting a b | c d instead of a b and c d separately
+                if ((int)count(biparts.begin(), biparts.end(), nms_i) == 0 && 
+                    (int)count(biparts2.begin(), biparts2.end(), nms_i2) == 0 &&
+                    (int)count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
+                    (int)count(biparts2.begin(), biparts2.end(), nms_i) == 0 ) {
+                    biparts.push_back(nms_i);
+                    biparts2.push_back(nms_i2);
+                    not_included.push_back(not_included_i);
+                    bp_count.push_back(1);
+                } else {
+                    //get index 
+                    size_t index;
+                    if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                        index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                    }else{
+                        index = find(biparts.begin(),biparts.end(),nms_i2)-biparts.begin();
+                    }
+                    bp_count[index] += 1;
+                }
+
             }
         }
     }
@@ -258,8 +277,17 @@ int main(int argc, char * argv[]) {
                 nms_i.push_back(name_index[nms[k]]);
             }
             sort(nms_i.begin(), nms_i.end());
-            //cout << find(biparts.begin(),biparts.end(),nms_i)-biparts.begin() << endl;
-            matrix[i][find(biparts.begin(), biparts.end(), nms_i) - biparts.begin()] = 1;
+            size_t index;
+            if(edgewisealltaxa == true){
+                if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                    index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                }else{
+                    index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
+                } 
+            }else{
+                index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
+            }
+            matrix[i][index] = 1;
             if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
                 vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
                 set<string> rt_nms_set;
@@ -306,12 +334,19 @@ int main(int argc, char * argv[]) {
             for (unsigned int k=0; k < biparts[i].size(); k++) {
                 nms.push_back(name_st_index[biparts[i][k]]);
             }
-            (*poos) << get_string_vector(nms);
+            (*poos) << "CLADE: " << get_string_vector(nms);
+            if(edgewisealltaxa == true){
+                vector<string> nms_o;
+                for (unsigned int k=0; k < biparts2[i].size(); k++) {
+                    nms_o.push_back(name_st_index[biparts2[i][k]]);
+                }
+                (*poos) << "| " << get_string_vector(nms_o);
+            }
             double totalcount = bp_count[i];
             vector<double> conflict_nums;
             conflict_nums.push_back(bp_count[i]);
             if (verbose)
-                cout << "\n\tCONFLICTS:" << endl;
+                (*poos) << "\n\tCONFLICTS:" << endl;
             for (unsigned int j=0; j < biparts.size(); j++) {
                 unsigned int sumc2 = sum_matrix_col(matrix,j);
                 if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
@@ -323,8 +358,17 @@ int main(int argc, char * argv[]) {
                         }    
                         totalcount += bp_count[j];
                         conflict_nums.push_back(bp_count[j]);
-                        if(verbose)
-                            cout << " \t "<< get_string_vector(nms2) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t" << bp_count[j]/trees.size() <<  endl;
+                        if(verbose){
+                            (*poos) << " \t "<< get_string_vector(nms2);
+                            if(edgewisealltaxa == true){
+                                vector<string> nms_o;
+                                for (unsigned int k=0; k < biparts2[j].size(); k++) {
+                                    nms_o.push_back(name_st_index[biparts2[j][k]]);
+                                }
+                                (*poos) << "| " << get_string_vector(nms_o);
+                            }
+                            (*poos) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t" << bp_count[j]/trees.size() <<  endl;
+                        }
                     }
                 }
             }
@@ -348,7 +392,15 @@ int main(int argc, char * argv[]) {
             for (unsigned int k=0; k < biparts[i].size(); k++) {
                 nms.push_back(name_st_index[biparts[i][k]]);
             }
-            (*poos) << get_string_vector(nms) << "\tFREQ:\t1.\tICA:\t1.\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t1." << endl;
+            (*poos) << "CLADE: " <<  get_string_vector(nms);
+            if(edgewisealltaxa == true){
+                vector<string> nms_o;
+                for (unsigned int k=0; k < biparts2[i].size(); k++) {
+                    nms_o.push_back(name_st_index[biparts2[i][k]]);
+                }
+                (*poos) << "| " << get_string_vector(nms_o);
+            }
+            (*poos) << "\tFREQ:\t1.\tICA:\t1.\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t1." << endl;
             TSCA += 1;
         }
     }
