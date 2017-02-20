@@ -201,6 +201,7 @@ int main(int argc, char * argv[]) {
             for (unsigned int k=0; k < nms_s2.size(); k++) {
                 nms_i2.push_back(name_index[nms_s2[k]]);
             }
+            sort(nms_i2.begin(),nms_i2.end());
             //check to see if the bipart is new
             if( edgewisealltaxa == false){
                 //this is nodewise and we dont' assume we have all the taxa
@@ -220,7 +221,7 @@ int main(int argc, char * argv[]) {
                  */
                 if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
                     if ((int)count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
-                (int)count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
+                        (int)count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
                         biparts.push_back(nms_i2);
                         biparts2.push_back(nms_i);
                         not_included.push_back(not_included_i);
@@ -234,9 +235,7 @@ int main(int argc, char * argv[]) {
                 //this is edgewise and we assume all the taxa 
                 //this is for reporting a b | c d instead of a b and c d separately
                 if ((int)count(biparts.begin(), biparts.end(), nms_i) == 0 && 
-                    (int)count(biparts2.begin(), biparts2.end(), nms_i2) == 0 &&
-                    (int)count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
-                    (int)count(biparts2.begin(), biparts2.end(), nms_i) == 0 ) {
+                    (int)count(biparts.begin(), biparts.end(), nms_i2) == 0){
                     biparts.push_back(nms_i);
                     biparts2.push_back(nms_i2);
                     not_included.push_back(not_included_i);
@@ -258,7 +257,6 @@ int main(int argc, char * argv[]) {
     
     (*poos) << numtrees << " trees " <<  endl;
     (*poos) << biparts.size() << " unique clades found" << endl;
-
     //calculate the logical matrix of biparts for each tree
     //the matrix will have each i as a tree and 
     //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
@@ -302,6 +300,7 @@ int main(int argc, char * argv[]) {
                 for (unsigned int k=0; k < nms_s2.size(); k++) {
                     nms_i2.push_back(name_index[nms_s2[k]]);
                 }
+                sort(nms_i2.begin(),nms_i2.end());
                 matrix[i][find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin()] = 1;
             }
         }
