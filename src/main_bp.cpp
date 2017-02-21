@@ -351,7 +351,7 @@ int main(int argc, char * argv[]) {
         for (int i=0; i <numtrees; i++){
             string sv = get_string_vector(matrix[i]);
             if (count(un_trees.begin(),un_trees.end(),sv)==0){
-                cout << trees[i]->getRoot()->getNewick(false) << endl;
+                cout << trees[i]->getRoot()->getNewick(false) <<";" << endl;
                 un_trees.insert(sv);
             }
         }
