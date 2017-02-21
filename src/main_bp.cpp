@@ -23,6 +23,7 @@ void print_help() {
     cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
     cout << " -v, --verbose       give more output" << endl;
     cout << " -e, --edgeall       force edgewise (not node) and assume all taxa are present in all trees" << endl;
+    cout << " -u, --uniquetree    output unique trees as well as other output" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -39,8 +40,9 @@ static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"verbose", no_argument, NULL, 'v'},
-    {"outf", required_argument, NULL, 'o'},
     {"edgeall", no_argument, NULL, 'e'},
+    {"uniquetree", no_argument, NULL, 'u'},
+    {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -54,11 +56,12 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool verbose = false;
     bool edgewisealltaxa = false;
+    bool uniquetree = false;
     char * treef = NULL;
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:vehV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:veuhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -77,6 +80,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'e':
                 edgewisealltaxa = true;
+                break;
+            case 'u':
+                uniquetree = true;
                 break;
             case 'h':
                 print_help();
@@ -115,13 +121,44 @@ int main(int argc, char * argv[]) {
     //read trees
     TreeReader tr;
     string retstring;
+    int ft = test_tree_filetype_stream(*pios, retstring);
+    if (ft != 0 && ft != 1) {
+        cerr << "this really only works with nexus or newick" << endl;
+        exit(0);
+    }
+
     vector<Tree *> trees;
-    while (getline(*pios,retstring)) {
+    bool going = true;
+    if (ft == 0) {
+        map<string,string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                trees.push_back(tree);
+            }
+        }
+    } else if (ft == 1) {
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (going) {
+                trees.push_back(tree);
+            } 
+        }
+    }
+
+
+    /*while (getline(*pios,retstring)) {
         if (retstring.size() < 3) {
             continue;
         }
         trees.push_back(tr.readTree(retstring));
-    }
+    }*/
+
     int numtrees = trees.size();
     if (numtrees == 0) {
         if (fileset) {
@@ -305,7 +342,21 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-
+    /*
+     * print the unique trees
+     */
+    if (uniquetree == true){
+        cout << "====UNIQUE TREES====" << endl;
+        set<string> un_trees;
+        for (int i=0; i <numtrees; i++){
+            string sv = get_string_vector(matrix[i]);
+            if (count(un_trees.begin(),un_trees.end(),sv)==0){
+                cout << trees[i]->getRoot()->getNewick(false) << endl;
+                un_trees.insert(sv);
+            }
+        }
+        cout << "==END UNIQUE TREES==" << endl;
+    }
 
     //constructing the logical matrix
     //the logical matrix has each row as a bipart1 and each col as a name
