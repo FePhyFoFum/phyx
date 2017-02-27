@@ -151,14 +151,6 @@ int main(int argc, char * argv[]) {
         }
     }
 
-
-    /*while (getline(*pios,retstring)) {
-        if (retstring.size() < 3) {
-            continue;
-        }
-        trees.push_back(tr.readTree(retstring));
-    }*/
-
     int numtrees = trees.size();
     if (numtrees == 0) {
         if (fileset) {
@@ -356,6 +348,7 @@ int main(int argc, char * argv[]) {
             }
         }
         cout << "==END UNIQUE TREES==" << endl;
+        exit(0);
     }
 
     //constructing the logical matrix
@@ -400,7 +393,7 @@ int main(int argc, char * argv[]) {
             for (unsigned int j=0; j < biparts.size(); j++) {
                 unsigned int sumc2 = sum_matrix_col(matrix,j);
                 if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
-                    bool logitest = test_logical(logical_matrix[i],logical_matrix[j]);
+                    bool logitest = test_logical(logical_matrix[i],logical_matrix[j],edgewisealltaxa);
                     if (logitest) {
                         vector<string> nms2;
                         for (unsigned int k=0; k < biparts[j].size(); k++) {
