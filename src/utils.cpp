@@ -213,7 +213,6 @@ bool test_logical (vector <int> & matA, vector <int> & matB) {
     int match1 = 0;
     unsigned int numdiffs = 0;
     for (unsigned int i=0; i < matA.size(); i++) {
-        //added the -1, can take out if something gets fishy
         if (((matA[i] == 1) && (matB[i] == 1))) {
             match1 += 1;
         } else {
@@ -224,6 +223,48 @@ bool test_logical (vector <int> & matA, vector <int> & matB) {
     if ((match1 != sum(matA)) && (match1 != sum(matB))) {
         if (numdiffs != matA.size()) {
             test = true;
+        }
+    }
+    return test;
+}
+
+/*
+ * edgewise added because we have to check the reverse if not rooted
+ *
+ * TODO : should probably look at this
+ */
+bool test_logical (vector <int> & matA, vector <int> & matB,bool edgewise) {
+    bool test = false;
+    int match1 = 0;
+    unsigned int numdiffs = 0;
+    for (unsigned int i=0; i < matA.size(); i++) {
+        if (((matA[i] == 1) && (matB[i] == 1))) {
+            match1 += 1;
+        } else {
+            numdiffs += 1;
+        }
+    }
+    //had to change because of negatives
+    if ((match1 != sum(matA)) && (match1 != sum(matB))) {
+        if (numdiffs != matA.size()) {
+            if(edgewise == true){
+                int match2 = 0;
+                unsigned int numdiffs2 = 0;
+                for (unsigned int i=0; i < matA.size(); i++) {
+                    if (((matA[i] == 1) && (matB[i] == 0))) {
+                        match2 += 1;
+                    } else {
+                        numdiffs2 += 1;
+                    }
+                }
+                if ((match2 != sum(matA)) && (match2 != sum_zeros(matB))) {
+                    if (numdiffs2 != matA.size()) {
+                        test = true;
+                    }
+                }
+            }else{
+                test = true;
+            }
         }
     }
     return test;
@@ -281,6 +322,14 @@ int sum (vector <int> & in) {
     return accumulate(in.begin(), in.end(), 0);
 }
 
+int sum_zeros (vector <int> & in) {
+    int x = 0;
+    for(unsigned int i=0;i < in.size(); i++){
+        if (in[i] == 0)
+            x += 1;
+    }
+    return x;
+}
 
 Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
     Superdouble sum = 0;

@@ -24,6 +24,7 @@ vector <double> parse_double_comma_list (string& str);
 // do stuff over vectors
 double sum (vector <double> & in);
 int sum (vector <int> & in);
+int sum_zeros (vector <int> & in);
 Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in);
 double mean (vector <double> & in);
 double variance (vector <double> & in);
@@ -36,6 +37,7 @@ vector <int> sample_without_replacement (int const& numTotal, int const& numSamp
 
 void print_error (char * pname, char arg);
 bool test_logical (vector <int> & matA, vector <int> & matB);
+bool test_logical (vector <int> & matA, vector <int> & matB, bool edgewise);
 
 int sum_matrix_col (vector <vector <int> > & matrix, int col);
 int sum_matrix_col_negs (vector <vector <int> > & matrix, int col);
