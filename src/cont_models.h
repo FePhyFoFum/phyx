@@ -22,4 +22,6 @@ void calc_vcv(Tree * tr, mat & vcv);
 void calc_square_change_anc_states(Tree * tree, int index);
 void calc_postorder_square_change(Node * node,map<Node *,int> & nodenum,
     mat * fullMcp, mat * fullVcp, int index);
+double calc_bm_node_postorder(Node * node, int nch, double sigma);
+double calc_bm_prune(Tree * tr, double sigma);
 #endif /* _CONT_MODELS_H_ */

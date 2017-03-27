@@ -199,3 +199,41 @@ void calc_postorder_square_change(Node * node,map<Node *,int> & nodenum,
         }
     }
 }
+
+double calc_bm_node_postorder(Node * node, int nch, double sigma){
+    double node_like = 0.;
+    for (int i=0;i<node->getChildCount();i++){
+        if(node->getChild(i)->isInternal()){
+           node_like += calc_bm_node_postorder(node->getChild(i),nch,sigma);
+        }
+    }
+    if (node->isInternal()){
+        double ch1 = (*node->getChild(0)->getDoubleVector("val"))[nch];
+        double ch2 = (*node->getChild(1)->getDoubleVector("val"))[nch];
+        double ch = ch1 - ch2;
+        double bl1 = node->getChild(0)->getBL(); 
+        double bl2 = node->getChild(1)->getBL();
+        double bl = bl1 + bl2;
+        double cur_like = ((-0.5)* ((log(2*M_PI*sigma))+(log(bl))+(pow(ch,2)/(sigma*bl))));
+        node_like += cur_like;
+        if (node->isRoot() == false){
+            (*node->getDoubleVector("val"))[nch] = ((bl2*ch1)+(bl1*ch2))/(bl);
+            node->setBL(node->getBL()+((bl1*bl2)/(bl1+bl2)));
+        }
+    }
+    return node_like;
+}
+
+double calc_bm_prune(Tree * tr, double sigma){
+    int nchar = (*tr->getRoot()->getDoubleVector("val")).size();
+    double tlike = 0;
+    map<Node *, double> oldlen;
+    for (int i=0;i<tr->getNodeCount();i++){oldlen[tr->getNode(i)] = tr->getNode(i)->getBL();}
+    for (int i=0;i<nchar;i++){
+        for (int j=0;j<tr->getNodeCount();j++){tr->getNode(j)->setBL(oldlen[tr->getNode(j)]);}
+        tlike += calc_bm_node_postorder(tr->getRoot(),i,sigma);
+    }
+    return tlike;
+}
+
+
