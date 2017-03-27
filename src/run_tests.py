@@ -110,7 +110,7 @@ def test_program(name):
         cm = "./pxrlt -t TEST/kingdoms.tre -c TEST/kingdoms.oldnames.txt -n TEST/kingdoms.newnames.txt"
         t = '(Eubacteria:4200,(Archaea:3806.0102499999998145,((((SAR:1626.0427319999998872,Plant:1626.0276670000000649):72.380183999999999855,Excavata:1698.4229159999999865):74.73121999999999332,Amoebozoa:1773.1541360000001077):7.9375349999999995632,(Animal:1295.717544000000089,Fungi:1295.7033610000000863):485.3800600000000145):2024.9200000000000728):394);\n'
     elif name == "pxrls":
-        cm = "pxrls -s TEST/test.fa -c TEST/oldnames.txt -n TEST/newnames.txt"
+        cm = "./pxrls -s TEST/test.fa -c TEST/oldnames.txt -n TEST/newnames.txt"
         t = '>Cinclus_mexicanus\nAAATTTCCCTGTCCCTTTAA\n>Anodorhynchus_hyacinthinus\nGCTCGAGGGGCCCCAAGACC\n>Stellula_calliope\nACGCTCCCCCTTAAAAATGA\n>Anser_anser\nTCCTTGTTCAACTCCGGTGG\n>Gallus_gallus\nTTACTATTCCCCCCCGCCGG\n'
     elif name == "pxclsq":
         cm = "./pxclsq -s TEST/Alignment -p 0.6"
