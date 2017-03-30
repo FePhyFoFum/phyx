@@ -99,6 +99,30 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
     }
 }
 
+void paint_nodes(Tree * tree, vector<string> & names, bool const& silent){
+    int num_names = names.size();
+    tree->getRoot()->setPainted(true);
+    for (int i=0; i < num_names; i++) {
+        Node * m = tree->getNode(names[i]);
+        m->setPainted(true);
+        if (m != NULL) {
+            Node * cur = m;
+            while (cur != tree->getRoot()){
+                cur = cur->getParent();
+                if (cur->getPainted() == true)
+                    break;
+                else
+                    cur->setPainted(true);
+            }
+        } else {
+            if (!silent) {
+                cerr << names[i] << " not in tree"  << endl;
+            }
+        }
+    }
+
+}
+
 
 // treemap: key is focal node, value is vector of adjacent nodes
 // both keys and values can be internal or terminal nodes

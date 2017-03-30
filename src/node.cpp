@@ -25,19 +25,20 @@ using namespace std;
 
 Node::Node():BL(0.0), height(0.0), number(0), name(""), parent(NULL),
     children(vector<Node *> ()), assoc(map<string, NodeObject *>()),
-    assocDV(map<string, vector<Superdouble> >()), comment("") {
+    assocDV(map<string, vector<Superdouble> >()), comment(""), painted(false) {
 
 }
 
 Node::Node(Node * inparent):BL(0.0), height(0.0), number(0), name(""), parent(inparent),
     children(vector<Node *> ()), assoc(map<string,NodeObject *>()),
-    assocDV(map<string, vector<Superdouble> >()), comment("") {
+    assocDV(map<string, vector<Superdouble> >()), comment(""), painted(false) {
 
 }
 
 Node::Node(double bl, int innumber, string inname, Node * inparent):BL(bl), height(0.0),
     number(innumber), name(inname), parent(inparent), children(vector<Node *> ()),
-    assoc(map<string, NodeObject *>()), assocDV(map<string,vector<Superdouble> >()), comment("") {
+    assoc(map<string, NodeObject *>()), assocDV(map<string,vector<Superdouble> >()), 
+    comment(""), painted(false) {
 
 }
 
@@ -88,6 +89,9 @@ int Node::getNumber() {
 void Node::setNumber(int n) {
     number = n;
 }
+
+bool Node::getPainted(){ return painted;}
+void Node::setPainted(bool p){ painted = p;}
 
 double Node::getBL() {
     return BL;
@@ -189,6 +193,36 @@ string Node::getNewick(bool bl) {
     }
     if (name.size() > 0) {
         ret += name;
+    }
+    return ret;
+}
+
+string Node::getPaintedNewick(bool bl){
+    string ret = "";
+    vector<int> paintedchildren;
+    for (int i=0; i < this->getChildCount(); i++) {
+        if (this->getChild(i)->getPainted() == true)
+            paintedchildren.push_back(i);
+    }
+    for (int i=0; i < paintedchildren.size(); i++) {
+        if (i == 0) {
+            ret += "(";
+        }
+        ret += this->getChild(paintedchildren[i])->getPaintedNewick(bl);
+        if (bl == true) {
+            std::ostringstream o;
+            //20 is what you get from raxml
+            o << setprecision(20) << this->getChild(paintedchildren[i])->getBL();
+            ret += ":" + o.str();
+        }
+        if (i == paintedchildren.size()-1) {
+            ret += ")";
+        } else {
+            ret += ",";
+        }
+    }
+    if (this->getName().size() > 0) {
+        ret += this->getName();
     }
     return ret;
 }

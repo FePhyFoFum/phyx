@@ -4,6 +4,7 @@
  */
 
 #include <set>
+#include <map>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -101,6 +102,21 @@ int Tree::getInternalNodeCount() {
 Node * Tree::getNode(int num) {
     return nodes.at(num);
 }
+
+Node * Tree::getNode(string & name) {
+    Node * ret = NULL;
+    if (name_node_map.size() == 0){
+        for (int i=0; i < nodes.size(); i++) {
+            if (nodes.at(i)->getName().size() > 0)
+                name_node_map[nodes.at(i)->getName()] = nodes.at(i);
+        }
+    }
+    if (name_node_map.count(name) != 0)
+        ret = name_node_map[name];
+    return ret;
+}
+
+
 
 int Tree::getNodeCount() {
     return nodes.size();

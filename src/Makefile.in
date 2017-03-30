@@ -146,6 +146,10 @@ RMT_SRC = main_rmt.cpp
 RMT_OBJ = main_rmt.o
 RMT_DEP = main_rmt.d
 
+TRT_SRC = main_trt.cpp
+TRT_OBJ = main_trt.o
+TRT_DEP = main_trt.d
+
 #removing for fortran, updating for non-fortran in process
 #SM0_SRC = main_sm0.cpp
 #SM0_OBJ = main_sm0.o
@@ -313,7 +317,7 @@ RATE_DEPS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxcontrates $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxcontrates $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -458,6 +462,10 @@ pxrr: $(CPP_OBJS) $(RR_OBJ)
 pxrmt: $(CPP_OBJS) $(RMT_OBJ)
 	@echo 'building pxrmt'
 	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS)
+
+pxtrt: $(CPP_OBJS) $(TRT_OBJ)
+	@echo 'building pxtrt'
+	$(CXX) -o "pxtrt" $(OPT_FLAGS) $(TRT_OBJ) $(CPP_OBJS)
 
 #removing until fortran update
 #pxsm0: $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)

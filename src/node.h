@@ -30,6 +30,7 @@ private:
     map<string, vector<Superdouble> > assocDV;
     vector<BranchSegment> * segs;
     string comment;
+    bool painted;
 
 public:
     Node();
@@ -50,6 +51,8 @@ public:
     void setParent(Node & p);
     int getNumber();
     void setNumber(int n);
+    bool getPainted();
+    void setPainted(bool p);
     double getBL();
     void setBL(double bl);
     double getHeight();
@@ -66,6 +69,7 @@ public:
     void setComment(string s);
     string getNewick(bool bl);
     string getNewick(bool bl, string obj);
+    string getPaintedNewick(bool bl);
     Node * getParent();
     int getChildCount();
     void assocObject(string name, NodeObject & obj);

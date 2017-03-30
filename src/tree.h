@@ -9,6 +9,8 @@
 #define _TREE_H_
 
 #include "node.h"
+#include <map>
+#include <string>
 
 using namespace std;
 
@@ -18,6 +20,7 @@ private:
     vector<Node *> nodes;
     vector<Node *> internalNodes;
     vector<Node *> externalNodes;
+    map<string, Node*> name_node_map;
     int internalNodeCount;
     int externalNodeCount;
     
@@ -40,6 +43,7 @@ public:
     Node * getInternalNode(int num);
     Node * getInternalNode(string & name);
     Node * getNode(int num);
+    Node * getNode(string & name);
     int getNodeCount();
     int getExtantNodeCount();
     int getExternalNodeCount();
