@@ -104,8 +104,8 @@ void paint_nodes(Tree * tree, vector<string> & names, bool const& silent){
     tree->getRoot()->setPainted(true);
     for (int i=0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);
-        m->setPainted(true);
         if (m != NULL) {
+            m->setPainted(true);
             Node * cur = m;
             while (cur != tree->getRoot()){
                 cur = cur->getParent();
