@@ -15,15 +15,19 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "This will print out bipartitions found in treefile." << endl;
+    cout << "This will print out bipartitions found in treefile. It assumes " << endl;
+    cout << "things are rooted unless you use -e" << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
     cout << "Usage: pxbp [OPTION]... [FILE]..."<<endl;
     cout << endl;
     cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
     cout << " -v, --verbose       give more output" << endl;
-    cout << " -e, --edgeall       force edgewise (not node) and assume all taxa are present in all trees" << endl;
-    cout << " -u, --uniquetree    output unique trees as well as other output" << endl;
+    cout << " -e, --edgeall       force edgewise (not node - so when things are unrooted) and" << endl; 
+    cout << "                           assume all taxa are present in all trees" << endl;
+    cout << " -u, --uniquetree    output unique trees and *no* other output" << endl;
+    cout << " -m, --maptree=FILE  put the bipart freq on the edges of this tree. This will " << endl;
+    cout << "                           create a *.pxbpmapped.tre file." <<endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -42,6 +46,7 @@ static struct option const long_options[] =
     {"verbose", no_argument, NULL, 'v'},
     {"edgeall", no_argument, NULL, 'e'},
     {"uniquetree", no_argument, NULL, 'u'},
+    {"maptree", required_argument, NULL, 'm'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -54,14 +59,16 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
+    bool mapfileset = false;
     bool verbose = false;
     bool edgewisealltaxa = false;
     bool uniquetree = false;
     char * treef = NULL;
+    char * mtreef = NULL;
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:veuhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:m:veuhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -84,6 +91,11 @@ int main(int argc, char * argv[]) {
             case 'u':
                 uniquetree = true;
                 break;
+            case 'm':
+                mapfileset = true;
+                mtreef = strdup(optarg);
+                check_file_exists(mtreef);
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -97,8 +109,10 @@ int main(int argc, char * argv[]) {
     }
     
     istream* pios = NULL;
+    istream* mpios = NULL;
     ostream* poos = NULL;
     ifstream* fstr = NULL;
+    ifstream* mfstr = NULL;
     ofstream* ofstr = NULL;
     
     if (fileset == true) {
@@ -118,7 +132,13 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
 
-    //read trees
+    //map file
+    if (mapfileset == true) {
+        mfstr = new ifstream(mtreef);
+        mpios = mfstr;
+    }
+
+    //------READ TREES
     TreeReader tr;
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
@@ -150,6 +170,40 @@ int main(int argc, char * argv[]) {
             } 
         }
     }
+    //-----END READ TREES
+    //-----READ MAP TREE
+    Tree * maptree = NULL;
+    if (mapfileset == true){
+        ft = test_tree_filetype_stream(*mpios, retstring);
+        if (ft != 0 && ft != 1) {
+            cerr << "this really only works with nexus or newick" << endl;
+            exit(0);
+        }
+
+        bool going = true;
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*mpios, &translation_table, &retstring);;
+            while (going) {
+                maptree = read_next_tree_from_stream_nexus(*mpios, retstring, ttexists,
+                    &translation_table, &going);
+                if (maptree != NULL) {
+                    going = false;
+                    break;
+                }
+            }
+        } else if (ft == 1) {
+            while (going) {
+                maptree = read_next_tree_from_stream_newick(*mpios, retstring, &going);
+                if (going) {
+                    going = false;
+                    break;
+                } 
+            }
+        } 
+    }
+    //----END READ MAP TREE
 
     int numtrees = trees.size();
     if (numtrees == 0) {
@@ -466,6 +520,45 @@ int main(int argc, char * argv[]) {
         }
     }
     (*poos) << "TSCA: " << TSCA << endl;
+    if (mapfileset){
+        string mot(mtreef);
+        mot = mot +".pxbpmapped.tre";
+        ofstream* mofstr = new ofstream(mot);
+        ostream* mpoos = mofstr;
+        for(int i=0;i<maptree->getInternalNodeCount();i++){
+            if (maptree->getInternalNode(i) == maptree->getRoot()){
+                continue;
+            }
+            vector<string> nms = maptree->getInternalNode(i)->get_leave_names();
+            vector<int> nms_i;
+            for (unsigned int k=0; k < nms.size(); k++) {
+                nms_i.push_back(name_index[nms[k]]);
+            }
+            sort(nms_i.begin(), nms_i.end());
+            size_t index;
+            bool found = false;
+            if(edgewisealltaxa == true){
+                if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                    index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                    found = true;
+                }else{
+                    index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
+                    found = true;
+                } 
+            }else{
+                index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
+                found = true;
+            }
+            if (found == false){
+                maptree->getInternalNode(i)->setName("0.0");
+            }else{
+                maptree->getInternalNode(i)->setName(to_string(bp_count[index]/trees.size()));
+            }
+        }
+        (*mpoos) << maptree->getRoot()->getNewick(true) << ";" << endl;
+        mofstr->close();
+        delete mpoos;
+    }
 
     //shut things down
     if (fileset) {

@@ -187,7 +187,17 @@ int main(int argc, char * argv[]) {
                                 newroot->addChild(*nd);
                                 addtree->setRoot(newroot);
                             }else{
-                                nd->addChild(*prn);
+                                if (nd->getChildCount() == 0){
+                                    Node p = (*nd->getParent());
+                                    Node * nn = new Node(p);
+                                    p.addChild(*nn);
+                                    p.removeChild(*nd);
+                                    nn->addChild(*nd);
+                                    nn->addChild(*prn);
+                                    cout << nn->getNewick(false) << endl;
+                                }else{
+                                    nd->addChild(*prn);
+                                }
                             }
                             vector<string> lvsnms = prn->get_leave_names();
                             for(int i =0; i < lvsnms.size(); i++){
@@ -204,7 +214,7 @@ int main(int argc, char * argv[]) {
                         break;
                 }
             }
-            (*poos) << addtree->getRoot()->getNewick(false) << ";" << endl;
+            (*poos) << addtree->getRoot()->getNewick(true) << ";" << endl;
             delete addtree;
         }else
             going = false;
