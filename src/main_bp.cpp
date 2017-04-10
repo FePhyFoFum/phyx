@@ -28,6 +28,8 @@ void print_help() {
     cout << " -u, --uniquetree    output unique trees and *no* other output" << endl;
     cout << " -m, --maptree=FILE  put the bipart freq on the edges of this tree. This will " << endl;
     cout << "                           create a *.pxbpmapped.tre file." <<endl;
+    cout << " -s, --suppress      don't print all the output (maybe you use this" << endl;
+    cout << "                           with the maptree feature" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -47,6 +49,7 @@ static struct option const long_options[] =
     {"edgeall", no_argument, NULL, 'e'},
     {"uniquetree", no_argument, NULL, 'u'},
     {"maptree", required_argument, NULL, 'm'},
+    {"suppress", no_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -63,12 +66,13 @@ int main(int argc, char * argv[]) {
     bool verbose = false;
     bool edgewisealltaxa = false;
     bool uniquetree = false;
+    bool suppress = false;
     char * treef = NULL;
     char * mtreef = NULL;
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:m:veuhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:m:vseuhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -90,6 +94,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'u':
                 uniquetree = true;
+                break;
+            case 's':
+                suppress = true;
                 break;
             case 'm':
                 mapfileset = true;
@@ -337,189 +344,190 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    
-    (*poos) << numtrees << " trees " <<  endl;
-    (*poos) << biparts.size() << " unique clades found" << endl;
-    //calculate the logical matrix of biparts for each tree
-    //the matrix will have each i as a tree and 
-    //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
-    vector<int> cols(biparts.size()+1, 0);
-    vector<vector<int> > matrix (numtrees, cols);
-    for (int i=0; i < numtrees; i++) {
-        bool unrooted = false;
-        int numch = trees[i]->getRoot()->getChildCount();
-        if (numch > 2){
-            unrooted = true;
-        }
-        for (int j=0; j < trees[i]->getInternalNodeCount(); j++) {
-            vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
-            vector<int> nms_i;
-            for (unsigned int k=0; k < nms.size(); k++) {
-                nms_i.push_back(name_index[nms[k]]);
+    if (suppress == false){
+        (*poos) << numtrees << " trees " <<  endl;
+        (*poos) << biparts.size() << " unique clades found" << endl;
+        //calculate the logical matrix of biparts for each tree
+        //the matrix will have each i as a tree and 
+        //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
+        vector<int> cols(biparts.size()+1, 0);
+        vector<vector<int> > matrix (numtrees, cols);
+        for (int i=0; i < numtrees; i++) {
+            bool unrooted = false;
+            int numch = trees[i]->getRoot()->getChildCount();
+            if (numch > 2){
+                unrooted = true;
             }
-            sort(nms_i.begin(), nms_i.end());
-            size_t index;
-            if(edgewisealltaxa == true){
-                if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
-                    index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+            for (int j=0; j < trees[i]->getInternalNodeCount(); j++) {
+                vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
+                vector<int> nms_i;
+                for (unsigned int k=0; k < nms.size(); k++) {
+                    nms_i.push_back(name_index[nms[k]]);
+                }
+                sort(nms_i.begin(), nms_i.end());
+                size_t index;
+                if(edgewisealltaxa == true){
+                    if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                        index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                    }else{
+                        index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
+                    } 
                 }else{
-                    index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
-                } 
-            }else{
-                index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
-            }
-            matrix[i][index] = 1;
-            if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
-                vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
-                set<string> rt_nms_set;
-                copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
-                set<string> nms_s;
-                copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
-                vector<int> nms_i2;
-                vector<string> nms_s2(rt_nms.size());
-                vector<string>::iterator it;
-                it = set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),nms_s.end(), nms_s2.begin());
-                nms_s2.resize(it-nms_s2.begin());
-                for (unsigned int k=0; k < nms_s2.size(); k++) {
-                    nms_i2.push_back(name_index[nms_s2[k]]);
+                    index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
                 }
-                sort(nms_i2.begin(),nms_i2.end());
-                matrix[i][find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin()] = 1;
+                matrix[i][index] = 1;
+                if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
+                    vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
+                    set<string> rt_nms_set;
+                    copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
+                    set<string> nms_s;
+                    copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
+                    vector<int> nms_i2;
+                    vector<string> nms_s2(rt_nms.size());
+                    vector<string>::iterator it;
+                    it = set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),nms_s.end(), nms_s2.begin());
+                    nms_s2.resize(it-nms_s2.begin());
+                    for (unsigned int k=0; k < nms_s2.size(); k++) {
+                        nms_i2.push_back(name_index[nms_s2[k]]);
+                    }
+                    sort(nms_i2.begin(),nms_i2.end());
+                    matrix[i][find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin()] = 1;
+                }
             }
         }
-    }
-    /*
-     * print the unique trees
-     */
-    if (uniquetree == true){
-        cout << "====UNIQUE TREES====" << endl;
-        set<string> un_trees;
-        for (int i=0; i <numtrees; i++){
-            string sv = get_string_vector(matrix[i]);
-            if (count(un_trees.begin(),un_trees.end(),sv)==0){
-                cout << trees[i]->getRoot()->getNewick(false) <<";" << endl;
-                un_trees.insert(sv);
+        /*
+         * print the unique trees
+         */
+        if (uniquetree == true){
+            cout << "====UNIQUE TREES====" << endl;
+            set<string> un_trees;
+            for (int i=0; i <numtrees; i++){
+                string sv = get_string_vector(matrix[i]);
+                if (count(un_trees.begin(),un_trees.end(),sv)==0){
+                    cout << trees[i]->getRoot()->getNewick(false) <<";" << endl;
+                    un_trees.insert(sv);
+                }
             }
+            cout << "==END UNIQUE TREES==" << endl;
+            exit(0);
         }
-        cout << "==END UNIQUE TREES==" << endl;
-        exit(0);
-    }
 
-    //constructing the logical matrix
-    //the logical matrix has each row as a bipart1 and each col as a name
-    //there is a one if the bipart has the name
-    //need to add the -1 for bipart2
-    vector<int> cols2(names.size(),0);
-    vector<vector<int> > logical_matrix (biparts.size(),cols2);
-    for (unsigned int i=0; i < biparts.size(); i++) {
-        for (unsigned int j=0; j < names.size(); j++) {
-            if (count(biparts[i].begin(), biparts[i].end(), name_index[names[j]]) != 0) {
-                logical_matrix[i][j] = 1;
-            }
-        }
-        //cout << get_string_vector(logical_matrix[i]) << endl;
-    }
-    
-    double smallest_proportion = 0.0;
-    double TSCA = 0;
-    //get the conflicting bipartitions
-    //initialize results vectors
-    for (unsigned int i = 0; i < biparts.size(); i++) {
-        unsigned int sumc = sum_matrix_col(matrix,i);
-        if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
-            vector<string> nms;
-            for (unsigned int k=0; k < biparts[i].size(); k++) {
-                nms.push_back(name_st_index[biparts[i][k]]);
-            }
-            (*poos) << "CLADE: " << get_string_vector(nms);
-            if(edgewisealltaxa == true){
-                vector<string> nms_o;
-                for (unsigned int k=0; k < biparts2[i].size(); k++) {
-                    nms_o.push_back(name_st_index[biparts2[i][k]]);
+        //constructing the logical matrix
+        //the logical matrix has each row as a bipart1 and each col as a name
+        //there is a one if the bipart has the name
+        //need to add the -1 for bipart2
+        vector<int> cols2(names.size(),0);
+        vector<vector<int> > logical_matrix (biparts.size(),cols2);
+        for (unsigned int i=0; i < biparts.size(); i++) {
+            for (unsigned int j=0; j < names.size(); j++) {
+                if (count(biparts[i].begin(), biparts[i].end(), name_index[names[j]]) != 0) {
+                    logical_matrix[i][j] = 1;
                 }
-                (*poos) << "| " << get_string_vector(nms_o);
             }
-            double totalcount = bp_count[i];
-            vector<double> conflict_nums;
-            conflict_nums.push_back(bp_count[i]);
-            if (verbose)
-                (*poos) << "\n\tCONFLICTS:" << endl;
-            for (unsigned int j=0; j < biparts.size(); j++) {
-                unsigned int sumc2 = sum_matrix_col(matrix,j);
-                if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
-                    bool logitest = test_logical(logical_matrix[i],logical_matrix[j],edgewisealltaxa);
-                    if (logitest) {
-                        vector<string> nms2;
-                        for (unsigned int k=0; k < biparts[j].size(); k++) {
-                            nms2.push_back(name_st_index[biparts[j][k]]);
-                        }    
-                        totalcount += bp_count[j];
-                        conflict_nums.push_back(bp_count[j]);
-                        if(verbose){
-                            (*poos) << " \t "<< get_string_vector(nms2);
-                            if(edgewisealltaxa == true){
-                                vector<string> nms_o;
-                                for (unsigned int k=0; k < biparts2[j].size(); k++) {
-                                    nms_o.push_back(name_st_index[biparts2[j][k]]);
+            //cout << get_string_vector(logical_matrix[i]) << endl;
+        }
+        
+        double smallest_proportion = 0.0;
+        double TSCA = 0;
+        //get the conflicting bipartitions
+        //initialize results vectors
+        for (unsigned int i = 0; i < biparts.size(); i++) {
+            unsigned int sumc = sum_matrix_col(matrix,i);
+            if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
+                vector<string> nms;
+                for (unsigned int k=0; k < biparts[i].size(); k++) {
+                    nms.push_back(name_st_index[biparts[i][k]]);
+                }
+                (*poos) << "CLADE: " << get_string_vector(nms);
+                if(edgewisealltaxa == true){
+                    vector<string> nms_o;
+                    for (unsigned int k=0; k < biparts2[i].size(); k++) {
+                        nms_o.push_back(name_st_index[biparts2[i][k]]);
+                    }
+                    (*poos) << "| " << get_string_vector(nms_o);
+                }
+                double totalcount = bp_count[i];
+                vector<double> conflict_nums;
+                conflict_nums.push_back(bp_count[i]);
+                if (verbose)
+                    (*poos) << "\n\tCONFLICTS:" << endl;
+                for (unsigned int j=0; j < biparts.size(); j++) {
+                    unsigned int sumc2 = sum_matrix_col(matrix,j);
+                    if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
+                        bool logitest = test_logical(logical_matrix[i],logical_matrix[j],edgewisealltaxa);
+                        if (logitest) {
+                            vector<string> nms2;
+                            for (unsigned int k=0; k < biparts[j].size(); k++) {
+                                nms2.push_back(name_st_index[biparts[j][k]]);
+                            }    
+                            totalcount += bp_count[j];
+                            conflict_nums.push_back(bp_count[j]);
+                            if(verbose){
+                                (*poos) << " \t "<< get_string_vector(nms2);
+                                if(edgewisealltaxa == true){
+                                    vector<string> nms_o;
+                                    for (unsigned int k=0; k < biparts2[j].size(); k++) {
+                                        nms_o.push_back(name_st_index[biparts2[j][k]]);
+                                    }
+                                    (*poos) << "| " << get_string_vector(nms_o);
                                 }
-                                (*poos) << "| " << get_string_vector(nms_o);
+                                (*poos) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t" << bp_count[j]/trees.size() <<  endl;
                             }
-                            (*poos) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t" << bp_count[j]/trees.size() <<  endl;
                         }
                     }
                 }
-            }
-            //calculate ICA
-            double sign = 1;
-            for (unsigned int j=0; j < conflict_nums.size(); j++) {
-                conflict_nums[j] /= totalcount;
-                if (conflict_nums[j] > conflict_nums[0]) {
-                    sign = -1;
-                }
-            }
-            double ICA = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
-            for (unsigned int j=0; j < conflict_nums.size(); j++) {
-                ICA += (conflict_nums[j] * logn(conflict_nums[j], conflict_nums.size()));
-            }
-            TSCA += ICA;
-            ICA *= sign;
-            (*poos) << "\tFREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  endl;
-            if(verbose){
-                (*poos) << "\tTREES:\t";
-                for (int j=0;j<matrix.size();j++){
-                    if (matrix[j][i] == 1){
-                        (*poos) << j << " ";   
+                //calculate ICA
+                double sign = 1;
+                for (unsigned int j=0; j < conflict_nums.size(); j++) {
+                    conflict_nums[j] /= totalcount;
+                    if (conflict_nums[j] > conflict_nums[0]) {
+                        sign = -1;
                     }
                 }
-                (*poos) << endl;
-            }
-        } else if (sumc == trees.size()) {
-            vector<string> nms;
-            for (unsigned int k=0; k < biparts[i].size(); k++) {
-                nms.push_back(name_st_index[biparts[i][k]]);
-            }
-            (*poos) << "CLADE: " <<  get_string_vector(nms);
-            if(edgewisealltaxa == true){
-                vector<string> nms_o;
-                for (unsigned int k=0; k < biparts2[i].size(); k++) {
-                    nms_o.push_back(name_st_index[biparts2[i][k]]);
+                double ICA = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
+                for (unsigned int j=0; j < conflict_nums.size(); j++) {
+                    ICA += (conflict_nums[j] * logn(conflict_nums[j], conflict_nums.size()));
                 }
-                (*poos) << "| " << get_string_vector(nms_o);
-            }
-            (*poos) << "\tFREQ:\t1.\tICA:\t1.\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t1." << endl;
-            TSCA += 1;
-            if(verbose){
-                (*poos) << "\tTREES:\t";
-                for (int j=0;j<matrix.size();j++){
-                    if (matrix[j][i] == 1){
-                        (*poos) << j << " ";   
+                TSCA += ICA;
+                ICA *= sign;
+                (*poos) << "\tFREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  endl;
+                if(verbose){
+                    (*poos) << "\tTREES:\t";
+                    for (int j=0;j<matrix.size();j++){
+                        if (matrix[j][i] == 1){
+                            (*poos) << j << " ";   
+                        }
                     }
+                    (*poos) << endl;
                 }
-                (*poos) << endl;
+            } else if (sumc == trees.size()) {
+                vector<string> nms;
+                for (unsigned int k=0; k < biparts[i].size(); k++) {
+                    nms.push_back(name_st_index[biparts[i][k]]);
+                }
+                (*poos) << "CLADE: " <<  get_string_vector(nms);
+                if(edgewisealltaxa == true){
+                    vector<string> nms_o;
+                    for (unsigned int k=0; k < biparts2[i].size(); k++) {
+                        nms_o.push_back(name_st_index[biparts2[i][k]]);
+                    }
+                    (*poos) << "| " << get_string_vector(nms_o);
+                }
+                (*poos) << "\tFREQ:\t1.\tICA:\t1.\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t1." << endl;
+                TSCA += 1;
+                if(verbose){
+                    (*poos) << "\tTREES:\t";
+                    for (int j=0;j<matrix.size();j++){
+                        if (matrix[j][i] == 1){
+                            (*poos) << j << " ";   
+                        }
+                    }
+                    (*poos) << endl;
+                }
             }
         }
-    }
-    (*poos) << "TSCA: " << TSCA << endl;
+        (*poos) << "TSCA: " << TSCA << endl;
+    }//end suppress if
     if (mapfileset){
         string mot(mtreef);
         mot = mot +".pxbpmapped.tre";
