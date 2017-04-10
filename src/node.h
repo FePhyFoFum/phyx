@@ -41,6 +41,7 @@ public:
     int get_num_leaves();
     vector<Node*> get_leaves();
     vector<string> get_leave_names();
+    set<string> get_leave_names_set();
     set<Node *> get_leaves_set();
 
     vector<Node*> getChildren();

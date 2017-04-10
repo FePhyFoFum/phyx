@@ -369,6 +369,24 @@ set<Node*> Node::get_leaves_set() {
     return retnodes;
 }
 
+set<string> Node::get_leave_names_set() {
+    stack<Node*> nodes;
+    set<string> names;
+    nodes.push(this);
+    while (nodes.empty() == false) {
+        Node * nd = nodes.top();
+        nodes.pop();
+        if (nd->getChildCount() > 0) {
+            for (int i=0; i < nd->getChildCount(); i++) {
+                nodes.push(nd->getChild(i));
+            }
+        } else {
+            names.insert(nd->getName());
+        }
+    }
+    return names;
+}
+
 vector<string> Node::get_leave_names() {
     stack<Node*> nodes;
     vector<string> names;

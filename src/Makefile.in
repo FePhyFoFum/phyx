@@ -215,6 +215,10 @@ TCOL_SRC = main_tcol.cpp
 TCOL_OBJ = main_tcol.o
 TCOL_DEP = main_tcol.d
 
+TCOMB_SRC = main_tcomb.cpp
+TCOMB_OBJ = main_tcomb.o
+TCOMB_DEP = main_tcomb.d
+
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
@@ -496,6 +500,9 @@ pxtcol: $(CPP_OBJS) $(TCOL_OBJ)
 	@echo 'building pxtcol'
 	$(CXX) -o "pxtcol" $(OPT_FLAGS) $(TCOL_OBJ) $(CPP_OBJS)
 
+pxtcomb: $(CPP_OBJS) $(TCOMB_OBJ)
+	@echo 'building pxtcomb'
+	$(CXX) -o "pxtcomb" $(OPT_FLAGS) $(TCOMB_OBJ) $(CPP_OBJS)
 
 install:
 	install -m 0755 px* $(prefix)
