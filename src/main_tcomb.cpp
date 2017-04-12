@@ -158,47 +158,60 @@ int main(int argc, char * argv[]) {
             vector<string>::iterator it = set_difference(btns.begin(),btns.end(),atns.begin(),atns.end(),v.begin());
             v.resize(it-v.begin());
             map<string,Node *> diffnds;
+            vector<string> diffnms; 
             for (int i = 0; i<bigtree->getExtantNodeCount();i++){
-                if (count(v.begin(),v.end(),bigtree->getExternalNode(i)->getName())==1)
-                    diffnds[bigtree->getExternalNode(i)->getName()] = bigtree->getExternalNode(i);
+                if (count(v.begin(),v.end(),bigtree->getExternalNode(i)->getName())==1){
+                    diffnms.push_back(bigtree->getExternalNode(i)->getName());
+                }
+            } 
+            //get start node on big tree by getting the mrca
+            Node * connecthere = bigtree->getMRCA(diffnms);
+            vector<Node *> childs = connecthere->getChildren();
+            for (int i=0;i <childs.size();i++){
+                vector<string> v_int(diffnms.size());
+                vector<string>::iterator it;
+                set<string> lvsset = childs[i]->get_leave_names_set();
+                it = set_intersection(lvsset.begin(),lvsset.end(),
+                                atns.begin(),atns.end(),v_int.begin());
+                v_int.resize(it-v_int.begin());
+                if (v_int.size() > 0){
+                    //need to add those missing not the overlapping
+                    vector<string> v2(lvsset.size());
+                    vector<string>::iterator it2 = set_difference(lvsset.begin(),lvsset.end(),atns.begin(),atns.end(),v2.begin());
+                    v2.resize(it2-v2.begin());
+                    for(int j=0;j<v2.size();j++){
+                        cout << "to add " <<  v2[j]<< endl; 
+                        diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
+                    }
+                    connecthere->removeChild(*childs[i]);
+                }
             }
+            Node * oldroot = addtree->getRoot();
+            oldroot->setParent(*connecthere);
+            connecthere->addChild(*oldroot);
+            addtree->setRoot(connecthere);
             bool didit = false;
             while (diffnds.size() > 0){
                 for (map<string,Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it){
                     //cout << it->first << endl;
                     Node * cn = it->second;
-                    set <string> cs = cn->get_leave_names_set();
                     bool goi = true;
                     while (goi == true){
-                        Node * prn = cn;
-                        cn = prn->getParent();
-                        cs = cn->get_leave_names_set();
+                        Node * prn = cn->getParent();
+                        set <string> cs = cn->get_leave_names_set();
                         vector<string> v_int;
                         set_intersection(cs.begin(),cs.end(),atns.begin(),atns.end(),back_inserter(v_int));
                         if(v_int.size() > 0){
-                            //cout <<  "this is what we need to add " << prn->getNewick(false) << endl;
+                            cout <<  "this is what we need to add " << prn->getNewick(false) << endl;
                             //get nodes
                             //get mrca
                             Node * nd = addtree->getMRCA(v_int);
-                            //cout << "would add to " <<  nd->getNewick(false) << endl;
-                            if (addtree->getRoot() == nd){
-                                Node * newroot = new Node();
-                                newroot->addChild(*prn);
-                                newroot->addChild(*nd);
-                                addtree->setRoot(newroot);
-                            }else{
-                                if (nd->getChildCount() == 0){
-                                    Node p = (*nd->getParent());
-                                    Node * nn = new Node(p);
-                                    p.addChild(*nn);
-                                    p.removeChild(*nd);
-                                    nn->addChild(*nd);
-                                    nn->addChild(*prn);
-                                    cout << nn->getNewick(false) << endl;
-                                }else{
-                                    nd->addChild(*prn);
-                                }
+                            cout << "would add to " <<  nd->getNewick(false) << endl;
+                            //START HERE
+                            if(v_int.size() == 1){
+                                
                             }
+                            
                             vector<string> lvsnms = prn->get_leave_names();
                             for(int i =0; i < lvsnms.size(); i++){
                                 if (diffnds.count(lvsnms[i]) > 0){
@@ -209,6 +222,7 @@ int main(int argc, char * argv[]) {
                             didit = true;
                             break;
                         }
+                        cn = prn;
                     }
                     if (didit == true)
                         break;
