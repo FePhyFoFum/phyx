@@ -26,6 +26,7 @@ void print_help() {
     cout << " -g, --guess         EXPERIMENTAL: guess whether there are seqs that need to be " << endl;
     cout << "                       rev comp. uses edlib library on first seq" << endl;
     cout << " -p, --pguess        EXPERIMENTAL: progressively guess " << endl;
+    cout << " -m, --sguess        EXPERIMENTAL: sampled guess " << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
     cout << " -h, --help          display this help and exit"<<endl;
     cout << " -V, --version       display version and exit"<<endl;
@@ -42,6 +43,7 @@ static struct option const long_options[] =
     {"ids", required_argument, NULL, 'i'},
     {"guess", no_argument, NULL, 'g'},
     {"pguess", no_argument, NULL, 'p'},
+    {"sguess", no_argument, NULL, 'm'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -88,12 +90,14 @@ int main(int argc, char * argv[]) {
     
     bool guess = false;
     bool pguess = false;
+    bool sguess = false;
+    double sguess_samplenum = 0.1; // 10% of them will be used for revcomp
     char * seqf = NULL;
     char * outf = NULL;
     char * idssc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:i:o:gphV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:i:o:mgphV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -113,6 +117,10 @@ int main(int argc, char * argv[]) {
             case 'p':
                 guess = true;
                 pguess = true;
+                break;
+            case 'm':
+                guess = true;
+                sguess = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -191,6 +199,12 @@ int main(int argc, char * argv[]) {
                (*poos) << seq.get_fasta();
                if(pguess)
                    done.push_back(seq);
+               if(sguess){
+                   double r = ((double) rand() / (RAND_MAX));
+                    if (r < sguess_samplenum){
+                        done.push_back(seq);
+                    }
+               }
            }
         }
         if (ft == 2) {
