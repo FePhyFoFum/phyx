@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -93,7 +93,7 @@ int main(int argc, char * argv[]) {
     bool guess = false;
     bool pguess = false;
     bool sguess = false;
-    double sguess_samplenum = 0.1; // 10% of them will be used for revcomp
+    double sguess_samplenum = 0.2; // 10% of them will be used for revcomp
     char * seqf = NULL;
     char * outf = NULL;
     char * idssc = NULL;
@@ -199,9 +199,9 @@ int main(int argc, char * argv[]) {
                     seq.perm_reverse_complement();
                }
                (*poos) << seq.get_fasta();
-               if(pguess)
+               if(pguess){
                    done.push_back(seq);
-               if(sguess){
+               }else if(sguess){
                    double r = ((double) rand() / (RAND_MAX));
                     if (r < sguess_samplenum){
                         done.push_back(seq);
