@@ -136,11 +136,9 @@ int main(int argc, char * argv[]) {
     int ft = test_seq_filetype_stream(*pios,retstring);
     while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
         seqs.push_back(seq);
-        //(*poos) << seq.get_fasta();
     }
     if (ft == 2) {
         seqs.push_back(seq);
-        //(*poos) << seq.get_fasta();
     }
     if (sortby == 1)
         sort(seqs.begin(),seqs.end(),SequenceIDListCompare);
