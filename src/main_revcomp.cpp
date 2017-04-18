@@ -25,6 +25,7 @@ void print_help() {
     cout << " -i, --ids=IDS       a comma sep list of ids to flip (NO SPACES!)" << endl;
     cout << " -g, --guess         EXPERIMENTAL: guess whether there are seqs that need to be " << endl;
     cout << "                       rev comp. uses edlib library on first seq" << endl;
+    cout << " -p, --pguess        EXPERIMENTAL: progressively guess " << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
     cout << " -h, --help          display this help and exit"<<endl;
     cout << " -V, --version       display version and exit"<<endl;
@@ -40,11 +41,41 @@ static struct option const long_options[] =
     {"seqf", required_argument, NULL, 's'},
     {"ids", required_argument, NULL, 'i'},
     {"guess", no_argument, NULL, 'g'},
+    {"pguess", no_argument, NULL, 'p'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
 };
+
+bool reverse_it_or_not(vector<Sequence> & seqs, Sequence comp_seq){
+    int best_distance = 10000000;
+    int best_dis_rev = 100000000;
+    string comp = comp_seq.get_sequence();
+    string revcomp = comp_seq.reverse_complement();
+    for (int i=0;i<seqs.size();i++){
+        EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seqs[i].get_sequence().c_str(), 
+                seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
+        if (result.editDistance < 0)
+            continue;
+        if (result.editDistance < best_distance)
+            best_distance = result.editDistance;
+        edlibFreeAlignResult(result);
+    }
+    for (int i=0;i<seqs.size();i++){
+        EdlibAlignResult result = edlibAlign(revcomp.c_str(), revcomp.length(), seqs[i].get_sequence().c_str(), 
+                seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
+        if (result.editDistance < 0)
+            continue;
+        if (result.editDistance < best_dis_rev)
+            best_dis_rev = result.editDistance;
+        edlibFreeAlignResult(result);
+    }
+    if (best_dis_rev < best_distance)
+        return true;
+    return false;
+
+}
 
 int main(int argc, char * argv[]) {
     
@@ -56,12 +87,13 @@ int main(int argc, char * argv[]) {
     vector<string> ids;
     
     bool guess = false;
+    bool pguess = false;
     char * seqf = NULL;
     char * outf = NULL;
     char * idssc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:i:o:hgV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:i:o:gphV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -77,6 +109,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 'g':
                 guess = true;
+                break;
+            case 'p':
+                guess = true;
+                pguess = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -142,39 +178,23 @@ int main(int argc, char * argv[]) {
         }
     }else{
        bool first = true;
-       Sequence firstseq;
+       vector<Sequence> done; //for pguess
        while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
            if (first == true){
-               firstseq = seq;
+               done.push_back(seq);
                (*poos) << seq.get_fasta();
                first = false;
            }else{
-               EdlibAlignResult result = edlibAlign(firstseq.get_sequence().c_str(), 
-                       firstseq.get_sequence().length(), seq.get_sequence().c_str(), 
-                        seq.get_sequence().length(), edlibNewAlignConfig(-1, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
-               edlibFreeAlignResult(result);
-               seq.perm_reverse_complement();
-               EdlibAlignResult result2 = edlibAlign(firstseq.get_sequence().c_str(), 
-                       firstseq.get_sequence().length(), seq.get_sequence().c_str(), 
-                        seq.get_sequence().length(), edlibNewAlignConfig(-1, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
-               edlibFreeAlignResult(result2);
-               if (result.editDistance < result2.editDistance ){
+               if (reverse_it_or_not(done, seq)){
                     seq.perm_reverse_complement();
                }
                (*poos) << seq.get_fasta();
+               if(pguess)
+                   done.push_back(seq);
            }
         }
         if (ft == 2) {
-           EdlibAlignResult result = edlibAlign(firstseq.get_sequence().c_str(), 
-                   firstseq.get_sequence().length(), seq.get_sequence().c_str(), 
-                    seq.get_sequence().length(), edlibNewAlignConfig(-1, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
-           edlibFreeAlignResult(result);
-           seq.perm_reverse_complement();
-           EdlibAlignResult result2 = edlibAlign(firstseq.get_sequence().c_str(), 
-                   firstseq.get_sequence().length(), seq.get_sequence().c_str(), 
-                    seq.get_sequence().length(), edlibNewAlignConfig(-1, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
-           edlibFreeAlignResult(result2);
-           if (result.editDistance < result2.editDistance ){
+           if (reverse_it_or_not(done, seq)){
                 seq.perm_reverse_complement();
            }
            (*poos) << seq.get_fasta();
