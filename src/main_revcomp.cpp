@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <time.h>
+#include <stdlib.h>
 #include <getopt.h>
 
 using namespace std;
@@ -80,7 +82,7 @@ bool reverse_it_or_not(vector<Sequence> & seqs, Sequence comp_seq){
 }
 
 int main(int argc, char * argv[]) {
-    
+    srand (time(NULL));
     log_call(argc, argv);
     
     bool fileset = false;
