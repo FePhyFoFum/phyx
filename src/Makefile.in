@@ -94,9 +94,9 @@ FQFILT_SRC = main_fqfilt.cpp
 FQFILT_OBJ = main_fqfilt.o
 FQFILT_DEP = main_fqfilt.d
 
-REVCOMP_SRC = main_revcomp.cpp
-REVCOMP_OBJ = main_revcomp.o
-REVCOMP_DEP = main_revcomp.d
+REVCOMP_SRC = main_revcomp.cpp edlib.cpp
+REVCOMP_OBJ = main_revcomp.o edlib.o
+REVCOMP_DEP = main_revcomp.d edlib.d
 
 NW_SRC = main_nw.cpp
 NW_OBJ = main_nw.o
@@ -219,6 +219,10 @@ TCOMB_SRC = main_tcomb.cpp
 TCOMB_OBJ = main_tcomb.o
 TCOMB_DEP = main_tcomb.d
 
+SSORT_SRC = main_ssort.cpp
+SSORT_OBJ = main_ssort.o
+SSORT_DEP = main_ssort.d
+
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
@@ -321,7 +325,7 @@ RATE_DEPS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxcontrates $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -503,6 +507,10 @@ pxtcol: $(CPP_OBJS) $(TCOL_OBJ)
 pxtcomb: $(CPP_OBJS) $(TCOMB_OBJ)
 	@echo 'building pxtcomb'
 	$(CXX) -o "pxtcomb" $(OPT_FLAGS) $(TCOMB_OBJ) $(CPP_OBJS)
+
+pxssort: $(CPP_OBJS) $(SSORT_OBJ)
+	@echo 'building pxssort'
+	$(CXX) -o "pxssort" $(OPT_FLAGS) $(SSORT_OBJ) $(CPP_OBJS)
 
 install:
 	install -m 0755 px* $(prefix)

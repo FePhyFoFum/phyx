@@ -41,8 +41,8 @@ public:
     bool is_prot_char(char & residue);
     
     bool is_aligned();
-    string get_sequence();
-    string get_id();
+    string get_sequence()const;
+    string get_id()const ;
     unsigned int get_length();
     void add_cont_char(double num);
     double get_cont_char(int _index);

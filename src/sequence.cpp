@@ -120,11 +120,11 @@ bool Sequence::is_aligned() {
     return aligned;
 }
 
-string Sequence::get_sequence() {
+string Sequence::get_sequence() const {
     return seq;
 }
 
-string Sequence::get_id() {
+string Sequence::get_id() const {
     return id;
 }
 
