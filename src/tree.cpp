@@ -441,25 +441,29 @@ void Tree::pruneExternalNode(Node * node) {
      */
     double bl = 0;
     Node * parent = node->getParent();
-    Node * other = NULL;
-    for (int i=0; i < parent->getChildCount(); i++) {
-        if (parent->getChild(i) != node) {
-            other = parent->getChild(i);
-        }
-    }
-    bl = other->getBL()+parent->getBL();
-    Node * mparent = parent->getParent();
-    if (mparent != NULL) {
-        mparent->addChild(*other);
-        other->setBL(bl);
-        for (int i=0; i < mparent->getChildCount(); i++) {
-            if (mparent->getChild(i)==parent) {
-                mparent->removeChild(*parent);
-                break;
+    if(parent->getChildCount() == 2){
+        Node * other = NULL;
+        for (int i=0; i < parent->getChildCount(); i++) {
+            if (parent->getChild(i) != node) {
+                other = parent->getChild(i);
             }
         }
-    } else {
-        root = other;
+        bl = other->getBL()+parent->getBL();
+        Node * mparent = parent->getParent();
+        if (mparent != NULL) {
+            mparent->addChild(*other);
+            other->setBL(bl);
+            for (int i=0; i < mparent->getChildCount(); i++) {
+                if (mparent->getChild(i)==parent) {
+                    mparent->removeChild(*parent);
+                    break;
+                }
+            }
+        } else {
+            root = other;
+        }
+    }else{
+        parent->removeChild(*node);
     }
     delete node;
     this->processRoot();
