@@ -322,6 +322,7 @@ int sum (vector <int> & in) {
     return accumulate(in.begin(), in.end(), 0);
 }
 
+
 int sum_zeros (vector <int> & in) {
     int x = 0;
     for(unsigned int i=0;i < in.size(); i++){
@@ -330,6 +331,7 @@ int sum_zeros (vector <int> & in) {
     }
     return x;
 }
+
 
 Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
     Superdouble sum = 0;

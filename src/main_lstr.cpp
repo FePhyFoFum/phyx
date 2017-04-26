@@ -140,7 +140,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck) > 1) {
+    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck + namecheck) > 1) {
         cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
         exit(0);
     }
