@@ -26,12 +26,15 @@ The instructions below assume homebrew, which is convenient for dealing with dep
         brew install git
         brew install cmake
         brew install homebrew/science/nlopt
+        _in recent versions armadillo from brew works best_
+        brew install armadillo
 
 3. On to phyx. first, clone the repository (if you haven't already):
 
         git clone https://github.com/FePhyFoFum/phyx.git
 
 4. Install the final dependency, armadillo, (included with phyx):
+ - This can be installed from the deps or from brew:
 
 		cd phyx/deps
 		tar -xzf armadillo-7.400.2.tgz
@@ -39,6 +42,11 @@ The instructions below assume homebrew, which is convenient for dealing with dep
 		./configure
 		make
 		sudo make install
+ 
+ - If you install from brew, you can do this by
+
+        brew install homebrew/science/nlopt
+        export CXX=/usr/local/bin/g++-6
 
 5. Install phyx
 
