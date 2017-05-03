@@ -26,7 +26,9 @@ The instructions below assume homebrew, which is convenient for dealing with dep
         brew install git
         brew install cmake
         brew install homebrew/science/nlopt
-        _in recent versions armadillo from brew works best_
+
+ - In recent versions armadillo from brew works best        
+
         brew install armadillo
 
 3. On to phyx. first, clone the repository (if you haven't already):
