@@ -25,4 +25,7 @@ examples_old*
 CMakeLists.txt
 convert_phylip_to_states.py
 logo.svg
+*.bbl
+*.blg
+*.synctex.gz
 
