@@ -361,7 +361,7 @@ pxrmt -t rmt_test.tre -n s1,s6,s8
 
 \subsection{pxrr}
 
-This program will re-root trees in a tree file based on specified outgroups (\texttt{-g}), or the program can unroot a tree (\texttt{-u}). For re-rooting, if not all the outgroups are found in the tree the program will re-root the tree based on the outgroups that are available. It provides a useful tool for re-rooting thousands of trees which can then be used for analyzing gene discordance across phylogenies.
+This program will re-root trees in a tree file based on specified outgroups (\texttt{-g}), or the program can unroot a tree (\texttt{-u}). For re-rooting, if not all the outgroups are found in the tree the program will print an error. However, \texttt{pxrr} can re-root the tree based on the outgroups that \textit{are} available by using the silent option (\texttt{-s}). Alternatively, if the outgroups are ranked in preference but not all necessarily present in a given tree \texttt{pxrr} can root on the first outgroup present by using the \texttt{-r} option. It provides a useful tool for re-rooting thousands of trees which can then be used for analyzing gene discordance across phylogenies.
 
 \begin{flushleft}
 Example to root on the outgroups s1 and s2:
