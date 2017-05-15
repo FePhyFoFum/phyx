@@ -25,6 +25,7 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
     cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl;
+    cout << " -r, --ranked         outgroups are ordered. root on first one present" << endl;
     cout << " -u, --unroot         unroot the tree" << endl;
     cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
     cout << " -s, --silent         do not error if outgroup(s) not found" << endl;
@@ -40,7 +41,8 @@ string versionline("pxrr 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwrit
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"outgroups",required_argument,NULL, 'g'},
+    {"outgroups", required_argument, NULL, 'g'},
+    {"ranked", no_argument, NULL, 'r'},
     {"unroot", no_argument, NULL, 'u'},
     {"outf", required_argument, NULL, 'o'},
     {"silent", no_argument, NULL, 's'},
@@ -58,6 +60,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool silent = false;
     bool unroot = false;
+    bool ranked = false;
     vector <string> outgroups;
 
     char * treef = NULL;
@@ -65,7 +68,7 @@ int main(int argc, char * argv[]) {
     char * outgroupsc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:g:uo:shV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:g:ruo:shV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -78,6 +81,9 @@ int main(int argc, char * argv[]) {
             case 'g':
                 outgroupsset = true;
                 outgroupsc = strdup(optarg);
+                break;
+            case 'r':
+                ranked = true;
                 break;
             case 'u':
                 unroot = true;
@@ -123,7 +129,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
@@ -145,7 +151,7 @@ int main(int argc, char * argv[]) {
     bool going = true;
     bool exists;
     if (!unroot) {
-        if (ft == 0) {
+        if (ft == 0) { // Nexus
             map<string,string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
@@ -154,7 +160,26 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (tree != NULL) {
-                    exists = reroot(tree, outgroups, silent);
+                    if (ranked) {
+                        // find first outgroup present in tree
+                        bool ogexists = false;
+                        for (unsigned int i=0; i < outgroups.size(); i++) {
+                            string name = outgroups[i];
+                            if (check_name_against_tree(tree, name)) {
+                                vector <string> og;
+                                og.push_back(name);
+                                exists = reroot(tree, og, silent);
+                                ogexists = true;
+                                break;
+                            }
+                        }
+                        // if no valid outgroups, let silent option figure out
+                        if (!ogexists) {
+                            exists = reroot(tree, outgroups, silent);
+                        }
+                    } else {
+                        exists = reroot(tree, outgroups, silent);
+                    }
                     if (!exists) {
                         cerr << "the outgroup taxa don't exist in this tree " << endl;
                     } else {
@@ -163,12 +188,31 @@ int main(int argc, char * argv[]) {
                     delete tree;
                 }
             }
-        } else if (ft == 1) {
+        } else if (ft == 1) { // newick
             Tree * tree;
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
-                    exists = reroot(tree, outgroups, silent);
+                    if (ranked) {
+                        // find first outgroup present in tree
+                        bool ogexists = false;
+                        for (unsigned int i=0; i < outgroups.size(); i++) {
+                            string name = outgroups[i];
+                            if (check_name_against_tree(tree, name)) {
+                                vector <string> og;
+                                og.push_back(name);
+                                exists = reroot(tree, og, silent);
+                                ogexists = true;
+                                break;
+                            }
+                        }
+                        // if no valid outgroups, let silent option figure out
+                        if (!ogexists) {
+                            exists = reroot(tree, outgroups, silent);
+                        }
+                    } else {
+                        exists = reroot(tree, outgroups, silent);
+                    }
                     if (!exists) {
                         cerr << "the outgroup taxa don't exist in this tree " << endl;
                     } else {

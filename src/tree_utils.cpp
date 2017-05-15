@@ -431,6 +431,17 @@ bool check_names_against_tree(Tree * tr, vector<string> names) {
 }
 
 
+// single name version
+bool check_name_against_tree(Tree * tr, string const& name) {
+    bool allgood = true;
+    Node * nd = tr->getExternalNode(name);
+    if (nd == NULL) {
+        allgood = false;
+    }
+    return allgood;
+}
+
+
 // if 'silent', don't complain if any outgroups are missing
 bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
     bool success = false;
