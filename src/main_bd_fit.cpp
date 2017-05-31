@@ -104,7 +104,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
@@ -118,19 +118,40 @@ int main(int argc, char * argv[]) {
     }
     
     bool going = true;
-    Tree * tree;
-    while (going) {
-        tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
-        if (going) {
-            // in addition to checking ultramtericity, the following sets node heights
-            //if (is_ultrametric_postorder(tree)) {
-            if (is_ultrametric_paths(tree)) {
-                BDFit bd(tree, model);
-                bd.get_pars(poos);
-                delete tree;
-            } else {
-                cout << "Tree is not ultrametric. Exiting." << endl;
-                exit(0);
+    if (ft == 1) {
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            if (going) {
+                // in addition to checking ultramtericity, the following sets node heights
+                if (is_ultrametric_paths(tree)) {
+                    BDFit bd(tree, model);
+                    bd.get_pars(poos);
+                    delete tree;
+                } else {
+                    cout << "Tree is not ultrametric. Exiting." << endl;
+                    exit(0);
+                }
+            }
+        }
+    } if (ft == 0) {
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                // in addition to checking ultramtericity, the following sets node heights
+                if (is_ultrametric_paths(tree)) {
+                    BDFit bd(tree, model);
+                    bd.get_pars(poos);
+                    delete tree;
+                } else {
+                    cout << "Tree is not ultrametric. Exiting." << endl;
+                    exit(0);
+                }
             }
         }
     }
