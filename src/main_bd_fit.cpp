@@ -22,7 +22,7 @@ void print_help () {
     cout << "Usage: pxbdfit [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
-    cout << " -m, --model=STRING  diversification model; either 'yule' or 'bd' (default)" << endl;
+    cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;

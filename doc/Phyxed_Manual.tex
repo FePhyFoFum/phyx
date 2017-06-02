@@ -112,10 +112,10 @@ pxaa2cdn -a AA_Alignment.fa -n Unaligned_Nucleotide.fa -o CDN_aln.fa
 
 \subsection{pxbdfit}
 
-Diversification has becoming a rapidly expanding field and as a result tools to analyze the data are essential. This program will fit a diversification model to a tree. The model which is chosen with \texttt{-m} may be either the default a birth-death model (\texttt{bd}) or a yule model (\texttt{yule}). The program will return the model parameters (b,d,r,e), likelihood, aic and tree statistics.
+Diversification has becoming a rapidly expanding field and as a result tools to analyze the data are essential. This program will fit a diversification model to a tree. The model which is chosen with \texttt{-m} may be (the default) birth-death model (\texttt{bd}), a pure-birth yule model (\texttt{yule}), or the optimal of these two models (\texttt{best}) as determined by AIC. The program will return the model parameters (b,d,r,e), likelihood, aic and tree statistics.
 \begin{flushleft}
 \begin{verbatim}
-pxbdfit -t bd.tre -m "yule"
+pxbdfit -t bd.tre -m yule
 \end{verbatim}
 \end{flushleft}
 

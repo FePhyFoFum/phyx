@@ -37,11 +37,33 @@ void BDFit::fit_model () {
         fit_yule();
     } else if (model_ == "bd") {
         fit_bd();
+    } else if (model_ == "best") {
+        get_best_model();
     } else {
         cout << "Huh?!?" << endl;
     }
 }
 
+// find the best model between yule and bd using aic
+void BDFit::get_best_model () {
+    treelength_ = get_tree_length(tree_);
+    nintnodes_ = tree_->getInternalNodeCount();
+    nspeciation_ = nintnodes_ - 1.0;
+    ntips_ = tree_->getExternalNodeCount();
+    rootheight_ = tree_->getRoot()->getHeight();
+    fit_yule();
+    fit_bd();
+    if (aic_yule_ < aic_) {
+        cout << "yule model fits better by " << aic_ - aic_yule_
+                << " AIC units" << endl;
+        model_ = "yule";
+    } else {
+        cout << "bd model fits better by " << aic_yule_ - aic_
+                << " AIC units" << endl;
+        model_ = "bd";
+    }
+    
+}
 
 /*
 ML for lambda is simply: (nintnodes - 1) / treelength
@@ -56,9 +78,12 @@ Easier: factorial(n) = gamma(n+1)
         lfactorial(n) = std::lgamma(n+1)
 */
 void BDFit::fit_yule () {
-    lambda_ = nspeciation_ / treelength_;
-    likelihood_ = nspeciation_ * log(lambda_) - lambda_ * treelength_
+    lambda_yule_ = nspeciation_ / treelength_;
+    likelihood_yule_ = nspeciation_ * log(lambda_yule_) - lambda_yule_ * treelength_
         + std::lgamma(nintnodes_ + 1.0);
+    get_aic (likelihood_yule_);
+    aicc_yule_ = aicc_;
+    aic_yule_ = aic_;
 }
 
 
@@ -110,6 +135,7 @@ void BDFit::fit_bd () {
     mu_ = lambda_ - r_;
     
     likelihood_ = -minf;
+    get_aic (likelihood_);
     //cout << "found minimum after " << counter << " evaluations." << endl;
 }
 
@@ -141,13 +167,13 @@ double nlopt_bd_log_lik (const std::vector<double> &x, std::vector<double> &grad
 
 // calculate model-specific raw and small-sample-corrected AIC
 // 'n' here (number of data points) is taken as the number of terminals
-void BDFit::get_aic () {
+void BDFit::get_aic (const double &lik) {
     double K = 1.0;
     double n = ntips_;
     if (model_ == "bd") {
         K = 2.0;
     }
-    aic_ = (-2.0 * likelihood_) + (2.0 * K);
+    aic_ = (-2.0 * lik) + (2.0 * K);
     aicc_ = aic_ + (2 * K * (K + 1)) / (n - K - 1);
 }
 
@@ -160,12 +186,16 @@ void BDFit::get_pars (ostream* poos) {
     (*poos) << "treelength: " << treelength_ << endl;
     (*poos) << "rootheight: " << rootheight_ << endl;
     (*poos) << "model: " << model_ << endl;
-    (*poos) << "likelihood: " << likelihood_ << endl;
-    get_aic ();
-    (*poos) << "aic: " << aic_ << endl;
-    (*poos) << "aicc: " << aicc_ << endl;
-    (*poos) << "b: " << lambda_ << endl;
-    if (model_ == "bd") {
+    if (model_ == "yule") {
+        (*poos) << "likelihood: " << likelihood_yule_ << endl;
+        (*poos) << "aic: " << aic_yule_ << endl;
+        (*poos) << "aicc: " << aicc_yule_ << endl;
+        (*poos) << "b: " << lambda_yule_ << endl;
+    } else if (model_ == "bd") {
+        (*poos) << "likelihood: " << likelihood_ << endl;
+        (*poos) << "aic: " << aic_ << endl;
+        (*poos) << "aicc: " << aicc_ << endl;
+        (*poos) << "b: " << lambda_ << endl;
         (*poos) << "d: " << mu_ << endl;
         (*poos) << "r (b-d): " << r_ << endl;
         (*poos) << "e (d/b): " << epsilon_ << endl;
