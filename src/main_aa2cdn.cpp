@@ -62,9 +62,9 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     bool nucfileset = false; // not used
-    string aaseqf = "";
-    string nucseqf = "";
-    string outf = "";
+    char * aaseqf = NULL;
+    char * nucseqf = NULL;
+    char * outf = NULL;
 
     while (1) {
         int oi = -1;
@@ -98,6 +98,14 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(aaseqf, outf);
+    }
+    if (nucfileset && outfileset) {
+        check_inout_streams_identical(nucseqf, outf);
+    }
+    
     if (!fileset) {
         cout << "you must specify an input amino acid sequence file" << endl;
         exit(0);

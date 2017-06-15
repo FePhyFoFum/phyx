@@ -21,6 +21,8 @@ using namespace std;
 #include "bd_fit.h"
 #include "log.h"
 
+// altering bd code. doesn't currently do anything!
+
 /*
 Give two options:
 1. pass in 2 trees
@@ -106,6 +108,13 @@ int main(int argc, char * argv[]) {
                 print_error(argv[0], (char)c);
                 exit(0);
         }
+    }
+    
+    if (tfileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    if (alttfileset && outfileset) {
+        check_inout_streams_identical(alttreef, outf);
     }
     
     istream * pios = NULL;
