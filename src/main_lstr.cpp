@@ -140,15 +140,19 @@ int main(int argc, char * argv[]) {
         }
     }
     
+    if (fileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    
     if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck + namecheck) > 1) {
         cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
         exit(0);
     }
 
-    istream* pios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -162,7 +166,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

@@ -164,12 +164,12 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
+    ostream * poos = NULL;
+    ofstream * ofstr = NULL;
     
     // not used at the moment: assumed that all input comes from files
-    istream* pios = NULL;
-    ifstream* fstr = NULL;
+    istream * pios = NULL;
+    ifstream * fstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

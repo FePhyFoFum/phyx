@@ -92,19 +92,19 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios = NULL;
-    istream* piost = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
-    ifstream* tfstr = NULL;
+    istream * pios = NULL;
+    istream * piost = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
+    ifstream * tfstr = NULL;
     
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

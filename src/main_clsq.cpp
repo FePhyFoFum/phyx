@@ -59,8 +59,8 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     bool force_protein = false;
-    string seqf = "";
-    string outf = "";
+    char * seqf = NULL;
+    char * outf = NULL;
     double proportion = 0.5;
     bool verbose = false;
 
@@ -104,10 +104,15 @@ int main(int argc, char * argv[]) {
         cout << "you must specify an input sequence file" << endl;
         exit(0);
     }
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
-    istream* pios = NULL;
-    ifstream* fstr = NULL;
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(seqf, outf);
+    }
+    
+    ostream * poos = NULL;
+    ofstream * ofstr = NULL;
+    istream * pios = NULL;
+    ifstream * fstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -120,7 +125,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

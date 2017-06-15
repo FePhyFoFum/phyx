@@ -5,7 +5,6 @@
  *      Author: joe
  */
 
-
 #ifdef _OPENMP
     #include <omp.h>
 #else
@@ -74,8 +73,8 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     int threads = 1;
-    string seqf = "";
-    string outf = "";
+    char * seqf = NULL;
+    char * outf = NULL;
 
     while (1) {
         int oi = -1;
@@ -109,17 +108,21 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
-    ifstream* fstr = NULL;
-    istream* pios = NULL;
+    if (fileset && outfileset) {
+        check_inout_streams_identical(seqf, outf);
+    }
+    
+    ostream * poos = NULL;
+    ofstream * ofstr = NULL;
+    ifstream * fstr = NULL;
+    istream * pios = NULL;
     
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

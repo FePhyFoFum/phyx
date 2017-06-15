@@ -21,10 +21,10 @@ int main(int argc, char * argv[]) {
     
     char * treef = argv[1];
     
-    istream* pios;
-    ostream* poos;
-    ifstream* fstr;
-    ofstream* ofstr;
+    istream * pios;
+    ostream * poos;
+    ifstream * fstr;
+    ofstream * ofstr;
     
     poos = &cout;
     fstr = new ifstream(treef);

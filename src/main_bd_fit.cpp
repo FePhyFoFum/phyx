@@ -88,10 +88,14 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
+    if (tfileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
 
     if (outfileset == true) {
         ofstr = new ofstream(outf);

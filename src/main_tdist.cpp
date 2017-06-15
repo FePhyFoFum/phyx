@@ -108,10 +108,10 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
 
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -124,7 +124,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

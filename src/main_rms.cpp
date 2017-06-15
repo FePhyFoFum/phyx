@@ -62,8 +62,8 @@ int main(int argc, char * argv[]) {
     bool namefileset = false;
     char * namesc = NULL;
     char * namesfc = NULL;
-    string seqf = "";
-    string outf = "";
+    char * seqf = NULL;
+    char * outf = NULL;
     string rmf = "";
     vector <string> names;
 
@@ -103,6 +103,10 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(seqf, outf);
+    }
 
     // only taking files at the moment (not stdin)
     /*
@@ -112,10 +116,10 @@ int main(int argc, char * argv[]) {
     }
     */
     
-    istream* pios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
     
     if (namesset == true) {
         vector <string> tokens2;
@@ -144,7 +148,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

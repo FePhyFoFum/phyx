@@ -95,10 +95,14 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
+    if (sfileset && outfileset) {
+        check_inout_streams_identical(seqf, outf);
+    }
+    
+    istream * pios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ofstream * ofstr = NULL;
     
     if (!nfileset | !cfileset) {
         cout << "Must supply both name files (-c for current, -n for new)." << endl;
@@ -110,7 +114,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

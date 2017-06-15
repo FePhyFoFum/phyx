@@ -106,6 +106,11 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    
     if (outgroupsset == true) {
         vector<string> tokens2;
         tokenize(outgroupsc, tokens2, ",");
@@ -117,10 +122,6 @@ int main(int argc, char * argv[]) {
     if (!outgroupsset && !unroot) {
         cerr << "you need to set the outgroup (-g)" << endl;
         exit(0);
-    }
-    
-    if (fileset && outfileset) {
-        check_inout_streams_identical(treef, outf);
     }
 
     istream * pios = NULL;

@@ -99,10 +99,10 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    istream* pios = NULL;
-    istream* poos = NULL;
-    ifstream* cfstr = NULL;
-    ifstream* tfstr = NULL;
+    istream * pios = NULL;
+    istream * poos = NULL;
+    ifstream * cfstr = NULL;
+    ifstream * tfstr = NULL;
 
     ostream * poouts = NULL;
     ofstream * ofstr = NULL;
@@ -124,10 +124,10 @@ int main(int argc, char * argv[]) {
 
     //out file
     //
-    if (outfileset == true){
+    if (outfileset == true) {
         ofstr = new ofstream(outf);
         poouts = ofstr;
-    } else{
+    } else {
         poouts = &cout;
     }
     //

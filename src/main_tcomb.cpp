@@ -101,12 +101,19 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios = NULL;
-    istream* apios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ifstream* afstr = NULL;
-    ofstream* ofstr = NULL;
+    if (tfileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    if (addfileset && outfileset) {
+        check_inout_streams_identical(addtreef, outf);
+    }
+    
+    istream * pios = NULL;
+    istream * apios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ifstream * afstr = NULL;
+    ofstream * ofstr = NULL;
 
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -120,10 +127,10 @@ int main(int argc, char * argv[]) {
     } else {
         cout << "you need to set an tfile (-t)" << endl;
     }
-    if (addfileset == true){
+    if (addfileset == true) {
         afstr = new ifstream(addtreef);
         apios = afstr;
-    } else{
+    } else {
         cout << "you need to set an addfile (-a)" << endl;
     }
     

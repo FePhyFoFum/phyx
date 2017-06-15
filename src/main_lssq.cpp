@@ -127,10 +127,15 @@ int main(int argc, char * argv[]){
                 exit(0);
         }
     }
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
-    ifstream* fstr = NULL;
-    istream* pios = NULL;
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(seqf, outf);
+    }
+    
+    ostream * poos = NULL;
+    ofstream * ofstr = NULL;
+    ifstream * fstr = NULL;
+    istream * pios = NULL;
     
     if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar) > 1) {
         cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
@@ -142,7 +147,7 @@ int main(int argc, char * argv[]){
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }

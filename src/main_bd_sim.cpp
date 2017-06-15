@@ -128,9 +128,6 @@ int main(int argc, char * argv[]) {
         }
     }
     
-//     cout << "death = " << death << endl;
-//     cout << "seed = " << seed << endl;
-    
     if (ext == 0 && time == 0) {
         cout << "you have to set -e or -t" << endl;
         exit(0);
@@ -140,8 +137,8 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
+    ostream * poos = NULL;
+    ofstream * ofstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);

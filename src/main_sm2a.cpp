@@ -92,12 +92,12 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-    istream* spios = NULL;
-    istream* tpios = NULL;
-    ostream* poos = NULL;
-    ifstream* sfstr = NULL;
-    ifstream* tfstr = NULL;
-    ofstream* ofstr = NULL;
+    istream * spios = NULL;
+    istream * tpios = NULL;
+    ostream * poos = NULL;
+    ifstream * sfstr = NULL;
+    ifstream * tfstr = NULL;
+    ofstream * ofstr = NULL;
     
     if (sfileset == true) {
         sfstr = new ifstream(seqf);

@@ -189,8 +189,8 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ofstream* logout = NULL;
-    ostream* loos = NULL;
+    ofstream * logout = NULL;
+    ostream * loos = NULL;
     
     if (logfileset == true) {
         logout = new ofstream(logf);
@@ -299,8 +299,8 @@ int main(int argc, char * argv[]) {
 
     vector<Sequence> seqs;
     Sequence seq;
-    ifstream* fstr = new ifstream(dataf);
-    istream* pios = fstr;
+    ifstream * fstr = new ifstream(dataf);
+    istream * pios = fstr;
     line = "";
     int ft = test_seq_filetype_stream(*pios,line);
     while (read_next_seq_from_stream(*pios,ft,line,seq)) {

@@ -115,19 +115,23 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    istream* pios = NULL;
-    istream* mpios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ifstream* mfstr = NULL;
-    ofstream* ofstr = NULL;
+    if (fileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    
+    istream * pios = NULL;
+    istream * mpios = NULL;
+    ostream * poos = NULL;
+    ifstream * fstr = NULL;
+    ifstream * mfstr = NULL;
+    ofstream * ofstr = NULL;
     
     if (fileset == true) {
         fstr = new ifstream(treef);
         pios = fstr;
     } else {
         pios = &cin;
-        if (check_for_input_to_stream() == false){
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
@@ -531,8 +535,8 @@ int main(int argc, char * argv[]) {
     if (mapfileset){
         string mot(mtreef);
         mot = mot +".pxbpmapped.tre";
-        ofstream* mofstr = new ofstream(mot);
-        ostream* mpoos = mofstr;
+        ofstream * mofstr = new ofstream(mot);
+        ostream * mpoos = mofstr;
         for(int i=0;i<maptree->getInternalNodeCount();i++){
             if (maptree->getInternalNode(i) == maptree->getRoot()){
                 continue;

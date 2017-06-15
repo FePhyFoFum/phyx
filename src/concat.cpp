@@ -30,7 +30,7 @@ SequenceConcatenater::SequenceConcatenater ():num_partitions_(0), num_char_(0),
 void SequenceConcatenater::read_sequences (string & seqf) {
     filename_ = seqf;
     string retstring;
-    istream* pios = new ifstream(filename_);
+    istream * pios = new ifstream(filename_);
     ft_ = test_seq_filetype_stream(*pios, retstring);
     Sequence seq;
     int counter = 0;

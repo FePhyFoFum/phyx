@@ -141,8 +141,8 @@ int main(int argc, char * argv[]) {
         ifs.close();
     }
     
-    ostream* poos = NULL;
-    ofstream* ofstr = NULL;
+    ostream * poos = NULL;
+    ofstream * ofstr = NULL;
 
     if (outfileset == true) {
         ofstr = new ofstream(outf);
