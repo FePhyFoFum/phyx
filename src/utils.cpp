@@ -44,6 +44,13 @@ void check_file_exists (const string& filename) {
     }
 }
 
+void check_inout_streams_identical (char * in, char * out) {
+    if ((string)in == (string)out) {
+        cout << "Warning: input and output file names must differ (streams!). Exiting." << endl;
+        exit(0);
+    }
+}
+
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters) {
     // Skip delimiters at beginning.
     string::size_type lastPos = str.find_first_not_of(delimiters, 0);

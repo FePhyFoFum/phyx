@@ -11,6 +11,8 @@ using namespace std;
 
 void check_file_exists (const string& filename);
 
+void check_inout_streams_identical (char * in, char * out);
+
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters = " ");
 vector <string> tokenize (string const& input);
 void trim_spaces (string & str);

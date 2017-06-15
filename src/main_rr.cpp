@@ -118,6 +118,10 @@ int main(int argc, char * argv[]) {
         cerr << "you need to set the outgroup (-g)" << endl;
         exit(0);
     }
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
 
     istream * pios = NULL;
     ostream * poos = NULL;
