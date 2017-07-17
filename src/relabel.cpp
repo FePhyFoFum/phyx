@@ -61,6 +61,8 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     */
 }
 
+// should we 'correct' invalid names? or leave it to user?
+// can use get_valid_newick_label or get_valid_nexus_label from utils.cpp
 void Relabel::relabel_tree (Tree * tr) {
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         string str = tr->getExternalNode(i)->getName();
