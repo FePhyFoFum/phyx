@@ -78,6 +78,26 @@ void Relabel::relabel_tree (Tree * tr) {
             }
         }  
     }
+    // do internal labels as well. be quieter here (don't expect internal nodes to have labels)
+    for (int i=0; i < tr->getInternalNodeCount(); i++) {
+        string str = tr->getInternalNode(i)->getName();
+        if (str == "") {
+            continue;
+        }
+        if (name_map_.find(str) != name_map_.end()) {
+            //cout << "Tree label '" << str << "' found in name list!" << endl;
+            tr->getInternalNode(i)->setName(name_map_[str]);
+        } else {
+            // see if it is quotes that is messing us up
+            replace_all(str, "'", "");
+            if (name_map_.find(str) != name_map_.end()) {
+                //cout << "Found it this time!" << endl;
+                tr->getInternalNode(i)->setName(name_map_[str]);
+            } else {
+                cout << "Tree label '" << str << "' NOT found in name list!" << endl;
+            }
+        }  
+    }
 }
 
 void Relabel::relabel_sequence (Sequence & seq) {
