@@ -121,6 +121,9 @@ def test_program(name):
     elif name == "pxstrec":
         cm = "./pxstrec -t TEST/test.strec.tre -d TEST/test.data.narrow -c TEST/test.conf | tail -1"
         t = '0.316161 \n'
+    elif name == "pxssort":
+        cm = "./pxssort -s TEST/Codon.fa"
+        t = '>Sequence1\nATGAAAAAAATATAT\n>Sequence2\nATGAAATTTAATATA\n>Sequence3\nAAATTTAAATTTAAA\n>Sequence4\nAAATTTAAATTTATA\n'
     else:
         return
     p = subprocess.Popen(cm,shell=True,stdout=subprocess.PIPE)
