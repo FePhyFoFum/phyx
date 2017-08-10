@@ -70,6 +70,17 @@ bool Node::isRoot() {
     }
 }
 
+// is the internal node of two degree (one parent and one child?)
+bool Node::isKnuckle () {
+    // neither tips nor the root can be a knuckle
+    if (isRoot() || isExternal()) {
+        return false;
+    } else if (children.size() == 1) {
+        return true;
+    }
+    return false;
+}
+
 bool Node::hasParent() {
     if (parent == NULL) {
         return false;

@@ -39,5 +39,7 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent);
 vector <string> get_names_in_tree(Tree * tr, vector<string> const& names);
 vector <string> get_complement_tip_set (Tree * tr, vector<string> const& orig_names);
 vector <string> get_tip_labels (Tree * tr);
+void deknuckle_tree (Tree * tree);
+void remove_knuckle (Node * node);
 
 #endif /* _TREE_UTILS_H_ */

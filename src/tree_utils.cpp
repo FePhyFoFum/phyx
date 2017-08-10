@@ -99,7 +99,7 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
     }
 }
 
-void paint_nodes(Tree * tree, vector<string> & names, bool const& silent){
+void paint_nodes(Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
     tree->getRoot()->setPainted(true);
     for (int i=0; i < num_names; i++) {
@@ -242,6 +242,7 @@ void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
 
 
 // moving to own function, as is generally useful
+// NOTE: this does not recognize trees where there is a polytomy at the root
 bool is_rooted (Tree * tr) {
     bool rooted = false;
     if (tr->getRoot()->getChildCount() == 2) {
@@ -397,7 +398,7 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
         }
         if (node->getChildCount() > 0) {
             vector <double> heights;
-            //bool parentHeight = 0.0; // not used
+            //double parentHeight = 0.0; // not used
             for (int i = 0; i < node->getChildCount(); i++) {
                 postorder_ultrametricity_check(node->getChild(i), ultrametric);
                 heights.push_back(node->getChild(i)->getBL() + node->getChild(i)->getHeight());
@@ -544,4 +545,32 @@ vector <string> get_tip_labels (Tree * tr) {
     }
     sort(labels.begin(), labels.end());
     return labels;
+}
+
+// remove all knuckles in a tree
+void deknuckle_tree (Tree * tree) {
+    for (int i=0; i < tree->getInternalNodeCount(); i++) {
+            Node * tnd = tree->getInternalNode(i);
+            if (tnd->isKnuckle()) {
+                //cout << tnd->getName() << " is a KNUCKLE!" << endl;
+                
+                // attempt to remove knuckle
+                remove_knuckle(tnd);
+            }
+        }
+}
+
+// remove a individual knuckle
+void remove_knuckle (Node * node) {
+    if (node->isKnuckle()) {
+        double el = node->getBL(); // edge length
+        Node * cnd = node->getChild(0);
+        el += cnd->getBL();
+        Node * pnd = node->getParent();
+        
+        // delete node, set grandchild as child to grandparent, set el
+        pnd->addChild(*cnd);
+        cnd->setBL(el);
+        pnd->removeChild(*node);
+    }
 }
