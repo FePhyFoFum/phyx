@@ -4,7 +4,7 @@
 
 Authors: Joseph W. Brown, Joseph F. Walker, and Stephen A. Smith
 
-Citation: Brown, J. W., J. F. Walker, and S. A. Smith; Phyx: phylogenetic tools for unix. Bioinformatics 2017; 33 (12): 1886-1888. doi: 10.1093/bioinformatics/btx063
+Citation: [Brown, J. W., J. F. Walker, and S. A. Smith; Phyx: phylogenetic tools for unix. Bioinformatics 2017; 33 (12): 1886-1888. doi: 10.1093/bioinformatics/btx063](https://academic.oup.com/bioinformatics/article/33/12/1886/2975328/Phyx-phylogenetic-tools-for-unix)
 
 License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -29,7 +29,7 @@ The instructions below assume homebrew, which is convenient for dealing with dep
         brew install cmake
         brew install homebrew/science/nlopt
 
- - In recent versions armadillo from brew works best        
+ - In recent versions armadillo from brew works best:
 
         brew install armadillo
 
