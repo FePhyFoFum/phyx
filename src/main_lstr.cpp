@@ -173,7 +173,6 @@ int main(int argc, char * argv[]) {
     }
     
     TreeReader tr;
-    //vector <string> lines;
 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);

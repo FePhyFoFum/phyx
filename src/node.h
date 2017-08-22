@@ -48,6 +48,7 @@ public:
     bool isExternal();
     bool isInternal();
     bool isRoot();
+    bool isKnuckle();
     bool hasParent();
     void setParent(Node & p);
     int getNumber();

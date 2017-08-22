@@ -4,11 +4,11 @@
 
 Authors: Joseph W. Brown, Joseph F. Walker, and Stephen A. Smith
 
-Citation: Brown, J. W., J. F. Walker, and S. A. Smith; Phyx: phylogenetic tools for unix. Bioinformatics 2017; 33 (12): 1886-1888. doi: 10.1093/bioinformatics/btx063
+Citation: [Brown, J. W., J. F. Walker, and S. A. Smith; Phyx: phylogenetic tools for unix. Bioinformatics 2017; 33 (12): 1886-1888. doi: 10.1093/bioinformatics/btx063](https://academic.oup.com/bioinformatics/article/33/12/1886/2975328/Phyx-phylogenetic-tools-for-unix)
 
 License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 
-Some of the sequence comparison operations use the very nice [edlib library](https://github.com/Martinsos/edlib#alignment-methods). These are reported in this publication: Martin Šošić, Mile Šikić; Edlib: a C/C ++ library for fast, exact sequence alignment using edit distance. Bioinformatics 2017 btw753. doi: 10.1093/bioinformatics/btw753.
+Some of the sequence comparison operations use the very nice [edlib library](https://github.com/Martinsos/edlib#alignment-methods). These are reported in this publication: [Martin Šošić, Mile Šikić; Edlib: a C/C ++ library for fast, exact sequence alignment using edit distance. Bioinformatics 2017 btw753. doi: 10.1093/bioinformatics/btw753](https://academic.oup.com/bioinformatics/article/33/9/1394/2964763/Edlib-a-C-C-library-for-fast-exact-sequence).
 
 # Installation instructions 
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
@@ -29,7 +29,7 @@ The instructions below assume homebrew, which is convenient for dealing with dep
         brew install cmake
         brew install homebrew/science/nlopt
 
- - In recent versions armadillo from brew works best        
+ - In recent versions armadillo from brew works best:
 
         brew install armadillo
 
