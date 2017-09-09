@@ -7,7 +7,7 @@ using namespace std;
 
 #include "sequence.h"
 
-class MultimodalSeqStat {
+class MultinomialSeqStat {
 private:
     int num_char_;
     int num_taxa_;
@@ -21,10 +21,10 @@ private:
     void calculateTestStatistic ();
     
 public:
-    MultimodalSeqStat (vector<Sequence> & seqs);
+    MultinomialSeqStat (vector<Sequence> & seqs);
     double get_test_statistic ();
     
-    //~SequenceConcatenater();
+    //~MultinomialSeqStat();
 };
 
 #endif /* _SSTAT_H_ */

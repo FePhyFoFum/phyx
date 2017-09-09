@@ -10,7 +10,7 @@ using namespace std;
 #include "sstat.h"
 
 
-MultimodalSeqStat::MultimodalSeqStat (vector<Sequence> & seqs) {
+MultinomialSeqStat::MultinomialSeqStat (vector<Sequence> & seqs) {
     seqs_ = seqs;
     num_taxa_ = seqs.size();
     
@@ -25,7 +25,7 @@ MultimodalSeqStat::MultimodalSeqStat (vector<Sequence> & seqs) {
     calculateTestStatistic();
 }
 
-bool MultimodalSeqStat::checked_aligned () {
+bool MultinomialSeqStat::checked_aligned () {
     bool is_aligned_ = true;
     vector <int> seq_lengths (num_taxa_, 0);
     
@@ -45,7 +45,7 @@ bool MultimodalSeqStat::checked_aligned () {
     return is_aligned_;
 }
 
-void MultimodalSeqStat::collect_site_patters () {
+void MultinomialSeqStat::collect_site_patters () {
     vector <string> inputPatterns;
     for (int i = 0; i < num_char_; i++) {
         char a = seqs_[0].get_sequence().at(i);
@@ -92,7 +92,7 @@ void MultimodalSeqStat::collect_site_patters () {
 }
 
 // Calculate T(X) test statistic
-void MultimodalSeqStat::calculateTestStatistic () {
+void MultinomialSeqStat::calculateTestStatistic () {
 /*----------------------------------------------------------------------------------------------------------
 | Calculate summary statistics from Bollback (2002)
 | 1) Calculate n*ln(n) for each pattern
@@ -123,6 +123,6 @@ void MultimodalSeqStat::calculateTestStatistic () {
     test_statistic_ = finalResult;
 }
 
-double MultimodalSeqStat::get_test_statistic () {
+double MultinomialSeqStat::get_test_statistic () {
     return test_statistic_;
 }

@@ -17,7 +17,7 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Calculates multimodal alignment test statistics." << endl;
+    cout << "Calculates multinomial alignment test statistics." << endl;
     cout << "Currently only calculates the test statistic from Bollback (2002) MBE." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
     
     //cout << "Read in " << seqs.size() << " sequences!" << endl;
     
-    MultimodalSeqStat mm(seqs);
+    MultinomialSeqStat mm(seqs);
     (*poos) << mm.get_test_statistic() << endl;
     
     if (outfileset) {
