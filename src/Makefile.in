@@ -1,6 +1,6 @@
 RM := rm -f
 ## Use compiler from configure. May be specified by user with e.g.:
-## ./configure CXX=/usr/local/bin/g++-6
+## ./configure CXX=/usr/local/bin/g++-7
 CXX := @CXX@
 
 ##set the nlopt around
@@ -118,6 +118,10 @@ CONCAT_SRC = concat.cpp main_concat.cpp
 CONCAT_OBJ = concat.o main_concat.o
 CONCAT_DEP = concat.d main_concat.d
 
+SSTAT_SRC = sstat.cpp main_sstat.cpp
+SSTAT_OBJ = sstat.o main_sstat.o
+SSTAT_DEP = sstat.d main_sstat.d
+
 CONTRATES_SRC = main_contrates.cpp optimize_cont_models_nlopt.cpp
 CONTRATES_OBJ = main_contrates.o optimize_cont_models_nlopt.o
 CONTRATES_DEP = main_contrates.d optimize_cont_models_nlopt.d
@@ -191,9 +195,9 @@ VCF2FA_SRC = vcf_reader.cpp main_vcf2fa.cpp
 VCF2FA_OBJ = vcf_reader.o main_vcf2fa.o
 VCF2FA_DEP = vcf_reader.d main_vcf2fa.d
 
-LS_SQ_SRC = seqinfo.cpp main_lssq.cpp
-LS_SQ_OBJ = seqinfo.o main_lssq.o
-LS_SQ_DEP = seqinfo.d main_lssq.d
+LS_SQ_SRC = seq_info.cpp main_lssq.cpp
+LS_SQ_OBJ = seq_info.o main_lssq.o
+LS_SQ_DEP = seq_info.d main_lssq.d
 
 LS_TR_SRC = treeinfo.cpp main_lstr.cpp
 LS_TR_OBJ = treeinfo.o main_lstr.o
@@ -438,6 +442,10 @@ pxseqgen: $(CPP_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
 pxcat: $(CPP_OBJS) $(CONCAT_OBJ)
 	@echo 'building pxcat'
 	$(CXX) -o "pxcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS)
+
+pxsstat: $(CPP_OBJS) $(SSTAT_OBJ)
+	@echo 'building pxsstat'
+	$(CXX) -o "pxsstat" $(OPT_FLAGS) $(SSTAT_OBJ) $(CPP_OBJS)
 
 pxlog: $(CPP_OBJS) $(LOGMANIP_OBJ)
 	@echo 'building pxlog'
