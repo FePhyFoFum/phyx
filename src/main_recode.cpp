@@ -85,11 +85,6 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-//    if (argc == 1) {
-//        cout << "no arguments provided" << endl;
-//        exit(0);
-//    }
-    
     istream * pios = NULL;
     ostream * poos = NULL;
     ifstream * fstr = NULL;
