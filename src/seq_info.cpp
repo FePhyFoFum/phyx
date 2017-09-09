@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#include "seqinfo.h"
+#include "seq_info.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
