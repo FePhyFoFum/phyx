@@ -168,6 +168,149 @@ void LogManipulator::get_sample_counts () {
     }
 }
 
+void LogManipulator::get_column_names () {
+    if (!files_.empty()) {
+        if (num_files_ == 1) {
+            string curfile = files_[0];
+            infilestr_.open(curfile.c_str());
+            string line;
+            bool first_line = true;
+            while (getline(infilestr_, line)) {
+                if (line.empty() || check_comment_line(line)) {
+                    continue;
+                } else if (first_line) {
+                    vector <string> header = tokenize(line);
+                    int curpars = header.size();
+                    num_cols_ = curpars;
+                    parm_columns_ = header;
+                    first_line = false;
+                    break;
+                }
+            }
+            for (int i = 0; i < num_cols_; i++) {
+                (*poos_) << i+1 << ". " << parm_columns_[i] << endl;
+            }
+        } else {
+        // multiple files. make sure number/name/order of columns is identical
+            
+        }
+    }
+}
+
+// delete variables (columns) from a large parameter log
+// assumes a single log file
+// assume that burnin etc. is done separately?
+void LogManipulator::delete_columns (vector <int> const& col_ids) {
+    if (!files_.empty()) {
+        ntotal_samples_ = 0;
+        string curfile = files_[0];
+        infilestr_.open(curfile.c_str());
+        string line;
+        bool first_line = true;
+        int sample_counter = 0;
+        vector <int> cols_to_retain;
+        
+        while (getline(infilestr_, line)) {
+            if (line.empty() || check_comment_line(line)) {
+                continue;
+            } else if (first_line) {
+                vector <string> header = tokenize(line);
+                int curpars = header.size();
+                num_cols_ = curpars;
+                parm_columns_ = header;
+                
+                cols_to_retain.resize(num_cols_);
+                iota(cols_to_retain.begin(), cols_to_retain.end(), 0);
+                
+                // remove unwanted column indices (reverse order)
+                for (vector<int>::const_reverse_iterator i = col_ids.rbegin(); i < col_ids.rend(); i++) {
+                    // subtract 1 because input is 1-indexed
+                    cols_to_retain.erase(cols_to_retain.begin()+(*i)-1);
+                }
+                
+                num_cols_retain_ = cols_to_retain.size();
+                for (int i=0; i < num_cols_retain_; i++) {
+                    (*poos_) << header[cols_to_retain[i]];
+                    if (i < (num_cols_retain_ - 1)) {
+                        (*poos_) << "\t";
+                    }
+                }
+                (*poos_) << endl;
+                first_line = false;
+                continue;
+            } else {
+                vector <string> samp = tokenize(line);
+                for (int i=0; i < num_cols_retain_; i++) {
+                    (*poos_) << samp[cols_to_retain[i]];
+                    if (i < (num_cols_retain_ - 1)) {
+                        (*poos_) << "\t";
+                    }
+                }
+                (*poos_) << endl;
+                sample_counter++;
+            }
+        }
+            
+        if (verbose_) {
+            cout << "Retained " << sample_counter << " samples for "
+                << num_cols_retain_ << " variables." << endl;
+        }
+    }
+}
+
+// complement of above: retain columns passed in
+void LogManipulator::retain_columns (vector <int> const& col_ids) {
+    if (!files_.empty()) {
+        ntotal_samples_ = 0;
+        string curfile = files_[0];
+        infilestr_.open(curfile.c_str());
+        string line;
+        bool first_line = true;
+        int sample_counter = 0;
+        vector <int> cols_to_retain;
+        for (int i = 0; i < (int)col_ids.size(); i++) {
+            // subtract 1 because input is 1-indexed
+            cols_to_retain.push_back(col_ids[i] - 1);
+        }
+        num_cols_retain_ = cols_to_retain.size();
+        
+        while (getline(infilestr_, line)) {
+            if (line.empty() || check_comment_line(line)) {
+                continue;
+            } else if (first_line) {
+                vector <string> header = tokenize(line);
+                int curpars = header.size();
+                num_cols_ = curpars;
+                parm_columns_ = header;
+                for (int i=0; i < num_cols_retain_; i++) {
+                    (*poos_) << header[cols_to_retain[i]];
+                    if (i < (num_cols_retain_ - 1)) {
+                        (*poos_) << "\t";
+                    }
+                }
+                (*poos_) << endl;
+                first_line = false;
+                continue;
+            } else {
+                vector <string> samp = tokenize(line);
+                for (int i=0; i < num_cols_retain_; i++) {
+                    (*poos_) << samp[cols_to_retain[i]];
+                    if (i < (num_cols_retain_ - 1)) {
+                        (*poos_) << "\t";
+                    }
+                }
+                (*poos_) << endl;
+                sample_counter++;
+            }
+        }
+            
+        if (verbose_) {
+            cout << "Retained " << sample_counter << " samples for "
+                << num_cols_retain_ << " variables." << endl;
+        }
+    }
+}
+
 void LogManipulator::sample_parameters () {
     if (!files_.empty()) {
         ntotal_samples_ = 0;

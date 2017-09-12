@@ -87,6 +87,24 @@ vector <double> parse_double_comma_list (string& str) {
     return res;
 }
 
+vector <int> parse_int_comma_list (string& str) {
+    vector <int> res;
+    std::stringstream ss(str);
+    double i;
+    while (ss >> i) {
+        res.push_back(i);
+        bool done = false;
+        while (!done) { // shouldn't be any spaces, but let's be safe
+            if (ss.peek() == ' ' || ss.peek() == ',') {
+                ss.ignore();
+            } else {
+                done = true;
+            }
+        }
+    }
+    return res;
+}
+
 
 bool is_number (const string& s) {
     string::const_iterator it = s.begin();
@@ -568,9 +586,9 @@ bool check_for_input_to_stream(){
     struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
     int ret = 0;
     ret = poll(&pfd, 1, 500);
-    if (ret == 0){
+    if (ret == 0) {
         return false;
-    }else{
+    } else {
         return true;
     }
 }

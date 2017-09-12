@@ -26,6 +26,7 @@ private:
     int ntotal_samples_;
     int num_files_;
     int num_cols_;
+    int num_cols_retain_;
     
     string tree_name_prefix_;
     
@@ -50,8 +51,11 @@ public:
         ostream* poos, bool const& verbose);
     void count ();
     void get_sample_counts ();
+    void get_column_names ();
     void sample(int const& burnin, int const& nthin, int const& nrandom,
         int const& seed);
+    void delete_columns (vector <int> const& col_ids);
+    void retain_columns (vector <int> const& col_ids);
     
 };
 

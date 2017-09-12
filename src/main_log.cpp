@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <cstring>
 #include <getopt.h>
 
@@ -28,6 +29,9 @@ void print_help() {
     cout << " -n, --thin=INT      interval of resampling" << endl;
     cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << endl;
     cout << " -i, --info          calculate log file attributes and exit" << endl;
+    cout << " -c, --columns       print out column names (parameter logs only)" << endl;
+    cout << " -d, --delete=CSL    delete columns by index sep by commas (NO SPACES!) (parameter logs only)" << endl;
+    cout << " -k, --keep=CSL      keep only columns by index sep by commas (NO SPACES!) (parameter logs only)" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -v, --verbose       make the output more verbose" << endl;
     cout << " -h, --help          display this help and exit" << endl;
@@ -47,7 +51,10 @@ static struct option const long_options[] =
     {"burnin", required_argument, NULL, 'b'},
     {"thin", required_argument, NULL, 'n'},
     {"rand", required_argument, NULL, 'r'},
-    {"info", required_argument, NULL, 'i'},
+    {"info", no_argument, NULL, 'i'},
+    {"columns", no_argument, NULL, 'c'},
+    {"delete", required_argument, NULL, 'd'},
+    {"keep", required_argument, NULL, 'k'},
     {"seed", required_argument, NULL, 'x'},
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
@@ -63,14 +70,18 @@ int main(int argc, char * argv[]) {
     bool pfileset = false;
     bool tfileset = false;
     vector <string> input_files;
+    vector <int> col_indices;
     
     int burnin = 0;
     int nthin = 1;
     int nrandom = -1;
     int seed = -1;
     bool verbose = false;
-    
     bool count = false;
+    bool get_columns = false;
+    bool delete_columns = false;
+    bool keep_columns = false;
+    string incolids;
     
     string logtype;
     
@@ -81,7 +92,7 @@ int main(int argc, char * argv[]) {
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "p:t:o:b:n:r:ix:vhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "p:t:o:b:n:r:icd:k:x:vhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -146,6 +157,21 @@ int main(int argc, char * argv[]) {
             case 'i':
                 count = true;
                 break;
+            case 'c':
+                get_columns = true;
+                break;
+            case 'd':
+                delete_columns = true;
+                incolids = strdup(optarg);
+                col_indices = parse_int_comma_list(incolids);
+                sort(col_indices.begin(), col_indices.end());
+                break;
+            case 'k':
+                keep_columns = true;
+                incolids = strdup(optarg);
+                col_indices = parse_int_comma_list(incolids);
+                sort(col_indices.begin(), col_indices.end());
+                break;
             case 'x':
                 seed = atoi(strdup(optarg));
                 break;
@@ -178,7 +204,6 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    
     if (tfileset == true && pfileset == true) {
         cout << "Set tree file *or* parameter file, not both. Exiting." << endl;
         exit (0);
@@ -193,6 +218,10 @@ int main(int argc, char * argv[]) {
         pios = &cin;
     }
 */
+    if (get_columns && tfileset) {
+        cout << "Argument 'columns' is not applicable for tree files. Exiting." << endl;
+        exit (0);
+    }
     
     //LogManipulator lm (logtype, input_files, pios, poos);
     LogManipulator lm (logtype, input_files, poos, verbose);
@@ -200,6 +229,24 @@ int main(int argc, char * argv[]) {
     if (count) {
         lm.count();
         lm.get_sample_counts();
+    } else if (get_columns) {
+        if (tfileset) {
+            cout << "Argument 'columns' is not applicable for tree files. Exiting." << endl;
+            exit (0);
+        }
+        lm.get_column_names();
+    } else if (delete_columns)  {
+        if (tfileset) {
+            cout << "Argument 'delete columns' is not applicable for tree files. Exiting." << endl;
+            exit (0);
+        }
+        lm.delete_columns(col_indices);
+    } else if (keep_columns) {
+        if (tfileset) {
+            cout << "Argument 'keep columns' is not applicable for tree files. Exiting." << endl;
+            exit (0);
+        }
+        lm.retain_columns(col_indices);
     } else {
         lm.sample(burnin, nthin, nrandom, seed);
     }
