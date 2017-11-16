@@ -28,21 +28,8 @@
 %\usepackage{etoolbox}
 %\usepackage{setspace}% http://ctan.org/pkg/setspace
 
-
 \linespread{1}
-
-
 \setcounter{secnumdepth}{0}
-% Our sections are not numbered and our papers do not have
-% Tables of Contents. We don't 
-% present a list of figures or list of tables, either.
-
-% Any common font is fine.
-% (A common sans-serif font should be used on figures, but figures should be
-% separate from the LaTeX document.)
-
-%\pagestyle{empty}
-
 \pagenumbering{arabic}
 
 \begin{document}
@@ -74,14 +61,13 @@ All programs are open source and Phyx operates under the GPL3 licence: \href{htt
 Installation instructions for both unix and mac may be found at the Phyx wiki: \href{https://github.com/FePhyFoFum/phyx/wiki/Installation}{https://github.com/FePhyFoFum/phyx/wiki/Installation}.
 \end{flushleft}
 
-\section{Features of Phyx}
+\section{Pheatures of Phyx}
 
 The following is a list of the programs that are currently available. For all programs typing the argument \texttt{-h} will produce a list of program options. Below is a list of current programs with examples on how to run them. Programs are updated regularly with new options being added. The most up to date list of options for each program can be found in the help menu.
 
 \subsection{Data formats}
 
 Phyx supports the popular formats for sequence alignments (fasta, fastq, phylip, and Nexus) and trees (newick and Nexus) and uses format auto-detection on the fly. Therefore, for nearly all Phyx programs any of these formats (or a combination thereof, e.g. with \texttt{pxcat}, below) can be used without user specification.
-
 
 \subsection{Repeatability}
 
@@ -255,7 +241,6 @@ pxmrca -t mrca_test.tre -m mrca.txt
 \end{verbatim}
 \end{flushleft}
 
-
 \subsection{pxmrcacut}
 
 With extremely large trees becoming more common place (species level, gene families etc.) it is useful to focus on certain clades. This program allows the user to specify tips of a clade (-m), only two are required and will remove a newick for the smallest clade that encompasses both species specified. mrca file format:
@@ -327,7 +312,6 @@ pxrls -s SeqFile -c CurrentNames -n NewNames
 \end{verbatim}
 \end{flushleft}
 
-
 \subsection{pxrlt}
 
 This program provides a way to relabel the tips of trees by giving a tree file and specifying files listing current \texttt{-c} and new names \texttt{-n}; name ordering in the files must be identical, with one taxon per line.
@@ -374,7 +358,6 @@ pxrr -t rr_test.tre -g s1,s2
 
 This programs are all designed in a similar vain, with the ability to convert a file from its current format to fasta, phylip or nexus, respectively. You may also specify if you would like to have the output in uppercase with the option \texttt{-u}.
 
-
 \begin{flushleft}
 \begin{verbatim}
 pxs2* -s Alignment
@@ -388,7 +371,6 @@ This is a sequence simulator that allows the user to give a tree and specify a m
 The sequence simulator features have been thoroughly tested except the multimodel simulation which is still under active development and has not been thoroughly tested to the developers comfort!
 
 For multimodel simulations it is easiest to print out the node labels on your tree originally using the \texttt{-p} option. Once you know the nodes that you would like the model to change at you can specify these nodes on the input using the \texttt{-m} option. An example if you wanted two models of evolution on your tree one for the tree and one where it changes at node two, you would enter the command as follows.
-
 
 \begin{flushleft}
 example\_file example (which uses a simple JC69 model):
@@ -410,6 +392,16 @@ If, for example, the model you want for the tree is (.33,.33,.33,.33,.33) and yo
 \begin{verbatim}
 pxseqgen -t tree_file -o output_alignment 
 -m .33,.33,.33,.33,.33,.33,2,.3,.3,.2,.5,.4,.2
+\end{verbatim}
+\end{flushleft}
+
+\subsection{pxsstat}
+
+This program calculates multinomial alignment test statistics that can be used for assessing model adequacy. Currently limited to the test statistic of Bollback (2002) MBE, but more are coming.
+
+\begin{flushleft}
+\begin{verbatim}
+pxsstat -s Alignment.fa
 \end{verbatim}
 \end{flushleft}
 
@@ -446,7 +438,6 @@ pxt2new -t Tree.nex
 \subsection{pxtlate}
 
 This program will take an input coding DNA sequence and translate it to the associated amino acid alignment. The \texttt{-t} argument specifies which translation table to use; the standard code is used by default. Use \texttt{-h} to see which tables are currently available, and feel free to suggest additions (\href{https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi}{see alternative translation tables described on genbank}).
-
 
 \begin{flushleft}
 \begin{verbatim}
