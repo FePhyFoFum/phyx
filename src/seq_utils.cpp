@@ -246,9 +246,16 @@ void write_phylip_alignment(vector <Sequence> & seqs, bool const& uppercase, ost
 void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
     string datatype = seqs[0].get_alpha_name();
+    
+    //cout << endl << "datatype = " << datatype << endl << endl;
+    
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
         datatype = "PROTEIN";
     }
+    if (datatype == "MULTI") {
+        datatype = "STANDARD";
+    }
+    
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }

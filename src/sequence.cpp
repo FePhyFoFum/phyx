@@ -69,6 +69,25 @@ void Sequence::set_alpha(seqAlpha s) {
 void Sequence::infer_alpha () {
     string str = seq;
     
+    // do quick check for 'standard' data: will contain numbers
+    if (str.find_first_of("0123456789") != std::string::npos) {
+        alphabet = MULTI;
+        return;
+    }
+    
+    // the multi version below counts the number of digits.
+    // i think the above version (_any_ digits) should suffice, and will be faster
+    /*
+    int digitCount = 0; // could exit after first digit
+    for (unsigned int i=0; i < str.size(); i++) {
+        if (isdigit(str[i])) digitCount++;
+    }
+    if (digitCount > 0) {
+        alphabet = MULTI;
+        return;
+    }
+    */
+    
     int dnaHit = 0;
     int proteinHit = 0;
     int validChars = 0;
