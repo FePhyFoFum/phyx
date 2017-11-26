@@ -296,6 +296,7 @@ int main(int argc, char * argv[]) {
                     continue;
                 }
             }
+            //end using cutoffs
             vector<int> nms_i;
             set<string> nms_s;
             copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
@@ -381,6 +382,19 @@ int main(int argc, char * argv[]) {
                 unrooted = true;
             }
             for (int j=0; j < trees[i]->getInternalNodeCount(); j++) {
+                //if we are using a cutoff, skip the edge that is below the num
+                if(cutoff == true){
+                    if(trees[i]->getInternalNode(j)->getName().length() < 1)
+                        continue;
+                    char* pEnd;
+                    double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd) ;
+                    if(td < cutnum){
+                        continue;
+                    }
+                }
+                //end using cutoffs
+
+
                 vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
                 vector<int> nms_i;
                 for (unsigned int k=0; k < nms.size(); k++) {
