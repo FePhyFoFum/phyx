@@ -28,6 +28,7 @@ void print_help() {
     cout << " -u, --uniquetree    output unique trees and *no* other output" << endl;
     cout << " -m, --maptree=FILE  put the bipart freq on the edges of this tree. This will " << endl;
     cout << "                           create a *.pxbpmapped.tre file." <<endl;
+    cout << " -c, --cutoff        skip biparts that have support lower than this." << endl;
     cout << " -s, --suppress      don't print all the output (maybe you use this" << endl;
     cout << "                           with the maptree feature" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
@@ -40,7 +41,7 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxbp 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxbp 0.991\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -49,6 +50,7 @@ static struct option const long_options[] =
     {"edgeall", no_argument, NULL, 'e'},
     {"uniquetree", no_argument, NULL, 'u'},
     {"maptree", required_argument, NULL, 'm'},
+    {"cutoff", required_argument, NULL, 'c'},
     {"suppress", no_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
@@ -67,12 +69,14 @@ int main(int argc, char * argv[]) {
     bool edgewisealltaxa = false;
     bool uniquetree = false;
     bool suppress = false;
+    bool cutoff = false;
     char * treef = NULL;
     char * mtreef = NULL;
     char * outf = NULL;
+    double cutnum = 0;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:m:vseuhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:m:c:vseuhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -97,6 +101,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 's':
                 suppress = true;
+                break;
+            case 'c':
+                cutoff = true;
+                cutnum = atof(strdup(optarg));
                 break;
             case 'm':
                 mapfileset = true;
@@ -277,6 +285,16 @@ int main(int argc, char * argv[]) {
             //skip the root
             if (nms.size() == rt_nms.size()) {
                 continue;
+            }
+            //if we are using a cutoff, skip the edge that is below the num
+            if(cutoff == true){
+                if(trees[i]->getInternalNode(j)->getName().length() < 1)
+                    continue;
+                char* pEnd;
+                double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd) ;
+                if(td < cutnum){
+                    continue;
+                }
             }
             vector<int> nms_i;
             set<string> nms_s;
