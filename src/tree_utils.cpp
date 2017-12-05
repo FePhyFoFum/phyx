@@ -286,12 +286,9 @@ double get_tree_length (Tree * tr) {
    return length;
 }
 
-// NEED THIS?!?
-// copying this outside of tree_info as it is generally useful
+// NEED THIS?!? probably not. maybe doesn't hurt to have another interface?
 bool has_branchlengths (Tree * tr) {
-    bool gotem = false;
-    double treelength = get_tree_length(tr);
-    gotem = (treelength > 0.0) ? true : false;
+    bool gotem = tr->hasEdgeLengths();
     return gotem;
 }
 
