@@ -286,7 +286,7 @@ double get_tree_length (Tree * tr) {
    return length;
 }
 
-
+// NEED THIS?!?
 // copying this outside of tree_info as it is generally useful
 bool has_branchlengths (Tree * tr) {
     bool gotem = false;

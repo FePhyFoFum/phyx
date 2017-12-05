@@ -17,6 +17,7 @@ TreeInfo::TreeInfo (Tree * intree) {
     calc_stats();
 }
 
+
 TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
         bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
         bool const& lengthcheck, bool const& namecheck, bool const& rtvarcheck,
@@ -26,8 +27,7 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
         ultrametric_tree_ = is_ultrametric_paths(tree_);
         (*poos) << std::boolalpha << ultrametric_tree_ << endl;
     } else if (rtvarcheck) {
-        treelength_ = get_tree_length(tree_);
-        has_branchlengths_ = (treelength_ > 0.0) ? true : false;
+        has_branchlengths_ = tree_->hasEdgeLengths();
         if (has_branchlengths_) {
             rtvar_ = get_root_tip_var(tree_);
             (*poos) << rtvar_ << endl;
@@ -52,9 +52,9 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
         ntips_ = tree_->getExternalNodeCount();
         (*poos) << ntips_ << endl;
     } else if (lengthcheck) {
-        treelength_ = get_tree_length(tree_);
-        has_branchlengths_ = (treelength_ > 0.0) ? true : false;
+        has_branchlengths_ = tree_->hasEdgeLengths();
         if (has_branchlengths_) {
+            treelength_ = get_tree_length(tree_);
             (*poos) << treelength_ << endl;
         } else {
             (*poos) << "NA" << endl;
@@ -67,9 +67,14 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
     }
 }
 
+
 void TreeInfo::calc_stats () {
-    treelength_ = get_tree_length(tree_);
-    has_branchlengths_ = (treelength_ > 0.0) ? true : false;
+    has_branchlengths_ = tree_->hasEdgeLengths();
+    if (has_branchlengths_) {
+        treelength_ = get_tree_length(tree_);
+    } else {
+        treelength_ = 0.0;
+    }
     nintnodes_ = tree_->getInternalNodeCount();
     ntips_ = tree_->getExternalNodeCount();
     rooted_tree_ = is_rooted(tree_);
