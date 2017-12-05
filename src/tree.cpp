@@ -116,8 +116,6 @@ Node * Tree::getNode(string & name) {
     return ret;
 }
 
-
-
 int Tree::getNodeCount() {
     return nodes.size();
 }
@@ -128,6 +126,14 @@ Node * Tree::getRoot() {
 
 void Tree::setRoot(Node * inroot) {
     root = inroot;
+}
+
+void Tree::setEdgeLengthsPresent(bool & res) {
+    edgeLengths = res;
+}
+
+bool Tree::hasEdgeLengths() {
+    return edgeLengths;
 }
 
 void Tree::unRoot() {

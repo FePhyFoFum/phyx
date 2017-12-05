@@ -23,6 +23,7 @@ private:
     map<string, Node*> name_node_map;
     int internalNodeCount;
     int externalNodeCount;
+    bool edgeLengths;
     
     void processReRoot(Node * node);
     void exchangeInfo(Node * node1, Node * node2);
@@ -50,6 +51,8 @@ public:
     int getInternalNodeCount();
     Node * getRoot();
     void setRoot(Node * inroot);
+    void setEdgeLengthsPresent(bool & res);
+    bool hasEdgeLengths();
     void unRoot();
     bool reRoot(Node * inroot);
     void duplicateRootSupport();

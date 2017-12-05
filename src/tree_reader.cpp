@@ -28,6 +28,9 @@ TreeReader::TreeReader() {}
  * we should take this out as soon as we are ready to repoint
  * the existing code to the right bits
  */
+
+// TODO: record whether edge lengths are present, store as property
+
 Tree * TreeReader::readTree(string trees) {
     Tree * tree = new Tree();
     string pb = trees;
@@ -38,6 +41,7 @@ Tree * TreeReader::readTree(string trees) {
     bool in_quote = false;
     char quoteType;
     Node * currNode = NULL;
+    double sumEL = 0.0;
     while (keepGoing == true) {
         //cout << "Working on: " << nextChar << endl;
         if (nextChar == '(') {
@@ -132,6 +136,7 @@ Tree * TreeReader::readTree(string trees) {
             } // work on edge
             double edd = strtod(edgeL.c_str(), NULL);
             currNode->setBL(edd);
+            sumEL += edd;
             x--;
         }
         // note/annotation
@@ -211,7 +216,10 @@ Tree * TreeReader::readTree(string trees) {
         }
         nextChar = pb.c_str()[x];
     }
+    bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
+    tree->setEdgeLengthsPresent(hasEdgeLengths);
     tree->processRoot();
+    
     return tree;
 }
 
