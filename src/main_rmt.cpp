@@ -36,7 +36,7 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxrmt 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxrmt 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -170,7 +170,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (going == true) {
                 remove_tips(tree, names, silent);
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }
@@ -180,7 +180,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going == true) {
                 remove_tips(tree, names, silent);
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }

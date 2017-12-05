@@ -167,7 +167,7 @@ int main(int argc, char * argv[]) {
     for (int c=0; c < nchars; c++) {
         cerr << "character: " << c << endl;
         if (analysis == 0) {
-           // cout << "Input tree: " << trees[0]->getRoot()->getNewick(true) << ";" << endl;
+           // cout << "Input tree: " << getNewickString(trees[0]) << ";" << endl;
             if (c == 0) {
                 (*poouts) << "#nexus" << endl << "begin trees;" << endl;
             }
@@ -200,7 +200,7 @@ int main(int argc, char * argv[]) {
                     trees[x]->getExternalNode(i)->setName(s.str());
                 }
                 (*poouts) << "tree tree" << c << " = ";
-                (*poouts) << trees[x]->getRoot()->getNewick(true) << ";" << endl;
+                (*poouts) << getNewickString(trees[x]) << endl;
             }
             if (c == (nchars - 1)) {
                 (*poouts) << "end;\n" << endl;

@@ -154,19 +154,20 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                for (int i=0;i<tree->getInternalNodeCount();i++){
+                for (int i=0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
-                    if (nodeid_map.find(tnode->getName())!=nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
-                }for (int i=0;i<tree->getExternalNodeCount();i++){
+                }
+                for (int i=0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
-                    if (nodeid_map.find(tnode->getName())!=nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                //put annotations here
-                (*poos) << "tree tree = " << tree->getRoot()->getNewick(true) << ";" << endl;
+                // put annotations here
+                (*poos) << "tree tree = " << getNewickString(tree) << endl;
                 delete tree;
             }
         }
@@ -182,19 +183,20 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                for (int i=0;i<tree->getInternalNodeCount();i++){
+                for (int i=0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
-                    if (nodeid_map.find(tnode->getName())!=nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()){
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
-                }for (int i=0;i<tree->getExternalNodeCount();i++){
+                }
+                for (int i=0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
-                    if (nodeid_map.find(tnode->getName())!=nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()){
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }   
-                //put annotations here
-                (*poos) << "tree tree = " << tree->getRoot()->getNewick(true) << ";" << endl;
+                // put annotations here
+                (*poos) << "tree tree = " << getNewickString(tree) << endl;
                 delete tree;
             }
         }

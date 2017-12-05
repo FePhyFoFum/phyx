@@ -141,7 +141,7 @@ int main(int argc, char * argv[]) {
        MRCANAME = tip1 tip2 ... 
     */
     map<string, vector<string> > mrcas;
-    if (mrcaset){
+    if (mrcaset) {
         ifstream inmrca(mrcaf);
         string mrcaline;
         while (getline(inmrca, mrcaline)) {
@@ -186,19 +186,19 @@ int main(int argc, char * argv[]) {
                         Node * nd = tree->getMRCA((*it).second);
                         nd->setName((*it).first);
                     }
-                }else{
-                    for(int i=0; i<tree->getInternalNodeCount();i++){
-                        if (tree->getInternalNode(i)->getName().size()==0){
+                } else {
+                    for (int i=0; i<tree->getInternalNodeCount();i++) {
+                        if (tree->getInternalNode(i)->getName().size() == 0) {
                             tree->getInternalNode(i)->setName("px"+std::to_string(count));
                             count ++;
                         }
                     }
                 }
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }
-    }else{
+    } else {
         map <string, string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
@@ -207,7 +207,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                if(mrcaset){
+                if (mrcaset) {
                     map<string, vector<string> >::iterator it;
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
                         //cout << "Dealing with clade '" << (*it).first << "'" << endl;
@@ -218,15 +218,15 @@ int main(int argc, char * argv[]) {
                         Node * nd = tree->getMRCA((*it).second);
                         nd->setName((*it).first);
                     }
-                }else{
-                    for(int i=0; i<tree->getInternalNodeCount();i++){
-                        if (tree->getInternalNode(i)->getName().size()==0){
+                } else {
+                    for (int i=0; i<tree->getInternalNodeCount();i++) {
+                        if (tree->getInternalNode(i)->getName().size() == 0) {
                             tree->getInternalNode(i)->setName("px"+std::to_string(count));
                             count ++;
                         }
                     }
                 }
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }

@@ -149,13 +149,12 @@ int main(int argc, char * argv[]) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);
                     if (!isultra) {
-                        cout << "Setting root height only works for ultrametric trees. Exiting."
-                            << endl;
+                        cout << "Setting root height only works for ultrametric trees. Exiting." << endl;
                         exit(0);
                     }
                 }
                 ts.rescale(tree);
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }
@@ -172,13 +171,12 @@ int main(int argc, char * argv[]) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);
                     if (!isultra) {
-                        cout << "Setting root height only works for ultrametric trees. Exiting."
-                            << endl;
+                        cout << "Setting root height only works for ultrametric trees. Exiting." << endl;
                         exit(0);
                     }
                 }
                 ts.rescale(tree);
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }

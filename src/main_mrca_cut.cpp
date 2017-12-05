@@ -166,7 +166,8 @@ int main(int argc, char * argv[]) {
                 exit (0);
             }
             Node * nd = tree->getMRCA((*it).second);
-            (*poos) << nd->getNewick(true) << ";" << endl;
+            bool bl = has_branchlengths(tree);
+            (*poos) << nd->getNewick(bl) << ";" << endl;
         }
         delete tree;
     }

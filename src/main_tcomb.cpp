@@ -144,10 +144,11 @@ int main(int argc, char * argv[]) {
     bool going = true;
     Tree * bigtree;
     while (going) {
-        if (retstring.size() > 1)
+        if (retstring.size() > 1) {
             bigtree = read_next_tree_from_stream_newick (*pios, retstring, &going);
-        else
+        } else {
             going = false;
+        }
     }
     set<string> btns = bigtree->getRoot()->get_leave_names_set();
 
@@ -156,6 +157,7 @@ int main(int argc, char * argv[]) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
+    
     going = true;
     while (going) {
         if (retstring.size() > 1){
@@ -235,7 +237,7 @@ int main(int argc, char * argv[]) {
                         break;
                 }
             }
-            (*poos) << addtree->getRoot()->getNewick(true) << ";" << endl;
+            (*poos) << getNewickString(addtree) << endl;
             delete addtree;
         }else
             going = false;

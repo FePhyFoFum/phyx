@@ -508,7 +508,7 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
                 }
             }
             success = tree->reRoot(n);
-            string intermediate = tree->getRoot()->getNewick(true) + ";";
+            string intermediate = getNewickString(tree);
             //cout << "intermediate result: " << intermediate << endl;
             delete tree; // apparently necessary
             TreeReader tr;

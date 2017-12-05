@@ -24,6 +24,7 @@ using arma::expmat;
 #include "node.h"
 #include "tree.h"
 #include "tree_reader.h"
+#include "tree_utils.h"
 
 // TODO: do we want this order?
 /*Default Rate Matrix looks like this, I don't know why but I always go A,T,C,G
@@ -410,7 +411,8 @@ void SequenceGenerator::preorder_tree_traversal () {
 
 // this should probably be returned on its own
 void SequenceGenerator::print_node_labels() {
-    cout << tree_->getRoot()->getNewick(true) <<";" << endl;
+    cout << getNewickString(tree_) << endl;
+    //cout << tree_->getRoot()->getNewick(true) <<";" << endl;
 }
 
 

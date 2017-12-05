@@ -44,11 +44,11 @@ int main(int argc, char * argv[]){
 
     Tree * tree = tr.readTree(test);
     cout << tree->getNodeCount() << endl;
-/*    cout << tree->getRoot()->getNewick(true) << ";" << endl;
+/*  cout << getNewickString(tree) << endl;
     cout << tree->getRoot()->getNewick(true,"number") << ";" << endl;
     string a = "c";
     tree->pruneExternalNode(tree->getExternalNode(a));
-    cout << tree->getRoot()->getNewick(true) << ";" << endl;
+    cout << getNewickString(tree) << endl;
 
     StringNodeObject sno("...a node object");
     tree->getRoot()->assocObject("test",sno);

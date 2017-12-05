@@ -1,29 +1,30 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <cstring>
 #include <getopt.h>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-#include "utils.h"
 #include "tree_reader.h"
-#include "relabel.h"
+#include "tree.h"
 #include "tree_utils.h"
+#include "utils.h"
 #include "log.h"
 
-void print_help() {
-    cout << "Taxon relabelling for trees." << endl;
-    cout << "This will take nexus and newick inputs." << endl;
-    cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << endl;
+void print_help () {
+    cout << "General tree cleaner." << endl;
+    cout << "By default will remove annotations (node labels), 'knuckles', and root edges." << endl;
+    cout << "Alternatively choose 1 property." << endl;
     cout << endl;
-    cout << "Usage: pxrlt [OPTION]... " << endl;
+    cout << "Usage: pxcltr [OPTION]... " << endl;
     cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << endl;
-    cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << endl;
+    cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
+    cout << " -r, --root          remove root edge (if present)" << endl;
+    cout << " -l, --labels        remove internal node labels" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -32,14 +33,15 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxrlt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxclt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"cnames", required_argument, NULL, 'c'},
-    {"nnames", required_argument, NULL, 'n'},
+    {"root", no_argument, NULL, 'r'},
+    {"labels", no_argument, NULL, 'l'},
     {"outf", required_argument, NULL, 'o'},
+    {"showd", no_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -51,15 +53,16 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    bool cfileset = false;
-    bool nfileset = false;
-    char * outf = NULL;
+    bool optionsset = false; // if true, do only 1 operation
+    bool removeroot = false;
+    bool removelabels = false;
+    
     char * treef = NULL;
-    string cnamef = "";
-    string nnamef = "";
+    char * outf = NULL;
+    
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:c:n:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:rlo:x:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -69,15 +72,13 @@ int main(int argc, char * argv[]) {
                 treef = strdup(optarg);
                 check_file_exists(treef);
                 break;
-            case 'c':
-                cfileset = true;
-                cnamef = strdup(optarg);
-                check_file_exists(cnamef.c_str());
+            case 'r':
+                removeroot = true;
+                optionsset = true;
                 break;
-            case 'n':
-                nfileset = true;
-                nnamef = strdup(optarg);
-                check_file_exists(nnamef.c_str());
+            case 'l':
+                removelabels = true;
+                optionsset = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -99,34 +100,32 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
-    
-    if (!nfileset | !cfileset) {
-        cout << "Must supply both name files (-c for current, -n for new)." << endl;
+    if ((removeroot + removelabels) > 1) {
+        cout << "Specify 1 property only (or leave blank to clean all)" << endl;
         exit(0);
     }
     
-    if (tfileset == true) {
-        fstr = new ifstream(treef);
-        pios = fstr;
-    } else {
-        pios = &cin;
-        if (check_for_input_to_stream() == false) {
-            print_help();
-            exit(1);
-        }
-    }
+    istream* pios = NULL;
+    ostream* poos = NULL;
+    ifstream* fstr = NULL;
+    ofstream* ofstr = NULL;
+
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
     } else {
         poos = &cout;
     }
-    
-    Relabel rl (cnamef, nnamef);
+    if (tfileset == true) {
+        fstr = new ifstream(treef);
+        pios = fstr;
+    } else {
+        pios = &cin;
+        if (check_for_input_to_stream() == false){
+            print_help();
+            exit(1);
+        }
+    }
     
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
@@ -134,13 +133,14 @@ int main(int argc, char * argv[]) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
+    
     bool going = true;
     if (ft == 1) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going) {
-                rl.relabel_tree(tree);
+            if (tree != NULL) {
+                deknuckle_tree(tree);
                 (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
@@ -154,15 +154,12 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                rl.relabel_tree(tree);
+                deknuckle_tree(tree);
                 (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }
     }
-    
-    // TODO: add missing Nexus stuff
-    
     
     if (outfileset) {
         ofstr->close();

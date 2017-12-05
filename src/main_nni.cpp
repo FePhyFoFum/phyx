@@ -146,7 +146,7 @@ int main(int argc, char * argv[]) {
                 map<Node*,vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree,tree_map);
                 nni_from_tree_map(tree,tree_map);
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
                 treeCounter++;
             }
@@ -164,7 +164,7 @@ int main(int argc, char * argv[]) {
                 map<Node*,vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree,tree_map);
                 nni_from_tree_map(tree,tree_map);
-                (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
                 treeCounter++;
             }

@@ -188,7 +188,7 @@ int main(int argc, char * argv[]) {
                     if (!exists) {
                         cerr << "the outgroup taxa don't exist in this tree " << endl;
                     } else {
-                        (*poos) << tree->getRoot()->getNewick(true) << ";"<< endl;
+                        (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
                 }
@@ -221,7 +221,7 @@ int main(int argc, char * argv[]) {
                     if (!exists) {
                         cerr << "the outgroup taxa don't exist in this tree " << endl;
                     } else {
-                        (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                        (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
                 }
@@ -239,7 +239,7 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (tree != NULL) {
                     tree->unRoot();
-                    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                    (*poos) << getNewickString(tree) << endl;
                     delete tree;
                 }
             }
@@ -249,7 +249,7 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
                     tree->unRoot();
-                    (*poos) << tree->getRoot()->getNewick(true) << ";" << endl;
+                    (*poos) << getNewickString(tree) << endl;
                     delete tree;
                 }
             }
