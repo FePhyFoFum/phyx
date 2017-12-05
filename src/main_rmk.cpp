@@ -127,9 +127,10 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
-                bool bl = tree->hasEdgeLengths();
+                //bool bl = tree->hasEdgeLengths();
                 deknuckle_tree(tree);
-                (*poos) << tree->getRoot()->getNewick(bl) << ";" << endl;
+                //(*poos) << tree->getRoot()->getNewick(bl) << ";" << endl;
+                (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
         }

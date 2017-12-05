@@ -286,11 +286,13 @@ double get_tree_length (Tree * tr) {
    return length;
 }
 
+
 // NEED THIS?!? probably not. maybe doesn't hurt to have another interface?
 bool has_branchlengths (Tree * tr) {
     bool gotem = tr->hasEdgeLengths();
     return gotem;
 }
+
 
 // simply multiply each edge by some scalar (determined somehow)
 void rescale_tree(Tree * tr, double const& scalef) {
@@ -585,4 +587,13 @@ void remove_knuckle (Node * node) {
         cnd->setBL(el);
         pnd->removeChild(*node);
     }
+}
+
+// different version from directly accessing node/getNewick (which this does eventually)
+// 1. check presence of edge lengths
+// 2. includes semicolon in string
+string getNewickString (Tree * tree) {
+    bool bl = tree->hasEdgeLengths();
+    string phy = tree->getRoot()->getNewick(bl) + ";";
+    return phy;
 }
