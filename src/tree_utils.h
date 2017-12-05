@@ -28,6 +28,7 @@ void paint_nodes(Tree * tree, vector<string> & names, bool const& silent);
 bool is_rooted (Tree * tr);
 bool is_binary (Tree * tr);
 double get_tree_length (Tree * tr);
+bool has_branchlengths (Tree * tr);
 bool is_ultrametric_paths (Tree * tr);
 void set_node_heights (Node * node);
 bool is_ultrametric_postorder (Tree * tr);

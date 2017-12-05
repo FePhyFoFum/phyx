@@ -23,6 +23,7 @@ using namespace std;
 
 extern double EPSILON;
 
+
 int get_distance_between_two_nodes(Tree * tr, Node * nd1, Node * nd2) {
     vector<Node *> vnd;
     vnd.push_back(nd1);
@@ -55,6 +56,7 @@ double get_length_to_root(Node * n) {
     return length;
 }
 
+
 /*
  * calculate the variance between the lengths to the root and the tips
  */
@@ -67,6 +69,7 @@ double get_root_tip_var(Tree * tr){
 
     return var;
 }
+
 
 // assumes annotations are of form: [something]
 void remove_annotations(Tree * tr) {
@@ -98,6 +101,7 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
         }
     }
 }
+
 
 void paint_nodes(Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
@@ -282,6 +286,16 @@ double get_tree_length (Tree * tr) {
    return length;
 }
 
+
+// copying this outside of tree_info as it is generally useful
+bool has_branchlengths (Tree * tr) {
+    bool gotem = false;
+    double treelength = get_tree_length(tr);
+    gotem = (treelength > 0.0) ? true : false;
+    return gotem;
+}
+
+// simply multiply each edge by some scalar (determined somehow)
 void rescale_tree(Tree * tr, double const& scalef) {
     int numNodes = tr->getNodeCount();
     for (int i = 0; i < numNodes; i++) {
@@ -504,7 +518,6 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
         }
     }
     success = tree->reRoot(m);
-    
     return success;
 }
 
@@ -547,6 +560,7 @@ vector <string> get_tip_labels (Tree * tr) {
     return labels;
 }
 
+
 // remove all knuckles in a tree
 void deknuckle_tree (Tree * tree) {
     for (int i=0; i < tree->getInternalNodeCount(); i++) {
@@ -559,6 +573,7 @@ void deknuckle_tree (Tree * tree) {
             }
         }
 }
+
 
 // remove a individual knuckle
 void remove_knuckle (Node * node) {

@@ -25,7 +25,7 @@ TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binaryche
     if (ultracheck) {
         ultrametric_tree_ = is_ultrametric_paths(tree_);
         (*poos) << std::boolalpha << ultrametric_tree_ << endl;
-    } else if(rtvarcheck){
+    } else if (rtvarcheck) {
         treelength_ = get_tree_length(tree_);
         has_branchlengths_ = (treelength_ > 0.0) ? true : false;
         if (has_branchlengths_) {
