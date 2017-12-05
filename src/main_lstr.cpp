@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
-    bool optionsset = false; // is true, do not return all properties
+    bool optionsset = false; // if true, do not return all properties
     bool ultracheck = false;
     bool binarycheck = false;
     bool lengthcheck = false;
