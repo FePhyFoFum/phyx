@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#include "treeinfo.h"
+#include "tree_info.h"
 #include "tree.h"
 #include "node.h"
 #include "tree_utils.h"

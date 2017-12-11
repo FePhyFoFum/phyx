@@ -171,6 +171,10 @@ CLSQ_SRC = clsq.cpp main_clsq.cpp
 CLSQ_OBJ = clsq.o main_clsq.o
 CLSQ_DEP = clsq.d main_clsq.d
 
+CLTR_SRC = clean_tree.cpp main_cltr.cpp
+CLTR_OBJ = clean_tree.o main_cltr.o
+CLTR_DEP = clean_tree.d main_cltr.d
+
 AA2C_SRC = aa2cdn.cpp main_aa2cdn.cpp
 AA2C_OBJ = aa2cdn.o main_aa2cdn.o
 AA2C_DEP = aa2cdn.d main_aa2cdn.d
@@ -199,9 +203,9 @@ LS_SQ_SRC = seq_info.cpp main_lssq.cpp
 LS_SQ_OBJ = seq_info.o main_lssq.o
 LS_SQ_DEP = seq_info.d main_lssq.d
 
-LS_TR_SRC = treeinfo.cpp main_lstr.cpp
-LS_TR_OBJ = treeinfo.o main_lstr.o
-LS_TR_DEP = treeinfo.d main_lstr.d
+LS_TR_SRC = tree_info.cpp main_lstr.cpp
+LS_TR_OBJ = tree_info.o main_lstr.o
+LS_TR_DEP = tree_info.d main_lstr.d
 
 COMPTEST_SRC = comp_test.cpp main_comp.cpp
 COMPTEST_OBJ = comp_test.o main_comp.o
@@ -333,7 +337,7 @@ RATE_DEPS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxssort $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxssort $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -386,6 +390,10 @@ pxnj: $(CPP_OBJS) $(NJ_OBJ)
 pxclsq: $(CPP_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'
 	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS)
+
+pxcltr: $(CPP_OBJS) $(CLTR_OBJ)
+	@echo 'building pxcltr'
+	$(CXX) -o "pxcltr" $(OPT_FLAGS) $(CLTR_OBJ) $(CPP_OBJS)
 
 pxrms: $(CPP_OBJS) $(RMS_OBJ)
 	@echo 'building pxrms'

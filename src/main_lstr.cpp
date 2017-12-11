@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#include "treeinfo.h"
+#include "tree_info.h"
 #include "tree_reader.h"
 #include "tree.h"
 #include "utils.h"
