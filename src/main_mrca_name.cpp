@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
-    TreeReader tr;
+    //TreeReader tr;
     char * outf = NULL;
     char * treef = NULL;
     char * mrcaf = NULL;

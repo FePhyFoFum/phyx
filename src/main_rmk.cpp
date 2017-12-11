@@ -111,8 +111,6 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
     }
-    
-    TreeReader tr;
 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);

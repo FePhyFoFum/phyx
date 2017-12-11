@@ -158,7 +158,6 @@ int main(int argc, char * argv[]) {
     }
 
     //------READ TREES
-    TreeReader tr;
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
