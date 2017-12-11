@@ -132,6 +132,14 @@ void Tree::setEdgeLengthsPresent(bool & res) {
     edgeLengths = res;
 }
 
+void Tree::setNodeAnnotationsPresent(bool & res) {
+    nodeAnnotations = res;
+}
+
+bool Tree::hasNodeAnnotations() {
+    return nodeAnnotations;
+}
+
 bool Tree::hasEdgeLengths() {
     return edgeLengths;
 }
@@ -172,6 +180,27 @@ bool Tree::reRoot(Node * inroot) {
         // duplicate support information (if present) for display purposes
         duplicateRootSupport();
         return true;
+    }
+}
+
+void Tree::removeRootEdge() {
+    bool going = true; // multiple stems? nefarious...
+    while (going) {
+        if (root->getChildCount() == 1) {
+            /*
+            1. grab child
+            2. set child as new root
+            3. delete old root
+            4. reprocess tree?
+            */
+            Node * curr = root->getChild(0);
+            delete root;
+            setRoot(curr);
+            processRoot();
+        } else {
+            going = false;
+            break;
+        }
     }
 }
 

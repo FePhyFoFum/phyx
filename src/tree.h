@@ -24,6 +24,7 @@ private:
     int internalNodeCount;
     int externalNodeCount;
     bool edgeLengths;
+    bool nodeAnnotations;
     
     void processReRoot(Node * node);
     void exchangeInfo(Node * node1, Node * node2);
@@ -53,6 +54,8 @@ public:
     void setRoot(Node * inroot);
     void setEdgeLengthsPresent(bool & res);
     bool hasEdgeLengths();
+    void setNodeAnnotationsPresent(bool & res);
+    bool hasNodeAnnotations();
     void unRoot();
     bool reRoot(Node * inroot);
     void duplicateRootSupport();
@@ -62,6 +65,8 @@ public:
     Node * getInternalMRCA(vector<string> & innodes);
     void processRoot();
     void exchangeNodes(Node * node1, Node * node2);
+    
+    void removeRootEdge();
     
     void setHeightFromRootToNodes();
     void setHeightFromTipToNodes();

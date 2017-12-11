@@ -33,6 +33,7 @@ bool is_ultrametric_paths (Tree * tr);
 void set_node_heights (Node * node);
 bool is_ultrametric_postorder (Tree * tr);
 bool postorder_ultrametricity_check (Node * node, bool & ultrametric);
+bool has_root_edge (Tree * tr);
 
 bool check_names_against_tree(Tree * tr, vector<string> names);
 bool check_name_against_tree(Tree * tr, string const& name);

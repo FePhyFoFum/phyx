@@ -66,22 +66,22 @@ double get_root_tip_var(Tree * tr){
         paths.push_back(get_length_to_root(tr->getExternalNode(i)));
     }
     double var = variance(paths);
-
     return var;
 }
 
 
 // assumes annotations are of form: [something]
 void remove_annotations(Tree * tr) {
-    // remove annotations for next character
     for (int i=0; i < tr->getInternalNodeCount(); i++) {
         tr->getInternalNode(i)->setName("");
     }
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         string str = tr->getExternalNode(i)->getName();
-        std::size_t found = str.find_first_of("[");
-        str.erase(found);
-        tr->getExternalNode(i)->setName(str);
+        std::size_t found = str.find_first_of("["); // not allowing these in valid names (for now)
+        if (found != std::string::npos) {
+            str.erase(found);
+            tr->getExternalNode(i)->setName(str);
+        }
     }
 }
 
@@ -124,7 +124,6 @@ void paint_nodes(Tree * tree, vector<string> & names, bool const& silent) {
             }
         }
     }
-
 }
 
 
@@ -563,14 +562,13 @@ vector <string> get_tip_labels (Tree * tr) {
 // remove all knuckles in a tree
 void deknuckle_tree (Tree * tree) {
     for (int i=0; i < tree->getInternalNodeCount(); i++) {
-            Node * tnd = tree->getInternalNode(i);
-            if (tnd->isKnuckle()) {
-                //cout << tnd->getName() << " is a KNUCKLE!" << endl;
-                
-                // attempt to remove knuckle
-                remove_knuckle(tnd);
-            }
+        Node * tnd = tree->getInternalNode(i);
+        if (tnd->isKnuckle()) {
+            //cout << tnd->getName() << " is a KNUCKLE!" << endl;
+            // attempt to remove knuckle
+            remove_knuckle(tnd);
         }
+    }
 }
 
 
@@ -596,4 +594,16 @@ string getNewickString (Tree * tree) {
     bool bl = tree->hasEdgeLengths();
     string phy = tree->getRoot()->getNewick(bl) + ";";
     return phy;
+}
+
+// not checking whether rooted in the first place, because registers as not
+// e.g. ((((A:0.1,B:0.1):0.1,C:0.2):0.1,D:0.3):0.5);
+bool has_root_edge (Tree * tr) {
+    bool rootEdge = false;
+    int nchild = tr->getRoot()->getChildCount();
+    //cout << "Root has " << nchild << " children." << endl;
+    if (nchild == 1) {
+        rootEdge = true;
+    }
+    return rootEdge;
 }

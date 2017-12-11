@@ -39,6 +39,7 @@ Tree * TreeReader::readTree(string trees) {
     bool start = true;
     bool keepGoing = true;
     bool in_quote = false;
+    bool hasAnnotations = false;
     char quoteType;
     Node * currNode = NULL;
     double sumEL = 0.0;
@@ -141,6 +142,7 @@ Tree * TreeReader::readTree(string trees) {
         }
         // note/annotation
         else if (nextChar == '[') {
+            hasAnnotations = true;
             x++;
             nextChar = pb.c_str()[x];
             string note = "";
@@ -156,7 +158,8 @@ Tree * TreeReader::readTree(string trees) {
             }
             currNode->setComment(note);
         } else if (nextChar == ' ') {
-
+            // something supposed to be here?
+            
         }
         // external named node
         else {
@@ -218,8 +221,8 @@ Tree * TreeReader::readTree(string trees) {
     }
     bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
     tree->setEdgeLengthsPresent(hasEdgeLengths);
+    tree->setNodeAnnotationsPresent(hasAnnotations);
     tree->processRoot();
-    
     return tree;
 }
 

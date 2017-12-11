@@ -13,12 +13,15 @@ using namespace std;
 #include "tree.h"
 #include "tree_utils.h"
 #include "utils.h"
+#include "clean_tree.h"
 #include "log.h"
 
 void print_help () {
     cout << "General tree cleaner." << endl;
-    cout << "By default will remove annotations (node labels), 'knuckles', and root edges." << endl;
-    cout << "Alternatively choose 1 property." << endl;
+    cout << "Removes annotations (node labels), 'knuckles', and root edges to" << endl;
+    cout << "generate a 'vanilla' newick representation." << endl;
+    cout << "By default removes all properties. Alternatively choose 1 property." << endl;
+    cout << "This will take newick or nexus files" << endl;
     cout << endl;
     cout << "Usage: pxcltr [OPTION]... " << endl;
     cout << endl;
@@ -33,7 +36,7 @@ void print_help () {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxclt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxcltr 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -56,6 +59,8 @@ int main(int argc, char * argv[]) {
     bool optionsset = false; // if true, do only 1 operation
     bool removeroot = false;
     bool removelabels = false;
+    
+    // need option to write nexus
     
     char * treef = NULL;
     char * outf = NULL;
@@ -140,7 +145,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
-                deknuckle_tree(tree);
+                CleanTree ct(tree);
                 (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
@@ -154,7 +159,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                deknuckle_tree(tree);
+                CleanTree ct(tree);
                 (*poos) << getNewickString(tree) << endl;
                 delete tree;
             }
