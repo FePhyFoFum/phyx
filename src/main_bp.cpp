@@ -52,6 +52,7 @@ static struct option const long_options[] =
     {"maptree", required_argument, NULL, 'm'},
     {"cutoff", required_argument, NULL, 'c'},
     {"suppress", no_argument, NULL, 's'},
+    {"first", no_argument, NULL, 'f'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -70,13 +71,14 @@ int main(int argc, char * argv[]) {
     bool uniquetree = false;
     bool suppress = false;
     bool cutoff = false;
+    bool firsttree = false;
     char * treef = NULL;
     char * mtreef = NULL;
     char * outf = NULL;
     double cutnum = 0;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:m:c:vseuhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:m:c:vseufhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -101,6 +103,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 's':
                 suppress = true;
+                break;
+            case 'f':
+                firsttree = true;
                 break;
             case 'c':
                 cutoff = true;
@@ -467,6 +472,11 @@ int main(int argc, char * argv[]) {
         //get the conflicting bipartitions
         //initialize results vectors
         for (unsigned int i = 0; i < biparts.size(); i++) {
+            if (firsttree == true){
+                if (matrix[0][i] != 1){
+                    continue;
+                }
+            }
             unsigned int sumc = sum_matrix_col(matrix,i);
             if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
                 vector<string> nms;
