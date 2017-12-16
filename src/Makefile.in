@@ -322,20 +322,8 @@ RATE_DEPS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-#%.o: ./%.f
-#	$(FC) $(FFLAGS) -c -w $<
-
-#FORT_OBJS += \
-./clock.o \
-./my_expokit.o \
-./mataid.o \
-./blas.o \
-./lapack.o \
-./my_matexp.o
-
-# Each subdirectory must supply rules for building sources it contributes
 %.o: ./%.cpp
-	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
+	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
 # All Target
@@ -344,7 +332,7 @@ all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq px
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
-	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
+	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
 
 pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
 	@echo 'building pxmrca'
@@ -368,11 +356,11 @@ pxbdsim: $(CPP_OBJS) $(BD_SIM_OBJ)
 
 pxbdfit: $(CPP_OBJS) $(BD_FIT_OBJ)
 	@echo 'building pxbdfit'
-	$(CXX) -o "pxbdfit" $(OPT_FLAGS) $(BD_FIT_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxbdfit" $(OPT_FLAGS) $(BD_FIT_OBJ) $(CPP_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
 
 pxnni: $(CPP_OBJS) $(NNI_OBJ)
 	@echo 'building pxnni'
-	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
 
 pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
 	@echo 'building pxlstr'
@@ -448,7 +436,7 @@ pxboot: $(CPP_OBJS) $(SEQSAMP_OBJ)
 
 pxseqgen: $(CPP_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
 	@echo 'building pxseqgen'
-	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPP_LIBS) #$(FORT_OBJS)  -lgfortran
+	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
 
 pxcat: $(CPP_OBJS) $(CONCAT_OBJ)
 	@echo 'building pxcat'
@@ -466,9 +454,9 @@ pxvcf2fa: $(CPP_OBJS) $(VCF2FA_OBJ)
 	@echo 'building pxvcf2fa'
 	$(CXX) -o "pxvcf2fa" $(OPT_FLAGS) $(VCF2FA_OBJ) $(CPP_OBJS)
 
-pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS) $(FORT_OBJS)
+pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS)
 	@echo 'building pxcontrates'
-	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(CPP_OBJS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
+	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(CPP_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
 
 pxrecode: $(CPP_OBJS) $(SEQRECODE_OBJ)
 	@echo 'building pxrecode'
