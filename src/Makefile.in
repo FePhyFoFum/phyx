@@ -3,6 +3,9 @@ RM := rm -f
 ## ./configure CXX=/usr/local/bin/g++-7
 CXX := @CXX@
 
+CPPFLAGS := @CPPFLAGS@
+LDFLAGS := @LDFLAGS@
+
 ##set the nlopt around
 HNLOPT := @HNLOPT@
 HARM := @HARM@
@@ -429,7 +432,7 @@ pxfqfilt: $(CPP_OBJS) $(FQFILT_OBJ)
 
 pxrevcomp: $(CPP_OBJS) $(REVCOMP_OBJ)
 	@echo 'building pxrevcomp'
-	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(CPP_LIBS)
+	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) #$(CPP_LIBS)
 
 pxnw: $(CPP_OBJS) $(NW_OBJ)
 	@echo 'building pxnw'
