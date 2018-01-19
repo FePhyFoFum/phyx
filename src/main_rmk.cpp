@@ -1,8 +1,3 @@
-/*
- * main_lstr.cpp
- *
- */
-
 #include <iostream>
 #include <fstream>
 #include <vector>
