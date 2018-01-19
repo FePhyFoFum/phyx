@@ -473,10 +473,10 @@ void Tree::pruneExternalNode(Node * node) {
      *
      * doesn't yet take care if node.parent == root
      * or polytomy
-     */
+    */
     double bl = 0;
     Node * parent = node->getParent();
-    if(parent->getChildCount() == 2){
+    if (parent->getChildCount() == 2) {
         Node * other = NULL;
         for (int i=0; i < parent->getChildCount(); i++) {
             if (parent->getChild(i) != node) {
@@ -496,8 +496,9 @@ void Tree::pruneExternalNode(Node * node) {
             }
         } else {
             root = other;
+            cout << "i am here apparently..." << endl;
         }
-    }else{
+    } else {
         parent->removeChild(*node);
     }
     delete node;

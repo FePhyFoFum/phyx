@@ -89,7 +89,13 @@ void remove_annotations(Tree * tr) {
 void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
     int counter = 0;
+    
+    // new: note tree rooted status. if originally unrooted, make sure it stays that way on pruning
+    bool rs = is_rooted(tree);
+    //cout << "rooted tree: " << std::boolalpha << rs << endl;
+    
     for (int i=0; i < num_names; i++) {
+        //cout << "Attempting to remove tip '" << names[i] << "'." << endl;
         Node * m = tree->getExternalNode(names[i]);
         if (m != NULL) {
             tree->pruneExternalNode(m);
@@ -99,6 +105,14 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
                 cerr << names[i] << " not in tree"  << endl;
             }
         }
+        //cout << "After pruning, tree rootedness: " << std::boolalpha << is_rooted(tree) << endl;
+        if (rs != is_rooted(tree)) {
+            //cout << "Unrooting tree..." << endl;
+            // it is possible to go from unrooted to rooted on pruning, but not the other way (i think)
+            tree->unRoot();
+        }
+        // debugging
+        //cout << getNewickString(tree) << endl;
     }
 }
 
