@@ -283,7 +283,7 @@ int main(int argc, char * argv[]) {
             cerr <<" not included: "  << not_included_nms[j]<< endl;
             not_included_i.push_back(name_index[not_included_nms[j]]);
         }
-        
+        vector<int> bp_count_tree; // for edgewise to make sure we don't double count
         for (int j=0; j < trees[i]->getInternalNodeCount(); j++) {
             vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
             //skip the root
@@ -351,12 +351,17 @@ int main(int argc, char * argv[]) {
             }else{
                 //this is edgewise and we assume all the taxa 
                 //this is for reporting a b | c d instead of a b and c d separately
+                
+                //first check to make sure that both sides at least have two taxa
+                if (nms_i.size() < 2 || nms_i2.size() < 2)
+                    continue;
                 if ((int)count(biparts.begin(), biparts.end(), nms_i) == 0 && 
                     (int)count(biparts.begin(), biparts.end(), nms_i2) == 0){
                     biparts.push_back(nms_i);
                     biparts2.push_back(nms_i2);
                     not_included.push_back(not_included_i);
                     bp_count.push_back(1);
+                    bp_count_tree.push_back(bp_count.size()-1);
                 } else {
                     //get index 
                     size_t index;
@@ -365,7 +370,11 @@ int main(int argc, char * argv[]) {
                     }else{
                         index = find(biparts.begin(),biparts.end(),nms_i2)-biparts.begin();
                     }
-                    bp_count[index] += 1;
+                    //need to accommodate that it can be reflected in the edgewise case
+                    if ((int)count(bp_count_tree.begin(), bp_count_tree.end(), index) == 0){
+                        bp_count[index] += 1;
+                        bp_count_tree.push_back(index);
+                    }
                 }
 
             }
@@ -377,7 +386,11 @@ int main(int argc, char * argv[]) {
         //calculate the logical matrix of biparts for each tree
         //the matrix will have each i as a tree and 
         //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
-        vector<int> cols(biparts.size()+1, 0);
+        int colsize = biparts.size()+1;
+        if (edgewisealltaxa == true){
+            colsize = biparts.size(); //no root for edgewise
+        }
+        vector<int> cols(colsize, 0);
         vector<vector<int> > matrix (numtrees, cols);
         for (int i=0; i < numtrees; i++) {
             bool unrooted = false;
@@ -397,7 +410,10 @@ int main(int argc, char * argv[]) {
                     }
                 }
                 //end using cutoffs
-
+                //should this do the root? I don't think so
+                if (edgewisealltaxa == true && trees[i]->getInternalNode(j)==trees[i]->getRoot()){
+                    continue;
+                }
 
                 vector<string> nms = trees[i]->getInternalNode(j)->get_leave_names();
                 vector<int> nms_i;
