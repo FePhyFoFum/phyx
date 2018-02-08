@@ -108,14 +108,7 @@ These instructions work for most ubuntu versions as well as debian.
 
 1. Install general dependencies:
 
-        sudo apt-get install git
-        sudo apt-get install autotools-dev
-        sudo apt-get install autoconf
-        sudo apt-get install automake
-        sudo apt-get install cmake
-        sudo apt-get install libtool
-        sudo apt-get install liblapack-dev
-        sudo apt-get install libatlas-cpp-0.6-dev
+        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-cpp-0.6-dev
 2. Clone the phyx repo (if you haven't already):
 
         git clone https://github.com/FePhyFoFum/phyx.git
