@@ -496,7 +496,7 @@ void Tree::pruneExternalNode(Node * node) {
             }
         } else {
             root = other;
-            cout << "i am here apparently..." << endl;
+            //cout << "i am here apparently..." << endl;
         }
     } else {
         parent->removeChild(*node);
