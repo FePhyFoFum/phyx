@@ -42,7 +42,7 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     new_names_ = terp;
     
     if (ccount != ncount) {
-        cout << "Current (" << ccount << ") and new (" << ncount
+        cerr << "Current (" << ccount << ") and new (" << ncount
             << ") lists differ in length. Exiting." << endl;
         exit(0);
     } else {
@@ -76,7 +76,7 @@ void Relabel::relabel_tree (Tree * tr) {
                 //cout << "Found it this time!" << endl;
                 tr->getExternalNode(i)->setName(name_map_[str]);
             } else {
-                cout << "Tree label '" << str << "' NOT found in name list!" << endl;
+                cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
             }
         }  
     }
@@ -96,7 +96,7 @@ void Relabel::relabel_tree (Tree * tr) {
                 //cout << "Found it this time!" << endl;
                 tr->getInternalNode(i)->setName(name_map_[str]);
             } else {
-                cout << "Tree label '" << str << "' NOT found in name list!" << endl;
+                cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
             }
         }  
     }
@@ -107,6 +107,6 @@ void Relabel::relabel_sequence (Sequence & seq) {
     if (name_map_.find(str) != name_map_.end()) {
         seq.set_id(name_map_[str]);
     } else {
-        cout << "Erg. Cannot match label '" << str << "'." << endl;
+        cerr << "Erg. Cannot match label '" << str << "'." << endl;
     }
 }

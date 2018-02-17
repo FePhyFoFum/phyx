@@ -32,7 +32,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxrlt 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxrlt 0.1\nCopyright (C) 2018 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -105,7 +105,7 @@ int main(int argc, char * argv[]) {
     ofstream * ofstr = NULL;
     
     if (!nfileset | !cfileset) {
-        cout << "Must supply both name files (-c for current, -n for new)." << endl;
+        cerr << "Must supply both name files (-c for current, -n for new)." << endl;
         exit(0);
     }
     
