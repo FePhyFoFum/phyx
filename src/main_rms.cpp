@@ -31,6 +31,7 @@ void print_help() {
     cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << endl;
     cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << endl;
     cout << " -f, --namesf=FILE   names in a file (each on a line)" << endl;
+    cout << " -c, --comp          take the complement (i.e. move any taxa not in list)" << endl;
     cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -46,6 +47,7 @@ static struct option const long_options[] =
     {"seqf", required_argument, NULL, 's'},
     {"names",required_argument,NULL,'n'},
     {"namesf", required_argument, NULL, 'f'},
+    {"comp", no_argument, NULL, 'c'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -60,6 +62,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool namesset = false;
     bool namefileset = false;
+    bool complement = false;
     char * namesc = NULL;
     char * namesfc = NULL;
     char * seqf = NULL;
@@ -69,7 +72,7 @@ int main(int argc, char * argv[]) {
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:n:f:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:n:f:co:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -87,6 +90,9 @@ int main(int argc, char * argv[]) {
                 namefileset = true;
                 namesfc = strdup(optarg);
                 check_file_exists(namesfc);
+                break;
+            case 'c':
+                complement = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -107,14 +113,6 @@ int main(int argc, char * argv[]) {
     if (fileset && outfileset) {
         check_inout_streams_identical(seqf, outf);
     }
-
-    // only taking files at the moment (not stdin)
-    /*
-    if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
-        exit(0);
-    }
-    */
     
     istream * pios = NULL;
     ostream * poos = NULL;
@@ -133,13 +131,13 @@ int main(int argc, char * argv[]) {
     } else if (namefileset == true) {
         ifstream nfstr(namesfc);
         string tline;
-        while (getline(nfstr,tline)) {
+        while (getline(nfstr, tline)) {
             trim_spaces(tline);
             names.push_back(tline);
         }
         nfstr.close();
     } else {
-        cerr << "you need to set the names of the tips you want to remove (-n)" << endl;
+        cerr << "you need to set the names of the taxa you want to remove (-n)" << endl;
         exit(0);
     }
     
@@ -159,32 +157,42 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
+    
     Sequence seq;
     string retstring;
-    
-    ifstream readline;
-    string line;
     string seq_name;
-
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    //send sequences to be translated here
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seq_name = seq.get_id();
-        if (find(names.begin(), names.end(), seq_name) != names.end()) {
-            
-            // what is supposed to go here?
-            
-        } else {
-            *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+    
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    
+    if (!complement) {
+        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+            seq_name = seq.get_id();
+            if (find(names.begin(), names.end(), seq_name) == names.end()) {
+                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+            }
         }
-    }
-    //fasta has a trailing one
-    if (ft == 2) {
-        seq_name = seq.get_id();
-        if (find(names.begin(), names.end(), seq_name) != names.end()) {
-
-        } else {
-            *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+        // fasta has a trailing one
+        if (ft == 2) {
+            seq_name = seq.get_id();
+            if (find(names.begin(), names.end(), seq_name) == names.end()) {
+                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+            }
+        }
+    } else {
+        // keep the taxa passed in
+        // complicating factor: not guaranteed to have any taxa left (i.e. empty output)
+        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+            seq_name = seq.get_id();
+            if (find(names.begin(), names.end(), seq_name) != names.end()) {
+                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+            }
+        }
+        // fasta has a trailing one
+        if (ft == 2) {
+            seq_name = seq.get_id();
+            if (find(names.begin(), names.end(), seq_name) != names.end()) {
+                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+            }
         }
     }
 
