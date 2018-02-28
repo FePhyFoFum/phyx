@@ -53,7 +53,7 @@ $^{*}$Corresponding author}\\
 \medskip
 
 \section{What is Phyx?}\label{abstract}
-Phyx (pronounced "fix") is a set of data analysis programs modeled after POSIX-style command-line tools, to help them be easily incorporated in bioinformatic pipelines. The majority of Phyx programs focus on phylogenetic analyses, which includes a variety of programs to clean data matrices, simulate data, and perform basic phylogenetic analyses. Phyx is an ever expanding library of programs, and we welcome any feature requests through github issue submissions: \href{https://github.com/FePhyFoFum/phyx/issues}{https://github.com/FePhyFoFum/phyx/issues}. 
+Phyx (pronounced ``fix'') is a set of data analysis programs modeled after POSIX-style command-line tools, to help them be easily incorporated in bioinformatic pipelines. The majority of Phyx programs focus on phylogenetic analyses, which includes a variety of programs to clean data matrices, simulate data, and perform basic phylogenetic analyses. Phyx is an ever expanding library of programs, and we welcome any feature requests through github issue submissions: \href{https://github.com/FePhyFoFum/phyx/issues}{https://github.com/FePhyFoFum/phyx/issues}. 
 All programs are open source and Phyx operates under the GPL3 licence: \href{https://www.gnu.org/licenses/gpl-3.0.html}{https://www.gnu.org/licenses/gpl-3.0.html}
 
 \subsection{Installing Phyx}\label{introduction}
@@ -71,7 +71,7 @@ Phyx supports the popular formats for sequence alignments (fasta, fastq, phylip,
 
 \subsection{Repeatability}
 
-Phyx will track the programs and commands input to a file called "phyx.logfile". This allows users to see exactly what settings they used to run a program and can help others replicate experiments (say, but including the logfile as supplementary information to a paper).
+Phyx will track the programs and commands input to a file called ``phyx.logfile''. This allows users to see exactly what settings they used to run a program and can help others replicate experiments (say, but including the logfile as supplementary information to a paper).
 
 \subsection{Piping}
 
@@ -85,7 +85,7 @@ pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment || pxclsq -p 1.0
 
 \section{Examples}
 
-A list of example files can be found in the "example\_files" folder. Subfolder names correspond to individual program names.
+A list of example files can be found in the ``example\_files'' folder. Subfolder names correspond to individual program names.
 
 \subsection{pxaa2cdn}
 
@@ -324,7 +324,7 @@ pxrlt -t kingdoms.tre -c kingdoms.oldnames.txt -n kingdoms.newnames.txt
 
 \subsection{pxrms}
 
-This program will remove sequences from a sequence file, either by typing them on the command line using \texttt{-n} (comma-delimited) or by specifying a file using \texttt{-f} (one taxon per line).
+This program will remove sequences from a sequence file, either by typing them on the command line using \texttt{-n} (comma-delimited) or by specifying a file using \texttt{-f} (one taxon per line). Use the \texttt{-c} flag to remove the complementary taxa.
 
 \begin{flushleft}
 \begin{verbatim}
@@ -334,7 +334,7 @@ pxrms -s Nucleotide.fa -f taxa_to_delete.txt
 
 \subsection{pxrmt}
 
-This program will remove tips from a tree file, either by typing them on the command line using \texttt{-n} (comma-delimited) or by specifying a file using \texttt{-f} (one taxon per line).
+This program will remove tips from a tree file, either by typing them on the command line using \texttt{-n} (comma-delimited) or by specifying a file using \texttt{-f} (one taxon per line). Use the \texttt{-c} flag to remove the complementary taxa.
 
 \begin{flushleft}
 Example to remove tips s1, s6, and s8:
