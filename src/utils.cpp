@@ -582,7 +582,7 @@ bool all_equal (vector <double> vals) {
 }
 
 
-bool check_for_input_to_stream(){
+bool check_for_input_to_stream (){
     struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
     int ret = 0;
     ret = poll(&pfd, 1, 500);
@@ -591,4 +591,17 @@ bool check_for_input_to_stream(){
     } else {
         return true;
     }
+}
+
+
+// not using right now
+// return elements in a *not* found in b
+vector <string> get_complement (vector <string> & a, vector <string> & b) {
+    vector <string> comp;
+    for (unsigned int i=0; i < a.size(); i++) {
+        if (find(b.begin(), b.end(), a[i]) == b.end()) {
+            comp.push_back(a[i]);
+        }
+    }
+    return comp;
 }

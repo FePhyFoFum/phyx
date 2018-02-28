@@ -22,13 +22,14 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxrmt [OPTION]... [FILE]..."<<endl;
     cout << endl;
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
-    cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << endl;
-    cout << " -f, --namesf=FILE    names in a file (each on a line)" << endl;
-    cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
-    cout << " -s, --silent         suppress warnings of missing tips" << endl;
-    cout << " -h, --help           display this help and exit" << endl;
-    cout << " -V, --version        display version and exit" << endl;
+    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
+    cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << endl;
+    cout << " -f, --namesf=FILE   names in a file (each on a line)" << endl;
+    cout << " -c, --comp          take the complement (i.e. move any taxa not in list)" << endl;
+    cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
+    cout << " -s, --silent        suppress warnings of missing tips" << endl;
+    cout << " -h, --help          display this help and exit" << endl;
+    cout << " -V, --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
@@ -43,6 +44,7 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"names",required_argument,NULL,'n'},
     {"outf", required_argument, NULL, 'o'},
+    {"comp", no_argument, NULL, 'c'},
     {"silent", required_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -59,6 +61,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool silent = false;
     vector<string> names;
+    bool complement = false;
 
     char * treef = NULL;
     char * outf = NULL;
@@ -66,7 +69,7 @@ int main(int argc, char * argv[]) {
     char * namesfc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:n:f:o:shV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:n:f:co:shV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -84,6 +87,9 @@ int main(int argc, char * argv[]) {
                 namefileset = true;
                 namesfc = strdup(optarg);
                 check_file_exists(namesfc);
+                break;
+            case 'c':
+                complement = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -159,32 +165,77 @@ int main(int argc, char * argv[]) {
         cerr << "this really only works with nexus or newick" << endl;
         exit(0);
     }
+    
     bool going = true;
-    if (ft == 0) {
-        map<string,string> translation_table;
-        bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
-        while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
-                &translation_table, &going);
-            if (going == true) {
-                remove_tips(tree, names, silent);
-                (*poos) << getNewickString(tree) << endl;
-                delete tree;
+    if (!complement) {
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (going == true) {
+                    remove_tips(tree, names, silent);
+                    (*poos) << getNewickString(tree) << endl;
+                    delete tree;
+                }
+            }
+        } else if (ft == 1) {
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going == true) {
+                    remove_tips(tree, names, silent);
+                    (*poos) << getNewickString(tree) << endl;
+                    delete tree;
+                }
             }
         }
-    } else if (ft == 1) {
-        Tree * tree;
-        while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going == true) {
-                remove_tips(tree, names, silent);
-                (*poos) << getNewickString(tree) << endl;
-                delete tree;
+    } else {
+        // *** check list of names to keep is at least 2
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+            Tree * tree;
+            int numLeaves;
+            vector <string> toPrune;
+            while (going) {
+                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (going == true) {
+                    toPrune = get_complement_tip_set(tree, names);
+                    numLeaves = tree->getExternalNodeCount();
+                    if (numLeaves - (int)toPrune.size() > 1) {
+                        remove_tips(tree, names, silent);
+                        (*poos) << getNewickString(tree) << endl;
+                    }
+                    delete tree;
+                }
+            }
+        } else if (ft == 1) {
+            Tree * tree;
+            vector <string> toPrune;
+            int numLeaves;
+            while (going) {
+                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going == true) {
+                    toPrune = get_complement_tip_set(tree, names);
+                    numLeaves = tree->getExternalNodeCount();
+                    //cout << "numLeaves = " << numLeaves << endl;
+                    //print_vector(toPrune);
+                    if (numLeaves - (int)toPrune.size() > 1) {
+                        remove_tips(tree, names, silent);
+                        (*poos) << getNewickString(tree) << endl;
+                    }
+                    delete tree;
+                }
             }
         }
     }
+    
     if (fileset) {
         fstr->close();
         delete pios;

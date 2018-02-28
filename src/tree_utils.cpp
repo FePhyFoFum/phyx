@@ -550,7 +550,7 @@ vector <string> get_names_in_tree (Tree * tr, vector<string> const& names) {
 
 vector <string> get_complement_tip_set (Tree * tr, vector<string> const& orig_names) {
     vector <string> comp = get_tip_labels(tr);
-     std::vector<string>::iterator it;
+    std::vector<string>::iterator it;
     for (unsigned int i = 0; i < orig_names.size(); i++) {
         // remove bad names
         it = std::find(comp.begin(), comp.end(), orig_names[i]);
