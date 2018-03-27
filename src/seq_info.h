@@ -19,6 +19,7 @@ private:
     map <char, double> total_;
     int seqcount_;
     bool output_indiv_; // report stats for each seq
+    double percent_missing_;
     
     // new stuff
     vector <string> taxon_labels_;
@@ -42,12 +43,14 @@ private:
     void return_freq_table (ostream* poos);
     void get_longest_taxon_label ();
     void calculate_freqs ();
+    void calc_missing ();
 
 public:
     SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein);
     void summarize ();
     void get_property (bool const& get_labels, bool const& check_aligned,
-        bool const& get_nseq, bool const& get_freqs, bool const& get_nchar);
+        bool const& get_nseq, bool const& get_freqs, bool const& get_nchar,
+        double const& get_missing);
 };
 
 #endif /* _LS_SEQ_H_ */

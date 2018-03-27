@@ -290,6 +290,18 @@ void SeqInfo::get_nchars () {
     seqcount_ = (int)seq_lengths_.size();
 }
 
+// does not currently do per-individual...
+void SeqInfo::calc_missing () {
+    calculate_freqs();
+    // missing data are the last two characters (-N for DNA, -X for protein)
+    int total_num_chars = sum(char_counts_);
+    double temp = 0.0;
+    for (unsigned int i = seq_chars_.length()-2; i < seq_chars_.length(); i++) {
+        temp += (double)char_counts_[i] / (double)total_num_chars;
+    }
+    percent_missing_ = temp;
+}
+
 // get the longest label. for printing purposes
 void SeqInfo::get_longest_taxon_label () {
     longest_tax_label_ = 0;
@@ -322,7 +334,8 @@ SeqInfo::SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_p
 
 // return whichever property set to true
 void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
-        bool const& get_nseq, bool const& get_freqs, bool const& get_nchar) {
+        bool const& get_nseq, bool const& get_freqs, bool const& get_nchar,
+        double const& get_missing) {
     
     if (get_labels) {
         collect_taxon_labels();
@@ -333,11 +346,14 @@ void SeqInfo::get_property (bool const& get_labels, bool const& check_aligned,
         check_is_aligned();
         (*poos_) << std::boolalpha << is_aligned_ << endl;
     } else if (get_nseq) {
-        get_nseqs ();
+        get_nseqs();
         (*poos_) << seqcount_ << endl;
     } else if (get_freqs) {
         calculate_freqs();
         return_freq_table(poos_);
+    } else if (get_missing) {
+        calc_missing();
+        (*poos_) << percent_missing_ << endl;
     } else if (get_nchar) {
         get_nchars ();
         if (!output_indiv_) { // single return value

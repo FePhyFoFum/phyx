@@ -32,6 +32,7 @@ void print_help() {
     cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
     cout << " -a, --aligned       return whether sequences are aligned (same length)" << endl;
     cout << " -f, --freqs         return character state frequencies" << endl;
+    cout << " -m, --missing       return percent missing characters" << endl;
     cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -52,6 +53,7 @@ static struct option const long_options[] =
     {"prot", no_argument, NULL, 'p'},
     {"aligned", no_argument, NULL, 'a'},
     {"freqs", no_argument, NULL, 'f'},
+    {"missing", no_argument, NULL, 'm'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -71,12 +73,13 @@ int main(int argc, char * argv[]){
     bool get_nseq = false;
     bool get_nchar = false;
     bool get_freqs = false;
+    bool get_missing = false;
     char * outf = NULL;
     char * seqf = NULL;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:inclpafhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:inclpafmhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -116,6 +119,10 @@ int main(int argc, char * argv[]){
                 get_freqs = true;
                 optionsset = true;
                 break;
+            case 'm':
+                get_missing = true;
+                optionsset = true;
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -137,7 +144,7 @@ int main(int argc, char * argv[]){
     ifstream * fstr = NULL;
     istream * pios = NULL;
     
-    if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar) > 1) {
+    if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
         cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
         exit(0);
     }
@@ -164,7 +171,7 @@ int main(int argc, char * argv[]){
     if (optionsset) {
         // get single property
         ls_Seq.get_property (get_labels, check_aligned, get_nseq,
-            get_freqs, get_nchar);
+            get_freqs, get_nchar, get_missing);
     } else {
         // the original behaviour
         ls_Seq.summarize();
