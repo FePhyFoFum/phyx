@@ -32,7 +32,7 @@ void print_help() {
     cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
     cout << " -a, --aligned       return whether sequences are aligned (same length)" << endl;
     cout << " -f, --freqs         return character state frequencies" << endl;
-    cout << " -m, --missing       return percent missing characters" << endl;
+    cout << " -m, --missing       return the proportion of missing characters" << endl;
     cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
