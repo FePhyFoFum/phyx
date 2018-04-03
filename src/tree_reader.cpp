@@ -297,6 +297,7 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
         if (!getline(stri, line1)) {
             break;
         }
+        trim_spaces(line1);
         if (line1.empty()) {
             continue;
         }
@@ -358,7 +359,7 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
 Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
     bool ttexists, map<string,string> * trans, bool * going) {
     string tline;
-    if (retstring.size() > 0) {
+    if (retstring.size() > 0) { // i think this is never true
         tline = retstring;
         retstring = "";
     } else {
@@ -368,7 +369,7 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
                 (*going) = false;
                 return NULL;
             }
-            //trim_spaces(tline);
+            trim_spaces(tline); // important!
             if (!tline.empty()) {
                 reading = false;
             } else {
