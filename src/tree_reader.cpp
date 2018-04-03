@@ -297,6 +297,10 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
         if (!getline(stri, line1)) {
             break;
         }
+        if (line1.empty()) {
+            continue;
+        }
+        //cout << "Working on: " << line1 << endl;
         (*retstring) = line1;
         string uc(line1);
         transform(uc.begin(), uc.end(), uc.begin(), ::toupper);
