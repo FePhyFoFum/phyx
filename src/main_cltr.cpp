@@ -18,8 +18,8 @@ using namespace std;
 
 void print_help () {
     cout << "General tree cleaner." << endl;
-    cout << "Removes annotations (node labels), 'knuckles', and root edges to" << endl;
-    cout << "generate a 'vanilla' newick representation." << endl;
+    cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << endl;
+    cout << "root edges to generate a 'vanilla' newick representation." << endl;
     cout << "By default removes all properties. Alternatively choose 1 property." << endl;
     cout << "This will take newick or nexus files" << endl;
     cout << endl;
