@@ -161,9 +161,6 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    // TODO: add missing Nexus stuff
-    
-    
     if (outfileset) {
         ofstr->close();
         delete poos;
