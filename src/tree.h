@@ -25,6 +25,7 @@ private:
     int externalNodeCount;
     bool edgeLengths;
     bool nodeAnnotations;
+    bool internalNodeNames;
     
     void processReRoot(Node * node);
     void exchangeInfo(Node * node1, Node * node2);
@@ -40,6 +41,9 @@ public:
     void addExternalNode(Node * tn);
     void addInternalNode(Node * tn);
     void pruneExternalNode(Node * node);
+    
+    void pruneInternalNode(Node * node);
+    
     Node * getExternalNode(int num);
     Node * getExternalNode(string name);
     Node * getInternalNode(int num);
@@ -56,6 +60,10 @@ public:
     bool hasEdgeLengths();
     void setNodeAnnotationsPresent(bool & res);
     bool hasNodeAnnotations();
+    
+    void setNodeNamesPresent(bool & res);
+    bool hasNodeNames();
+    
     void unRoot();
     bool reRoot(Node * inroot);
     void duplicateRootSupport();

@@ -36,14 +36,13 @@ public:
     Node();
     Node(Node * parent);
     Node(double bl, int number, string name, Node * parent);
-
-
+    
     int get_num_leaves();
     vector<Node*> get_leaves();
     vector<string> get_leave_names();
     set<string> get_leave_names_set();
     set<Node *> get_leaves_set();
-
+    
     vector<Node*> getChildren();
     bool isExternal();
     bool isInternal();
@@ -82,7 +81,7 @@ public:
     void initSegVector();
     vector<BranchSegment> * getSegVector();
     void deleteSegVector();
-
+    
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_number; //segment specific rev B, combining the tempA and the ENLT
     ~Node();

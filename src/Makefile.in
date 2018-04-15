@@ -238,6 +238,10 @@ SSORT_SRC = main_ssort.cpp
 SSORT_OBJ = main_ssort.o
 SSORT_DEP = main_ssort.d
 
+COLLAPSE_TREE_SRC = collapse_tree.cpp main_colt.cpp
+COLLAPSE_TREE_OBJ = collapse_tree.o main_colt.o
+COLLAPSE_TREE_DEP = collapse_tree.d main_colt.d
+
 ## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
@@ -328,7 +332,7 @@ RATE_DEPS += \
 
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxssort $(NLOPT_PROGRAMS)
+all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxssort pxcolt $(NLOPT_PROGRAMS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -526,6 +530,10 @@ pxtcomb: $(CPP_OBJS) $(TCOMB_OBJ)
 pxssort: $(CPP_OBJS) $(SSORT_OBJ)
 	@echo 'building pxssort'
 	$(CXX) -o "pxssort" $(OPT_FLAGS) $(SSORT_OBJ) $(CPP_OBJS)
+
+pxcolt: $(CPP_OBJS) $(COLLAPSE_TREE_OBJ)
+	@echo 'building pxcolt'
+	$(CXX) -o "pxcolt" $(OPT_FLAGS) $(COLLAPSE_TREE_OBJ) $(CPP_OBJS)
 
 install:
 	install -m 0755 px* $(prefix)

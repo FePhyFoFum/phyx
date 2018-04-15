@@ -40,6 +40,7 @@ Tree * TreeReader::readTree(string trees) {
     bool keepGoing = true;
     bool in_quote = false;
     bool hasAnnotations = false;
+    bool hasInternalNodeNames = false;
     char quoteType;
     Node * currNode = NULL;
     double sumEL = 0.0;
@@ -59,7 +60,7 @@ Tree * TreeReader::readTree(string trees) {
         } else if (nextChar == ',') {
             currNode = currNode->getParent();
         } else if (nextChar == ')') {
-            // internal named node
+            // internal named node (or more likely support annotation)
             currNode = currNode->getParent();
             x++;
             nextChar = pb.c_str()[x];
@@ -114,6 +115,9 @@ Tree * TreeReader::readTree(string trees) {
                 } 
             }// work on edge
             currNode->setName(nodeName);
+            if (nodeName.size() > 0) {
+                hasInternalNodeNames = true;
+            }
             if (!in_quote) {
                 //x--;
             }
@@ -221,7 +225,10 @@ Tree * TreeReader::readTree(string trees) {
     }
     bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
     tree->setEdgeLengthsPresent(hasEdgeLengths);
+    //cout << "hasAnnotations = " << hasAnnotations << endl;
     tree->setNodeAnnotationsPresent(hasAnnotations);
+    //cout << "hasInternalNodeNames = " << hasInternalNodeNames << endl;
+    tree->setNodeNamesPresent(hasInternalNodeNames);
     tree->processRoot();
     return tree;
 }
