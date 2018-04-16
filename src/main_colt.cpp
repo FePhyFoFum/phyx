@@ -48,6 +48,7 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
+    bool thresholdset = false;
     double threshold = 0.5;
     
     char * outf = NULL;
@@ -67,6 +68,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'l':
                 threshold = atof(strdup(optarg));
+                //thresholdset = true;
                 if (threshold <= 0) {
                     cout << "Threshold must be > 0" << endl;
                     exit(0);

@@ -86,8 +86,6 @@ int main(int argc, char * argv[]) {
     string logtype;
     
     char * outf = NULL;
-    char * treef = NULL;
-    char * parmf = NULL;
     
     while (1) {
         int oi = -1;
@@ -194,8 +192,8 @@ int main(int argc, char * argv[]) {
     ofstream * ofstr = NULL;
     
     // not used at the moment: assumed that all input comes from files
-    istream * pios = NULL;
-    ifstream * fstr = NULL;
+    //istream * pios = NULL;
+    //ifstream * fstr = NULL;
     
     if (outfileset == true) {
         ofstr = new ofstream(outf);
@@ -208,16 +206,7 @@ int main(int argc, char * argv[]) {
         cout << "Set tree file *or* parameter file, not both. Exiting." << endl;
         exit (0);
     }
-/*    } else if (pfileset == true) {
-        fstr = new ifstream(parmf);
-        pios = fstr;
-    } else if (tfileset == true) {
-        fstr = new ifstream(treef);
-        pios = fstr;
-    } else {
-        pios = &cin;
-    }
-*/
+    
     if (get_columns && tfileset) {
         cout << "Argument 'columns' is not applicable for tree files. Exiting." << endl;
         exit (0);

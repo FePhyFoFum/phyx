@@ -554,7 +554,7 @@ int main(int argc, char * argv[]) {
                 (*poos) << "\tFREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  endl;
                 if(verbose){
                     (*poos) << "\tTREES:\t";
-                    for (int j=0;j<matrix.size();j++){
+                    for (unsigned int j=0;j<matrix.size();j++){
                         if (matrix[j][i] == 1){
                             (*poos) << j << " ";   
                         }
@@ -578,7 +578,7 @@ int main(int argc, char * argv[]) {
                 TSCA += 1;
                 if(verbose){
                     (*poos) << "\tTREES:\t";
-                    for (int j=0;j<matrix.size();j++){
+                    for (unsigned int j=0;j<matrix.size();j++){
                         if (matrix[j][i] == 1){
                             (*poos) << j << " ";   
                         }

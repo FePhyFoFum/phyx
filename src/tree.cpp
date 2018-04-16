@@ -106,7 +106,7 @@ Node * Tree::getNode(int num) {
 Node * Tree::getNode(string & name) {
     Node * ret = NULL;
     if (name_node_map.size() == 0){
-        for (int i=0; i < nodes.size(); i++) {
+        for (unsigned int i=0; i < nodes.size(); i++) {
             if (nodes.at(i)->getName().size() > 0)
                 name_node_map[nodes.at(i)->getName()] = nodes.at(i);
         }

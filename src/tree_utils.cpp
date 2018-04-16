@@ -505,7 +505,7 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
             // root randomly, then do desired rooting
             Node * n = NULL;
             while (!done) {
-                for (int i = 0; i < ingroup.size(); i++) {
+                for (unsigned int i = 0; i < ingroup.size(); i++) {
                     n = tree->getExternalNode(ingroup[i]);
                     Node * p = n->getParent();
                     if (p != tree->getRoot()) {

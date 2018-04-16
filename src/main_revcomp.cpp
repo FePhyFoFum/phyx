@@ -57,7 +57,7 @@ bool reverse_it_or_not(vector<Sequence> & seqs, Sequence comp_seq){
     int best_dis_rev = 100000000;
     string comp = comp_seq.get_sequence();
     string revcomp = comp_seq.reverse_complement();
-    for (int i=0;i<seqs.size();i++){
+    for (unsigned int i=0;i<seqs.size();i++){
         EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0)
@@ -66,7 +66,7 @@ bool reverse_it_or_not(vector<Sequence> & seqs, Sequence comp_seq){
             best_distance = result.editDistance;
         edlibFreeAlignResult(result);
     }
-    for (int i=0;i<seqs.size();i++){
+    for (unsigned int i=0;i<seqs.size();i++){
         EdlibAlignResult result = edlibAlign(revcomp.c_str(), revcomp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0)

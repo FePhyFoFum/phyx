@@ -9,7 +9,7 @@ using namespace std;
 #include "tree_utils.h"
 #include "collapse_tree.h"
 
-Collapser::Collapser (double & threshold) {
+Collapser::Collapser (double & threshold):scale_set_(false) {
     threshold_ = threshold;
     //cout << "Threshold set to: " << threshold_ << endl;
 }
@@ -55,7 +55,6 @@ void Collapser::collapse_edges (Tree * tr) {
             }
         }
         //cout << "Went through loop " << loop_count << " times." << endl;
-        
     }
 }
 

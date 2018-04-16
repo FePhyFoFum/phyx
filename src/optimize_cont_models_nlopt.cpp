@@ -75,7 +75,7 @@ double nlopt_ou_sr_log(unsigned n, const double *x, double *grad, void *data) {
 
 
 double nlopt_bm_bl(unsigned n, const double *x, double *grad, void *data){
-    for (int i=0;i<n;i++){
+    for (unsigned int i=0;i<n;i++){
         if (x[i] <= 0){
             return LARGE;
         }   

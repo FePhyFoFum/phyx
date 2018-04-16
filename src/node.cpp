@@ -215,7 +215,7 @@ string Node::getPaintedNewick(bool bl){
         if (this->getChild(i)->getPainted() == true)
             paintedchildren.push_back(i);
     }
-    for (int i=0; i < paintedchildren.size(); i++) {
+    for (unsigned int i=0; i < paintedchildren.size(); i++) {
         if (i == 0) {
             ret += "(";
         }

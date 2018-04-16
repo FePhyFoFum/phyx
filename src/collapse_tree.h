@@ -18,6 +18,7 @@ idunno. maybe this is not best.
 class Collapser {
 private:
     float threshold_;
+    bool scale_set_;
     
     void guess_scale (double & threshold);
     
