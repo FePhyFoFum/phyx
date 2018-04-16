@@ -211,7 +211,7 @@ int main(int argc, char * argv[]) {
                     toPrune = get_complement_tip_set(tree, names);
                     numLeaves = tree->getExternalNodeCount();
                     if (numLeaves - (int)toPrune.size() > 1) {
-                        remove_tips(tree, names, silent);
+                        remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
@@ -229,7 +229,7 @@ int main(int argc, char * argv[]) {
                     //cout << "numLeaves = " << numLeaves << endl;
                     //print_vector(toPrune);
                     if (numLeaves - (int)toPrune.size() > 1) {
-                        remove_tips(tree, names, silent);
+                        remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
