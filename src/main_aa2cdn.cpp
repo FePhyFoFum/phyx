@@ -36,7 +36,8 @@ void print_help() {
     cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
     cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -h, --help         display this help and exit" << endl;
+    cout << " -r, --rmlastcdn     Removes last codon                " << endl;
+    cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
@@ -50,6 +51,7 @@ static struct option const long_options[] =
     {"aaseqf", required_argument, NULL, 'a'},
     {"nucseqf", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
+    {"rmlastcdn", required_argument, NULL, 'r'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -62,13 +64,14 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     bool nucfileset = false; // not used
+    bool rm_last = false;
     char * aaseqf = NULL;
     char * nucseqf = NULL;
     char * outf = NULL;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "a:o:n:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "a:o:n:rhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -86,6 +89,9 @@ int main(int argc, char * argv[]) {
                 nucfileset = true;
                 nucseqf = strdup(optarg);
                 check_file_exists(nucseqf);
+                break;
+            case 'r':
+                rm_last = true;
                 break;
             case 'h':
                 print_help();
@@ -174,7 +180,7 @@ int main(int argc, char * argv[]) {
 
     AAtoCDN functions;
     map<string, string>::iterator iter;
-    codon_sequences = functions.convert_to_codons(aa_sequences, nuc_sequences);
+    codon_sequences = functions.convert_to_codons(aa_sequences, nuc_sequences, rm_last);
     for (iter = codon_sequences.begin(); iter != codon_sequences.end(); iter++) {
         *poos << ">" << iter -> first << "\n" << iter -> second << endl;
     }

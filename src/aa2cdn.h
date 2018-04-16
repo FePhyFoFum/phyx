@@ -22,7 +22,7 @@ private:
 public:
     AAtoCDN();
     map <string, string> convert_to_codons (map <string, string>& aa_sequences,
-    map <string, string>& nuc_sequences);
+    map <string, string>& nuc_sequences, bool& rm_last);
 
 };
 

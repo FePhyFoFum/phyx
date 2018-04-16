@@ -14,8 +14,9 @@ using namespace std;
 #include "aa2cdn.h"
 
 map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequences,
-    map<string, string>& nuc_sequences) {
+    map<string, string>& nuc_sequences, bool& rm_last) {
     
+	
     string temp = "";
     for (iter_ = aa_sequences.begin(); iter_ != aa_sequences.end(); iter_++) {
         if (nuc_sequences.find(iter_ -> first) == nuc_sequences.end()) {
@@ -23,16 +24,29 @@ map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequenc
         } else {
             amino_acid_sequence_ = iter_ -> second;
             nucleotide_sequence_ = nuc_sequences[iter_ -> first];
-            for (unsigned int i=0; i < amino_acid_sequence_.size(); i++) {
-                if (amino_acid_sequence_[i] == '-') {
-                    temp += "---";
-                } else {
-                    temp += nucleotide_sequence_[0];
-                    temp += nucleotide_sequence_[1];
-                    temp += nucleotide_sequence_[2];
-                    nucleotide_sequence_.erase(0, 3);
-                }
-            }
+            if(rm_last == false){
+				for (unsigned int i=0; i < amino_acid_sequence_.size(); i++) {
+					if (amino_acid_sequence_[i] == '-') {
+						temp += "---";
+					} else {
+						temp += nucleotide_sequence_[0];
+						temp += nucleotide_sequence_[1];
+						temp += nucleotide_sequence_[2];
+						nucleotide_sequence_.erase(0, 3);
+					}
+				}
+			}else{
+				for (unsigned int i=0; i < (amino_acid_sequence_.size() - 1); i++) {
+					if (amino_acid_sequence_[i] == '-') {
+						temp += "---";
+					} else {
+						temp += nucleotide_sequence_[0];
+						temp += nucleotide_sequence_[1];
+						temp += nucleotide_sequence_[2];
+						nucleotide_sequence_.erase(0, 3);
+					}
+				}
+			}
             codon_sequences_[iter_ -> first] = temp;
             temp = "";
         }
