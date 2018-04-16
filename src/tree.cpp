@@ -521,64 +521,29 @@ void Tree::pruneInternalNode(Node * node) {
     /*
      * how this works
      * 
-     * store edge length of node: pel
-     * get the parent = gparent
-     * for each child of node, set parent to gparent, adding pel
+     * store edge length of node: pel (points to `grandparent')
+     * get the grandparent node = gparent
+     * for each child of node, set parent to gparent, adding pel to existing edge length
      * delete node
      * 
      * doesn't yet deal with possibility that node is the root (i.e. no parent)
+     * - this will arise with unrooted trees
     */
     double pel = node->getBL();
+    //cout << "Parent edge length: " << pel << endl;
     Node * gparent = node->getParent();
     
     for (int i=0; i < node->getChildCount(); i++) {
         Node * child = node->getChild(i);
-        //cout << "Original edge length: " << child->getBL() << endl;
+        //cout << "  " << i << ". Original edge length: " << child->getBL() << endl;
         double newEL = pel + child->getBL();
-        //cout << "New edge length: " << newEL << endl;
+        //cout << "     New edge length: " << newEL << endl;
         child->setBL(newEL);
         gparent->addChild(*child);
     }
     
     // now get rid of it
     gparent->removeChild(*node);
-    delete node;
-    /*
-    Node * par1 = node1->getParent();
-    Node * par2 = node2->getParent();
-    bool bp1 = par1->removeChild(*node1);
-    assert(bp1);
-    bool bp2 = par2->removeChild(*node2);
-    assert(bp2);
-    par1->addChild(*node2);
-    par2->addChild(*node1);
-    
-    if (parent->getChildCount() == 2) {
-        Node * other = NULL;
-        for (int i=0; i < parent->getChildCount(); i++) {
-            if (parent->getChild(i) != node) {
-                other = parent->getChild(i);
-            }
-        }
-        bl = other->getBL()+parent->getBL();
-        Node * mparent = parent->getParent();
-        if (mparent != NULL) {
-            mparent->addChild(*other);
-            other->setBL(bl);
-            for (int i=0; i < mparent->getChildCount(); i++) {
-                if (mparent->getChild(i)==parent) {
-                    mparent->removeChild(*parent);
-                    break;
-                }
-            }
-        } else {
-            root = other;
-            //cout << "i am here apparently..." << endl;
-        }
-    } else {
-        parent->removeChild(*node);
-    }
-    */
     delete node;
     this->processRoot();
 }
