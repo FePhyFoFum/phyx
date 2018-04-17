@@ -133,6 +133,9 @@ def test_program(name):
     elif name == "pxaa2cdn":
         cm = "./pxaa2cdn -a TEST/AA.fa -n TEST/un_aln_nuc.fa"
         t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
+    elif name == "pxcolt":
+        cm = "./pxcolt -t TEST/collapse.tre -l 0.7"
+        t = '((TaxonC:0.25,TaxonA:0.22500000000000000555,TaxonB:0.15499999999999999889)1.0:0.4000000000000000222,(TaxonD:0.23000000000000000999,TaxonE:0.16000000000000000333)0.94:0.2999999999999999889);\n'
     else:
         return
     p = subprocess.Popen(cm,shell=True,stdout=subprocess.PIPE)

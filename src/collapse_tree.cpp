@@ -9,16 +9,25 @@ using namespace std;
 #include "tree_utils.h"
 #include "collapse_tree.h"
 
-Collapser::Collapser (double & threshold):scale_set_(false) {
+Collapser::Collapser (double const& threshold):scale_set_(false) {
     threshold_ = threshold;
-    //cout << "Threshold set to: " << threshold_ << endl;
 }
 
+void Collapser::set_sup_string (string const& str) {
+    sup_string_ = str;
+}
+
+/*
+need to consider both node `names' _and_ `comments'
+former can be newick or Nexus, latter are only Nexus (e.g. BEAST)
+- annotations have certain strings identifying support:
+    - 'posterior=', 'prob=', 'label='
+*/
 
 void Collapser::collapse_edges (Tree * tr) {
-    //tree->hasNodeNames()
-    
-    bool isRooted = is_rooted(tr); // should be useful
+    has_labels_ = tr->hasNodeNames();
+    has_annotations_ = tr->hasNodeAnnotations();
+    //bool isRooted = is_rooted(tr); // should be useful
     // cout << "isRooted: " << isRooted << endl;
     
     if (!tr->hasNodeAnnotations()) {
@@ -41,6 +50,9 @@ void Collapser::collapse_edges (Tree * tr) {
                     //cout << "Whoops. This node has no support value." << endl;
                 } else {
                     float cursup = stof(str);
+                    if (!scale_set_) {
+                        guess_scale(cursup);
+                    }
                     if (cursup < threshold_) {
                         //cout << "Welp. This one has got to go (" << cursup << ")." << endl;
                         tr->pruneInternalNode(m);
@@ -61,12 +73,6 @@ void Collapser::collapse_edges (Tree * tr) {
 
 
 /*
-need to consider both node `names' _and_ `comments'
-former can be newick or Nexus, latter are only Nexus (e.g. BEAST)
-*/
-
-
-/*
 need to consider ranges:
 1) 0-100 (e.g., bootstraps)
 2) 0.0-1.0 (probs)
@@ -74,7 +80,18 @@ need to consider ranges:
 - rintf(f)==f
 */
 
-void Collapser::guess_scale (double & threshold) {
-    
-}
 
+// using a support value (the first encountered), determine whether scale is proportions or percentages
+// if appropriate will reset threshold (e.g. from 0.5 to 50)
+void Collapser::guess_scale (float const& sup) {
+    float f = sup;
+    if (rintf(f) == f) {
+        //cout << "Support is an integer" << endl;
+        if (f > 1.0) { // overkill
+            //cout << "Ok, looks like a percentage here guys." << endl;
+            threshold_ *= 100;
+            //cout << "New threshold set to " << threshold_ << endl;
+            scale_set_ = true;
+        }
+    }
+}

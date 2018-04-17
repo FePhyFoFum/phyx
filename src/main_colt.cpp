@@ -16,12 +16,14 @@ using namespace std;
 
 void print_help() {
     cout << "Collapse edges with support below some threshold." << endl;
+    cout << "If annotated Nexus, may require passing in the support identifier (-s)." << endl;
     cout << "This will take nexus and newick inputs." << endl;
     cout << endl;
     cout << "Usage: pxcolt [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -l, --limit=DOUBLE  the minimum support threshold (default = 0.5)" << endl;
+    cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << endl;
+    cout << " -s, --sup=STRING    string identifying support values (if default fails)" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
@@ -36,6 +38,7 @@ static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"limit", required_argument, NULL, 'l'},
+    {"sup", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -48,15 +51,17 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    bool thresholdset = false;
+    bool supset = false;
+    
     double threshold = 0.5;
+    string supstring = "";
     
     char * outf = NULL;
     char * treef = NULL;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:l:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:l:s:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -68,11 +73,14 @@ int main(int argc, char * argv[]) {
                 break;
             case 'l':
                 threshold = atof(strdup(optarg));
-                //thresholdset = true;
-                if (threshold <= 0) {
-                    cout << "Threshold must be > 0" << endl;
+                if (threshold <= 0 || threshold > 1) {
+                    cout << "Specify proportional threshold: (0,1)." << endl;
                     exit(0);
                 }
+                break;
+            case 's':
+                supset = true;
+                supstring = strdup(optarg);
                 break;
             case 'o':
                 outfileset = true;
@@ -117,6 +125,10 @@ int main(int argc, char * argv[]) {
     }
     
     Collapser tc (threshold);
+    
+    if (supset) {
+        tc.set_sup_string(supstring);
+    }
     
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
