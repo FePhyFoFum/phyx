@@ -32,7 +32,7 @@ void print_help() {
     cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << endl;
     cout << " -f, --namesf=FILE   names in a file (each on a line)" << endl;
     cout << " -c, --comp          take the complement (i.e. move any taxa not in list)" << endl;
-    cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << endl;
+    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
