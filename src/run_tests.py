@@ -130,6 +130,9 @@ def test_program(name):
     elif name == "pxsstat":
         cm = "./pxsstat -s TEST/Bollback_2002_MBE.fa"
         t = '-18.867\n'
+    elif name == "pxaa2cdn":
+        cm = "./pxaa2cdn -a TEST/AA.fa -n TEST/un_aln_nuc.fa"
+        t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
     else:
         return
     p = subprocess.Popen(cm,shell=True,stdout=subprocess.PIPE)
@@ -149,7 +152,7 @@ def test_program(name):
 
 # this are skipped in the testing because they are preliminary, tests will
 # be added as they become more permanent.
-notest = ["pxbpsq","pxaa2cdn","pxnni"]
+notest = ["pxbpsq","pxnni"]
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
