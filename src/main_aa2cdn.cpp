@@ -36,7 +36,7 @@ void print_help() {
     cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
     cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -r, --rmlastcdn     Removes last codon                " << endl;
+    cout << " -r, --rmlastcdn     removes last codon                " << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -51,7 +51,7 @@ static struct option const long_options[] =
     {"aaseqf", required_argument, NULL, 'a'},
     {"nucseqf", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
-    {"rmlastcdn", required_argument, NULL, 'r'},
+    {"rmlastcdn", no_argument, NULL, 'r'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    bool nucfileset = false; // not used
+    bool nucfileset = false;
     bool rm_last = false;
     char * aaseqf = NULL;
     char * nucseqf = NULL;
@@ -189,7 +189,4 @@ int main(int argc, char * argv[]) {
         delete poos;
     }
     return EXIT_SUCCESS;
-
 }
-
-

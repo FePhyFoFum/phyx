@@ -25,20 +25,20 @@ map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequenc
             amino_acid_sequence_ = iter_ -> second;
             nucleotide_sequence_ = nuc_sequences[iter_ -> first];
             if(rm_last == true){
-				len = amino_acid_sequence_.size() - 1;
-			}else{
-				len = amino_acid_sequence_.size();
-			}
-			for (unsigned int i=0; i < len; i++) {
-				if (amino_acid_sequence_[i] == '-') {
-					temp += "---";
-				} else {
-					temp += nucleotide_sequence_[0];
-					temp += nucleotide_sequence_[1];
-					temp += nucleotide_sequence_[2];
-					nucleotide_sequence_.erase(0, 3);
-				}
-			}
+                len = amino_acid_sequence_.size() - 1;
+            }else{
+                len = amino_acid_sequence_.size();
+            }
+            for (int i=0; i < len; i++) {
+                if (amino_acid_sequence_[i] == '-') {
+                    temp += "---";
+                } else {
+                    temp += nucleotide_sequence_[0];
+                    temp += nucleotide_sequence_[1];
+                    temp += nucleotide_sequence_[2];
+                    nucleotide_sequence_.erase(0, 3);
+                }
+            }
             codon_sequences_[iter_ -> first] = temp;
             temp = "";
         }
