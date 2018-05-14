@@ -23,6 +23,10 @@ void CleanTree::clean_all () {
         //cout << "Found node annotations!" << endl;
         remove_annotations(tree_);
     }
+    if (tree_->hasNodeNames()) {
+        //cout << "Found node names!" << endl;
+        remove_internal_names(tree_);
+    }
     deknuckle_tree(tree_);
     if (has_root_edge(tree_)) {
         //cout << "Tree has a root edge." << endl;
