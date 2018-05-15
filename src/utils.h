@@ -25,10 +25,11 @@ unsigned int get_clock_seed ();
 vector <double> parse_double_comma_list (string& str);
 //vector <int> parse_int_comma_list (string& str);
 
-// template version. pass result vector as arg; assumes this is empty (not checked)
+// template version. pass result vector as arg; will delete anything already in res
 template<typename T> void parse_comma_list (string& str, vector <T> & res) {
     std::stringstream ss(str);
     T i;
+    res.clear();
     while (ss >> i) {
         res.push_back(i);
         bool done = false;
