@@ -161,13 +161,13 @@ int main(int argc, char * argv[]) {
             case 'd':
                 delete_columns = true;
                 incolids = strdup(optarg);
-                col_indices = parse_int_comma_list(incolids);
+                parse_comma_list(incolids, col_indices);
                 sort(col_indices.begin(), col_indices.end());
                 break;
             case 'k':
                 keep_columns = true;
                 incolids = strdup(optarg);
-                col_indices = parse_int_comma_list(incolids);
+                parse_comma_list(incolids, col_indices);
                 sort(col_indices.begin(), col_indices.end());
                 break;
             case 'x':
