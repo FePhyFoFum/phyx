@@ -68,42 +68,43 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
 }
 
 
-// probably a nicer way to do this
-vector <double> parse_double_comma_list (string& str) {
-    vector <double> res;
-    std::stringstream ss(str);
-    double i;
-    while (ss >> i) {
-        res.push_back(i);
-        bool done = false;
-        while (!done) { // shouldn't be any spaces, but let's be safe
-            if (ss.peek() == ' ' || ss.peek() == ',') {
-                ss.ignore();
-            } else {
-                done = true;
-            }
-        }
-    }
-    return res;
-}
+// deprecated in favour of template version (in header file)
+//vector <double> parse_double_comma_list (string& str) {
+//    vector <double> res;
+//    std::stringstream ss(str);
+//    double i;
+//    while (ss >> i) {
+//        res.push_back(i);
+//        bool done = false;
+//        while (!done) { // shouldn't be any spaces, but let's be safe
+//            if (ss.peek() == ' ' || ss.peek() == ',') {
+//                ss.ignore();
+//            } else {
+//                done = true;
+//            }
+//        }
+//    }
+//    return res;
+//}
 
-vector <int> parse_int_comma_list (string& str) {
-    vector <int> res;
-    std::stringstream ss(str);
-    double i;
-    while (ss >> i) {
-        res.push_back(i);
-        bool done = false;
-        while (!done) { // shouldn't be any spaces, but let's be safe
-            if (ss.peek() == ' ' || ss.peek() == ',') {
-                ss.ignore();
-            } else {
-                done = true;
-            }
-        }
-    }
-    return res;
-}
+// deprecated in favour of template version (in header file)
+//vector <int> parse_int_comma_list (string& str) {
+//    vector <int> res;
+//    std::stringstream ss(str);
+//    int i;
+//    while (ss >> i) {
+//        res.push_back(i);
+//        bool done = false;
+//        while (!done) { // shouldn't be any spaces, but let's be safe
+//            if (ss.peek() == ' ' || ss.peek() == ',') {
+//                ss.ignore();
+//            } else {
+//                done = true;
+//            }
+//        }
+//    }
+//    return res;
+//}
 
 
 bool is_number (const string& s) {

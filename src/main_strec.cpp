@@ -172,7 +172,7 @@ int main(int argc, char * argv[]) {
             case 'p':
                 periodsset = true;
                 periodstring = (strdup(optarg));
-                period_times = parse_double_comma_list(periodstring);
+                parse_comma_list(periodstring, period_times);
                 break;
             case 'l':
                 logfileset = true;

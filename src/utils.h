@@ -4,6 +4,7 @@
 #include <vector>
 #include <iterator>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -21,8 +22,26 @@ bool is_number (const string &);
 
 unsigned int get_clock_seed ();
 
-vector <double> parse_double_comma_list (string& str);
-vector <int> parse_int_comma_list (string& str);
+//vector <double> parse_double_comma_list (string& str);
+//vector <int> parse_int_comma_list (string& str);
+
+// template version. pass result vector as arg; will delete anything already in res
+template<typename T> void parse_comma_list (string& str, vector <T> & res) {
+    std::stringstream ss(str);
+    T i;
+    res.clear();
+    while (ss >> i) {
+        res.push_back(i);
+        bool done = false;
+        while (!done) { // shouldn't be any spaces, but let's be safe
+            if (ss.peek() == ' ' || ss.peek() == ',') {
+                ss.ignore();
+            } else {
+                done = true;
+            }
+        }
+    }
+}
 
 // do stuff over vectors
 double sum (vector <double> & in);
@@ -56,7 +75,7 @@ string get_valid_nexus_label (string const& inLabel);
 string get_safe_taxon_label (string const& inLabel);
 void quotify_label (string & token);
 
-// not currently used
+// not currently used (but cool)
 template<typename T> void print_vector (vector <T> & vec) {
     std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(std::cout, " "));
     cout << endl;

@@ -73,15 +73,18 @@ double get_root_tip_var(Tree * tr){
 // assumes annotations are of form: [something]
 void remove_annotations(Tree * tr) {
     for (int i=0; i < tr->getInternalNodeCount(); i++) {
-        tr->getInternalNode(i)->setName("");
+        tr->getInternalNode(i)->setComment("");
     }
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
-        string str = tr->getExternalNode(i)->getName();
-        std::size_t found = str.find_first_of("["); // not allowing these in valid names (for now)
-        if (found != std::string::npos) {
-            str.erase(found);
-            tr->getExternalNode(i)->setName(str);
-        }
+        tr->getExternalNode(i)->setComment("");
+    }
+}
+
+
+// same as above, but for names
+void remove_internal_names(Tree * tr) {
+    for (int i=0; i < tr->getInternalNodeCount(); i++) {
+        tr->getInternalNode(i)->setName("");
     }
 }
 
