@@ -106,7 +106,7 @@ int main(int argc, char * argv[]) {
     vector <double> basefreq(4, 0.25);
     vector <double> aabasefreq(20, 0.05);
     vector <double> userrates;
-    vector <double> multirates;;
+    vector <double> multirates;
     int nreps = 1; // not implemented at the moment
     int seed = -1;
     int numpars = 0;
@@ -154,7 +154,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 infreqs = strdup(optarg);
-                basefreq = parse_double_comma_list(infreqs);
+                parse_comma_list(infreqs, basefreq);
                 if (basefreq.size() != 4) {
                     cout << "Error: must provide 4 base frequencies (" << basefreq.size()
                         << " provided). Exiting." << endl;
@@ -173,7 +173,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 inrates = strdup(optarg);
-                userrates = parse_double_comma_list(inrates);
+                parse_comma_list(inrates, userrates);
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 6) {
@@ -209,7 +209,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'w':
                 inrates = strdup(optarg);
-                userrates = parse_double_comma_list(inrates);
+                parse_comma_list(inrates, userrates);
                 is_dna = false;
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
@@ -257,7 +257,7 @@ int main(int argc, char * argv[]) {
             case 'q':
                 is_dna = false;
                 infreqs = strdup(optarg);
-                aabasefreq = parse_double_comma_list(infreqs);
+                parse_comma_list(infreqs, aabasefreq);
                 if (aabasefreq.size() != 20) {
                     cout << "Error: must provide 20 base frequencies (" << aabasefreq.size()
                         << " provided). Exiting." << endl;
@@ -282,7 +282,7 @@ int main(int argc, char * argv[]) {
                 break;
             case 'm':
                 holdrates = strdup(optarg);
-                multirates = parse_double_comma_list(holdrates);
+                parse_comma_list(holdrates, multirates);
                 numpars = multirates.size();
                 if ((numpars - 6) % 7 != 0) {
                     cout << "Error: must provide 6 background substitution "
