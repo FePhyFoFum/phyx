@@ -22,7 +22,7 @@ bool is_number (const string &);
 
 unsigned int get_clock_seed ();
 
-vector <double> parse_double_comma_list (string& str);
+//vector <double> parse_double_comma_list (string& str);
 //vector <int> parse_int_comma_list (string& str);
 
 // template version. pass result vector as arg; will delete anything already in res
