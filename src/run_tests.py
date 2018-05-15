@@ -80,8 +80,8 @@ def test_program(name):
         cm = "./pxconsq -s TEST/test.fa"
         t = '>consensus\nRHNYKNBBSNNYHMMRNHVV\n'
     elif name == "pxseqgen":
-        cm = "./pxseqgen -t TEST/test.tre -x 1 -l 1"
-        t = '>TaxonE\nT\n>TaxonD\nT\n>TaxonC\nA\n>TaxonB\nT\n>TaxonA\nA\n'
+        cm = "./pxseqgen -t TEST/test.tre -x 1 -l 10"
+        t = '>TaxonE\nCTGTAACTAG\n>TaxonD\nCTGTAACTAG\n>TaxonC\nGTCTAACAGG\n>TaxonB\nGTTTGACTGG\n>TaxonA\nTTTTGACTGG\n'
     elif name == "pxrmt":
         cm = "./pxrmt -t TEST/test.tre -n TaxonA"
         t = '((TaxonC:0.25,TaxonB:0.15499999999999999889):0.4000000000000000222,(TaxonD:0.23000000000000000999,TaxonE:0.16000000000000000333):0.2999999999999999889);\n'
