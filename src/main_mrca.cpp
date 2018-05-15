@@ -26,7 +26,7 @@ void print_help() {
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
     cout << endl;
-    cout << "Usage: pxmrcacut [OPTION]... " << endl;
+    cout << "Usage: pxmrca [OPTION]... " << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input newick tree file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output newick file, stout otherwise" << endl;
@@ -97,7 +97,7 @@ int main(int argc, char * argv[]) {
     }
     
     if (!mrcaset) {
-        cout << "Must supply mrca file." << endl;
+        cout << "Must supply mrca file" << endl;
         exit(0);
     }
     
@@ -140,26 +140,46 @@ int main(int argc, char * argv[]) {
     }
     inmrca.close();
     
-    // collect tree(s)
-    vector<string> lines;
-    string line;
-    while (getline(*pios, line)) {
-        lines.push_back(line);
+    string retstring;
+    int ft = test_tree_filetype_stream(*pios, retstring);
+    if (ft != 0 && ft != 1) {
+        cerr << "this really only works with nexus or newick" << endl;
+        exit(0);
     }
     
-    TreeReader tr;
+    bool going = true;
+    map<string,vector<string> >::iterator it;
     
-    for (unsigned int i = 0; i < lines.size(); i++) {
-        Tree * tree = tr.readTree(lines[i]);
-        //(*poos) << "total " << tree->getExternalNodeCount() << endl;
-        
-        map<string,vector<string> >::iterator it;
-        for (it=mrcas.begin(); it != mrcas.end(); it++) {
-            Node * nd = tree->getMRCA((*it).second);
-            (*poos) << (*it).first << " " << nd->get_num_leaves() << " "
-                << nd->getName() << endl;
+    if (ft == 1) {
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (tree != NULL) {
+                for (it=mrcas.begin(); it != mrcas.end(); it++) {
+                    Node * nd = tree->getMRCA((*it).second);
+                    (*poos) << (*it).first << " " << nd->get_num_leaves() << " "
+                        << nd->getName() << endl;
+                }
+                delete tree;
+            }
         }
-        delete tree;
+    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                for (it=mrcas.begin(); it != mrcas.end(); it++) {
+                    Node * nd = tree->getMRCA((*it).second);
+                    (*poos) << (*it).first << " " << nd->get_num_leaves() << " "
+                        << nd->getName() << endl;
+                }
+                delete tree;
+            }
+        }
     }
     
     if (fileset) {
