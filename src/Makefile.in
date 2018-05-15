@@ -424,7 +424,7 @@ pxfqfilt: $(CPP_OBJS) $(FQFILT_OBJ)
 
 pxrevcomp: $(CPP_OBJS) $(REVCOMP_OBJ)
 	@echo 'building pxrevcomp'
-	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) #$(CPP_LIBS)
+	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS)
 
 pxnw: $(CPP_OBJS) $(NW_OBJ)
 	@echo 'building pxnw'
