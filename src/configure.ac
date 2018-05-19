@@ -18,7 +18,7 @@ AC_PREFIX_DEFAULT(/usr/local/bin)
 
 have_nlopt=no
 AC_SUBST([HNLOPT],[Y])
-AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes])
+AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes], [have_nlopt=no], [-lstdc++])
 
 if test "x${have_nlopt}" = xno; then
    AC_MSG_WARN([
