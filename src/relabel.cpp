@@ -96,7 +96,7 @@ void Relabel::relabel_tree (Tree * tr) {
                 //cout << "Found it this time!" << endl;
                 tr->getInternalNode(i)->setName(name_map_[str]);
             } else {
-                cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
+                //cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
             }
         }  
     }
