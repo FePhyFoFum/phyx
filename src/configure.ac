@@ -14,7 +14,7 @@ AC_PROG_CXX
 
 AC_CHECK_LIB([m], [fabs])
 
-AC_PREFIX_DEFAULT(/usr/local/bin)
+AC_PREFIX_DEFAULT(/usr/local)
 
 have_nlopt=no
 AC_SUBST([HNLOPT],[Y])
