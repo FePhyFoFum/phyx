@@ -10,6 +10,15 @@ License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 
 Some of the sequence comparison operations use the very nice [edlib library](https://github.com/Martinsos/edlib#alignment-methods). These are reported in this publication: [Martin Šošić, Mile Šikić; Edlib: a C/C ++ library for fast, exact sequence alignment using edit distance. Bioinformatics 2017 btw753. doi: 10.1093/bioinformatics/btw753](https://academic.oup.com/bioinformatics/article/33/9/1394/2964763/Edlib-a-C-C-library-for-fast-exact-sequence).
 
+## Update 24 May 2018
+If you have been using phyx and things are not working after a recent pull, this is because of a change in configuration. Please do the following to remedy the situation:
+
+    make distclean
+    autoreconf -fi
+    ./configure
+    make
+    sudo make install
+
 # Installation instructions 
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
 
