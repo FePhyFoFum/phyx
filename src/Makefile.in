@@ -536,10 +536,10 @@ pxcolt: $(CPP_OBJS) $(COLLAPSE_TREE_OBJ)
 	$(CXX) -o "pxcolt" $(OPT_FLAGS) $(COLLAPSE_TREE_OBJ) $(CPP_OBJS)
 
 install:
-	install -m 0755 px* $(prefix)
+	install -m 0755 px* $(prefix)/bin
 
 uninstall:
-	-$(RM) $(prefix)/px*
+	-$(RM) $(prefix)/bin/px*
 
 # Other Targets
 clean:
