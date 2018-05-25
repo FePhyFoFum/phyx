@@ -25,6 +25,7 @@ void print_help() {
     cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << endl;
     cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
+    cout << " -v, --verbose       make the output more verbose" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -40,6 +41,7 @@ static struct option const long_options[] =
     {"cnames", required_argument, NULL, 'c'},
     {"nnames", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
+    {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -53,13 +55,14 @@ int main(int argc, char * argv[]) {
     bool sfileset = false;
     bool cfileset = false;
     bool nfileset = false;
+    bool verbose = false;
     char * outf = NULL;
     char * seqf = NULL;
     string cnamef = "";
     string nnamef = "";
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:c:n:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:c:n:o:vhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -82,6 +85,9 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                break;
+            case 'v':
+                verbose = true;
                 break;
             case 'h':
                 print_help();
@@ -126,7 +132,7 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    Relabel rl (cnamef, nnamef);
+    Relabel rl (cnamef, nnamef, verbose);
     
     Sequence seq;
     string retstring;

@@ -1,5 +1,5 @@
-#ifndef _RELABEL_H_
-#define _RELABEL_H_
+#ifndef _RELABEL_TREE_H_
+#define _RELABEL_TREE_H_
 
 #include <map>
 #include <vector>
@@ -15,15 +15,16 @@ private:
     vector <string> old_names_;
     vector <string> new_names_;
     map <string, string> name_map_;
+    bool verbose_;
     
     void store_name_lists (string & cnamesf, string nnamesf);
     
 public:
-    Relabel (string & cnamesf, string nnamesf);
+    Relabel (string & cnamesf, string nnamesf, bool const& verbose);
     void relabel_tree (Tree * tr);
     void relabel_sequence (Sequence & seq);
 };
 
 
 
-#endif /* _RELABEL_H_ */
+#endif /* _RELABEL_TREE_H_ */

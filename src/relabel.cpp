@@ -10,7 +10,7 @@ using namespace std;
 #include "utils.h"
 
 
-Relabel::Relabel (string & cnamesf, string nnamesf) {
+Relabel::Relabel (string & cnamesf, string nnamesf, bool const& verbose) {
     store_name_lists (cnamesf, nnamesf);
 }
 
