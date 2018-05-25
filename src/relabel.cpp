@@ -12,6 +12,7 @@ using namespace std;
 
 Relabel::Relabel (string & cnamesf, string nnamesf, bool const& verbose) {
     store_name_lists (cnamesf, nnamesf);
+    verbose_ = verbose;
 }
 
 void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
@@ -58,9 +59,6 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
         }
     }
     /*
-    cout << "Counted current (" << ccount << ") and new (" << ncount
-        << ") names." << endl;
-    
     for(map<string, string>::const_iterator it = name_map_.begin(); it != name_map_.end(); ++it) {
         std::cout << it->first << " " << it->second << endl;
     }
@@ -84,7 +82,9 @@ void Relabel::relabel_tree (Tree * tr) {
                 //cout << "Found it this time!" << endl;
                 tr->getExternalNode(i)->setName(name_map_[str]);
             } else {
-                cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
+                if (verbose_) {
+                    cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
+                }
             }
         }  
     }
