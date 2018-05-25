@@ -31,6 +31,12 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     old_names_ = terp;
     terp.clear();
     
+    // TODO? clean names to make them jointly newick/nexus compliant
+    // should we 'correct' invalid names? or leave it to user?
+    // can use get_valid_newick_label or get_valid_nexus_label from utils.cpp
+    // downside: if we change these, will not match what the user expects downstream
+    // quotes should be ok if spaces are the issue
+    
     ifstream ifn(nnamesf.c_str());
     while (getline (ifn, line)) {
         if (!line.empty()) {
@@ -61,8 +67,6 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     */
 }
 
-// should we 'correct' invalid names? or leave it to user?
-// can use get_valid_newick_label or get_valid_nexus_label from utils.cpp
 void Relabel::relabel_tree (Tree * tr) {
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         string str = tr->getExternalNode(i)->getName();
