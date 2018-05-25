@@ -67,6 +67,10 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     */
 }
 
+// TODO: keep track of non-matching `old_names` rather than non-matching node names
+// 1. store matched names in a vector
+// 2. find complement set against supplied not empty, report bad names
+// 3. if complement is 
 void Relabel::relabel_tree (Tree * tr) {
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         string str = tr->getExternalNode(i)->getName();
