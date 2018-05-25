@@ -434,10 +434,12 @@ int main(int argc, char * argv[]) {
                 matrix[i][index] = 1;
                 if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
                     vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
+                    cout << rt_nms.size() << endl;
                     set<string> rt_nms_set;
                     copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
                     set<string> nms_s;
                     copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
+                    vector<int> nms_i;
                     vector<int> nms_i2;
                     vector<string> nms_s2(rt_nms.size());
                     vector<string>::iterator it;
@@ -446,8 +448,16 @@ int main(int argc, char * argv[]) {
                     for (unsigned int k=0; k < nms_s2.size(); k++) {
                         nms_i2.push_back(name_index[nms_s2[k]]);
                     }
+                    for (auto it : nms_s){
+                        nms_i.push_back(name_index[it]);
+                    }
                     sort(nms_i2.begin(),nms_i2.end());
-                    matrix[i][find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin()] = 1;
+                    sort(nms_i.begin(),nms_i.end());
+                    int x = find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin();
+                    if (x == matrix[i].size()){
+                        x = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                    }
+                    matrix[i][x] = 1;
                 }
             }
         }
