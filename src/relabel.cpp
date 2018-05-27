@@ -131,9 +131,6 @@ bool Relabel::relabel_sequence (Sequence & seq) {
         seq.set_id(name_map_[str]);
         return true;
     } else {
-        if (verbose_) {
-            cerr << "Cannot match sequence label '" << str << "'." << endl;
-        }
         return false;
     }
 }
