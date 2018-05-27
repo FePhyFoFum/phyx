@@ -32,6 +32,13 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     old_names_ = terp;
     terp.clear();
     
+    // check all current names are unique (otherwise won't work with existing map)
+    set <string> orig(old_names_.begin(), old_names_.end());
+    if (orig.size() < old_names_.size()) {
+        cerr << "Oops! Current name list contains duplicates. Exiting." << endl;
+        exit(0);
+    }
+    
     // TODO? clean names to make them jointly newick/nexus compliant
     // should we 'correct' invalid names? or leave it to user?
     // can use get_valid_newick_label or get_valid_nexus_label from utils.cpp
@@ -65,26 +72,23 @@ void Relabel::store_name_lists (string & cnamesf, string nnamesf) {
     */
 }
 
-// TODO: keep track of non-matching `old_names` rather than non-matching node names
-// 1. store matched names in a vector
-// 2. find complement set against supplied not empty, report bad names
-// 3. if complement is 
+// if verbose, will report the failed matches
 void Relabel::relabel_tree (Tree * tr) {
+    // keep track of matches
+    set <string> orig(old_names_.begin(), old_names_.end());
     for (int i=0; i < tr->getExternalNodeCount(); i++) {
         string str = tr->getExternalNode(i)->getName();
         if (name_map_.find(str) != name_map_.end()) {
             //cout << "Tree label '" << str << "' found in name list!" << endl;
             tr->getExternalNode(i)->setName(name_map_[str]);
+            orig.erase(str);
         } else {
             // see if it is quotes that is messing us up
             replace_all(str, "'", "");
             if (name_map_.find(str) != name_map_.end()) {
-                //cout << "Found it this time!" << endl;
+                //cout << "Found it (" << str << ") this time!" << endl;
                 tr->getExternalNode(i)->setName(name_map_[str]);
-            } else {
-                if (verbose_) {
-                    cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
-                }
+                orig.erase(str);
             }
         }  
     }
@@ -103,10 +107,19 @@ void Relabel::relabel_tree (Tree * tr) {
             if (name_map_.find(str) != name_map_.end()) {
                 //cout << "Found it this time!" << endl;
                 tr->getInternalNode(i)->setName(name_map_[str]);
-            } else {
-                //cerr << "Tree label '" << str << "' NOT found in name list!" << endl;
+                orig.erase(str);
             }
         }  
+    }
+    
+    // report failed matches (if present)
+    if (orig.size() > 0) {
+        if (verbose_) {
+            cerr << "The following names to match were not found in the tree:" << endl;
+            for (auto elem : orig) {
+                cerr << elem << endl;
+            }
+        }
     }
 }
 
