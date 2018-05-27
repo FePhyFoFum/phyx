@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <set>
 
 using namespace std;
 
@@ -123,11 +124,21 @@ void Relabel::relabel_tree (Tree * tr) {
     }
 }
 
-void Relabel::relabel_sequence (Sequence & seq) {
+// now returns a boolean indicating success
+bool Relabel::relabel_sequence (Sequence & seq) {
     string str = seq.get_id();
     if (name_map_.find(str) != name_map_.end()) {
         seq.set_id(name_map_[str]);
+        return true;
     } else {
-        cerr << "Erg. Cannot match label '" << str << "'." << endl;
+        if (verbose_) {
+            cerr << "Cannot match sequence label '" << str << "'." << endl;
+        }
+        return false;
     }
+}
+
+set <string> Relabel::get_names_to_replace () {
+    set <string> orig(old_names_.begin(), old_names_.end());
+    return orig;
 }

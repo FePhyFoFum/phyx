@@ -22,7 +22,8 @@ private:
 public:
     Relabel (string & cnamesf, string nnamesf, bool const& verbose);
     void relabel_tree (Tree * tr);
-    void relabel_sequence (Sequence & seq);
+    bool relabel_sequence (Sequence & seq);
+    set <string> get_names_to_replace ();
 };
 
 

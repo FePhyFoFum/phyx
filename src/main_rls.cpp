@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <set>
 #include <cstring>
 #include <getopt.h>
 
@@ -134,21 +135,42 @@ int main(int argc, char * argv[]) {
     
     Relabel rl (cnamef, nnamef, verbose);
     
+    set <string> orig = rl.get_names_to_replace();
+    
     Sequence seq;
     string retstring;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     
+    bool success = false;
+    
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        rl.relabel_sequence(seq);
+        string terp = seq.get_id();
+        success = rl.relabel_sequence(seq);
+        if (success) {
+            orig.erase(terp);
+        }
         (*poos) << ">" << seq.get_id() << endl;
         (*poos) << seq.get_sequence() << endl;
     }
 // have to deal with last sequence outside while loop. fix this.
     if (ft == 2) {
-        rl.relabel_sequence(seq);
+        string terp = seq.get_id();
+        success = rl.relabel_sequence(seq);
+        if (success) {
+            orig.erase(terp);
+        }
         (*poos) << ">" << seq.get_id() << endl;
         (*poos) << seq.get_sequence() << endl;
+    }
+    
+    if (orig.size() > 0) {
+        if (verbose) {
+            cerr << "The following names to match were not found in the alignment:" << endl;
+            for (auto elem : orig) {
+                cerr << elem << endl;
+            }
+        }
     }
     
     if (sfileset) {
