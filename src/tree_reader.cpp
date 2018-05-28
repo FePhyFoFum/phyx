@@ -53,6 +53,10 @@ Tree * TreeReader::readTree(string trees) {
                 currNode = root;
                 start = false;
             } else {
+                if (currNode == NULL){
+                    cerr << "Malformed newick string. Can read until char " << x << "." << endl;
+                    exit(1);
+                }
                 Node * newNode = new Node(currNode);
                 currNode->addChild(*newNode);
                 currNode = newNode;
@@ -115,6 +119,7 @@ Tree * TreeReader::readTree(string trees) {
                 } 
             }// work on edge
             currNode->setName(nodeName);
+            //cout << nodeName << endl;
             if (nodeName.size() > 0) {
                 hasInternalNodeNames = true;
             }
@@ -163,7 +168,7 @@ Tree * TreeReader::readTree(string trees) {
             currNode->setComment(note);
         } else if (nextChar == ' ') {
             // something supposed to be here?
-            
+
         }
         // external named node
         else {
@@ -216,6 +221,7 @@ Tree * TreeReader::readTree(string trees) {
                     }
                 } 
             }
+            //cout << nodeName << endl;
             newNode->setName(nodeName);
         }
         if (x < pb.length() - 1) { // added
