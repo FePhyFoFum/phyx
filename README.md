@@ -23,50 +23,38 @@ If you have been using phyx and things are not working after a recent pull, this
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
 
 ## Mac install
-Mac has become increasingly difficult to support at the command line with changes every version on location and standards for compilation tools. First, distribution of compiled programs is very difficult. Furthermore, Mac now defaults to clang as a C/C++ compiler, which does not support OpenMP.  For **Mac OSX 10.12**, we have found that you can install with clang using the simple instructions and [homebrew] (http://brew.sh/) *or* using a fresh installation of gcc from [here](http://hpc.sourceforge.net/). Instructions for both are below (don't use both, choose one, probably the simple one). For simple instructions click [here](#install-with-homebrew-simple-instructions), and for advanced instructions click [here](#install-with-hpc-gcc-advanced-instructions).
+Mac has become increasingly difficult to support at the command line with changes every version on location and standards for compilation tools. First, distribution of compiled programs is very difficult. Furthermore, Mac now defaults to clang as a C/C++ compiler, which does not support OpenMP.  For **Mac OSX 10.12**, we have found that you can install with clang using the simple instructions and [homebrew] (http://brew.sh/) *or* using a fresh installation of gcc from [here](http://hpc.sourceforge.net/). Instructions for both are below (don't use both, choose one, probably the simple one). For simple instructions click [here](#binary-install-with-homebrew), and for advanced instructions click [here](#install-with-hpc-gcc-advanced-instructions).
 
-### Install with Homebrew (simple instructions)
-The instructions below assume homebrew, which is convenient for dealing with dependencies.
+### Binary install with Homebrew
 
-1. Install the homebrew package manager:
+1. Install the Homebrew package manager:
+
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+2. Install the Brewsci phyx package:
+
+        brew install brewsci/bio/phyx
+
+### Build from source with Homebrew
+
+1. Install the Homebrew package manager:
 
         /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 2. Install dependencies from homebrew:
 
-        brew install git
-        brew install cmake
-        brew install homebrew/science/nlopt
-
- - In recent versions armadillo from brew works best:
-
-        brew install armadillo
+        brew install git cmake nlopt armadillo
 
 3. On to phyx. first, clone the repository (if you haven't already):
 
         git clone https://github.com/FePhyFoFum/phyx.git
 
-4. Install the final dependency, armadillo, (included with phyx):
- - This can be installed from the deps or from brew:
+4. Install phyx
 
-		cd phyx/deps
-		tar -xzf armadillo-7.400.2.tgz
-		cd armadillo-7.400.2
-		./configure
-		make
-		sudo make install
- 
- - If you install from brew, you can do this by
-
-        brew install homebrew/science/nlopt
-        export CXX=/usr/local/bin/g++-6
-
-5. Install phyx
-
-		cd ../../src
-		./configure
-		make
-		python run_tests.py
+        cd phyx/src
+        ./configure
+        make
+        python run_tests.py
 
 If you want to install it so it is available anywhere in your system, do:
 
