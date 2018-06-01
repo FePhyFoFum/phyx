@@ -330,9 +330,12 @@ RATE_DEPS += \
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 #	$(CXX) $(OPT_FLAGS) -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
+
+PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxssort pxcolt $(NLOPT_PROGRAMS)
+
 # All Target
 # pxnni not included for now
-all: pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxssort pxcolt $(NLOPT_PROGRAMS)
+all: $(PROGS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
 	@echo 'building pxstrec'
@@ -539,7 +542,7 @@ install:
 	install -m 0755 px* $(prefix)/bin
 
 uninstall:
-	-$(RM) $(prefix)/bin/px*
+	-$(RM) $(addprefix $(prefix)/bin/, $(PROGS))
 
 # Other Targets
 clean:
