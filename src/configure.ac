@@ -18,14 +18,15 @@ AC_PREFIX_DEFAULT(/usr/local)
 
 have_nlopt=no
 AC_SUBST([HNLOPT],[Y])
-AC_SEARCH_LIBS([nlopt_urand], [nlopt_cxx], [have_nlopt=yes], [have_nlopt=no], [-lstdc++])
-
+AC_CHECK_LIB(nlopt,nlopt_version,[have_nlopt=yes],[have_nlopt=no])
+AC_CHECK_HEADER(nlopt.h,[have_nlopt=yes],[have_nlopt=no])
 if test "x${have_nlopt}" = xno; then
    AC_MSG_WARN([
 --------------------------------------------------------
-The nlopt library is required for optimization.
-phyx was developed with nlopt compiled with these flags
- ./configure --with-cxx --without-octave --without-matlab
+The nlopt library is required for optimization for some
+programs. You can install from standard repos or you 
+can compile with these flags
+ ./configure --without-octave --without-matlab
 --------------------------------------------------------])
    AC_SUBST([HNLOPT],[N])
 fi

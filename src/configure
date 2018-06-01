@@ -585,7 +585,7 @@ PACKAGE_STRING='phyx 1.0'
 PACKAGE_BUGREPORT='eebsmith@umich.edu'
 PACKAGE_URL=''
 
-ac_default_prefix=/usr/local/bin
+ac_default_prefix=/usr/local
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -627,10 +627,10 @@ OPT_FLAGS
 HOMP
 POW_LIB
 LIBOBJS
+HARM
 EGREP
 GREP
 CPP
-HARM
 HNLOPT
 ac_ct_CC
 CFLAGS
@@ -661,6 +661,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -734,6 +735,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -986,6 +988,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1123,7 +1134,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1276,6 +1287,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -3295,12 +3307,13 @@ fi
 have_nlopt=no
 HNLOPT=Y
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing nlopt_urand" >&5
-$as_echo_n "checking for library containing nlopt_urand... " >&6; }
-if ${ac_cv_search_nlopt_urand+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nlopt_version in -lnlopt" >&5
+$as_echo_n "checking for nlopt_version in -lnlopt... " >&6; }
+if ${ac_cv_lib_nlopt_nlopt_version+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_func_search_save_LIBS=$LIBS
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnlopt  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -3310,148 +3323,32 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char nlopt_urand ();
+char nlopt_version ();
 int
 main ()
 {
-return nlopt_urand ();
+return nlopt_version ();
   ;
   return 0;
 }
 _ACEOF
-for ac_lib in '' nlopt_cxx; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib -lstdc++ $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_nlopt_urand=$ac_res
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_nlopt_nlopt_version=yes
+else
+  ac_cv_lib_nlopt_nlopt_version=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_nlopt_urand+:} false; then :
-  break
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
 fi
-done
-if ${ac_cv_search_nlopt_urand+:} false; then :
-
-else
-  ac_cv_search_nlopt_urand=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_nlopt_urand" >&5
-$as_echo "$ac_cv_search_nlopt_urand" >&6; }
-ac_res=$ac_cv_search_nlopt_urand
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_nlopt_nlopt_version" >&5
+$as_echo "$ac_cv_lib_nlopt_nlopt_version" >&6; }
+if test "x$ac_cv_lib_nlopt_nlopt_version" = xyes; then :
   have_nlopt=yes
 else
   have_nlopt=no
 fi
 
-
-if test "x${have_nlopt}" = xno; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
---------------------------------------------------------
-The nlopt library is required for optimization.
-phyx was developed with nlopt compiled with these flags
- ./configure --with-cxx --without-octave --without-matlab
---------------------------------------------------------" >&5
-$as_echo "$as_me: WARNING:
---------------------------------------------------------
-The nlopt library is required for optimization.
-phyx was developed with nlopt compiled with these flags
- ./configure --with-cxx --without-octave --without-matlab
---------------------------------------------------------" >&2;}
-   HNLOPT=N
-
-fi
-
-#need to find a better lib to search for
-have_arma=no
-HARM=Y
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing wrapper_sgesv_" >&5
-$as_echo_n "checking for library containing wrapper_sgesv_... " >&6; }
-if ${ac_cv_search_wrapper_sgesv_+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_func_search_save_LIBS=$LIBS
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char wrapper_sgesv_ ();
-int
-main ()
-{
-return wrapper_sgesv_ ();
-  ;
-  return 0;
-}
-_ACEOF
-for ac_lib in '' armadillo; do
-  if test -z "$ac_lib"; then
-    ac_res="none required"
-  else
-    ac_res=-l$ac_lib
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-  fi
-  if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_wrapper_sgesv_=$ac_res
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
-  if ${ac_cv_search_wrapper_sgesv_+:} false; then :
-  break
-fi
-done
-if ${ac_cv_search_wrapper_sgesv_+:} false; then :
-
-else
-  ac_cv_search_wrapper_sgesv_=no
-fi
-rm conftest.$ac_ext
-LIBS=$ac_func_search_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_wrapper_sgesv_" >&5
-$as_echo "$ac_cv_search_wrapper_sgesv_" >&6; }
-ac_res=$ac_cv_search_wrapper_sgesv_
-if test "$ac_res" != no; then :
-  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
-  have_arma=yes
-fi
-
-
-if test "x${have_arma}" = xno; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
---------------------------------------------------------
-The armadillo library is required for some linear algebra
-operations.
-phyx was developed with armadillo compiled with these flags
- ./configure
---------------------------------------------------------" >&5
-$as_echo "$as_me: WARNING:
---------------------------------------------------------
-The armadillo library is required for some linear algebra
-operations.
-phyx was developed with armadillo compiled with these flags
- ./configure
---------------------------------------------------------" >&2;}
-    HARM=N
-
-fi
-
-# Checks for header files.
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3849,6 +3746,114 @@ fi
 done
 
 
+ac_fn_c_check_header_mongrel "$LINENO" "nlopt.h" "ac_cv_header_nlopt_h" "$ac_includes_default"
+if test "x$ac_cv_header_nlopt_h" = xyes; then :
+  have_nlopt=yes
+else
+  have_nlopt=no
+fi
+
+
+if test "x${have_nlopt}" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
+--------------------------------------------------------
+The nlopt library is required for optimization for some
+programs. You can install from standard repos or you
+can compile with these flags
+ ./configure --without-octave --without-matlab
+--------------------------------------------------------" >&5
+$as_echo "$as_me: WARNING:
+--------------------------------------------------------
+The nlopt library is required for optimization for some
+programs. You can install from standard repos or you
+can compile with these flags
+ ./configure --without-octave --without-matlab
+--------------------------------------------------------" >&2;}
+   HNLOPT=N
+
+fi
+
+#need to find a better lib to search for
+have_arma=no
+HARM=Y
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for library containing wrapper_sgesv_" >&5
+$as_echo_n "checking for library containing wrapper_sgesv_... " >&6; }
+if ${ac_cv_search_wrapper_sgesv_+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS=$LIBS
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char wrapper_sgesv_ ();
+int
+main ()
+{
+return wrapper_sgesv_ ();
+  ;
+  return 0;
+}
+_ACEOF
+for ac_lib in '' armadillo; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
+    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
+  fi
+  if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_wrapper_sgesv_=$ac_res
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext
+  if ${ac_cv_search_wrapper_sgesv_+:} false; then :
+  break
+fi
+done
+if ${ac_cv_search_wrapper_sgesv_+:} false; then :
+
+else
+  ac_cv_search_wrapper_sgesv_=no
+fi
+rm conftest.$ac_ext
+LIBS=$ac_func_search_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_wrapper_sgesv_" >&5
+$as_echo "$ac_cv_search_wrapper_sgesv_" >&6; }
+ac_res=$ac_cv_search_wrapper_sgesv_
+if test "$ac_res" != no; then :
+  test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
+  have_arma=yes
+fi
+
+
+if test "x${have_arma}" = xno; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
+--------------------------------------------------------
+The armadillo library is required for some linear algebra
+operations.
+phyx was developed with armadillo compiled with these flags
+ ./configure
+--------------------------------------------------------" >&5
+$as_echo "$as_me: WARNING:
+--------------------------------------------------------
+The armadillo library is required for some linear algebra
+operations.
+phyx was developed with armadillo compiled with these flags
+ ./configure
+--------------------------------------------------------" >&2;}
+    HARM=N
+
+fi
+
+# Checks for header files.
 for ac_header in fenv.h stdlib.h string.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`

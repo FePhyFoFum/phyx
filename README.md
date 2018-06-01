@@ -85,7 +85,7 @@ If you want to install it so it is available anywhere in your system, do:
 
 5. Install nlopt. Get armadillo from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
 
-        ./configure --with-cxx --without-octave --without-matlab
+        ./configure --without-octave --without-matlab
         make
         sudo make install
 
@@ -105,25 +105,22 @@ These instructions work for most ubuntu versions as well as debian.
 
 1. Install general dependencies:
 
-        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-cpp-0.6-dev
+        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-cpp-0.6-dev nlopt
+
 2. Clone the phyx repo (if you haven't already):
 
         git clone https://github.com/FePhyFoFum/phyx.git
-3. Install nlopt dependency (default is C, we need C++; not available from apt-get):
 
-        cd phyx/deps
-        tar -xvzf nlopt-2.4.2.tar.gz
-        cd nlopt-2.4.2
-        ./configure --with-cxx --without-octave --without-matlab
-        make
-        sudo make install
-4. Install armadillo dependency  
+3. Install armadillo dependency  
+
 **Note**: it is possible to get from apt-get, but need version >= 5.2:
 
         sudo apt-get install libarmadillo-dev
+
 On debian it was necessary to use backports:
 
         sudo apt-get -t jessie-backports install libarmadillo-dev
+
 If that is not possible, compile the provided code:
 
         cd phyx/deps
@@ -132,12 +129,14 @@ If that is not possible, compile the provided code:
         ./configure
         make
         sudo make install
-5. Finally, install phyx:
+
+4. Finally, install phyx:
 
         cd phyx/src
         ./configure
         make
         python run_tests.py
+
 If you want to install it so it is available anywhere in your system, do:
 
         sudo make install

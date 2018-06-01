@@ -13,7 +13,7 @@ HOMP := @HOMP@
 
 CPP_LIBS = -llapack -lblas -lpthread -lm
 ifeq "$(HNLOPT)" "Y"
-    CPP_LIBS += -lnlopt_cxx 
+    CPP_LIBS += -lnlopt
 endif
 
 ifeq "$(HARM)" "Y"
