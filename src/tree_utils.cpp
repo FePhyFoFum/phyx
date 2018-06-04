@@ -613,6 +613,13 @@ string getNewickString (Tree * tree) {
     return phy;
 }
 
+// same as above but with objects
+string getNewickString (Tree * tree, string obj) {
+    bool bl = tree->hasEdgeLengths();
+    string phy = tree->getRoot()->getNewick(bl,obj) + ";";
+    return phy;
+}
+
 // not checking whether rooted in the first place, because registers as not
 // e.g. ((((A:0.1,B:0.1):0.1,C:0.2):0.1,D:0.3):0.5);
 bool has_root_edge (Tree * tr) {

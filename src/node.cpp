@@ -240,9 +240,9 @@ string Node::getPaintedNewick(bool bl){
 
 /*
  * should be returning the stringnodeobjects as the names for internal
- * nodes
+ * nodes with the [&obj=string]
+ * needs to be a string in setObject
  */
-// this one does not seem to be used
 string Node::getNewick(bool bl, string obj) {
     string ret = "";
     for (int i=0; i < this->getChildCount(); i++) {
@@ -261,22 +261,13 @@ string Node::getNewick(bool bl, string obj) {
             ret += ",";
         }
     }
-    if (isInternal() == true) {
-        if (obj == "number") {
-            std::ostringstream o;
-            o << number;
-            ret += o.str();
-        } else {
-            if (this->getObject(obj) != NULL) {
-                std::ostringstream o;
-                o << (*((StringNodeObject*) (this->getObject(obj))));
-                ret += o.str();
-            }
-        }
-    } else { // EXTERNAL
-        if (name.size() > 0) {
-            ret = ret + name;
-        }
+    if (this->name.size() > 0) {
+        ret = ret + this->name;
+    }
+    if (this->getObject(obj) != NULL) {
+        std::ostringstream o;
+        o << (*((StringNodeObject*) (this->getObject(obj))));
+        ret += "[&"+obj+"="+o.str()+"]";
     }
     return ret;
 }

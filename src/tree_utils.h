@@ -45,5 +45,6 @@ vector <string> get_tip_labels (Tree * tr);
 void deknuckle_tree (Tree * tree);
 void remove_knuckle (Node * node);
 string getNewickString (Tree * tree);
+string getNewickString (Tree * tree, string object);
 
 #endif /* _TREE_UTILS_H_ */

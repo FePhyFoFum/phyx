@@ -9,6 +9,7 @@
 
 using namespace std;
 
+#include "string_node_object.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
@@ -188,19 +189,24 @@ int main(int argc, char * argv[]) {
                     trees[x]->getInternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
                     s.precision(9);
-                    s << "[&value=" << tv << "]";
-                    trees[x]->getInternalNode(i)->setName(s.str());
+                    s << fixed << tv;
+                    StringNodeObject nob(s.str());
+                    trees[x]->getInternalNode(i)->assocObject("value",nob);
+                    //trees[x]->getInternalNode(i)->setName(s.str());
                 }
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
                     double tv = (*trees[x]->getExternalNode(i)->getDoubleVector("val"))[0];
                     trees[x]->getExternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
                     s.precision(9);
-                    s << fixed << trees[x]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
-                    trees[x]->getExternalNode(i)->setName(s.str());
+                    s << fixed << tv;
+                    StringNodeObject nob(s.str());
+                    trees[x]->getExternalNode(i)->assocObject("value",nob);
+                    //s << fixed << trees[x]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
+                    //trees[x]->getExternalNode(i)->setName(s.str());
                 }
                 (*poouts) << "tree tree" << c << " = ";
-                (*poouts) << getNewickString(trees[x]) << endl;
+                (*poouts) << getNewickString(trees[x],"value") << endl;
             }
             if (c == (nchars - 1)) {
                 (*poouts) << "end;\n" << endl;
