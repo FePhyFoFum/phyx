@@ -169,6 +169,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
                 retstring = "";
             } else {
                 if (!getline(stri, tline)) {
+                    trim_spaces(curseq);
                     seq.set_sequence(curseq);
                     return false;
                 }
@@ -180,6 +181,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
                     seq.set_id(id_);
                     curseq = "";
                 } else {
+                    trim_spaces(curseq);
                     seq.set_sequence(curseq);
                     retstring = tline;
                     return true;
