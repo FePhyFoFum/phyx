@@ -193,6 +193,7 @@ string Node::getNewick(bool bl) {
         if (bl == true) {
             std::ostringstream o;
             //20 is what you get from raxml
+            o.setf(ios::fixed,ios::floatfield);
             o << setprecision(20) << this->getChild(i)->getBL();
             ret += ":" + o.str();
         }
