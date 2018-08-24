@@ -25,10 +25,11 @@ void print_help() {
     cout << endl;
     cout << "Usage: pxrecode [OPTION]... " << endl;
     cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
+    cout << " -s, --seqf=FILE      input sequence file, stdin otherwise" << endl;
+    cout << " -r, --recode=STRING  string identifying recoding scheme" << endl;
+    cout << " -o, --outf=FILE      output sequence file, stout otherwise" << endl;
+    cout << " -h, --help           display this help and exit" << endl;
+    cout << " -V, --version        display version and exit" << endl;
     cout << endl;
     cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
@@ -39,6 +40,7 @@ string versionline("pxrecode 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\n
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
+    {"recode", required_argument, NULL, 'r'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -51,11 +53,12 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
+    string recodescheme = "";
     char * outf = NULL;
     char * seqf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:r:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -64,6 +67,9 @@ int main(int argc, char * argv[]) {
                 fileset = true;
                 seqf = strdup(optarg);
                 check_file_exists(seqf);
+                break;
+            case 'r':
+                recodescheme = strdup(optarg);
                 break;
             case 'o':
                 outfileset = true;
@@ -83,6 +89,11 @@ int main(int argc, char * argv[]) {
     
     if (fileset && outfileset) {
         check_inout_streams_identical(seqf, outf);
+    }
+    
+    // set default if arg not provided
+    if (recodescheme == "") {
+        recodescheme = "RY";
     }
     
     istream * pios = NULL;
@@ -108,11 +119,10 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    SequenceRecoder sr;
+    SequenceRecoder sr (recodescheme);
     
     Sequence seq;
     string retstring;
-    //bool first = true;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     
