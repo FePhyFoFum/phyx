@@ -20,13 +20,24 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Sequence recoding. Currently only to RY, but more coming." << endl;
+    cout << "Nucleotide sequence recoding." << endl;
     cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
     cout << endl;
     cout << "Usage: pxrecode [OPTION]... " << endl;
     cout << endl;
     cout << " -s, --seqf=FILE      input sequence file, stdin otherwise" << endl;
-    cout << " -r, --recode=STRING  string identifying recoding scheme" << endl;
+    cout << " -r, --recode=STRING  string identifying recoding scheme (default: RY)" << endl;
+    cout << "  Supported recodings (use any valid combination):" << endl;
+    cout << "      R = A|G" << endl;
+    cout << "      Y = C|T" << endl;
+    cout << "      S = C|G" << endl;
+    cout << "      W = A|T" << endl;
+    cout << "      M = A|C" << endl;
+    cout << "      K = G|T" << endl;
+    cout << "      B = C|G|T" << endl;
+    cout << "      D = A|G|T" << endl;
+    cout << "      H = A|C|T" << endl;
+    cout << "      V = A|C|G" << endl;
     cout << " -o, --outf=FILE      output sequence file, stout otherwise" << endl;
     cout << " -h, --help           display this help and exit" << endl;
     cout << " -V, --version        display version and exit" << endl;
