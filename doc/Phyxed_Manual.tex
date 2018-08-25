@@ -284,11 +284,11 @@ pxnw -s Alignment.aln
 
 \subsection{pxrecode}
 
-This program will recode a DNA alignment to specify only transitions/tranversions (RY-coding).
+This program will recode a nucleotide alignment using any combination of the recognized recoding schemes: R (A$|$G), Y (C$|$T), S (C$|$G), W (A$|$T), M (A$|$C), K (G$|$T), B (C$|$G$|$T), D (A$|$G$|$T), H (A$|$C$|$T), V (A$|$C$|$G). Recoding schemes (e.g., `RY', `SW', `MK', etc.) are specified with the \texttt{-r} argument. If no scheme is provided, RY-coding is used by default.
 
 \begin{flushleft}
 \begin{verbatim}
-pxrecode -s Nucleotide.fa
+pxrecode -r ry -s Nucleotide.fa
 \end{verbatim}
 \end{flushleft}
 
