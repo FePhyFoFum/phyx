@@ -78,8 +78,8 @@ Phyx will track the programs and commands input to a file called ``phyx.logfile'
 By optionally reading from \texttt{stdin} and writing to \texttt{stout}, Phyx provides the ability of programs to pipe the output of one into another, allowing for an efficient processing of data. An example of this would be to if someone wanted to perform a codon alignment, then remove all columns with missing data, and finally make a rough neighbor-joining tree.
 \begin{flushleft}
 \begin{verbatim}
-pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment || pxclsq -p 1.0 
-|| pxnj -n 3 -o output_tree_file
+pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment | pxclsq -p 1.0 
+| pxnj -n 3 -o output_tree_file
 \end{verbatim}
 \end{flushleft}
 
