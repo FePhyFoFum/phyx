@@ -30,7 +30,7 @@ void print_help() {
     cout << " -l, --length        return the length of the tree" << endl;
     cout << " -i, --tiplabels     return all tip labels (one per line)" << endl;
     cout << " -v, --rtvar         return root-to-tip variance" << endl;
-    cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
+    cout << " -o, --outf=FILE     output tree stats file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
