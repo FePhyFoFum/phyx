@@ -434,7 +434,6 @@ int main(int argc, char * argv[]) {
                 matrix[i][index] = 1;
                 if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()){
                     vector<string> rt_nms = trees[i]->getRoot()->get_leave_names();
-                    cout << rt_nms.size() << endl;
                     set<string> rt_nms_set;
                     copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
                     set<string> nms_s;
