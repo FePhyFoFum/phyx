@@ -1,6 +1,6 @@
 <img src="logo.png" alt="phyx logo" width=150px/> 
 
-**phyx** performs phylogenetics analyses on trees and sequences. See installation instructions for Linux and Mac including any dependencies on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation) or below. A list of the current programs with examples can be found [here](https://github.com/FePhyFoFum/phyx/wiki/Program-list).
+**phyx** performs phylogenetics analyses on trees and sequences. See installation instructions for Linux and Mac including any dependencies on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation) or below. A list of the current programs with examples can be found [here](https://github.com/FePhyFoFum/phyx/wiki/Program-list). See a brief overview [here](https://twitter.com/i/moments/1067839564927008769).
 
 Authors: Joseph W. Brown, Joseph F. Walker, and Stephen A. Smith
 
@@ -62,7 +62,8 @@ If you want to install it so it is available anywhere in your system, do:
 
 ### Install with HPC GCC (advanced instructions)
 1. Install gcc and gfortran. Download gcc-6.2-bin.tar.gz or more recent from http://hpc.sourceforge.net/. Install with:
-        
+    ​     
+
         sudo tar -xvf gcc-6.2-bin.tar -C /
 
 2. Install autoconf from http://ftp.gnu.org/gnu/autoconf/. Get autoconf-latest.tar.gz, then:
@@ -73,7 +74,7 @@ If you want to install it so it is available anywhere in your system, do:
         make
         sudo make install
         ln -s autoconf-2.69 /usr/local/autoconf
-        
+    
 3. On to phyx. first, clone the repository (if you haven't already):
 
         git clone https://github.com/FePhyFoFum/phyx.git
