@@ -481,7 +481,7 @@ bool reroot(Tree * tree, vector<string> const& outgroups, bool const& silent) {
             return false;
         }
     } else {
-        outgr = get_names_in_tree(tree, outgr);
+        outgr = get_names_in_tree(tree, outgr); // this is where things got deleted
         if (outgr.empty()) {
             return true;
         }
