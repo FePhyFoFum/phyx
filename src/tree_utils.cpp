@@ -473,8 +473,9 @@ bool check_name_against_tree(Tree * tr, string const& name) {
 
 
 // if 'silent', don't complain if any outgroups are missing
-bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
+bool reroot(Tree * tree, vector<string> const& outgroups, bool const& silent) {
     bool success = false;
+    vector<string> outgr = outgroups;
     if (!silent) {
         if (!check_names_against_tree(tree, outgr)) {
             return false;

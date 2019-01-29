@@ -38,7 +38,7 @@ bool has_root_edge (Tree * tr);
 
 bool check_names_against_tree(Tree * tr, vector<string> names);
 bool check_name_against_tree(Tree * tr, string const& name);
-bool reroot(Tree * tree, vector<string> & outgr, bool const& silent);
+bool reroot(Tree * tree, vector<string> const& outgroups, bool const& silent);
 vector <string> get_names_in_tree(Tree * tr, vector<string> const& names);
 vector <string> get_complement_tip_set (Tree * tr, vector<string> const& orig_names);
 vector <string> get_tip_labels (Tree * tr);
