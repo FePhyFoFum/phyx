@@ -527,7 +527,7 @@ bool reroot(Tree * tree, vector<string> const& outgroups, bool const& silent) {
             success = tree->reRoot(n);
             string intermediate = getNewickString(tree);
             //cout << "intermediate result: " << intermediate << endl;
-            delete tree; // apparently necessary
+            //delete tree; // apparently necessary
             TreeReader tr;
             tree = tr.readTree(intermediate);
             m = tree->getMRCA(outgr);
