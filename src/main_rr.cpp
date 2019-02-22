@@ -25,7 +25,7 @@ void print_help() {
     cout << endl;
     cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
     cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << endl;
-    cout << " -r, --ranked         outgroups are ordered. root on first one present" << endl;
+    cout << " -r, --ranked         turn on ordering of outgroups. will root on first one present" << endl;
     cout << " -u, --unroot         unroot the tree" << endl;
     cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
     cout << " -s, --silent         do not error if outgroup(s) not found" << endl;

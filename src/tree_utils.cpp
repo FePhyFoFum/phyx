@@ -473,14 +473,15 @@ bool check_name_against_tree(Tree * tr, string const& name) {
 
 
 // if 'silent', don't complain if any outgroups are missing
-bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
+bool reroot(Tree * tree, vector<string> const& outgroups, bool const& silent) {
     bool success = false;
+    vector<string> outgr = outgroups;
     if (!silent) {
         if (!check_names_against_tree(tree, outgr)) {
             return false;
         }
     } else {
-        outgr = get_names_in_tree(tree, outgr);
+        outgr = get_names_in_tree(tree, outgr); // this is where things got deleted
         if (outgr.empty()) {
             return true;
         }
@@ -526,7 +527,7 @@ bool reroot(Tree * tree, vector<string> & outgr, bool const& silent) {
             success = tree->reRoot(n);
             string intermediate = getNewickString(tree);
             //cout << "intermediate result: " << intermediate << endl;
-            delete tree; // apparently necessary
+            //delete tree; // apparently necessary
             TreeReader tr;
             tree = tr.readTree(intermediate);
             m = tree->getMRCA(outgr);
