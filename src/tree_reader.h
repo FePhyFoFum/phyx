@@ -23,6 +23,8 @@ public:
 int test_tree_filetype(string filen);
 int test_tree_filetype_stream(istream & stri, string & retstring);
 bool get_nexus_translation_table(istream & stri, map<string,string> * trans, string * retstring);
+bool check_nexus_comment (string line);
+void process_nexus_comment (istream & stri, string & tline);
 Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring, bool ttexists,
     map<string,string> * trans, bool * going);
 Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going);

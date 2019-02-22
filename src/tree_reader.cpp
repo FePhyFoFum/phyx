@@ -363,20 +363,61 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
     return exists;
 }
 
+// given a line that begins with [, keep reading until a line where last char is ] (i.e., end of comment)
+// NOTE: returns the end comment line (so reader will need to read in next valid line)
+void process_nexus_comment (istream & stri, string & tline) {
+    bool done = false;
+    string terp = tline;
+    trim_spaces(terp);
+    // check single-line comment
+    if (terp.back() == ']') {
+        //cout << "single-line comment!" << endl;
+        return;
+    }
+    // if not, dealing with a multi-line comment
+    while (!done) {
+        getline(stri, terp);
+        trim_spaces(terp);
+        if (!terp.empty()) {
+            if (terp.back() == ']') {
+                //cout << "found end of multi-line comment" << endl;
+                return;
+            }
+        }
+    }
+}
+
+bool check_nexus_comment (string line) {
+    bool comment = false;
+    trim_spaces(line);
+    if (line[0] == '[') {
+        comment = true;
+    }
+    return comment;
+}
 
 /*
  * this will read the nexus file after processing translating
  * should add some error correction code here
- */
-
+*/
 Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
     bool ttexists, map<string,string> * trans, bool * going) {
     string tline;
-    if (retstring.size() > 0) { // i think this is never true
+    if (retstring.size() > 0) {
         tline = retstring;
         retstring = "";
+        bool done = false;
+        while (!done) {
+            if (check_nexus_comment(tline)) {
+                //cout << "yikes a comment!" << endl;
+                process_nexus_comment(stri, tline);
+                getline(stri, tline);
+            } else {
+                done = true;
+            }
+        }
     } else {
-        bool reading = true; // continue reading if lines are empty. should check for comments too
+        bool reading = true; // continue reading if lines are empty or comments
         while (reading) {
             if (!getline(stri, tline)) {
                 (*going) = false;
@@ -384,7 +425,11 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
             }
             trim_spaces(tline); // important!
             if (!tline.empty()) {
-                reading = false;
+                if (check_nexus_comment(tline)) {
+                    process_nexus_comment(stri, tline);
+                } else {
+                    reading = false;
+                }
             } else {
                 //cout << "Skipping empty line" << endl;
             }
