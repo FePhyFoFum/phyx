@@ -632,3 +632,15 @@ bool has_root_edge (Tree * tr) {
     }
     return rootEdge;
 }
+
+string double_to_str(double d){
+    size_t len = std::snprintf(0, 0, "%.16f", d);
+    std::string s(len+1, 0);
+    std::snprintf(&s[0], len+1, "%.16f", d);
+    s.pop_back();
+    s.erase(s.find_last_not_of('0') + 1, std::string::npos);
+    if(s.back() == '.') {
+        s.pop_back();
+    }
+    return s;
+}

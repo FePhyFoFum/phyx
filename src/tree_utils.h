@@ -47,4 +47,5 @@ void remove_knuckle (Node * node);
 string getNewickString (Tree * tree);
 string getNewickString (Tree * tree, string object);
 
+string double_to_str(double d);
 #endif /* _TREE_UTILS_H_ */

@@ -22,6 +22,7 @@ using namespace std;
 #include "node.h"
 #include "node_object.h"
 #include "string_node_object.h"
+#include "tree_utils.h"
 
 Node::Node():BL(0.0), height(0.0), number(0), name(""), parent(NULL),
     children(vector<Node *> ()), assoc(map<string, NodeObject *>()),
@@ -191,11 +192,12 @@ string Node::getNewick(bool bl) {
         }
         ret = ret+this->getChild(i)->getNewick(bl);
         if (bl == true) {
-            std::ostringstream o;
-            //20 is what you get from raxml
-            o.setf(ios::fixed,ios::floatfield);
-            o << setprecision(20) << this->getChild(i)->getBL();
-            ret += ":" + o.str();
+            //std::ostringstream o;
+            ////20 is what you get from raxml
+            //o.setf(ios::fixed,ios::floatfield);
+            //o << setprecision(20) << this->getChild(i)->getBL();
+            //ret += ":" + o.str();
+            ret += ":" + double_to_str(this->getChild(i)->getBL());
         }
         if (i == this->getChildCount()-1) {
             ret += ")";
