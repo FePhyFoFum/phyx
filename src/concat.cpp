@@ -17,14 +17,14 @@ using namespace std;
 #include "seq_reader.h"
 #include "concat.h"
 
-SequenceConcatenater::SequenceConcatenater (string & seqf):num_partitions_(0),
+SequenceConcatenater::SequenceConcatenater (string & seqf, bool & toupcase):num_partitions_(0),
     num_char_(0), num_taxa_(0), ft_(0) {
+    toupcase_ = toupcase;
     read_sequences(seqf);
 }
 
 SequenceConcatenater::SequenceConcatenater ():num_partitions_(0), num_char_(0),
     num_taxa_(0), ft_(0) {
-
 }
 
 void SequenceConcatenater::read_sequences (string & seqf) {
@@ -53,6 +53,11 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                 delete pios;
                 exit(1);
             }
+            if (toupcase_) {
+                string terp = seq.get_sequence();
+                std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+                seq.set_sequence(terp);
+            }
             seqs_.push_back(seq);
             counter++;
         }
@@ -77,10 +82,20 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                 length = curr;
                 first = false;
             }
+            if (toupcase_) {
+                string terp = seq.get_sequence();
+                std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+                seq.set_sequence(terp);
+            }
             seqs_.push_back(seq);
             counter++;
         }
         // fasta has a trailing one
+        if (toupcase_) {
+            string terp = seq.get_sequence();
+            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            seq.set_sequence(terp);
+        }
         seqs_.push_back(seq);
         counter++;
         num_taxa_ = counter;

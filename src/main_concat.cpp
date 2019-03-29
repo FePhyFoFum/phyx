@@ -40,6 +40,7 @@ void print_help() {
     cout << " -f, --flistFILE     file listing input files (one per line)" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -p, --partf=FILE    output partition file, none otherwise" << endl;
+    cout << " -u, --uppercase     export characters in uppercase" << endl;
     cout << " -h, --help          display this help and exit" << endl;
     cout << " -V, --version       display version and exit" << endl;
     cout << endl;
@@ -47,7 +48,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxcat 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+string versionline("pxcat 0.9\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -55,6 +56,7 @@ static struct option const long_options[] =
     {"flist", required_argument, NULL, 'f'},
     {"outf", required_argument, NULL, 'o'},
     {"partf", required_argument, NULL, 'p'},
+    {"uppercase", no_argument, NULL, 'u'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {NULL, 0, NULL, 0}
@@ -67,8 +69,8 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
     bool logparts = false;
+    bool toupcase = false;
     vector <string> inputFiles;
-    SequenceConcatenater result;
     char * outf = NULL;
     string partf = "";
     string listf = "";
@@ -76,7 +78,7 @@ int main(int argc, char * argv[]) {
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "s:f:o:p:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:f:o:p:uhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -114,6 +116,9 @@ int main(int argc, char * argv[]) {
                 logparts = true;
                 partf = strdup(optarg);
                 break;
+            case 'u':
+                toupcase = true;
+                break;
             case 'h':
                 print_help();
                 exit(0);
@@ -150,11 +155,12 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &cout;
     }
-
+    
+    SequenceConcatenater result;
     bool first = true;
 
     for (unsigned int i = 0; i < inputFiles.size(); i++) {
-        SequenceConcatenater curr(inputFiles[i]);
+        SequenceConcatenater curr(inputFiles[i], toupcase);
         if (!first) {
             result.concatenate(curr);
         } else {

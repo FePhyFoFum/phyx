@@ -14,6 +14,7 @@ private:
     int num_char_;
     int num_taxa_;
     int ft_;
+    bool toupcase_;
     string filename_;
     vector <int> partition_sizes_;
     
@@ -22,7 +23,7 @@ private:
 
 public:
     SequenceConcatenater ();
-    SequenceConcatenater (string & seqf);
+    SequenceConcatenater (string & seqf, bool & toupcase);
     void concatenate (SequenceConcatenater & newSeqs);
     int get_sequence_length ();
     int get_num_taxa ();
