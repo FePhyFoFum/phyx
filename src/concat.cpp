@@ -69,7 +69,6 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                 exit(1);
             }
         } else {
-            cout << "Welp. Need to write something for interleaved Nexus" << endl;
             seqs_ = read_interleaved_nexus(seqf, num_taxa_, num_char_);
         }
         

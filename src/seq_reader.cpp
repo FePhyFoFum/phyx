@@ -274,15 +274,14 @@ vector <Sequence> read_interleaved_nexus (string filen, int ntax, int nchar) {
                 // check if we're done
                 string terp = seqs[ntax - 1].get_sequence();
                 if (terp.size() == nchar) {
-                    cout << "We did it!" << endl;
                     break;
                 }
             }
         }
     }
     infile.close();
-    cout << "Seqs has " << seqs.size() << " taxa and "
-            << seqs[0].get_sequence().size() << " sites." << endl;
+    //cout << "Seqs has " << seqs.size() << " taxa and "
+    //        << seqs[0].get_sequence().size() << " sites." << endl;
     return seqs;
 }
 
