@@ -215,6 +215,77 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
     return false;
 }
 
+
+// interleaved data do not work with the stream philosophy
+// by using this function, the file has already been checked, so we know ntax and nchar
+vector <Sequence> read_interleaved_nexus (string filen, int ntax, int nchar) {
+    vector <Sequence> seqs;
+    string tline;
+    ifstream infile(filen.c_str());
+    bool done = false;
+    
+    // first, get us to the MATRIX line i.e., right before the sequences start
+    bool found = false;
+    while (getline(infile, tline)) {
+        trim_spaces(tline);
+        std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
+        if (tline.compare("MATRIX") == 0) {
+            found = true;
+            break;
+        }
+    }
+    if (found == false) {
+        cout << "badly formatted nexus file, missing 'MATRIX' in data/character block" << endl;
+        exit(1);
+    }
+    
+    int totcount = 0;
+    int loopcount = 0;
+    string del(" \t");
+    while (getline(infile, tline)) {
+        trim_spaces(tline);
+        if (tline.size() != 0) {
+            vector <string> tokens;
+            tokenize(tline, tokens, del);
+            if (tokens.size() > 1) {
+                Sequence seq;
+                for (unsigned int i=0; i < tokens.size(); i++) {
+                    trim_spaces(tokens[i]);
+                }
+                if (tokens[0].compare(";") == 0) {
+                    cout << "Huh?" << endl;
+                    exit(0);
+                } else {
+                    seq.set_id(tokens[0]);
+                    seq.set_sequence(tokens[1]);
+                    if (totcount < ntax) {
+                        seqs.push_back(seq);
+                    } else {
+                        // finished with first block. match and concatenate with existing seq
+                        // as first pass, assume same ordering (demonic if it isn't)
+                        seqs[loopcount].set_sequence(seqs[loopcount].get_sequence() + seq.get_sequence());
+                    }
+                }
+            }
+            totcount++;
+            loopcount++;
+            if (loopcount == ntax) {
+                loopcount = 0; // reset
+                // check if we're done
+                string terp = seqs[ntax - 1].get_sequence();
+                if (terp.size() == nchar) {
+                    cout << "We did it!" << endl;
+                    break;
+                }
+            }
+        }
+    }
+    infile.close();
+    cout << "Seqs has " << seqs.size() << " taxa and "
+            << seqs[0].get_sequence().size() << " sites." << endl;
+    return seqs;
+}
+
 /*
  * tests the filetype by checking the first string and guessing based on
  * # (nexus), num (phylip), > (fasta)
@@ -349,13 +420,14 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
 
 
 // TODO: update this to use a stream
-void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
+void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar, bool & interleave) {
     numTaxa = numChar = 0;
     string tline;
     string temp;
     ifstream infile(filen.c_str());
     while (getline(infile, tline)) {
         if (!tline.empty()) {
+            // convert to uppercase
             std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
             vector <string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
@@ -372,6 +444,30 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar) {
                         numChar = stoi(searchtokens[i]);
                     }
                 }
+            } else if (searchtokens[0] == "FORMAT") {
+                replace(tline.begin(), tline.end(), '=', ' ');
+                replace(tline.begin(), tline.end(), ';', ' ');
+                searchtokens = tokenize(tline);
+                for (unsigned int i = 0; i < searchtokens.size(); i++) {
+                    if (searchtokens[i].substr(0, 4) == "INTE") {
+                        if (i < (searchtokens.size() - 1)) {
+                            i++;
+                            if (searchtokens[i] == "YES") {
+                                interleave = true;
+                            } else if (searchtokens[i] == "NO") {
+                                interleave = false;
+                            } else {
+                                // if yes or no not provided, it is true
+                                interleave = true;
+                                i--; // backup, since this is a different token
+                            }
+                        } else {
+                            // if `interleave` is the last token, it is true
+                            interleave = true;
+                        }
+                    }
+                }      
+            } else if (searchtokens[0] == "MATRIX") {
                 break;
             }
         }

@@ -15,6 +15,7 @@ private:
     int num_taxa_;
     int ft_;
     bool toupcase_;
+    bool interleave_;
     string filename_;
     vector <int> partition_sizes_;
     

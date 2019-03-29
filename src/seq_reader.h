@@ -10,7 +10,8 @@ bool read_next_seq_from_stream (istream & stri, int ftype, string & retstring,
     Sequence & seq);
 bool read_next_seq_char_from_stream (istream & stri, int ftype,
     string & retstring, Sequence & seq);
-void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar);
+void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar, bool & interleave);
+vector <Sequence> read_interleaved_nexus (string filen, int ntax, int nchar);
 
 // deprecated
 int test_seq_filetype (string filen);

@@ -24,7 +24,7 @@ SequenceConcatenater::SequenceConcatenater (string & seqf, bool & toupcase):num_
 }
 
 SequenceConcatenater::SequenceConcatenater ():num_partitions_(0), num_char_(0),
-    num_taxa_(0), ft_(0) {
+    num_taxa_(0), ft_(0), interleave_(false) {
 }
 
 void SequenceConcatenater::read_sequences (string & seqf) {
@@ -43,30 +43,36 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             num_taxa_ = stoi(fileDim[0]);
             num_char_ = stoi(fileDim[1]);
         } else {
-            get_nexus_dimensions(seqf, num_taxa_, num_char_);
+            get_nexus_dimensions(seqf, num_taxa_, num_char_, interleave_);
         }
-        while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
-            length = (int)seq.get_sequence().size();
-            if (length != num_char_) {
-                cout << "Sequence '" << seq.get_id() << "' has " << length << " characters, but the file '"
-                    << filename_ << "' specified " << num_char_ << " characters. Exiting." << endl;
+        if (!interleave_) {
+            while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
+                length = (int)seq.get_sequence().size();
+                if (length != num_char_) {
+                    cout << "Sequence '" << seq.get_id() << "' has " << length << " characters, but the file '"
+                        << filename_ << "' specified " << num_char_ << " characters. Exiting." << endl;
+                    delete pios;
+                    exit(1);
+                }
+                if (toupcase_) {
+                    string terp = seq.get_sequence();
+                    std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+                    seq.set_sequence(terp);
+                }
+                seqs_.push_back(seq);
+                counter++;
+            }
+            if (counter != num_taxa_) {
+                cout << "Read " << counter << " taxa, but the file '" << filename_ << "' specified "
+                    << num_taxa_ << " taxa. Exiting." << endl;
                 delete pios;
                 exit(1);
             }
-            if (toupcase_) {
-                string terp = seq.get_sequence();
-                std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
-                seq.set_sequence(terp);
-            }
-            seqs_.push_back(seq);
-            counter++;
+        } else {
+            cout << "Welp. Need to write something for interleaved Nexus" << endl;
+            seqs_ = read_interleaved_nexus(seqf, num_taxa_, num_char_);
         }
-        if (counter != num_taxa_) {
-            cout << "Read " << counter << " taxa, but the file '" << filename_ << "' specified "
-                << num_taxa_ << " taxa. Exiting." << endl;
-            delete pios;
-            exit(1);
-        }
+        
     } else if (ft_ == 2) { // fasta
         bool first = true;
         while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
