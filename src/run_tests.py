@@ -15,7 +15,7 @@ class bcolors:
 def test_program(name):
     x = None
     t = None
-    print "TESTING",name
+    print ("TESTING",name)
     if name == "pxlstr":
         cm = "./pxlstr -t TEST/test.tre"
         t = 'tree #: 0\nrooted: true\nbinary: true\nnterminal: 5\nninternal: 4\nbranch lengths: true\nrttipvar: 0.004634\ntreelength: 1.595\nultrametric: false\nrootheight: NA\n'
@@ -140,17 +140,17 @@ def test_program(name):
         return
     p = subprocess.Popen(cm,shell=True,stdout=subprocess.PIPE)
     x = p.communicate()
-    #print x
-    x = x[0].lstrip()
+    #print(x)
+    x = x[0].lstrip().decode("utf-8")
     if x == t:
-        print bcolors.OKBLUE+"PASSED"+bcolors.ENDC
+        print (bcolors.OKBLUE+"PASSED"+bcolors.ENDC)
         return True
     else:
         for i,j in zip(x,t):
-            print i,j,i==j
-        print bcolors.FAIL+"FAILED"+bcolors.ENDC
-        print "intended output:",t
-        print "your output:",x
+            print (i,j,i==j)
+        print (bcolors.FAIL+"FAILED"+bcolors.ENDC)
+        print ("intended output:\n",t)
+        print ("your output:\n",x)
         return False
 
 # this are skipped in the testing because they are preliminary, tests will
@@ -159,13 +159,13 @@ notest = ["pxbpsq","pxnni"]
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
-        print "python run_tests.py"
+        print ("python run_tests.py")
         sys.exit(0)
     
     passed = 0
     failed = 0
     failedl = []
-    print "================="
+    print ("=================")
     for i in os.listdir("."):
         if i[:2] == "px":
             if i in notest:
@@ -177,10 +177,10 @@ if __name__ == "__main__":
                 failed += 1
                 failedl.append(i)
             else:
-                print bcolors.WARNING+"no test for "+i+bcolors.ENDC
-            print "================="
-    print "PASSED TESTS:",passed
-    print "FAILED TESTS:",failed
+                print (bcolors.WARNING+"no test for "+i+bcolors.ENDC)
+            print ("=================")
+    print ("PASSED TESTS:",passed)
+    print ("FAILED TESTS:",failed)
     if failed > 0:
-        print "These failed:"
-        print "\t",",".join(failedl)
+        print ("These failed:")
+        print ("\t",",".join(failedl))
