@@ -70,6 +70,13 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             }
         } else {
             seqs_ = read_interleaved_nexus(seqf, num_taxa_, num_char_);
+            if (toupcase_) {
+                for (int i = 0; i < num_taxa_; i++) {
+                    string terp = seqs_[i].get_sequence();
+                    std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+                    seqs_[i].set_sequence(terp);
+                }
+            }
         }
         
     } else if (ft_ == 2) { // fasta
