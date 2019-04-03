@@ -265,3 +265,9 @@ string Sequence::get_fastq() {
     return retstr;
 }
 
+// returns a transformed copy in case original is to be retained
+string Sequence::seq_to_upper () {
+    string outseq = seq;
+    std::transform(outseq.begin(), outseq.end(), outseq.begin(), ::toupper);
+    return outseq;
+}

@@ -55,9 +55,7 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                     exit(1);
                 }
                 if (toupcase_) {
-                    string terp = seq.get_sequence();
-                    std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
-                    seq.set_sequence(terp);
+                    seq.set_sequence(seq.seq_to_upper());
                 }
                 seqs_.push_back(seq);
                 counter++;
@@ -72,9 +70,7 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             seqs_ = read_interleaved_nexus(seqf, num_taxa_, num_char_);
             if (toupcase_) {
                 for (int i = 0; i < num_taxa_; i++) {
-                    string terp = seqs_[i].get_sequence();
-                    std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
-                    seqs_[i].set_sequence(terp);
+                    seqs_[i].set_sequence(seqs_[i].seq_to_upper());
                 }
             }
         }
@@ -95,18 +91,14 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                 first = false;
             }
             if (toupcase_) {
-                string terp = seq.get_sequence();
-                std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
-                seq.set_sequence(terp);
+                seq.set_sequence(seq.seq_to_upper());
             }
             seqs_.push_back(seq);
             counter++;
         }
         // fasta has a trailing one
         if (toupcase_) {
-            string terp = seq.get_sequence();
-            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
-            seq.set_sequence(terp);
+            seq.set_sequence(seq.seq_to_upper());
         }
         seqs_.push_back(seq);
         counter++;

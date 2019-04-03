@@ -62,6 +62,7 @@ public:
     string get_fasta();
     string get_fasta(bool const& uppercase);
     string get_fastq();
+    string seq_to_upper ();
 
 };
 #endif /* _SEQUENCE_H_ */
