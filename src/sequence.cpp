@@ -243,9 +243,7 @@ string Sequence::get_fasta(bool const& uppercase) {
     retstr.append(id);
     retstr.append("\n");
     if (uppercase) {
-        string terp = seq;
-        std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
-        retstr.append(terp);
+        retstr.append(seq_to_upper());
     } else {
         retstr.append(seq);
     }
