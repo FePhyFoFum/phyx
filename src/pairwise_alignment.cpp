@@ -18,10 +18,10 @@ using namespace std;
  */
 double nw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scoringmatrix,
     double gap_penalty, string & aln1, string & aln2) {
-    string seq1 = iseq1.get_sequence();
-    std::transform(seq1.begin(), seq1.end(),seq1.begin(), ::toupper); 
-    string seq2 = iseq2.get_sequence();
-    std::transform(seq2.begin(), seq2.end(),seq2.begin(), ::toupper); 
+    
+    string seq1 = iseq1.seq_to_upper();
+    string seq2 = iseq2.seq_to_upper();
+    
     vector<vector<double> > F;
     for (unsigned int i=0; i < seq2.length()+1; i++) {
         vector<double> b;
@@ -106,10 +106,10 @@ double nw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scorin
  */
 double sw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scoringmatrix,
     double gap_penalty, string & aln1, string & aln2) {
-    string seq1 = iseq1.get_sequence();
-    std::transform(seq1.begin(), seq1.end(),seq1.begin(), ::toupper); 
-    string seq2 = iseq2.get_sequence();
-    std::transform(seq2.begin(), seq2.end(),seq2.begin(), ::toupper); 
+    
+    string seq1 = iseq1.seq_to_upper();
+    string seq2 = iseq2.seq_to_upper();
+    
     vector<vector<double> > F;
     for (unsigned int i=0; i < seq2.length()+1; i++) {
         vector<double> b;

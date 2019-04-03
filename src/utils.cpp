@@ -51,10 +51,11 @@ void check_inout_streams_identical (char * in, char * out) {
     }
 }
 
-// convenience func
-string string_to_upper (string & str) {
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
-    return str;
+// convenience func. returns copy so original can still be used
+string string_to_upper (string const& instr) {
+    string outstr = instr;
+    std::transform(outstr.begin(), outstr.end(), outstr.begin(), ::toupper);
+    return outstr;
 }
 
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters) {

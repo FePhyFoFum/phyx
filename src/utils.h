@@ -13,7 +13,7 @@ using namespace std;
 void check_file_exists (const string& filename);
 void check_inout_streams_identical (char * in, char * out);
 
-string string_to_upper (string & str);
+string string_to_upper (string const& str);
 
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters = " ");
 vector <string> tokenize (string const& input);

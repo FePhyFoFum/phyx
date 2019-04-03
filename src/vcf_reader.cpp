@@ -93,8 +93,7 @@ void VcfReader::write_seqs (bool const& uppercase, ostream* poos) {
     for (unsigned int i = 0; i < taxa_.size(); i++) {
         (*poos) << ">" << taxa_[i] << endl;
         if (uppercase) {
-            string terp = seqs_[i];
-            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            string terp = string_to_upper(seqs_[i]);
             (*poos) << terp << endl;
         } else {
             (*poos) << seqs_[i] << endl;

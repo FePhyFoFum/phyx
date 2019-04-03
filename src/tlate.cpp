@@ -296,7 +296,7 @@ string TLATE::translate (string& dna) {
     string residue;
     string AA;
     
-    std::transform(dna.begin(), dna.end(), dna.begin(), ::toupper);
+    dna = string_to_upper(dna);
     
     for (unsigned int i = 0; i < dna.size(); i = i + 3) {
         codon = dna.substr(i, 3);

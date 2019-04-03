@@ -230,8 +230,7 @@ void write_phylip_alignment(vector <Sequence> & seqs, bool const& uppercase, ost
     (*ostr) << seqs.size() << " " << seqlength << endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
         if (uppercase) {
-            string terp = seqs[i].get_sequence();
-            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            string terp = seqs[i].seq_to_upper();
             (*ostr) << seqs[i].get_id() << "\t" << terp << endl;
         } else {
             (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
@@ -267,8 +266,7 @@ void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostr
     for (unsigned int i=0; i < seqs.size(); i++) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
         if (uppercase) {
-            string terp = seqs[i].get_sequence();
-            std::transform(terp.begin(), terp.end(), terp.begin(), ::toupper);
+            string terp = seqs[i].seq_to_upper();
             (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << terp << endl;
         } else {
             (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;

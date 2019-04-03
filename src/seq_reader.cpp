@@ -73,7 +73,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             bool found = false;
             while (getline(stri, tline)) {
                 trim_spaces(tline);
-                std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
+                tline = string_to_upper(tline);
                 if (tline.compare("MATRIX") == 0) {
                     found = true;
                     break;
@@ -228,7 +228,7 @@ vector <Sequence> read_interleaved_nexus (string filen, int ntax, int nchar) {
     bool found = false;
     while (getline(infile, tline)) {
         trim_spaces(tline);
-        std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
+        tline = string_to_upper(tline);
         if (tline.compare("MATRIX") == 0) {
             found = true;
             break;
@@ -427,7 +427,7 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar, bool & 
     while (getline(infile, tline)) {
         if (!tline.empty()) {
             // convert to uppercase
-            std::transform(tline.begin(), tline.end(), tline.begin(), ::toupper);
+            tline = string_to_upper(tline);
             vector <string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.

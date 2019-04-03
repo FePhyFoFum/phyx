@@ -316,8 +316,7 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
         }
         //cout << "Working on: " << line1 << endl;
         (*retstring) = line1;
-        string uc(line1);
-        transform(uc.begin(), uc.end(), uc.begin(), ::toupper);
+        string uc = string_to_upper(line1);
         if (uc.find("TRANSLATE") != string::npos) {
             tgoing = true;
             exists = true;
@@ -436,8 +435,7 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
         }
     }
     //cout << "Working on: " << tline << endl;
-    string uc(tline);
-    transform(uc.begin(), uc.end(), uc.begin(), ::toupper);
+    string uc = string_to_upper(tline);
     if (uc.find("END;") != string::npos) {
         (*going) = false;
         return NULL;

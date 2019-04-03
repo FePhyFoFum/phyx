@@ -59,7 +59,7 @@ void CompTest::read_seqs () {
 // count occurrences of each valid character state in current sequence
 void CompTest::count_chars (string& seq) {
     int sum = 0;
-    std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
+    seq = string_to_upper(seq);
     vector <int> icounts(seq_chars_.length(), 0);
         
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {

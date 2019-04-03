@@ -14,7 +14,7 @@ using namespace std;
 // for each character in the alphabet 'seq_chars_'
 void SeqInfo::count_chars_indiv_seq(string& seq) {
     
-    std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
+    seq = string_to_upper(seq);
     
     total_.clear();
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
@@ -38,7 +38,7 @@ void SeqInfo::count_chars_indiv_seq(string& seq) {
 void SeqInfo::count_chars (string& seq) {
     unsigned int sum = 0;
     
-    std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
+    seq = string_to_upper(seq);
     
     if (output_indiv_) {
         vector <int> icounts(seq_chars_.length(), 0);

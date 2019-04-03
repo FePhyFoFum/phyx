@@ -534,7 +534,7 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
 // make sure sequence contains only valid nucleotide characters
 void SequenceGenerator::check_valid_sequence () {
     // make sure uppercase
-    std::transform(root_sequence_.begin(), root_sequence_.end(), root_sequence_.begin(), ::toupper);
+    root_sequence_ = string_to_upper(root_sequence_);
     if (is_dna_) {
         std::size_t found = root_sequence_.find_first_not_of(nucleotides_);
         if (found != std::string::npos) {

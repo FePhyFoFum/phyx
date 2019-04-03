@@ -92,7 +92,7 @@ void Sequence::infer_alpha () {
     int proteinHit = 0;
     int validChars = 0;
     
-    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    str = string_to_upper(str);
     std::sort(str.begin(), str.end());
     
     // iterate over unique characters
@@ -265,7 +265,6 @@ string Sequence::get_fastq() {
 
 // returns a transformed copy in case original is to be retained
 string Sequence::seq_to_upper () {
-    string outseq = seq;
-    std::transform(outseq.begin(), outseq.end(), outseq.begin(), ::toupper);
+    string outseq = string_to_upper(seq);
     return outseq;
 }
