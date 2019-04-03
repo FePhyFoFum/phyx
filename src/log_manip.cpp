@@ -289,6 +289,14 @@ void LogManipulator::retain_columns (vector <int> const& col_ids) {
                 vector <string> header = tokenize(line);
                 int curpars = header.size();
                 num_cols_ = curpars;
+                
+                // check that right end of col_ids is valid (0 already checked upstream)
+                // vector has been sorted
+                if (col_ids.back() > num_cols_) {
+                    cout << "Warning: column numbers are 1-indexed. Exiting." << endl;
+                    exit (0);
+                }
+                
                 parm_columns_ = header;
                 for (int i=0; i < num_cols_retain_; i++) {
                     (*poos_) << header[cols_to_retain[i]];
@@ -319,6 +327,7 @@ void LogManipulator::retain_columns (vector <int> const& col_ids) {
     }
 }
 
+// not yet used?
 void LogManipulator::sample_parameters () {
     if (!files_.empty()) {
         ntotal_samples_ = 0;
