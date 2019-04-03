@@ -195,11 +195,9 @@ int main(int argc, char * argv[]) {
     //istream * pios = NULL;
     //ifstream * fstr = NULL;
     
-    if (outfileset == true) {
-        ofstr = new ofstream(outf);
-        poos = ofstr;
-    } else {
-        poos = &cout;
+    if (!tfileset && !pfileset) {
+        cout << "Must specify a tree file or parameter file. Exiting." << endl;
+        exit (0);
     }
     
     if (tfileset == true && pfileset == true) {
@@ -207,9 +205,19 @@ int main(int argc, char * argv[]) {
         exit (0);
     }
     
-    if (get_columns && tfileset) {
-        cout << "Argument 'columns' is not applicable for tree files. Exiting." << endl;
-        exit (0);
+    // abort if invalid args
+    if (tfileset) {
+        if (get_columns || delete_columns || keep_columns) {
+            cout << "Column arguments are not applicable for tree files. Exiting." << endl;
+            exit (0);
+        }
+    }
+    
+    if (outfileset == true) {
+        ofstr = new ofstream(outf);
+        poos = ofstr;
+    } else {
+        poos = &cout;
     }
     
     //LogManipulator lm (logtype, input_files, pios, poos);
@@ -219,22 +227,10 @@ int main(int argc, char * argv[]) {
         lm.count();
         lm.get_sample_counts();
     } else if (get_columns) {
-        if (tfileset) {
-            cout << "Argument 'columns' is not applicable for tree files. Exiting." << endl;
-            exit (0);
-        }
         lm.get_column_names();
     } else if (delete_columns)  {
-        if (tfileset) {
-            cout << "Argument 'delete columns' is not applicable for tree files. Exiting." << endl;
-            exit (0);
-        }
         lm.delete_columns(col_indices);
     } else if (keep_columns) {
-        if (tfileset) {
-            cout << "Argument 'keep columns' is not applicable for tree files. Exiting." << endl;
-            exit (0);
-        }
         lm.retain_columns(col_indices);
     } else {
         lm.sample(burnin, nthin, nrandom, seed);
