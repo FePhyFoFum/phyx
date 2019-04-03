@@ -213,6 +213,14 @@ int main(int argc, char * argv[]) {
         }
     }
     
+    // exit if not 1-indexed (just check first column
+    if (delete_columns || keep_columns) {
+        if (col_indices[0] < 1) {
+            cout << "Warning: column numbers are 1-indexed. Exiting." << endl;
+            exit (0);
+        }
+    }
+    
     if (outfileset == true) {
         ofstr = new ofstream(outf);
         poos = ofstr;
