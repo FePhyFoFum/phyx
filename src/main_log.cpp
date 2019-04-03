@@ -30,8 +30,8 @@ void print_help() {
     cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << endl;
     cout << " -i, --info          calculate log file attributes and exit" << endl;
     cout << " -c, --columns       print out column names (parameter logs only)" << endl;
-    cout << " -d, --delete=CSL    delete columns by index sep by commas (NO SPACES!) (parameter logs only)" << endl;
-    cout << " -k, --keep=CSL      keep only columns by index sep by commas (NO SPACES!) (parameter logs only)" << endl;
+    cout << " -d, --delete=CSL    delete columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << endl;
+    cout << " -k, --keep=CSL      keep only columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << endl;
     cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -v, --verbose       make the output more verbose" << endl;
     cout << " -h, --help          display this help and exit" << endl;
