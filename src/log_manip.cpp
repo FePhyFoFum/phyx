@@ -220,6 +220,14 @@ void LogManipulator::delete_columns (vector <int> const& col_ids) {
                 parm_columns_ = header;
                 
                 cols_to_retain.resize(num_cols_);
+                
+                // check that right end of col_ids is valid (0 already checked upstream)
+                // vector has been sorted
+                if (col_ids.back() > num_cols_) {
+                    cout << "Warning: column numbers are 1-indexed. Exiting." << endl;
+                    exit (0);
+                }
+                
                 iota(cols_to_retain.begin(), cols_to_retain.end(), 0);
                 
                 // remove unwanted column indices (reverse order)
