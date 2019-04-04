@@ -116,15 +116,30 @@ int main(int argc, char * argv[]) {
     }
 
     int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs.push_back(seq);
+    // extra stuff to deal with possible interleaved nexus
+    // yes, nexus to nexus conversion is silly. ut could go from interleaved to non-interleaved
+    if (ft == 0) {
+        int ntax, nchar = 0;
+        bool interleave = false;
+        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        retstring = ""; // ugh hacky
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seqs.push_back(seq);
+            }
+        } else {
+            seqs = read_interleaved_nexus (*pios, ntax, nchar);
+        }
+    } else {
+        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+            seqs.push_back(seq);
+        }
+        // fasta has a trailing one
+        if (ft == 2) {
+            seqs.push_back(seq);
+        }
     }
     
-    // fasta has a trailing one
-    if (ft == 2) {
-        seqs.push_back(seq);
-    }
     write_nexus_alignment(seqs, toupcase, poos);
     
     if (fileset == true) {

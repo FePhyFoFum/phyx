@@ -218,7 +218,8 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
 
 // interleaved data do not work with the stream philosophy
 // by using this function, the file has already been checked, so we know ntax and nchar
-vector <Sequence> read_interleaved_nexus (string filen, int ntax, int nchar) {
+// prolly get rid of this in favour of the stream-based one
+vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar) {
     vector <Sequence> seqs;
     string tline;
     ifstream infile(filen.c_str());
@@ -280,6 +281,57 @@ vector <Sequence> read_interleaved_nexus (string filen, int ntax, int nchar) {
         }
     }
     infile.close();
+    //cout << "Seqs has " << seqs.size() << " taxa and "
+    //        << seqs[0].get_sequence().size() << " sites." << endl;
+    return seqs;
+}
+
+// don't search for MATRIX; if we know it is interleaved, MATRIX has already been read
+vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
+    vector <Sequence> seqs;
+    string tline;
+    bool done = false;
+    
+    int totcount = 0;
+    int loopcount = 0;
+    string del(" \t");
+    while (getline(stri, tline)) {
+        trim_spaces(tline);
+        if (tline.size() != 0) {
+            vector <string> tokens;
+            tokenize(tline, tokens, del);
+            if (tokens.size() > 1) {
+                Sequence seq;
+                for (unsigned int i=0; i < tokens.size(); i++) {
+                    trim_spaces(tokens[i]);
+                }
+                if (tokens[0].compare(";") == 0) {
+                    cout << "Huh?" << endl;
+                    exit(0);
+                } else {
+                    seq.set_id(tokens[0]);
+                    seq.set_sequence(tokens[1]);
+                    if (totcount < ntax) {
+                        seqs.push_back(seq);
+                    } else {
+                        // finished with first block. match and concatenate with existing seq
+                        // as first pass, assume same ordering (demonic if it isn't)
+                        seqs[loopcount].set_sequence(seqs[loopcount].get_sequence() + seq.get_sequence());
+                    }
+                }
+            }
+            totcount++;
+            loopcount++;
+            if (loopcount == ntax) {
+                loopcount = 0; // reset
+                // check if we're done
+                string terp = seqs[ntax - 1].get_sequence();
+                if (terp.size() == nchar) {
+                    break;
+                }
+            }
+        }
+    }
     //cout << "Seqs has " << seqs.size() << " taxa and "
     //        << seqs[0].get_sequence().size() << " sites." << endl;
     return seqs;
@@ -416,10 +468,9 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
     return false;
 }
 
-
-
-// TODO: update this to use a stream
-void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar, bool & interleave) {
+// file-version
+// prolly get rid of this in favour of the stream-based one
+void get_nexus_dimensions_file (string & filen, int & numTaxa, int & numChar, bool & interleave) {
     numTaxa = numChar = 0;
     string tline;
     string temp;
@@ -465,13 +516,67 @@ void get_nexus_dimensions (string & filen, int & numTaxa, int & numChar, bool & 
                             interleave = true;
                         }
                     }
-                }      
+                }
             } else if (searchtokens[0] == "MATRIX") {
                 break;
             }
         }
     }
     infile.close();
+}
+
+// overloaded stream version
+void get_nexus_dimensions (istream & stri, int & numTaxa, int & numChar, bool & interleave) {
+    numTaxa = numChar = 0;
+    string tline;
+    //string temp;
+    while (getline(stri, tline)) {
+        if (!tline.empty()) {
+            // convert to uppercase
+            tline = string_to_upper(tline);
+            vector <string> searchtokens = tokenize(tline);
+            if (searchtokens[0] == "DIMENSIONS") {
+            // get rid of '=' and ';'. tokens then easy to deal with.
+                replace(tline.begin(), tline.end(), '=', ' ');
+                replace(tline.begin(), tline.end(), ';', ' ');
+                searchtokens = tokenize(tline);
+                for (unsigned int i = 0; i < searchtokens.size(); i++) {
+                    if (searchtokens[i].substr(0, 4) == "NTAX") {
+                        i++;
+                        numTaxa = stoi(searchtokens[i]);
+                    } else if (searchtokens[i].substr(0, 4) == "NCHA") {
+                        i++;
+                        numChar = stoi(searchtokens[i]);
+                    }
+                }
+            } else if (searchtokens[0] == "FORMAT") {
+                replace(tline.begin(), tline.end(), '=', ' ');
+                replace(tline.begin(), tline.end(), ';', ' ');
+                searchtokens = tokenize(tline);
+                for (unsigned int i = 0; i < searchtokens.size(); i++) {
+                    if (searchtokens[i].substr(0, 4) == "INTE") {
+                        if (i < (searchtokens.size() - 1)) {
+                            i++;
+                            if (searchtokens[i] == "YES") {
+                                interleave = true;
+                            } else if (searchtokens[i] == "NO") {
+                                interleave = false;
+                            } else {
+                                // if yes or no not provided, it is true
+                                interleave = true;
+                                i--; // backup, since this is a different token
+                            }
+                        } else {
+                            // if `interleave` is the last token, it is true
+                            interleave = true;
+                        }
+                    }
+                }
+            } else if (searchtokens[0] == "MATRIX") {
+                break;
+            }
+        }
+    }
 }
 
 

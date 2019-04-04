@@ -43,7 +43,7 @@ void SequenceConcatenater::read_sequences (string & seqf) {
             num_taxa_ = stoi(fileDim[0]);
             num_char_ = stoi(fileDim[1]);
         } else {
-            get_nexus_dimensions(seqf, num_taxa_, num_char_, interleave_);
+            get_nexus_dimensions_file(seqf, num_taxa_, num_char_, interleave_);
         }
         if (!interleave_) {
             while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
@@ -67,7 +67,7 @@ void SequenceConcatenater::read_sequences (string & seqf) {
                 exit(1);
             }
         } else {
-            seqs_ = read_interleaved_nexus(seqf, num_taxa_, num_char_);
+            seqs_ = read_interleaved_nexus_file(seqf, num_taxa_, num_char_);
             if (toupcase_) {
                 for (int i = 0; i < num_taxa_; i++) {
                     seqs_[i].set_sequence(seqs_[i].seq_to_upper());

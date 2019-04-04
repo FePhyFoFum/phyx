@@ -114,13 +114,32 @@ int main(int argc, char * argv[]) {
     }
 
     int ft = test_seq_filetype_stream(*pios, retstring);
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        (*poos) << seq.get_fasta(toupcase);
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        int ntax, nchar = 0;
+        bool interleave = false;
+        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        retstring = ""; // ugh hacky
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                (*poos) << seq.get_fasta(toupcase);
+            }
+        } else {
+            vector <Sequence> seqs = read_interleaved_nexus (*pios, ntax, nchar);
+            for (int i = 0; i < seqs.size(); i++) {
+                (*poos) << seqs[i].get_fasta(toupcase);
+            }
+        }
+    } else {
+        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+            (*poos) << seq.get_fasta(toupcase);
+        }
+        //fasta has a trailing one
+        if (ft == 2) {
+            (*poos) << seq.get_fasta(toupcase);
+        }
     }
-    //fasta has a trailing one
-    if (ft == 2) {
-        (*poos) << seq.get_fasta(toupcase);
-    }
+    
     if (fileset) {
         fstr->close();
         delete pios;
