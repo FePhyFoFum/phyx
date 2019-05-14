@@ -141,13 +141,13 @@ BP_DEP = main_bp.d
 #BPSEQ_OBJ = main_bpseq.o
 #BPSEQ_DEP = main_bpseq.d
 
-2NEW_SRC = main_t2new.cpp
-2NEW_OBJ = main_t2new.o
-2NEW_DEP = main_t2new.d
+T2NEW_SRC = main_t2new.cpp
+T2NEW_OBJ = main_t2new.o
+T2NEW_DEP = main_t2new.d
 
-2NEX_SRC = main_t2nex.cpp
-2NEX_OBJ = main_t2nex.o
-2NEX_DEP = main_t2nex.d
+T2NEX_SRC = main_t2nex.cpp
+T2NEX_OBJ = main_t2nex.o
+T2NEX_DEP = main_t2nex.d
 
 RR_SRC = main_rr.cpp
 RR_OBJ = main_rr.o
@@ -481,13 +481,13 @@ pxbp: $(CPP_OBJS) $(BP_OBJ)
 #	@echo 'building pxbpsq'
 #	$(CXX) -o "pxbpsq" $(OPT_FLAGS) $(BPSEQ_OBJ) $(CPP_OBJS)
 
-pxt2new: $(CPP_OBJS) $(2NEW_OBJ)
+pxt2new: $(CPP_OBJS) $(T2NEW_OBJ)
 	@echo 'building pxt2new'
-	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(2NEW_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(T2NEW_OBJ) $(CPP_OBJS)
 
-pxt2nex: $(CPP_OBJS) $(2NEX_OBJ)
+pxt2nex: $(CPP_OBJS) $(T2NEX_OBJ)
 	@echo 'building pxt2nex'
-	$(CXX) -o "pxt2nex" $(OPT_FLAGS) $(2NEX_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxt2nex" $(OPT_FLAGS) $(T2NEX_OBJ) $(CPP_OBJS)
 	
 pxrr: $(CPP_OBJS) $(RR_OBJ)
 	@echo 'building pxrr'
