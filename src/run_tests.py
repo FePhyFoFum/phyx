@@ -64,6 +64,9 @@ def test_program(name):
     elif name == "pxt2new":
         cm = "./pxt2new -t TEST/test_nexus.tre"
         t = '(((TaxonA:0.1,TaxonB:0.03):0.125,TaxonC:0.25):0.4,(TaxonD:0.23,TaxonE:0.16):0.3);\n'
+    elif name == "pxt2nex":
+        cm = "./pxt2nex -t TEST/collapse.tre"
+        t = '#NEXUS\nBegin trees;\ntree tree0 = [&R] (((TaxonA:0.1,TaxonB:0.03)0.43:0.125,TaxonC:0.25)1.0:0.4,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\nend;\n'
     elif name == "pxbdsim":
         cm = "./pxbdsim -e 5 -x 1 | grep -o taxon | wc -l"
         t = '5\n'
