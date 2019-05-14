@@ -15,10 +15,10 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "This will convert a tree file to newick." << endl;
+    cout << "This will convert a tree file to vanilla Nexus format." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxt2new [OPTION]... [FILE]..." << endl;
+    cout << "Usage: pxt2nex [OPTION]... [FILE]..." << endl;
     cout << endl;
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
@@ -31,7 +31,7 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxt2new 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxt2nex 0.1\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -108,23 +108,54 @@ int main(int argc, char * argv[]) {
     //read trees 
     string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    if (ft != 0) {
-        cerr << "this really only converts nexus." << endl;
-        exit(0);
-    }
-    map <string, string> translation_table;
-    bool ttexists;
-    ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+    
+    int treeCounter = 0;
     bool going = true;
-    Tree * tree;
-    while (going) {
-        tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
-            &translation_table, &going);
-        if (going == true) {
-            (*poos) << getNewickString(tree) << endl;
-            delete tree;
+    
+    if (ft == 1) {
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (tree != NULL) {
+                if (treeCounter == 0) {
+                    (*poos) << "#NEXUS" << endl << "Begin trees;" << endl;
+                }
+                if (is_rooted(tree)) {
+                    (*poos) << "tree tree" << treeCounter << " = [&R] "
+                            << getNewickString(tree) << endl;
+                } else {
+                    (*poos) << "tree tree" << treeCounter << " = [&U] "
+                            << getNewickString(tree) << endl;
+                }
+                treeCounter++;
+            }
         }
+        (*poos) << "end;" << endl;
+    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+        map <string, string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                if (treeCounter == 0) {
+                    (*poos) << "#NEXUS" << endl << "Begin trees;" << endl;
+                }
+                if (is_rooted(tree)) {
+                    (*poos) << "tree tree" << treeCounter << " = [&R] "
+                            << getNewickString(tree) << endl;
+                } else {
+                    (*poos) << "tree tree" << treeCounter << " = [&U] "
+                            << getNewickString(tree) << endl;
+                }
+                treeCounter++;
+            }
+        }
+        (*poos) << "end;" << endl;
     }
+    
     if (fileset) {
         fstr->close();
         delete pios;
