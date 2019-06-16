@@ -35,6 +35,9 @@ char get_dna_from_pos(set<int> ins) {
             return 'M';
         }
         if (ins.count(2) == 1) {
+            if (ins.count(3) == 1) {
+                return 'D';
+            }
             return 'R';
         }
         if (ins.count(3) == 1) {
