@@ -31,7 +31,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxconsq 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxconsq 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

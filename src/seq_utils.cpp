@@ -17,8 +17,11 @@ string dnachars  = "ACGTURYSWKMBDHVN";
 string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
 
 /**
+ * IUPAC ambiguity codes
  * procedure to get the character of a nucleotide
  * from the set of positions
+ * An empty set contains only gaps. An N has a count for all nucleotides.
+ * When a site has valid nucleotides and gaps, the gaps are ignored.
  */
 char get_dna_from_pos(set<int> ins) {
     if (ins.count(0) == 1) {
@@ -80,7 +83,8 @@ set<int> get_dna_pos(char inc) {
         ret.insert(2);
     } else if (inc == 'T') {
         ret.insert(3);
-    } else if (inc == '-' || inc == 'N') {
+    //} else if (inc == '-' || inc == 'N') {
+    } else if (inc == 'N') {
         ret.insert(0);
         ret.insert(1);
         ret.insert(2);
