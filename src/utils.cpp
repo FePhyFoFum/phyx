@@ -123,6 +123,17 @@ bool is_number (const string& s) {
 }
 
 
+int factorial (int n) {
+    return (n == 0 || n == 1) ? 1 : factorial(n - 1) * n;
+}
+
+
+// used for counting trees
+int doublefactorial(int n) { 
+    return (n == 0 || n == 1) ? 1 : doublefactorial(n - 2) * n; 
+} 
+
+
 // higher resolution than time( NULL );
 unsigned int get_clock_seed () {
     return (std::chrono::high_resolution_clock::now().time_since_epoch().count());

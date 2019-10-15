@@ -21,6 +21,9 @@ void trim_spaces (string & str);
 bool check_comment_line (string const& line);
 bool is_number (const string &);
 
+int factorial (int n);
+int doublefactorial(int n);
+
 unsigned int get_clock_seed ();
 
 //vector <double> parse_double_comma_list (string& str);
