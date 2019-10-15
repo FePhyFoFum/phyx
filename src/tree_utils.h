@@ -48,4 +48,6 @@ string getNewickString (Tree * tree);
 string getNewickString (Tree * tree, string object);
 
 string double_to_str(double d);
+
+int get_num_possible_trees (int const& n, bool const& rooted);
 #endif /* _TREE_UTILS_H_ */
