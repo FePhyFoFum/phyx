@@ -72,6 +72,10 @@ if __name__ == "__main__":
       if n < 3:
         print("Minimum of 3 taxa.")
         exit()
+      elif n > 10:
+        print("There are " + str(get_num_trees(n)) + " trees for " + str(n)
+          + " taxa. I don't think you want that.")
+        exit()
   else:
     usage()
     exit()
