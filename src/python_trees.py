@@ -48,7 +48,7 @@ def get_num_trees(n):
   return dfactorial(N)
 
 def usage():
-  print("Usage: python3 python_trees3.py num_tips")
+  print("Usage: python3 python_trees.py num_tips")
 
 def main(labels):
   i = 1
