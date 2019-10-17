@@ -48,38 +48,45 @@ def get_num_trees(n):
   return dfactorial(N)
 
 def usage():
-  print("Usage: python3 python_trees.py num_tips")
+  print("Usage: python3 python_trees.py num_tips [outfile]")
 
-def main(labels):
+def main(n, outfile):
+  #labels = tuple(string.ascii_uppercase[:n])
+  #labels = tuple(string.ascii_uppercase[:n]) # simple letters (limited to 26)
+  labels = tuple("taxon_" + str(i) for i in range(1, (n + 1))) # match pxbdsim labels
+  if outfile is not None:
+    outf = open(outfile,"w")
   i = 1
   for tree in enum_unordered(labels):
     phy = str(tree).replace(" ", ",")
     print(str(i) + ". " + phy + ";")
+    if outfile is not None:
+      outf.write(phy + ";\n")
     i += 1
 
 if __name__ == "__main__":
   n = None
-  labels = None
-  #labels = tuple(string.ascii_uppercase[:n])
+  outfile = None
   
-  if len(sys.argv) == 2:
-    nt = sys.argv[1]
-    if not nt.isdigit():
-      usage()
-      exit()
-    else:
-      n = int(nt)
-      if n < 3:
-        print("Minimum of 3 taxa.")
-        exit()
-      elif n > 10:
-        print("There are " + str(get_num_trees(n)) + " trees for " + str(n)
-          + " taxa. I don't think you want that.")
-        exit()
-  else:
+  if len(sys.argv) == 1 or len(sys.argv) > 3:
     usage()
     exit()
-  #labels = tuple(string.ascii_uppercase[:n]) # simple letters (limited to 26)
-  labels = tuple("taxon_" + str(i) for i in range(1, (n + 1))) # match pxbdsim labels
+  
+  nt = sys.argv[1]
+  if not nt.isdigit():
+    usage()
+    exit()
+  else:
+    n = int(nt)
+    if n < 3:
+      print("Minimum of 3 taxa.")
+      exit()
+    elif n > 10:
+      print("There are " + str(get_num_trees(n)) + " trees for " + str(n)
+        + " taxa. I don't think you want that.")
+      exit()
+  if len(sys.argv) == 3:
+    outfile = sys.argv[2]
+  
   print("Generating " + str(get_num_trees(n)) + " trees for " + str(n) + " taxa.")
-  main(labels)
+  main(n, outfile)
