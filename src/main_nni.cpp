@@ -80,7 +80,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'x':
-                seed = atoi(strdup(optarg));
+                seed = string_to_int(optarg, "-x");
                 break;
             case 'V':
                 cout << versionline << endl;

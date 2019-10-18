@@ -93,7 +93,7 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'n':
-                threads = atoi(strdup(optarg));
+                threads = string_to_int(optarg, "-n");
                 break;
             case 'h':
                 print_help();

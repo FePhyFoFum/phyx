@@ -51,6 +51,19 @@ void check_inout_streams_identical (char * in, char * out) {
     }
 }
 
+// catch exception (atoi does not do this)
+int string_to_int (string const& in, string const& arg) {
+    int res = 0;
+    try {
+            res = stoi(in);
+        }
+        catch (const std::invalid_argument& ia) {
+            cerr << "Invalid argument for " << arg << " (expecting int). Exiting." << endl;
+            exit(0);
+        }
+    return res;
+}
+
 // convenience func. returns copy so original can still be used
 string string_to_upper (string const& instr) {
     string outstr = instr;

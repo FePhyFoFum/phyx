@@ -144,13 +144,13 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'b':
-                burnin = atoi(strdup(optarg));
+                burnin = string_to_int(optarg, "-b");
                 break;
             case 'n':
-                nthin = atoi(strdup(optarg));
+                nthin = string_to_int(optarg, "-n");
                 break;
             case 'r':
-                nrandom = atoi(strdup(optarg));
+                nrandom = string_to_int(optarg, "-r");
                 break;
             case 'i':
                 count = true;
@@ -171,7 +171,7 @@ int main(int argc, char * argv[]) {
                 sort(col_indices.begin(), col_indices.end());
                 break;
             case 'x':
-                seed = atoi(strdup(optarg));
+                seed = string_to_int(optarg, "-x");
                 break;
             case 'v':
                 verbose = true;

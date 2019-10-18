@@ -166,7 +166,7 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'l':
-                seqlen = atoi(strdup(optarg));
+                seqlen = string_to_int(optarg, "-l");
                 break;
             case 'a':
                 showancs = true;
@@ -249,10 +249,10 @@ int main(int argc, char * argv[]) {
                 }*/
                 break;
             case 'n':
-                nreps = atoi(strdup(optarg));
+                nreps = string_to_int(optarg, "-n");
                 break;
             case 'x':
-                seed = atoi(strdup(optarg));
+                seed = string_to_int(optarg, "-x");
                 break;
             case 'q':
                 is_dna = false;

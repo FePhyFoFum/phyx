@@ -82,7 +82,7 @@ int main(int argc, char * argv[]) {
         }
         switch(c) {
             case 'e':
-                ext = atoi(strdup(optarg));
+                ext = string_to_int(optarg, "-e");
                 extantset = true;
                 break;
             case 't':
@@ -104,14 +104,14 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'n':
-                nreps = atoi(strdup(optarg));
+                nreps = string_to_int(optarg, "-n");
                 break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
             case 'x':
-                seed = atoi(strdup(optarg));
+                seed = string_to_int(optarg, "-x");
                 break;
             case 's':
                 showd = true;

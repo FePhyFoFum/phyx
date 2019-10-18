@@ -91,7 +91,7 @@ int main(int argc, char * argv[]) {
                 check_file_exists(seqf);
                 break;
             case 'b':
-                sortby = atoi(strdup(optarg));
+                sortby = string_to_int(optarg, "-b");
                 break;
             case 'o':
                 outfileset = true;

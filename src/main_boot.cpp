@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'x':
-                seed = atoi(strdup(optarg));
+                seed = string_to_int(optarg, "-x");
                 break;
             case 'h':
                 print_help();

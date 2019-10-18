@@ -12,6 +12,7 @@ using namespace std;
 
 void check_file_exists (const string& filename);
 void check_inout_streams_identical (char * in, char * out);
+int string_to_int (string const& in, string const& arg);
 
 string string_to_upper (string const& str);
 

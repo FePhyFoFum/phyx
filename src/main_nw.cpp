@@ -100,7 +100,7 @@ int main(int argc, char * argv[]) {
                 outaf = strdup(optarg);
                 break;
             case 't':
-                seqtype = atoi(strdup(optarg));
+                seqtype = string_to_int(optarg, "-t");
                 if (seqtype > 1) {
                     cout << "Don't recognize seqtype " << seqtype
                         << ". Must be 0 (DNA) or 1 (AA)." << endl;
@@ -112,7 +112,7 @@ int main(int argc, char * argv[]) {
                 matf = strdup(optarg);
                 break;
             case 'n':
-                num_threads = atoi(strdup(optarg));
+                num_threads = string_to_int(optarg, "-n");
                 break;
             case 'v':
                 verbose = true;
