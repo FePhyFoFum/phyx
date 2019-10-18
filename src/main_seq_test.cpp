@@ -14,7 +14,7 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
 
-    if (argc > 2) {
+    if (argc > 2 || argc == 1) {
         cout << "usage: pxseqtest file" << endl;
         exit(0);
     }
