@@ -12,7 +12,7 @@ dist: bionic
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+      - sourceline: "ppa:ubuntu-toolchain-r/test"
     packages:
       - gcc-7
       - g++-7
@@ -30,6 +30,7 @@ before_install:
   - sudo apt-get install -y libatlas-cpp-0.6-dev
   - sudo apt-get install -y libnlopt-dev
   - sudo apt-get install -y libnlopt0
+  - sudo apt-get install -y libarmadillo-dev
 
 # should we include autoconf too?
 script:
