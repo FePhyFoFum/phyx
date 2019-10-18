@@ -64,6 +64,19 @@ int string_to_int (string const& in, string const& arg) {
     return res;
 }
 
+// catch exception (atoi does not do this)
+float string_to_float (string const& in, string const& arg) {
+    float res = 0;
+    try {
+            res = stof(in);
+        }
+        catch (const std::invalid_argument& ia) {
+            cerr << "Invalid argument for " << arg << " (expecting float). Exiting." << endl;
+            exit(0);
+        }
+    return res;
+}
+
 // convenience func. returns copy so original can still be used
 string string_to_upper (string const& instr) {
     string outstr = instr;

@@ -15,6 +15,7 @@ void check_inout_streams_identical (char * in, char * out);
 int string_to_int (string const& in, string const& arg);
 
 string string_to_upper (string const& str);
+float string_to_float (string const& in, string const& arg);
 
 void tokenize (const string& str, vector <string>& tokens, const string& delimiters = " ");
 vector <string> tokenize (string const& input);

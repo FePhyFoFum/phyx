@@ -61,7 +61,7 @@ int main(int argc, char * argv[]) {
         }
         switch(c) {
             case 'm':
-                meanfilt = atof(optarg);
+                meanfilt = string_to_float(optarg, "-m");
                 break;
             case 's':
                 fileset = true;

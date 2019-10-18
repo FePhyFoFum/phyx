@@ -269,10 +269,10 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'g':
-                alpha = atof(strdup(optarg));
+                alpha = string_to_float(optarg, "-g");
                 break;
             case 'i':
-                pinvar = atof(strdup(optarg));
+                pinvar = string_to_float(optarg, "-i");
                 break;
             case 'p':
                 printpost = true;

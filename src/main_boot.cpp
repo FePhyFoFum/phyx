@@ -85,7 +85,7 @@ int main(int argc, char * argv[]) {
                 partf = strdup(optarg);
                 break;
             case 'f':
-                jackfract = atof(strdup(optarg));
+                jackfract = string_to_float(optarg, "-f");
                 if (jackfract < 0 || jackfract > 1) {
                     cout << "Jackknife fraction must be 0 < x < 1" << endl;
                     exit(0);

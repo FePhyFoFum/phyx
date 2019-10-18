@@ -81,7 +81,7 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-                proportion = atof(strdup(optarg));
+                proportion = string_to_float(optarg, "-p");
                 break;
             case 'a':
                 force_protein = true;

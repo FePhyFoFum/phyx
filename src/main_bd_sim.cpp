@@ -86,18 +86,18 @@ int main(int argc, char * argv[]) {
                 extantset = true;
                 break;
             case 't':
-                time = atof(strdup(optarg));
+                time = string_to_float(optarg, "-t");
                 timeset = true;
                 break;
             case 'b':
-                birth = atof(strdup(optarg));
+                birth = string_to_float(optarg, "-b");
                 if (birth <= 0) {
                     cout << "Birth rate must be > 0" << endl;
                     exit(0);
                 }
                 break;
             case 'd':
-                death = atof(strdup(optarg));
+                death = string_to_float(optarg, "-d");
                 if (death < 0) {
                     cout << "Death rate must be >= 0" << endl;
                     exit(0);

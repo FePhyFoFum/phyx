@@ -71,12 +71,12 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 's':
+                scalef = string_to_float(optarg, "-s");
                 scaleset = true;
-                scalef = atof(strdup(optarg));
                 break;
             case 'r':
+                rootheight = string_to_float(optarg, "-r");
                 heightset = true;
-                rootheight = atof(strdup(optarg));
                 break;
             case 'o':
                 outfileset = true;

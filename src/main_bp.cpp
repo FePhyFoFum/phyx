@@ -108,8 +108,8 @@ int main(int argc, char * argv[]) {
                 firsttree = true;
                 break;
             case 'c':
+                cutnum = string_to_float(optarg, "-c");
                 cutoff = true;
-                cutnum = atof(strdup(optarg));
                 break;
             case 'm':
                 mapfileset = true;
