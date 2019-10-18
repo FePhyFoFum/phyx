@@ -23,7 +23,7 @@ endif
 # profiling:
 #-g -pg
 
-OPT_FLAGS := @OPT_FLAGS@
+OPT_FLAGS := @OPT_FLAGS@ -Wall
 ifeq "$(HOMP)" "Y"
     OPT_FLAGS += -DOMP
 endif

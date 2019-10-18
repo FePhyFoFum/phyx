@@ -453,7 +453,7 @@ int main(int argc, char * argv[]) {
                     sort(nms_i2.begin(),nms_i2.end());
                     sort(nms_i.begin(),nms_i.end());
                     int x = find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin();
-                    if (x == matrix[i].size()){
+                    if (x == (int)matrix[i].size()){
                         x = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
                     }
                     matrix[i][x] = 1;

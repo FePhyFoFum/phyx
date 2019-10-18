@@ -56,7 +56,7 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    bool optionsset = false; // if true, do only 1 operation
+    //bool optionsset = false; // if true, do only 1 operation. not currently used
     bool removeroot = false;
     bool removelabels = false;
     
@@ -79,11 +79,11 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 removeroot = true;
-                optionsset = true;
+                //optionsset = true;
                 break;
             case 'l':
                 removelabels = true;
-                optionsset = true;
+                //optionsset = true;
                 break;
             case 'o':
                 outfileset = true;

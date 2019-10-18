@@ -223,7 +223,7 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
     vector <Sequence> seqs;
     string tline;
     ifstream infile(filen.c_str());
-    bool done = false;
+    //bool done = false; // not used
     
     // first, get us to the MATRIX line i.e., right before the sequences start
     bool found = false;
@@ -274,7 +274,7 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
                 loopcount = 0; // reset
                 // check if we're done
                 string terp = seqs[ntax - 1].get_sequence();
-                if (terp.size() == nchar) {
+                if ((int)terp.size() == nchar) {
                     break;
                 }
             }
@@ -290,7 +290,7 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
 vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
     vector <Sequence> seqs;
     string tline;
-    bool done = false;
+    //bool done = false; // not used
     
     int totcount = 0;
     int loopcount = 0;
@@ -326,7 +326,7 @@ vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
                 loopcount = 0; // reset
                 // check if we're done
                 string terp = seqs[ntax - 1].get_sequence();
-                if (terp.size() == nchar) {
+                if ((int)terp.size() == nchar) {
                     break;
                 }
             }

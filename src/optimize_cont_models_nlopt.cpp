@@ -118,7 +118,8 @@ vector<double> optimize_single_rate_bm_nlopt(rowvec & _x, mat & _vcv, bool log) 
     double minf;
     //2 parameters, 1 anc, 2 rate
     vector<double> x(2,1);
-    nlopt::result result = opt.optimize(x, minf);
+    //nlopt::result result = opt.optimize(x, minf);
+    opt.optimize(x, minf);
     vector<double> results;
     results.push_back(x[0]);
     results.push_back(x[1]);
@@ -145,7 +146,8 @@ vector<double> optimize_single_rate_bm_ou_nlopt(rowvec & _x, mat & _vcv) {
     double minf;
     //2 parameters, 1 anc, 2 rate, 3 alpha
     vector<double> x(3, 1);
-    nlopt::result result = opt.optimize(x, minf);
+    //nlopt::result result = opt.optimize(x, minf);
+    opt.optimize(x, minf);
 //    cout << result << endl;
     vector<double> results;
     results.push_back(x[0]); results.push_back(x[1]); results.push_back(x[2]);

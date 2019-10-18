@@ -126,7 +126,7 @@ int main(int argc, char * argv[]) {
             }
         } else {
             vector <Sequence> seqs = read_interleaved_nexus (*pios, ntax, nchar);
-            for (int i = 0; i < seqs.size(); i++) {
+            for (int i = 0; i < (int)seqs.size(); i++) {
                 (*poos) << seqs[i].get_fasta(toupcase);
             }
         }

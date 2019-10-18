@@ -127,7 +127,8 @@ void BDFit::fit_bd () {
     opt.set_upper_bounds(ub);
     
     double minf;
-    nlopt::result result = opt.optimize(x, minf);
+    //nlopt::result result = opt.optimize(x, minf);
+    opt.optimize(x, minf);
     
     r_ = x[0];
     epsilon_ = x[1];

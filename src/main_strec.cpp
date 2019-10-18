@@ -101,8 +101,8 @@ int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
-    bool datafileset = false; // not used
-    bool treefileset = false; // not used
+    //bool datafileset = false; // not used
+    //bool treefileset = false; // not used
     bool conffileset = false;
     bool logfileset = false;
     bool outancfileset = false;
@@ -132,7 +132,7 @@ int main(int argc, char * argv[]) {
         }
         switch(c) {
             case 'd':
-                datafileset = true;
+                //datafileset = true;
                 dataf = strdup(optarg);
                 check_file_exists(dataf);
                 break;
@@ -144,7 +144,7 @@ int main(int argc, char * argv[]) {
                 datawide = true;
                 break;
             case 't':
-                treefileset = true;
+                //treefileset = true;
                 treef = strdup(optarg);
                 check_file_exists(treef);
                 break;

@@ -126,7 +126,7 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
     //sameQ = false;
     eigvec.fill(0);
     eigval.fill(0);
-    bool isImag = get_eigenvec_eigenval_from_Q(&eigval, &eigvec); // isImag is not used?
+    get_eigenvec_eigenval_from_Q(&eigval, &eigvec); // not currently used
     //cout << eigval << endl;
     //cout << eigvec << endl;
     for (int i=0; i < nstates; i++) {

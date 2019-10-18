@@ -51,9 +51,9 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    bool mrcafset = false;
+    //bool mrcafset = false; not used
     bool nodeidfset = false;
-    char * mrcaf = NULL;
+    //char * mrcaf = NULL;
     char * nodeidf = NULL;
     char * outf = NULL;
     char * treef = NULL;
@@ -72,8 +72,8 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'm':
-                mrcafset = true;
-                mrcaf = strdup(optarg);
+                //mrcafset = true;
+                //mrcaf = strdup(optarg);
                 break;
             case 'd':
                 nodeidfset = true;

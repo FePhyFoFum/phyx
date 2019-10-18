@@ -70,11 +70,11 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    bool outalnfileset = false;
+    //bool outalnfileset = false; // not used
     bool matrixfileset = false;
     char * seqf = NULL;
     char * outf = NULL;
-    char * outaf = NULL;
+    //char * outaf = NULL; not used
     char * matf = NULL;
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
@@ -96,8 +96,8 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'a':
-                outalnfileset = true;
-                outaf = strdup(optarg);
+                //outalnfileset = true;
+                //outaf = strdup(optarg);
                 break;
             case 't':
                 seqtype = string_to_int(optarg, "-t");
