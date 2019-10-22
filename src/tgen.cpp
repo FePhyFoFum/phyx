@@ -148,6 +148,6 @@ void TopologyGenerator::get_newicks (ostream* poos) {
     for (int i = 0; i < ntopos_; i++) {
         tree = trees_[i];
         string newick = edge_matrix_to_newick(tree);
-        cout << newick << endl;
+        (*poos) << newick << endl;
     }
 }
