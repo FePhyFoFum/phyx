@@ -19,7 +19,7 @@ void print_help() {
     cout << endl;
     cout << " -n, --ntax=INT      number of taxa" << endl;
     cout << " -r, --rooted        whether generated trees are rooted (default: false)" << endl;
-    cout << " -l, --label=STRING  prefix label for taxon names (default: 'taxon_')" << endl;
+    cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
 //    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
     int ntax = 0;
     bool rooted = false;
     bool outfileset = false;
-    string lprefix = "taxon_";
+    string lprefix = "t";
     char * outf = NULL;
 //    int seed = -1;
     
