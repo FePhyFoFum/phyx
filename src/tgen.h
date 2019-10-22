@@ -9,6 +9,7 @@ class TopologyGenerator {
 private:
     int ntax_;
     bool rooted_;
+    string lprefix_;
     
     int ntopos_; // number of possible topologies for n taxa. depends on rootedness
     int nedges_; // the number of edges in the final trees. depends on rootedness
@@ -28,7 +29,7 @@ private:
     void generate_trees ();
     
 public:
-    TopologyGenerator(int const& ntax, bool const& rooted);
+    TopologyGenerator(int const& ntax, bool const& rooted, string const& lprefix);
     void get_newicks(ostream* poos);
     //~TopologyGenerator();
 };

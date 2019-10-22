@@ -19,6 +19,7 @@ void print_help() {
     cout << endl;
     cout << " -n, --ntax=INT      number of taxa" << endl;
     cout << " -r, --rooted        whether generated trees are rooted (default: false)" << endl;
+    cout << " -l, --label=STRING  prefix label for taxon names (default: 'taxon_')" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
 //    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
@@ -34,6 +35,7 @@ static struct option const long_options[] =
 {
     {"ntax", required_argument, NULL, 'n'},
     {"rooted", no_argument, NULL, 'r'},
+    {"label", required_argument, NULL, 'l'},
     {"outf", required_argument, NULL, 'o'},
 //    {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
@@ -48,11 +50,13 @@ int main(int argc, char * argv[]) {
     int ntax = 0;
     bool rooted = false;
     bool outfileset = false;
+    string lprefix = "taxon_";
     char * outf = NULL;
 //    int seed = -1;
+    
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "n:ro:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "n:rl:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -62,6 +66,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 rooted = true;
+                break;
+            case 'l':
+                lprefix = strdup(optarg);
                 break;
             case 'o':
                 outfileset = true;
@@ -101,7 +108,7 @@ int main(int argc, char * argv[]) {
         poos = &cout;
     }
     
-    TopologyGenerator TG(ntax, rooted);
+    TopologyGenerator TG(ntax, rooted, lprefix);
     TG.get_newicks(poos);
     
     if (outfileset) {

@@ -12,8 +12,8 @@ using namespace std;
 #include "tgen.h"
 #include "tree_utils.h"
 
-TopologyGenerator::TopologyGenerator(int const& ntax, bool const& rooted):ntax_(ntax),
-        rooted_(rooted) {
+TopologyGenerator::TopologyGenerator(int const& ntax, bool const& rooted,
+        string const& lprefix):ntax_(ntax), rooted_(rooted), lprefix_(lprefix) {
     initialize();
 }
 
@@ -24,8 +24,8 @@ void TopologyGenerator::initialize () {
     nedges_ = get_num_edges(ntax_, rooted_);
     if (!rooted_) {
         init_edges_ = initialize_edge_matrix_unrooted(ntax_);
-        cout << "There are " << ntopos_ << " possible unrooted topologies for "
-                << ntax_ << " taxa." << endl;
+        //cout << "There are " << ntopos_ << " possible unrooted topologies for "
+        //        << ntax_ << " taxa." << endl;
         curtax_ = 4;
     } else {
         cout << "There are " << ntopos_ << " possible rooted topologies for "
@@ -132,7 +132,8 @@ void TopologyGenerator::newick_from_tree_map (int node, map <int, vector <int>> 
         if (m.count(curnode)) {
             newick_from_tree_map(curnode, m, tree); // recursion, baby
         } else {
-            tree += to_string(curnode);
+            // terminal
+            tree += lprefix_ + to_string(curnode);
         }
         if (i < (numdec - 1)) {
             tree += ",";
