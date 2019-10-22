@@ -645,6 +645,6 @@ string double_to_str(double d){
     return s;
 }
 
-int get_num_possible_trees (int const& n, bool const& rooted) {
+unsigned long int get_num_possible_trees (int const& n, bool const& rooted) {
     return doublefactorial(2 * (n + rooted) - 5);
 }
