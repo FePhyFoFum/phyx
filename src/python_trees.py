@@ -88,5 +88,5 @@ if __name__ == "__main__":
   if len(sys.argv) == 3:
     outfile = sys.argv[2]
   
-  print("Generating " + str(get_num_trees(n)) + " trees for " + str(n) + " taxa.")
+  print("Generating " + str(get_num_trees(n)) + " rooted trees for " + str(n) + " taxa.")
   main(n, outfile)
