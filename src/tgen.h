@@ -11,7 +11,7 @@ private:
     bool rooted_;
     string lprefix_;
     
-    int ntopos_; // number of possible topologies for n taxa. depends on rootedness
+    unsigned long int ntopos_; // number of possible topologies for n taxa. depends on rootedness
     int nedges_; // the number of edges in the final trees. depends on rootedness
     int curtax_; // the next taxon to add
     int curnode_; // the next internal node to add
