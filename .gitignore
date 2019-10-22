@@ -31,3 +31,7 @@ logo.svg
 Phyxed_Manual.log
 Phyxed_Manual.dvi
 
+# JayDubyaBee test code
+main_JWB.cpp
+compile_JWB.sh
+
