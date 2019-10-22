@@ -92,9 +92,11 @@ int main(int argc, char * argv[]) {
     if (ntax == 0) {
         cout << "You have to set the number of taxa -n. Exiting." << endl;
         exit(0);
-    }
-    if (ntax < 3) {
+    }else if (ntax < 3) {
         cout << "The number of taxa -n must be >= 3. Exiting." << endl;
+        exit(0);
+    }else if (ntax > 10) {
+        cout << "The number of taxa -n is limited to 10. Exiting." << endl;
         exit(0);
     }
     
