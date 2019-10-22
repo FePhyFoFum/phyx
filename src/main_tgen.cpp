@@ -9,6 +9,7 @@ using namespace std;
 
 #include "tgen.h"
 #include "utils.h"
+#include "tree_utils.h"
 #include "log.h"
 
 void print_help() {
@@ -92,11 +93,14 @@ int main(int argc, char * argv[]) {
     if (ntax == 0) {
         cout << "You have to set the number of taxa -n. Exiting." << endl;
         exit(0);
-    }else if (ntax < 3) {
+    } else if (ntax < 3) {
         cout << "The number of taxa -n must be >= 3. Exiting." << endl;
         exit(0);
-    }else if (ntax > 10) {
-        cout << "The number of taxa -n is limited to 10. Exiting." << endl;
+    } else if (ntax > 10) {
+        string rootstat = (rooted) ? "rooted" : "unrooted";
+        cout << "The number of taxa -n is limited to 10 ("
+                << get_num_possible_trees(10, rooted) << " "
+                << rootstat << " topologies). Exiting." << endl;
         exit(0);
     }
     
