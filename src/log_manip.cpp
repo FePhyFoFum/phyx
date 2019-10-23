@@ -276,7 +276,7 @@ void LogManipulator::retain_columns (vector <int> const& col_ids) {
         bool first_line = true;
         int sample_counter = 0;
         vector <int> cols_to_retain;
-        for (int i = 0; i < (int)col_ids.size(); i++) {
+        for (unsigned int i = 0; i < col_ids.size(); i++) {
             // subtract 1 because input is 1-indexed
             cols_to_retain.push_back(col_ids[i] - 1);
         }

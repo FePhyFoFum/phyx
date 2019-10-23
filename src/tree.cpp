@@ -216,7 +216,7 @@ void Tree::duplicateRootSupport () {
     vector<Node*> kids = root->getChildren();
     bool supfound = false;
     vector <string> sups;
-    int numnodes = 0; // want to guard against when only 1 outgroup
+    unsigned int numnodes = 0; // want to guard against when only 1 outgroup
     for (unsigned int i = 0; i < kids.size(); i++) {
         if (kids[i]->isInternal()) {
             numnodes++;
@@ -228,7 +228,7 @@ void Tree::duplicateRootSupport () {
         }
     }
     if (supfound) {
-        if (numnodes > (int)sups.size()) {
+        if (numnodes > sups.size()) {
             if (sups.size() == 1) {
                 for (unsigned int i = 0; i < kids.size(); i++) {
                     if (kids[i]->isInternal()) {

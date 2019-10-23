@@ -78,7 +78,7 @@ vector < vector < vector <int> > > TopologyGenerator::add_taxon_unrooted (vector
     vector < vector < vector <int> > > trees;
     int num_attach = 2 * (taxon - 1) - 3; // also the row where next edge will be added
     vector < vector <int> > edge;
-    for (int j = 0; j < (int)edges.size(); j++) {
+    for (unsigned int j = 0; j < edges.size(); j++) {
         for (int i = 0; i < num_attach; i++) {
             edge = edges[j];
             int prev_node = edge[i][0];
@@ -107,7 +107,7 @@ vector < vector < vector <int> > > TopologyGenerator::add_taxon_rooted (vector <
     int num_attach = 2 * (taxon - 1) - 2; // also the row where next edge will be added
     vector < vector <int> > edge;
     
-    for (int j = 0; j < (int)edges.size(); j++) {
+    for (unsigned int j = 0; j < edges.size(); j++) {
         for (int i = 0; i < num_attach; i++) {
             edge = edges[j];
             int prev_node = edge[i][0];
@@ -125,7 +125,7 @@ vector < vector < vector <int> > > TopologyGenerator::add_taxon_rooted (vector <
         edge = edges[j];
         // first, swap new node in for root node (always ntax+1)
         int root = ntax_ + 1;
-        for (int i = 0; i < (int)edge.size(); i++) {
+        for (unsigned int i = 0; i < edge.size(); i++) {
             if (edge[i][0] == root) {
                 edge[i][0] = new_node;
             } else if (edge[i][0] == 0) {
