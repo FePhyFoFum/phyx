@@ -22,7 +22,10 @@ private:
     void initialize ();
     int get_num_edges (int const& ntax, int const& rooted);
     vector < vector <int> > initialize_edge_matrix_unrooted (int const& n);
+    vector < vector <int> > initialize_edge_matrix_rooted (int const& n);
     vector < vector < vector <int> > > add_taxon_unrooted (vector < vector < vector <int> > > edges,
+        int const& taxon, int const& new_node);
+    vector < vector < vector <int> > > add_taxon_rooted (vector < vector < vector <int> > > edges,
         int const& taxon, int const& new_node);
     void newick_from_tree_map (int node, map <int, vector <int>> m, string & tree);
     string edge_matrix_to_newick (vector < vector <int> > const& edges);

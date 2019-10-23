@@ -14,7 +14,7 @@ using namespace std;
 
 void print_help() {
     cout << "Generate all tree topologies for n taxa." << endl;
-    cout << "Currently only unrooted, but rooted coming. As are random trees." << endl;
+    cout << "Random tree samples are a-coming." << endl;
     cout << endl;
     cout << "Usage: pxtgen [OPTION]... " << endl;
     cout << endl;
