@@ -162,16 +162,16 @@ void TopologyGenerator::generate_trees () {
 
 string TopologyGenerator::edge_matrix_to_newick (vector < vector <int> > const& edges) {
     string tree = "";
-    int num_edges = (int)edges.size();
-    int ntax = (int)((num_edges + 3)/2);
-    int min_node = ntax + 1;
-    int max_node = num_edges + 1;
+    //int num_edges = (int)edges.size();
+    //int ntax = (int)((num_edges + 3)/2);
+    int min_node = ntax_ + 1;
+    int max_node = nedges_ + 1;
     
     map <int, vector <int>> m;
     
     for (int i = min_node; i <= max_node; i++) {
         vector <int> clade;
-        for (int j = 0; j < num_edges; j++) {
+        for (int j = 0; j < nedges_; j++) {
             if (edges[j][0] == i) {
                 clade.push_back(edges[j][1]);
             }
