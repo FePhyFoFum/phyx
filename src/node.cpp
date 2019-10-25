@@ -102,8 +102,14 @@ void Node::setNumber(int n) {
     number = n;
 }
 
-bool Node::getPainted(){ return painted;}
-void Node::setPainted(bool p){ painted = p;}
+bool Node::getPainted() {
+    return painted;
+
+}
+
+void Node::setPainted(bool p) {
+    painted = p;
+}
 
 double Node::getBL() {
     return BL;
@@ -211,7 +217,7 @@ string Node::getNewick(bool bl) {
     return ret;
 }
 
-string Node::getPaintedNewick(bool bl){
+string Node::getPaintedNewick(bool bl) {
     string ret = "";
     vector<int> paintedchildren;
     for (int i=0; i < this->getChildCount(); i++) {

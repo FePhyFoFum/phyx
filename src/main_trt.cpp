@@ -26,6 +26,7 @@ void print_help() {
     cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
     cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << endl;
     cout << " -f, --namesf=FILE    names in a file (each on a line)" << endl;
+    cout << " -c, --comp           take the complement (i.e. remove any taxa not in list)" << endl;
     cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
     cout << " -s, --silent         suppress warnings of missing tips" << endl;
     cout << " -h, --help           display this help and exit" << endl;
@@ -37,12 +38,13 @@ void print_help() {
 /*
  * add you name if you contribute (probably add another line)
  */
-string versionline("pxtrt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxtrt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"names",required_argument,NULL,'n'},
+    {"comp", no_argument, NULL, 'c'},
     {"outf", required_argument, NULL, 'o'},
     {"silent", required_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
@@ -57,6 +59,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool namesset = false;
     bool namefileset = false;
+    bool complement = false;
     bool outfileset = false;
     bool silent = false;
     vector<string> names;
@@ -67,7 +70,7 @@ int main(int argc, char * argv[]) {
     char * namesfc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:n:f:o:shV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:n:cf:o:shV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -85,6 +88,9 @@ int main(int argc, char * argv[]) {
                 namefileset = true;
                 namesfc = strdup(optarg);
                 check_file_exists(namesfc);
+                break;
+            case 'c':
+                complement = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -161,31 +167,68 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     bool going = true;
-    if (ft == 0) {
-        map<string,string> translation_table;
-        bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
-        while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
-                &translation_table, &going);
-            if (going == true) {
-                paint_nodes(tree, names, silent);
-                (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
-                delete tree;
+    if (!complement) {
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (going == true) {
+                    paint_nodes(tree, names, silent);
+                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    delete tree;
+                }
+            }
+        } else if (ft == 1) {
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going == true) {
+                    paint_nodes(tree, names, silent);
+                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    delete tree;
+                }
             }
         }
-    } else if (ft == 1) {
-        Tree * tree;
-        while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going == true) {
-                paint_nodes(tree, names, silent);
-                (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
-                delete tree;
+    } else {
+        // don't assume all trees have the same leaf set
+        vector <string> toKeep;
+        if (ft == 0) {
+            map<string,string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (going == true) {
+                    toKeep = get_complement_tip_set(tree, names);
+                    if (toKeep.size() > 1) {
+                        paint_nodes(tree, toKeep, silent);
+                        (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    }
+                    delete tree;
+                }
+            }
+        } else if (ft == 1) {
+            Tree * tree;
+            while (going) {
+                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going == true) {
+                    toKeep = get_complement_tip_set(tree, names);
+                    if (toKeep.size() > 1) {
+                        paint_nodes(tree, toKeep, silent);
+                        (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    }
+                    delete tree;
+                }
             }
         }
     }
+    
     if (fileset) {
         fstr->close();
         delete pios;
