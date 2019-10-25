@@ -197,13 +197,14 @@ int main(int argc, char * argv[]) {
         }
     } else {
         // *** check list of names to keep is at least 2
+        // don't assume all trees have the same leaf set
+        vector <string> toPrune;
+        int numLeaves;
         if (ft == 0) {
             map<string,string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
             Tree * tree;
-            int numLeaves;
-            vector <string> toPrune;
             while (going) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
@@ -219,8 +220,6 @@ int main(int argc, char * argv[]) {
             }
         } else if (ft == 1) {
             Tree * tree;
-            vector <string> toPrune;
-            int numLeaves;
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
