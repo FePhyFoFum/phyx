@@ -25,7 +25,7 @@ void print_help() {
     cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
     cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << endl;
     cout << " -f, --namesf=FILE   names in a file (each on a line)" << endl;
-    cout << " -c, --comp          take the complement (i.e. move any taxa not in list)" << endl;
+    cout << " -c, --comp          take the complement (i.e. remove any taxa not in list)" << endl;
     cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
     cout << " -s, --silent        suppress warnings of missing tips" << endl;
     cout << " -h, --help          display this help and exit" << endl;
