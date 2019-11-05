@@ -44,6 +44,7 @@ jobs:
         cd ..
         mkdir -p docs
         pandoc --standalone -f man help.man -o docs/index.html
+        cp doc/*.pdf docs/
     - name: Deploy
       if: success() && github.ref == 'refs/heads/master' && runner.os == 'Linux'
       uses: peaceiris/actions-gh-pages@v2.5.0
