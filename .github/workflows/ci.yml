@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branch: master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Install brew dependencies
+      if: runner.os == 'macOS'
+      run: |
+          brew install nlopt armadillo
+    - name: Install apt dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install --no-install-recommends -y \
+        liblapack-dev \
+        libatlas-cpp-0.6-dev \
+        libnlopt-dev \
+        libarmadillo-dev
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+          cd src
+          ./configure --prefix=${PWD}/../bin
+          make -j
+          make test
+          make install
+    - name: Manfiles
+      if: success() && runner.os == 'Linux'
+      run: |
+        sudo apt-get install --no-install-recommends -y help2man pandoc
+        cd bin
+        find . -type f | xargs -n1 help2man > ../help.man
+        cd ..
+        pandoc --standalone -f man help.man -o help.html
