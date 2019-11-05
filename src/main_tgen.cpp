@@ -20,6 +20,7 @@ void print_help() {
     cout << endl;
     cout << " -n, --ntax=INT      number of taxa" << endl;
     cout << " -r, --rooted        whether generated trees are rooted (default: false)" << endl;
+    cout << " -c, --count         give the number of possible trees for n taxa and exit" << endl;
     cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << endl;
     cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
 //    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
@@ -36,6 +37,7 @@ static struct option const long_options[] =
 {
     {"ntax", required_argument, NULL, 'n'},
     {"rooted", no_argument, NULL, 'r'},
+    {"count", no_argument, NULL, 'r'},
     {"label", required_argument, NULL, 'l'},
     {"outf", required_argument, NULL, 'o'},
 //    {"seed", required_argument, NULL, 'x'},
@@ -50,14 +52,21 @@ int main(int argc, char * argv[]) {
     
     int ntax = 0;
     bool rooted = false;
+    bool count = false;
     bool outfileset = false;
     string lprefix = "t";
     char * outf = NULL;
+    
+    // limit on nuber of terminals supported (exhaustive)
+    int sim_limit_exh = 10;
+    // bc of the way trees are simulated, cannot be arbitrarily large
+    // hope to fix this soon
+    
 //    int seed = -1;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "n:rl:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "n:rcl:o:hV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -67,6 +76,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 rooted = true;
+                break;
+            case 'c':
+                count = true;
                 break;
             case 'l':
                 lprefix = strdup(optarg);
@@ -90,19 +102,29 @@ int main(int argc, char * argv[]) {
         }
     }
     
+    string rootstat = (rooted) ? "rooted" : "unrooted";
+    
     if (ntax == 0) {
         cout << "You have to set the number of taxa -n. Exiting." << endl;
         exit(0);
     } else if (ntax < 3) {
         cout << "The number of taxa -n must be >= 3. Exiting." << endl;
         exit(0);
-    } else if (ntax > 10) {
-        string rootstat = (rooted) ? "rooted" : "unrooted";
-        cout << "The number of taxa -n is limited to 10 ("
-                << get_num_possible_trees(10, rooted) << " "
+    } else if (ntax > sim_limit_exh) {
+        cout << "The number of taxa -n is currently limited to " << sim_limit_exh
+                << " (" << get_num_possible_trees(sim_limit_exh, rooted) << " "
                 << rootstat << " topologies). Exiting." << endl;
         exit(0);
     }
+    
+    if (count) {
+        cout << "There are " << get_num_possible_trees(ntax, rooted)
+                << " possible " << rootstat << " topologies for " << ntax
+                << " taxa." << endl;
+        exit(0);
+    }
+    
+    
     
     ostream * poos = NULL;
     ofstream * ofstr = NULL;
