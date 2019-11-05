@@ -36,7 +36,9 @@ jobs:
     - name: Manfiles
       if: success() && runner.os == 'Linux'
       run: |
-        sudo apt-get install --no-install-recommends -y help2man pandoc
+        sudo apt-get install --no-install-recommends -y help2man
+        wget https://github.com/jgm/pandoc/releases/download/2.7.3/pandoc-2.7.3-1-amd64.deb
+        sudo dpkg -i pandoc-2.7.3-1-amd64.deb
         cd bin
         find . -type f | xargs -n1 help2man > ../help.man
         cd ..
