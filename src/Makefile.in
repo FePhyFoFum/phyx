@@ -555,6 +555,7 @@ pxcolt: $(CPP_OBJS) $(COLLAPSE_TREE_OBJ)
 	$(CXX) -o "pxcolt" $(OPT_FLAGS) $(COLLAPSE_TREE_OBJ) $(CPP_OBJS)
 
 install:
+	mkdir -p $(prefix)/bin
 	install -m 0755 px* $(prefix)/bin
 
 uninstall:
