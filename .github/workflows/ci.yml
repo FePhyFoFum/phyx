@@ -29,7 +29,7 @@ jobs:
     - name: Build
       run: |
           cd src
-          ./configure --prefix=${PWD}/../bin
+          ./configure --prefix=${PWD}/..
           make -j
           make test
           make install
@@ -42,4 +42,12 @@ jobs:
         cd bin
         find . -type f | xargs -n1 help2man > ../help.man
         cd ..
-        pandoc --standalone -f man help.man -o help.html
+        mkdir -p docs
+        pandoc --standalone -f man help.man -o docs/index.html
+    - name: Deploy
+      if: success() && github.ref == 'refs/heads/master' && runner.os == 'Linux'
+      uses: peaceiris/actions-gh-pages@v2.5.0
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_ACCESS_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: docs
