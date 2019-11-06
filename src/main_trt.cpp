@@ -169,6 +169,7 @@ int main(int argc, char * argv[]) {
     bool going = true;
     if (!complement) {
         if (ft == 0) {
+            
             map<string,string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
@@ -182,11 +183,12 @@ int main(int argc, char * argv[]) {
                         exit(0);
                     }
                     paint_nodes(tree, names, silent);
-                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    (*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
                     delete tree;
                 }
             }
         } else if (ft == 1) {
+            
             Tree * tree;
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
@@ -196,7 +198,8 @@ int main(int argc, char * argv[]) {
                         exit(0);
                     }
                     paint_nodes(tree, names, silent);
-                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    (*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
+                    
                     delete tree;
                 }
             }

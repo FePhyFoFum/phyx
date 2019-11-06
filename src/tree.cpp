@@ -467,21 +467,21 @@ void Tree::postOrderProcessRoot(Node * node) {
     }
 }
 
+/*
+    * how this works
+    *
+    * get the parent = parent
+    * get the parent of the parent = mparent
+    * remove parent from mparent
+    * add !node from parent to mparent
+    *
+    * doesn't yet take care if node.parent == root
+    * or polytomy
+*/
 void Tree::pruneExternalNode(Node * node) {
     if (node->isInternal()) {
         return;
     }
-    /*
-     * how this works
-     *
-     * get the parent = parent
-     * get the parent of the parent = mparent
-     * remove parent from mparent
-     * add !node from parent to mparent
-     *
-     * doesn't yet take care if node.parent == root
-     * or polytomy
-    */
     double bl = 0;
     Node * parent = node->getParent();
     if (parent->getChildCount() == 2) {

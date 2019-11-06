@@ -217,13 +217,20 @@ string Node::getNewick(bool bl) {
     return ret;
 }
 
+// atm returns both 1) knuckles and 2) root edges
+// neither of these is likely wanted
+// recursive
 string Node::getPaintedNewick(bool bl) {
     string ret = "";
-    vector<int> paintedchildren;
+    vector <int> paintedchildren;
     for (int i=0; i < this->getChildCount(); i++) {
-        if (this->getChild(i)->getPainted() == true)
+        if (this->getChild(i)->getPainted() == true) {
             paintedchildren.push_back(i);
+        }
     }
+    
+    //cout << "dealing with " << paintedchildren.size() << " children." << endl;
+    
     for (unsigned int i=0; i < paintedchildren.size(); i++) {
         if (i == 0) {
             ret += "(";
@@ -231,7 +238,7 @@ string Node::getPaintedNewick(bool bl) {
         ret += this->getChild(paintedchildren[i])->getPaintedNewick(bl);
         if (bl == true) {
             std::ostringstream o;
-            //20 is what you get from raxml
+            // 20 is what you get from raxml
             o << setprecision(20) << this->getChild(paintedchildren[i])->getBL();
             ret += ":" + o.str();
         }

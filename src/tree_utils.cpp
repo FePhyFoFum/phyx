@@ -60,7 +60,7 @@ double get_length_to_root(Node * n) {
 /*
  * calculate the variance between the lengths to the root and the tips
  */
-double get_root_tip_var(Tree * tr){
+double get_root_tip_var(Tree * tr) {
     vector <double> paths;
     for (int i = 0; i < tr->getExternalNodeCount(); i++) {
         paths.push_back(get_length_to_root(tr->getExternalNode(i)));
@@ -89,6 +89,7 @@ void remove_internal_names(Tree * tr) {
 }
 
 
+// this is _very_ slow compared to painting the induced tree (pxtrt)
 void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
     int counter = 0;
@@ -114,26 +115,33 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
             // it is possible to go from unrooted to rooted on pruning, but not the other way (i think)
             tree->unRoot();
         }
-        // debugging
         //cout << getNewickString(tree) << endl;
     }
 }
 
 
+// assumes a rooted tree
 void paint_nodes(Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
-    tree->getRoot()->setPainted(true);
+    //tree->getRoot()->setPainted(true); // probably do not want this
+    
+    // instead, find mrca of names, paint that node
+    Node * nd = tree->getMRCA(names);
+    nd->setPainted(true);
+    
     for (int i=0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);
         if (m != NULL) {
             m->setPainted(true);
             Node * cur = m;
-            while (cur != tree->getRoot()){
+            while (cur != tree->getRoot()) {
                 cur = cur->getParent();
-                if (cur->getPainted() == true)
+                // break early if encountering an existing painted path
+                if (cur->getPainted() == true) {
                     break;
-                else
+                } else {
                     cur->setPainted(true);
+                }
             }
         } else {
             if (!silent) {
@@ -633,7 +641,7 @@ bool has_root_edge (Tree * tr) {
     return rootEdge;
 }
 
-string double_to_str(double d){
+string double_to_str(double d) {
     size_t len = std::snprintf(0, 0, "%.16f", d);
     std::string s(len+1, 0);
     std::snprintf(&s[0], len+1, "%.16f", d);
