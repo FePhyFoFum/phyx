@@ -177,6 +177,10 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going == true) {
+                    if (!is_rooted(tree)) {
+                        cout << "This only works with rooted trees. Exiting." << endl;
+                        exit(0);
+                    }
                     paint_nodes(tree, names, silent);
                     (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
                     delete tree;
@@ -187,6 +191,10 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
+                    if (!is_rooted(tree)) {
+                        cout << "This only works with rooted trees. Exiting." << endl;
+                        exit(0);
+                    }
                     paint_nodes(tree, names, silent);
                     (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
                     delete tree;
@@ -205,6 +213,10 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going == true) {
+                    if (!is_rooted(tree)) {
+                        cout << "This only works with rooted trees. Exiting." << endl;
+                        exit(0);
+                    }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
                         paint_nodes(tree, toKeep, silent);
@@ -218,6 +230,10 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
+                    if (!is_rooted(tree)) {
+                        cout << "This only works with rooted trees. Exiting." << endl;
+                        exit(0);
+                    }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
                         paint_nodes(tree, toKeep, silent);
