@@ -25,6 +25,7 @@ void print_help() {
     cout << "Extract subclade(s) from tree(s)." << endl;
     cout << "Takes in newick tree and MRCA file with format:" << endl;
     cout << "MRCANAME = tip1 tip2 ..." << endl;
+    cout << "If multiple MRCAs are provided, multiple subtrees are returned" << endl;
     cout << endl;
     cout << "Usage: pxmrcacut [OPTION]... " << endl;
     cout << endl;
@@ -147,6 +148,11 @@ int main(int argc, char * argv[]) {
     }
     inmrca.close();
     
+    
+    
+    // this does not use the conventional tree reader functions
+    // update this
+    
     // collect tree(s)
     vector<string> lines;
     string line;
@@ -162,8 +168,9 @@ int main(int argc, char * argv[]) {
         for (it = mrcas.begin(); it != mrcas.end(); it++) {
             //cout << "Dealing with clade '" << (*it).first << "'" << endl;
             if (!check_names_against_tree(tree, (*it).second)) {
+                // allow more flexibility here
                 cout << "Check mrca file for typos." << endl;
-                exit (0);
+                exit(0);
             }
             Node * nd = tree->getMRCA((*it).second);
             bool bl = has_branchlengths(tree);
