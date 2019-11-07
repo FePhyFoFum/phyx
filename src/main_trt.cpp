@@ -169,7 +169,7 @@ int main(int argc, char * argv[]) {
     bool going = true;
     if (!complement) {
         if (ft == 0) {
-            
+            // nexus
             map<string,string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
@@ -183,9 +183,10 @@ int main(int argc, char * argv[]) {
                         exit(0);
                     }
                     paint_nodes(tree, names, silent);
-                    // MRCA is far to expensive
-                    //(*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
-                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
+                    tree = read_tree_string(tracetreenewick);
+                    deknuckle_tree(tree); // guaranteed to have knuckles atm
+                    (*poos) << getNewickString(tree) << endl;
                     delete tree;
                 }
             }
@@ -202,7 +203,11 @@ int main(int argc, char * argv[]) {
                     paint_nodes(tree, names, silent);
                     // MRCA is far to expensive
                     //(*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
-                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    //(*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                    string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
+                    tree = read_tree_string(tracetreenewick);
+                    deknuckle_tree(tree); // guaranteed to have knuckles atm
+                    (*poos) << getNewickString(tree) << endl;
                     delete tree;
                 }
             }
@@ -225,8 +230,10 @@ int main(int argc, char * argv[]) {
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
-                        paint_nodes(tree, toKeep, silent);
-                        (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                        string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
+                        tree = read_tree_string(tracetreenewick);
+                        deknuckle_tree(tree); // guaranteed to have knuckles atm
+                        (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
                 }
@@ -242,8 +249,10 @@ int main(int argc, char * argv[]) {
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
-                        paint_nodes(tree, toKeep, silent);
-                        (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
+                        string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
+                        tree = read_tree_string(tracetreenewick);
+                        deknuckle_tree(tree); // guaranteed to have knuckles atm
+                        (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
                 }
