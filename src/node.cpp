@@ -219,6 +219,7 @@ string Node::getNewick(bool bl) {
 
 // atm returns both 1) knuckles and 2) root edges
 // neither of these is likely wanted
+// root edge could be solved by passing in the correct node initially, but MRCA is expensive
 // recursive
 string Node::getPaintedNewick(bool bl) {
     string ret = "";
@@ -228,9 +229,22 @@ string Node::getPaintedNewick(bool bl) {
             paintedchildren.push_back(i);
         }
     }
+    /*
+    string ndname = this->getName();
+    if (ndname != "") {
+            cout << "Dealing with node '" << ndname << "'." << endl;
+        }
+    cout << "   dealing with " << paintedchildren.size() << " children." << endl;
     
-    //cout << "dealing with " << paintedchildren.size() << " children." << endl;
-    
+    if (paintedchildren.size() == 1) {
+        cout << "looks like '" << ndname << "' here might be a knuckle!" << endl;
+        bool done = false;
+        double el = this->getChild(paintedchildren[0])->getBL();
+        while (!done) {
+            Node * cnd = this->getChild(paintedchildren[0]);
+        }
+    }
+    */
     for (unsigned int i=0; i < paintedchildren.size(); i++) {
         if (i == 0) {
             ret += "(";

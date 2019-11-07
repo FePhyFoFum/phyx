@@ -123,11 +123,7 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
 // assumes a rooted tree
 void paint_nodes(Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
-    //tree->getRoot()->setPainted(true); // probably do not want this
-    
-    // instead, find mrca of names, paint that node
-    Node * nd = tree->getMRCA(names);
-    nd->setPainted(true);
+    tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
     for (int i=0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);

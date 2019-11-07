@@ -239,7 +239,8 @@ Tree * TreeReader::readTree(string trees) {
     return tree;
 }
 
-Tree * read_tree_string(string trees) {
+// for processing strings we know are valid tree strings
+Tree * read_tree_string (string trees) {
     TreeReader tr;
     Tree * tree = tr.readTree(trees);
     return tree;

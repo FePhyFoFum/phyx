@@ -183,12 +183,14 @@ int main(int argc, char * argv[]) {
                         exit(0);
                     }
                     paint_nodes(tree, names, silent);
-                    (*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
+                    // MRCA is far to expensive
+                    //(*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
+                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
                     delete tree;
                 }
             }
         } else if (ft == 1) {
-            
+            // newick
             Tree * tree;
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
@@ -198,8 +200,9 @@ int main(int argc, char * argv[]) {
                         exit(0);
                     }
                     paint_nodes(tree, names, silent);
-                    (*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
-                    
+                    // MRCA is far to expensive
+                    //(*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
+                    (*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
                     delete tree;
                 }
             }
