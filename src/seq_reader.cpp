@@ -468,8 +468,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
     return false;
 }
 
-// file-version
-// prolly get rid of this in favour of the stream-based one
+// file-version of above. used by concatenator
 void get_nexus_dimensions_file (string & filen, int & numTaxa, int & numChar, bool & interleave) {
     numTaxa = numChar = 0;
     string tline;
@@ -570,6 +569,116 @@ void get_nexus_dimensions (istream & stri, int & numTaxa, int & numChar, bool & 
                             // if `interleave` is the last token, it is true
                             interleave = true;
                         }
+                    }
+                }
+            } else if (searchtokens[0] == "MATRIX") {
+                break;
+            }
+        }
+    }
+}
+
+// same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
+// should remove global to_upper as morphology can be coded arbitrarily
+// - this is _low_ priority
+void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numChar,
+        bool & interleave, string & alpha_name, string & symbols, string & gap, string & missing) {
+    numTaxa = numChar = 0;
+    alpha_name = symbols = "";
+    // set defaults, in case not explicitly stated
+    gap = "-";
+    missing = "?";
+    
+    string tline;
+    //string temp;
+    while (getline(stri, tline)) {
+        if (!tline.empty()) {
+            // convert to uppercase
+            tline = string_to_upper(tline);
+            vector <string> searchtokens = tokenize(tline);
+            if (searchtokens[0] == "DIMENSIONS") {
+            // get rid of '=' and ';'. tokens then easy to deal with.
+                replace(tline.begin(), tline.end(), '=', ' ');
+                replace(tline.begin(), tline.end(), ';', ' ');
+                searchtokens = tokenize(tline);
+                for (unsigned int i = 0; i < searchtokens.size(); i++) {
+                    if (searchtokens[i].substr(0, 4) == "NTAX") {
+                        i++;
+                        numTaxa = stoi(searchtokens[i]);
+                    } else if (searchtokens[i].substr(0, 4) == "NCHA") {
+                        i++;
+                        numChar = stoi(searchtokens[i]);
+                    }
+                }
+            } else if (searchtokens[0] == "FORMAT") {
+                replace(tline.begin(), tline.end(), '=', ' ');
+                replace(tline.begin(), tline.end(), ';', ' ');
+                searchtokens = tokenize(tline);
+                for (unsigned int i = 0; i < searchtokens.size(); i++) {
+                    if (searchtokens[i].substr(0, 4) == "INTE") {
+                        if (i < (searchtokens.size() - 1)) {
+                            i++;
+                            if (searchtokens[i] == "YES") {
+                                interleave = true;
+                            } else if (searchtokens[i] == "NO") {
+                                interleave = false;
+                            } else {
+                                // if yes or no not provided, it is true
+                                interleave = true;
+                                i--; // backup, since this is a different token
+                            }
+                        } else {
+                            // if `interleave` is the last token, it is true
+                            interleave = true;
+                        }
+                    } else if (searchtokens[i] == "DATATYPE") {
+                        i++;
+                        // valid Nexus types: STANDARD, DNA, RNA, Nucleotide, Protein, Continuous
+                        // phyx types: DNA = 0, AA = 1, BINARY = 2, MULTI = 3, CODON = 4, NA = 5
+                        // only considering major ones atm
+                        if (searchtokens[i] == "STANDARD") {
+                            alpha_name = "MULTI";
+                        } else if (searchtokens[i] == "DNA") {
+                            alpha_name = "DNA";
+                        } else if (searchtokens[i] == "PROTEIN") {
+                            alpha_name = "AA";
+                        } else {
+                            cout << "Datatype '" << searchtokens[i] << "' not supported" << endl;
+                        }
+                    } else if (searchtokens[i] == "SYMBOLS") {
+                        //cout << "here i am about to parse the symbols block" << endl;
+                        // morphology data
+                        // can take form SYMBOLS="012" or (annoyingly) SYMBOLS="0 1 2"
+                        // just need to make sure both " are captured, and we should be cool
+                        bool done = false;
+                        bool first = true;
+                        string terp = "";
+                        while (!done) {
+                            i++;
+                            if (first) {
+                                // check that we are in the right spot
+                                terp = searchtokens[i];
+                                if (terp.front() == '"') {
+                                    // check if symbols contain no gaps
+                                    if (terp.back() == '"') {
+                                        //cout << "symbols are (rationally) contiguous!" << endl;
+                                        terp.erase (std::remove (terp.begin(), terp.end(), '"'), terp.end());
+                                        symbols = terp;
+                                        done = true;
+                                    }
+                                }
+                                first = false;
+                            } else {
+                                terp += searchtokens[i];
+                                if (searchtokens[i].back() == '"') {
+                                    //cout << "found the end of symbols!" << endl;
+                                    terp.erase (std::remove (terp.begin(), terp.end(), '"'), terp.end());
+                                    symbols = terp;
+                                    done = true;
+                                }
+                            }
+                        }
+                        //cout << "Captured symbols: " << symbols << endl;
                     }
                 }
             } else if (searchtokens[0] == "MATRIX") {

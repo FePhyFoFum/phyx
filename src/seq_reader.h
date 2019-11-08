@@ -12,6 +12,8 @@ bool read_next_seq_char_from_stream (istream & stri, int ftype,
     string & retstring, Sequence & seq);
 void get_nexus_dimensions_file (string & filen, int & numTaxa, int & numChar, bool & interleave);
 void get_nexus_dimensions (istream & stri, int & numTaxa, int & numChar, bool & interleave);
+void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numChar,
+        bool & interleave, string & alpha_name, string & symbols, string & gap, string & missing);
 vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar);
 vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar);
 
