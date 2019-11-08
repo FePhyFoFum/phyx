@@ -51,7 +51,7 @@ string Sequence::get_alpha_name() {
         return "AA";
     }
     if (alphabet == BINARY) {
-        return "BINARY";
+        return "BINARY"; // i don't believe this _can_ be true atm
     }
     if (alphabet == MULTI) {
         return "MULTI";
