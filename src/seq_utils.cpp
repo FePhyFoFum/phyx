@@ -258,7 +258,7 @@ void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostr
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
         datatype = "PROTEIN";
     }
-    if (datatype == "MULTI") {
+    if (datatype == "MULTI" || datatype == "BINARY") {
         datatype = "STANDARD";
     }
     
