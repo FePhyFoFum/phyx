@@ -236,7 +236,7 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
         }
     }
     if (found == false) {
-        cout << "badly formatted nexus file, missing 'MATRIX' in data/character block" << endl;
+        cout << "badly formatted nexus file: missing 'MATRIX' in data/character block. Exiting." << endl;
         exit(1);
     }
     
@@ -682,6 +682,10 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
                     }
                 }
             } else if (searchtokens[0] == "MATRIX") {
+                if (alpha_name == "MULTI" && symbols.empty()) {
+                    symbols = "01"; // this is default Nexus alphabet for 'standard' data
+                    alpha_name = "BINARY";
+                }
                 break;
             }
         }

@@ -69,6 +69,12 @@ void Sequence::set_alpha(seqAlpha s) {
 void Sequence::infer_alpha () {
     string str = seq;
     
+    // check for binary data
+    if (check_binary_sequence(str)) {
+        alphabet = BINARY;
+        return;
+    }
+    
     // do quick check for 'standard' data: will contain numbers
     if (str.find_first_of("0123456789") != std::string::npos) {
         alphabet = MULTI;
