@@ -515,3 +515,11 @@ void populate_map_codon_indices(map <string,vector<int> > * codon_position) {
     (*codon_position)["GGA"] = {59};
     (*codon_position)["GGG"] = {60};
 }
+
+bool check_binary_sequence (string const& seq) {
+    bool binary = false;
+    if (seq.find_first_not_of("01-?") == std::string::npos) {
+        binary = true;
+    }
+    return binary;
+}

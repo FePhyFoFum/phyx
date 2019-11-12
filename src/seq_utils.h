@@ -20,5 +20,6 @@ void populate_map_codon_dict(map<string, string> * codon_dict);
 void populate_map_codon_indices(map<string, vector<int> > * codon_position);
 void create_vector_seq_codon_state_reconstructor(vector<Sequence> & origseqs,
     vector<Sequence> & sr_seqs, int site, map<string,vector<int> > & codon_pos);
+bool check_binary_sequence (string const& seq);
 
 #endif /* _SEQ_UTILS_H_ */
