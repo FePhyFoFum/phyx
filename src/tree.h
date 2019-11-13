@@ -37,6 +37,7 @@ private:
 public:
     Tree();
     Tree(Node * root);
+    Tree * clone() const { return new Tree(*this); }
     
     void addExternalNode(Node * tn);
     void addInternalNode(Node * tn);
