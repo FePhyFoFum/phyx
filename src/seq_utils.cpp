@@ -523,3 +523,14 @@ bool check_binary_sequence (string const& seq) {
     }
     return binary;
 }
+
+// get all unique character states
+string get_alphabet_from_sequence (string const& instr) {
+    string uniqueChars;
+    
+    string sorted = instr;
+    std::sort(sorted.begin(), sorted.end());
+    unique_copy(sorted.begin(), sorted.end(), back_inserter(uniqueChars));
+    
+    return uniqueChars;
+}
