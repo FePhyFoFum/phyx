@@ -230,6 +230,7 @@ int main(int argc, char * argv[]) {
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
+                        paint_nodes(tree, toKeep, silent);
                         string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
                         tree = read_tree_string(tracetreenewick);
                         deknuckle_tree(tree); // guaranteed to have knuckles atm
@@ -249,6 +250,7 @@ int main(int argc, char * argv[]) {
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
+                        paint_nodes(tree, toKeep, silent);
                         string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
                         tree = read_tree_string(tracetreenewick);
                         deknuckle_tree(tree); // guaranteed to have knuckles atm
