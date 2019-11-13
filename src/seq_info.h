@@ -11,14 +11,23 @@ private:
     string concatenated_;
     string temp_seq_;
     string seq_chars_; // the alphabet (DNA or AA only at present)
-    string file_type_;
-    bool finished_;
+    string file_type_; //"nexus", "phylip", "fasta", "fastq"
+    bool output_indiv_; // report stats for each seq
+
+    bool datatype_set_;
+    bool is_dna_;
     bool is_protein_;
-    string seq_type_;
+    bool is_multi_;
+    bool is_binary_;
+    bool alpha_set_;
+    
+    string alpha_name_; // phyx seq ids: DNA, AA, BINARY (not currently supported), MULTI
+    string seq_type_; // label used for output table: Prot, Nucl, Mult, Binary
     string name_;
+    char gap_;
+    char missing_;
     map <char, double> total_;
     int seqcount_;
-    bool output_indiv_; // report stats for each seq
     double percent_missing_;
     
     // new stuff
@@ -39,11 +48,13 @@ private:
     void set_alphabet ();
     void count_chars_indiv_seq (string& seq);
     void count_chars(string& seq);
-    void print_stats (ostream* poos);
+    void print_summary_table_whole_alignment (ostream* poos);
     void return_freq_table (ostream* poos);
     void get_longest_taxon_label ();
     void calculate_freqs ();
     void calc_missing ();
+    void set_datatype ();
+    void set_alphabet_from_sampled_seqs (string const& seq);
 
 public:
     SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein);
