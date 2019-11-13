@@ -99,18 +99,17 @@ void Sequence::infer_alpha () {
     int validChars = 0;
     
     str = string_to_upper(str);
-    std::sort(str.begin(), str.end());
     
     // iterate over unique characters
-    string strcopy;
-    unique_copy(str.begin(), str.end(), back_inserter(strcopy));
-    for (size_t i=0; i < strcopy.length(); ++i) {
-        int num = count(str.begin(), str.end(), strcopy[i]);
-        if (is_prot_char(strcopy[i])) {
+    string uniqueChars = get_alphabet_from_sequence(str);
+    
+    for (size_t i=0; i < uniqueChars.length(); ++i) {
+        int num = count(str.begin(), str.end(), uniqueChars[i]);
+        if (is_prot_char(uniqueChars[i])) {
             proteinHit += num;
             validChars++;
             // DNA chars are a subset of protein chars
-            if (is_dna_char(strcopy[i])) {
+            if (is_dna_char(uniqueChars[i])) {
                 dnaHit += num;
             }
         }
