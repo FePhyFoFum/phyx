@@ -117,7 +117,7 @@ int main(int argc, char * argv[]) {
 
     int ft = test_seq_filetype_stream(*pios, retstring);
     // extra stuff to deal with possible interleaved nexus
-    // yes, nexus to nexus conversion is silly. ut could go from interleaved to non-interleaved
+    // yes, nexus to nexus conversion is silly. but could go from interleaved to non-interleaved
     if (ft == 0) {
         int ntax, nchar = 0;
         bool interleave = false;

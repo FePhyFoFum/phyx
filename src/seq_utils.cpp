@@ -252,14 +252,30 @@ void write_phylip_alignment(vector <Sequence> & seqs, bool const& uppercase, ost
 void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
     string datatype = seqs[0].get_alpha_name();
-    
+    string symbols = ""; // not required for binary (default), protein, DNA
     //cout << endl << "datatype = " << datatype << endl << endl;
     
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
         datatype = "PROTEIN";
     }
-    if (datatype == "MULTI" || datatype == "BINARY") {
+    if (datatype == "BINARY") {
         datatype = "STANDARD";
+        symbols = "01"; // not strictly necessary, as this is the default set. but doesn't hurt
+    }
+    if (datatype == "MULTI") {
+        datatype = "STANDARD";
+        cout << "assembling symbols now" << endl;
+        string combined;
+        for (unsigned int i=0; i < seqs.size(); i++) {
+            if (uppercase) {
+                combined += seqs[i].seq_to_upper();
+            } else {
+                combined += seqs[i].get_sequence();
+            }
+        }
+        symbols = get_alphabet_from_sequence(combined);
+        symbols.erase(std::remove(symbols.begin(), symbols.end(), '-'), symbols.end());
+        symbols.erase(std::remove(symbols.begin(), symbols.end(), '?'), symbols.end());
     }
     
     for (unsigned int i=0; i < seqs.size(); i++) {
@@ -268,7 +284,11 @@ void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostr
     (*ostr) << "#NEXUS" << endl;
     (*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
     (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << endl;
-    (*ostr) << "\tFORMAT DATATYPE=" << datatype << " INTERLEAVE=NO GAP=-;" << endl;
+    (*ostr) << "\tFORMAT DATATYPE=" << datatype;
+    if (!symbols.empty()) {
+        (*ostr) << " SYMBOLS=\"" << symbols << "\"";
+    }
+    (*ostr) << " INTERLEAVE=NO GAP=- MISSING=?;" << endl;
     (*ostr) << "\tMATRIX\n" << endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
