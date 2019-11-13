@@ -353,7 +353,7 @@ int test_char_filetype_stream(istream & stri, string & retstring) {
         ret = 0;
     } else if (retstring[0] == '>') {
         ret = 2;
-    } else {    
+    } else {
         vector<string> tokens;
         string del(" \t");
         tokenize(retstring,tokens,del);

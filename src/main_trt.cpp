@@ -182,10 +182,7 @@ int main(int argc, char * argv[]) {
                         cout << "This only works with rooted trees. Exiting." << endl;
                         exit(0);
                     }
-                    paint_nodes(tree, names, silent);
-                    string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
-                    tree = read_tree_string(tracetreenewick);
-                    deknuckle_tree(tree); // guaranteed to have knuckles atm
+                    tree = get_induced_tree(tree, names, silent);
                     (*poos) << getNewickString(tree) << endl;
                     delete tree;
                 }
@@ -200,13 +197,7 @@ int main(int argc, char * argv[]) {
                         cout << "This only works with rooted trees. Exiting." << endl;
                         exit(0);
                     }
-                    paint_nodes(tree, names, silent);
-                    // MRCA is far to expensive
-                    //(*poos) << tree->getMRCA(names)->getPaintedNewick(true) << ";" << endl;
-                    //(*poos) << tree->getRoot()->getPaintedNewick(true) << ";" << endl;
-                    string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
-                    tree = read_tree_string(tracetreenewick);
-                    deknuckle_tree(tree); // guaranteed to have knuckles atm
+                    tree = get_induced_tree(tree, names, silent);
                     (*poos) << getNewickString(tree) << endl;
                     delete tree;
                 }
@@ -230,10 +221,7 @@ int main(int argc, char * argv[]) {
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
-                        paint_nodes(tree, toKeep, silent);
-                        string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
-                        tree = read_tree_string(tracetreenewick);
-                        deknuckle_tree(tree); // guaranteed to have knuckles atm
+                        tree = get_induced_tree(tree, toKeep, silent);
                         (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;
@@ -250,10 +238,7 @@ int main(int argc, char * argv[]) {
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
-                        paint_nodes(tree, toKeep, silent);
-                        string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
-                        tree = read_tree_string(tracetreenewick);
-                        deknuckle_tree(tree); // guaranteed to have knuckles atm
+                        tree = get_induced_tree(tree, toKeep, silent);
                         (*poos) << getNewickString(tree) << endl;
                     }
                     delete tree;

@@ -76,11 +76,11 @@ void MultinomialSeqStat::collect_site_patters () {
                 iterSites++;
                 if (*iterSites == currentPattern) {
                     currentPatternCount++;
-                } else {    // Exit loop, counted all matching patterns
+                } else { // Exit loop, counted all matching patterns
                     iterSites--;
                     siteMatched = false;
                 }
-            } else {    // At last pattern
+            } else { // At last pattern
                 siteMatched = false;
             }
         }

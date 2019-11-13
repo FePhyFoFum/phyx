@@ -119,9 +119,18 @@ void remove_tips(Tree * tree, vector<string> & names, bool const& silent) {
     }
 }
 
+// tree must be rooted. assumes this is checked upstream (so alternative can be considered)
+Tree * get_induced_tree (Tree * tree, vector<string> & names, bool const& silent) {
+    paint_nodes(tree, names, silent);
+    string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
+    Tree * indTree = read_tree_string(tracetreenewick);
+    deknuckle_tree(indTree); // guaranteed to have knuckles atm
+    return indTree;
+}
+
 
 // assumes a rooted tree
-void paint_nodes(Tree * tree, vector<string> & names, bool const& silent) {
+void paint_nodes (Tree * tree, vector<string> & names, bool const& silent) {
     int num_names = names.size();
     tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
@@ -217,9 +226,7 @@ void create_tree_map_from_rootnode(Tree * tr, map<Node*,vector<Node*> > & tree_m
 
 
 void nni_from_tree_map(Tree * tr, map<Node*,vector<Node*> > & tree_map) {
-    
     bool debug = true;
-    
     bool success = false;
     while (!success) {
         map<Node*,vector<Node*> >::iterator item = tree_map.begin();

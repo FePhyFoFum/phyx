@@ -155,7 +155,7 @@ int factorial (int n) {
 
 
 // used for counting trees
-int doublefactorial(int n) { 
+int doublefactorial(int n) {
     return (n == 0 || n == 1) ? 1 : doublefactorial(n - 2) * n; 
 } 
 

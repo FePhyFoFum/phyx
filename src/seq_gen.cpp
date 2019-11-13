@@ -294,7 +294,7 @@ void SequenceGenerator::preorder_tree_traversal () {
     vector < vector <double> > QMatrix(nstates_, vector <double>(nstates_, 0.0));
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
-    if (multi_model_) {        
+    if (multi_model_) {
         rmatrix_[0][2] = multi_rates_[0]; // A->C
         rmatrix_[2][0] = multi_rates_[0]; // C->A
         rmatrix_[0][3] = multi_rates_[1]; // A->G

@@ -24,6 +24,7 @@ void rescale_tree(Tree * tr, double const& scalef);
 void remove_annotations(Tree * tr);
 void remove_internal_names(Tree * tr);
 void remove_tips(Tree * tree, vector<string> & names, bool const& silent);
+Tree * get_induced_tree (Tree * tree, vector<string> & names, bool const& silent);
 void paint_nodes(Tree * tree, vector<string> & names, bool const& silent);
 
 bool is_rooted (Tree * tr);
