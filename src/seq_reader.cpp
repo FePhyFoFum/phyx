@@ -582,12 +582,12 @@ void get_nexus_dimensions (istream & stri, int & numTaxa, int & numChar, bool & 
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
 void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numChar,
-        bool & interleave, string & alpha_name, string & symbols, string & gap, string & missing) {
+        bool & interleave, string & alpha_name, string & symbols, char & gap, char & missing) {
     numTaxa = numChar = 0;
     alpha_name = symbols = "";
     // set defaults, in case not explicitly stated
-    gap = "-";
-    missing = "?";
+    gap = '-';
+    missing = '?';
     
     string tline;
     //string temp;
@@ -645,8 +645,13 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
                         } else {
                             cout << "Datatype '" << searchtokens[i] << "' not supported" << endl;
                         }
+                    } else if (searchtokens[i] == "GAP") {
+                        i++;
+                        gap = searchtokens[i][0];
+                    } else if (searchtokens[i] == "MISSING") {
+                        i++;
+                        missing = searchtokens[i][0];
                     } else if (searchtokens[i] == "SYMBOLS") {
-                        //cout << "here i am about to parse the symbols block" << endl;
                         // morphology data
                         // can take form SYMBOLS="012" or (annoyingly) SYMBOLS="0 1 2"
                         // just need to make sure both " are captured, and we should be cool
