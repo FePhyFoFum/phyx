@@ -8,7 +8,6 @@
 #ifndef _STRING_NODE_OBJECT_H_
 #define _STRING_NODE_OBJECT_H_
 
-using namespace std;
 
 #include "node_object.h"
 

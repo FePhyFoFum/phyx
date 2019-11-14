@@ -1,20 +1,20 @@
 #ifndef _RATE_MODEL_H_
 #define _RATE_MODEL_H_
 
-#include <map>
-
-using namespace std;
 
 #include <armadillo>
+#include <string>
+#include <map>
+
 using namespace arma;
 
 class RateModel{
 
 private:
     mat Q;
-    vector<mat> Qs;
-    vector<string> labels;
-    vector< vector<double> > Q_mask;
+    std::vector<mat> Qs;
+    std::vector<std::string> labels;
+    std::vector< std::vector<double> > Q_mask;
     bool sameQ;
     cx_mat lasteigval;
     cx_mat lasteigvec;
@@ -38,7 +38,7 @@ public:
     */
     int selection_model; //0,2 = 2a
     int nstates;
-    map<double, cx_mat> stored_p_matrices;
+    std::map<double, cx_mat> stored_p_matrices;
     bool neg_p;
     void set_n_qs(int number);
     void set_Q_which(mat & inQ, int which);
@@ -46,7 +46,7 @@ public:
     void set_Q_diag();
     void set_Q_cell(int,int,double);
     void setup_Q();
-    void setup_Q(vector<vector<double> > & inQ);
+    void setup_Q(std::vector< std::vector<double> > & inQ);
     void setup_Q(mat & inQ);
     mat & get_Q();
     void set_sameQ(bool);
@@ -64,7 +64,7 @@ public:
 };
 void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw);
 bool test_transition(char a, char b);
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, map<string, vector<int> > & codon_index, vector<string> & codon_list);
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string> & codon_dict, std::map<std::string, std::vector<int> > & codon_index, std::vector<std::string> & codon_list);
 void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H);
 
 #endif /* _RATE_MODEL_H_ */

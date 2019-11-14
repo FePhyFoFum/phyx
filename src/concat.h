@@ -3,7 +3,6 @@
 
 #include <vector>
 
-using namespace std;
 
 #include "sequence.h"
 

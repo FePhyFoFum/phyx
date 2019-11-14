@@ -29,7 +29,6 @@
 #include <cmath>
 #include <iostream>
 
-using namespace std;
 
 class Superdouble {
 private:
@@ -39,7 +38,7 @@ private:
     double upperlimit;
     double lowerlimit;
     void adjustDecimal();
-    friend ostream& operator<<(ostream& os, const Superdouble& x);
+    friend std::ostream& operator<<(std::ostream& os, const Superdouble& x);
     
 public:
     Superdouble(long double mantissa=1.0, int exponent=0);

@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-#include <stdio.h>
+#include <vector>
 #include <nlopt.hpp>
 #include <math.h>
 
@@ -30,7 +30,7 @@ double nlopt_bm_sr(unsigned n, const double *x, double *grad, void *data) {
     if (x[1] <= 0) {
         return LARGE;
     }
-    //cout << x[0] << " " << x[1] << endl;
+    cout << x[0] << " " << x[1] << endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
     rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
@@ -93,7 +93,7 @@ double nlopt_bm_bl(unsigned n, const double *x, double *grad, void *data){
     return -like;
 }
 
-vector<double> optimize_single_rate_bm_nlopt(rowvec & _x, mat & _vcv, bool log) {
+std::vector<double> optimize_single_rate_bm_nlopt(rowvec & _x, mat & _vcv, bool log) {
     analysis_data a;
     a.x = _x;
     a.ovcv = _vcv;
@@ -117,17 +117,17 @@ vector<double> optimize_single_rate_bm_nlopt(rowvec & _x, mat & _vcv, bool log) 
 
     double minf;
     //2 parameters, 1 anc, 2 rate
-    vector<double> x(2,1);
+    std::vector<double> x(2,1);
     //nlopt::result result = opt.optimize(x, minf);
     opt.optimize(x, minf);
-    vector<double> results;
+    std::vector<double> results;
     results.push_back(x[0]);
     results.push_back(x[1]);
     results.push_back(minf);
     return results;
 }
 
-vector<double> optimize_single_rate_bm_ou_nlopt(rowvec & _x, mat & _vcv) {
+std::vector<double> optimize_single_rate_bm_ou_nlopt(rowvec & _x, mat & _vcv) {
     analysis_data a;
     a.x = _x;
     a.ovcv = _vcv;
@@ -145,17 +145,17 @@ vector<double> optimize_single_rate_bm_ou_nlopt(rowvec & _x, mat & _vcv) {
     opt.set_maxeval(5000);
     double minf;
     //2 parameters, 1 anc, 2 rate, 3 alpha
-    vector<double> x(3, 1);
+    std::vector<double> x(3, 1);
     //nlopt::result result = opt.optimize(x, minf);
     opt.optimize(x, minf);
 //    cout << result << endl;
-    vector<double> results;
+    std::vector<double> results;
     results.push_back(x[0]); results.push_back(x[1]); results.push_back(x[2]);
     results.push_back(minf);
     return results;
 }
 
-vector<double> optimize_single_rate_bm_bl(Tree * tr) {
+std::vector<double> optimize_single_rate_bm_bl(Tree * tr) {
     analysis_data_tree a;
     a.tree = tr;
     int n = 1+tr->getNodeCount() - 1;
@@ -172,10 +172,10 @@ vector<double> optimize_single_rate_bm_bl(Tree * tr) {
     opt.set_ftol_rel(0.000001);
     opt.set_maxeval(100000);
     double minf;
-    vector<double> x(n, 1);
+    std::vector<double> x(n, 1);
     nlopt::result result = opt.optimize(x, minf);
     cout << result << endl;
-    vector<double> results;
+    std::vector<double> results;
     for (int i=0;i<tr->getNodeCount();i++){
         if (tr->getNode(i) != tr->getRoot()){
             tr->getNode(i)->setBL(x[i+1]);

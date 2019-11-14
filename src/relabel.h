@@ -4,7 +4,6 @@
 #include <map>
 #include <vector>
 
-using namespace std;
 
 #include "tree.h"
 #include "sequence.h"

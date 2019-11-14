@@ -3,7 +3,6 @@
 
 #include <random>
 
-using namespace std;
 
 #include "tree.h"
 #include "node.h"

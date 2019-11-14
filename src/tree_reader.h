@@ -8,7 +8,6 @@
 #ifndef _TREE_READER_H_
 #define _TREE_READER_H_
 
-using namespace std;
 
 #include "node.h"
 #include "tree.h"

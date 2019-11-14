@@ -5,6 +5,7 @@
 #include "rate_model.h"
 
 #include <armadillo>
+
 using namespace arma;
 
 inline int signof(double d) {return d >= 0 ? 1 : -1;}
@@ -61,7 +62,7 @@ void RateModel::setup_Q() {
     sameQ = false;
 }
 
-void RateModel::setup_Q(vector<vector<double> > & inQ) {
+void RateModel::setup_Q(std::vector< std::vector<double> > & inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ[i][j];
@@ -354,8 +355,8 @@ bool test_transition(char a, char b) {
     return ret;
 }
 
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, 
-    map<string, vector<int> > & codon_index, vector<string> & codon_list) {
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string> & codon_dict, 
+    std::map<std::string, std::vector<int> > & codon_index, std::vector<std::string> & codon_list) {
     for (int i=0; i < 61; i++) {
         for (int j=0; j < 61; j++) {
             int diff = 0;

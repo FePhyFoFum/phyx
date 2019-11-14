@@ -3,7 +3,6 @@
 
 #include "tree.h"
 
-using namespace std;
 
 class TScale {
 private:

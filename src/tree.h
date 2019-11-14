@@ -9,18 +9,17 @@
 #define _TREE_H_
 
 #include "node.h"
+
 #include <map>
 #include <string>
-
-using namespace std;
 
 class Tree{
 private:
     Node * root;
-    vector<Node *> nodes;
-    vector<Node *> internalNodes;
-    vector<Node *> externalNodes;
-    map<string, Node*> name_node_map;
+    std::vector<Node *> nodes;
+    std::vector<Node *> internalNodes;
+    std::vector<Node *> externalNodes;
+    std::map<std::string, Node*> name_node_map;
     int internalNodeCount;
     int externalNodeCount;
     bool edgeLengths;
@@ -44,11 +43,11 @@ public:
     void pruneExternalNode(Node * node);
     void pruneInternalNode(Node * node);
     Node * getExternalNode(int num);
-    Node * getExternalNode(string name);
+    Node * getExternalNode(std::string name);
     Node * getInternalNode(int num);
-    Node * getInternalNode(string & name);
+    Node * getInternalNode(std::string & name);
     Node * getNode(int num);
-    Node * getNode(string & name);
+    Node * getNode(std::string & name);
     int getNodeCount();
     int getExtantNodeCount();
     int getExternalNodeCount();
@@ -65,9 +64,9 @@ public:
     bool reRoot(Node * inroot);
     void duplicateRootSupport();
     void tritomyRoot(Node * toberoot);
-    Node * getMRCA(vector<string> innodes);
-    Node * getMRCA(vector<Node *> innodes);
-    Node * getInternalMRCA(vector<string> & innodes);
+    Node * getMRCA(std::vector<std::string> innodes);
+    Node * getMRCA(std::vector<Node *> innodes);
+    Node * getInternalMRCA(std::vector<std::string> & innodes);
     void processRoot();
     void exchangeNodes(Node * node1, Node * node2);
     void removeRootEdge();

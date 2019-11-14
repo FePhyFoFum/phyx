@@ -10,7 +10,6 @@
 
 #include <map>
 
-using namespace std;
 
 class SequenceCleaner {
 private:

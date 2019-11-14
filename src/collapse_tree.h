@@ -1,7 +1,6 @@
 #ifndef _COLLAPSE_TREE_H_
 #define _COLLAPSE_TREE_H_
 
-using namespace std;
 
 #include "tree.h"
 

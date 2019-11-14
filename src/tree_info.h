@@ -1,7 +1,6 @@
 #ifndef _LS_TR_H_
 #define _LS_TR_H_
 
-using namespace std;
 
 #include "tree.h"
 

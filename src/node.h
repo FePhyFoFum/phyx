@@ -10,8 +10,8 @@
 
 #include <map>
 #include <set>
+#include <string>
 
-using namespace std;
 
 #include "branch_segment.h"
 #include "vector_node_object.h"
@@ -23,27 +23,27 @@ private:
     double height; // could be from tip or from root
     double depth;
     int number;
-    string name;
+    std::string name;
     Node * parent;
-    vector<Node *> children;
-    map<string,NodeObject *> assoc;
-    map<string, vector<Superdouble> > assocDV;
-    vector<BranchSegment> * segs;
-    string comment;
+    std::vector<Node *> children;
+    std::map<std::string, NodeObject *> assoc;
+    std::map<std::string, std::vector<Superdouble> > assocDV;
+    std::vector<BranchSegment> * segs;
+    std::string comment;
     bool painted;
 
 public:
     Node();
     Node(Node * parent);
-    Node(double bl, int number, string name, Node * parent);
+    Node(double bl, int number, std::string name, Node * parent);
     
     int get_num_leaves();
-    vector<Node*> get_leaves();
-    vector<string> get_leave_names();
-    set<string> get_leave_names_set();
-    set<Node *> get_leaves_set();
+    std::vector<Node*> get_leaves();
+    std::vector<std::string> get_leave_names();
+    std::set<std::string> get_leave_names_set();
+    std::set<Node *> get_leaves_set();
     
-    vector<Node*> getChildren();
+    std::vector<Node*> getChildren();
     bool isExternal();
     bool isInternal();
     bool isRoot();
@@ -64,22 +64,22 @@ public:
     bool addChild(Node & c);
     bool removeChild(Node & c);
     Node * getChild(int c);
-    string getName();
-    string getComment();
-    void setName(string s);
-    void setComment(string s);
-    string getNewick(bool bl);
-    string getNewick(bool bl, string obj);
-    string getPaintedNewick(bool bl);
+    std::string getName();
+    std::string getComment();
+    void setName(std::string s);
+    void setComment(std::string s);
+    std::string getNewick(bool bl);
+    std::string getNewick(bool bl, std::string obj);
+    std::string getPaintedNewick(bool bl);
     Node * getParent();
     int getChildCount();
-    void assocObject(string name, NodeObject & obj);
-    void assocDoubleVector(string name, vector<Superdouble> & obj);
-    vector<Superdouble> * getDoubleVector(string name);
-    void deleteDoubleVector(string name);
-    NodeObject * getObject(string name);
+    void assocObject(std::string name, NodeObject & obj);
+    void assocDoubleVector(std::string name, std::vector<Superdouble> & obj);
+    std::vector<Superdouble> * getDoubleVector(std::string name);
+    void deleteDoubleVector(std::string name);
+    NodeObject * getObject(std::string name);
     void initSegVector();
-    vector<BranchSegment> * getSegVector();
+    std::vector<BranchSegment> * getSegVector();
     void deleteSegVector();
     
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT

@@ -3,7 +3,6 @@
 
 #include <map>
 
-using namespace std;
 
 #include "sequence.h"
 

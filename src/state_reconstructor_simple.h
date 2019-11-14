@@ -2,7 +2,6 @@
 #ifndef _STATE_RECONSTRUCTOR_SIMPLE_H_
 #define _STATE_RECONSTRUCTOR_SIMPLE_H_
 
-using namespace std;
 
 #include "tree.h"
 #include "node.h"

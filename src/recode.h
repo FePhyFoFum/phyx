@@ -4,7 +4,6 @@
 #include <set>
 #include <regex>
 
-using namespace std;
 
 class SequenceRecoder {
 

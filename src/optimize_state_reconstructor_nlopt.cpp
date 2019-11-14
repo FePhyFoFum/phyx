@@ -7,7 +7,7 @@
 
 #include "optimize_state_reconstructor_nlopt.h"
 #include <iostream>
-#include <stdio.h>
+//#include <stdio.h>
 #include <nlopt.hpp>
 #include <math.h>
 
@@ -66,7 +66,7 @@ void optimize_sr_nlopt(RateModel * _rm,StateReconstructor * _sr, mat * _free_mas
     opt.set_xtol_rel(0.001);
     opt.set_maxeval(5000);
 
-    vector<double> x(_nfree,0);
+    std::vector<double> x(_nfree,0);
     for (unsigned int i=0; i < _rm->get_Q().n_rows; i++) {
         for (unsigned int j=0; j < _rm->get_Q().n_cols; j++) {
             if (i != j) {
@@ -78,7 +78,7 @@ void optimize_sr_nlopt(RateModel * _rm,StateReconstructor * _sr, mat * _free_mas
     }
 
     //double minf;
-    vector<double> result = opt.optimize(x);
+    std::vector<double> result = opt.optimize(x);
     for (unsigned int i=0; i < _rm->get_Q().n_rows; i++) {
         for (unsigned int j=0; j < _rm->get_Q().n_cols; j++) {
             if (i != j) {
