@@ -7,6 +7,7 @@
 #include <getopt.h>
 #include <algorithm>
 #include <set>
+
 using namespace std;
 
 #include "tree.h"

@@ -6,6 +6,7 @@
 #include <cstring>
 #include <getopt.h>
 #include <map>
+
 using namespace std;
 
 #include "tree.h"
