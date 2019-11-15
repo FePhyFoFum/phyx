@@ -28,22 +28,22 @@ public:
     
     static std::set<char> recognized_;
     
-    static regex r_;
-    static regex y_;
-    static regex s_;
-    static regex w_;
-    static regex m_;
-    static regex k_;
-    static regex b_;
-    static regex d_;
-    static regex h_;
-    static regex v_;
+    static std::regex r_;
+    static std::regex y_;
+    static std::regex s_;
+    static std::regex w_;
+    static std::regex m_;
+    static std::regex k_;
+    static std::regex b_;
+    static std::regex d_;
+    static std::regex h_;
+    static std::regex v_;
     
-    SequenceRecoder(string& recodescheme);
-    void parse_scheme();
-    void check_valid_scheme();
-    std::string get_recoded_seq(const std::string& origseq);
-    void recode_seq(std::string& s);
+    SequenceRecoder (std::string& recodescheme);
+    void parse_scheme ();
+    void check_valid_scheme ();
+    std::string get_recoded_seq (const std::string& origseq);
+    void recode_seq (std::string& s);
     
     //~SequenceRecoder();
 };
