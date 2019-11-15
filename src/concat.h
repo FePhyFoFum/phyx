@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-//#include "sequence.h"
-
 class SequenceConcatenater {
 private:
     std::vector<Sequence> seqs_;
@@ -18,20 +16,20 @@ private:
     std::string filename_;
     std::vector<int> partition_sizes_;
     
-    void read_sequences(std::string& seqf);
-    void delete_sequence(SequenceConcatenater& newSeqs, const int& index);
+    void read_sequences (std::string& seqf);
+    void delete_sequence (SequenceConcatenater& newSeqs, const int& index);
 
 public:
-    SequenceConcatenater();
-    SequenceConcatenater(std::string& seqf, bool& toupcase);
-    void concatenate(SequenceConcatenater& newSeqs);
-    int get_sequence_length();
-    int get_num_taxa();
-    Sequence get_sequence(const int& index);
-    std::vector<int> get_partition_sizes();
-    void write_partition_information(const std::vector<std::string>& inputFiles,
+    SequenceConcatenater ();
+    SequenceConcatenater (std::string& seqf, bool& toupcase);
+    void concatenate (SequenceConcatenater& newSeqs);
+    int get_sequence_length ();
+    int get_num_taxa ();
+    Sequence get_sequence (const int& index);
+    std::vector<int> get_partition_sizes ();
+    void write_partition_information (const std::vector<std::string>& inputFiles,
         std::string& partfile);
-    //~SequenceConcatenater();
+    //~SequenceConcatenater ();
 };
 
 #endif /* _CONCAT_H_ */
