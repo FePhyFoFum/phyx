@@ -17,8 +17,6 @@
 #include <poll.h>
 #include <unistd.h>
 
-using namespace std;
-
 // set threshold. should maybe use superdouble.
 double EPSILON = 1e-7;
 
@@ -35,62 +33,66 @@ double EPSILON = 1e-7;
 #include "utils.h"
 #include "superdouble.h"
 
-
-void check_file_exists (const string& filename) {
+void check_file_exists (const std::string& filename) {
     std::ifstream infile(filename);
     if (!infile.good()) {
-        cout << "File '" << filename << "' not found. Exiting." << endl;
+        std::cout << "File '" << filename << "' not found. Exiting." << std::endl;
         exit(0);
     }
 }
+
 
 void check_inout_streams_identical (char * in, char * out) {
-    if ((string)in == (string)out) {
-        cout << "Warning: input and output file names must differ (streams!). Exiting." << endl;
+    if ((std::string)in == (std::string)out) {
+        std::cout << "Warning: input and output file names must differ (streams!). Exiting." << std::endl;
         exit(0);
     }
 }
 
+
 // catch exception (atoi does not do this)
-int string_to_int (string const& in, string const& arg) {
+int string_to_int (const std::string& in, const std::string& arg) {
     int res = 0;
     try {
             res = stoi(in);
         }
         catch (const std::invalid_argument& ia) {
-            cerr << "Invalid argument for " << arg << " (expecting int). Exiting." << endl;
+            std::cerr << "Invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
             exit(0);
         }
     return res;
 }
 
+
 // catch exception (atoi does not do this)
-float string_to_float (string const& in, string const& arg) {
+float string_to_float (const std::string& in, const std::string& arg) {
     float res = 0;
     try {
             res = stof(in);
         }
         catch (const std::invalid_argument& ia) {
-            cerr << "Invalid argument for " << arg << " (expecting float). Exiting." << endl;
+            std::cerr << "Invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
             exit(0);
         }
     return res;
 }
 
+
 // convenience func. returns copy so original can still be used
-string string_to_upper (string const& instr) {
-    string outstr = instr;
+std::string string_to_upper (const std::string& instr) {
+    std::string outstr = instr;
     std::transform(outstr.begin(), outstr.end(), outstr.begin(), ::toupper);
     return outstr;
 }
 
-void tokenize (const string& str, vector <string>& tokens, const string& delimiters) {
-    // Skip delimiters at beginning.
-    string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-    // Find first "non-delimiter".
-    string::size_type pos     = str.find_first_of(delimiters, lastPos);
 
-    while (string::npos != pos || string::npos != lastPos) {
+void tokenize (const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters) {
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+    // Find first "non-delimiter".
+    std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
+
+    while (std::string::npos != pos || std::string::npos != lastPos) {
         // Found a token, add it to the vector.
         tokens.push_back(str.substr(lastPos, pos - lastPos));
         // Skip delimiters.  Note the "not_of"
@@ -102,7 +104,7 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
 
 
 // deprecated in favour of template version (in header file)
-//vector <double> parse_double_comma_list (string& str) {
+//std::vector<double> parse_double_comma_list (std::string& str) {
 //    vector <double> res;
 //    std::stringstream ss(str);
 //    double i;
@@ -121,7 +123,7 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
 //}
 
 // deprecated in favour of template version (in header file)
-//vector <int> parse_int_comma_list (string& str) {
+//std::vector<int> parse_int_comma_list (std::string& str) {
 //    vector <int> res;
 //    std::stringstream ss(str);
 //    int i;
@@ -140,8 +142,8 @@ void tokenize (const string& str, vector <string>& tokens, const string& delimit
 //}
 
 
-bool is_number (const string& s) {
-    string::const_iterator it = s.begin();
+bool is_number (const std::string& s) {
+    std::string::const_iterator it = s.begin();
     while (it != s.end() && std::isdigit(*it)) {
         ++it;
     }
@@ -168,10 +170,10 @@ unsigned int get_clock_seed () {
 
 // works a little differently than above; don't need to trim spaces
 // assumes delimiter is some form of whitespace
-vector <string> tokenize (string const& input) {
-    vector <string> tokens;
-    string temp;
-    istringstream str(input);
+std::vector <std::string> tokenize (const std::string& input) {
+    std::vector<std::string> tokens;
+    std::string temp;
+    std::istringstream str(input);
     while (str >> temp) {
         tokens.push_back(temp);
     }
@@ -179,13 +181,13 @@ vector <string> tokenize (string const& input) {
 }
 
 
-void trim_spaces (string& str) {
+void trim_spaces (std::string& str) {
     // Trim Both leading and trailing spaces
     size_t startpos = str.find_first_not_of(" \t\r\n"); // Find the first character position after excluding leading blank spaces
     size_t endpos = str.find_last_not_of(" \t\r\n"); // Find the first character position from reverse af
 
     // if all spaces or empty return an empty string
-    if (string::npos == startpos || string::npos == endpos) {
+    if (std::string::npos == startpos || std::string::npos == endpos) {
         str = "";
     } else {
         str = str.substr(startpos, endpos - startpos + 1);
@@ -206,9 +208,9 @@ void trim_spaces (string& str) {
 }
 
 
-bool check_comment_line (string const& line) {
+bool check_comment_line (const std::string& line) {
     bool comment = false;
-    string trimmed = line;
+    std::string trimmed = line;
     trim_spaces(trimmed); // get rid of leading spaces
     if (trimmed[0] == '#' || trimmed[0] == '[') {
         comment = true;
@@ -217,17 +219,17 @@ bool check_comment_line (string const& line) {
 }
 
 
-vector <vector <double> > processRateMatrixConfigFile (string filename, int numstates) {
-    vector <double> cols(numstates,1);
-    vector <vector <double> > ratematrix = vector <vector <double> > (numstates, cols);
+std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numstates) {
+    std::vector<double> cols(numstates,1);
+    std::vector<std::vector<double> > ratematrix = std::vector<std::vector <double> > (numstates, cols);
     //read file
-    ifstream ifs(filename.c_str());
-    string line;
+    std::ifstream ifs(filename.c_str());
+    std::string line;
     int fromarea = 0;
     while (getline(ifs,line)) {
         if (line.size() > 3) {
-            vector <string> tokens;
-            string del(" ,\t");
+            std::vector<std::string> tokens;
+            std::string del(" ,\t");
             tokens.clear();
             tokenize(line, tokens, del);
             for (unsigned int j=0; j < tokens.size(); j++) {
@@ -255,16 +257,16 @@ int random_int_range (int min, int max) {
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
 // ok, this is pretty sweet, if i do say so myself
-vector <int> sample_without_replacement (int const& numTotal, int const& numSample) {
-    vector <int> randsites (numSample); // numchar zero-initialized elements
-    vector <int> allsites (numTotal);
-    iota(allsites.begin(), allsites.end(), 0); // generate sequence 0,1,2...n-1
+std::vector <int> sample_without_replacement (const int& numTotal, const int& numSample) {
+    std::vector <int> randsites (numSample); // numchar zero-initialized elements
+    std::vector <int> allsites (numTotal);
+    std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0,1,2...n-1
     
     int randNum = 0;
     for (int i = 0; i < numSample; i++) {
         randNum = random_int_range(i, (numTotal - 1));
     // swap, so don't have to worry about multiple hits
-        swap(allsites[i], allsites[randNum]);
+        std::swap(allsites[i], allsites[randNum]);
         randsites[i] = allsites[i];
     }
     return randsites;
@@ -273,12 +275,12 @@ vector <int> sample_without_replacement (int const& numTotal, int const& numSamp
 
 // arg below is always '?'. besides, getopt prints errors to sterr
 void print_error (char * pname, char arg) {
-    // cout << pname <<": invalid option -- '" << arg << "'" << endl;
-    cout << "Try `" << pname << " --help' for more information." << endl;
+    // std::cout << pname <<": invalid option -- '" << arg << "'" << std::endl;
+    std::cout << "Try `" << pname << " --help' for more information." << std::endl;
 }
 
 
-bool test_logical (vector <int> & matA, vector <int> & matB) {
+bool test_logical (std::vector<int>& matA, std::vector<int>& matB) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
@@ -298,12 +300,13 @@ bool test_logical (vector <int> & matA, vector <int> & matB) {
     return test;
 }
 
+
 /*
  * edgewise added because we have to check the reverse if not rooted
  *
  * TODO : should probably look at this
  */
-bool test_logical (vector <int> & matA, vector <int> & matB,bool edgewise) {
+bool test_logical (std::vector<int>& matA, std::vector <int>& matB, bool edgewise) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
@@ -327,7 +330,7 @@ bool test_logical (vector <int> & matA, vector <int> & matB,bool edgewise) {
                         numdiffs2 += 1;
                     }
                 }
-                if ((match2 != sum(matA)) && (match2 != sum_zeros(matB))) {
+                if ((match2 != sum(matA)) && (match2 != count_zeros(matB))) {
                     if (numdiffs2 != matA.size()) {
                         test = true;
                     }
@@ -344,7 +347,7 @@ bool test_logical (vector <int> & matA, vector <int> & matB,bool edgewise) {
 //------------------------------------------------------------------------//
 // simple math on vectors
 
-int sum_matrix_col (vector <vector <int> > & matrix,int col) {
+int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
     int x=0;
     for (unsigned int i=0; i < matrix.size(); i++) {
         x += matrix[i][col];
@@ -353,7 +356,7 @@ int sum_matrix_col (vector <vector <int> > & matrix,int col) {
 }
 
 
-int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
+int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
     int x=0;
     for (unsigned int i=0; i < matrix.size(); i++) {
         if (matrix[i][col] < 0) {
@@ -364,12 +367,12 @@ int sum_matrix_col_negs (vector <vector <int> > & matrix, int col) {
 }
 
 
-double mean (vector <double> & in) {
+double mean (std::vector<double>& in) {
     return sum (in) / (double)in.size();
 }
 
 
-double variance (vector <double> & in) {
+double variance (std::vector<double>& in) {
     double meann = mean(in);
     
     std::vector<double> diff(in.size());
@@ -383,39 +386,40 @@ double variance (vector <double> & in) {
 }
 
 
-double sum (vector <double> & in) {
-    return accumulate(in.begin(), in.end(), 0.0);
+double sum (std::vector<double>& in) {
+    return std::accumulate(in.begin(), in.end(), 0.0);
 }
 
 
-int sum (vector <int> & in) {
-    return accumulate(in.begin(), in.end(), 0);
+int sum (std::vector<int>& in) {
+    return std::accumulate(in.begin(), in.end(), 0);
 }
 
 
-int sum_zeros (vector <int> & in) {
+int count_zeros (std::vector<int>& in) {
     int x = 0;
-    for(unsigned int i=0;i < in.size(); i++){
-        if (in[i] == 0)
+    for (unsigned int i=0;i < in.size(); i++){
+        if (in[i] == 0) {
             x += 1;
+        }
     }
     return x;
 }
 
 
-Superdouble calculate_vector_Superdouble_sum (vector <Superdouble> & in) {
+Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in) {
     Superdouble sum = 0;
     for (unsigned int i=0; i < in.size(); i++) {
         sum += in[i];
-        // cout << in[i] << " sum:" << sum << endl;
+        // std::cout << in[i] << " sum:" << sum << std::endl;
     }
-    // cout << "endsum:" << sum << endl;
+    // std::cout << "endsum:" << sum << std::endl;
     return sum;
 }
 
 
 // add element i in vec1 to element i in vec2
-vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
+std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
     
     // bail if sequences are of different lengths. should be caught earlier than this
     if (vec1.size() != vec2.size()) {
@@ -423,8 +427,7 @@ vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
           "Vectors must be of equal length"
       );
     }
-    
-    vector <int> res = vec1;
+    std::vector<int> res = vec1;
     std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<int>());
     return res;
 }
@@ -433,8 +436,8 @@ vector <int> sum (vector <int> & vec1, vector <int> & vec2) {
 //------------------------------------------------------------------------//
 
 
-string get_string_vector (vector <string> &sts) {
-    string rets;
+std::string get_string_vector (std::vector<std::string>& sts) {
+    std::string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
         rets += sts[i]+ " ";
     }
@@ -442,17 +445,17 @@ string get_string_vector (vector <string> &sts) {
 }
 
 
-string get_string_vector (vector <int> & sts) {
-    string rets;
+std::string get_string_vector (std::vector<int>& sts) {
+    std::string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
-        rets += to_string(sts[i]) + " ";
+        rets += std::to_string(sts[i]) + " ";
     }
     return rets;
 }
 
 
 // replace all occurrences of origSubStr to replSubStr
-void replace_all (string& str, string const& origSubStr, string const& replSubStr) {
+void replace_all (std::string& str, const std::string& origSubStr, const std::string& replSubStr) {
     if (origSubStr.empty()) {
         return;
     }
@@ -469,7 +472,7 @@ void replace_all (string& str, string const& origSubStr, string const& replSubSt
 // characters will each be replaced). replacement string may be longer than what
 // is being replaced (a single character).
 // e.g. we might replace each chars in "()[]:;" by "_"
-void replace_each (string& str, string const& badChars, string const& replSubStr) {
+void replace_each (std::string& str, const std::string& badChars, const std::string& replSubStr) {
     if (badChars.empty()) {
         return;
     }
@@ -504,13 +507,13 @@ void replace_each (string& str, string const& badChars, string const& replSubStr
  Where they diverge (punctuation in Nexus but not newick):  
  
 /-----------------------------------------------------------------------*/
-const string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>";
-const string newick_punct = "()[]\':;,";
+const std::string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>";
+const std::string newick_punct = "()[]\':;,";
 
 
 // get a taxon label that is newick-compliant
-string get_valid_newick_label (string const& inLabel) {
-    string outLabel = inLabel;
+std::string get_valid_newick_label (const std::string& inLabel) {
+    std::string outLabel = inLabel;
     
     // if surrounded by single quotes already, assume cool
     if (outLabel[0] == '\'' && outLabel[outLabel.size() - 1] == '\'') {
@@ -527,8 +530,8 @@ string get_valid_newick_label (string const& inLabel) {
 
 
 // get a taxon label that is Nexus-compliant
-string get_valid_nexus_label (string const& inLabel) {
-    string outLabel = inLabel;
+std::string get_valid_nexus_label (const std::string& inLabel) {
+    std::string outLabel = inLabel;
     
     // if surrounded by single quotes already, assume cool
     if (outLabel[0] == '\'' && outLabel[outLabel.size() - 1] == '\'') {
@@ -546,15 +549,15 @@ string get_valid_nexus_label (string const& inLabel) {
 
 // alters the label, but *should* open in all programs
 // replace all illegal characters with an underscore
-string get_safe_taxon_label (string const& inLabel) {
-    string outLabel = inLabel;
+std::string get_safe_taxon_label (const std::string& inLabel) {
+    std::string outLabel = inLabel;
     replace_each(outLabel, nexus_punct, "_");
     return outLabel;
 }
 
 
 // got an invalid token. replace internal quotes and underscores, surround by quotes
-void quotify_label (string & token) {
+void quotify_label (std::string& token) {
     // replace internal quotes
     replace_all(token, "'", "''");
     
@@ -569,7 +572,7 @@ void quotify_label (string & token) {
 //------------------------------------------------------------------------//
 
 // Hamming (edit) distance
-unsigned int calc_hamming_dist (string const& s1, string const& s2) {
+unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2) {
     
     if (s1 == s2) {
         return 0;
@@ -602,12 +605,12 @@ bool essentially_equal (double a, double b) {
     bool equal = false;
     
     /*
-    cout << "fabs(a - b) = " << fabs(a - b) << endl;
-    cout << "ApproximatelyEqual: " <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << endl;
-    cout << "EssentiallyEqual: " <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << endl;
+    std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
+    std::cout << "ApproximatelyEqual: " <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "EssentiallyEqual: " <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     */
     
-    if (fabs(a - b) <= max(EPSILON, EPSILON * max(abs(a), abs(b)))) {
+    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(abs(a), abs(b)))) {
         equal = true;
     }
     
@@ -617,9 +620,10 @@ bool essentially_equal (double a, double b) {
 }
 
 
-bool all_equal (vector <double> vals) {
+bool all_equal (std::vector<double> vals) {
     bool equal = false;
-    vector <double>::iterator it = find_if_not(vals.begin()+1, vals.end(), bind(essentially_equal, placeholders::_1, vals[0]));
+    std::vector<double>::iterator it = std::find_if_not(vals.begin()+1, vals.end(),
+            std::bind(essentially_equal, std::placeholders::_1, vals[0]));
     if (it == end(vals)) {
         equal = true;
     }
@@ -627,7 +631,7 @@ bool all_equal (vector <double> vals) {
 }
 
 
-bool check_for_input_to_stream (){
+bool check_for_input_to_stream () {
     struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
     int ret = 0;
     ret = poll(&pfd, 1, 500);
@@ -641,8 +645,8 @@ bool check_for_input_to_stream (){
 
 // not using right now
 // return elements in a *not* found in b
-vector <string> get_complement (vector <string> & a, vector <string> & b) {
-    vector <string> comp;
+std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b) {
+    std::vector<std::string> comp;
     for (unsigned int i=0; i < a.size(); i++) {
         if (find(b.begin(), b.end(), a[i]) == b.end()) {
             comp.push_back(a[i]);
