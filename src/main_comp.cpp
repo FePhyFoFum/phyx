@@ -1,14 +1,8 @@
-
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
-#include <map>
 #include <cstring>
 #include <getopt.h>
-#include <sstream>
-
-using namespace std;
 
 #include "utils.h"
 #include "sequence.h"
@@ -17,21 +11,21 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Compositional homogeneity test" << endl;
-    cout << "This will take fasta, phylip or nexus file formats" << endl;
-    cout << endl;
-    cout << "Usage: pxcomp [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
-    cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
-    cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Compositional homogeneity test" << std::endl;
+    std::cout << "This will take fasta, phylip or nexus file formats" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcomp [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
+    std::cout << " -p, --prot          force interpret as protein (if inference fails)" << std::endl;
+    std::cout << " -o, --outf=FILE     output stats file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-string versionline("pxcomp 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown and Stephen A. Smith (blackrim)");
+std::string versionline("pxcomp 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown and Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -76,7 +70,7 @@ int main(int argc, char * argv[]){
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -88,26 +82,26 @@ int main(int argc, char * argv[]){
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     CompTest ct(pios, poos, force_protein);
