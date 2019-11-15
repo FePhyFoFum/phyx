@@ -1,12 +1,10 @@
 
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 #include <cmath>
 #include <iostream>
 
 #include "superdouble.h"
-
-using namespace std;
 
 Superdouble::Superdouble(long double m, int e):stilldouble(false),upperlimit(1e+100),lowerlimit(1e-100) {
     mantissa = m;
@@ -30,7 +28,7 @@ double Superdouble::getMantissa() {
 
 void Superdouble::adjustDecimal() {
     stilldouble = false;
-    if (isnormal(mantissa)==false) {
+    if (std::isnormal(mantissa)==false) {
         exponent = 0;
         stilldouble = true;
     } else {
@@ -45,8 +43,8 @@ void Superdouble::adjustDecimal() {
     }
 }
 
-ostream& operator<<(ostream& os, const Superdouble& x) {
-    os<<x.mantissa <<"e"<<x.exponent;
+std::ostream& operator << (std::ostream& os, const Superdouble& x) {
+    os <<x.mantissa << "e" << x.exponent;
     return os;
 }
 
