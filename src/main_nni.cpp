@@ -1,8 +1,3 @@
-/*
- * main_nni.cpp
- *
- */
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,8 +5,6 @@
 #include <map>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "node.h"
 #include "tree_reader.h"
@@ -23,22 +16,22 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Nearest Neighbor Interchange Program" << endl;
-    cout << "This will take newick or nexus files" << endl;
-    cout << endl;
-    cout << "Usage: pxnni [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
-    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Nearest Neighbor Interchange Program" << std::endl;
+    std::cout << "This will take newick or nexus files" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxnni [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree file, stout otherwise" << std::endl;
+    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxnni 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown");
+std::string versionline("pxnni 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -83,7 +76,7 @@ int main(int argc, char * argv[]) {
                 seed = string_to_int(optarg, "-x");
                 break;
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -95,23 +88,23 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
 
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
@@ -125,12 +118,10 @@ int main(int argc, char * argv[]) {
         srand(get_clock_seed());
     }
     
-    //vector<string> lines;
-
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "this really only works with nexus or newick" << std::endl;
         exit(0);
     }
     
@@ -141,17 +132,17 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
-                //cout << "Working on tree #" << treeCounter << endl;
-                map<Node*,vector<Node*> > tree_map;
+                //std::cout << "Working on tree #" << treeCounter << std::endl;
+                std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree,tree_map);
                 nni_from_tree_map(tree,tree_map);
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
                 treeCounter++;
             }
         }
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -159,16 +150,15 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                //cout << "Working on tree #" << treeCounter << endl;
-                map<Node*,vector<Node*> > tree_map;
+                //std::cout << "Working on tree #" << treeCounter << std::endl;
+                std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree,tree_map);
                 nni_from_tree_map(tree,tree_map);
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
                 treeCounter++;
             }
         }
     }
-    
     return EXIT_SUCCESS;
 }
