@@ -10,6 +10,7 @@
 #include "sequence.h"
 #include "seq_reader.h"
 
+
 CompTest::CompTest (std::istream* pios, std::ostream* poos, const bool& force_protein) {
     // set parameters
     is_protein_ = false;

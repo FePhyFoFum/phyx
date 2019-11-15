@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -6,8 +5,6 @@
 #include <cstring>
 #include <getopt.h>
 #include <map>
-
-using namespace std;
 
 #include "utils.h"
 #include "sequence.h"
@@ -19,20 +16,20 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Continuous character branch length estimation with Brownian." << endl;
-    cout << "This will take fasta, phylip (and soon nexus) inputs." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxcontrates [OPTION]... " << endl;
-    cout << endl;
-    cout << " -c, --charf=FILE     input character file, stdin otherwise" << endl;
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE      output sequence file, stout otherwise" << endl;
-    cout << " -h, --help           display this help and exit" << endl;
-    cout << " -V, --version        display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Continuous character branch length estimation with Brownian." << std::endl;
+    std::cout << "This will take fasta, phylip (and soon nexus) inputs." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcontrates [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -c, --charf=FILE     input character file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE      output sequence file, stout otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
 string versionline("pxcontbl 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
@@ -84,7 +81,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -92,48 +89,48 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    istream * pios = NULL;
-    istream * poos = NULL;
-    ifstream * cfstr = NULL;
-    ifstream * tfstr = NULL;
+    std::istream * pios = NULL;
+    std::istream * poos = NULL;
+    std::ifstream * cfstr = NULL;
+    std::ifstream * tfstr = NULL;
 
-    ostream * poouts = NULL;
-    ofstream * ofstr = NULL;
+    std::ostream * poouts = NULL;
+    std::ofstream * ofstr = NULL;
     
 
     if (tfileset == true) {
         tfstr = new ifstream(treef);
         poos = tfstr;
     } else {
-        poos = &cin;
+        poos = &std::cin;
     }
 
     if (cfileset == true) {
-        cfstr = new ifstream(charf);
+        cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
-        cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
+        std::cout << "you have to set a character file. Only a tree file can be read in through the stream;" << std::endl;
     }
 
     //out file
     //
     if (outfileset == true){
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poouts = ofstr;
     } else{
-        poouts = &cout;
+        poouts = &std::cout;
     }
     //
 
-    string retstring;
+    std::string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if (ft != 1 && ft != 2) {
-        cout << "only fasta and phylip (with spaces) supported so far" << endl;
+        std::cout << "only fasta and phylip (with spaces) supported so far" << std::endl;
         exit(0);
     }
     Sequence seq;
-    vector <Sequence> seqs;
-    map <string, int> seq_map;
+    std::vector<Sequence> seqs;
+    std::map<string, int> seq_map;
     int y = 0;
     int nchars = 0 ;
     while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
@@ -143,7 +140,7 @@ int main(int argc, char * argv[]) {
         seq.clear_cont_char();
         y++;
     }
-    cout << "nchars: " <<  nchars << endl;
+    std::cout << "nchars: " <<  nchars << std::endl;
     
     if (ft == 2) {
         seqs.push_back(seq);
@@ -152,7 +149,7 @@ int main(int argc, char * argv[]) {
     }
     //read trees
     TreeReader tr;
-    vector<Tree *> trees;
+    std::vector<Tree *> trees;
     while (getline(*poos,retstring)) {
         if (retstring.size()<4){
             continue;
@@ -162,24 +159,24 @@ int main(int argc, char * argv[]) {
     int x = 0;
     //conduct analyses for each character
     for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
-        vector<Superdouble> tv (nchars);
+        std::vector<Superdouble> tv (nchars);
         for (int c=0; c < nchars; c++) {
             tv[c] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);
         }
         trees[x]->getExternalNode(i)->assocDoubleVector("val",tv);
     }
     for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
-        vector<Superdouble> tv (nchars);
+        std::vector<Superdouble> tv (nchars);
         for (int c=0; c < nchars; c++) {
             tv[c] = 0;
         }
         trees[x]->getInternalNode(i)->assocDoubleVector("val",tv);
     }
     float sigma = 1;
-    cout << calc_bm_prune(trees[x], sigma) << endl;
+    std::cout << calc_bm_prune(trees[x], sigma) << std::endl;
     optimize_single_rate_bm_bl(trees[x]);
-    (*poouts) << trees[x]->getRoot()->getNewick(true) << ";" << endl;
-    cout << calc_bm_prune(trees[x], sigma) << endl;
+    (*poouts) << trees[x]->getRoot()->getNewick(true) << ";" << std::endl;
+    std::cout << calc_bm_prune(trees[x], sigma) << std::endl;
 
     if (cfileset) {
         cfstr->close();
