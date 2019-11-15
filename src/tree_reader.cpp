@@ -1,10 +1,3 @@
-/*
- * tree_reader.cpp
- *
- *  Created on: Nov 24, 2009
- *      Author: smitty
- */
-
 #include <string>
 #include <vector>
 #include <iostream>
@@ -13,8 +6,6 @@
 #include <iostream>
 #include <map>
 #include <algorithm>
-
-using namespace std;
 
 #include "node.h"
 #include "tree.h"
@@ -30,10 +21,9 @@ TreeReader::TreeReader() {}
  */
 
 // TODO: record whether edge lengths are present, store as property
-
-Tree * TreeReader::readTree(string trees) {
+Tree * TreeReader::readTree (std::string trees) {
     Tree * tree = new Tree();
-    string pb = trees;
+    std::string pb = trees;
     unsigned int x = 0;
     char nextChar = pb.c_str()[x];
     bool start = true;
@@ -45,7 +35,7 @@ Tree * TreeReader::readTree(string trees) {
     Node * currNode = NULL;
     double sumEL = 0.0;
     while (keepGoing == true) {
-        //cout << "Working on: " << nextChar << endl;
+        //std::cout << "Working on: " << nextChar << std::endl;
         if (nextChar == '(') {
             if (start == true) {
                 Node * root = new Node();
@@ -54,7 +44,7 @@ Tree * TreeReader::readTree(string trees) {
                 start = false;
             } else {
                 if (currNode == NULL){
-                    cerr << "Malformed newick string. Can read until char " << x << "." << endl;
+                    std::cerr << "Malformed newick string. Can read until char " << x << "." << std::endl;
                     exit(1);
                 }
                 Node * newNode = new Node(currNode);
@@ -68,8 +58,8 @@ Tree * TreeReader::readTree(string trees) {
             currNode = currNode->getParent();
             x++;
             nextChar = pb.c_str()[x];
-            //cout << "Working on: " << nextChar << endl;
-            string nodeName = "";
+            //std::cout << "Working on: " << nextChar << std::endl;
+            std::string nodeName = "";
             bool goingName = true;
             in_quote = false;
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
@@ -119,7 +109,7 @@ Tree * TreeReader::readTree(string trees) {
                 } 
             }// work on edge
             currNode->setName(nodeName);
-            //cout << nodeName << endl;
+            //std::cout << nodeName << std::endl;
             if (nodeName.size() > 0) {
                 hasInternalNodeNames = true;
             }
@@ -132,7 +122,7 @@ Tree * TreeReader::readTree(string trees) {
             // edge length
             x++;
             nextChar = pb.c_str()[x];
-            string edgeL = "";
+            std::string edgeL = "";
             bool goingName = true;
             while (goingName == true) {
                 edgeL = edgeL + nextChar;
@@ -154,7 +144,7 @@ Tree * TreeReader::readTree(string trees) {
             hasAnnotations = true;
             x++;
             nextChar = pb.c_str()[x];
-            string note = "";
+            std::string note = "";
             bool goingNote = true;
             while (goingNote == true) {
                 note = note + nextChar;
@@ -175,7 +165,7 @@ Tree * TreeReader::readTree(string trees) {
             Node * newNode = new Node(currNode);
             currNode->addChild(*newNode);
             currNode = newNode;
-            string nodeName = "";
+            std::string nodeName = "";
             bool goingName = true;
             in_quote = false;
             if (nextChar == '"' || nextChar == '\''){
@@ -221,7 +211,7 @@ Tree * TreeReader::readTree(string trees) {
                     }
                 } 
             }
-            //cout << nodeName << endl;
+            //std::cout << nodeName << std::endl;
             newNode->setName(nodeName);
         }
         if (x < pb.length() - 1) { // added
@@ -231,20 +221,22 @@ Tree * TreeReader::readTree(string trees) {
     }
     bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
     tree->setEdgeLengthsPresent(hasEdgeLengths);
-    //cout << "hasAnnotations = " << hasAnnotations << endl;
+    //std::cout << "hasAnnotations = " << hasAnnotations << std::endl;
     tree->setNodeAnnotationsPresent(hasAnnotations);
-    //cout << "hasInternalNodeNames = " << hasInternalNodeNames << endl;
+    //std::cout << "hasInternalNodeNames = " << hasInternalNodeNames << std::endl;
     tree->setNodeNamesPresent(hasInternalNodeNames);
     tree->processRoot();
     return tree;
 }
 
+
 // for processing strings we know are valid tree strings
-Tree * read_tree_string (string trees) {
+Tree * read_tree_string (std::string trees) {
     TreeReader tr;
     Tree * tree = tr.readTree(trees);
     return tree;
 }
+
 
 /*
  * tests the filetype by checking the first string and guessing based on
@@ -254,9 +246,9 @@ Tree * read_tree_string (string trees) {
  *  if it is nexus, then the nexus reader will need 
  *  to deal with translate or not
  */
-int test_tree_filetype(string filen) {
-    string tline;
-    ifstream infile(filen.c_str());
+int test_tree_filetype (std::string filen) {
+    std::string tline;
+    std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
     while (getline(infile,tline)) {
         if (tline.size() < 1) {
@@ -278,13 +270,14 @@ int test_tree_filetype(string filen) {
     return ret;
 }
 
+
 /* tests the filetype by checking the first string and guessing based on 
  * #nexus, ( newick
  * returns in the order above, 0 ,1, 666 --- no filetype recognized
  */
-int test_tree_filetype_stream(istream & stri, string & retstring) {
+int test_tree_filetype_stream (std::istream& stri, std::string& retstring) {
     if (!getline(stri, retstring)) {
-        cout << "ERROR: end of file too soon" << endl;
+        std::cout << "ERROR: end of file too soon" << std::endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
     if (retstring[0] == '#') {
@@ -295,14 +288,15 @@ int test_tree_filetype_stream(istream & stri, string & retstring) {
     return ret;
 }
 
+
 /**
  * this will look for the translation table if it exists
  */
-bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
-    string * retstring) {
-    string line1;
-    string del(" \t");
-    vector <string> tokens;
+bool get_nexus_translation_table (std::istream & stri, std::map<std::string, std::string> * trans,
+    std::string * retstring) {
+    std::string line1;
+    std::string del(" \t");
+    std::vector<std::string> tokens;
     bool exists = false; // is there a translation table?
     bool going = true;
     bool begintrees = false;
@@ -315,29 +309,29 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
         if (line1.empty()) {
             continue;
         }
-        //cout << "Working on: " << line1 << endl;
+        //std::cout << "Working on: " << line1 << std::endl;
         (*retstring) = line1;
-        string uc = string_to_upper(line1);
-        if (uc.find("TRANSLATE") != string::npos) {
+        std::string uc = string_to_upper(line1);
+        if (uc.find("TRANSLATE") != std::string::npos) {
             tgoing = true;
             exists = true;
-            //cout << "Found translation table!" << endl;
+            //std::cout << "Found translation table!" << std::endl;
             continue;
         } else if (begintrees == true && tgoing == false) {
-            //cout << "No translation table present!" << endl;
+            //std::cout << "No translation table present!" << std::endl;
                 return false;
         }
-        if (uc.find("BEGIN TREES") != string::npos) {
+        if (uc.find("BEGIN TREES") != std::string::npos) {
             begintrees = true;
-           //cout << "Found Begin trees!" << endl;
+           //std::cout << "Found Begin trees!" << std::endl;
         }
         if (tgoing == true) {
             //trimspaces and split up strings
             tokens.clear();
             tokenize(line1, tokens, del);
             size_t endcheck = line1.find(";");
-            if (endcheck != string::npos) { // semicolon present. this is the last line.
-                //cout << "Ending translation table!" << endl;
+            if (endcheck != std::string::npos) { // semicolon present. this is the last line.
+                //std::cout << "Ending translation table!" << std::endl;
                 going = false;
                 (*retstring) = "";
             }
@@ -346,32 +340,33 @@ bool get_nexus_translation_table(istream & stri, map<string, string> * trans,
                     trim_spaces(tokens[i]);
                 }
                 size_t found = tokens[1].find(",");
-                if (found != string::npos) {
+                if (found != std::string::npos) {
                     tokens[1].erase(found, 1);
                 }
                 if (!going) {
                     size_t found2 = tokens[1].find(";");
-                    if (found2 != string::npos) {
+                    if (found2 != std::string::npos) {
                         tokens[1].erase(found2, 1);
                     }
                 }
                 (*trans)[tokens[0]] = tokens[1];
-                //cout << "tokens[0] = " << tokens[0] << "; tokens[1] = " << tokens[1] << endl;
+                //std::cout << "tokens[0] = " << tokens[0] << "; tokens[1] = " << tokens[1] << std::endl;
             }
         }
     }
     return exists;
 }
 
+
 // given a line that begins with [, keep reading until a line where last char is ] (i.e., end of comment)
 // NOTE: returns the end comment line (so reader will need to read in next valid line)
-void process_nexus_comment (istream & stri, string & tline) {
+void process_nexus_comment (std::istream& stri, std::string& tline) {
     bool done = false;
-    string terp = tline;
+    std::string terp = tline;
     trim_spaces(terp);
     // check single-line comment
     if (terp.back() == ']') {
-        //cout << "single-line comment!" << endl;
+        //std::cout << "single-line comment!" << std::endl;
         return;
     }
     // if not, dealing with a multi-line comment
@@ -380,14 +375,15 @@ void process_nexus_comment (istream & stri, string & tline) {
         trim_spaces(terp);
         if (!terp.empty()) {
             if (terp.back() == ']') {
-                //cout << "found end of multi-line comment" << endl;
+                //std::cout << "found end of multi-line comment" << std::endl;
                 return;
             }
         }
     }
 }
 
-bool check_nexus_comment (string line) {
+
+bool check_nexus_comment (std::string line) {
     bool comment = false;
     trim_spaces(line);
     if (line[0] == '[') {
@@ -396,20 +392,21 @@ bool check_nexus_comment (string line) {
     return comment;
 }
 
+
 /*
  * this will read the nexus file after processing translating
  * should add some error correction code here
 */
-Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
-    bool ttexists, map<string,string> * trans, bool * going) {
-    string tline;
+Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstring,
+    bool ttexists, std::map<std::string, std::string> * trans, bool * going) {
+    std::string tline;
     if (retstring.size() > 0) {
         tline = retstring;
         retstring = "";
         bool done = false;
         while (!done) {
             if (check_nexus_comment(tline)) {
-                //cout << "yikes a comment!" << endl;
+                //std::cout << "yikes a comment!" << std::endl;
                 process_nexus_comment(stri, tline);
                 getline(stri, tline);
             } else {
@@ -431,13 +428,13 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
                     reading = false;
                 }
             } else {
-                //cout << "Skipping empty line" << endl;
+                //std::cout << "Skipping empty line" << std::endl;
             }
         }
     }
-    //cout << "Working on: " << tline << endl;
-    string uc = string_to_upper(tline);
-    if (uc.find("END;") != string::npos) {
+    //std::cout << "Working on: " << tline << std::endl;
+    std::string uc = string_to_upper(tline);
+    if (uc.find("END;") != std::string::npos) {
         (*going) = false;
         return NULL;
     }
@@ -447,9 +444,9 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
     //string tstring(tokens[tokens.size()-1]);
     
     size_t startpos = tline.find_first_of("(");
-    string tstring = tline.substr(startpos);
+    std::string tstring = tline.substr(startpos);
     Tree * tree;
-    //cout << tstring << endl;
+    //std::cout << tstring << std::endl;
     TreeReader tr;
     tree = tr.readTree(tstring);
     if (ttexists) {
@@ -460,12 +457,13 @@ Tree * read_next_tree_from_stream_nexus(istream & stri, string & retstring,
     return tree;
 }
 
+
 /*
  * this is simple as each line is a tree
  */
 // adding a simple check: if line is empty, assume we're done
-Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, bool * going) {
-    string tline;
+Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring, bool * going) {
+    std::string tline;
     if (retstring.size() > 0) {
         tline = retstring;
         retstring = "";
@@ -474,7 +472,7 @@ Tree * read_next_tree_from_stream_newick(istream & stri, string & retstring, boo
         return NULL;
     }
     if (tline.size() == 0) {
-        //cout << "You've got yerself an empty line, there." << endl;
+        //std::cout << "You've got yerself an empty line, there." << std::endl;
         (*going) = false;
         return NULL;
     }
