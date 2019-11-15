@@ -1,8 +1,3 @@
-/*
- * main_SW.cpp
- *
- */
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -14,8 +9,6 @@
 #include <omp.h>
 #endif
 
-using namespace std;
-
 #include "utils.h"
 #include "seq_reader.h"
 #include "sequence.h"
@@ -25,29 +18,29 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Conduct Smith-Waterman analysis for all the seqs in a file." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << "Output is a list of the scores and distances (and the alignments" << endl;
-    cout << "if asked)." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxsw [OPTION]... [FILE]..." << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output score/distance file, stout otherwise" << endl;
-    cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise" << endl;
-    cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)" << endl;
-    cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62" << endl;
-    cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << endl;
-    cout << " -v, --verbose       make the output more verbose, turns off parallel" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Conduct Smith-Waterman analysis for all the seqs in a file." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "Output is a list of the scores and distances (and the alignments" << std::endl;
+    std::cout << "if asked)." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxsw [OPTION]... [FILE]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output score/distance file, stout otherwise" << std::endl;
+    std::cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise" << std::endl;
+    std::cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)" << std::endl;
+    std::cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62" << std::endl;
+    std::cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << std::endl;
+    std::cout << " -v, --verbose       make the output more verbose, turns off parallel" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxsw 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxsw 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -101,7 +94,8 @@ int main(int argc, char * argv[]) {
             case 't':
                 seqtype = string_to_int(optarg, "-t");
                 if (seqtype > 1) {
-                    cout << "Don't recognize seqtype " << seqtype << ". Must be 0 (DNA) or 1 (AA)." << endl;
+                    std::cout << "Don't recognize seqtype " << seqtype
+                            << ". Must be 0 (DNA) or 1 (AA)." << std::endl;
                     exit(0);
                 }
                 break;
@@ -120,14 +114,14 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
                 exit(0);
         }
     }
-    map<char, map<char,int> > sc_mat;
+    std::map<char, std::map<char, int> > sc_mat;
     if (matrixfileset == true) {
         read_scoring_matrix(matf, sc_mat);
     } else {
@@ -139,34 +133,34 @@ int main(int argc, char * argv[]) {
              
         }
     }
-    vector<Sequence> seqs;
+    std::vector<Sequence> seqs;
     Sequence seq;
-    string retstring;
+    std::string retstring;
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
-    ofstream * afstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ofstream * afstr = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (outalnfileset) {
-        afstr = new ofstream(outaf);
+        afstr = new std::ofstream(outaf);
     }
 
     int ft = test_seq_filetype_stream(*pios,retstring);
@@ -186,17 +180,17 @@ int main(int argc, char * argv[]) {
         #pragma omp parallel for
         for (unsigned int j=0; j < seqs.size(); j++) {
             if (j > i) {
-                string aln1;
-                string aln2;
+                std::string aln1;
+                std::string aln2;
                 double sc = sw(seqs[i],seqs[j],sc_mat,0, aln1, aln2);
                 #pragma omp critical
                 {
-                    (*poos) << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << endl;
+                    (*poos) << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << std::endl;
                     if (verbose) {
-                        cout << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << endl;
+                        std::cout << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << std::endl;
                     }
                     if (outalnfileset) {
-                        (*afstr) << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << endl;
+                        (*afstr) << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << std::endl;
                     }
                 }
             }
@@ -215,4 +209,3 @@ int main(int argc, char * argv[]) {
     }
     return EXIT_SUCCESS;
 }
-
