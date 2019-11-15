@@ -1,23 +1,16 @@
-/*
- * tlate.h
- *
- *  Created on: Jun 16, 2015
- *      Author: joe
- */
-
 #ifndef _TLATE_H_
 #define _TLATE_H_
 
+#include <string>
 #include <map>
-
 
 class TLATE {
 private:
-    map <string, string> table_;
+    std::map<std::string, std::string> table_;
     
 public:
-    TLATE (string const& table);
-    string translate (string& dna);
+    TLATE(const std::string& table);
+    std::string translate(std::string& dna);
     //virtual ~tlate();
 };
 

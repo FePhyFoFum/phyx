@@ -8,15 +8,14 @@
 #ifndef _BRANCH_SEGMENT_H_
 #define _BRANCH_SEGMENT_H_
 
-//#include <vector>
+#include <vector>
 
 class RateModel;
 
 #include "vector_node_object.h"
 #include "superdouble.h"
 
-
-class BranchSegment{
+class BranchSegment {
 private:
     double duration;
     int period;
@@ -25,13 +24,13 @@ private:
     int startdistint;
     
 public:
-    BranchSegment(double dur,int per);
+    BranchSegment(double dur, int per);
     void setModel(RateModel * mod);
     //void setStartDist(vector<int> sd);
     void clearStartDist();
     double getDuration();
     int getPeriod();
-    //vector<int> getStartDist();
+    //std::vector<int> getStartDist();
     void set_start_dist_int(int d);
     int get_start_dist_int();
     RateModel * getModel();

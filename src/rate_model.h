@@ -1,15 +1,14 @@
 #ifndef _RATE_MODEL_H_
 #define _RATE_MODEL_H_
 
-
 #include <armadillo>
 #include <string>
+#include <vector>
 #include <map>
 
 using namespace arma;
 
-class RateModel{
-
+class RateModel {
 private:
     mat Q;
     std::vector<mat> Qs;
@@ -41,19 +40,19 @@ public:
     std::map<double, cx_mat> stored_p_matrices;
     bool neg_p;
     void set_n_qs(int number);
-    void set_Q_which(mat & inQ, int which);
-    void set_Q(mat & inQ);
+    void set_Q_which(mat& inQ, int which);
+    void set_Q(mat& inQ);
     void set_Q_diag();
-    void set_Q_cell(int,int,double);
+    void set_Q_cell(int, int, double);
     void setup_Q();
-    void setup_Q(std::vector< std::vector<double> > & inQ);
-    void setup_Q(mat & inQ);
-    mat & get_Q();
+    void setup_Q(std::vector< std::vector<double> >& inQ);
+    void setup_Q(mat& inQ);
+    mat& get_Q();
     void set_sameQ(bool);
-    cx_mat setup_P(double,bool);
-    void setup_P_simple(mat & p,double,bool);
-    void setup_fortran_P_whichQ(int which, mat & P, double t);
-    void setup_fortran_P(mat & P, double t, bool store_p_matrices);
+    cx_mat setup_P(double, bool);
+    void setup_P_simple(mat& p, double, bool);
+    void setup_fortran_P_whichQ(int which, mat& P, double t);
+    void setup_fortran_P(mat& P, double t, bool store_p_matrices);
     /*
      * get things from stmap
      */
@@ -62,9 +61,11 @@ public:
     void get_eigenvec_eigenval_from_Q_simple(mat * eigenvalues, mat * eigenvectors);
     
 };
-void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw);
+void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf, mat& bigpiK, mat& bigpiw);
 bool test_transition(char a, char b);
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string> & codon_dict, std::map<std::string, std::vector<int> > & codon_index, std::vector<std::string> & codon_list);
-void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H);
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string,
+        std::string>& codon_dict, std::map<std::string, std::vector<int> >& codon_index,
+        std::vector<std::string>& codon_list);
+void convert_matrix_to_single_row_for_fortran(mat& inmatrix, double t, double * H);
 
 #endif /* _RATE_MODEL_H_ */

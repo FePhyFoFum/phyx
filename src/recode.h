@@ -1,14 +1,14 @@
 #ifndef _RECODE_H_
 #define _RECODE_H_
 
+#include <string>
 #include <set>
 #include <regex>
-
 
 class SequenceRecoder {
 
 public:
-    string recodescheme_;
+    std::string recodescheme_;
     
     // individual coding scheme
     bool R_;
@@ -26,7 +26,7 @@ public:
     bool G_;
     bool T_;
     
-    static set <char> recognized_;
+    static std::set<char> recognized_;
     
     static regex r_;
     static regex y_;
@@ -39,11 +39,11 @@ public:
     static regex h_;
     static regex v_;
     
-    SequenceRecoder (string & recodescheme);
-    void parse_scheme ();
-    void check_valid_scheme ();
-    string get_recoded_seq (string const& origseq);
-    void recode_seq (string &s);
+    SequenceRecoder(string& recodescheme);
+    void parse_scheme();
+    void check_valid_scheme();
+    std::string get_recoded_seq(const std::string& origseq);
+    void recode_seq(std::string& s);
     
     //~SequenceRecoder();
 };

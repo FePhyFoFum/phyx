@@ -1,8 +1,8 @@
 #ifndef _BD_SIM_H_
 #define _BD_SIM_H_
 
+#include <vector>
 #include <random>
-
 
 #include "tree.h"
 #include "node.h"
@@ -19,10 +19,10 @@ private:
     double timestop_;
     int numofchanges_;
     double currenttime_;
-    vector<Node*> extantnodes_;
-    vector<Node*> dead_nodes_;
-    map<Node*,double> BIRTHTIME_;
-    map<Node*,double> DEATHTIME_;
+    std::vector<Node*> extantnodes_;
+    std::vector<Node*> dead_nodes_;
+    std::map<Node*, double> BIRTHTIME_;
+    std::map<Node*, double> DEATHTIME_;
     Node* root_;
     Tree* tree_;
     
@@ -44,9 +44,7 @@ private:
 public:
     BirthDeathSimulator();
     BirthDeathSimulator(double estop, double tstop, double brate, double drate, int seed);
-
     Tree * make_tree(bool);
-
     //~BirthDeathSimulator();
 };
 

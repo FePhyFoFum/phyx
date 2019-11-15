@@ -9,7 +9,7 @@
 #define _NODE_OBJECT_H_
 
 
-class NodeObject{
+class NodeObject {
 
 public:
     NodeObject() {}

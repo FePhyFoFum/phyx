@@ -3,20 +3,19 @@
 
 #include <vector>
 
-
 #include <gsl/gsl_vector.h>
 
-class Delta{
+class Delta {
 private:
     double cdf(double);
 public:
     Delta();
     double shift(double p, double s, int c, int l, int r);
     double bigshift(double p, double s, int c, int l, int r);
-    vector<double> delta(int, int, int);
+    std::vector<double> delta(int, int, int);
 };
 
-class OptimizeShift{
+class OptimizeShift {
 private:
     Delta * delta;
     int maxiterations;
@@ -26,7 +25,7 @@ private:
     static double GetShift_gsl(const gsl_vector * variables, void *obj);
 public:
     OptimizeShift(Delta *);
-    vector<double> optimize_shift();
+    std::vector<double> optimize_shift();
     void setCLR(int,int,int);
 };
 

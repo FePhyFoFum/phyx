@@ -2,6 +2,9 @@
 #ifndef _STATE_RECONSTRUCTOR_SIMPLE_H_
 #define _STATE_RECONSTRUCTOR_SIMPLE_H_
 
+#include <string>
+#include <vector>
+#include <map>
 
 #include "tree.h"
 #include "node.h"
@@ -9,34 +12,34 @@
 #include "vector_node_object.h"
 #include "sequence.h"
 
-class StateReconstructorSimple{
+class StateReconstructorSimple {
 
 private:
     Tree * tree;
     int nstates;
     int nsites;
-    RateModel & rm;
-    string dc;
+    RateModel& rm;
+    std::string dc;
     
-    map<double, mat> map_ps;
-    map<double, mat> map_ps0;
-    map<double, mat> map_ps1;
-    map<double, mat> map_ps2;
-    map<Node *,vector<vector<double> > > conditionals_map;
-    vector<double> v_storage;  //just junk storage
-    vector<double> v1;
-    vector<double> v2;
+    std::map<double, mat> map_ps;
+    std::map<double, mat> map_ps0;
+    std::map<double, mat> map_ps1;
+    std::map<double, mat> map_ps2;
+    std::map<Node *, std::vector< std::vector<double> > > conditionals_map;
+    std::vector<double> v_storage;  //just junk storage
+    std::vector<double> v1;
+    std::vector<double> v2;
     
     //VectorNodeObject<double> 
-    void conditionals(vector<double> * v, Node & node,int site);
-    void conditionals2(vector<double> * v, Node & node,int site);
-    void ancdist_conditional_lh(Node & node,int site);
+    void conditionals(std::vector<double> * v, Node& node, int site);
+    void conditionals2(std::vector<double> * v, Node& node, int site);
+    void ancdist_conditional_lh(Node& node, int site);
     
 public:
-    StateReconstructorSimple(RateModel &, int);
+    StateReconstructorSimple(RateModel&, int);
     void set_tree(Tree *);
     double eval_likelihood(int site);
-    bool set_tip_conditionals(vector<Sequence> & distrib_data,int );
+    bool set_tip_conditionals(std::vector<Sequence>& distrib_data, int);
     void clear_map_ps();
     double pp0;
     double pp1;

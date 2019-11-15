@@ -12,12 +12,11 @@
 #include <set>
 #include <string>
 
-
 #include "branch_segment.h"
 #include "vector_node_object.h"
 #include "superdouble.h"
 
-class Node{
+class Node {
 private:
     double BL; // branch length, points to parent
     double height; // could be from tip or from root
@@ -49,7 +48,7 @@ public:
     bool isRoot();
     bool isKnuckle();
     bool hasParent();
-    void setParent(Node & p);
+    void setParent(Node& p);
     int getNumber();
     void setNumber(int n);
     bool getPainted();
@@ -60,9 +59,9 @@ public:
     void setHeight(double he);
     double getDepth();
     void setDepth(double de);
-    bool hasChild(Node & test);
-    bool addChild(Node & c);
-    bool removeChild(Node & c);
+    bool hasChild(Node& test);
+    bool addChild(Node& c);
+    bool removeChild(Node& c);
     Node * getChild(int c);
     std::string getName();
     std::string getComment();
@@ -73,8 +72,8 @@ public:
     std::string getPaintedNewick(bool bl);
     Node * getParent();
     int getChildCount();
-    void assocObject(std::string name, NodeObject & obj);
-    void assocDoubleVector(std::string name, std::vector<Superdouble> & obj);
+    void assocObject(std::string name, NodeObject& obj);
+    void assocDoubleVector(std::string name, std::vector<Superdouble>& obj);
     std::vector<Superdouble> * getDoubleVector(std::string name);
     void deleteDoubleVector(std::string name);
     NodeObject * getObject(std::string name);
@@ -85,7 +84,6 @@ public:
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_number; //segment specific rev B, combining the tempA and the ENLT
     ~Node();
-
 };
 
 #endif /* _NODE_H_ */

@@ -1,7 +1,7 @@
 #ifndef _COLLAPSE_TREE_H_
 #define _COLLAPSE_TREE_H_
 
-
+#include <string>
 #include "tree.h"
 
 /*
@@ -18,17 +18,17 @@ idunno. maybe this is not best.
 class Collapser {
 private:
     float threshold_;
-    string sup_string_; // string identifying support value within an annotation
+    std::string sup_string_; // string identifying support value within an annotation
     
     bool scale_set_;
     bool has_labels_;
     bool has_annotations_;
     
-    void guess_scale (float const& sup);
+    void guess_scale (const float& sup);
     
 public:
-    Collapser (double const& threshold);
-    void set_sup_string (string const& str);
+    Collapser (const double& threshold);
+    void set_sup_string (const std::string& str);
     void collapse_edges (Tree * tr);
 };
 

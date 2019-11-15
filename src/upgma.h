@@ -8,33 +8,36 @@
 #ifndef _UPGMA_H_
 #define _UPGMA_H_
 
+#include <string>
 #include <vector>
 #include <map>
-
+#include <iostream>
 
 class UPGMA {
 private:
 
-    map <string, string> sequences;
-    map <string, string>::iterator iter;
-    vector<string> names;
-    vector< vector<double> > Matrix;
-    void set_name_key ();
+    std::map<std::string, std::string> sequences;
+    std::map<std::string, std::string>::iterator iter;
+    std::vector<std::string> names;
+    std::vector< std::vector<double> > Matrix;
+    void set_name_key();
     
     // additions:
     int ntax;
     int nchar;
-    string seqfile;
-    map<int, string> NameKey;
-    string newickstring; // temporary
+    std::string seqfile;
+    std::map<int, std::string> NameKey;
+    std::string newickstring; // temporary
 
 public:
     UPGMA();
-    UPGMA (istream* pios);
-    map<string, string> FastaToOneLine(ifstream&);
-    vector< vector<double> > BuildMatrix(map<string, string>& sequences);
-    void TREEMAKE(vector<string>&, map <int, string>&, vector< vector<double> >&);
-    string get_newick ();
+    UPGMA(std::istream* pios);
+    std::map<std::string, std::string> FastaToOneLine(std::ifstream&);
+    std::vector< std::vector<double> > BuildMatrix(std::map<std::string,
+        std::string>& sequences);
+    void TREEMAKE(std::vector<std::string>&, std::map <int, std::string>&,
+        std::vector< std::vector<double> >&);
+    std::string get_newick();
 };
 
 #endif /* _UPGMA_H_ */

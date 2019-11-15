@@ -8,12 +8,13 @@
 #ifndef _TREE_H_
 #define _TREE_H_
 
+#include <string>
+#include <vector>
+#include <map>
+
 #include "node.h"
 
-#include <map>
-#include <string>
-
-class Tree{
+class Tree {
 private:
     Node * root;
     std::vector<Node *> nodes;
@@ -30,7 +31,7 @@ private:
     void exchangeInfo(Node * node1, Node * node2);
     void postOrderProcessRoot(Node * node);
     Node * getMRCATraverse(Node * curn1, Node * curn2);
-    void setHeightFromRootToNode(Node & inNode, double newHeight);
+    void setHeightFromRootToNode(Node& inNode, double newHeight);
     double getGreatestDistance(Node * inNode);
     
 public:
@@ -45,20 +46,20 @@ public:
     Node * getExternalNode(int num);
     Node * getExternalNode(std::string name);
     Node * getInternalNode(int num);
-    Node * getInternalNode(std::string & name);
+    Node * getInternalNode(std::string& name);
     Node * getNode(int num);
-    Node * getNode(std::string & name);
+    Node * getNode(std::string& name);
     int getNodeCount();
     int getExtantNodeCount();
     int getExternalNodeCount();
     int getInternalNodeCount();
     Node * getRoot();
     void setRoot(Node * inroot);
-    void setEdgeLengthsPresent(bool & res);
+    void setEdgeLengthsPresent(bool& res);
     bool hasEdgeLengths();
-    void setNodeAnnotationsPresent(bool & res);
+    void setNodeAnnotationsPresent(bool& res);
     bool hasNodeAnnotations();
-    void setNodeNamesPresent(bool & res);
+    void setNodeNamesPresent(bool& res);
     bool hasNodeNames();
     void unRoot();
     bool reRoot(Node * inroot);
@@ -66,7 +67,7 @@ public:
     void tritomyRoot(Node * toberoot);
     Node * getMRCA(std::vector<std::string> innodes);
     Node * getMRCA(std::vector<Node *> innodes);
-    Node * getInternalMRCA(std::vector<std::string> & innodes);
+    Node * getInternalMRCA(std::vector<std::string>& innodes);
     void processRoot();
     void exchangeNodes(Node * node1, Node * node2);
     void removeRootEdge();

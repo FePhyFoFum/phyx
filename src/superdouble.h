@@ -29,7 +29,6 @@
 #include <cmath>
 #include <iostream>
 
-
 class Superdouble {
 private:
     long double mantissa;
@@ -54,10 +53,10 @@ public:
     void operator/= (Superdouble x);
     void operator+= (Superdouble x);
     void operator-= (Superdouble x);
-    bool operator < (const Superdouble &x)const;
-    bool operator > (const Superdouble &x)const;
-    bool operator >= (const Superdouble &x)const;
-    bool operator <= (const Superdouble &x)const;
+    bool operator < (const Superdouble& x)const;
+    bool operator > (const Superdouble& x)const;
+    bool operator >= (const Superdouble& x)const;
+    bool operator <= (const Superdouble& x)const;
     int getExponent();
     double getMantissa();
     Superdouble getLn();
@@ -65,6 +64,5 @@ public:
     void switch_sign();
     
     operator double() {return mantissa*pow(10.,exponent);};
-    
 };
 #endif /* _SUPERDOUBLE_H_ */

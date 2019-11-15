@@ -11,7 +11,7 @@ using namespace arma;
 
 #include <gsl/gsl_vector.h>
 
-class OptimizeStateReconstructor{
+class OptimizeStateReconstructor {
 private:
     RateModel * rm;
     StateReconstructor * sr;

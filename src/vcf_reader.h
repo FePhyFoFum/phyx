@@ -3,27 +3,19 @@
 
 #include <vector>
 #include <string>
-
+#include <iostream>
 
 class VcfReader {
 private:
+    std::vector<std::string> taxa_;
+    std::vector<std::string> seqs_;
     
-    vector <string> taxa_;
-    vector <string> seqs_;
-    
-    vector <string> get_alts (const string& str);
-    void read_vcf (istream* pios);
+    std::vector<std::string> get_alts(const std::string& str);
+    void read_vcf(std::istream* pios);
 
 public:
-    VcfReader(istream* pios);
-    void write_seqs (bool const& uppercase, ostream* poos);
+    VcfReader(std::istream* pios);
+    void write_seqs(const bool& uppercase, std::ostream* poos);
 };
-
-
-
-
-
-
-
 
 #endif /* _VCF_READER_H_ */

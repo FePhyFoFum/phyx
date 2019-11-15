@@ -102,7 +102,7 @@ void SequenceCleaner::clean_sequences () {
         //NumbOfSequences++;
     }
     for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
-
+        
         string to_stay = "";
         new_dna = iter_ -> second;
         stillMissing = 0;
@@ -147,14 +147,14 @@ void SequenceCleaner::clean_sequences () {
 
 void SequenceCleaner::CheckMissing(double MissingData [], string& dna, bool& type) {
 
-    if (type == true){
+    if (type == true) {
         for (int i = 0; i < num_char_; i++) {
             if (tolower(dna[i]) == 'n' || dna[i] == '-' || tolower(dna[i]) == 'x') {
                 MissingData[i]++;
                 //cout << "Position: " << i << " DNA: " << dna[i] <<  " Missing: " << MissingData[i] << endl;
             }
         }
-    }else{
+    } else {
         for (int i = 0; i < num_char_; i++) {
             if (dna[i] == '-' || tolower(dna[i]) == 'x') {
                 MissingData[i]++;
