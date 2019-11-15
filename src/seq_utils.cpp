@@ -1,20 +1,19 @@
-
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
 #include <assert.h>
 #include <iostream>
 #include <algorithm>
-
-using namespace std;
 
 #include "seq_utils.h"
 #include "sequence.h"
 #include "utils.h"
 
 // IUPAC codes
-string dnachars  = "ACGTURYSWKMBDHVN";
-string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
+std::string dnachars  = "ACGTURYSWKMBDHVN";
+std::string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
+
 
 /**
  * IUPAC ambiguity codes
@@ -23,7 +22,7 @@ string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
  * An empty set contains only gaps. An N has a count for all nucleotides.
  * When a site has valid nucleotides and gaps, the gaps are ignored.
  */
-char get_dna_from_pos(set<int> ins) {
+char get_dna_from_pos (std::set<int> ins) {
     if (ins.count(0) == 1) {
         if (ins.count(1) == 1) {
             if (ins.count(2) == 1) {
@@ -72,8 +71,9 @@ char get_dna_from_pos(set<int> ins) {
     return('-');
 }
 
-set<int> get_dna_pos(char inc) {
-    set<int> ret;
+
+std::set<int> get_dna_pos (char inc) {
+    std::set<int> ret;
     inc = toupper(inc);
     if (inc == 'A') {
         ret.insert(0);
@@ -123,7 +123,8 @@ set<int> get_dna_pos(char inc) {
     return ret;
 }
 
-char get_prot_char(set<char> inc) {
+
+char get_prot_char (std::set<char> inc) {
     // if any is missing, consensus is missing
     if (inc.count('X') == 1 || inc.count('-') == 1) {
         return 'X';
@@ -152,24 +153,24 @@ char get_prot_char(set<char> inc) {
 /**
  * string alpha: either "DNA" or "AA"
  */
-string consensus_seq(vector <Sequence> & seqs, string & alpha) {
+std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
     int seqlength = seqs[0].get_sequence().length();
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
-    string retstring;
+    std::string retstring;
     if (alpha == "DNA") {
         for (int i=0; i < seqlength; i++) {
-            set<int> fullset;
+            std::set<int> fullset;
             for (unsigned int j=0; j < seqs.size(); j++) {
-                set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
+                std::set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
                 fullset.insert(tset.begin(), tset.end());
             }
             retstring += get_dna_from_pos(fullset);
         }
     } else if (alpha == "AA") {
         for (int i=0; i < seqlength; i++) {
-            set<char> fullset;
+            std::set<char> fullset;
             //bool ambig = false; // doesn't do anything
             for (unsigned int j=0; j < seqs.size(); j++) {
                 fullset.insert(seqs[j].get_sequence()[i]);
@@ -182,17 +183,18 @@ string consensus_seq(vector <Sequence> & seqs, string & alpha) {
             retstring += get_prot_char(fullset);
         }
     } else {
-        cout << "I don't know what kind of sequence that is..." << endl;
+        std::cout << "I don't know what kind of sequence that is..." << std::endl;
         exit(0);
     }
     return retstring;
 }
 
+
 /**
  * Returns a map of DNA
  *
  */
-char single_dna_complement(char inc) {
+char single_dna_complement (char inc) {
     inc = toupper(inc);
     if (inc=='A') {
         return 'T';
@@ -229,31 +231,33 @@ char single_dna_complement(char inc) {
     }
 }
 
-void write_phylip_alignment(vector <Sequence> & seqs, bool const& uppercase, ostream * ostr) {
+
+void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
-    (*ostr) << seqs.size() << " " << seqlength << endl;
+    (*ostr) << seqs.size() << " " << seqlength << std::endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
         if (uppercase) {
-            string terp = seqs[i].seq_to_upper();
-            (*ostr) << seqs[i].get_id() << "\t" << terp << endl;
+            std::string terp = seqs[i].seq_to_upper();
+            (*ostr) << seqs[i].get_id() << "\t" << terp << std::endl;
         } else {
-            (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+            (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
         }
     }
 }
+
 
 /**
  * this is not for concatenation. only single gene regions
  * another one needs to be written for concatenation
  */
-void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostream * ostr) {
+void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
     int seqlength = seqs[0].get_sequence().length();
-    string datatype = seqs[0].get_alpha_name();
-    string symbols = ""; // not required for binary (default), protein, DNA
-    //cout << endl << "datatype = " << datatype << endl << endl;
+    std::string datatype = seqs[0].get_alpha_name();
+    std::string symbols = ""; // not required for binary (default), protein, DNA
+    //std::cout << std::endl << "datatype = " << datatype << std::endl << std::endl;
     
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
         datatype = "PROTEIN";
@@ -264,8 +268,8 @@ void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostr
     }
     if (datatype == "MULTI") {
         datatype = "STANDARD";
-        cout << "assembling symbols now" << endl;
-        string combined;
+        std::cout << "assembling symbols now" << std::endl;
+        std::string combined;
         for (unsigned int i=0; i < seqs.size(); i++) {
             if (uppercase) {
                 combined += seqs[i].seq_to_upper();
@@ -281,39 +285,40 @@ void write_nexus_alignment(vector <Sequence> & seqs, bool const& uppercase, ostr
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
-    (*ostr) << "#NEXUS" << endl;
+    (*ostr) << "#NEXUS" << std::endl;
     (*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
-    (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << endl;
+    (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << std::endl;
     (*ostr) << "\tFORMAT DATATYPE=" << datatype;
     if (!symbols.empty()) {
         (*ostr) << " SYMBOLS=\"" << symbols << "\"";
     }
-    (*ostr) << " INTERLEAVE=NO GAP=- MISSING=?;" << endl;
-    (*ostr) << "\tMATRIX\n" << endl;
+    (*ostr) << " INTERLEAVE=NO GAP=- MISSING=?;" << std::endl;
+    (*ostr) << "\tMATRIX\n" << std::endl;
     for (unsigned int i=0; i < seqs.size(); i++) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
         if (uppercase) {
-            string terp = seqs[i].seq_to_upper();
-            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << terp << endl;
+            std::string terp = seqs[i].seq_to_upper();
+            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << terp << std::endl;
         } else {
-            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << endl;
+            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << std::endl;
         }
-        //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << endl;
+        //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
     }
-    (*ostr) << ";\nend;\n" << endl;
+    (*ostr) << ";\nend;\n" << std::endl;
 }
+
 
 /**
  * given a vector of seqs, this will make, for each seq a vector
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor(vector <Sequence> & origseqs,
-    vector <Sequence> & sr_seqs, int site, map<string, vector<int> > & codon_pos) {
+void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
+    std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
     int start = site*3;
     for (unsigned int i=0; i < origseqs.size(); i++) {
-        string codon = origseqs[i].get_sequence().substr(start,3);
-        string setsq = "";
+        std::string codon = origseqs[i].get_sequence().substr(start,3);
+        std::string setsq = "";
         for (int j=0; j < 61; j++) {
             setsq += "0";
         }
@@ -324,18 +329,18 @@ void create_vector_seq_codon_state_reconstructor(vector <Sequence> & origseqs,
     }
 }
 
+
 /**
  * given a vector of seqs, this will make, for each seq a vector
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor_all_site(vector <Sequence> & origseqs,
-    vector <Sequence> & sr_seqs, int site, map<string, vector <int> > & codon_pos) {
+void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
+    std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
     int start = site * 3;
     for (unsigned int i=0; i < origseqs.size(); i++) {
-        string codon = origseqs[i].get_sequence().substr(start, 3);
-        
-        string setsq(61, '0');
+        std::string codon = origseqs[i].get_sequence().substr(start, 3);
+        std::string setsq(61, '0');
         
         for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
             setsq.replace(codon_pos[codon][j], 1, "1");
@@ -344,7 +349,8 @@ void create_vector_seq_codon_state_reconstructor_all_site(vector <Sequence> & or
     }
 }
 
-void populate_codon_list(vector <string> * codon_list) {
+
+void populate_codon_list(std::vector<std::string> * codon_list) {
     (*codon_list).push_back("TTT");
     (*codon_list).push_back("TTC");
     (*codon_list).push_back("TTA");
@@ -408,7 +414,8 @@ void populate_codon_list(vector <string> * codon_list) {
     (*codon_list).push_back("GGG");
 }
 
-void populate_map_codon_dict(map <string, string> * codon_dict) {
+
+void populate_map_codon_dict(std::map <std::string, std::string> * codon_dict) {
     (*codon_dict)["TTT"] = "F";
     (*codon_dict)["TTC"] = "F";
     (*codon_dict)["TTA"] = "L";
@@ -472,7 +479,8 @@ void populate_map_codon_dict(map <string, string> * codon_dict) {
     (*codon_dict)["GGG"] = "G";
 }
 
-void populate_map_codon_indices(map <string,vector<int> > * codon_position) {
+
+void populate_map_codon_indices(std::map <std::string, std::vector<int> > * codon_position) {
     (*codon_position)["TTT"] = {0};
     (*codon_position)["TTC"] = {1};
     (*codon_position)["TTA"] = {2};
@@ -536,7 +544,8 @@ void populate_map_codon_indices(map <string,vector<int> > * codon_position) {
     (*codon_position)["GGG"] = {60};
 }
 
-bool check_binary_sequence (string const& seq) {
+
+bool check_binary_sequence (const std::string& seq) {
     bool binary = false;
     if (seq.find_first_not_of("01-?") == std::string::npos) {
         binary = true;
@@ -544,13 +553,12 @@ bool check_binary_sequence (string const& seq) {
     return binary;
 }
 
+
 // get all unique character states
-string get_alphabet_from_sequence (string const& instr) {
-    string uniqueChars;
-    
-    string sorted = instr;
+std::string get_alphabet_from_sequence (const std::string& instr) {
+    std::string uniqueChars;
+    std::string sorted = instr;
     std::sort(sorted.begin(), sorted.end());
-    unique_copy(sorted.begin(), sorted.end(), back_inserter(uniqueChars));
-    
+    std::unique_copy(sorted.begin(), sorted.end(), std::back_inserter(uniqueChars));
     return uniqueChars;
 }
