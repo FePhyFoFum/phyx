@@ -1,4 +1,4 @@
-//g++ -std=c++11 main_kaks.cpp utils.cpp utils.h kaks.cpp kaks.h sequence.h sequence.cpp seq_utils.h seq_utils.cpp superdouble.cpp superdouble.h -o pxkaks
+// this is essentially empty
 
 #include <iostream>
 #include <string>
@@ -7,26 +7,24 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "log.h"
 
 void print_help() {
-    cout << "Basic Positive selection test" << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxkaks [OPTION]... " << endl;
-    cout << endl;
-    cout << " -i, --inputf=FILE      name of codon aligned fasta, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE        name of output file, stout otherwise" << endl;
-    cout << "     --help             display this help and exit" << endl;
-    cout << "     --version          display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Basic Positive selection test" << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxkaks [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -i, --inputf=FILE      name of codon aligned fasta, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE        name of output file, stout otherwise" << std::endl;
+    std::cout << "     --help             display this help and exit" << std::endl;
+    std::cout << "     --version          display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxkaks 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxkaks 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -64,10 +62,10 @@ int main(int argc, char * argv[]){
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
-                cout << "Error in input try -h" << endl;
+                std::cout << "Error in input try -h" << std::endl;
                 exit(0);
         }
     }
@@ -76,22 +74,22 @@ int main(int argc, char * argv[]){
         check_inout_streams_identical(seqf, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (fileset == true) {
         fstr = new ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);

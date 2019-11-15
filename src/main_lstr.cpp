@@ -6,8 +6,6 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "tree_info.h"
 #include "tree_reader.h"
 #include "tree.h"
@@ -15,30 +13,30 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Print tree summary" << endl;
-    cout << "By default returns all properties. Alternatively choose 1 property." << endl;
-    cout << "This will take newick or nexus files" << endl;
-    cout << endl;
-    cout << "Usage: pxlstr [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -r, --rooted        return whether the tree is rooted" << endl;
-    cout << " -a, --age           return the height of root (must be rooted and ultrametric)" << endl;
-    cout << " -n, --ntips         return the number of terminals" << endl;
-    cout << " -u, --ultrametric   return whether tree is ultrametric" << endl;
-    cout << " -b, --binary        return whether tree is binary" << endl;
-    cout << " -l, --length        return the length of the tree" << endl;
-    cout << " -i, --tiplabels     return all tip labels (one per line)" << endl;
-    cout << " -v, --rtvar         return root-to-tip variance" << endl;
-    cout << " -o, --outf=FILE     output tree stats file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Print tree summary" << std::endl;
+    std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
+    std::cout << "This will take newick or nexus files" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxlstr [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -r, --rooted        return whether the tree is rooted" << std::endl;
+    std::cout << " -a, --age           return the height of root (must be rooted and ultrametric)" << std::endl;
+    std::cout << " -n, --ntips         return the number of terminals" << std::endl;
+    std::cout << " -u, --ultrametric   return whether tree is ultrametric" << std::endl;
+    std::cout << " -b, --binary        return whether tree is binary" << std::endl;
+    std::cout << " -l, --length        return the length of the tree" << std::endl;
+    std::cout << " -i, --tiplabels     return all tip labels (one per line)" << std::endl;
+    std::cout << " -v, --rtvar         return root-to-tip variance" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree stats file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxlstr 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxlstr 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -127,7 +125,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -140,37 +138,37 @@ int main(int argc, char * argv[]) {
     }
     
     if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck + namecheck) > 1) {
-        cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
+        std::cout << "Specify 1 property only (or leave blank to show all properties)" << std::endl;
         exit(0);
     }
 
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     if (fileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
 
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "this really only works with nexus or newick" << std::endl;
         exit(0);
     }
     
@@ -182,7 +180,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
                 if (!optionsset) {
-                    (*poos) << "tree #: " << treeCounter << endl;
+                    (*poos) << "tree #: " << treeCounter << std::endl;
                     TreeInfo ti(tree);
                     ti.get_stats(poos);
                     delete tree;
@@ -195,7 +193,7 @@ int main(int argc, char * argv[]) {
             }
         }
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -204,7 +202,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 if (!optionsset) {
-                    (*poos) << "tree #: " << treeCounter << endl;
+                    (*poos) << "tree #: " << treeCounter << std::endl;
                     TreeInfo ti(tree);
                     ti.get_stats(poos);
                     delete tree;
