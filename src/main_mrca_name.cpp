@@ -1,9 +1,4 @@
 /*
- * main_mrca_name.cpp
- *
-*/
-
-/*
  * The idea behind this is to allow for the naming of internal nodes based
  * on given MRCAS and a set of names in a file the input of which should
  * look like:
@@ -17,37 +12,33 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "node.h"
 #include "tree_reader.h"
-#include "string_node_object.h"
-#include "vector_node_object.h"
 #include "tree.h"
 #include "utils.h"
 #include "tree_utils.h"
 #include "log.h"
 
 void print_help() {
-    cout << "Label internal nodes with clade names." << endl;
-    cout << "Takes in newick tree and MRCA file with format:" << endl;
-    cout << "MRCANAME = tip1 tip2 ..." << endl;
-    cout << "If no MRCA file is present, this will label anything" << endl;
-    cout << "that isn't labeled" << endl;
-    cout << endl;
-    cout << "Usage: pxmrcaname [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input newick tree file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output newick file, stout otherwise" << endl;
-    cout << " -m, --mrca=FILE     file containing MRCA declarations" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Label internal nodes with clade names." << std::endl;
+    std::cout << "Takes in newick tree and MRCA file with format:" << std::endl;
+    std::cout << "MRCANAME = tip1 tip2 ..." << std::endl;
+    std::cout << "If no MRCA file is present, this will label anything" << std::endl;
+    std::cout << "that isn't labeled" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxmrcaname [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input newick tree file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output newick file, stout otherwise" << std::endl;
+    std::cout << " -m, --mrca=FILE     file containing MRCA declarations" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxmrcaname 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxmrcaname 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -96,7 +87,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -109,26 +100,26 @@ int main(int argc, char * argv[]) {
     }
     
     if (!mrcaset) {
-        cerr << "Because no file was provided, all the internal nodes" << endl;
-        cerr << "will be labeled" << endl;
+        std::cerr << "Because no file was provided, all the internal nodes" << std::endl;
+        std::cerr << "will be labeled" << std::endl;
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf, ios::app);
+        ofstr = new std::ofstream(outf, std::ios::app);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (fileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
@@ -140,17 +131,17 @@ int main(int argc, char * argv[]) {
        expecting (new) format:
        MRCANAME = tip1 tip2 ... 
     */
-    map<string, vector<string> > mrcas;
+    std::map<std::string, std::vector<std::string> > mrcas;
     if (mrcaset) {
-        ifstream inmrca(mrcaf);
-        string mrcaline;
+        std::ifstream inmrca(mrcaf);
+        std::string mrcaline;
         while (getline(inmrca, mrcaline)) {
             if (mrcaline.empty()) {
                 continue;
             }
-            vector<string> searchtokens;
+            std::vector<std::string> searchtokens;
             tokenize(mrcaline, searchtokens, "=");
-            string mrcaname = searchtokens[0];
+            std::string mrcaname = searchtokens[0];
             trim_spaces(mrcaname);
             searchtokens.erase(searchtokens.begin());
             searchtokens = tokenize(searchtokens[0]);
@@ -160,11 +151,10 @@ int main(int argc, char * argv[]) {
     }
     
 // collect tree(s)
-    
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "This really only works with nexus or newick" << endl;
+        std::cerr << "This really only works with nexus or newick" << std::endl;
         exit(0);
     }
     
@@ -176,11 +166,11 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
                 if(mrcaset){
-                    map<string, vector<string> >::iterator it;
+                    std::map<std::string, std::vector<std::string> >::iterator it;
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
-                        //cout << "Dealing with clade '" << (*it).first << "'" << endl;
+                        //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
-                            cout << "Check mrca file for typos." << endl;
+                            std::cout << "Check mrca file for typos." << std::endl;
                             exit (0);
                         }
                         Node * nd = tree->getMRCA((*it).second);
@@ -194,12 +184,12 @@ int main(int argc, char * argv[]) {
                         }
                     }
                 }
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }
     } else {
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -208,11 +198,11 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 if (mrcaset) {
-                    map<string, vector<string> >::iterator it;
+                    std::map<std::string, std::vector<std::string> >::iterator it;
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
-                        //cout << "Dealing with clade '" << (*it).first << "'" << endl;
+                        //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
-                            cout << "Check mrca file for typos." << endl;
+                            std::cout << "Check mrca file for typos." << std::endl;
                             exit (0);
                         }
                         Node * nd = tree->getMRCA((*it).second);
@@ -226,7 +216,7 @@ int main(int argc, char * argv[]) {
                         }
                     }
                 }
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }
