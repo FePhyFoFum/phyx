@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <cmath>
 
-using namespace std;
-
 #include "tree_reader.h"
 #include "tree.h"
 #include "tree_utils.h"
@@ -17,21 +15,21 @@ using namespace std;
 #include "log.h"
 
 void print_help () {
-    cout << "Birth-death inference" << endl;
-    cout << endl;
-    cout << "Usage: pxbdfit [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
-    cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Birth-death inference" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxbdfit [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
+    std::cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxbdfit 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxbdfit 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -54,7 +52,7 @@ int main(int argc, char * argv[]) {
     char * treef = NULL;
     char * outf = NULL;
     
-    string model = "bd";
+    std::string model = "bd";
     
     while (1) {
         int oi = -1;
@@ -80,7 +78,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -92,32 +90,32 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
 
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (tfileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "this really only works with nexus or newick" << std::endl;
         exit(0);
     }
     
@@ -133,13 +131,13 @@ int main(int argc, char * argv[]) {
                     bd.get_pars(poos);
                     delete tree;
                 } else {
-                    cout << "Tree is not ultrametric. Exiting." << endl;
+                    std::cout << "Tree is not ultrametric. Exiting." << std::endl;
                     exit(0);
                 }
             }
         }
     } if (ft == 0) {
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -153,7 +151,7 @@ int main(int argc, char * argv[]) {
                     bd.get_pars(poos);
                     delete tree;
                 } else {
-                    cout << "Tree is not ultrametric. Exiting." << endl;
+                    std::cout << "Tree is not ultrametric. Exiting." << std::endl;
                     exit(0);
                 }
             }

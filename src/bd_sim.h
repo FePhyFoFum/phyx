@@ -26,25 +26,25 @@ private:
     Node* root_;
     Tree* tree_;
     
-    mt19937 generator_;
+    std::mt19937 generator_;
     std::uniform_real_distribution<double> uniformDistrib_;
 
-    bool check_stop_conditions();
-    double time_to_next_event();
-    void event();
-    void node_death(Node *);
-    void node_birth(Node *);
-    void delete_dead_nodes();
-    void setup_parameters();
-    bool event_is_birth();
-    void delete_a_node(Node *);
-    double get_distance_from_tip(Node *innode);
-    void set_distance_to_tip();
+    bool check_stop_conditions ();
+    double time_to_next_event ();
+    void event ();
+    void node_death (Node *);
+    void node_birth (Node *);
+    void delete_dead_nodes ();
+    void setup_parameters ();
+    bool event_is_birth ();
+    void delete_a_node (Node *);
+    double get_distance_from_tip (Node *innode);
+    void set_distance_to_tip ();
 
 public:
-    BirthDeathSimulator();
-    BirthDeathSimulator(double estop, double tstop, double brate, double drate, int seed);
-    Tree * make_tree(bool);
+    BirthDeathSimulator ();
+    BirthDeathSimulator (double estop, double tstop, double brate, double drate, int seed);
+    Tree * make_tree (bool);
     //~BirthDeathSimulator();
 };
 

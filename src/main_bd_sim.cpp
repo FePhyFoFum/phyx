@@ -1,16 +1,9 @@
-/*
- * main_bd.cpp
- *
-*/
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "node.h"
 #include "tree_reader.h"
@@ -22,26 +15,26 @@ using namespace std;
 #include "log.h"
 
 void print_help () {
-    cout << "Birth-death simulator." << endl;
-    cout << endl;
-    cout << "Usage: pxbdsim [OPTION]... " << endl;
-    cout << endl;
-    cout << " -e, --extant=INT    number of extant species, alt to time" << endl;
-    cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
-    cout << " -b, --birth=DOUBLE  birth rate, default=1" << endl;
-    cout << " -d, --death=DOUBLE  death rate, default=0" << endl;
-    cout << " -n, --nreps=INT     number of replicates, default=1" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -s, --showd         show dead taxa" << endl;
-    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Birth-death simulator." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxbdsim [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -e, --extant=INT    number of extant species, alt to time" << std::endl;
+    std::cout << " -t, --time=INT      depth of the tree, alt to extant" << std::endl;
+    std::cout << " -b, --birth=DOUBLE  birth rate, default=1" << std::endl;
+    std::cout << " -d, --death=DOUBLE  death rate, default=0" << std::endl;
+    std::cout << " -n, --nreps=INT     number of replicates, default=1" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -s, --showd         show dead taxa" << std::endl;
+    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxbdsim 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+ std::string versionline("pxbdsim 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -92,14 +85,14 @@ int main(int argc, char * argv[]) {
             case 'b':
                 birth = string_to_float(optarg, "-b");
                 if (birth <= 0) {
-                    cout << "Birth rate must be > 0" << endl;
+                    std::cout << "Birth rate must be > 0" << std::endl;
                     exit(0);
                 }
                 break;
             case 'd':
                 death = string_to_float(optarg, "-d");
                 if (death < 0) {
-                    cout << "Death rate must be >= 0" << endl;
+                    std::cout << "Death rate must be >= 0" << std::endl;
                     exit(0);
                 }
                 break;
@@ -120,7 +113,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -129,34 +122,32 @@ int main(int argc, char * argv[]) {
     }
     
     if (ext == 0 && time == 0) {
-        cout << "you have to set -e or -t" << endl;
+        std::cout << "you have to set -e or -t" << std::endl;
         exit(0);
     }
     if (timeset && extantset) {
-        cout << "Set -e or -t, not both" << endl;
+        std::cout << "Set -e or -t, not both" << std::endl;
         exit(0);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
+     std::ostream * poos = NULL;
+     std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     BirthDeathSimulator bd(ext, time, birth, death, seed);
     for (int i = 0; i < nreps; i++) {
         Tree * bdtr = bd.make_tree(showd);
         if (bdtr->getExtantNodeCount() > 1) {
-            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
+            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << std::endl;
         } else {
-            (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << endl;
+            (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << std::endl;
         }
-        
-        
     }
     if (outfileset) {
         ofstr->close();
