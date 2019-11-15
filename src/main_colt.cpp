@@ -1,12 +1,10 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+#include <map>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "utils.h"
 #include "tree_reader.h"
@@ -15,24 +13,24 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Collapse edges with support below some threshold." << endl;
-    cout << "If annotated Nexus, may require passing in the support identifier (-s)." << endl;
-    cout << "This will take nexus and newick inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxcolt [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << endl;
-    cout << " -s, --sup=STRING    string identifying support values (if default fails)" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Collapse edges with support below some threshold." << std::endl;
+    std::cout << "If annotated Nexus, may require passing in the support identifier (-s)." << std::endl;
+    std::cout << "This will take nexus and newick inputs." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcolt [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << std::endl;
+    std::cout << " -s, --sup=STRING    string identifying support values (if default fails)" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxcolt 0.1\nCopyright (C) 2018 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxcolt 0.1\nCopyright (C) 2018 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -54,7 +52,7 @@ int main(int argc, char * argv[]) {
     bool supset = false;
     
     double threshold = 0.5;
-    string supstring = "";
+    std::string supstring = "";
     
     char * outf = NULL;
     char * treef = NULL;
@@ -74,7 +72,7 @@ int main(int argc, char * argv[]) {
             case 'l':
                 threshold = string_to_float(optarg, "-l");
                 if (threshold <= 0 || threshold > 1) {
-                    cout << "Specify proportional threshold: (0,1)." << endl;
+                    std::cout << "Specify proportional threshold: (0,1)." << std::endl;
                     exit(0);
                 }
                 break;
@@ -90,7 +88,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -102,26 +100,26 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (tfileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     Collapser tc (threshold);
@@ -130,10 +128,10 @@ int main(int argc, char * argv[]) {
         tc.set_sup_string(supstring);
     }
     
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "this really only works with nexus or newick" << std::endl;
         exit(0);
     }
     bool going = true;
@@ -143,12 +141,12 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
                 tc.collapse_edges(tree);
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -157,9 +155,9 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 if (!tree->hasNodeAnnotations()) {
-                    cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << endl;
+                    std::cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << std::endl;
                 }
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }
