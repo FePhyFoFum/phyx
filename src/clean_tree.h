@@ -2,6 +2,7 @@
 #define _CL_TR_H_
 
 #include "tree.h"
+#include "node.h"
 
 class CleanTree {
 private:

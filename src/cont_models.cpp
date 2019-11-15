@@ -12,7 +12,7 @@ using namespace arma;
 #include "constants.h" // for PI and E
 
 
-void calc_vcv(Tree * tree, mat & vcv) {
+void calc_vcv (Tree * tree, mat & vcv) {
     int numlvs = tree->getExternalNodeCount();
     vcv = mat(numlvs,numlvs);
     int count = 0;
@@ -33,13 +33,14 @@ void calc_vcv(Tree * tree, mat & vcv) {
     }
 }
 
+
 /*
  * get the MRCA
  * this calculates the typical algorithm for MRCA
  * can be a little slow, so probably best to use
  * getMRCAFromPath_forVCV
  */
-Node * getMRCA_forVCV(Node * curn1,Node * curn2) {
+Node * getMRCA_forVCV (Node * curn1,Node * curn2) {
     Node * mrca = NULL;
     //get path to root for first node
     std::vector<Node *> path1;
@@ -70,12 +71,13 @@ Node * getMRCA_forVCV(Node * curn1,Node * curn2) {
     return mrca;
 }
 
+
 /*
  * this saves a great deal of time as it takes the already
  * obtained path and finds the match with the second node
  */
 
-Node * getMRCAFromPath_forVCV(std::vector<Node *> * path1,Node * curn2) {
+Node * getMRCAFromPath_forVCV (std::vector<Node *> * path1,Node * curn2) {
     Node * mrca = NULL;
     Node * parent = curn2;
     bool x = true;
@@ -102,7 +104,7 @@ x should be a vector
 mu should be a vector
 sigma should be vcv with sigma already applied
  */
-double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma) {
+double norm_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
     unsigned int size = x.n_cols;
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET = det(sigma);
@@ -123,7 +125,8 @@ double norm_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma) {
     }
 }
 
-double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma) {
+
+double norm_log_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
     unsigned int size = x.n_cols;
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET;
@@ -148,11 +151,12 @@ double norm_log_pdf_multivariate(rowvec & x, rowvec & mu, mat & sigma) {
     }
 }
 
+
 /**
  * assumes that the characters are in get_cont_char and that the 
  * results will be in assocDoubleVector as val and valse
  */
-void calc_square_change_anc_states(Tree * tree, int index) {
+void calc_square_change_anc_states (Tree * tree, int index) {
     int df = 0;
     int count = 0;
     std::map<Node *,int> nodenum;
@@ -178,7 +182,8 @@ void calc_square_change_anc_states(Tree * tree, int index) {
     }
 }
 
-void calc_postorder_square_change(Node * node, std::map<Node *,int> & nodenum,
+
+void calc_postorder_square_change (Node * node, std::map<Node *,int> & nodenum,
     mat * fullMcp, mat * fullVcp, int index) {
     for (int i=0; i < node->getChildCount(); i++) {
         calc_postorder_square_change(node->getChild(i),nodenum,fullMcp,fullVcp,index);    
@@ -200,14 +205,15 @@ void calc_postorder_square_change(Node * node, std::map<Node *,int> & nodenum,
     }
 }
 
-double calc_bm_node_postorder(Node * node, int nch, double sigma) {
+
+double calc_bm_node_postorder (Node * node, int nch, double sigma) {
     double node_like = 0.;
-    for (int i=0;i<node->getChildCount();i++){
-        if(node->getChild(i)->isInternal()){
+    for (int i=0;i<node->getChildCount();i++) {
+        if(node->getChild(i)->isInternal()) {
            node_like += calc_bm_node_postorder(node->getChild(i),nch,sigma);
         }
     }
-    if (node->isInternal()){
+    if (node->isInternal()) {
         double ch1 = (*node->getChild(0)->getDoubleVector("val"))[nch];
         double ch2 = (*node->getChild(1)->getDoubleVector("val"))[nch];
         double ch = ch1 - ch2;
@@ -216,7 +222,7 @@ double calc_bm_node_postorder(Node * node, int nch, double sigma) {
         double bl = bl1 + bl2;
         double cur_like = ((-0.5)* ((log(2*M_PI*sigma))+(log(bl))+(pow(ch,2)/(sigma*bl))));
         node_like += cur_like;
-        if (node->isRoot() == false){
+        if (node->isRoot() == false) {
             (*node->getDoubleVector("val"))[nch] = ((bl2*ch1)+(bl1*ch2))/(bl);
             node->setBL(node->getBL()+((bl1*bl2)/(bl1+bl2)));
         }
@@ -224,16 +230,15 @@ double calc_bm_node_postorder(Node * node, int nch, double sigma) {
     return node_like;
 }
 
-double calc_bm_prune(Tree * tr, double sigma) {
+
+double calc_bm_prune (Tree * tr, double sigma) {
     int nchar = (*tr->getRoot()->getDoubleVector("val")).size();
     double tlike = 0;
     std::map<Node *, double> oldlen;
-    for (int i=0;i<tr->getNodeCount();i++){oldlen[tr->getNode(i)] = tr->getNode(i)->getBL();}
-    for (int i=0;i<nchar;i++){
-        for (int j=0;j<tr->getNodeCount();j++){tr->getNode(j)->setBL(oldlen[tr->getNode(j)]);}
+    for (int i=0;i<tr->getNodeCount();i++) {oldlen[tr->getNode(i)] = tr->getNode(i)->getBL();}
+    for (int i=0;i<nchar;i++) {
+        for (int j=0;j<tr->getNodeCount();j++) {tr->getNode(j)->setBL(oldlen[tr->getNode(j)]);}
         tlike += calc_bm_node_postorder(tr->getRoot(),i,sigma);
     }
     return tlike;
 }
-
-

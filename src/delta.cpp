@@ -1,11 +1,8 @@
-
 #include <math.h>
 #include <vector>
 #include <limits>
 #include <stdlib.h>
 #include <iostream>
-
-using namespace std;
 
 #include "gmpfrxx/gmpfrxx.h"
 #include <gsl/gsl_multimin.h>
@@ -19,7 +16,8 @@ using namespace std;
 
 Delta::Delta() {}
 
-double Delta::shift(double p, double s, int c, int l, int r) {
+
+double Delta::shift (double p, double s, int c, int l, int r) {
     if (p < 0 || s < 0 || p > PMAX || s > PMAX)
         return LARGE;
     double enp = exp(-p);
@@ -50,17 +48,18 @@ double Delta::shift(double p, double s, int c, int l, int r) {
     } catch( char * str ) {
         return LARGE;
     }
-    //cout << "bl:" << bigleft << "\tbr:"<< bigright << endl;
+    //std::cout << "bl:" << bigleft << "\tbr:"<< bigright << std::endl;
     return -(bigleft-bigright);
 }
+
 
 /*
  * use for over/underflow problems
  */
-
-double Delta::bigshift(double p, double s, int c, int l, int r) {
-    if (p < 0 || s < 0 || p > PMAX || s > PMAX)
-            return LARGE;
+double Delta::bigshift (double p, double s, int c, int l, int r) {
+    if (p < 0 || s < 0 || p > PMAX || s > PMAX) {
+        return LARGE;
+    }
     mpfr_class bp,bs,bc,bl,br;
     bp = p;bs = s;bc = c;bl = l;br = r;
     mpfr_class expnbp = exp(-bp);
@@ -91,21 +90,23 @@ double Delta::bigshift(double p, double s, int c, int l, int r) {
     } catch( char * str ) {
         return LARGE;
     }
-    //cout << "bl:" << bigleft << "\tbr:"<< bigright << endl;
+    //std::cout << "bl:" << bigleft << "\tbr:"<< bigright << std::endl;
     mpfr_class f = -(bigleft-bigright);
     double x = f.get_d();
     return x;
 }
 
-double Delta::cdf(double del) {
+
+double Delta::cdf (double del) {
     double pvalue = 1-gsl_cdf_gaussian_P(del, 1.3);
     return pvalue;
 }
 
-vector<double> Delta::delta(int l, int r,int o) {
+
+std::vector<double> Delta::delta (int l, int r, int o) {
     OptimizeShift os(this);
     os.setCLR(1,l+r,o);
-    vector<double> resout = os.optimize_shift();
+    std::vector<double> resout = os.optimize_shift();
     double out;
     if (l > 100 || r > 100 || o > 100) {
         out =  bigshift(resout[0],resout[1],1,l+r,o);
@@ -120,7 +121,7 @@ vector<double> Delta::delta(int l, int r,int o) {
     } else {
         in = shift(resout[0],resout[1],1,l,r);
     }
-    vector<double> ret;
+    std::vector<double> ret;
     ret.push_back(-(out-in));
     ret.push_back(cdf(-(out-in)));
     return ret;
@@ -129,11 +130,12 @@ vector<double> Delta::delta(int l, int r,int o) {
 
 OptimizeShift::OptimizeShift(Delta * delt):delta(delt),maxiterations(10000),stoppingprecision(0.001),c(0),l(0),r(0) {}
 
-void OptimizeShift::setCLR(int ce, int le, int ri) {
+
+void OptimizeShift::setCLR (int ce, int le, int ri) {
     c = ce; l = le; r = ri;
 }
 
-double OptimizeShift::GetShift(const gsl_vector * variables) {
+double OptimizeShift::GetShift (const gsl_vector * variables) {
     double p=gsl_vector_get(variables,0);
     double s=gsl_vector_get(variables,1);
     double shift;
@@ -149,13 +151,14 @@ double OptimizeShift::GetShift(const gsl_vector * variables) {
 }
 
 
-double OptimizeShift::GetShift_gsl(const gsl_vector * variables, void *obj) {
+double OptimizeShift::GetShift_gsl (const gsl_vector * variables, void *obj) {
     double temp;
     temp = ((OptimizeShift*)obj)->GetShift(variables);
     return temp;
 }
 
-vector<double> OptimizeShift::optimize_shift() {
+
+std::vector<double> OptimizeShift::optimize_shift () {
     //need to check the performance on this
     const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2rand;
     gsl_multimin_fminimizer *s = NULL;
@@ -169,7 +172,7 @@ vector<double> OptimizeShift::optimize_shift() {
     /* Set all step sizes to .01 */ //Note that it was originally 1
     gsl_vector_set_all (ss, 0.1);
     /* Starting point */
-    //cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<endl;
+    //std::cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<std::endl;
     x = gsl_vector_alloc (np);
     gsl_vector_set (x,0,0.5);
     gsl_vector_set (x,1,0.5);
@@ -196,8 +199,8 @@ vector<double> OptimizeShift::optimize_shift() {
         status = gsl_multimin_test_size (size, stoppingprecision); //since we want more precision
     }
     while (status == GSL_CONTINUE && iter < maxiterations);
-    //cout << "iterations:" << iter << endl;
-    vector<double> results;
+    //std::cout << "iterations:" << iter << std::endl;
+    std::vector<double> results;
     results.push_back(gsl_vector_get(s->x,0));
     results.push_back(gsl_vector_get(s->x,1));
     gsl_vector_free(x);
