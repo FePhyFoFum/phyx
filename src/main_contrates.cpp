@@ -18,21 +18,21 @@
 #include "log.h"
 
 void print_help() {
-    cout << "Continuous character rate estimation with Brownian and OU." << endl;
-    cout << "This will take fasta, phylip (and soon nexus) inputs." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxcontrates [OPTION]... " << endl;
-    cout << endl;
-    cout << " -c, --charf=FILE     input character file, stdin otherwise" << endl;
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
-    cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << endl;
-    cout << " -o, --outf=FILE      output sequence file, stout otherwise" << endl;
-    cout << " -h, --help           display this help and exit" << endl;
-    cout << " -V, --version        display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Continuous character rate estimation with Brownian and OU." << std::endl;
+    std::cout << "This will take fasta, phylip (and soon nexus) inputs." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcontrates [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -c, --charf=FILE     input character file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << std::endl;
+    std::cout << " -o, --outf=FILE      output sequence file, stout otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
 std::string versionline("pxcontrates 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
@@ -90,7 +90,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -117,7 +117,7 @@ int main(int argc, char * argv[]) {
         cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
-        cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
+        std::cout << "you have to set a character file. Only a tree file can be read in through the stream;" << std::endl;
     }
 
     //out file
@@ -125,13 +125,13 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poouts = ofstr;
     } else {
-        poouts = &cout;
+        poouts = &std::cout;
     }
 
     std::string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if (ft != 1 && ft != 2) {
-        cout << "only fasta and phylip (with spaces) supported so far" << endl;
+        std::cout << "only fasta and phylip (with spaces) supported so far" << std::endl;
         exit(0);
     }
     Sequence seq;
@@ -161,11 +161,11 @@ int main(int argc, char * argv[]) {
     
     //conduct analyses for each character
     for (int c=0; c < nchars; c++) {
-        cerr << "character: " << c << endl;
+        cerr << "character: " << c << std::endl;
         if (analysis == 0) {
-           // cout << "Input tree: " << getNewickString(trees[0]) << ";" << endl;
+           // std::cout << "Input tree: " << getNewickString(trees[0]) << ";" << std::endl;
             if (c == 0) {
-                (*poouts) << "#nexus" << endl << "begin trees;" << endl;
+                (*poouts) << "#nexus" << std::endl << "begin trees;" << std::endl;
             }
             for (unsigned int x = 0; x < trees.size(); x++){
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
@@ -201,10 +201,10 @@ int main(int argc, char * argv[]) {
                     //trees[x]->getExternalNode(i)->setName(s.str());
                 }
                 (*poouts) << "tree tree" << c << " = ";
-                (*poouts) << getNewickString(trees[x],"value") << endl;
+                (*poouts) << getNewickString(trees[x],"value") << std::endl;
             }
             if (c == (nchars - 1)) {
-                (*poouts) << "end;\n" << endl;
+                (*poouts) << "end;\n" << std::endl;
             }
             // remove annotations
             remove_annotations(trees[0]);
@@ -222,15 +222,15 @@ int main(int argc, char * argv[]) {
             std::vector<double> res = optimize_single_rate_bm_nlopt(x, vcv, true);
             double aic = (2*2)-(2*(-res[2]));
             double aicc = aic + ((2*2*(2+1))/(n-2-1));
-            cout << c << " BM " << " state: " << res[0] <<  " rate: " << res[1]
-                << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
+            std::cout << c << " BM " << " state: " << res[0] <<  " rate: " << res[1]
+                << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  std::endl;
 
             std::vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
             aic = (2*3)-(2*(-res2[3]));
             aicc = aic + ((2*3*(3+1))/(n-3-1));
-            cout << c << " OU " << " state: " << res2[0] <<  " rate: "
+            std::cout << c << " OU " << " state: " << res2[0] <<  " rate: "
                 << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3]
-                << " aic: " << aic << " aicc: " << aicc << endl;
+                << " aic: " << aic << " aicc: " << aicc << std::endl;
         }
     }
 

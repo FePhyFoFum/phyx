@@ -1,7 +1,4 @@
-/*
- * main_delta.cpp
- *
- */
+// this is not used
 
 #include <iostream>
 #include <fstream>
