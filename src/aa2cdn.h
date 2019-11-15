@@ -1,10 +1,3 @@
-/*
- * aatocdn.h
- *
- *  Created on: Jun 15, 2015
- *      Author: joe
- */
-
 #ifndef _AA_TO_CDN_H_
 #define _AA_TO_CDN_H_
 
@@ -19,9 +12,10 @@ private:
     std::string nucleotide_sequence_;
 
 public:
-    AAtoCDN();
-    std::map <std::string, std::string> convert_to_codons (std::map <std::string, std::string>& aa_sequences,
-    std::map <std::string, std::string>& nuc_sequences, bool& rm_last);
+    AAtoCDN ();
+    std::map <std::string, std::string> convert_to_codons (std::map <std::string,
+        std::string>& aa_sequences, std::map <std::string,
+        std::string>& nuc_sequences, bool& rm_last);
 };
 
 #endif /* _AA_TO_CDN_H_ */

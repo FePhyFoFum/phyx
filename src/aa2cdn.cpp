@@ -1,26 +1,18 @@
-/*
- * aatocdn.cpp
- *
- *  Created on: Jun 15, 2015
- *      Author: joe
- */
-
 #include <iostream>
 #include <string>
 #include <map>
 
-using namespace std;
-
 #include "aa2cdn.h"
 
-map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequences,
-    map<string, string>& nuc_sequences, bool& rm_last) {
+std::map<std::string, std::string> AAtoCDN::convert_to_codons(std::map<std::string,
+        std::string>& aa_sequences, std::map<std::string, std::string>& nuc_sequences,
+        bool& rm_last) {
     
     int len;
-    string temp = "";
+    std::string temp = "";
     for (iter_ = aa_sequences.begin(); iter_ != aa_sequences.end(); iter_++) {
         if (nuc_sequences.find(iter_ -> first) == nuc_sequences.end()) {
-            cout << "Only in the AA File: " << iter_ -> first << endl;
+            std::cout << "Only in the AA File: " << iter_ -> first << std::endl;
         } else {
             amino_acid_sequence_ = iter_ -> second;
             nucleotide_sequence_ = nuc_sequences[iter_ -> first];
@@ -46,7 +38,7 @@ map <string, string> AAtoCDN::convert_to_codons(map <string, string>& aa_sequenc
     return codon_sequences_;
 }
 
+
 AAtoCDN::AAtoCDN() {
     // TODO Auto-generated constructor stub
-
 }

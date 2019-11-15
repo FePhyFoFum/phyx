@@ -1,24 +1,9 @@
-/*
- * main_aatocdn.cpp
- *
- *  Created on: Jun 15, 2015
- *      Author: joe
- */
-
-
-//g++ -std=c++11 main_aatocdn.cpp aatocdn.cpp utils.cpp superdouble.cpp sequence.cpp seq_utils.cpp seq_reader.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
-//#include <vector>
-//#include <sstream>
-#include <iterator>
 #include <map>
-#include <iterator>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "aa2cdn.h"
 #include "utils.h"
@@ -27,24 +12,24 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Takes in AA alignment and unaligned Nucleotide file to give a Codon Alignment." << endl;
-    cout << "This will get rid of any sequences found in either only the Nucleotide or the Amino Acid Alignment" << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxaa2cdn [OPTION]... " << endl;
-    cout << endl;
-    cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
-    cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -r, --rmlastcdn     removes last codon                " << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Takes in AA alignment and unaligned Nucleotide file to give a Codon Alignment." << std::endl;
+    std::cout << "This will get rid of any sequences found in either only the Nucleotide or the Amino Acid Alignment" << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxaa2cdn [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta file, stout otherwise" << std::endl;
+    std::cout << " -r, --rmlastcdn     removes last codon                " << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxaa2cdn 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxaa2cdn 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -97,7 +82,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -113,51 +98,51 @@ int main(int argc, char * argv[]) {
     }
     
     if (!fileset) {
-        cout << "you must specify an input amino acid sequence file" << endl;
+        std::cout << "you must specify an input amino acid sequence file" << std::endl;
         exit(0);
     }
     if (!nucfileset) {
-        cout << "you must specify an input nucleotide sequence file" << endl;
+        std::cout << "you must specify an input nucleotide sequence file" << std::endl;
         exit(0);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
-    ifstream * nucfstr = NULL;
-    istream * nucpios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
+    std::ifstream * nucfstr = NULL;
+    std::istream * nucpios = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(aaseqf);
+        fstr = new std::ifstream(aaseqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (fileset == true) {
-        nucfstr = new ifstream(nucseqf);
+        nucfstr = new std::ifstream(nucseqf);
         nucpios = nucfstr;
     } else {
-        nucpios = &cin;
+        nucpios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     Sequence aa_seq, nuc_seq;
-    string retstring;
-    map<string, string> aa_sequences, nuc_sequences, codon_sequences;
+    std::string retstring;
+    std::map<std::string, std::string> aa_sequences, nuc_sequences, codon_sequences;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     while (read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
@@ -179,11 +164,12 @@ int main(int argc, char * argv[]) {
     }
 
     AAtoCDN functions;
-    map<string, string>::iterator iter;
+    std::map<std::string, std::string>::iterator iter;
     codon_sequences = functions.convert_to_codons(aa_sequences, nuc_sequences, rm_last);
     for (iter = codon_sequences.begin(); iter != codon_sequences.end(); iter++) {
-        *poos << ">" << iter -> first << "\n" << iter -> second << endl;
+        *poos << ">" << iter -> first << "\n" << iter -> second << std::endl;
     }
+    
     if (outfileset) {
         ofstr->close();
         delete poos;
