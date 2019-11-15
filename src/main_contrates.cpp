@@ -1,13 +1,10 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+#include <map>
 #include <cstring>
 #include <getopt.h>
-#include <map>
-
-using namespace std;
 
 #include "string_node_object.h"
 #include "utils.h"
@@ -15,6 +12,7 @@ using namespace std;
 #include "seq_reader.h"
 #include "tree_reader.h"
 #include "tree.h"
+#include "tree_utils.h"
 #include "cont_models.h"
 #include "optimize_cont_models_nlopt.h"
 #include "log.h"
@@ -37,7 +35,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxcontrates 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxcontrates 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -100,48 +98,45 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    istream * pios = NULL;
-    istream * poos = NULL;
-    ifstream * cfstr = NULL;
-    ifstream * tfstr = NULL;
+    std::istream * pios = NULL;
+    std::istream * poos = NULL;
+    std::ifstream * cfstr = NULL;
+    std::ifstream * tfstr = NULL;
 
-    ostream * poouts = NULL;
-    ofstream * ofstr = NULL;
+    std::ostream * poouts = NULL;
+    std::ofstream * ofstr = NULL;
     
-
     if (tfileset == true) {
-        tfstr = new ifstream(treef);
+        tfstr = new std::ifstream(treef);
         poos = tfstr;
     } else {
-        poos = &cin;
+        poos = &std::cin;
     }
 
     if (cfileset == true) {
-        cfstr = new ifstream(charf);
+        cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
         cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
     }
 
     //out file
-    //
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poouts = ofstr;
     } else {
         poouts = &cout;
     }
-    //
 
-    string retstring;
+    std::string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if (ft != 1 && ft != 2) {
         cout << "only fasta and phylip (with spaces) supported so far" << endl;
         exit(0);
     }
     Sequence seq;
-    vector <Sequence> seqs;
-    map <string, int> seq_map;
+    std::vector<Sequence> seqs;
+    std::map<std::string, int> seq_map;
     int y = 0;
     int nchars = 0 ;
     while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
@@ -159,7 +154,7 @@ int main(int argc, char * argv[]) {
     }
     //read trees
     TreeReader tr;
-    vector<Tree *> trees;
+    std::vector<Tree *> trees;
     while (getline(*poos,retstring)) {
         trees.push_back(tr.readTree(retstring));
     }
@@ -174,12 +169,12 @@ int main(int argc, char * argv[]) {
             }
             for (unsigned int x = 0; x < trees.size(); x++){
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
-                    vector<Superdouble> tv (1);
+                    std::vector<Superdouble> tv (1);
                     tv[0] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);
                     trees[x]->getExternalNode(i)->assocDoubleVector("val",tv);
                 }
                 for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
-                    vector<Superdouble> tv (1);
+                    std::vector<Superdouble> tv (1);
                     tv[0] = 0;
                     trees[x]->getInternalNode(i)->assocDoubleVector("val",tv);
                 }
@@ -189,7 +184,7 @@ int main(int argc, char * argv[]) {
                     trees[x]->getInternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
                     s.precision(9);
-                    s << fixed << tv;
+                    s << std::fixed << tv;
                     StringNodeObject nob(s.str());
                     trees[x]->getInternalNode(i)->assocObject("value",nob);
                     //trees[x]->getInternalNode(i)->setName(s.str());
@@ -199,7 +194,7 @@ int main(int argc, char * argv[]) {
                     trees[x]->getExternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
                     s.precision(9);
-                    s << fixed << tv;
+                    s << std::fixed << tv;
                     StringNodeObject nob(s.str());
                     trees[x]->getExternalNode(i)->assocObject("value",nob);
                     //s << fixed << trees[x]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
@@ -224,13 +219,13 @@ int main(int argc, char * argv[]) {
             for (int i=0; i < n; i++) {
                 x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
             }
-            vector<double> res = optimize_single_rate_bm_nlopt(x, vcv, true);
+            std::vector<double> res = optimize_single_rate_bm_nlopt(x, vcv, true);
             double aic = (2*2)-(2*(-res[2]));
             double aicc = aic + ((2*2*(2+1))/(n-2-1));
             cout << c << " BM " << " state: " << res[0] <<  " rate: " << res[1]
                 << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
 
-            vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
+            std::vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
             aic = (2*3)-(2*(-res2[3]));
             aicc = aic + ((2*3*(3+1))/(n-3-1));
             cout << c << " OU " << " state: " << res2[0] <<  " rate: "
