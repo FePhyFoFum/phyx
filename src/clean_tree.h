@@ -12,10 +12,10 @@ private:
     bool binary_tree_;
     bool has_branchlengths_;
     //double treelength_;
-    void clean_all();
+    void clean_all ();
 
 public:
-    CleanTree(Tree * intree);
+    CleanTree (Tree * intree);
 };
 
 #endif /* _CL_TR_H_ */

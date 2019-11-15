@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <cmath>
 
-using namespace std;
-
 #include "tree_reader.h"
 #include "tree.h"
 #include "tree_utils.h"
@@ -17,26 +15,26 @@ using namespace std;
 #include "log.h"
 
 void print_help () {
-    cout << "General tree cleaner." << endl;
-    cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << endl;
-    cout << "root edges to generate a 'vanilla' newick representation." << endl;
-    cout << "By default removes all properties. Alternatively choose 1 property." << endl;
-    cout << "This will take newick or nexus files" << endl;
-    cout << endl;
-    cout << "Usage: pxcltr [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
-    cout << " -r, --root          remove root edge (if present)" << endl;
-    cout << " -l, --labels        remove internal node labels" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "General tree cleaner." << std::endl;
+    std::cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << std::endl;
+    std::cout << "root edges to generate a 'vanilla' newick representation." << std::endl;
+    std::cout << "By default removes all properties. Alternatively choose 1 property." << std::endl;
+    std::cout << "This will take newick or nexus files" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcltr [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
+    std::cout << " -r, --root          remove root edge (if present)" << std::endl;
+    std::cout << " -l, --labels        remove internal node labels" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxcltr 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxcltr 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -93,7 +91,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -106,36 +104,36 @@ int main(int argc, char * argv[]) {
     }
     
     if ((removeroot + removelabels) > 1) {
-        cout << "Specify 1 property only (or leave blank to clean all)" << endl;
+        std::cout << "Specify 1 property only (or leave blank to clean all)" << std::endl;
         exit(0);
     }
     
-    istream* pios = NULL;
-    ostream* poos = NULL;
-    ifstream* fstr = NULL;
-    ofstream* ofstr = NULL;
+    std::istream* pios = NULL;
+    std::ostream* poos = NULL;
+    std::ifstream* fstr = NULL;
+    std::ofstream* ofstr = NULL;
 
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (tfileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
-        if (check_for_input_to_stream() == false){
+        pios = &std::cin;
+        if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "this really only works with nexus or newick" << std::endl;
         exit(0);
     }
     
@@ -146,12 +144,12 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
                 CleanTree ct(tree);
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -160,7 +158,7 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 CleanTree ct(tree);
-                (*poos) << getNewickString(tree) << endl;
+                (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }

@@ -4,8 +4,6 @@
 #include <cmath>
 #include <algorithm>
 
-using namespace std;
-
 #include "tree.h"
 #include "node.h"
 #include "tree_utils.h"
