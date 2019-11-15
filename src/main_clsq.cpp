@@ -1,17 +1,8 @@
-/*
- * main_clsq.cpp
- *
- *  Created on: Jun 15, 2015
- *      Author: joe
- */
-
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "clsq.h"
 #include "utils.h"
@@ -20,25 +11,25 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Cleans alignments by removing positions with too much ambiguous data." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << "Results are written in fasta format." << endl;
-    cout << endl;
-    cout << "Usage: pxclsq [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
-    cout << " -p, --prop=DOUBLE     proportion required to be present, default=0.5" << endl;
-    cout << " -a, --aminoacid       force interpret as protein (if inference fails)" << endl;
-    cout << " -v, --verbose         more verbose output (i.e. if entire seqs are removed)" << endl;
-    cout << " -h, --help            display this help and exit" << endl;
-    cout << " -V, --version         display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Cleans alignments by removing positions with too much ambiguous data." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxclsq [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE       output fasta file, stout otherwise" << std::endl;
+    std::cout << " -p, --prop=DOUBLE     proportion required to be present, default=0.5" << std::endl;
+    std::cout << " -a, --aminoacid       force interpret as protein (if inference fails)" << std::endl;
+    std::cout << " -v, --verbose         more verbose output (i.e. if entire seqs are removed)" << std::endl;
+    std::cout << " -h, --help            display this help and exit" << std::endl;
+    std::cout << " -V, --version         display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxclsq 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxclsq 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -93,7 +84,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -101,7 +92,7 @@ int main(int argc, char * argv[]) {
         }
     }
     if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
+        std::cout << "you must specify an input sequence file" << std::endl;
         exit(0);
     }
     
@@ -109,22 +100,22 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    istream * pios = NULL;
-    ifstream * fstr = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ifstream * fstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
