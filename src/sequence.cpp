@@ -6,10 +6,9 @@
  */
 
 #include <string>
+#include <vector>
 #include <iostream>
 #include <algorithm>
-
-using namespace std;
 
 #include "sequence.h"
 #include "utils.h"
@@ -19,7 +18,7 @@ using namespace std;
 Sequence::Sequence ():id_(), seq_(), length_(0), aligned_(), alphabet_(NA) {}
 
 
-Sequence::Sequence (string _id, string _seq, bool _aligned) {
+Sequence::Sequence (std::string _id, std::string _seq, bool _aligned) {
     id_ = _id;
     seq_ = _seq;
     length_ = seq_.size();
@@ -29,7 +28,7 @@ Sequence::Sequence (string _id, string _seq, bool _aligned) {
 
 
 // *** this doesn't seem to be used ***
-Sequence::Sequence (string _id, string _seq) {
+Sequence::Sequence (std::string _id, std::string _seq) {
     id_ = _id;
     seq_ = _seq;
     length_ = seq_.size();
@@ -44,7 +43,7 @@ seqAlpha Sequence::get_alpha () {
 }
 
 
-string Sequence::get_alpha_name () {
+std::string Sequence::get_alpha_name () {
     if (alphabet_ == NA) {
         infer_alpha();
     }
@@ -73,7 +72,7 @@ void Sequence::set_alpha (seqAlpha s) {
 // figure out the sequence type. for now, just DNA/AA
 // not perfect: for _very_ short AA seqs it is possible all chars are valid nuc chars
 void Sequence::infer_alpha () {
-    string str = seq_;
+    std::string str = seq_;
     
     // check for binary data
     if (check_binary_sequence(str)) {
@@ -107,10 +106,10 @@ void Sequence::infer_alpha () {
     str = string_to_upper(str);
     
     // iterate over unique characters
-    string uniqueChars = get_alphabet_from_sequence(str);
+    std::string uniqueChars = get_alphabet_from_sequence(str);
     
     for (size_t i=0; i < uniqueChars.length(); ++i) {
-        int num = count(str.begin(), str.end(), uniqueChars[i]);
+        int num = std::count(str.begin(), str.end(), uniqueChars[i]);
         if (is_prot_char(uniqueChars[i])) {
             proteinHit += num;
             validChars++;
@@ -153,12 +152,12 @@ bool Sequence::is_aligned () {
 }
 
 
-string Sequence::get_sequence () const {
+std::string Sequence::get_sequence () const {
     return seq_;
 }
 
 
-string Sequence::get_id() const {
+std::string Sequence::get_id () const {
     return id_;
 }
 
@@ -206,12 +205,12 @@ int Sequence::get_num_multistate_char () {
 }
 
 
-void Sequence::set_sequence (string _seq) {
+void Sequence::set_sequence (std::string _seq) {
     seq_ = _seq;
     length_ = seq_.size();
 }
 
-void Sequence::set_id (string _id) {
+void Sequence::set_id (std::string _id) {
     id_ = _id;
 }
 
@@ -221,25 +220,25 @@ void Sequence::set_aligned (bool _aligned) {
 }
 
 
-string Sequence::reverse_complement () {
-    string rcomp = seq_;
+std::string Sequence::reverse_complement () {
+    std::string rcomp = seq_;
     for (unsigned int i=0; i < rcomp.size(); i++) {
-        rcomp.replace(i,1,1,single_dna_complement(seq_[seq_.size()-i-1]));
+        rcomp.replace(i, 1, 1, single_dna_complement(seq_[seq_.size()-i-1]));
     }
     return rcomp;
 }
 
 
 void Sequence::perm_reverse_complement () {
-    string rcomp = seq_;
+    std::string rcomp = seq_;
     for (unsigned int i=0; i < rcomp.size(); i++) {
-        rcomp.replace(i,1,1,single_dna_complement(seq_[seq_.size()-i-1]));
+        rcomp.replace(i, 1, 1, single_dna_complement(seq_[seq_.size()-i-1]));
     }
     seq_ = rcomp;
 }
 
 
-void Sequence::set_qualstr (string & stri,int offset) {
+void Sequence::set_qualstr (std::string& stri, int offset) {
     qualarr_.clear();
     qualstr_ = stri;
     for (unsigned int i=0; i < stri.size(); i++) {
@@ -248,7 +247,7 @@ void Sequence::set_qualstr (string & stri,int offset) {
 }
 
 
-vector<double> Sequence::get_qualarr () {
+std::vector<double> Sequence::get_qualarr () {
     return qualarr_;
 }
 
@@ -258,8 +257,8 @@ double Sequence::get_qualarr_mean () {
 }
 
 
-string Sequence::get_fasta() {
-    string retstr;
+std::string Sequence::get_fasta() {
+    std::string retstr;
     retstr.append(">");
     retstr.append(id_);
     retstr.append("\n");
@@ -269,8 +268,8 @@ string Sequence::get_fasta() {
 }
 
 
-string Sequence::get_fasta (const bool& uppercase) {
-    string retstr;
+std::string Sequence::get_fasta (const bool& uppercase) {
+    std::string retstr;
     retstr.append(">");
     retstr.append(id_);
     retstr.append("\n");
@@ -284,8 +283,8 @@ string Sequence::get_fasta (const bool& uppercase) {
 }
 
 
-string Sequence::get_fastq () {
-    string retstr;
+std::string Sequence::get_fastq () {
+    std::string retstr;
     retstr.append("@");
     retstr.append(id_);
     retstr.append("\n");
@@ -298,7 +297,7 @@ string Sequence::get_fastq () {
 
 
 // returns a transformed copy in case original is to be retained
-string Sequence::seq_to_upper () {
-    string outseq = string_to_upper(seq_);
+std::string Sequence::seq_to_upper () {
+    std::string outseq = string_to_upper(seq_);
     return outseq;
 }
