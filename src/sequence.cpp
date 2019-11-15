@@ -16,68 +16,74 @@ using namespace std;
 #include "seq_utils.h"
 
 // this is the constructor almost always used
-Sequence::Sequence():id(), seq(), length(0), aligned(), alphabet(NA) {}
+Sequence::Sequence ():id_(), seq_(), length_(0), aligned_(), alphabet_(NA) {}
 
-Sequence::Sequence(string _id, string _seq, bool _aligned) {
-    id = _id;
-    seq = _seq;
-    length = seq.size();
-    aligned = _aligned;
+
+Sequence::Sequence (string _id, string _seq, bool _aligned) {
+    id_ = _id;
+    seq_ = _seq;
+    length_ = seq_.size();
+    aligned_ = _aligned;
     infer_alpha();
 }
 
+
 // *** this doesn't seem to be used ***
-Sequence::Sequence(string _id, string _seq) {
-    id = _id;
-    seq = _seq;
-    length = seq.size();
-    aligned = false;
+Sequence::Sequence (string _id, string _seq) {
+    id_ = _id;
+    seq_ = _seq;
+    length_ = seq_.size();
+    aligned_ = false;
     infer_alpha();
 }
 
+
 // *** this doesn't seem to be used ***
-seqAlpha Sequence::get_alpha() {
-    return alphabet;
+seqAlpha Sequence::get_alpha () {
+    return alphabet_;
 }
 
-string Sequence::get_alpha_name() {
-    if (alphabet == NA) {
+
+string Sequence::get_alpha_name () {
+    if (alphabet_ == NA) {
         infer_alpha();
     }
-    if (alphabet == DNA) {
+    if (alphabet_ == DNA) {
         return "DNA";
     }
-    if (alphabet == AA) {
+    if (alphabet_ == AA) {
         return "AA";
     }
-    if (alphabet == BINARY) {
+    if (alphabet_ == BINARY) {
         return "BINARY"; // i don't believe this _can_ be true atm
     }
-    if (alphabet == MULTI) {
+    if (alphabet_ == MULTI) {
         return "MULTI";
     }
     return "";
 }
 
+
 // *** this doesn't seem to be used ***
-void Sequence::set_alpha(seqAlpha s) {
-    alphabet = s;
+void Sequence::set_alpha (seqAlpha s) {
+    alphabet_ = s;
 }
+
 
 // figure out the sequence type. for now, just DNA/AA
 // not perfect: for _very_ short AA seqs it is possible all chars are valid nuc chars
 void Sequence::infer_alpha () {
-    string str = seq;
+    string str = seq_;
     
     // check for binary data
     if (check_binary_sequence(str)) {
-        alphabet = BINARY;
+        alphabet_ = BINARY;
         return;
     }
     
     // do quick check for 'standard' data: will contain numbers
     if (str.find_first_of("0123456789") != std::string::npos) {
-        alphabet = MULTI;
+        alphabet_ = MULTI;
         return;
     }
     
@@ -115,13 +121,14 @@ void Sequence::infer_alpha () {
         }
     }
     if (proteinHit > dnaHit) {
-        alphabet = AA;
+        alphabet_ = AA;
     } else if (proteinHit == dnaHit) {
-        alphabet = DNA;
+        alphabet_ = DNA;
     }
 }
 
-bool Sequence::is_dna_char (char & residue) {
+
+bool Sequence::is_dna_char (char& residue) {
     bool isDNA = false;
     std::size_t found = dnachars.find(residue);
     if (found != std::string::npos) {
@@ -130,7 +137,8 @@ bool Sequence::is_dna_char (char & residue) {
     return isDNA;
 }
 
-bool Sequence::is_prot_char (char & residue) {
+
+bool Sequence::is_prot_char (char& residue) {
     bool isAA = false;
     std::size_t found = protchars.find(residue);
     if (found != std::string::npos) {
@@ -140,136 +148,157 @@ bool Sequence::is_prot_char (char & residue) {
 }
 
 
-bool Sequence::is_aligned() {
-    return aligned;
+bool Sequence::is_aligned () {
+    return aligned_;
 }
 
-string Sequence::get_sequence() const {
-    return seq;
+
+string Sequence::get_sequence () const {
+    return seq_;
 }
+
 
 string Sequence::get_id() const {
-    return id;
+    return id_;
 }
 
-unsigned int Sequence::get_length() {
-    if (length == 0) {
-        length = seq.size();
+
+unsigned int Sequence::get_length () {
+    if (length_ == 0) {
+        length_ = seq_.size();
     }
-    return seq.size();
+    return seq_.size();
 }
 
-void Sequence::add_cont_char(double _num) {
-    cont_chars.push_back(_num);
+
+void Sequence::add_cont_char (double _num) {
+    cont_chars_.push_back(_num);
 }
 
-double Sequence::get_cont_char(int _index) {
-    return cont_chars[_index];
+
+double Sequence::get_cont_char (int _index) {
+    return cont_chars_[_index];
 }
 
-int Sequence::get_num_cont_char() {
-    return cont_chars.size();
+
+int Sequence::get_num_cont_char () {
+    return cont_chars_.size();
 }
 
-void Sequence::clear_cont_char() {
-    cont_chars.clear();
+
+void Sequence::clear_cont_char () {
+    cont_chars_.clear();
 }
+
 
 void Sequence::add_multistate_char(int _num) {
-    multistate_chars.push_back(_num);
+    multistate_chars_.push_back(_num);
 }
 
-int Sequence::get_multistate_char(int _index) {
-    return multistate_chars[_index];
+
+int Sequence::get_multistate_char (int _index) {
+    return multistate_chars_[_index];
 }
 
-int Sequence::get_num_multistate_char() {
-    return multistate_chars.size();
+
+int Sequence::get_num_multistate_char () {
+    return multistate_chars_.size();
 }
 
-void Sequence::set_sequence(string _seq) {
-    seq = _seq;
-    length = seq.size();
+
+void Sequence::set_sequence (string _seq) {
+    seq_ = _seq;
+    length_ = seq_.size();
 }
 
-void Sequence::set_id(string _id) {
-    id = _id;
+void Sequence::set_id (string _id) {
+    id_ = _id;
 }
 
-void Sequence::set_aligned(bool _aligned) {
-    aligned = _aligned;
+
+void Sequence::set_aligned (bool _aligned) {
+    aligned_ = _aligned;
 }
 
-string Sequence::reverse_complement() {
-    string rcomp = seq;
+
+string Sequence::reverse_complement () {
+    string rcomp = seq_;
     for (unsigned int i=0; i < rcomp.size(); i++) {
-        rcomp.replace(i,1,1,single_dna_complement(seq[seq.size()-i-1]));
+        rcomp.replace(i,1,1,single_dna_complement(seq_[seq_.size()-i-1]));
     }
     return rcomp;
 }
 
-void Sequence::perm_reverse_complement() {
-    string rcomp = seq;
+
+void Sequence::perm_reverse_complement () {
+    string rcomp = seq_;
     for (unsigned int i=0; i < rcomp.size(); i++) {
-        rcomp.replace(i,1,1,single_dna_complement(seq[seq.size()-i-1]));
+        rcomp.replace(i,1,1,single_dna_complement(seq_[seq_.size()-i-1]));
     }
-    seq = rcomp;
+    seq_ = rcomp;
 }
 
-void Sequence::set_qualstr(string & stri,int offset) {
-    qualarr.clear();
-    qualstr = stri;
+
+void Sequence::set_qualstr (string & stri,int offset) {
+    qualarr_.clear();
+    qualstr_ = stri;
     for (unsigned int i=0; i < stri.size(); i++) {
-        qualarr.push_back(((int)stri[i])-offset);
+        qualarr_.push_back(((int)stri[i])-offset);
     }
 }
 
-vector<double> Sequence::get_qualarr() {
-    return qualarr;
+
+vector<double> Sequence::get_qualarr () {
+    return qualarr_;
 }
 
-double Sequence::get_qualarr_mean() {
-    return mean(qualarr);
+
+double Sequence::get_qualarr_mean () {
+    return mean(qualarr_);
 }
+
 
 string Sequence::get_fasta() {
     string retstr;
     retstr.append(">");
-    retstr.append(id);
+    retstr.append(id_);
     retstr.append("\n");
-    retstr.append(seq);
+    retstr.append(seq_);
     retstr.append("\n");
     return retstr;
 }
 
-string Sequence::get_fasta(bool const& uppercase) {
+
+string Sequence::get_fasta (const bool& uppercase) {
     string retstr;
     retstr.append(">");
-    retstr.append(id);
+    retstr.append(id_);
     retstr.append("\n");
     if (uppercase) {
         retstr.append(seq_to_upper());
     } else {
-        retstr.append(seq);
+        retstr.append(seq_);
     }
     retstr.append("\n");
     return retstr;
 }
 
-string Sequence::get_fastq() {
+
+string Sequence::get_fastq () {
     string retstr;
     retstr.append("@");
-    retstr.append(id);
+    retstr.append(id_);
     retstr.append("\n");
-    retstr.append(seq);
+    retstr.append(seq_);
     retstr.append("\n+\n");
-    retstr.append(qualstr);
+    retstr.append(qualstr_);
     retstr.append("\n");
     return retstr;
 }
 
+
 // returns a transformed copy in case original is to be retained
 string Sequence::seq_to_upper () {
-    string outseq = string_to_upper(seq);
+    string outseq = string_to_upper(seq_);
     return outseq;
 }
