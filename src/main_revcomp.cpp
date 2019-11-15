@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <getopt.h>
 
-using namespace std;
 
 #include "seq_reader.h"
 #include "sequence.h"
@@ -18,26 +17,26 @@ using namespace std;
 #include "edlib.h"
 
 void print_help() {
-    cout << "Reverse complement sequences from nexus, phylip, or fastq to fasta." << endl;
-    cout << "Can read from stdin or file, but output is fasta." << endl;
-    cout << endl;
-    cout << "Usage: pxrevcomp [OPTION]... [FILE]..."<<endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<endl;
-    cout << " -i, --ids=IDS       a comma sep list of ids to flip (NO SPACES!)" << endl;
-    cout << " -g, --guess         EXPERIMENTAL: guess whether there are seqs that need to be " << endl;
-    cout << "                       rev comp. uses edlib library on first seq" << endl;
-    cout << " -p, --pguess        EXPERIMENTAL: progressively guess " << endl;
-    cout << " -m, --sguess        EXPERIMENTAL: sampled guess " << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<endl;
-    cout << " -h, --help          display this help and exit"<<endl;
-    cout << " -V, --version       display version and exit"<<endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+    std::cout << "Reverse complement sequences from nexus, phylip, or fastq to fasta." << std::endl;
+    std::cout << "Can read from stdin or file, but output is fasta." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxrevcomp [OPTION]... [FILE]..."<<std::endl;
+    std::cout << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<std::endl;
+    std::cout << " -i, --ids=IDS       a comma sep list of ids to flip (NO SPACES!)" << std::endl;
+    std::cout << " -g, --guess         EXPERIMENTAL: guess whether there are seqs that need to be " << std::endl;
+    std::cout << "                       rev comp. uses edlib library on first seq" << std::endl;
+    std::cout << " -p, --pguess        EXPERIMENTAL: progressively guess " << std::endl;
+    std::cout << " -m, --sguess        EXPERIMENTAL: sampled guess " << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<std::endl;
+    std::cout << " -h, --help          display this help and exit"<<std::endl;
+    std::cout << " -V, --version       display version and exit"<<std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
 }
 
-string versionline("pxrevcomp 0.11\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxrevcomp 0.11\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -52,11 +51,11 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-bool reverse_it_or_not(vector<Sequence> & seqs, Sequence comp_seq){
+bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
     int best_distance = 10000000;
     int best_dis_rev = 100000000;
-    string comp = comp_seq.get_sequence();
-    string revcomp = comp_seq.reverse_complement();
+    std::string comp = comp_seq.get_sequence();
+    std::string revcomp = comp_seq.reverse_complement();
     for (unsigned int i=0;i<seqs.size();i++){
         EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
@@ -88,7 +87,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     bool idsset = false;
-    vector<string> ids;
+    std::vector<std::string> ids;
     
     bool guess = false;
     bool pguess = false;
@@ -132,7 +131,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -144,8 +143,8 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    if (idsset == true){
-        vector<string> tokens2;
+    if (idsset == true) {
+        std::vector<std::string> tokens2;
         tokenize(idssc, tokens2, ",");
         for (unsigned int j=0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
@@ -153,29 +152,29 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     Sequence seq;
-    string retstring;
+    std::string retstring;
     int ft = test_seq_filetype_stream(*pios,retstring);
     if (guess == false){
         while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
@@ -192,7 +191,7 @@ int main(int argc, char * argv[]) {
         }
     }else{
        bool first = true;
-       vector<Sequence> done; //for pguess
+       std::vector<Sequence> done; //for pguess
        while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
            if (first == true){
                done.push_back(seq);
