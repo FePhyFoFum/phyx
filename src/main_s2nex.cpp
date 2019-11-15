@@ -1,15 +1,9 @@
-/*
- * main_stonex.cpp
- *
- */
-
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "utils.h"
 #include "seq_reader.h"
@@ -18,22 +12,22 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Convert seqfiles from nexus, phylip, or fastq to nexus." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxs2nex [OPTION]... [FILE]..." << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
-    cout << " -u, --uppercase     export characters in uppercase" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Convert seqfiles from nexus, phylip, or fastq to nexus." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxs2nex [OPTION]... [FILE]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
+    std::cout << " -u, --uppercase     export characters in uppercase" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxs2nex 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxs2nex 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -77,7 +71,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -89,30 +83,30 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    vector<Sequence> seqs;
+    std::vector<Sequence> seqs;
     Sequence seq;
-    string retstring;
+    std::string retstring;
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
 
     int ft = test_seq_filetype_stream(*pios, retstring);
