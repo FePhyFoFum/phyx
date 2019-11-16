@@ -1,9 +1,4 @@
 /*
- * main_TEST.cpp
- *
- */
-
-/*
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -17,7 +12,6 @@
 // g++ -std=c++11 main_test.cpp -o JWB_test
 
 //g++ -std=c++11 nj.cpp main_nj.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp log.cpp -o test
-
 
 using namespace std;
 

@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,10 +5,7 @@
 #include <cstring>
 #include <getopt.h>
 #include <algorithm>
-#include <set>
 #include <map>
-
-using namespace std;
 
 #include "tree.h"
 #include "tree_reader.h"
@@ -18,27 +14,25 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "This will trace a big tree given a taxon list and and produce newick" << endl;
-    cout << "Can read from stdin or file" << endl;
-    cout << endl;
-    cout << "Usage: pxtrt [OPTION]... [FILE]..."<<endl;
-    cout << endl;
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
-    cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << endl;
-    cout << " -f, --namesf=FILE    names in a file (each on a line)" << endl;
-    cout << " -c, --comp           take the complement (i.e. remove any taxa not in list)" << endl;
-    cout << " -o, --outf=FILE      output tree file, stout otherwise" << endl;
-    cout << " -s, --silent         suppress warnings of missing tips" << endl;
-    cout << " -h, --help           display this help and exit" << endl;
-    cout << " -V, --version        display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<endl;
+     std::cout << "This will trace a big tree given a taxon list and and produce newick" << std::endl;
+     std::cout << "Can read from stdin or file" << std::endl;
+     std::cout << std::endl;
+     std::cout << "Usage: pxtrt [OPTION]... [FILE]..."<<std::endl;
+     std::cout << std::endl;
+     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+     std::cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << std::endl;
+     std::cout << " -f, --namesf=FILE    names in a file (each on a line)" << std::endl;
+     std::cout << " -c, --comp           take the complement (i.e. remove any taxa not in list)" << std::endl;
+     std::cout << " -o, --outf=FILE      output tree file, stout otherwise" << std::endl;
+     std::cout << " -s, --silent         suppress warnings of missing tips" << std::endl;
+     std::cout << " -h, --help           display this help and exit" << std::endl;
+     std::cout << " -V, --version        display version and exit" << std::endl;
+     std::cout << std::endl;
+     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
+     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
 }
-/*
- * add you name if you contribute (probably add another line)
- */
-string versionline("pxtrt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+
+std::string versionline("pxtrt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -62,7 +56,7 @@ int main(int argc, char * argv[]) {
     bool complement = false;
     bool outfileset = false;
     bool silent = false;
-    vector<string> names;
+    std::vector<std::string> names;
 
     char * treef = NULL;
     char * outf = NULL;
@@ -103,7 +97,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                 std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -116,8 +110,8 @@ int main(int argc, char * argv[]) {
     }
     
     if (namesset == true) {
-        vector<string> tokens2;
-        string del2(",");
+        std::vector<std::string> tokens2;
+        std::string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
         for (unsigned int j=0; j < tokens2.size(); j++) {
@@ -125,52 +119,52 @@ int main(int argc, char * argv[]) {
             names.push_back(tokens2[j]);
         }
     } else if (namefileset == true) {
-        ifstream nfstr(namesfc);
-        string tline;
+        std::ifstream nfstr(namesfc);
+        std::string tline;
         while (getline(nfstr,tline)) {
             trim_spaces(tline);
             names.push_back(tline);
         }
         nfstr.close();
     } else {
-        cerr << "you need to set the names of the tips you want to remove (-n)" << endl;
+        std::cerr << "you need to set the names of the tips you want to remove (-n)" << std::endl;
         exit(0);
     }
 
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = & std::cout;
     }
     
     //read trees 
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "this really only works with nexus or newick" << std::endl;
         exit(0);
     }
     bool going = true;
     if (!complement) {
         if (ft == 0) {
             // nexus
-            map<string,string> translation_table;
+            std::map<std::string, std::string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
             Tree * tree;
@@ -179,11 +173,11 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        cout << "This only works with rooted trees. Exiting." << endl;
+                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     tree = get_induced_tree(tree, names, silent);
-                    (*poos) << getNewickString(tree) << endl;
+                    (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
                 }
             }
@@ -194,20 +188,20 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        cout << "This only works with rooted trees. Exiting." << endl;
+                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     tree = get_induced_tree(tree, names, silent);
-                    (*poos) << getNewickString(tree) << endl;
+                    (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
                 }
             }
         }
     } else {
         // don't assume all trees have the same leaf set
-        vector <string> toKeep;
+        std::vector <std::string> toKeep;
         if (ft == 0) {
-            map<string,string> translation_table;
+            std::map<std::string, std::string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
             Tree * tree;
@@ -216,13 +210,13 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        cout << "This only works with rooted trees. Exiting." << endl;
+                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
                         tree = get_induced_tree(tree, toKeep, silent);
-                        (*poos) << getNewickString(tree) << endl;
+                        (*poos) << getNewickString(tree) << std::endl;
                     }
                     delete tree;
                 }
@@ -233,13 +227,13 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        cout << "This only works with rooted trees. Exiting." << endl;
+                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
                         tree = get_induced_tree(tree, toKeep, silent);
-                        (*poos) << getNewickString(tree) << endl;
+                        (*poos) << getNewickString(tree) << std::endl;
                     }
                     delete tree;
                 }
