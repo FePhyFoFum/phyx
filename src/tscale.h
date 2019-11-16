@@ -11,9 +11,9 @@ private:
     
 public:
     TScale ();
-    void set_scalef(const double& scalef);
-    void set_rootheight(const double& rootheight);
-    void rescale(Tree * tr);
+    void set_scalef (const double& scalef);
+    void set_rootheight (const double& rootheight);
+    void rescale (Tree * tr);
 };
 
 #endif /* _TSCALE_H_ */

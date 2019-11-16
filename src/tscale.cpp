@@ -1,25 +1,24 @@
-
-
 #include "tscale.h"
 #include "tree.h"
 #include "utils.h"
 #include "tree_utils.h"
 
-using namespace std;
 
 TScale::TScale () {
-    
 }
 
-void TScale::set_scalef (double const& scalef) {
+
+void TScale::set_scalef (const double& scalef) {
     scalef_ = scalef;
     rootset_ = false;
 }
 
-void TScale::set_rootheight (double const& rootheight) {
+
+void TScale::set_rootheight (const double& rootheight) {
     rootheight_ = rootheight;
     rootset_ = true;
 }
+
 
 void TScale::rescale (Tree * tr) {
     if (rootset_) {
