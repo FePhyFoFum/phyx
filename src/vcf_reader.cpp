@@ -1,16 +1,18 @@
+#include <string>
+#include <vector>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 
-using namespace std;
-
 #include "vcf_reader.h"
 #include "utils.h"
 
-VcfReader::VcfReader(istream* pios) {
+VcfReader::VcfReader(std::istream* pios) {
     read_vcf(pios);
 }
-void VcfReader::read_vcf (istream* pios) {
+
+
+void VcfReader::read_vcf (std::istream* pios) {
     bool started = false;
     bool first = true;
     // these column numbers should be constant (i think?), but let's not leave anything to chance
@@ -19,15 +21,14 @@ void VcfReader::read_vcf (istream* pios) {
     int taxstartcol = 0;
     int ncols = 0;
     
-    string line;
-    
+    std::string line;
     while (getline(*pios, line)) {
-        vector <string> temp = tokenize(line);
+        std::vector<std::string> temp = tokenize(line);
         if (started) {
             // every line below the bottom header line should be site data
-            string refstate = temp[refcol];
-            string terp = temp[altcol];
-            vector <string> states = get_alts(terp);
+            std::string refstate = temp[refcol];
+            std::string terp = temp[altcol];
+            std::vector<std::string> states = get_alts(terp);
             // put all observed states in same vector
             states.insert(states.begin(), refstate);
             
@@ -60,7 +61,7 @@ void VcfReader::read_vcf (istream* pios) {
                             // here assuming taxa cols directly follow this column
                             read_taxa = true;
                             taxstartcol = i+1;
-                            //cout << endl << "Taxa:";
+                            //cout << std::endl << "Taxa:";
                         } else if (temp[i] =="REF") {
                             refcol = i;
                         } else if (temp[i] =="ALT") {
@@ -68,35 +69,40 @@ void VcfReader::read_vcf (istream* pios) {
                         }
                     }
                 }
-                //cout << endl;
+                //cout << std::endl;
                 started = true;
             }
         }
     }
     //cout << "Read in " << taxa_.size() << " taxa, each with " << seqs_[0].size()
-    //    << " characters." << endl;
+    //    << " characters." << std::endl;
 }
 
+
+
+// *** seems like a general function would be useful here 
+
 // split alt states on comma
-vector <string> VcfReader::get_alts (const string& str) {
-    vector<string> res;
-    stringstream ss(str);
+std::vector<std::string> VcfReader::get_alts (const std::string& str) {
+    std::vector<std::string> res;
+    std::stringstream ss(str);
     while(ss.good()) {
-        string substr;
+        std::string substr;
         getline(ss, substr, ',');
         res.push_back(substr);
     }
     return res;
 }
 
-void VcfReader::write_seqs (bool const& uppercase, ostream* poos) {
+
+void VcfReader::write_seqs (bool const& uppercase, std::ostream* poos) {
     for (unsigned int i = 0; i < taxa_.size(); i++) {
-        (*poos) << ">" << taxa_[i] << endl;
+        (*poos) << ">" << taxa_[i] << std::endl;
         if (uppercase) {
-            string terp = string_to_upper(seqs_[i]);
-            (*poos) << terp << endl;
+            std::string terp = string_to_upper(seqs_[i]);
+            (*poos) << terp << std::endl;
         } else {
-            (*poos) << seqs_[i] << endl;
+            (*poos) << seqs_[i] << std::endl;
         }
     }
 }
