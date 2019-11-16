@@ -3,21 +3,19 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace std;
-
 #include "utils.h"
 #include "sequence.h"
 #include "sstat.h"
 
 
-MultinomialSeqStat::MultinomialSeqStat (vector<Sequence> & seqs) {
+MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs) {
     seqs_ = seqs;
     num_taxa_ = seqs.size();
     
-    //cout << "Read in " << num_taxa_ << " sequences!" << endl;
+    //std::cout << "Read in " << num_taxa_ << " sequences!" << std::endl;
     
     if (!checked_aligned()) {
-        cout << "Cannot calculate statistic as sequences are not aligned. Exiting." << endl;
+        std::cout << "Cannot calculate statistic as sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
     
@@ -25,9 +23,10 @@ MultinomialSeqStat::MultinomialSeqStat (vector<Sequence> & seqs) {
     calculateTestStatistic();
 }
 
+
 bool MultinomialSeqStat::checked_aligned () {
     bool is_aligned_ = true;
-    vector <int> seq_lengths (num_taxa_, 0);
+    std::vector<int> seq_lengths (num_taxa_, 0);
     
     // gather all lengths
     for (int i = 0; i < num_taxa_; i++) {
@@ -41,15 +40,15 @@ bool MultinomialSeqStat::checked_aligned () {
     } else {
         is_aligned_ = false;
     }
-    
     return is_aligned_;
 }
 
+
 void MultinomialSeqStat::collect_site_patters () {
-    vector <string> inputPatterns;
+    std::vector<std::string> inputPatterns;
     for (int i = 0; i < num_char_; i++) {
         char a = seqs_[0].get_sequence().at(i);
-        string pat(1, a);
+        std::string pat(1, a);
         for (int j = 1; j < num_taxa_; j++) {
             char residue = seqs_[j].get_sequence().at(i);
             pat += residue;
@@ -64,8 +63,8 @@ void MultinomialSeqStat::collect_site_patters () {
     bool siteMatched = true;
     
 // Iterate from first site to last site
-    for (vector<string>::const_iterator iterSites = inputPatterns.begin(); iterSites < inputPatterns.end(); ++iterSites) {
-        string currentPattern = *iterSites;
+    for (std::vector<std::string>::const_iterator iterSites = inputPatterns.begin(); iterSites < inputPatterns.end(); ++iterSites) {
+        std::string currentPattern = *iterSites;
         int currentPatternCount = 1;
         
 // Check if pattern n+1 == pattern n; if so, update count, test next site; if not, log current count/pattern; MUCH FASTER!!
@@ -85,11 +84,12 @@ void MultinomialSeqStat::collect_site_patters () {
             }
         }
 // No need to check against stored sites, as vector has been sorted in function 'getInputPatterns'
-        patterns_and_counts_.push_back(make_pair(currentPattern, currentPatternCount));
+        patterns_and_counts_.push_back(std::make_pair(currentPattern, currentPatternCount));
         numUniquePatterns++;
     }
-    //cout << "Found " << numUniquePatterns << " unique site patterns." << endl;
+    //std::cout << "Found " << numUniquePatterns << " unique site patterns." << std::endl;
 }
+
 
 // Calculate T(X) test statistic
 void MultinomialSeqStat::calculateTestStatistic () {
@@ -112,16 +112,17 @@ void MultinomialSeqStat::calculateTestStatistic () {
     }
     tempResult = (double)num_char_*(log(num_char_));
     /*
-        cout << "'numIncludedChar*log(numIncludedChar)' calculated as: " << tempResult << endl;
-        cout << "'final sum' is: " << finalResult << endl;
-        cout << "'numIncludedChar' is: " << num_char_ << endl;
-        cout << "'log(numIncludedChar)' is: " << log(num_char_) << endl;
+        std::cout << "'numIncludedChar*log(numIncludedChar)' calculated as: " << tempResult << std::endl;
+        std::cout << "'final sum' is: " << finalResult << std::endl;
+        std::cout << "'numIncludedChar' is: " << num_char_ << std::endl;
+        std::cout << "'log(numIncludedChar)' is: " << log(num_char_) << std::endl;
     */
     finalResult = finalResult - tempResult;
-    //cout << numPatterns << " distinct site patterns. T(X) = " << finalResult << endl;
+    //std::cout << numPatterns << " distinct site patterns. T(X) = " << finalResult << std::endl;
     
     test_statistic_ = finalResult;
 }
+
 
 double MultinomialSeqStat::get_test_statistic () {
     return test_statistic_;

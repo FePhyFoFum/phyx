@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <utility>
 
 #include "sequence.h"
 
@@ -16,13 +15,13 @@ private:
     std::vector<Sequence> seqs_;
     std::vector< std::pair <std::string, int> > patterns_and_counts_;
     
-    bool checked_aligned();
-    void collect_site_patters();
-    void calculateTestStatistic();
+    bool checked_aligned ();
+    void collect_site_patters ();
+    void calculateTestStatistic ();
     
 public:
-    MultinomialSeqStat(std::vector<Sequence>& seqs);
-    double get_test_statistic();
+    MultinomialSeqStat (std::vector<Sequence>& seqs);
+    double get_test_statistic ();
     
     //~MultinomialSeqStat();
 };
