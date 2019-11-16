@@ -1,15 +1,9 @@
-/*
- * main_strec.cpp
- *
- */
-
 #include <getopt.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
-
-using namespace std;
+#include <set>
 
 #include "node.h"
 #include "tree_reader.h"
@@ -28,31 +22,29 @@ using namespace std;
 
 
 void print_help() {
-    cout << "This will conduct state reconstruction analyses." << endl;
-    cout << endl;
-    cout << "Usage: pxstrec [OPTION]... [FILE]..." << endl;
-    cout << endl;
-    cout << " -d, --dataf=FILE    input data file" <<endl;
-    cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<endl;
-    cout << " -z, --dataz         data is in probability format (0,1,0,0)" << endl;
-    cout << " -t, --treef=FILE    input tree file" << endl;
-    cout << " -c, --conf=FILE     configuration file" << endl;
-    cout << " -o, --outanc=FILE   output file for ancestral calc" << endl;
-    cout << " -n, --outstnum=FILE output file for stochastic mapping number" << endl;
-    cout << " -a, --outstnumany=FILE output file for stochastic mapping number any" << endl;
-    cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << endl;
-    cout << " -p, --periods=NUMS  comma separated times" << endl;
-    cout << " -l, --logf=FILE     log file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "This will conduct state reconstruction analyses." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxstrec [OPTION]... [FILE]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << " -d, --dataf=FILE    input data file" <<std::endl;
+    std::cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<std::endl;
+    std::cout << " -z, --dataz         data is in probability format (0,1,0,0)" << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file" << std::endl;
+    std::cout << " -c, --conf=FILE     configuration file" << std::endl;
+    std::cout << " -o, --outanc=FILE   output file for ancestral calc" << std::endl;
+    std::cout << " -n, --outstnum=FILE output file for stochastic mapping number" << std::endl;
+    std::cout << " -a, --outstnumany=FILE output file for stochastic mapping number any" << std::endl;
+    std::cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << std::endl;
+    std::cout << " -p, --periods=NUMS  comma separated times" << std::endl;
+    std::cout << " -l, --logf=FILE     log file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-/*
- * add you name if you contribute (probably add another line)
- */
-string versionline("pxstrec 0.2\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+
+std::string versionline("pxstrec 0.2\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -72,26 +64,26 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-bool checkdata(Tree * intree, vector<Sequence> runseqs);
-bool checkdata(Tree * intree, vector<Sequence> runseqs) {
-    vector<string> ret;
-    set<string> seqnames;
-    set<string> treenames;
+bool checkdata(Tree * intree, std::vector<Sequence> runseqs);
+bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
+    std::vector<std::string> ret;
+    std::set<std::string> seqnames;
+    std::set<std::string> treenames;
     for (int i=0; i < intree->getExternalNodeCount(); i++) {
         treenames.insert(intree->getExternalNode(i)->getName());
     }
     for (unsigned int i=0; i < runseqs.size(); i++) {
         seqnames.insert(runseqs[i].get_id());
     }
-    vector<string> v(treenames.size()+seqnames.size());
-    vector<string>::iterator it;
+    std::vector<std::string> v(treenames.size()+seqnames.size());
+    std::vector<std::string>::iterator it;
     it=set_difference (seqnames.begin(), seqnames.end(), treenames.begin(), treenames.end(), v.begin());
     if (int(it-v.begin()) > 0) {
         cerr << "there are " << int(it - v.begin()) << " taxa that have the wrong names.\n";
     }
     for (it=v.begin() ; it != v.end(); it++) {
         if ((*it).size() > 1) {
-            cout << *it << endl;
+            std::cout << *it << std::endl;
         }
     }
     return seqnames == treenames;
@@ -120,9 +112,9 @@ int main(int argc, char * argv[]) {
     char * outnum = NULL;
     char * outnumany = NULL;
     char * outtime = NULL;
-    string periodstring;
-    vector<string> ptokens;
-    vector<double> period_times;
+    std::string periodstring;
+    std::vector<std::string> ptokens;
+    std::vector<double> period_times;
     
     while (1) {
         int oi = -1;
@@ -182,7 +174,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -190,45 +182,45 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ofstream * logout = NULL;
-    ostream * loos = NULL;
+    std::ofstream * logout = NULL;
+    std::ostream * loos = NULL;
     
     if (logfileset == true) {
-        logout = new ofstream(logf);
+        logout = new std::ofstream(logf);
         loos = logout;
     } else {
         loos = &cout;
     }
 
     if (conffileset == false) {
-        cerr << "right now, you need to have a conf file. to change soon." << endl;
+        cerr << "right now, you need to have a conf file. to change soon." << std::endl;
         print_help();
         exit(0);
     }
 
     bool verbose = true;
-    string outfile_stochnum_any ="";
-    string ratematrixfile = "";
-    vector<vector<double> > ratematrix;
+    std::string outfile_stochnum_any ="";
+    std::string ratematrixfile = "";
+    std::vector<std::vector<double> > ratematrix;
     bool estimate = true;
-    map<string,vector<string> > mrcas;
-    vector<string> stochtime;
-    vector<string> stochnumber;
-    vector<string> stochnumber_any;
-    vector<string> ancstates;
-    string freeparams = "_one_"; //right now, just _all_ or _one_
+    std::map<std::string, std::vector<std::string> > mrcas;
+    std::vector<std::string> stochtime;
+    std::vector<std::string> stochnumber;
+    std::vector<std::string> stochnumber_any;
+    std::vector<std::string> ancstates;
+    std::string freeparams = "_one_"; //right now, just _all_ or _one_
 
     /*************
      * read the configuration file
      **************/
-    ifstream ifs(conff);
-    string line;
+    std::ifstream ifs(conff);
+    std::string line;
     while (getline(ifs, line)) {
         if (line.size() > 1) {
             if (strcmp( (&line[0]), "#") != 0) {
             //if ((&line[0]) != "#") {
-                vector<string> tokens;
-                string del("=");
+                std::vector<std::string> tokens;
+                std::string del("=");
                 tokens.clear();
                 tokenize(line, tokens, del);
                 for (unsigned int j=0; j < tokens.size(); j++) {
@@ -249,39 +241,39 @@ int main(int argc, char * argv[]) {
                      * need to make sure that the mrca exist in the tree, 
                      * that the names are correct
                      */
-                    vector<string> searchtokens;
+                    std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
                     for (unsigned int j=0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                     }
-                    vector<string> mrc;
+                    std::vector<std::string> mrc;
                     for (unsigned int j=1; j < searchtokens.size(); j++) {
                         mrc.push_back(searchtokens[j]);
                     }
                     mrcas[searchtokens[0]] = mrc;
                 } else if (!strcmp(tokens[0].c_str(), "stochtime")) {
-                    vector<string> searchtokens;
+                    std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
                     for (unsigned int j=0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         stochtime.push_back(searchtokens[j]);
                     }
                 } else if (!strcmp(tokens[0].c_str(), "stochnumber")) {
-                    vector<string> searchtokens;
+                    std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
                     for (unsigned int j=0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         stochnumber.push_back(searchtokens[j]);
                     }
                 } else if (!strcmp(tokens[0].c_str(), "stochnumber_any")) {
-                    vector<string> searchtokens;
+                    std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
                     for (unsigned int j=0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         stochnumber_any.push_back(searchtokens[j]);
                     }
                 } else if (!strcmp(tokens[0].c_str(), "ancstates")) {
-                    vector<string> searchtokens;
+                    std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
                     for (unsigned int j=0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
@@ -292,20 +284,20 @@ int main(int argc, char * argv[]) {
         }
     }
     if (verbose) {
-        (*loos) << "finished reading config file" << endl;
+        (*loos) << "finished reading config file" << std::endl;
     }
     /**
      * read the data file
      */
 
-    vector<Sequence> seqs;
+    std::vector<Sequence> seqs;
     Sequence seq;
-    ifstream * fstr = new ifstream(dataf);
-    istream * pios = fstr;
+    std::ifstream * fstr = new std::ifstream(dataf);
+    std::istream * pios = fstr;
     line = "";
     int ft = test_seq_filetype_stream(*pios,line);
     while (read_next_seq_from_stream(*pios,ft,line,seq)) {
-    //(*loos) << seq.get_sequence() << endl;
+    //(*loos) << seq.get_sequence() << std::endl;
         seqs.push_back(seq);
     }
     //fasta has a trailing one
@@ -313,17 +305,17 @@ int main(int argc, char * argv[]) {
         seqs.push_back(seq);
     }
     if (verbose) {
-        (*loos) << "taxa: " << seqs.size() << endl;
+        (*loos) << "taxa: " << seqs.size() << std::endl;
     }
 
     /**
      * read the tree file
      */
     TreeReader tr;
-    vector<Tree *> trees;
-    ifstream infile2(treef);
+    std::vector<Tree *> trees;
+    std::ifstream infile2(treef);
     if (!infile2) {
-        cerr << "Could not open treefile." << endl;
+        cerr << "Could not open treefile." << std::endl;
         return 1;
     }
     line = "";
@@ -334,7 +326,7 @@ int main(int argc, char * argv[]) {
     }
     infile2.close();
     if (verbose) {
-        (*loos) << "trees: "<< trees.size() << endl;
+        (*loos) << "trees: "<< trees.size() << std::endl;
     }
     
     /**
@@ -349,24 +341,24 @@ int main(int argc, char * argv[]) {
         if (dataz == false) {
             nstates = seqs[0].get_sequence().length();
         } else {
-            vector<string> searchtokens;
+            std::vector<std::string> searchtokens;
             tokenize(seqs[0].get_sequence(), searchtokens, ",");
             nstates = searchtokens.size();
         }
         nsites = 1;
     } else {
         int maxstate=1;
-        vector<string> searchtokens;
+        std::vector<std::string> searchtokens;
         tokenize(seqs[0].get_sequence(), searchtokens, " ");
         for (unsigned int j=0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         nsites = searchtokens.size();
         if (verbose) {
-            (*loos) << "nsites: " << nsites << endl;
+            (*loos) << "nsites: " << nsites << std::endl;
         }
         for (unsigned int se = 0;se<seqs.size();se++) {
-            searchtokens = vector<string> ();
+            searchtokens = std::vector<std::string> ();
             tokenize(seqs[se].get_sequence(), searchtokens, "     ");
             for (unsigned int j=0; j < searchtokens.size(); j++) {
                 trim_spaces(searchtokens[j]);
@@ -379,18 +371,17 @@ int main(int argc, char * argv[]) {
         nstates = maxstate+1;//TODO this can be determined by largest number +1
     }
     if (verbose) {
-        (*loos) << "total number of states in dataset: " << nstates << endl;
+        (*loos) << "total number of states in dataset: " << nstates << std::endl;
     }
     //reading ratematrixfile
     if (ratematrixfile.size() > 1) {
         ratematrix = processRateMatrixConfigFile(ratematrixfile,nstates);
     }
     //end ratematrixfile
-
-    ofstream ancout;
-    ofstream stnumout;
-    ofstream sttimeout;
-    ofstream sttnumout_any;
+    std::ofstream ancout;
+    std::ofstream stnumout;
+    std::ofstream sttimeout;
+    std::ofstream sttnumout_any;
     
     if (ancstates.size() > 0 && outancfileset == true) {
         ancout.open(outanc,ios::out);
@@ -398,7 +389,7 @@ int main(int argc, char * argv[]) {
         for (int i=0; i < nstates; i++) {
             ancout << "\tstate_" << i+1;
         }
-        ancout << endl;
+        ancout << std::endl;
     }
     if (stochnumber.size() > 0 && outstochnumfileset == true) {
         stnumout.open(outnum,ios::out);
@@ -410,7 +401,7 @@ int main(int argc, char * argv[]) {
                 }
             }
         }
-        stnumout << endl;
+        stnumout << std::endl;
     }
     if (stochtime.size() > 0 && outstochtimefileset == true ) {
         sttimeout.open(outtime,ios::out);
@@ -418,34 +409,34 @@ int main(int argc, char * argv[]) {
         for (int i=0; i < nstates; i++) {
             sttimeout << "\tstate_" << i+1;
         }
-        sttimeout << endl;
+        sttimeout << std::endl;
     }
     if (stochnumber_any.size() > 0 && outstochnumanyfileset == true) {
         sttnumout_any.open(outnumany,ios::out);
         sttnumout_any << "site\ttree\tMRCA\tlnL";
         sttnumout_any << "\tanystate";
-        sttnumout_any << endl;
+        sttnumout_any << std::endl;
     }
     
     for (int n = 0; n < nsites; n++) {
-        (*loos) << "site: " << n+1 << endl;
+        (*loos) << "site: " << n+1 << std::endl;
         /*
          * this converts the data and is a little long to accomodate datasets
          * with sites that don't have all the states but the results can still
          * be printed to the same outfile for analysis after
          */
         //need to put the data into a wide view
-        vector<Sequence> runseqs;
+        std::vector<Sequence> runseqs;
         int nstates_site_n;
-        vector<int> existing_states(nstates,0);
+        std::vector<int> existing_states(nstates,0);
         if (datawide == false) {
             for (unsigned int se = 0;se<seqs.size();se++) {
-                vector<string> searchtokens;
+                std::vector<std::string> searchtokens;
                 tokenize(seqs[se].get_sequence(), searchtokens, "     ");
                 for (unsigned int j=0; j < searchtokens.size(); j++) {
                     trim_spaces(searchtokens[j]);
                 }
-                string tseqs(nstates,'0');
+                std::string tseqs(nstates,'0');
                 if (searchtokens[n]=="?") {
                     for (int mse = 0; mse < nstates; mse++) {
                     tseqs.replace(mse,1,"1");
@@ -494,14 +485,14 @@ int main(int argc, char * argv[]) {
         }
 
         if (verbose) {
-            (*loos) <<"states: " << nstates_site_n << endl;
+            (*loos) <<"states: " << nstates_site_n << std::endl;
             (*loos) << "trees: ";
         }
         for (unsigned int i=0; i < trees.size(); i++) {
             if (verbose) {
-                (*loos) << i << endl;
+                (*loos) << i << std::endl;
             }
-            vector<RateModel> rms;
+            std::vector<RateModel> rms;
             RateModel rm(nstates_site_n);
             StateReconstructor sr(rm,rms);
             rm.setup_P(0.1,false);
@@ -517,7 +508,7 @@ int main(int argc, char * argv[]) {
             sr.set_store_p_matrices(false);
             Tree * tree = trees[i];
             if (verbose) {
-                (*loos) << "tips: "<< tree->getExternalNodeCount() << endl;
+                (*loos) << "tips: "<< tree->getExternalNodeCount() << std::endl;
             }
             sr.set_tree(tree);
             if (periodsset == true) {
@@ -534,7 +525,7 @@ int main(int argc, char * argv[]) {
                 same = sr.set_tip_conditionals_already_given(runseqs);
             }
             if (same == true) {
-                (*loos) << "skipping calculation" <<endl;
+                (*loos) << "skipping calculation" <<std::endl;
                 continue;
             }
             double finallike; Superdouble totlike_sd;
@@ -556,11 +547,11 @@ int main(int argc, char * argv[]) {
                     }
                 }
                 if (verbose) {
-                    (*loos) << free_var << endl;
-                    (*loos) << ct << endl;
+                    (*loos) << free_var << std::endl;
+                    (*loos) << ct << std::endl;
                 }
                 rm.neg_p = false;
-                cout << "likelihood: " << sr.eval_likelihood() << endl;
+                std::cout << "likelihood: " << sr.eval_likelihood() << std::endl;
                 //estimating the optimal rates
                 if (estimate) {//optimize
                     optimize_sr_nlopt(&rm,&sr,&free_var,ct);
@@ -573,16 +564,16 @@ int main(int argc, char * argv[]) {
                 }
                 //end estimating
                 if (verbose) {
-                    (*loos) << free_var << endl;
+                    (*loos) << free_var << std::endl;
                 }
                 rm.setup_Q(free_var);
                 sr.set_store_p_matrices(true);
                 finallike = sr.eval_likelihood();
                 if (verbose) {
-                    (*loos) << "final_likelihood: " << finallike << endl;
+                    (*loos) << "final_likelihood: " << finallike << std::endl;
                 }
             } else { //optimize with periods
-                vector<mat> periods_free_var(period_times.size());
+                std::vector<mat> periods_free_var(period_times.size());
                 int ct = 0;
                 if (freeparams == "_one_") {
                     ct = 1;
@@ -607,19 +598,19 @@ int main(int argc, char * argv[]) {
                 }
                 if (verbose) {
                     for (unsigned int s=0; s < period_times.size(); s++) {
-                        (*loos) << periods_free_var[s] << endl;
+                        (*loos) << periods_free_var[s] << std::endl;
                     }
-                    (*loos) << ct << endl;
+                    (*loos) << ct << std::endl;
                 }
                 rm.neg_p = false;
-                cout << "likelihood: " << sr.eval_likelihood() << endl;
+                std::cout << "likelihood: " << sr.eval_likelihood() << std::endl;
                 optimize_sr_periods_nlopt(&rms,&sr,&periods_free_var,ct);
                 if (verbose) {
                     for (unsigned int s=0; s < period_times.size(); s++) {
-                        (*loos) << periods_free_var[s] << endl;
+                        (*loos) << periods_free_var[s] << std::endl;
                     }
-                    (*loos) << ct << endl;
-                    cout << "////////////////////////" << endl;
+                    (*loos) << ct << std::endl;
+                    std::cout << "////////////////////////" << std::endl;
                 }
                 for (unsigned int s=0; s < period_times.size(); s++) {
                     rms[s].setup_Q(periods_free_var[s]);
@@ -627,18 +618,18 @@ int main(int argc, char * argv[]) {
                 sr.set_store_p_matrices(true);
                 finallike = sr.eval_likelihood();
                 if (verbose) {
-                    (*loos) << "final_likelihood: " << finallike << endl;
+                    (*loos) << "final_likelihood: " << finallike << std::endl;
                 }
-                cout << "period set and so no ancestral states just yet" << endl;
+                std::cout << "period set and so no ancestral states just yet" << std::endl;
                 continue;
             }
             if (verbose) {
-                (*loos) << "ancestral states" <<endl;
+                (*loos) << "ancestral states" <<std::endl;
             }
             sr.prepare_ancstate_reverse();
             for (unsigned int j=0; j < ancstates.size(); j++) {
             if (ancstates[j] == "_all_") {
-                vector<Superdouble> lhoods;
+                std::vector<Superdouble> lhoods;
                 for (int l=0; l < tree->getInternalNodeCount(); l++) {
                     lhoods = sr.calculate_ancstate_reverse_sd(*tree->getInternalNode(l));
                     totlike_sd = calculate_vector_Superdouble_sum(lhoods);
@@ -661,11 +652,11 @@ int main(int argc, char * argv[]) {
                     out << high;
                     tree->getInternalNode(l)->setName(out.str());
                 }
-                ancout << getNewickString(tree) << endl;
+                ancout << getNewickString(tree) << std::endl;
             } else {
-                vector<Superdouble> lhoods;
+                std::vector<Superdouble> lhoods;
                 if (verbose) {
-                    (*loos) <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  endl;
+                    (*loos) <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  std::endl;
                 }
                 ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
                 lhoods = sr.calculate_ancstate_reverse_sd(*tree->getMRCA(mrcas[ancstates[j]]));
@@ -691,22 +682,22 @@ int main(int argc, char * argv[]) {
                 if (neg == true) {
                     exit(0);
                 }
-                ancout <<endl;
+                ancout <<std::endl;
                 if (verbose) {
-                    (*loos) << endl;
+                    (*loos) << std::endl;
                 }
             }
             }
             if (verbose) {
-                (*loos) << endl;
-                (*loos) << "stochastic time" << endl;
+                (*loos) << std::endl;
+                (*loos) << "stochastic time" << std::endl;
             }
 
             for (unsigned int j=0; j < stochtime.size(); j++) {
             if (tree->getMRCA(mrcas[stochtime[j]])->isRoot() == false) {
-                vector<double> lhoods;
+                std::vector<double> lhoods;
                 if (verbose) {
-                    (*loos)  << "mrca: " << stochtime[j] <<  endl;
+                    (*loos)  << "mrca: " << stochtime[j] <<  std::endl;
                 }
                 sttimeout << n+1 << "\t" << i+1 << "\t" << stochtime[j]<< "\t" << finallike;
                 bool neg = false;
@@ -715,7 +706,7 @@ int main(int argc, char * argv[]) {
                     if (existing_states[k]==1) {
                         sr.prepare_stochmap_reverse_all_nodes(excount,excount);
                         sr.prepare_ancstate_reverse();
-                        vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]),true);
+                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]),true);
                         double tnum = sum(stoch)/double(totlike_sd);
                         double bl = tree->getMRCA(mrcas[stochtime[j]])->getBL();
                         if (verbose) {
@@ -734,9 +725,9 @@ int main(int argc, char * argv[]) {
                     }
 
                 }
-                sttimeout << endl;
+                sttimeout << std::endl;
                 if (verbose) {
-                    (*loos) << endl;
+                    (*loos) << std::endl;
                 }
                 if (neg == true) {
                     exit(0);
@@ -744,14 +735,14 @@ int main(int argc, char * argv[]) {
             }
             }
             if (verbose) {
-                (*loos) << endl;
-                (*loos) << "stochastic number" << endl;
+                (*loos) << std::endl;
+                (*loos) << "stochastic number" << std::endl;
             }
             for (unsigned int j=0; j < stochnumber.size(); j++) {
                 if (tree->getMRCA(mrcas[stochnumber[j]])->isRoot() == false) {
-                    vector<double> lhoods;
+                    std::vector<double> lhoods;
                     if (verbose) {
-                        (*loos) << "mrca: " << stochnumber[j] <<  endl;
+                        (*loos) << "mrca: " << stochnumber[j] <<  std::endl;
                     }
                     stnumout << n+1 << "\t" << i+1 << "\t" << stochnumber[j]<< "\t" << finallike;
                     bool neg = false;
@@ -768,7 +759,7 @@ int main(int argc, char * argv[]) {
                                     } else {
                                         sr.prepare_stochmap_reverse_all_nodes(excount,excount2);
                                         sr.prepare_ancstate_reverse();
-                                        vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]),false);
+                                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]),false);
                                         double tnum = sum(stoch)/totlike_sd;
                                         if (verbose) {
                                             (*loos) << tnum << " ";
@@ -787,7 +778,7 @@ int main(int argc, char * argv[]) {
                                 }
                             }
                             if (verbose) {
-                                (*loos) << endl;
+                                (*loos) << std::endl;
                             }
                             excount += 1;
                         } else {
@@ -804,13 +795,13 @@ int main(int argc, char * argv[]) {
                                 }
                             }
                             if (verbose) {
-                                (*loos) << endl;
+                                (*loos) << std::endl;
                             }
                         }
                     }
-                    stnumout << endl;
+                    stnumout << std::endl;
                     if (verbose) {
-                        (*loos) << endl;
+                        (*loos) << std::endl;
                     }
                     if (neg == true) {
                         exit(0);
@@ -818,10 +809,10 @@ int main(int argc, char * argv[]) {
                 }
             }
             if (verbose) {
-                (*loos) << endl;
+                (*loos) << std::endl;
             }
             if (verbose) {
-                (*loos) << "stochastic number (any)" << endl;
+                (*loos) << "stochastic number (any)" << std::endl;
             }
             if (stochnumber_any.size() > 0) {
                 sr.prepare_stochmap_reverse_all_nodes_all_matrices();
@@ -829,21 +820,21 @@ int main(int argc, char * argv[]) {
             }
             for (unsigned int j=0; j < stochnumber_any.size(); j++) {
                 if (tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot() == false) {
-                    vector<double> lhoods;
+                    std::vector<double> lhoods;
                     if (verbose) {
-                        (*loos) <<"node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  endl;
+                        (*loos) <<"node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  std::endl;
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
-                    vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]),false);
+                    std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]),false);
                     double tnum = sum(stoch)/totlike_sd;
-                    //(*loos) << sum(stoch)<< " "<<totlike << endl;
+                    //(*loos) << sum(stoch)<< " "<<totlike << std::endl;
                     if (verbose) {
                         (*loos) << tnum << " " ;
                     }
                     sttnumout_any << "\t" << tnum;
-                    sttnumout_any << endl;
+                    sttnumout_any << std::endl;
                     if (verbose) {
-                        (*loos) << endl;
+                        (*loos) << std::endl;
                     }
                 }
             }
