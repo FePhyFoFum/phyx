@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,8 +6,6 @@
 #include <getopt.h>
 #include <map>
 
-using namespace std;
-
 #include "tree.h"
 #include "tree_reader.h"
 #include "utils.h"
@@ -16,23 +13,21 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "This will convert a tree file to newick." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxt2new [OPTION]... [FILE]..." << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "This will convert a tree file to newick." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxt2new [OPTION]... [FILE]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-/*
- * add you name if you contribute (probably add another line)
- */
-string versionline("pxt2new 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+
+std::string versionline("pxt2new 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -71,7 +66,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                 std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -84,36 +79,36 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (fileset == true ) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = & std::cout;
     }
     
     //read trees 
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0) {
-        cerr << "this really only converts nexus." << endl;
+        std::cerr << "this really only converts nexus." << std::endl;
         exit(0);
     }
-    map <string, string> translation_table;
+    std::map<std::string, std::string> translation_table;
     bool ttexists;
     ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
     bool going = true;
@@ -122,7 +117,7 @@ int main(int argc, char * argv[]) {
         tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
             &translation_table, &going);
         if (going == true) {
-            (*poos) << getNewickString(tree) << endl;
+            (*poos) << getNewickString(tree) << std::endl;
             delete tree;
         }
     }
