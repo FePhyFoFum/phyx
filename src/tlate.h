@@ -9,8 +9,8 @@ private:
     std::map<std::string, std::string> table_;
     
 public:
-    TLATE(const std::string& table);
-    std::string translate(std::string& dna);
+    TLATE (const std::string& table);
+    std::string translate (std::string& dna);
     //virtual ~tlate();
 };
 

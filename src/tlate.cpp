@@ -1,14 +1,7 @@
-/*
- * tlate.cpp
- *
- *  Created on: Jun 16, 2015
- *      Author: joe
- */
-
+#include <string>
 #include <map>
 #include <algorithm>
-
-using namespace std;
+#include <iostream>
 
 #include "tlate.h"
 #include "utils.h"
@@ -19,7 +12,7 @@ using namespace std;
 // hard-coded translation tables //
 
 // uses standard code (https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG1)
-map <string, string> standard_ = {
+std::map<std::string, std::string> standard_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -86,8 +79,9 @@ map <string, string> standard_ = {
     {"GGG", "G"}
 };
 
+
 // https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG2
-map <string, string> vert_mtdna_ = {
+std::map<std::string, std::string> vert_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -154,8 +148,9 @@ map <string, string> vert_mtdna_ = {
     {"GGG", "G"}
 };
 
+
 // https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG3
-map <string, string> yeast_mtdna_ = {
+std::map<std::string, std::string> yeast_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -220,7 +215,8 @@ map <string, string> yeast_mtdna_ = {
     {"GGG", "G"}
 };
 
-map <string, string> invert_mtdna_ = {
+
+std::map<std::string, std::string> invert_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -287,14 +283,15 @@ map <string, string> invert_mtdna_ = {
     {"GGG", "G"}
 };
 
+
 /*******************************************************/
 
-string TLATE::translate (string& dna) {
 
-    string codon = "";
-    string AminoAcid = "";
-    string residue;
-    string AA;
+std::string TLATE::translate (std::string& dna) {
+    std::string codon = "";
+    std::string AminoAcid = "";
+    std::string residue;
+    std::string AA;
     
     dna = string_to_upper(dna);
     
@@ -311,7 +308,8 @@ string TLATE::translate (string& dna) {
     return AminoAcid;
 }
 
-TLATE::TLATE (string const& table) {
+
+TLATE::TLATE (const std::string& table) {
     // where the translation table is set
     if (table == "std") {
         table_ = standard_;
@@ -322,7 +320,7 @@ TLATE::TLATE (string const& table) {
     } else if (table == "ivmt") {
         table_ = invert_mtdna_;
     } else {
-        cout << "Table argument '" << table << "' not recognized. Exiting." << endl;
+        std::cout << "Table argument '" << table << "' not recognized. Exiting." << std::endl;
         exit(0);
     }
 }
