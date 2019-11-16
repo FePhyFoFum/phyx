@@ -1,10 +1,3 @@
-/*
- * seqgen.h
- *
- *  Created on: Jun 23, 2015
- *      Author: joe
- */
-
 #ifndef _SEQ_GEN_H_
 #define _SEQ_GEN_H_
 
@@ -50,7 +43,7 @@ private:
     static std::string nucleotides_;
     static std::string amino_acids_;
     
-    mt19937 generator_;
+    std::mt19937 generator_;
     std::uniform_real_distribution<float> uniformDistrib_;
     std::gamma_distribution<float> gammaDistrib_;
     
@@ -65,32 +58,32 @@ private:
     std::vector<Sequence> res;
     
     // los funciones
-    void print_node_labels();
-    void label_internal_nodes();
-    void preorder_tree_traversal();
+    void print_node_labels ();
+    void label_internal_nodes ();
+    void preorder_tree_traversal ();
     //std::vector<float> site_rates;
-    std::vector< std::vector<double> > calculate_q_matrix();
-    std::vector< std::vector<double> > calcQmatrix(std::vector< std::vector<double> >);
-    std::vector< std::vector<double> > calculate_p_matrix(const std::vector< std::vector<double> >& QMatrix,
+    std::vector< std::vector<double> > calculate_q_matrix ();
+    std::vector< std::vector<double> > calcQmatrix (std::vector< std::vector<double> >);
+    std::vector< std::vector<double> > calculate_p_matrix (const std::vector< std::vector<double> >& QMatrix,
         float br);
-    std::string simulate_sequence(const std::string& anc, std::vector< std::vector<double> >& Matrix,
+    std::string simulate_sequence (const std::string& anc, std::vector< std::vector<double> >& Matrix,
         const float& brlength);
-    std::string generate_random_sequence();
-    std::vector< std::vector<double> > construct_rate_matrix(const std::vector<double>& rates);
-    void check_valid_sequence();
-    float get_uniform_random_deviate();
-    float get_gamma_random_deviate(float);
-    std::vector<float> set_site_rates();
+    std::string generate_random_sequence ();
+    std::vector< std::vector<double> > construct_rate_matrix (const std::vector<double>& rates);
+    void check_valid_sequence ();
+    float get_uniform_random_deviate ();
+    float get_gamma_random_deviate (float);
+    std::vector<float> set_site_rates ();
     
 public:
-    SequenceGenerator(const int&seqlength, const std::vector<double>& basefreq,
+    SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
         std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
         const int& nreps, const int& seed, const float& alpha, const float& pinvar,
         const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
         const std::vector<double>& aabasefreq, const bool& is_dna);
     
     // return results
-    std::vector<Sequence> get_sequences();
+    std::vector<Sequence> get_sequences ();
 };
 
 #endif /* _SEQ_GEN_H_ */

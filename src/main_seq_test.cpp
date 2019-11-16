@@ -1,13 +1,6 @@
-/*
- * main_seq_test.cpp
- *
- */
-
 #include <iostream>
 #include <fstream>
 #include <string>
-
-using namespace std;
 
 #include "utils.h"
 #include "seq_reader.h"
@@ -15,10 +8,10 @@ using namespace std;
 int main(int argc, char * argv[]) {
 
     if (argc > 2 || argc == 1) {
-        cout << "usage: pxseqtest file" << endl;
+        std::cout << "usage: pxseqtest file" << std::endl;
         exit(0);
     }
 
-    cout << test_seq_filetype(argv[1]) << endl;
+    std::cout << test_seq_filetype(argv[1]) << std::endl;
     return EXIT_SUCCESS;
 }

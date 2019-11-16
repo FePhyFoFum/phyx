@@ -1,19 +1,12 @@
-/*
- * seqgen.cpp
- *
- *  Created on: Jun 23, 2015
- *      Author: joe
- */
-
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <nlopt.hpp>
 #include <armadillo>
 #include <random>
 #include <numeric>
 
-using namespace std;
 //using namespace arma;
 using arma::randn;
 using arma::mat;
@@ -39,17 +32,17 @@ using arma::expmat;
 
 // this should enable easy changing of order, if desired
 
-map <char, int> SequenceGenerator::nuc_map_ = {
+std::map<char, int> SequenceGenerator::nuc_map_ = {
    {'A', 0},
    {'C', 1},
    {'G', 2},
    {'T', 3}
 };
 
-string SequenceGenerator::nucleotides_ = "ACGT";
-string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
+std::string SequenceGenerator::nucleotides_ = "ACGT";
+std::string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
 
-map <char, int> SequenceGenerator::aa_map_ = {
+std::map<char, int> SequenceGenerator::aa_map_ = {
 
    {'A', 0},
    {'R', 1},
@@ -74,7 +67,7 @@ map <char, int> SequenceGenerator::aa_map_ = {
 };
 
 /*
-map <char, int> SequenceGenerator::nucMap = {
+std::map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
    {'T', 1},
    {'C', 2},
@@ -83,11 +76,11 @@ map <char, int> SequenceGenerator::nucMap = {
 string SequenceGenerator::nucleotides = "ATCG";
 */
  
-SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> const& basefreq,
-    vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-    int const& nreps, int const& seed, float const& alpha, float const& pinvar, 
-    string const& ancseq, bool const& printpost, vector<double> const& multirates,
-    vector <double> const& aabasefreq, bool const& is_dna):tree_(tree),
+SequenceGenerator::SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
+    std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
+    const int& nreps, const int& seed, const float& alpha, const float& pinvar,
+    const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
+    const std::vector<double>& aabasefreq, const bool& is_dna):tree_(tree),
     seqlen_(seqlength), nreps_(nreps), seed_(seed), alpha_(alpha), pinvar_(pinvar),
     root_sequence_(ancseq), base_freqs_(basefreq), aa_freqs_(aabasefreq), rmatrix_(rmatrix), 
     multi_rates_(multirates), show_ancs_(showancs), print_node_labels_(printpost),
@@ -95,9 +88,9 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
     /*
      for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
-            cout << rmatrix[i][j] << " ";
+            std::cout << rmatrix[i][j] << " ";
         }
-        cout << "\n";
+        std::cout << "\n";
     }*/
     initialize();
     if (is_dna_) {
@@ -119,18 +112,18 @@ SequenceGenerator::SequenceGenerator (int const &seqlength, vector <double> cons
 void SequenceGenerator::initialize () {
     // set the number generator being used
     if (seed_ != -1) { // user provided seed
-        generator_ = mt19937(seed_);
+        generator_ = std::mt19937(seed_);
     } else {
-        generator_ = mt19937(get_clock_seed());
+        generator_ = std::mt19937(get_clock_seed());
     }
     
     // construct uniform distribution from which random numbers will be generated
     // this happens to be the default distribution, but good to be explicit
-    uniformDistrib_ = uniform_real_distribution<float>(0.0, 1.0);
+    uniformDistrib_ = std::uniform_real_distribution<float>(0.0, 1.0);
     
     // construct gamma distribution (if necessary)
     if (alpha_ != -1.0) {
-        gammaDistrib_ = gamma_distribution<float>(alpha_, (1/alpha_));
+        gammaDistrib_ = std::gamma_distribution<float>(alpha_, (1/alpha_));
     }
     
     if (show_ancs_) {
@@ -155,12 +148,12 @@ void SequenceGenerator::initialize () {
 /* Use the P matrix probabilities and randomly draw numbers to see
  * if each individual state will undergo some type of change
  */
-string SequenceGenerator::simulate_sequence (string const& anc, 
-    vector < vector <double> >& QMatrix, float const& brlength) {
+std::string SequenceGenerator::simulate_sequence (const std::string& anc, 
+    std::vector < std::vector<double> >& QMatrix, const float& brlength) {
     std::vector<double>::iterator low;
-    vector < vector <double> > PMatrix(nstates_, vector <double>(nstates_, 0.0));
+    std::vector < std::vector<double> > PMatrix(nstates_, std::vector<double>(nstates_, 0.0));
     //int ancChar = 0;
-    string newstring = anc; // instead of building, set size and replace
+    std::string newstring = anc; // instead of building, set size and replace
     for (int i = 0; i < seqlen_; i++) {
         float RandNumb = get_uniform_random_deviate();
         int ancChar = 0;
@@ -168,13 +161,13 @@ string SequenceGenerator::simulate_sequence (string const& anc,
             ancChar = nuc_map_[anc[i]];
         } else {
             ancChar = aa_map_[anc[i]];
-            //cout << ancChar << endl;
+            //std::cout << ancChar << std::endl;
         }
         float brnew = brlength * site_rates_[i];
         PMatrix = calculate_p_matrix(QMatrix, brnew);
         for (int i = 0; i < nstates_; i++) {
             // this calculates a cumulative sum
-            std::partial_sum(PMatrix[i].begin(), PMatrix[i].end(), PMatrix[i].begin(), plus<double>());
+            std::partial_sum(PMatrix[i].begin(), PMatrix[i].end(), PMatrix[i].begin(), std::plus<double>());
         }
         low = std::lower_bound (PMatrix[ancChar].begin(), PMatrix[ancChar].end(), RandNumb);
         
@@ -184,7 +177,7 @@ string SequenceGenerator::simulate_sequence (string const& anc,
             newstring[i] = amino_acids_[low - PMatrix[ancChar].begin()];    
         }
     }
-    //cout << newstring << endl;
+    //std::cout << newstring << std::endl;
     return newstring;
 }
 
@@ -192,10 +185,9 @@ string SequenceGenerator::simulate_sequence (string const& anc,
 /*
  * Calculate the Q Matrix (Substitution rate matrix)
  */
-vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
-
-    vector < vector <double> > bigpi(nstates_, vector <double>(nstates_, 1.0));
-    vector < vector <double> > t(nstates_, vector <double>(nstates_, 0.0));
+std::vector< std::vector<double> > SequenceGenerator::calculate_q_matrix () {
+    std::vector < std::vector<double> > bigpi(nstates_, std::vector<double>(nstates_, 1.0));
+    std::vector < std::vector<double> > t(nstates_, std::vector<double>(nstates_, 0.0));
     
     double tscale = 0.0;
     
@@ -251,10 +243,10 @@ vector < vector <double> > SequenceGenerator::calculate_q_matrix () {
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
  */
-vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vector <double> > const& QMatrix,
+std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (const std::vector< std::vector<double> >& QMatrix,
     float br) {
 
-    vector < vector <double> > Pmatrix(nstates_, vector <double>(nstates_, 0.0));
+    std::vector< std::vector<double> > Pmatrix(nstates_, std::vector<double>(nstates_, 0.0));
     mat A = randn<mat>(nstates_, nstates_);
     mat B = randn<mat>(nstates_, nstates_); // why not just copy A?
     int count = 0;
@@ -267,7 +259,7 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
     }
    //exponentiate the matrix
    B = expmat(A);
-   //cout << B << endl;
+   //std::cout << B << std::endl;
    count = 0;
    //convert the matrix back to C++ vector
    for (unsigned int i = 0; i < Pmatrix.size(); i++) {
@@ -287,11 +279,10 @@ vector < vector <double> > SequenceGenerator::calculate_p_matrix (vector < vecto
 // TODO: how to name ancestor nodes (sequences)
 //       - if we have this we can add to results (if desired))
 void SequenceGenerator::preorder_tree_traversal () {
-
     double brlength = 0.0;
     int rate_count = 0;
     int check = 0;
-    vector < vector <double> > QMatrix(nstates_, vector <double>(nstates_, 0.0));
+    std::vector< std::vector<double> > QMatrix(nstates_, std::vector<double>(nstates_, 0.0));
     //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
     if (multi_model_) {
@@ -323,7 +314,7 @@ void SequenceGenerator::preorder_tree_traversal () {
     ancq_[root] = QMatrix;
     
     if (show_ancs_) {
-        string tname = root->getName();
+        std::string tname = root->getName();
         Sequence seq(tname, root_sequence_);
         res.push_back(seq);
     }
@@ -334,15 +325,15 @@ void SequenceGenerator::preorder_tree_traversal () {
         /*
         for (unsigned int i = 0; i < QMatrix.size(); i++) {
             for (unsigned int j = 0; j < QMatrix.size(); j++) {
-                cout << QMatrix[i][j] << " ";
+                std::cout << QMatrix[i][j] << " ";
             }
-            cout << "\n";
+            std::cout << "\n";
         }
-        cout << "\n";
+        std::cout << "\n";
         */
         if (multi_model_) {
             check = (int)round(multi_rates_[0]);
-            //cout << check << " " << rate_count << endl;
+            //std::cout << check << " " << rate_count << std::endl;
             if (tree_->getNode(k)->isInternal() == true && multi_rates_.size() != 0) {
                 if (check == rate_count) {
                     rmatrix_[0][2] = multi_rates_[1];
@@ -365,11 +356,11 @@ void SequenceGenerator::preorder_tree_traversal () {
                     for (unsigned int i = 0; i < 7; i++) {
                         multi_rates_.erase(multi_rates_.begin() + 0);
                     }
-                    //cout << "Size " << multi_rates_.size() << endl;
-                    //cout << multi_rates_[0] << endl;
+                    //std::cout << "Size " << multi_rates_.size() << std::endl;
+                    //std::cout << multi_rates_[0] << std::endl;
                     /*
                     for (unsigned int i = 0; i < multi_rates_.size(); i++) {
-                        cout << multi_rates_[i] << endl;
+                        std::cout << multi_rates_[i] << std::endl;
                     }*/        
                 }
                 rate_count++;
@@ -380,28 +371,28 @@ void SequenceGenerator::preorder_tree_traversal () {
         Node * dec = tree_->getNode(k);
         Node * parent = tree_->getNode(k)->getParent();
         //ancq[dec] = QMatrix;
-        vector < vector <double> > Qparent = ancq_[parent];
-        string ancSeq = seqs_[parent];
-        string decSeq = simulate_sequence(ancSeq, Qparent, brlength);
+        std::vector< std::vector<double> > Qparent = ancq_[parent];
+        std::string ancSeq = seqs_[parent];
+        std::string decSeq = simulate_sequence(ancSeq, Qparent, brlength);
         /*
         for (unsigned int i = 0; i < Qparent.size(); i++) {
             for (unsigned int j = 0; j < Qparent.size(); j++) {
-                cout << Qparent[i][j] << " ";
+                std::cout << Qparent[i][j] << " ";
             }
-            cout << "\n";
+            std::cout << "\n";
         }
-        cout << "\n";*/
+        std::cout << "\n";*/
         
         seqs_[dec] = decSeq;
         ancq_[dec] = QMatrix; // why store this?
         if (show_ancs_ && tree_->getNode(k)->isInternal() == true) {
-            string tname = tree_->getNode(k)->getName();
+            std::string tname = tree_->getNode(k)->getName();
             Sequence seq(tname, decSeq);
             res.push_back(seq);
         }
         // If its a tip print the name and the sequence
         if (tree_->getNode(k)->isInternal() != true) {
-            string tname = tree_->getNode(k)->getName();
+            std::string tname = tree_->getNode(k)->getName();
             Sequence seq(tname, decSeq);
             res.push_back(seq);
         }
@@ -411,22 +402,21 @@ void SequenceGenerator::preorder_tree_traversal () {
 
 // this should probably be returned on its own
 void SequenceGenerator::print_node_labels() {
-    cout << getNewickString(tree_) << endl;
-    //cout << tree_->getRoot()->getNewick(true) <<";" << endl;
+    std::cout << getNewickString(tree_) << std::endl;
+    //std::cout << tree_->getRoot()->getNewick(true) <<";" << std::endl;
 }
 
 
 void SequenceGenerator::label_internal_nodes() {
-
     int count = 1;
-    string str = "Node";
-    string nlabel = "";
+    std::string str = "Node";
+    std::string nlabel = "";
     Node * root = tree_->getRoot();
     root->setName("Node_0");
     for (int k = (tree_->getNodeCount() - 2); k >= 0; k--) {
         if (tree_->getNode(k)->isInternal() == true) {
-            //cout << k << endl;
-            str = to_string(count);
+            //std::cout << k << std::endl;
+            str = std::to_string(count);
             nlabel = "Node_" + str;
             tree_->getNode(k)->setName(nlabel);
             count++;
@@ -436,14 +426,13 @@ void SequenceGenerator::label_internal_nodes() {
 
 
 // involves both gamma and pinvar
-vector <float> SequenceGenerator::set_site_rates () {
-    vector <float> srates(seqlen_, 1.0);
-    
+std::vector<float> SequenceGenerator::set_site_rates () {
+    std::vector<float> srates(seqlen_, 1.0);
     // invariable sites
     if (pinvar_ != 0.0) {
         int numsample = seqlen_ * pinvar_ + 0.5;
         // sample invariable sites
-        vector <int> randsites = sample_without_replacement(seqlen_, numsample);
+        std::vector<int> randsites = sample_without_replacement(seqlen_, numsample);
         // must be a more elegant way of doing this
         for (int i = 0; i < numsample; i++) {
             srates[randsites[i]] = 0.0;
@@ -464,15 +453,14 @@ vector <float> SequenceGenerator::set_site_rates () {
 
 
 // initialized as string of length seqlength, all 'G'
-string SequenceGenerator::generate_random_sequence () {
-    
-    string ancseq(seqlen_, 'G');
+std::string SequenceGenerator::generate_random_sequence () {
+    std::string ancseq(seqlen_, 'G');
     if (is_dna_) {
         //string ancseq(seqlen, 'G');
-        vector <double> cumsum(4);
+        std::vector<double> cumsum(4);
         std::vector <double>::iterator low;
         // cumulative sum
-        std::partial_sum(base_freqs_.begin(), base_freqs_.end(), cumsum.begin(), plus<double>());
+        std::partial_sum(base_freqs_.begin(), base_freqs_.end(), cumsum.begin(), std::plus<double>());
     
         for (int i = 0; i < seqlen_; i++) {
             float RandNumb = get_uniform_random_deviate();
@@ -481,10 +469,10 @@ string SequenceGenerator::generate_random_sequence () {
         }
     } else {
         //string ancseq(seqlen, 'G');
-        vector <double> cumsum(20);
+        std::vector<double> cumsum(20);
         std::vector <double>::iterator low;
         // cumulative sum
-        std::partial_sum(aa_freqs_.begin(), aa_freqs_.end(), cumsum.begin(), plus<double>());
+        std::partial_sum(aa_freqs_.begin(), aa_freqs_.end(), cumsum.begin(), std::plus<double>());
     
         for (int i = 0; i < seqlen_; i++) {
             float RandNumb = get_uniform_random_deviate();
@@ -492,16 +480,15 @@ string SequenceGenerator::generate_random_sequence () {
             ancseq[i] = amino_acids_[low - cumsum.begin()];
         }    
     }
-    //cout << ancseq << endl;
+    //std::cout << ancseq << std::endl;
     return ancseq;
 }
 
 
 // rates are in order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
-vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <double> const& rates) {
-    
+std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (const std::vector<double>& rates) {
     // initialize
-    vector < vector <double> > ratemat(nstates_, vector<double>(4, 0.33));
+    std::vector< std::vector<double> > ratemat(nstates_, std::vector<double>(4, 0.33));
     
     // planning ahead here for potential non-reversible matrices
     if (rates.size() == 6) {
@@ -524,7 +511,7 @@ vector < vector <double> > SequenceGenerator::construct_rate_matrix (vector <dou
         ratemat[3][3] = (rates[2] + rates[4] + rates[5]) * -1;
         
     } else {
-        cout << "Er, we don't deal with " << rates.size() << " rates at the moment..." << endl;
+        std::cout << "Er, we don't deal with " << rates.size() << " rates at the moment..." << std::endl;
         exit(0);
     }
     return ratemat;
@@ -538,15 +525,15 @@ void SequenceGenerator::check_valid_sequence () {
     if (is_dna_) {
         std::size_t found = root_sequence_.find_first_not_of(nucleotides_);
         if (found != std::string::npos) {
-            cout << "Error: illegal character '" << root_sequence_[found] << "' at position " 
-                << found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << endl;
+            std::cout << "Error: illegal character '" << root_sequence_[found] << "' at position " 
+                << found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << std::endl;
             exit(0);
         }
     } else {
         std::size_t found = root_sequence_.find_first_not_of(amino_acids_);
         if (found != std::string::npos) {
-            cout << "Error: illegal character '" << root_sequence_[found] << "' at position " 
-                << found+1 << " (only AA chars allowed). Exiting." << endl;
+            std::cout << "Error: illegal character '" << root_sequence_[found] << "' at position " 
+                << found+1 << " (only AA chars allowed). Exiting." << std::endl;
             exit(0);
         }        
         
@@ -555,7 +542,7 @@ void SequenceGenerator::check_valid_sequence () {
 
 
 // not sure of a more elegant way to do this...
-vector<Sequence> SequenceGenerator::get_sequences () {
+std::vector<Sequence> SequenceGenerator::get_sequences () {
     return res;
 }
 
