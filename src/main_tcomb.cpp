@@ -135,7 +135,7 @@ int main(int argc, char * argv[]) {
     }
     
     bool going = true;
-    Tree * bigtree;
+    Tree * bigtree = NULL;
     while (going) {
         if (retstring.size() > 1) {
             bigtree = read_next_tree_from_stream_newick (*pios, retstring, &going);
