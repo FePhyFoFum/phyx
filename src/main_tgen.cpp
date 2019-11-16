@@ -5,33 +5,31 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "tgen.h"
 #include "utils.h"
 #include "tree_utils.h"
 #include "log.h"
 
 void print_help() {
-    cout << "Generate all tree topologies for n taxa." << endl;
-    cout << "Random tree samples are a-coming." << endl;
-    cout << endl;
-    cout << "Usage: pxtgen [OPTION]... " << endl;
-    cout << endl;
-    cout << " -n, --ntax=INT      number of taxa" << endl;
-    cout << " -r, --rooted        whether generated trees are rooted (default: false)" << endl;
-    cout << " -c, --count         give the number of possible trees for n taxa and exit" << endl;
-    cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-//    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+     std::cout << "Generate all tree topologies for n taxa." << std::endl;
+     std::cout << "Random tree samples are a-coming." << std::endl;
+     std::cout << std::endl;
+     std::cout << "Usage: pxtgen [OPTION]... " << std::endl;
+     std::cout << std::endl;
+     std::cout << " -n, --ntax=INT      number of taxa" << std::endl;
+     std::cout << " -r, --rooted        whether generated trees are rooted (default: false)" << std::endl;
+     std::cout << " -c, --count         give the number of possible trees for n taxa and exit" << std::endl;
+     std::cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << std::endl;
+     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+//     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+     std::cout << " -h, --help          display this help and exit" << std::endl;
+     std::cout << " -V, --version       display version and exit" << std::endl;
+     std::cout << std::endl;
+     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxtgen 0.1\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxtgen 0.1\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -54,7 +52,7 @@ int main(int argc, char * argv[]) {
     bool rooted = false;
     bool count = false;
     bool outfileset = false;
-    string lprefix = "t";
+    std::string lprefix = "t";
     char * outf = NULL;
     
     // limit on nuber of terminals supported (exhaustive)
@@ -94,7 +92,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                 std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -102,38 +100,36 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    string rootstat = (rooted) ? "rooted" : "unrooted";
+    std::string rootstat = (rooted) ? "rooted" : "unrooted";
     
     if (ntax == 0) {
-        cout << "You have to set the number of taxa -n. Exiting." << endl;
+         std::cout << "You have to set the number of taxa -n. Exiting." << std::endl;
         exit(0);
     } else if (ntax < 3) {
-        cout << "The number of taxa -n must be >= 3. Exiting." << endl;
+         std::cout << "The number of taxa -n must be >= 3. Exiting." << std::endl;
         exit(0);
     } else if (ntax > sim_limit_exh) {
-        cout << "The number of taxa -n is currently limited to " << sim_limit_exh
+         std::cout << "The number of taxa -n is currently limited to " << sim_limit_exh
                 << " (" << get_num_possible_trees(sim_limit_exh, rooted) << " "
-                << rootstat << " topologies). Exiting." << endl;
+                << rootstat << " topologies). Exiting." << std::endl;
         exit(0);
     }
     
     if (count) {
-        cout << "There are " << get_num_possible_trees(ntax, rooted)
+         std::cout << "There are " << get_num_possible_trees(ntax, rooted)
                 << " possible " << rootstat << " topologies for " << ntax
-                << " taxa." << endl;
+                << " taxa." << std::endl;
         exit(0);
     }
     
-    
-    
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = & std::cout;
     }
     
     TopologyGenerator TG(ntax, rooted, lprefix);
