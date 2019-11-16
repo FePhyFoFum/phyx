@@ -1,10 +1,3 @@
-/*
- * upgma.h
- *
- *  Created on: Jun 10, 2015
- *      Author: joe
- */
-
 #ifndef _UPGMA_H_
 #define _UPGMA_H_
 
@@ -30,14 +23,14 @@ private:
     std::string newickstring; // temporary
 
 public:
-    UPGMA();
-    UPGMA(std::istream* pios);
-    std::map<std::string, std::string> FastaToOneLine(std::ifstream&);
-    std::vector< std::vector<double> > BuildMatrix(std::map<std::string,
+    UPGMA ();
+    UPGMA (std::istream* pios);
+    std::map<std::string, std::string> FastaToOneLine (std::ifstream&);
+    std::vector< std::vector<double> > BuildMatrix (std::map<std::string,
         std::string>& sequences);
-    void TREEMAKE(std::vector<std::string>&, std::map <int, std::string>&,
+    void TREEMAKE (std::vector<std::string>&, std::map <int, std::string>&,
         std::vector< std::vector<double> >&);
-    std::string get_newick();
+    std::string get_newick ();
 };
 
 #endif /* _UPGMA_H_ */

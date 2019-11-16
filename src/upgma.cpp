@@ -1,10 +1,3 @@
-/*
- * upgma.cpp
- *
- *  Created on: Jun 10, 2015
- *      Author: joe
- */
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -16,29 +9,26 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "upgma.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 
-void update_tree(string& newname, vector<string>& names, map<int, string>& NumbKeys, 
-    int& node_list, vector< vector<double> >& NewMatrix, int& mini1, int& mini2) {
-
+void update_tree(std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& NumbKeys, 
+    int& node_list, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2) {
     //update the tree values, Tree Size is the node it is at
-    vector<double> row_hits, col_hits, new_ColRow;
+    std::vector<double> row_hits, col_hits, new_ColRow;
     double br_length = NewMatrix[mini1][mini2] / 2.0;
         
-    string length1 = std::to_string(br_length);
-    string length2 = length1;
+    std::string length1 = std::to_string(br_length);
+    std::string length2 = length1;
     double ColRow = 0.0;
     int matrixsize = NewMatrix.size();
 
     // extremely hacky way to get correct ELs
     std::size_t found = names[mini1].find("#");
     if (found != std::string::npos) {
-        string terp = names[mini1];
+        std::string terp = names[mini1];
         std::size_t pos = terp.find("#"); 
         double oldheight = std::stod(terp.substr(pos+1));
         names[mini1] = terp.substr(0, pos);
@@ -47,7 +37,7 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     // have to do it for the other side too
     found = names[mini2].find("#");
     if (found != std::string::npos) {
-        string terp = names[mini2];
+        std::string terp = names[mini2];
         std::size_t pos = terp.find("#"); 
         double oldheight = std::stod(terp.substr(pos+1));
         names[mini2] = terp.substr(0, pos);
@@ -64,7 +54,7 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     names.insert(names.begin(), newname);
     
     //Make Smaller Matrix
-    vector< vector<double> > temp_matrix(node_list, vector<double>(node_list, 0.0));
+    std::vector< std::vector<double> > temp_matrix(node_list, std::vector<double>(node_list, 0.0));
 //    vector< vector<double> > temp_matrix;    
 //    for (int i = 0; i < node_list; i++) {
 //        vector<double> row;
@@ -102,13 +92,13 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     //Need to fill the rest of the matrix up again
     int icount = 1;
     int jcount = 0;
-    //cout << "NewMatrix.size() = " << NewMatrix.size()
-    //    << "; mini1 = " << mini1 << "; mini2 = " << mini2 << endl;
+    // std::cout << "NewMatrix.size() = " << NewMatrix.size()
+    //    << "; mini1 = " << mini1 << "; mini2 = " << mini2 << std::endl;
     // mini1 is always < mini2
     for (int i = 0; i < matrixsize; i++) {
         // print vector contents
         //print_vector(NewMatrix[i]);
-        //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std::cout, " "));
+        //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std:: std::cout, " "));
         jcount = 1;
         if (i != mini1 && i != mini2) {
 //            if (i != mini2) {
@@ -127,18 +117,18 @@ void update_tree(string& newname, vector<string>& names, map<int, string>& NumbK
     //Print the new matrix makes it very verbose but
     //fun to watch
     /*
-    cout << name1 << "  <===============NewMatrix==============>  " << name2 << endl;
+     std::cout << name1 << "  <===============NewMatrix==============>  " << name2 << std::endl;
     for (int i = 0; i < temp_matrix.size(); i++) {
         for (int j = 0; j < temp_matrix.size(); j++) {
-            cout <<temp_matrix[i][j] << "\t";
+             std::cout <<temp_matrix[i][j] << "\t";
         }
-        cout << endl;
+         std::cout << std::endl;
     }*/
     NewMatrix = temp_matrix;
-
 }
 
-void Choose_Small(int& node_list, vector< vector<double> > const& Matrix,
+
+void Choose_Small(int& node_list, std::vector< std::vector<double> > const& Matrix,
     int& mini1, int& mini2) {
     //super large value
     double MIN = 99999999999.99;
@@ -162,16 +152,17 @@ void Choose_Small(int& node_list, vector< vector<double> > const& Matrix,
     node_list--;
 }
 
+
 //NumbKeys Contains the names and their matching number
 //Matrix Contains The original matrix
-void UPGMA::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
-    vector< vector<double> >& Matrix) {
+void UPGMA::TREEMAKE(std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
+    std::vector< std::vector<double> >& Matrix) {
 
     int mini1 = 0, mini2 = 0;
     int NumbOfSequences = NumbKeys.size();
-    vector< vector<double> > NewMatrix;
-    map<int, string>::iterator iter;
-    string newname;
+    std::vector< std::vector<double> > NewMatrix;
+    std::map<int, std::string>::iterator iter;
+    std::string newname;
     while (NumbOfSequences > 1) {
         Choose_Small(NumbOfSequences, Matrix, mini1, mini2);
         update_tree(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1, mini2);
@@ -181,7 +172,7 @@ void UPGMA::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
 
 
 // not used
-double CalcSeqDiffs(string& sequence1, string& sequence2) {
+double CalcSeqDiffs(std::string& sequence1, std::string& sequence2) {
     double score = 0;
     for (unsigned int i = 0; i < sequence1.size(); i++) {
         if (sequence1[i] != sequence2[i]) {
@@ -191,17 +182,18 @@ double CalcSeqDiffs(string& sequence1, string& sequence2) {
     return score;
 }
 
-vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
 
-    vector<string> SequenceName;
-    map <string, string>::iterator iter, iter2;
-    string fasta, SeqName, MatchName;
+std::vector< std::vector<double> > UPGMA::BuildMatrix (std::map<std::string, std::string>& sequences) {
+
+    std::vector<std::string> SequenceName;
+    std::map<std::string, std::string>::iterator iter, iter2;
+    std::string fasta, SeqName, MatchName;
     int FirstCount = 0;
     double MatchScore;
 
     // an easier way to initialize a vector of vectors:
     int ntax = sequences.size(); // this should be a property of the class, calculated once
-    vector< vector<double> > Score(ntax, vector<double>(ntax, 0.0));
+    std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
     
     //compare all sequences to other sequences
     for (iter = sequences.begin(); iter != sequences.end(); iter++) {
@@ -215,40 +207,41 @@ vector< vector<double> > UPGMA::BuildMatrix (map <string, string>& sequences) {
             MatchName = SeqName + "," + iter2 -> first;
             Score[FirstCount][SecondCount] = MatchScore;
             SecondCount++;
-
         }
         FirstCount++;
 
     }
     //prints the distance matrix maybe too verbose
     
-    cout << "\t";
+     std::cout << "\t";
     for (unsigned int i = 0; i < SequenceName.size(); i++) {
-        cout << SequenceName[i] << "\t";
+         std::cout << SequenceName[i] << "\t";
     }
-    cout << endl;
+     std::cout << std::endl;
     for (unsigned int i = 0; i < Score.size(); i++) {
-        cout << SequenceName[i] << "\t";
+         std::cout << SequenceName[i] << "\t";
         for (unsigned int j = 0; j < Score[i].size(); j++) {
-            cout << Score[i][j] << "\t";
+             std::cout << Score[i][j] << "\t";
 
         }
-        cout << endl;
+         std::cout << std::endl;
     }
     return Score;
 }
 
+
 UPGMA::UPGMA() {
     // TODO Auto-generated constructor stub
-
 }
+
 
 // *** some alternate functions below *** //
 
+
 // alternate constructor
-UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
+UPGMA::UPGMA (std::istream* pios):ntax(0), nchar(0) {
     Sequence seq;
-    string retstring;
+    std::string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
     
     int seqcount = 0;
@@ -258,9 +251,9 @@ UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
         sequences[seq.get_id()] = seq.get_sequence();
         if (!first) {
             if ((int)seq.get_length() != nchar) {
-                cout << "Error: sequence " << seq.get_id() << " has "
+                 std::cout << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
-                    << nchar << "." << endl << "Exiting." << endl;
+                    << nchar << "." << std::endl << "Exiting." << std::endl;
                 exit(1);
             }
         } else {
@@ -275,9 +268,9 @@ UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
     if (ft == 2) {
         sequences[seq.get_id()] = seq.get_sequence();
         if ((int)seq.get_length() != nchar) {
-            cout << "Error: sequence " << seq.get_id() << " has "
+             std::cout << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
-                << nchar << "." << endl << "Exiting." << endl;
+                << nchar << "." << std::endl << "Exiting." << std::endl;
             exit(1);
         }
         NameKey[seqcount] = seq.get_id();
@@ -290,6 +283,7 @@ UPGMA::UPGMA (istream* pios):ntax(0), nchar(0) {
     TREEMAKE(names, NameKey, Matrix);
 }
 
+
 // populate these when reading in the sequences
 void UPGMA::set_name_key () {
     int count = 0;
@@ -300,6 +294,7 @@ void UPGMA::set_name_key () {
     }
 }
 
-string UPGMA::get_newick () {
+
+std::string UPGMA::get_newick () {
     return newickstring;
 }
