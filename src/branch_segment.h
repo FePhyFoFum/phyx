@@ -1,10 +1,3 @@
-/*
- * BranchSegment.h
- *
- *  Created on: Aug 16, 2009
- *      Author: smitty
- */
-
 #ifndef _BRANCH_SEGMENT_H_
 #define _BRANCH_SEGMENT_H_
 
@@ -15,6 +8,7 @@ class RateModel;
 #include "vector_node_object.h"
 #include "superdouble.h"
 
+
 class BranchSegment {
 private:
     double duration;
@@ -24,17 +18,17 @@ private:
     int startdistint;
     
 public:
-    BranchSegment(double dur, int per);
-    void setModel(RateModel * mod);
-    //void setStartDist(vector<int> sd);
-    void clearStartDist();
-    double getDuration();
-    int getPeriod();
+    BranchSegment (double dur, int per);
+    void setModel (RateModel * mod);
+    //void setStartDist (std::vector<int> sd);
+    void clearStartDist ();
+    double getDuration ();
+    int getPeriod ();
     //std::vector<int> getStartDist();
-    void set_start_dist_int(int d);
-    int get_start_dist_int();
-    RateModel * getModel();
-    std::vector<int> getFossilAreas();
+    void set_start_dist_int (int d);
+    int get_start_dist_int ();
+    RateModel * getModel ();
+    std::vector<int> getFossilAreas ();
     void setFossilArea(int area);
     std::vector<Superdouble> * distconds;
     std::vector<Superdouble> alphas; // alpha for the entire branch -- stored in the 0th segment for anc calc

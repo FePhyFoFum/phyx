@@ -1,3 +1,4 @@
+#include <string>
 #include <vector>
 #include <map>
 #include <random>
@@ -12,21 +13,22 @@
 #include <armadillo>
 using namespace arma;
 
-void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr,
-    RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs,
-    map<string,vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat &inq) {
+
+void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& sr,
+    RateModel& rm, std::vector<Sequence>& seqs, std::vector<Sequence>& sr_seqs,
+    std::map<std::string, std::vector<int> >& codon_pos, mat& bf, mat& K, mat& w, mat& inq) {
     
     int sites = (seqs[0].get_sequence().size()/3);
     double curlike = 0;
     double sw = 0.5;
     rm.selection_model = 0;
     for (int s=0; s < sites; s++) {
-        create_vector_seq_codon_state_reconstructor(seqs, sr_seqs, s, codon_pos);
+        create_std::vector_seq_codon_state_reconstructor(seqs, sr_seqs, s, codon_pos);
         sr.set_tip_conditionals(sr_seqs, s);
         curlike +=  sr.eval_likelihood(s);
         rm.set_sameQ(true);
     }
-    cout << "start likelihood: " << curlike << endl;
+    std::cout << "start likelihood: " << curlike << std::endl;
 
     std::default_random_engine re;
     
@@ -41,9 +43,9 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
         newlike = 0;
         update_simple_goldman_yang_q(&inq, newk, neww, bf, K, w);
         rm.setup_Q(inq);
-        sr.clear_map_ps();
+        sr.clear_std::map_ps();
         for (int s=0; s < sites; s++) {
-            //create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
+            //create_std::vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
             //sr.set_tip_conditionals(sr_seqs,s);
             newlike +=  sr.eval_likelihood(s);
             rm.set_sameQ(true);
@@ -54,7 +56,7 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
             startw = neww;
         }
         if (i%sampleiter == 0) {
-            cout << "iter: "<< i << " like: " << curlike << " K: "<< startk <<" w: " << startw << endl;
+            std::cout << "iter: "<< i << " like: " << curlike << " K: "<< startk <<" w: " << startw << std::endl;
         }
     }
 }
@@ -64,10 +66,10 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & 
  * this should have 5 parameters
  * K = free, w0 = 0,w1 = 1,w2 = free ,p0 = free ,p1 = free ,p2 = free
  */
-void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple & sr,
-    RateModel & rm, vector<Sequence> & seqs, vector<Sequence> & sr_seqs,
-    map<string,vector<int> > & codon_pos, mat &bf, mat &K, mat &w, mat & inq0,
-    mat & inq1, mat &inq2) {
+void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& sr,
+    RateModel& rm, std::vector<Sequence>& seqs, std::vector<Sequence>& sr_seqs,
+    std::map<std::string,std::vector<int> >& codon_pos, mat& bf, mat& K, mat& w, mat& inq0,
+    mat& inq1, mat& inq2) {
     
     int sites = (seqs[0].get_sequence().size()/3);
     double curlike = 0;
@@ -75,12 +77,12 @@ void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple &
     sr.pp0 = 0.38008; sr.pp1 = 0.28326; sr.pp2 = 0.33666;
 
     for (int s=0; s < sites; s++) {
-        create_vector_seq_codon_state_reconstructor(seqs, sr_seqs, s, codon_pos);
+        create_std::vector_seq_codon_state_reconstructor(seqs, sr_seqs, s, codon_pos);
         sr.set_tip_conditionals(sr_seqs, s);
         curlike +=  sr.eval_likelihood(s);
         rm.set_sameQ(true);
     }
-    cout << "start likelihood: " << curlike << endl;
+    std::cout << "start likelihood: " << curlike << std::endl;
 
     std::default_random_engine re;
     
@@ -119,9 +121,9 @@ void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple &
         update_simple_goldman_yang_q(&inq2, newk, neww2, bf, K, w);
         rm.set_Q_which(inq0, 0);
         rm.set_Q_which(inq2, 2);
-        sr.clear_map_ps();
+        sr.clear_std::map_ps();
         for (int s=0; s < sites; s++) {
-            //create_vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
+            //create_std::vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
             //sr.set_tip_conditionals(sr_seqs,s);
             newlike +=  sr.eval_likelihood(s);
             rm.set_sameQ(true);
@@ -136,9 +138,9 @@ void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple &
             startp2 = newp2;
         }
         if (i % sampleiter == 0) {
-            cout << "iter: "<< i << " like: " << curlike << " K: "<< startk <<" w0: "
+            std::cout << "iter: "<< i << " like: " << curlike << " K: "<< startk <<" w0: "
             << startw0 << " w2: " << startw2 << " p0: " << startp0 << " p1: " << startp1
-            << " p2: "<< startp2 << endl;
+            << " p2: "<< startp2 << std::endl;
         }
     }
 }

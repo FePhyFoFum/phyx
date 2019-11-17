@@ -1,11 +1,3 @@
-/*
- * distmatrix.cpp
- *
- *  Created on: Jun 3, 2015
- *      Author: joe
- */
-
-
 // NOTE: this file is not presently used
 
 #include <iostream>
@@ -18,10 +10,9 @@
 #include <map>
 #include <iterator>
 
-using namespace std;
 
 //Calculate the difference between two strings
-float CalcSeqDiffs(string& sequence1, string& sequence2) {
+float CalcSeqDiffs (std::string& sequence1, std::string& sequence2) {
     float score = 0;
     for (unsigned int i = 0; i < sequence1.size(); i++) {
         if (sequence1[i] != sequence2[i]) {
@@ -31,18 +22,18 @@ float CalcSeqDiffs(string& sequence1, string& sequence2) {
     return score;
 }
 
-map<string,int> BuildMatrix (map <string, string>& sequences) {
-    vector<string> SequenceName;
-    map<string, int> Matrix;
-    map <string, string>::iterator iter;
-    map <string, string>::iterator iter2;
-    string fasta, SeqName, MatchName;
+std::map<std::string, int> BuildMatrix (std::map<std::string, std::string>& sequences) {
+    std::vector<string> SequenceName;
+    std::map<string, int> Matrix;
+    std::map<std::string, std::string>::iterator iter;
+    std::map<std::string, std::string>::iterator iter2;
+    std::string fasta, SeqName, MatchName;
     int count = 0;
     int FirstCount = 0;
     float MatchScore;
-    vector< vector<int> > Score;
+    std::vector< std::vector<int> > Score;
     for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-        vector<int> row;
+        std::vector<int> row;
         for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
             row.push_back(0);
         }
@@ -64,18 +55,17 @@ map<string,int> BuildMatrix (map <string, string>& sequences) {
         FirstCount++;
 
     }
-    cout << "\t";
+    std::cout << "\t";
     for (int i = 0; i < SequenceName.size(); i++) {
-
-        cout << SequenceName[i] << "\t";
+         std::cout << SequenceName[i] << "\t";
     }
-    cout << endl;
+    std::cout << std::endl;
     for (int i = 0; i < Score.size(); i++) {
-        cout << SequenceName[i] << "\t";
+         std::cout << SequenceName[i] << "\t";
         for (int j = 0; j < Score[i].size(); j++) {
-            cout << Score[i][j] << "\t";
+             std::cout << Score[i][j] << "\t";
         }
-        cout << endl;
+         std::cout << std::endl;
     }
     return Matrix;
 }
@@ -84,9 +74,9 @@ map<string,int> BuildMatrix (map <string, string>& sequences) {
 //as a map
 map <string, string> FastaToOneLine (string& fasta) {
 
-    map <string, string> sequences;
-    string line, dna, name_hold;
-    ifstream readline;
+    std::map<std::string, std::string> sequences;
+    std::string line, dna, name_hold;
+    std::ifstream readline;
     float count = 0;
     readline.open(fasta.c_str());
     if (readline.is_open()) {
@@ -112,12 +102,12 @@ map <string, string> FastaToOneLine (string& fasta) {
 }
 
 int main() {
-    map <string, string> sequences;
-    map <string, int>::iterator iter;
+    std::map<std::string, std::string> sequences;
+    std::map<std::string, int>::iterator iter;
     string fasta, Tree;
-    map<string, int> Matrix;
-    cout << "Calculating Distances" << endl;
-    //cin >> fasta;
+    std::map<std::string, int> Matrix;
+    std::cout << "Calculating Distances" << std::endl;
+    //std::cin >> fasta;
     fasta = ("TestFiles/Real_Test.fa");
     sequences = FastaToOneLine(fasta);
     Matrix = BuildMatrix(sequences);

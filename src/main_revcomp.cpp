@@ -5,9 +5,8 @@
 #include <vector>
 #include <cstring>
 #include <time.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <getopt.h>
-
 
 #include "seq_reader.h"
 #include "sequence.h"
@@ -74,10 +73,10 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
             best_dis_rev = result.editDistance;
         edlibFreeAlignResult(result);
     }
-    if (best_dis_rev < best_distance)
+    if (best_dis_rev < best_distance) {
         return true;
+    }
     return false;
-
 }
 
 int main(int argc, char * argv[]) {

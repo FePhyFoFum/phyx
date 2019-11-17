@@ -8,7 +8,6 @@
 
 class UPGMA {
 private:
-
     std::map<std::string, std::string> sequences;
     std::map<std::string, std::string>::iterator iter;
     std::vector<std::string> names;

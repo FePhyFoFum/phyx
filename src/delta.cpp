@@ -1,7 +1,7 @@
 #include <cmath>
 #include <vector>
 #include <limits>
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 
 #include "gmpfrxx/gmpfrxx.h"
@@ -13,6 +13,7 @@
 
 #define LARGE 100000000
 #define PMAX 1000
+
 
 Delta::Delta() {}
 

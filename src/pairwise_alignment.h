@@ -1,6 +1,7 @@
 #ifndef _PAIRWISE_ALIGNMENT_H_
 #define _PAIRWISE_ALIGNMENT_H_
 
+#include <string>
 #include <map>
 
 #include "sequence.h"

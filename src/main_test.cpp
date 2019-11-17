@@ -37,24 +37,24 @@ int main(int argc, char * argv[]){
     TreeReader tr;
 
     if (argc != 1){
-        cout << "usage: phyx_test" << endl;
+         std::cout << "usage: phyx_test" << std::endl;
         exit(0);
     }
     string datafile = "../../../projects/PHLAWD_fish/12S.keep";
     vector<Sequence> seqs;
     FastaUtil pr;
     bool phyl = pr.readFile(datafile,seqs);
-    cout << "sequences: " << seqs.size() << endl;
-    cout << seqs[0].get_sequence() <<endl;
+     std::cout << "sequences: " << seqs.size() << std::endl;
+     std::cout << seqs[0].get_sequence() <<std::endl;
     seqs[0].reverse_complement();
-    cout << endl;
-    cout << seqs[0].get_sequence()<< endl;
-    cout << "writing file" << endl;
+     std::cout << std::endl;
+     std::cout << seqs[0].get_sequence()<< std::endl;
+     std::cout << "writing file" << std::endl;
     string outfile = "test.fasta";
     pr.writeFileFromVector(outfile,seqs);
     */
     
-    cout << "werked" << endl;
+     std::cout << "werked" << std::endl;
     
     return EXIT_SUCCESS;
 }

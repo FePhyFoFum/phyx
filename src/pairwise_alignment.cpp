@@ -5,8 +5,6 @@
 #include <string>
 #include <algorithm>
 
-using namespace std;
-
 #include "sequence.h"
 #include "pairwise_alignment.h"
 
@@ -16,15 +14,15 @@ using namespace std;
  *
  * scoringmatrix should come from read_score_matrix
  */
-double nw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scoringmatrix,
-    double gap_penalty, string & aln1, string & aln2) {
+double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >& scoringmatrix,
+    double gap_penalty, std::string& aln1, std::string& aln2) {
     
-    string seq1 = iseq1.seq_to_upper();
-    string seq2 = iseq2.seq_to_upper();
+    std::string seq1 = iseq1.seq_to_upper();
+    std::string seq2 = iseq2.seq_to_upper();
     
-    vector<vector<double> > F;
+    std::vector<std::vector<double> > F;
     for (unsigned int i=0; i < seq2.length()+1; i++) {
-        vector<double> b;
+        std::vector<double> b;
         for (unsigned int j=0; j < seq1.length()+1; j++) {
             b.push_back(0);
         }
@@ -85,8 +83,8 @@ double nw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scorin
             j = j - 1;
         }
     }
-    reverse(aln1.begin(),aln1.end());
-    reverse(aln2.begin(),aln2.end());
+    std::reverse(aln1.begin(),aln1.end());
+    std::reverse(aln2.begin(),aln2.end());
     double score=0;
     for (unsigned int i=0; i < aln1.length(); i++) {
         if (aln1[i]!='-' && aln2[i]!='-') {
@@ -98,21 +96,22 @@ double nw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scorin
     return score;
 }
 
+
 /**
  * Smith-Waterman
  * returning aln1, aln2 strings and score
  *
  * scoringmatrix should come from read_score_matrix
  */
-double sw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scoringmatrix,
-    double gap_penalty, string & aln1, string & aln2) {
+double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >& scoringmatrix,
+    double gap_penalty, std::string& aln1, std::string& aln2) {
     
-    string seq1 = iseq1.seq_to_upper();
-    string seq2 = iseq2.seq_to_upper();
+    std::string seq1 = iseq1.seq_to_upper();
+    std::string seq2 = iseq2.seq_to_upper();
     
-    vector<vector<double> > F;
+    std::vector<std::vector<double> > F;
     for (unsigned int i=0; i < seq2.length()+1; i++) {
-        vector<double> b;
+        std::vector<double> b;
         for (unsigned int j=0; j < seq1.length()+1; j++) {
             b.push_back(0);
         }
@@ -184,8 +183,8 @@ double sw(Sequence & iseq1, Sequence & iseq2, map<char, map<char,int> > & scorin
             j = j - 1;
         }
     }
-    reverse(aln1.begin(),aln1.end());
-    reverse(aln2.begin(),aln2.end());
+    std::reverse(aln1.begin(),aln1.end());
+    std::reverse(aln2.begin(),aln2.end());
     double score=0;
     for (unsigned int i=0; i < aln1.length(); i++) {
         if (aln1[i]!='-' && aln2[i]!='-') {

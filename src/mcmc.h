@@ -9,8 +9,9 @@
 #include "tree.h"
 #include "sequence.h"
 
-#include <armadillo>
+#include <armadillo
 using namespace arma;
+
 
 void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& sr,
     RateModel& rm, std::vector<Sequence>& seqs, std::vector<Sequence>& sr_seqs,
