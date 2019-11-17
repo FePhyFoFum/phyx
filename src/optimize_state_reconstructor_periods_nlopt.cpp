@@ -1,14 +1,7 @@
-/*
- * optimize_tnc.cpp
- *
- *  Created on: Feb 9, 2010
- *      Author: smitty
- */
-
 #include <iostream>
 #include <stdio.h>
 #include <nlopt.hpp>
-#include <math.h>
+#include <cmath>
 #include <vector>
 
 #include "optimize_state_reconstructor_periods_nlopt.h"

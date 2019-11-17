@@ -1,5 +1,4 @@
-
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <limits>
 using namespace std;

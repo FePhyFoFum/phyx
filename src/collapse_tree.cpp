@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-#include <math.h>       /* rint */
+#include <cmath>       /* rint */
 
 #include "tree.h"
 #include "tree_utils.h"

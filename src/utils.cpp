@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -6,8 +5,6 @@
 #include <numeric>
 #include <algorithm>
 #include <stdlib.h>
-#include <math.h>
-#include <string>
 #include <sstream>
 #include <cmath>
 #include <limits>
@@ -16,6 +13,10 @@
 #include <chrono>
 #include <poll.h>
 #include <unistd.h>
+
+#include "utils.h"
+#include "superdouble.h"
+
 
 // set threshold. should maybe use superdouble.
 double EPSILON = 1e-7;
@@ -30,8 +31,6 @@ double EPSILON = 1e-7;
 #define double THRESH = e-10;
 */
 
-#include "utils.h"
-#include "superdouble.h"
 
 void check_file_exists (const std::string& filename) {
     std::ifstream infile(filename);

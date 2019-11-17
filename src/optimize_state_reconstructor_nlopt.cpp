@@ -1,15 +1,7 @@
-/*
- * optimize_tnc.cpp
- *
- *  Created on: Feb 9, 2010
- *      Author: smitty
- */
-
 #include "optimize_state_reconstructor_nlopt.h"
 #include <iostream>
-//#include <stdio.h>
 #include <nlopt.hpp>
-#include <math.h>
+#include <cmath>
 
 #include "state_reconstructor.h"
 #include "rate_model.h"

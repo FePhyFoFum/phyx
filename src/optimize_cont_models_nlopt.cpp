@@ -1,14 +1,7 @@
-/*
- * optimize_tnc.cpp
- *
- *  Created on: Feb 9, 2010
- *      Author: smitty
- */
-
 #include <iostream>
 #include <vector>
 #include <nlopt.hpp>
-#include <math.h>
+#include <cmath>
 
 #include "cont_models.h"
 

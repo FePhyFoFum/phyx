@@ -1,16 +1,14 @@
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
+#include <string>
 #include <vector>
 #include <iterator>
 #include <iostream>
 #include <sstream>
-#include <string>
-
-#include <string>
-#include <vector>
 
 #include "superdouble.h"
+
 
 void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);

@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <limits>
 #include <stdlib.h>

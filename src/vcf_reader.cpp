@@ -7,6 +7,7 @@
 #include "vcf_reader.h"
 #include "utils.h"
 
+
 VcfReader::VcfReader(std::istream* pios) {
     read_vcf(pios);
 }

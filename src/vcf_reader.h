@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 
+
 class VcfReader {
 private:
     std::vector<std::string> taxa_;
