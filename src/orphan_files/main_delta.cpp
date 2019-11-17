@@ -1,12 +1,11 @@
-// this is not used
+// this is not present in the Makefile
+
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
-
-using namespace std;
 
 #include "node.h"
 #include "tree_reader.h"
@@ -26,27 +25,27 @@ int main(int argc, char * argv[]) {
     TreeReader tr;
 
     if (argc != 4 && argc != 3) {
-        cout << "usage: phyx_delta l r o" << endl;
-        cout << "    OR" << endl;
-        cout << "usage: phyx_delta newickfile outfile" << endl;
+        std::cout << "usage: phyx_delta l r o" << std::endl;
+        std::cout << "    OR" << std::endl;
+        std::cout << "usage: phyx_delta newickfile outfile" << std::endl;
         exit(0);
     }
     if (argc == 4) {
         Delta delta;
-        vector<double> nums = delta.delta(atoi(argv[1]),atoi(argv[2]),atoi(argv[3]));
-        cout << nums[0] << " " << nums[1] << endl;
+        vector<double> nums = delta.delta(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+        std::cout << nums[0] << " " << nums[1] << std::endl;
     }
     if (argc == 3) {
         TreeReader tr;
         Tree * tree;
         ifstream ifs( argv[1] );
-        string temp;
+        std::string temp;
         int count = 1;
         while ( getline( ifs, temp ) ) {
             if (temp.size() > 1) {
                 tree = tr.readTree(temp);
-                cout << "Tree "<< count <<" has " << tree->getExternalNodeCount()
-                    << " leaves." << endl;
+                std::cout << "Tree "<< count <<" has " << tree->getExternalNodeCount()
+                    << " leaves." << std::endl;
                 //ret.push_back(intree);
                 count++;
             }
@@ -62,9 +61,9 @@ int main(int argc, char * argv[]) {
                 int left = tree->getInternalNode(i)->getChild(0)->get_num_leaves();
                 int right = tree->getInternalNode(i)->getChild(1)->get_num_leaves();
                 int out = tree->getInternalNode(i)->getParent()->get_num_leaves()-(left+right);
-                vector <double> nums = delta.delta(left, right, out);
-                cout << "left:" << left << " right:" << right << " out:"
-                    << out << " delta:" << nums[0] << " p:" << nums[1] << endl;
+                std::vector<double> nums = delta.delta(left, right, out);
+                std::cout << "left:" << left << " right:" << right << " out:"
+                    << out << " delta:" << nums[0] << " p:" << nums[1] << std::endl;
                 std::stringstream sout;
                 sout << nums[1];
                 tree->getInternalNode(i)->setName(sout.str());
@@ -72,7 +71,7 @@ int main(int argc, char * argv[]) {
         }
         ofstream outTreeFile;
         outTreeFile.open(argv[2],ios::app );
-        outTreeFile << tree->getRoot()->getNewick(true) << ";" << endl;
+        outTreeFile << tree->getRoot()->getNewick(true) << ";" << std::endl;
         outTreeFile.close();
     }
     return EXIT_SUCCESS;
