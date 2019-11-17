@@ -24,12 +24,12 @@ private:
     void calc_stats ();
 
 public:
-    TreeInfo(Tree * intree);
-    TreeInfo(Tree * intree, const bool& ultracheck, const bool& binarycheck,
+    TreeInfo (Tree * intree);
+    TreeInfo (Tree * intree, const bool& ultracheck, const bool& binarycheck,
         const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
         const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,
         std::ostream* poos);
-    void get_stats(std::ostream* poos);
+    void get_stats (std::ostream* poos);
 };
 
 #endif /* _LS_TR_H_ */

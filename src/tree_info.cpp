@@ -4,8 +4,6 @@
 #include <cmath>
 #include <algorithm>
 
-using namespace std;
-
 #include "tree_info.h"
 #include "tree.h"
 #include "node.h"
@@ -18,51 +16,51 @@ TreeInfo::TreeInfo (Tree * intree) {
 }
 
 
-TreeInfo::TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
-        bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
-        bool const& lengthcheck, bool const& namecheck, bool const& rtvarcheck,
-        ostream* poos) {
+TreeInfo::TreeInfo (Tree * intree, const bool& ultracheck, const bool& binarycheck,
+        const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
+        const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,
+        std::ostream* poos) {
     tree_ = intree;
     if (ultracheck) {
         ultrametric_tree_ = is_ultrametric_paths(tree_);
-        (*poos) << std::boolalpha << ultrametric_tree_ << endl;
+        (*poos) << std::boolalpha << ultrametric_tree_ << std::endl;
     } else if (rtvarcheck) {
         has_branchlengths_ = tree_->hasEdgeLengths();
         if (has_branchlengths_) {
             rtvar_ = get_root_tip_var(tree_);
-            (*poos) << rtvar_ << endl;
+            (*poos) << rtvar_ << std::endl;
         } else {
-            (*poos) << "NA" << endl;
+            (*poos) << "NA" << std::endl;
         }
     } else if (binarycheck) {
         binary_tree_ = is_binary(tree_);
-        (*poos) << std::boolalpha << binary_tree_ << endl;
+        (*poos) << std::boolalpha << binary_tree_ << std::endl;
     } else if (agecheck) {
         ultrametric_tree_ = is_ultrametric_paths(tree_);
         if (ultrametric_tree_) {
             rootheight_ = tree_->getRoot()->getHeight();
-            (*poos) << rootheight_ << endl;
+            (*poos) << rootheight_ << std::endl;
         } else {
-            (*poos) << "NA" << endl;
+            (*poos) << "NA" << std::endl;
         }
     } else if (rootedcheck) {
         rooted_tree_ = is_rooted(tree_);
-        (*poos) << std::boolalpha << rooted_tree_ << endl;
+        (*poos) << std::boolalpha << rooted_tree_ << std::endl;
     } else if (ntipcheck) {
         ntips_ = tree_->getExternalNodeCount();
-        (*poos) << ntips_ << endl;
+        (*poos) << ntips_ << std::endl;
     } else if (lengthcheck) {
         has_branchlengths_ = tree_->hasEdgeLengths();
         if (has_branchlengths_) {
             treelength_ = get_tree_length(tree_);
-            (*poos) << treelength_ << endl;
+            (*poos) << treelength_ << std::endl;
         } else {
-            (*poos) << "NA" << endl;
+            (*poos) << "NA" << std::endl;
         }
     } else if (namecheck) {
         tip_labels_ = get_tip_labels(tree_);
         for (unsigned int i = 0; i < tip_labels_.size(); i++) {
-            (*poos) << tip_labels_[i] << endl;
+            (*poos) << tip_labels_[i] << std::endl;
         }
     }
 }
@@ -93,28 +91,28 @@ void TreeInfo::calc_stats () {
 }
 
 
-void TreeInfo::get_stats (ostream* poos) {
-    (*poos) << "rooted: " << std::boolalpha << rooted_tree_ << endl;
-    (*poos) << "binary: " << std::boolalpha << binary_tree_ << endl;
-    (*poos) << "nterminal: " << ntips_ << endl;
-    (*poos) << "ninternal: " << nintnodes_ << endl;
-    (*poos) << "branch lengths: " << std::boolalpha << has_branchlengths_ << endl;
+void TreeInfo::get_stats (std::ostream* poos) {
+    (*poos) << "rooted: " << std::boolalpha << rooted_tree_ << std::endl;
+    (*poos) << "binary: " << std::boolalpha << binary_tree_ << std::endl;
+    (*poos) << "nterminal: " << ntips_ << std::endl;
+    (*poos) << "ninternal: " << nintnodes_ << std::endl;
+    (*poos) << "branch lengths: " << std::boolalpha << has_branchlengths_ << std::endl;
     if (has_branchlengths_) {
         if(rooted_tree_) {
-            (*poos) << "rttipvar: " << rtvar_ << endl;
+            (*poos) << "rttipvar: " << rtvar_ << std::endl;
         } else {
-            (*poos) << "rttipvar: NA" << endl;
+            (*poos) << "rttipvar: NA" << std::endl;
         }
-        (*poos) << "treelength: " << treelength_ << endl;
-        (*poos) << "ultrametric: " << std::boolalpha << ultrametric_tree_ << endl;
+        (*poos) << "treelength: " << treelength_ << std::endl;
+        (*poos) << "ultrametric: " << std::boolalpha << ultrametric_tree_ << std::endl;
     } else {
-        (*poos) << "rttipvar: NA" << endl;
-        (*poos) << "treelength: NA" << endl;
-        (*poos) << "ultrametric: NA" << endl;
+        (*poos) << "rttipvar: NA" << std::endl;
+        (*poos) << "treelength: NA" << std::endl;
+        (*poos) << "ultrametric: NA" << std::endl;
     }
     if (ultrametric_tree_) {
-        (*poos) << "rootheight: " << rootheight_ << endl;
+        (*poos) << "rootheight: " << rootheight_ << std::endl;
     } else {
-        (*poos) << "rootheight: NA" << endl;
+        (*poos) << "rootheight: NA" << std::endl;
     }
 }
