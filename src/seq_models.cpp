@@ -6,24 +6,23 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-
 #include "seq_models.h"
 #include "sequence.h"
 #include "utils.h"
 
-void read_scoring_matrix(char * filename, map<char, map<char,int> > & sc_mat) {
-    ifstream fstr(filename);
+
+void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >& sc_mat) {
+    std::ifstream fstr(filename);
     sc_mat.clear();
-    vector<char> order;
+    std::vector<char> order;
     bool first = true;
-    string line;
+    std::string line;
     while (getline(fstr,line)) {
         if (line[0] == '#') {
             continue;
         } else {
-            vector<string> tokens;
-            string del(" \t");
+            std::vector<std::string> tokens;
+            std::string del(" \t");
             tokenize(line,tokens,del);
             for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
@@ -34,7 +33,7 @@ void read_scoring_matrix(char * filename, map<char, map<char,int> > & sc_mat) {
                     order.push_back(tokens[i][0]);
                 }
                 for (unsigned int j=0; j < order.size(); j++) {
-                    sc_mat[order[j]] = map<char,int>();
+                    sc_mat[order[j]] = std::map<char, int>();
                 }
                 continue;
             }
@@ -46,17 +45,18 @@ void read_scoring_matrix(char * filename, map<char, map<char,int> > & sc_mat) {
     fstr.close();
 }
 
-void read_scoring_matrix_from_lines(vector<string> & lines, map<char, map<char, int> > & sc_mat) {
+
+void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<char, std::map<char, int> >& sc_mat) {
     sc_mat.clear();
-    vector<char> order;
+    std::vector<char> order;
     bool first = true;
     for (unsigned int i=0; i < lines.size(); i++) {
-        string line = lines[i];
+        std::string line = lines[i];
         if (line[0] == '#') {
             continue;
         } else {
-            vector<string> tokens;
-            string del(" \t");
+            std::vector<std::string> tokens;
+            std::string del(" \t");
             tokenize(line,tokens,del);
             for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
@@ -67,7 +67,7 @@ void read_scoring_matrix_from_lines(vector<string> & lines, map<char, map<char, 
                     order.push_back(tokens[i][0]);
                 }
                 for (unsigned int j=0; j < order.size(); j++) {
-                    sc_mat[order[j]] = map<char,int>();
+                    sc_mat[order[j]] = std::map<char, int>();
                 }
                 continue;
             }
@@ -78,8 +78,9 @@ void read_scoring_matrix_from_lines(vector<string> & lines, map<char, map<char, 
     }
 }
 
-void get_ednafull(map<char, map<char,int> > & sc_mat) {
-    vector<string> sts;
+
+void get_ednafull(std::map<char, std::map<char, int> >& sc_mat) {
+    std::vector<std::string> sts;
     sts.push_back("#");
     sts.push_back("# This matrix was created by Todd Lowe   12/10/92");
     sts.push_back("#");
@@ -108,8 +109,9 @@ void get_ednafull(map<char, map<char,int> > & sc_mat) {
     read_scoring_matrix_from_lines(sts,sc_mat);
 }
 
-void get_blosum62(map<char, map<char,int> > & sc_mat) {
-    vector<string> sts;
+
+void get_blosum62(std::map<char, std::map<char,int> >& sc_mat) {
+    std::vector<std::string> sts;
     sts.push_back("#  Matrix made by matblas from blosum62.iij");
     sts.push_back("#  * column uses minimum score");
     sts.push_back("#  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units");
@@ -143,4 +145,3 @@ void get_blosum62(map<char, map<char,int> > & sc_mat) {
     sts.push_back("* -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4  1 ");
     read_scoring_matrix_from_lines(sts,sc_mat);
 }
-
