@@ -11,8 +11,6 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
@@ -20,33 +18,33 @@ using namespace std;
 #include "log.h"
 
 void print_help() {
-    cout << "Nucleotide sequence recoding." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxrecode [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE      input sequence file, stdin otherwise" << endl;
-    cout << " -r, --recode=STRING  string identifying recoding scheme (default: RY)" << endl;
-    cout << "  Supported recodings (use any valid combination):" << endl;
-    cout << "      R = A|G" << endl;
-    cout << "      Y = C|T" << endl;
-    cout << "      S = C|G" << endl;
-    cout << "      W = A|T" << endl;
-    cout << "      M = A|C" << endl;
-    cout << "      K = G|T" << endl;
-    cout << "      B = C|G|T" << endl;
-    cout << "      D = A|G|T" << endl;
-    cout << "      H = A|C|T" << endl;
-    cout << "      V = A|C|G" << endl;
-    cout << " -o, --outf=FILE      output sequence file, stout otherwise" << endl;
-    cout << " -h, --help           display this help and exit" << endl;
-    cout << " -V, --version        display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Nucleotide sequence recoding." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxrecode [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -s, --seqf=FILE      input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -r, --recode=STRING  string identifying recoding scheme (default: RY)" << std::endl;
+    std::cout << "  Supported recodings (use any valid combination):" << std::endl;
+    std::cout << "      R = A|G" << std::endl;
+    std::cout << "      Y = C|T" << std::endl;
+    std::cout << "      S = C|G" << std::endl;
+    std::cout << "      W = A|T" << std::endl;
+    std::cout << "      M = A|C" << std::endl;
+    std::cout << "      K = G|T" << std::endl;
+    std::cout << "      B = C|G|T" << std::endl;
+    std::cout << "      D = A|G|T" << std::endl;
+    std::cout << "      H = A|C|T" << std::endl;
+    std::cout << "      V = A|C|G" << std::endl;
+    std::cout << " -o, --outf=FILE      output sequence file, stout otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxrecode 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrecode 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -64,7 +62,7 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
-    string recodescheme = "";
+    std::string recodescheme = "";
     char * outf = NULL;
     char * seqf = NULL;
     while (1) {
@@ -90,7 +88,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -107,23 +105,23 @@ int main(int argc, char * argv[]) {
         recodescheme = "RY";
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
@@ -133,18 +131,18 @@ int main(int argc, char * argv[]) {
     SequenceRecoder sr (recodescheme);
     
     Sequence seq;
-    string retstring;
+    std::string retstring;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
+        (*poos) << ">" << seq.get_id() << std::endl;
+        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
     }
 // have to deal with last sequence outside while loop. fix this.
     if (ft == 2) {
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << endl;
+        (*poos) << ">" << seq.get_id() << std::endl;
+        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
     }
     if (fileset) {
         fstr->close();

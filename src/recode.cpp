@@ -1,17 +1,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <sstream>
-#include <cmath>
-#include <limits>
-#include <cstdlib>
-#include <algorithm>
-#include <fstream>
 #include <set>
 #include <regex>
 
 #include "recode.h"
 #include "utils.h"
+
 
 // individual recodings
 std::set<char> SequenceRecoder::recognized_ = {'R', 'Y', 'S', 'W', 'M', 'K', 'B', 'D',
