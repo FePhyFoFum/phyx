@@ -1,3 +1,4 @@
+//  this does not appear in the Makefile
 
 #include <iostream>
 #include <fstream>
@@ -26,9 +27,9 @@ void print_help() {
     cout << "Calculate Selection Model 0 with K and w with seqs and tree." << endl;
     cout << "Can read from stdin or file." << endl;
     cout << endl;
-    cout << "Usage: pxsm2a [OPTION]... [FILE]..." << endl;
+    cout << "Usage: pxsm0 [OPTION]... [FILE]..." << endl;
     cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file" << endl;
+    cout << " -s, --seqf=FILE     input sequence file" <<endl;
     cout << " -t, --treef=FILE    input tree file" << endl;
     cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
     cout << " -h, --help          display this help and exit" << endl;
@@ -38,7 +39,7 @@ void print_help() {
     cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
 }
 
-string versionline("pxsm2a 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+string versionline("pxsm0 0.1\nCopyright (C) 2014 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -88,10 +89,11 @@ int main(int argc, char * argv[]) {
                 cout << versionline << endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(argv[0],(char)c);
                 exit(0);
         }
     }
+    
     istream * spios = NULL;
     istream * tpios = NULL;
     ostream * poos = NULL;
@@ -136,6 +138,7 @@ int main(int argc, char * argv[]) {
         sr_seqs.push_back(tseq);
     }
     
+
     //read trees 
     ft = test_tree_filetype_stream(*tpios, retstring);
     if (ft != 1) {
@@ -161,28 +164,19 @@ int main(int argc, char * argv[]) {
     mat bf(61,61);
     mat K(61,61);
     mat w(61,61);
-    mat inq0(61,61);
-    mat inq1(61,61);
-    mat inq2(61,61);
+    mat inq(61,61);
     generate_bigpibf_K_w(&bf,&K,&w,codon_dict,codon_pos,codon_list);
-    update_simple_goldman_yang_q(&inq0,1.36714,0.001,bf,K,w);
-    update_simple_goldman_yang_q(&inq1,1.36714,1.0,bf,K,w);
-    update_simple_goldman_yang_q(&inq2,1.36714,8.21486,bf,K,w);
+    update_simple_goldman_yang_q(&inq,1.0,1.0,bf,K,w);
 //    cout << inq << endl;
 
     RateModel rm(61);
-    rm.selection_model = 2;
-    rm.set_n_qs(3);
-    rm.set_Q_which(inq0,0);
-    rm.set_Q_which(inq1,1);
-    rm.set_Q_which(inq2,2);
-    //rm.set_Q(inq);
+    rm.set_Q(inq);
 //    cout << rm.get_Q() << endl;
     int sites = (seqs[0].get_sequence().size()/3);
     StateReconstructorSimple sr(rm,sites);
     sr.set_tree(tree);
     cout << "there are " << sites << " sites" << endl;
-    sm2a_mcmc(0,10,tree,sr,rm,seqs,sr_seqs,codon_pos,bf,K,w,inq0,inq1,inq2);
+    sm0_mcmc(375,10,tree,sr,rm,seqs,sr_seqs,codon_pos,bf,K,w,inq);
     
     sfstr->close();
     delete spios;

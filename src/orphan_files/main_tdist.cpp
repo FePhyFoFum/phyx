@@ -1,4 +1,4 @@
-// not currently used
+//  this does not appear in the Makefile
 
 #include <iostream>
 #include <fstream>
