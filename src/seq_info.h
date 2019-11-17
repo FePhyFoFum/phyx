@@ -41,25 +41,25 @@ private:
     std::ostream* poos_;
     int longest_tax_label_;
     
-    void collect_taxon_labels();
-    void check_is_aligned();
-    void get_nseqs();
-    void get_nchars();
-    void set_alphabet();
-    void count_chars_indiv_seq(std::string& seq);
-    void count_chars(std::string& seq);
-    void print_summary_table_whole_alignment(std::ostream* poos);
-    void return_freq_table(std::ostream* poos);
-    void get_longest_taxon_label();
-    void calculate_freqs();
-    void calc_missing();
-    void set_datatype();
-    void set_alphabet_from_sampled_seqs(const std::string& seq);
+    void collect_taxon_labels ();
+    void check_is_aligned ();
+    void get_nseqs ();
+    void get_nchars ();
+    void set_alphabet ();
+    void count_chars_indiv_seq (std::string& seq);
+    void count_chars (std::string& seq);
+    void print_summary_table_whole_alignment (std::ostream* poos);
+    void return_freq_table (std::ostream* poos);
+    void get_longest_taxon_label ();
+    void calculate_freqs ();
+    void calc_missing ();
+    void set_datatype ();
+    void set_alphabet_from_sampled_seqs (const std::string& seq);
 
 public:
-    SeqInfo(std::istream* pios, std::ostream* poos, bool& indiv, const bool& force_protein);
-    void summarize();
-    void get_property(const bool& get_labels, const bool& check_aligned,
+    SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv, const bool& force_protein);
+    void summarize ();
+    void get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
         const double& get_missing);
 };
