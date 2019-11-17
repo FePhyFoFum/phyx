@@ -22,19 +22,19 @@ Give two options:
 */
 
 void print_help () {
-     std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;
-     std::cout << "Pass in 2 trees with `t` and `a`." << std::endl;
-     std::cout << std::endl;
-     std::cout << "Usage: pxtcomb [OPTION]... " << std::endl;
-     std::cout << std::endl;
-     std::cout << " -t, --treef=FILE    reference treefile, stdin otherwise" << std::endl;
-     std::cout << " -a, --addtree=FILE  alternate treefile" << std::endl;
-     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
-     std::cout << " -h, --help          display this help and exit" << std::endl;
-     std::cout << " -V, --version       display version and exit" << std::endl;
-     std::cout << std::endl;
-     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
-     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
+    std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;
+    std::cout << "Pass in 2 trees with `t` and `a`." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtcomb [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE    reference treefile, stdin otherwise" << std::endl;
+    std::cout << " -a, --addtree=FILE  alternate treefile" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
 std::string versionline("pxtcomb 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
@@ -86,7 +86,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                 std::cout << versionline << std::endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -112,19 +112,19 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = & std::cout;
+        poos = &std::cout;
     }
     if (tfileset == true) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-         std::cout << "you need to set an tfile (-t)" << std::endl;
+        std::cout << "you need to set an tfile (-t)" << std::endl;
     }
     if (addfileset == true) {
         afstr = new std::ifstream(addtreef);
         apios = afstr;
     } else {
-         std::cout << "you need to set an addfile (-a)" << std::endl;
+        std::cout << "you need to set an addfile (-a)" << std::endl;
     }
     
     std::string retstring;
@@ -182,7 +182,7 @@ int main(int argc, char * argv[]) {
                     std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(),lvsset.end(),atns.begin(),atns.end(),v2.begin());
                     v2.resize(it2-v2.begin());
                     for(unsigned int j=0;j<v2.size();j++) {
-                         std::cout << "to add " <<  v2[j]<< std::endl; 
+                        std::cout << "to add " <<  v2[j]<< std::endl; 
                         diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
                     }
                     connecthere->removeChild(*childs[i]);
@@ -195,7 +195,7 @@ int main(int argc, char * argv[]) {
             bool didit = false;
             while (diffnds.size() > 0) {
                 for (std::map<std::string,Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
-                    // std::cout << it->first << std::endl;
+                    //std::cout << it->first << std::endl;
                     Node * cn = it->second;
                     bool goi = true;
                     while (goi == true) {
@@ -204,11 +204,11 @@ int main(int argc, char * argv[]) {
                         std::vector<std::string> v_int;
                         set_intersection(cs.begin(),cs.end(),atns.begin(),atns.end(),back_inserter(v_int));
                         if (v_int.size() > 0) {
-                             std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
+                            std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
                             //get nodes
                             //get mrca
                             Node * nd = addtree->getMRCA(v_int);
-                             std::cout << "would add to " <<  nd->getNewick(false) << std::endl;
+                            std::cout << "would add to " <<  nd->getNewick(false) << std::endl;
                             //START HERE
                             if (v_int.size() == 1) {
                                 

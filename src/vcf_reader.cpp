@@ -1,7 +1,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <sstream>
 #include <algorithm>
 
 #include "vcf_reader.h"
@@ -56,13 +55,13 @@ void VcfReader::read_vcf (std::istream* pios) {
                 for (unsigned int i = 1; i < temp.size(); i++) {
                     if (read_taxa) {
                         taxa_.push_back(temp[i]);    
-                        //cout << " " << temp[i];
+                        //std::cout << " " << temp[i];
                     } else {
                         if (temp[i] =="FORMAT") {
                             // here assuming taxa cols directly follow this column
                             read_taxa = true;
                             taxstartcol = i+1;
-                            //cout << std::endl << "Taxa:";
+                            //std::cout << std::endl << "Taxa:";
                         } else if (temp[i] =="REF") {
                             refcol = i;
                         } else if (temp[i] =="ALT") {
@@ -70,12 +69,12 @@ void VcfReader::read_vcf (std::istream* pios) {
                         }
                     }
                 }
-                //cout << std::endl;
+                //std::cout << std::endl;
                 started = true;
             }
         }
     }
-    //cout << "Read in " << taxa_.size() << " taxa, each with " << seqs_[0].size()
+    //std::cout << "Read in " << taxa_.size() << " taxa, each with " << seqs_[0].size()
     //    << " characters." << std::endl;
 }
 

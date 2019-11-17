@@ -26,7 +26,7 @@ double nlopt_bm_sr (unsigned n, const double *x, double *grad, void *data) {
     if (x[1] <= 0) {
         return LARGE;
     }
-    std::cout << x[0] << " " << x[1] << std::endl;
+   std::cout << x[0] << " " << x[1] << std::endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
     rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
@@ -39,7 +39,7 @@ double nlopt_bm_sr_log (unsigned n, const double *x, double *grad, void *data) {
     if (x[1] <= 0) {
         return LARGE;
     }
-    // std::cout << x[0] << " " << x[1] << std::endl;
+    //std::cout << x[0] << " " << x[1] << std::endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
     rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
@@ -87,7 +87,7 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
         }
     }
     double like = calc_bm_prune(tr,sigma);
-    // std::cout << like <<" " << sigma << std::endl;
+    //std::cout << like <<" " << sigma << std::endl;
     return -like;
 }
 
@@ -147,7 +147,7 @@ std::vector<double> optimize_single_rate_bm_ou_nlopt (rowvec& _x, mat& _vcv) {
     std::vector<double> x(3, 1);
     //nlopt::result result = opt.optimize(x, minf);
     opt.optimize(x, minf);
-//     std::cout << result << std::endl;
+//    std::cout << result << std::endl;
     std::vector<double> results;
     results.push_back(x[0]); results.push_back(x[1]); results.push_back(x[2]);
     results.push_back(minf);
@@ -174,7 +174,7 @@ std::vector<double> optimize_single_rate_bm_bl (Tree * tr) {
     double minf;
     std::vector<double> x(n, 1);
     nlopt::result result = opt.optimize(x, minf);
-     std::cout << result << std::endl;
+    std::cout << result << std::endl;
     std::vector<double> results;
     for (int i=0;i<tr->getNodeCount();i++) {
         if (tr->getNode(i) != tr->getRoot()) {

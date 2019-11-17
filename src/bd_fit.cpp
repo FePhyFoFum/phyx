@@ -11,13 +11,16 @@
 #include "node.h"
 #include "tree_utils.h"
 
+
+// hrm a debugging thing i gather
+int counter = 0;
+
+
 typedef struct {
     int N;
     std::vector<double> bt;
 } analysis_data;
 
-// hrm a debugging thing i gather
-int counter = 0;
 
 BDFit::BDFit (Tree * intree, const std::string& modelflavour) {
     tree_ = intree;

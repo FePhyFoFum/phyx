@@ -33,7 +33,7 @@ double nlopt_sr (unsigned n, const double *x, double *grad, void *my_func_data) 
     if (nloptrm->neg_p == true) {
         like = 10000000000000;
     }
-    // std::cout << like << std::endl;
+    //std::cout << like << std::endl;
     if (like < 0 || like == std::numeric_limits<double>::infinity()) {
         like = 10000000000000;
     }
@@ -63,10 +63,10 @@ void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_ma
         for (unsigned int j=0; j < _rm->get_Q().n_cols; j++) {
             if (i != j) {
                 x[int((*_free_mask)(i, j))] = _rm->get_Q()(i, j);
-                // std::cout << x[int((*_free_mask)(i, j))] << " ";
+                //std::cout << x[int((*_free_mask)(i, j))] << " ";
             }
         }
-        // std::cout << std::endl;
+        //std::cout << std::endl;
     }
 
     //double minf;
@@ -75,10 +75,10 @@ void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_ma
         for (unsigned int j=0; j < _rm->get_Q().n_cols; j++) {
             if (i != j) {
                 (*_free_mask)(i, j) = result[int((*_free_mask)(i, j))];
-                // std::cout << x[int((*_free_mask)(i, j))] << " ";
+                //std::cout << x[int((*_free_mask)(i, j))] << " ";
             }
         }
-        // std::cout << std::endl;
+        //std::cout << std::endl;
     }
     //if ((&minf) < 0) {
      //   printf("nlopt failed!\n");

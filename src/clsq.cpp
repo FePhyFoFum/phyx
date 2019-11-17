@@ -7,6 +7,7 @@
 #include "sequence.h"
 #include "seq_reader.h"
 
+
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& proportion, bool& force_protein,
         const bool& verbose):num_taxa_(0), num_char_(0), required_present_(proportion) {
     //std::cout << MolDna << std::endl;
@@ -60,7 +61,7 @@ void SequenceCleaner::read_sequences (std::istream* pios) {
 }
 
 
- // not used
+// not used
 int SequenceCleaner::get_num_taxa () {
     return num_taxa_;
 }

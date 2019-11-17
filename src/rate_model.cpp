@@ -8,8 +8,16 @@
 
 using namespace arma;
 
-inline int signof(double d) {return d >= 0 ? 1 : -1;}
-inline double roundto(double in) {return floor(in*(1000)+0.5)/(1000);}
+
+inline int signof (double d) {
+    return d >= 0 ? 1 : -1;
+}
+
+
+inline double roundto (double in) {
+    return floor(in*(1000)+0.5)/(1000);
+}
+
 
 RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),
     lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),
@@ -128,8 +136,8 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
     eigvec.fill(0);
     eigval.fill(0);
     get_eigenvec_eigenval_from_Q(&eigval, &eigvec); // not currently used
-    //cout << eigval << endl;
-    //cout << eigvec << endl;
+    //std::cout << eigval << std::endl;
+    //std::cout << eigvec << std::endl;
     for (int i=0; i < nstates; i++) {
         eigval(i, i) = exp(eigval(i, i) * bl);
     }
@@ -153,8 +161,8 @@ void RateModel::setup_P_simple(mat & p,double bl,bool store_p_matrices) {
     eigvec_simple.fill(0);
     eigval_simple.fill(0);
     get_eigenvec_eigenval_from_Q_simple(&eigval_simple, &eigvec_simple);
-    //cout << eigval << endl;
-    //cout << eigvec << endl;
+    //std::cout << eigval << std::endl;
+    //std::cout << eigvec << std::endl;
     for (int i=0; i < nstates; i++) {
         eigval_simple(i, i) = exp(eigval_simple(i, i) * bl);
     }

@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "seq_utils.h"
 
+
 // this is the constructor almost always used
 Sequence::Sequence ():id_(), seq_(), length_(0), aligned_(), alphabet_(NA) {}
 

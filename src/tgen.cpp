@@ -10,6 +10,7 @@
 #include "tgen.h"
 #include "tree_utils.h"
 
+
 TopologyGenerator::TopologyGenerator(const int& ntax, const bool& rooted,
         const std::string& lprefix):ntax_(ntax), rooted_(rooted), lprefix_(lprefix) {
     initialize();
@@ -153,7 +154,7 @@ std::vector< std::vector< std::vector<int> > > TopologyGenerator::add_taxon_root
 
 void TopologyGenerator::generate_trees () {
     while (curtax_ <= ntax_) {
-        //cout << "adding taxon: " << curtax_ << std::endl;
+        //std::cout << "adding taxon: " << curtax_ << std::endl;
         if (!rooted_) {
             trees_ = add_taxon_unrooted (trees_, curtax_, curnode_);
         } else {
@@ -162,7 +163,7 @@ void TopologyGenerator::generate_trees () {
         curtax_++;
         curnode_++;
     }
-    //cout << "done." << std::endl;
+    //std::cout << "done." << std::endl;
 }
 
 

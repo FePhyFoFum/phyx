@@ -1,18 +1,14 @@
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <vector>
-#include <iterator>
 #include <algorithm>
-#include <map>
-#include <iterator>
-#include <cstring>
 #include <getopt.h>
 
 #include "upgma.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
+
 
 void update_tree(std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& NumbKeys, 
     int& node_list, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2) {
@@ -92,13 +88,13 @@ void update_tree(std::string& newname, std::vector<std::string>& names, std::map
     //Need to fill the rest of the matrix up again
     int icount = 1;
     int jcount = 0;
-    // std::cout << "NewMatrix.size() = " << NewMatrix.size()
+    //std::cout << "NewMatrix.size() = " << NewMatrix.size()
     //    << "; mini1 = " << mini1 << "; mini2 = " << mini2 << std::endl;
     // mini1 is always < mini2
     for (int i = 0; i < matrixsize; i++) {
         // print vectorcontents
         //print_vector(NewMatrix[i]);
-        //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std:: std::cout, " "));
+        //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std::cout, " "));
         jcount = 1;
         if (i != mini1 && i != mini2) {
 //            if (i != mini2) {
@@ -117,12 +113,12 @@ void update_tree(std::string& newname, std::vector<std::string>& names, std::map
     //Print the new matrix makes it very verbose but
     //fun to watch
     /*
-     std::cout << name1 << "  <===============NewMatrix==============>  " << name2 << std::endl;
+    std::cout << name1 << "  <===============NewMatrix==============>  " << name2 << std::endl;
     for (int i = 0; i < temp_matrix.size(); i++) {
         for (int j = 0; j < temp_matrix.size(); j++) {
-             std::cout <<temp_matrix[i][j] << "\t";
+            std::cout <<temp_matrix[i][j] << "\t";
         }
-         std::cout << std::endl;
+        std::cout << std::endl;
     }*/
     NewMatrix = temp_matrix;
 }
@@ -134,7 +130,7 @@ void Choose_Small(int& node_list, std::vector< std::vector<double> > const& Matr
     double MIN = 99999999999.99;
     for (int i = 0; i < (node_list - 1); i++) {
         
-        int idx = min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
+        int idx = std::min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];
             mini1 = i;
@@ -213,18 +209,18 @@ std::vector< std::vector<double> > UPGMA::BuildMatrix (std::map<std::string, std
     }
     //prints the distance matrix maybe too verbose
     
-     std::cout << "\t";
+    std::cout << "\t";
     for (unsigned int i = 0; i < SequenceName.size(); i++) {
-         std::cout << SequenceName[i] << "\t";
+        std::cout << SequenceName[i] << "\t";
     }
-     std::cout << std::endl;
+    std::cout << std::endl;
     for (unsigned int i = 0; i < Score.size(); i++) {
-         std::cout << SequenceName[i] << "\t";
+        std::cout << SequenceName[i] << "\t";
         for (unsigned int j = 0; j < Score[i].size(); j++) {
-             std::cout << Score[i][j] << "\t";
+            std::cout << Score[i][j] << "\t";
 
         }
-         std::cout << std::endl;
+        std::cout << std::endl;
     }
     return Score;
 }
@@ -251,7 +247,7 @@ UPGMA::UPGMA (std::istream* pios):ntax(0), nchar(0) {
         sequences[seq.get_id()] = seq.get_sequence();
         if (!first) {
             if ((int)seq.get_length() != nchar) {
-                 std::cout << "Error: sequence " << seq.get_id() << " has "
+                std::cout << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
                     << nchar << "." << std::endl << "Exiting." << std::endl;
                 exit(1);
@@ -268,7 +264,7 @@ UPGMA::UPGMA (std::istream* pios):ntax(0), nchar(0) {
     if (ft == 2) {
         sequences[seq.get_id()] = seq.get_sequence();
         if ((int)seq.get_length() != nchar) {
-             std::cout << "Error: sequence " << seq.get_id() << " has "
+            std::cout << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
                 << nchar << "." << std::endl << "Exiting." << std::endl;
             exit(1);

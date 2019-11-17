@@ -41,7 +41,7 @@ double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_fun
             break;
         }
     }
-//     std::cout << like << std::endl;
+//    std::cout << like << std::endl;
     if (like < 0 || like == std::numeric_limits<double>::infinity()) {
         like = 10000000000000;
     }
@@ -73,10 +73,10 @@ void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor 
             for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {
                     x[int((*_free_mask)[k](i, j))] = _rm->at(k).get_Q()(i, j);
-                    // std::cout << x[int((*_free_mask)[k](i,j))] << " ";
+                    //std::cout << x[int((*_free_mask)[k](i,j))] << " ";
                 }
             }
-             std::cout << std::endl;
+            std::cout << std::endl;
         }
     }
     //double minf;
@@ -86,10 +86,10 @@ void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor 
             for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {
                     (*_free_mask)[k](i, j) = result[int((*_free_mask)[k](i, j))];
-                    // std::cout << x[int((*(*_free_mask)[k])(i,j))] << " ";
+                    //std::cout << x[int((*(*_free_mask)[k])(i,j))] << " ";
                 }
             }
-        // std::cout << std::endl;
+        //std::cout << std::endl;
         }
     }
     //if ((&minf) < 0) {

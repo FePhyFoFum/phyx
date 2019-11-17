@@ -1,11 +1,12 @@
-#include "edlib.h"
-
 #include <stdint.h>
 #include <cstdlib>
 #include <algorithm>
 #include <vector>
 #include <cstring>
 #include <cassert>
+
+#include "edlib.h"
+
 
 typedef uint64_t Word;
 static const int WORD_SIZE = sizeof(Word) * 8; // Size of Word in bits
@@ -25,11 +26,11 @@ struct AlignmentData {
         // We build a complete table and mark first and last block for each column
         // (because algorithm is banded so only part of each columns is used).
         // TODO: do not build a whole table, but just enough blocks for each column.
-         Ps     = new Word[maxNumBlocks * targetLength];
-         Ms     = new Word[maxNumBlocks * targetLength];
-         scores = new  int[maxNumBlocks * targetLength];
-         firstBlocks = new int[targetLength];
-         lastBlocks  = new int[targetLength];
+        Ps     = new Word[maxNumBlocks * targetLength];
+        Ms     = new Word[maxNumBlocks * targetLength];
+        scores = new  int[maxNumBlocks * targetLength];
+        firstBlocks = new int[targetLength];
+        lastBlocks  = new int[targetLength];
     }
 
     ~AlignmentData () {

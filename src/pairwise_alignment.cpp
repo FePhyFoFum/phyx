@@ -1,12 +1,11 @@
 #include <vector>
-#include <iostream>
 #include <map>
-#include <set>
 #include <string>
 #include <algorithm>
 
 #include "sequence.h"
 #include "pairwise_alignment.h"
+
 
 /**
  * Needleman-Wunsch

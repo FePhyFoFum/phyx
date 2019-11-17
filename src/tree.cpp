@@ -8,6 +8,7 @@
 #include "node.h"
 #include "tree.h"
 
+
 Tree::Tree () {
     root = NULL;
     processRoot();

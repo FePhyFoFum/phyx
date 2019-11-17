@@ -1,5 +1,3 @@
-// rename taxon labels
-
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -67,7 +65,7 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
     }
     /*
     for(map<string, string>::const_iterator it = name_map_.begin(); it != name_map_.end(); ++it) {
-        std::std::cout << it->first << " " << it->second << std::endl;
+        std::cout << it->first << " " << it->second << std::endl;
     }
     */
 }

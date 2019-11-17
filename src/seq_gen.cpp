@@ -7,7 +7,7 @@
 #include <random>
 #include <numeric>
 
-//using namespace arma;
+//using namespace arma; // do we want this?
 using arma::randn;
 using arma::mat;
 using arma::expmat;
@@ -19,6 +19,7 @@ using arma::expmat;
 #include "tree_reader.h"
 #include "tree_utils.h"
 
+
 // TODO: do we want this order?
 /*Default Rate Matrix looks like this, I don't know why but I always go A,T,C,G
  *
@@ -28,7 +29,6 @@ using arma::expmat;
  * G .33 .33  -1 .33
  * G .33 .33 .33  -1
  */
-
 
 // this should enable easy changing of order, if desired
 

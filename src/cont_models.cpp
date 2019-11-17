@@ -108,7 +108,7 @@ double norm_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET = det(sigma);
         if (DET == 0) {
-            cerr << "The covariance matrix can't be singular" << endl;
+            std::cerr << "The covariance matrix can't be singular" << std::endl;
             exit(0);
         }
         double norm_const = 1.0/ ( pow((2*PI),double(size)/2) * pow(DET,1.0/2) );
@@ -119,7 +119,7 @@ double norm_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
         double final = norm_const * result;
         return final;
     } else {
-        cerr << "The dimensions of the input don't match" << endl;
+        std::cerr << "The dimensions of the input don't match" << std::endl;
         exit(0);
     }
 }
@@ -132,7 +132,7 @@ double norm_log_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
         double sign;
         log_det(DET,sign,sigma);
         if (DET == 0) {
-            cerr << "The covariance matrix can't be singular" << endl;
+            std::cerr << "The covariance matrix can't be singular" << std::endl;
             exit(0);
         }
         mat U; vec s; mat V;
@@ -145,7 +145,7 @@ double norm_log_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
         double final = -.5 * (dot(invC2*trans(ancA),ancA))-0.5 * DET -0.5 * (size * log(2*PI));
         return final;
     } else {
-        cerr << "The dimensions of the input don't match" << endl;
+        std::cerr << "The dimensions of the input don't match" << std::endl;
         exit(0);
     }
 }

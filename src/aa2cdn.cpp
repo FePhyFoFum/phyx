@@ -4,6 +4,7 @@
 
 #include "aa2cdn.h"
 
+
 std::map<std::string, std::string> AAtoCDN::convert_to_codons(std::map<std::string,
         std::string>& aa_sequences, std::map<std::string, std::string>& nuc_sequences,
         bool& rm_last) {

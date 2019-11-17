@@ -3,6 +3,7 @@
 #include "tree_utils.h"
 #include "clean_tree.h"
 
+
 CleanTree::CleanTree (Tree * intree) {
     tree_ = intree;
     root_ = tree_->getRoot();

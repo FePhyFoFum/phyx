@@ -15,6 +15,7 @@
 #include "string_node_object.h"
 #include "tree_utils.h"
 
+
 Node::Node ():BL(0.0), height(0.0), number(0), name(""), parent(NULL),
     children(std::vector<Node *> ()), assoc(std::map<std::string, NodeObject *>()),
     assocDV(std::map<std::string, std::vector<Superdouble> >()), comment(""), painted(false) {
@@ -250,12 +251,12 @@ std::string Node::getPaintedNewick (bool bl) {
     /*
     string ndname = this->getName();
     if (ndname != "") {
-            cout << "Dealing with node '" << ndname << "'." << endl;
+            std::cout << "Dealing with node '" << ndname << "'." << std::endl;
         }
-    cout << "   dealing with " << paintedchildren.size() << " children." << endl;
+    std::cout << "   dealing with " << paintedchildren.size() << " children." << std::endl;
     
     if (paintedchildren.size() == 1) {
-        cout << "looks like '" << ndname << "' here might be a knuckle!" << endl;
+        std::cout << "looks like '" << ndname << "' here might be a knuckle!" << std::endl;
         bool done = false;
         double el = this->getChild(paintedchildren[0])->getBL();
         while (!done) {
@@ -472,13 +473,13 @@ std::vector<std::string> Node::get_leave_names () {
  * use the string ones like this
  * StringNodeObject sno("...a node object");
  * tree.getRoot()->assocObject("test",sno);
- * cout << *((StringNodeObject*) (tree.getRoot()->getObject("test"))) << endl;
+ * std::cout << *((StringNodeObject*) (tree.getRoot()->getObject("test"))) << std::endl;
  *
  * and the vector like
  * VectorNodeObject<int> vno;
  * vno.push_back(1);vno.push_back(2);
  * tree.getRoot()->assocObject("testvno",vno);
- * cout << ((VectorNodeObject<int> *) (tree.getRoot()->getObject("testvno")))->at(0) << endl;
+ * std::cout << ((VectorNodeObject<int> *) (tree.getRoot()->getObject("testvno")))->at(0) << std::endl;
  */
 NodeObject  * Node::getObject (std::string name) {
     return assoc[name];

@@ -14,22 +14,22 @@
 #include "log.h"
 
 void print_help() {
-     std::cout << "This will trace a big tree given a taxon list and and produce newick" << std::endl;
-     std::cout << "Can read from stdin or file" << std::endl;
-     std::cout << std::endl;
-     std::cout << "Usage: pxtrt [OPTION]... [FILE]..."<<std::endl;
-     std::cout << std::endl;
-     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
-     std::cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << std::endl;
-     std::cout << " -f, --namesf=FILE    names in a file (each on a line)" << std::endl;
-     std::cout << " -c, --comp           take the complement (i.e. remove any taxa not in list)" << std::endl;
-     std::cout << " -o, --outf=FILE      output tree file, stout otherwise" << std::endl;
-     std::cout << " -s, --silent         suppress warnings of missing tips" << std::endl;
-     std::cout << " -h, --help           display this help and exit" << std::endl;
-     std::cout << " -V, --version        display version and exit" << std::endl;
-     std::cout << std::endl;
-     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
-     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
+    std::cout << "This will trace a big tree given a taxon list and and produce newick" << std::endl;
+    std::cout << "Can read from stdin or file" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtrt [OPTION]... [FILE]..."<<std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << std::endl;
+    std::cout << " -f, --namesf=FILE    names in a file (each on a line)" << std::endl;
+    std::cout << " -c, --comp           take the complement (i.e. remove any taxa not in list)" << std::endl;
+    std::cout << " -o, --outf=FILE      output tree file, stout otherwise" << std::endl;
+    std::cout << " -s, --silent         suppress warnings of missing tips" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
 }
 
 std::string versionline("pxtrt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
@@ -97,7 +97,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                 std::cout << versionline << std::endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -150,7 +150,7 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = & std::cout;
+        poos = &std::cout;
     }
     
     //read trees 
@@ -173,7 +173,7 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     tree = get_induced_tree(tree, names, silent);
@@ -188,7 +188,7 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     tree = get_induced_tree(tree, names, silent);
@@ -210,7 +210,7 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     toKeep = get_complement_tip_set(tree, names);
@@ -227,7 +227,7 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                         std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     toKeep = get_complement_tip_set(tree, names);

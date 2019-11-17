@@ -32,7 +32,7 @@ double OptimizeStateReconstructor::GetLikelihoodWithOptimized (const gsl_vector 
     double like;
     rm->set_Q_diag();
     like = sr->eval_likelihood();
-    // std::cout << like << std::endl;
+    //std::cout << like << std::endl;
     if (like < 0 || like == std::numeric_limits<double>::infinity()) {
         like = 100000000;
     }
@@ -63,7 +63,7 @@ mat OptimizeStateReconstructor::optimize () {
     /* Set all step sizes to .01 */ //Note that it was originally 1
     gsl_vector_set_all (ss, .2);
     /* Starting point */
-    // std::cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<std::endl;
+    //std::cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<std::endl;
     x = gsl_vector_alloc (np);
     for (unsigned int i=0; i < np; i++) {
         gsl_vector_set (x, i, 0.1);
@@ -80,7 +80,7 @@ mat OptimizeStateReconstructor::optimize () {
     s = gsl_multimin_fminimizer_alloc (T, np);
     gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
     do {
-        // std::cout<<"Now on iteration "<<iter<<std::endl;
+        //std::cout<<"Now on iteration "<<iter<<std::endl;
         iter++;
         status = gsl_multimin_fminimizer_iterate(s);
         if (status != 0) { //0 Means it's a success

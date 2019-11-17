@@ -1,5 +1,3 @@
-// collapse internal edges below some support threshold
-
 #include <string>
 #include <iostream>
 #include <cmath>       /* rint */
@@ -7,6 +5,7 @@
 #include "tree.h"
 #include "tree_utils.h"
 #include "collapse_tree.h"
+
 
 Collapser::Collapser (double const& threshold):scale_set_(false) {
     threshold_ = threshold;

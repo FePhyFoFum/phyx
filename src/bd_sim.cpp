@@ -2,9 +2,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include <sstream>
 #include <cmath>
-#include <limits>
 #include <cstdlib>
 #include <algorithm>
 #include <ctime>
@@ -14,6 +12,7 @@
 #include "tree.h"
 #include "node.h"
 #include "utils.h"
+
 
 BirthDeathSimulator::BirthDeathSimulator (double estop, double tstop, double brate,
     double drate, int seed):failures_(0), maxfailures_(1000), birthrate_(brate),

@@ -1,16 +1,13 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <sstream>
-#include <cmath>
-#include <limits>
 #include <cstdlib>
 #include <algorithm>
-#include <ctime>
 #include <fstream>
 
 #include "seq_sample.h"
 #include "utils.h"
+
 
 SequenceSampler::SequenceSampler (const int& seed, const float& jackfract,
         std::string& partf):jkfract_(jackfract), jackknife_(false),

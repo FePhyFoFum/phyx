@@ -1,5 +1,3 @@
-// log program calls. useful for documenting and replication
-
 #include <fstream>
 
 #include "log.h"

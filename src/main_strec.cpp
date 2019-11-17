@@ -20,7 +20,6 @@
 #include "tree_utils.h"
 #include "log.h"
 
-
 void print_help() {
     std::cout << "This will conduct state reconstruction analyses." << std::endl;
     std::cout << std::endl;

@@ -29,7 +29,7 @@ int get_distance_between_two_nodes (Tree * tr, Node * nd1, Node * nd2) {
     }
     cur = nd2;
     while (cur != mrca) {
-            cur = cur->getParent();
+        cur = cur->getParent();
         count += 1;
     }
     return count;

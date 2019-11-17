@@ -10,6 +10,7 @@
 #include "sequence.h"
 #include "utils.h"
 
+
 // IUPAC codes
 std::string dnachars  = "ACGTURYSWKMBDHVN";
 std::string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";

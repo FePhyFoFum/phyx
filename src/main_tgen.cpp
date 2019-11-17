@@ -11,22 +11,22 @@
 #include "log.h"
 
 void print_help() {
-     std::cout << "Generate all tree topologies for n taxa." << std::endl;
-     std::cout << "Random tree samples are a-coming." << std::endl;
-     std::cout << std::endl;
-     std::cout << "Usage: pxtgen [OPTION]... " << std::endl;
-     std::cout << std::endl;
-     std::cout << " -n, --ntax=INT      number of taxa" << std::endl;
-     std::cout << " -r, --rooted        whether generated trees are rooted (default: false)" << std::endl;
-     std::cout << " -c, --count         give the number of possible trees for n taxa and exit" << std::endl;
-     std::cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << std::endl;
-     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
-//     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
-     std::cout << " -h, --help          display this help and exit" << std::endl;
-     std::cout << " -V, --version       display version and exit" << std::endl;
-     std::cout << std::endl;
-     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
-     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
+    std::cout << "Generate all tree topologies for n taxa." << std::endl;
+    std::cout << "Random tree samples are a-coming." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtgen [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -n, --ntax=INT      number of taxa" << std::endl;
+    std::cout << " -r, --rooted        whether generated trees are rooted (default: false)" << std::endl;
+    std::cout << " -c, --count         give the number of possible trees for n taxa and exit" << std::endl;
+    std::cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+//    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
 std::string versionline("pxtgen 0.1\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                 std::cout << versionline << std::endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -103,20 +103,20 @@ int main(int argc, char * argv[]) {
     std::string rootstat = (rooted) ? "rooted" : "unrooted";
     
     if (ntax == 0) {
-         std::cout << "You have to set the number of taxa -n. Exiting." << std::endl;
+        std::cout << "You have to set the number of taxa -n. Exiting." << std::endl;
         exit(0);
     } else if (ntax < 3) {
-         std::cout << "The number of taxa -n must be >= 3. Exiting." << std::endl;
+        std::cout << "The number of taxa -n must be >= 3. Exiting." << std::endl;
         exit(0);
     } else if (ntax > sim_limit_exh) {
-         std::cout << "The number of taxa -n is currently limited to " << sim_limit_exh
+        std::cout << "The number of taxa -n is currently limited to " << sim_limit_exh
                 << " (" << get_num_possible_trees(sim_limit_exh, rooted) << " "
                 << rootstat << " topologies). Exiting." << std::endl;
         exit(0);
     }
     
     if (count) {
-         std::cout << "There are " << get_num_possible_trees(ntax, rooted)
+        std::cout << "There are " << get_num_possible_trees(ntax, rooted)
                 << " possible " << rootstat << " topologies for " << ntax
                 << " taxa." << std::endl;
         exit(0);
@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = & std::cout;
+        poos = &std::cout;
     }
     
     TopologyGenerator TG(ntax, rooted, lprefix);

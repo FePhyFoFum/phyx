@@ -8,6 +8,7 @@
 #include "sequence.h"
 #include "seq_reader.h"
 
+
 /*******************************************************/
 // hard-coded translation tables //
 

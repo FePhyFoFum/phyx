@@ -3,7 +3,6 @@
 #include <vector>
 #include <map>
 #include <assert.h>
-#include <iostream>
 #include <fstream>
 
 #include "seq_models.h"

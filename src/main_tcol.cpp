@@ -12,21 +12,21 @@
 #include "log.h"
 
 void print_help() {
-     std::cout << "Add information to a tree so that you can color the edges." << std::endl;
-     std::cout << "This will take nexus and newick inputs and will output nexus so" << std::endl;
-     std::cout << "that it can be read by figtree." << std::endl;
-     std::cout << std::endl;
-     std::cout << "Usage: pxtcol [OPTION]... " << std::endl;
-     std::cout << std::endl;
-     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
-     std::cout << " -m, --mrcaf=FILE     file with mrcas and annotations, tab separated" << std::endl;
-     std::cout << " -d, --nodeidf=FILE   file with nodeids (labels) and annotations, tab separated" << std::endl;
-     std::cout << " -o, --outf=FILE      output file, stout otherwise" << std::endl;
-     std::cout << " -h, --help           display this help and exit" << std::endl;
-     std::cout << " -V, --version        display version and exit" << std::endl;
-     std::cout << std::endl;
-     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
-     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
+    std::cout << "Add information to a tree so that you can color the edges." << std::endl;
+    std::cout << "This will take nexus and newick inputs and will output nexus so" << std::endl;
+    std::cout << "that it can be read by figtree." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtcol [OPTION]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -m, --mrcaf=FILE     file with mrcas and annotations, tab separated" << std::endl;
+    std::cout << " -d, --nodeidf=FILE   file with nodeids (labels) and annotations, tab separated" << std::endl;
+    std::cout << " -o, --outf=FILE      output file, stout otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
 std::string versionline("pxtcol 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
@@ -84,7 +84,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                 std::cout << versionline << std::endl;
+                std::cout << versionline << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = & std::cout;
+        poos = &std::cout;
     }
     
     //for node ids
