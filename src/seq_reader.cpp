@@ -483,8 +483,8 @@ void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, 
             std::vector<std::string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
-                replace(tline.begin(), tline.end(), '=', ' ');
-                replace(tline.begin(), tline.end(), ';', ' ');
+                std::replace(tline.begin(), tline.end(), '=', ' ');
+                std::replace(tline.begin(), tline.end(), ';', ' ');
                 searchtokens = tokenize(tline);
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "NTAX") {
@@ -496,8 +496,8 @@ void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, 
                     }
                 }
             } else if (searchtokens[0] == "FORMAT") {
-                replace(tline.begin(), tline.end(), '=', ' ');
-                replace(tline.begin(), tline.end(), ';', ' ');
+                std::replace(tline.begin(), tline.end(), '=', ' ');
+                std::replace(tline.begin(), tline.end(), ';', ' ');
                 searchtokens = tokenize(tline);
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "INTE") {
@@ -539,8 +539,8 @@ void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool&
             std::vector<std::string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
-                replace(tline.begin(), tline.end(), '=', ' ');
-                replace(tline.begin(), tline.end(), ';', ' ');
+                std::replace(tline.begin(), tline.end(), '=', ' ');
+                std::replace(tline.begin(), tline.end(), ';', ' ');
                 searchtokens = tokenize(tline);
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "NTAX") {
@@ -552,8 +552,8 @@ void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool&
                     }
                 }
             } else if (searchtokens[0] == "FORMAT") {
-                replace(tline.begin(), tline.end(), '=', ' ');
-                replace(tline.begin(), tline.end(), ';', ' ');
+                std::replace(tline.begin(), tline.end(), '=', ' ');
+                std::replace(tline.begin(), tline.end(), ';', ' ');
                 searchtokens = tokenize(tline);
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "INTE") {
@@ -602,8 +602,8 @@ void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numC
             std::vector<std::string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
-                replace(tline.begin(), tline.end(), '=', ' ');
-                replace(tline.begin(), tline.end(), ';', ' ');
+                std::replace(tline.begin(), tline.end(), '=', ' ');
+                std::replace(tline.begin(), tline.end(), ';', ' ');
                 searchtokens = tokenize(tline);
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "NTAX") {
@@ -615,8 +615,8 @@ void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numC
                     }
                 }
             } else if (searchtokens[0] == "FORMAT") {
-                replace(tline.begin(), tline.end(), '=', ' ');
-                replace(tline.begin(), tline.end(), ';', ' ');
+                std::replace(tline.begin(), tline.end(), '=', ' ');
+                std::replace(tline.begin(), tline.end(), ';', ' ');
                 searchtokens = tokenize(tline);
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "INTE") {
@@ -886,4 +886,3 @@ bool read_nexus_seqs_file(string filen, vector <Sequence>& seqs) {
     return true;
 }
 */
-

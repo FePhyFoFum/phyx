@@ -8,12 +8,12 @@
 #include "sequence.h"
 
 
-std::string get_filetype_string(const int& ft);
-int test_seq_filetype_stream(std::istream& stri, std::string& retstring);
-int test_char_filetype_stream(std::istream& stri, std::string& retstring);
-bool read_next_seq_from_stream(std::istream& stri, int ftype, std::string& retstring,
+std::string get_filetype_string (const int& ft);
+int test_seq_filetype_stream (std::istream& stri, std::string& retstring);
+int test_char_filetype_stream (std::istream& stri, std::string& retstring);
+bool read_next_seq_from_stream (std::istream& stri, int ftype, std::string& retstring,
     Sequence& seq);
-bool read_next_seq_char_from_stream(std::istream& stri, int ftype,
+bool read_next_seq_char_from_stream (std::istream& stri, int ftype,
     std::string& retstring, Sequence& seq);
 void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, bool& interleave);
 void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool& interleave);
