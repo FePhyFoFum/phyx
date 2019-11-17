@@ -65,12 +65,12 @@ typedef enum {
     EDLIB_CIGAR_EXTENDED   //!< Match: '=', Insertion: 'I', Deletion: 'D', Mismatch: 'X'.
 } EdlibCigarFormat;
 
+
 // Edit operations.
 #define EDLIB_EDOP_MATCH 0    //!< Match.
 #define EDLIB_EDOP_INSERT 1   //!< Insertion to target = deletion from query.
 #define EDLIB_EDOP_DELETE 2   //!< Deletion from target = insertion to query.
 #define EDLIB_EDOP_MISMATCH 3 //!< Mismatch.
-
 
 
     /**
@@ -106,13 +106,13 @@ typedef enum {
      * Helper method for easy construction of configuration object.
      * @return Configuration object filled with given parameters.
      */
-    EdlibAlignConfig edlibNewAlignConfig(int k, EdlibAlignMode mode, EdlibAlignTask task);
+    EdlibAlignConfig edlibNewAlignConfig (int k, EdlibAlignMode mode, EdlibAlignTask task);
 
     /**
      * @return Default configuration object, with following defaults:
      *         k = -1, mode = EDLIB_MODE_NW, task = EDLIB_TASK_DISTANCE.
      */
-    EdlibAlignConfig edlibDefaultAlignConfig(void);
+    EdlibAlignConfig edlibDefaultAlignConfig (void);
 
 
     /**
@@ -169,7 +169,7 @@ typedef enum {
      * Frees memory in EdlibAlignResult that was allocated by edlib.
      * If you do not use it, make sure to free needed members manually using free().
      */
-    void edlibFreeAlignResult(EdlibAlignResult result);
+    void edlibFreeAlignResult (EdlibAlignResult result);
 
 
     /**
@@ -187,11 +187,11 @@ typedef enum {
      * @return  Result of alignment, which can contain edit distance, start and end locations and alignment path.
      *          Make sure to clean up the object using edlibFreeAlignResult() or by manually freeing needed members.
      */
-    EdlibAlignResult edlibAlign(const char* query, int queryLength,
+    EdlibAlignResult edlibAlign (const char* query, int queryLength,
                                 const char* target, int targetLength,
                                 const EdlibAlignConfig config);
 
-
+    
     /**
      * Builds cigar string from given alignment sequence.
      * @param [in] alignment  Alignment sequence.
@@ -211,10 +211,8 @@ typedef enum {
      *     Needed memory is allocated and given pointer is set to it.
      *     Do not forget to free it later using free()!
      */
-    char* edlibAlignmentToCigar(const unsigned char* alignment, int alignmentLength,
+    char* edlibAlignmentToCigar (const unsigned char* alignment, int alignmentLength,
                                 EdlibCigarFormat cigarFormat);
-
-
 
 #ifdef __cplusplus
 }
