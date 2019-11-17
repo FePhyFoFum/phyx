@@ -1,4 +1,3 @@
-
 #include <string>
 #include <vector>
 #include <map>
@@ -18,26 +17,29 @@ using namespace std;
 
 #define MINBL 0.000000001
 
-StateReconstructor::StateReconstructor(RateModel & _rm,vector<RateModel> &_vrm):tree(NULL),
+
+StateReconstructor::StateReconstructor (RateModel& _rm,vector<RateModel> &_vrm):tree(NULL),
     use_periods(false),nstates(_rm.nstates),rm(_rm),rm_periods(_vrm),dc("dist_conditionals"),
     andc("anc_dist_conditionals"),store_p_matrices(false),use_stored_matrices(false),revB("revB"),
     rev(false),rev_exp_number("rev_exp_number"),rev_exp_time("rev_exp_time"),
     stochastic(false),stored_EN_matrices(map<Superdouble, mat >()),
     stored_ER_matrices(map<Superdouble, mat >()),sp_alphas("sp_alphas"),alphas("alphas") {}
 
+
 /**
  * need to do this before you do the set tree
- */
-void StateReconstructor::set_periods(vector<double> & ps,vector<RateModel> & rms) {
+*/
+void StateReconstructor::set_periods (vector<double>& ps,vector<RateModel>& rms) {
     use_periods = true;
     periods = ps;
     rm_periods = rms;
 }
 
+
 /*
  * initialize each node with segments
- */
-void StateReconstructor::set_tree(Tree * tr) {
+*/
+void StateReconstructor::set_tree (Tree * tr) {
     tree = tr;
     if (verbose) {
         cout << "initializing nodes..." << endl;
@@ -94,10 +96,11 @@ void StateReconstructor::set_tree(Tree * tr) {
     }
 }
 
+
 /**
  * this will setup the distconds and ancdistconds for each segment
- */
-void StateReconstructor::set_periods_model() {
+*/
+void StateReconstructor::set_periods_model () {
     for (int i=0; i < tree->getNodeCount(); i++) {
         vector<BranchSegment> * tsegs = tree->getNode(i)->getSegVector();
         for (unsigned int j=0; j < tsegs->size(); j++) {
@@ -116,7 +119,8 @@ void StateReconstructor::set_periods_model() {
     delete ancdistconds;
 }
 
-bool StateReconstructor::set_tip_conditionals(vector<Sequence> & data) {
+
+bool StateReconstructor::set_tip_conditionals (vector<Sequence>& data) {
     bool allsame = true;
     string testsame = data[0].get_sequence();
     for (unsigned int i=0; i < data.size(); i++) {
@@ -162,7 +166,8 @@ bool StateReconstructor::set_tip_conditionals(vector<Sequence> & data) {
     return allsame;
 }
 
-bool StateReconstructor::set_tip_conditionals_already_given(vector<Sequence> & data) {
+
+bool StateReconstructor::set_tip_conditionals_already_given (vector<Sequence>& data) {
     bool allsame = false;
     for (unsigned int i=0; i < data.size(); i++) {
     Sequence seq = data[i];
@@ -199,7 +204,7 @@ bool StateReconstructor::set_tip_conditionals_already_given(vector<Sequence> & d
 }
 
 
-VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node) {
+VectorNodeObject<Superdouble> StateReconstructor::conditionals (Node& node) {
     VectorNodeObject<Superdouble> distconds = *((VectorNodeObject<Superdouble>*) node.getObject(dc));
     VectorNodeObject<Superdouble> * v = new VectorNodeObject<Superdouble> (nstates, 0);
     cx_mat p;
@@ -224,7 +229,8 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals(Node & node) {
     return distconds;
 }
 
-VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods(Node & node) {
+
+VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& node) {
     vector<Superdouble> distconds;
     vector<BranchSegment> * tsegs = node.getSegVector();
     distconds = *tsegs->at(0).distconds;
@@ -271,7 +277,8 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods(Node & no
     return rdistconds;
 }
 
-void StateReconstructor::ancdist_conditional_lh(Node & node) {
+
+void StateReconstructor::ancdist_conditional_lh (Node& node) {
     VectorNodeObject<Superdouble> distconds(nstates, 0);
     if (node.isExternal() == false) { // is not a tip
         Node * c1 = node.getChild(0);
@@ -325,18 +332,21 @@ void StateReconstructor::ancdist_conditional_lh(Node & node) {
     }
 }
 
-double StateReconstructor::eval_likelihood() {
+
+double StateReconstructor::eval_likelihood () {
     ancdist_conditional_lh(*tree->getRoot());
     //return (-log(calculate_vector_double_sum(*
     //      (VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))));
     return double(-(calculate_vector_Superdouble_sum(*(VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))).getLn());
 }
 
-void StateReconstructor::prepare_ancstate_reverse() {
+
+void StateReconstructor::prepare_ancstate_reverse () {
     reverse(tree->getRoot());
 }
 
-void StateReconstructor::reverse(Node * node) {
+
+void StateReconstructor::reverse (Node * node) {
     rev = true;
     VectorNodeObject<Superdouble> * revconds = new VectorNodeObject<Superdouble> (nstates, 0);//need to delete this at some point
     if (node == tree->getRoot()) {
@@ -415,7 +425,8 @@ void StateReconstructor::reverse(Node * node) {
     }
 }
 
-vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd(Node & node) {
+
+vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node& node) {
     vector<Superdouble> LHOODS (nstates,0);
     if (node.isExternal() == false) {//is not a tip
         VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
@@ -434,7 +445,8 @@ vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd(Node & nod
     return LHOODS;
 }
 
-vector<double> StateReconstructor::calculate_ancstate_reverse(Node & node) {
+
+vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) {
     vector<double> LHOODS (nstates,0);
     if (node.isExternal() == false) {//is not a tip
         VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
@@ -453,7 +465,8 @@ vector<double> StateReconstructor::calculate_ancstate_reverse(Node & node) {
     return LHOODS;
 }
 
-void StateReconstructor::prepare_stochmap_reverse_all_nodes(int from, int to) {
+
+void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
     stochastic = true;
     //calculate and store local expectation matrix for each branch length
     for (int k = 0; k < tree->getNodeCount(); k++) {
@@ -508,10 +521,11 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes(int from, int to) {
     }
 }
 
+
 /*
  * only for number of changes
- */
-void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices() {
+*/
+void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
     stochastic = true;
     //calculate and store local expectation matrix for each branch length
     for (int k = 0; k < tree->getNodeCount(); k++) {
@@ -575,7 +589,7 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices() {
 }
 
 
-vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool tm) {
+vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, bool tm) {
     if (node.isExternal()==false) {//is not a tip
     vector<double> totalExp (nstates,0);
     vector<Superdouble> Bs;
@@ -623,15 +637,17 @@ vector<double> StateReconstructor::calculate_reverse_stochmap(Node & node, bool 
     }
 }
 
-void StateReconstructor::set_store_p_matrices(bool i) {
+
+void StateReconstructor::set_store_p_matrices (bool i) {
     store_p_matrices = i;
 }
 
-void StateReconstructor::set_use_stored_matrices(bool i) {
+
+void StateReconstructor::set_use_stored_matrices (bool i) {
     use_stored_matrices = i;
 }
 
-StateReconstructor::~StateReconstructor() {
+
+StateReconstructor::~StateReconstructor () {
 
 }
-

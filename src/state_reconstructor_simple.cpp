@@ -1,9 +1,6 @@
-
 #include <string>
 #include <vector>
 #include <map>
-
-using namespace std;
 
 #include "state_reconstructor_simple.h"
 #include "tree.h"
@@ -17,20 +14,23 @@ using namespace std;
 
 #define MINBL 0.000000001
 
+
 /**
  * this can take the multiple states
  */
 
-StateReconstructorSimple::StateReconstructorSimple(RateModel & _rm, int num_sites):tree(NULL),
+StateReconstructorSimple::StateReconstructorSimple (RateModel& _rm, int num_sites):tree(NULL),
     nstates(_rm.nstates),nsites(num_sites),rm(_rm),dc("dist_conditionals"),v_storage(_rm.nstates,0),
     v1(_rm.nstates,0),v2(_rm.nstates,0) {}
-    /*
-     * initialize each node with segments
-     */
-void StateReconstructorSimple::set_tree(Tree * tr) {
+
+
+/*
+ * initialize each node with segments
+ */
+void StateReconstructorSimple::set_tree (Tree * tr) {
     tree = tr;
     if (verbose) {
-        cout << "initializing nodes..." << endl;
+        std::cout << "initializing nodes..." << std::endl;
     }
     for (int i=0; i < tree->getNodeCount(); i++) {
         if (tree->getNode(i)->getBL()<MINBL) {
@@ -39,7 +39,7 @@ void StateReconstructorSimple::set_tree(Tree * tr) {
     //VectorNodeObject<double> * dcs = new VectorNodeObject<double>(nstates);
     vector<vector<double> > tv;
     for (int j=0; j < nsites; j++) {
-        vector<double> tn(nstates);
+        std::vector<double> tn(nstates);
         tv.push_back(tn);
     }
     conditionals_map[tree->getNode(i)] = tv;
@@ -48,14 +48,15 @@ void StateReconstructorSimple::set_tree(Tree * tr) {
     }
 }
 
-bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_data, int site) {
+
+bool StateReconstructorSimple::set_tip_conditionals (std::vector<Sequence>& distrib_data, int site) {
     bool allsame = true;
-    string testsame = distrib_data[0].get_sequence();
+    std::string testsame = distrib_data[0].get_sequence();
     for (unsigned int i=0; i < distrib_data.size(); i++) {
         Sequence seq = distrib_data[i];
         Node * nd = tree->getExternalNode(seq.get_id());
         if (verbose) {
-            cout << nd->getName() << " ";
+            std::cout << nd->getName() << " ";
         }
         for (int j=0; j < nstates; j++) {
             if (seq.get_sequence().at(j) == '1') {
@@ -66,26 +67,27 @@ bool StateReconstructorSimple::set_tip_conditionals(vector<Sequence> & distrib_d
                 conditionals_map[nd][site][j] = 0.0;
             }
             if (verbose) {
-                cout << seq.get_sequence().at(j);
+                std::cout << seq.get_sequence().at(j);
             }
         }
         if (verbose) {
-            cout << endl;
+            std::cout << std::endl;
         }
         if (testsame != seq.get_sequence()) {
             allsame = false;
         }
     }
     if (allsame == true && verbose == true) {
-        cerr << "all the tips have the same characters" << endl;
+        std::cerr << "all the tips have the same characters" << std::endl;
     }
     return allsame;
 }
 
+
 //VectorNodeObject<double> 
-void StateReconstructorSimple::conditionals(vector<double> * v, Node & node,int site) {
+void StateReconstructorSimple::conditionals (std::vector<double> * v, Node & node, int site) {
 //    VectorNodeObject<double> distconds = *((VectorNodeObject<double>*) node.getObject(dc));
-    vector<double> * tdistconds = &conditionals_map[&node][site];
+    std::vector<double> * tdistconds = &conditionals_map[&node][site];
 
     //VectorNodeObject<double> * v = new VectorNodeObject<double> (nstates, 0);
     if (map_ps.count(node.getBL()) == 0) {
@@ -109,9 +111,10 @@ void StateReconstructorSimple::conditionals(vector<double> * v, Node & node,int 
 //    return distconds;
 }
 
+
 //model 2a
-void StateReconstructorSimple::conditionals2(vector<double> * v, Node & node,int site) {
-    vector<double> * tdistconds = &conditionals_map[&node][site];
+void StateReconstructorSimple::conditionals2(std::vector<double> * v, Node & node, int site) {
+    std::vector<double> * tdistconds = &conditionals_map[&node][site];
     if (map_ps0.count(node.getBL()) == 0) {
         mat tp0(nstates,nstates);
         mat tp1(nstates,nstates);
@@ -142,9 +145,10 @@ void StateReconstructorSimple::conditionals2(vector<double> * v, Node & node,int
     }
 }
 
-void StateReconstructorSimple::ancdist_conditional_lh(Node & node, int site) {
+
+void StateReconstructorSimple::ancdist_conditional_lh(Node& node, int site) {
 //    VectorNodeObject<double> distconds(nstates, 0);
-    vector<double> * distconds = &conditionals_map[&node][site];
+    std::vector<double> * distconds = &conditionals_map[&node][site];
     if (node.isExternal() == false) {//is not a tip
         Node * c1 = node.getChild(0);
         Node * c2 = node.getChild(1);
@@ -161,8 +165,8 @@ void StateReconstructorSimple::ancdist_conditional_lh(Node & node, int site) {
             conditionals2(&v1,*c1, site);
             conditionals2(&v2,*c2, site);
         }
-        //vector<Superdouble> * v1 = &conditionals_map[c1][site];
-        //vector<Superdouble> * v2 = &conditionals_map[c2][site];
+        //std::vector<Superdouble> * v1 = &conditionals_map[c1][site];
+        //std::vector<Superdouble> * v2 = &conditionals_map[c2][site];
         for (int i=0; i < nstates; i++) {
     //        distconds.at(i)= v1[i] * v2[i];
             distconds->at(i) = v1[i] * v2[i];
@@ -182,7 +186,8 @@ void StateReconstructorSimple::ancdist_conditional_lh(Node & node, int site) {
 //    }
 }
 
-double StateReconstructorSimple::eval_likelihood(int site) {
+
+double StateReconstructorSimple::eval_likelihood (int site) {
    ancdist_conditional_lh(*tree->getRoot(), site);
 //    return (-log(sum(*
 //          (VectorNodeObject<double>*) tree->getRoot()->getObject(dc))));
@@ -190,7 +195,8 @@ double StateReconstructorSimple::eval_likelihood(int site) {
     //return double(-(calculate_vector_Superdouble_sum(*(VectorNodeObject<double>*) tree->getRoot()->getObject(dc))).getLn());
 }
 
-void StateReconstructorSimple::clear_map_ps() {
+
+void StateReconstructorSimple::clear_map_ps () {
     if (rm.selection_model == 0) {
         map_ps.clear();
     } else if (rm.selection_model == 1) {
@@ -205,7 +211,6 @@ void StateReconstructorSimple::clear_map_ps() {
 }
 
 
-StateReconstructorSimple::~StateReconstructorSimple() {
+StateReconstructorSimple::~StateReconstructorSimple () {
 
 }
-
