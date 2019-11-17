@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -8,22 +7,22 @@
 #include <cstdlib>
 #include <map>
 
-using namespace std;
-
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
 
+
 // for printing purposes
-map <int, string> filetype_map = {
+std::map<int, std::string> filetype_map = {
    {0, "nexus"},
    {1, "phylip"},
    {2, "fasta"},
    {3, "fastq"}
 };
 
-string get_filetype_string (int const& ft) {
-    string ftype = filetype_map[ft];
+
+std::string get_filetype_string (const int& ft) {
+    std::string ftype = filetype_map[ft];
     return ftype;
 }
 
@@ -32,9 +31,9 @@ string get_filetype_string (int const& ft) {
  * # (nexus), num (phylip), > (fasta), @ (fastq)
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
  */
-int test_seq_filetype_stream(istream & stri, string & retstring) {
+int test_seq_filetype_stream(std::istream& stri, std::string& retstring) {
     if (!getline(stri, retstring)) {
-        cout << "ERROR: end of file too soon" << endl;
+        std::cout << "ERROR: end of file too soon" << std::endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
     if (retstring[0] == '#') {
@@ -44,8 +43,8 @@ int test_seq_filetype_stream(istream & stri, string & retstring) {
     } else if (retstring[0] == '@') {
         ret = 3;
     } else {
-        vector <string> tokens;
-        string del(" \t");
+        std::vector<std::string> tokens;
+        std::string del(" \t");
         tokenize(retstring, tokens, del);
         if (tokens.size() > 1) {
             trim_spaces(tokens[0]);
@@ -57,15 +56,16 @@ int test_seq_filetype_stream(istream & stri, string & retstring) {
     return ret;
 }
 
+
 /*
  * returns the next string in the getline if there is one
  * TODO: nexus interleaved is not going to work here
  * TODO: skip Nexus comment lines
  */
-bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq) {
-    string tline;
+bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& retstring, Sequence& seq) {
+    std::string tline;
     if (ftype == 0) { // nexus
-        string tline;
+        std::string tline;
         //are we at the beginning of the file?
         //TODO: add check for interleave and kick out to do a different reader
         //checks for beginning of char by MATRIX
@@ -80,7 +80,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
                 }
             }
             if (found == false) {
-                cout << "badly formatted nexus file, missing 'MATRIX' in data/character block" << endl;
+                std::cout << "badly formatted nexus file, missing 'MATRIX' in data/character block" << std::endl;
             }
             retstring = "";
         }
@@ -93,8 +93,8 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
                 return false;
             }
         }
-        vector <string> tokens;
-        string del(" \t");
+        std::vector<std::string> tokens;
+        std::string del(" \t");
         tokenize(tline, tokens, del);
         if (tokens.size() > 1) {
             for (unsigned int i=0; i < tokens.size(); i++) {
@@ -111,9 +111,9 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             return false;
         }
     } else if (ftype == 1) { // phylip. TODO: this crashes if has a trailing empty line (JWB)
-        vector<string> tokens;
-        string del(" \t");
-        string tline;
+        std::vector<std::string> tokens;
+        std::string del(" \t");
+        std::string tline;
         // check to see if we are at the beginning of the file
         if (retstring.size() > 0) {
             tokenize(retstring, tokens, del);
@@ -149,7 +149,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
         if (tokens.size() == 2) {
             seq.set_sequence(tokens[1]);
         } else {
-            string tse = tokens[1];
+            std::string tse = tokens[1];
             //TODO: look for decimal and add cont char if decimal present
             //seq.add_multistate_char(atoi(tokens[1].c_str()));
             for (unsigned int j=2; j < tokens.size(); j++) {
@@ -162,7 +162,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
     } else if (ftype == 2) { // fasta
         bool first = true;
         bool going = true;
-        string curseq = "";
+        std::string curseq = "";
         while (going) {
             if (first == true && retstring.size() > 0) {
                 tline = retstring;
@@ -176,7 +176,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             }
             if (tline.substr(0,1) == ">") {
                 if (first == true) {
-                    string id_ = tline.substr(1,tline.size()-1);
+                    std::string id_ = tline.substr(1,tline.size()-1);
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
@@ -191,7 +191,7 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
             }
         }
     } else if (ftype == 3) {//fastq assumes a 33 offset for now
-        string line1,line2,line3,line4;
+        std::string line1,line2,line3,line4;
         if (retstring.size() > 0) {
             line1 = retstring;
             retstring = "";
@@ -219,10 +219,10 @@ bool read_next_seq_from_stream(istream & stri, int ftype, string & retstring, Se
 // interleaved data do not work with the stream philosophy
 // by using this function, the file has already been checked, so we know ntax and nchar
 // prolly get rid of this in favour of the stream-based one
-vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar) {
-    vector <Sequence> seqs;
-    string tline;
-    ifstream infile(filen.c_str());
+std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, int nchar) {
+    std::vector <Sequence> seqs;
+    std::string tline;
+    std::ifstream infile(filen.c_str());
     //bool done = false; // not used
     
     // first, get us to the MATRIX line i.e., right before the sequences start
@@ -236,17 +236,17 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
         }
     }
     if (found == false) {
-        cout << "badly formatted nexus file: missing 'MATRIX' in data/character block. Exiting." << endl;
+        std::cout << "badly formatted nexus file: missing 'MATRIX' in data/character block. Exiting." << std::endl;
         exit(1);
     }
     
     int totcount = 0;
     int loopcount = 0;
-    string del(" \t");
+    std::string del(" \t");
     while (getline(infile, tline)) {
         trim_spaces(tline);
         if (tline.size() != 0) {
-            vector <string> tokens;
+            std::vector<std::string> tokens;
             tokenize(tline, tokens, del);
             if (tokens.size() > 1) {
                 Sequence seq;
@@ -254,7 +254,7 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
                     trim_spaces(tokens[i]);
                 }
                 if (tokens[0].compare(";") == 0) {
-                    cout << "Huh?" << endl;
+                    std::cout << "Huh?" << std::endl;
                     exit(0);
                 } else {
                     seq.set_id(tokens[0]);
@@ -273,7 +273,7 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
             if (loopcount == ntax) {
                 loopcount = 0; // reset
                 // check if we're done
-                string terp = seqs[ntax - 1].get_sequence();
+                std::string terp = seqs[ntax - 1].get_sequence();
                 if ((int)terp.size() == nchar) {
                     break;
                 }
@@ -281,24 +281,25 @@ vector <Sequence> read_interleaved_nexus_file (string filen, int ntax, int nchar
         }
     }
     infile.close();
-    //cout << "Seqs has " << seqs.size() << " taxa and "
-    //        << seqs[0].get_sequence().size() << " sites." << endl;
+    //std::cout << "Seqs has " << seqs.size() << " taxa and "
+    //        << seqs[0].get_sequence().size() << " sites." << std::endl;
     return seqs;
 }
 
+
 // don't search for MATRIX; if we know it is interleaved, MATRIX has already been read
-vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
-    vector <Sequence> seqs;
-    string tline;
+std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int nchar) {
+    std::vector<Sequence> seqs;
+    std::string tline;
     //bool done = false; // not used
     
     int totcount = 0;
     int loopcount = 0;
-    string del(" \t");
+    std::string del(" \t");
     while (getline(stri, tline)) {
         trim_spaces(tline);
         if (tline.size() != 0) {
-            vector <string> tokens;
+            std::vector<std::string> tokens;
             tokenize(tline, tokens, del);
             if (tokens.size() > 1) {
                 Sequence seq;
@@ -306,7 +307,7 @@ vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
                     trim_spaces(tokens[i]);
                 }
                 if (tokens[0].compare(";") == 0) {
-                    cout << "Huh?" << endl;
+                    std::cout << "Huh?" << std::endl;
                     exit(0);
                 } else {
                     seq.set_id(tokens[0]);
@@ -325,15 +326,15 @@ vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
             if (loopcount == ntax) {
                 loopcount = 0; // reset
                 // check if we're done
-                string terp = seqs[ntax - 1].get_sequence();
+                std::string terp = seqs[ntax - 1].get_sequence();
                 if ((int)terp.size() == nchar) {
                     break;
                 }
             }
         }
     }
-    //cout << "Seqs has " << seqs.size() << " taxa and "
-    //        << seqs[0].get_sequence().size() << " sites." << endl;
+    //std::cout << "Seqs has " << seqs.size() << " taxa and "
+    //        << seqs[0].get_sequence().size() << " sites." << std::endl;
     return seqs;
 }
 
@@ -343,9 +344,9 @@ vector <Sequence> read_interleaved_nexus (istream & stri, int ntax, int nchar) {
  * TODO: need to add csv
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
  */
-int test_char_filetype_stream(istream & stri, string & retstring) {
+int test_char_filetype_stream(std::istream& stri, std::string& retstring) {
     if (!getline(stri, retstring)) {
-        cout << "ERROR: end of file too soon" << endl;
+        std::cout << "ERROR: end of file too soon" << std::endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
     //NEXUS
@@ -354,8 +355,8 @@ int test_char_filetype_stream(istream & stri, string & retstring) {
     } else if (retstring[0] == '>') {
         ret = 2;
     } else {
-        vector<string> tokens;
-        string del(" \t");
+        std::vector<std::string> tokens;
+        std::string del(" \t");
         tokenize(retstring,tokens,del);
         if (tokens.size() > 1) {
             trim_spaces(tokens[0]);
@@ -367,18 +368,19 @@ int test_char_filetype_stream(istream & stri, string & retstring) {
     return ret;
 }
 
+
 /*
  * returns the next string in the getline if there is one
  * TODO: nexus 
  * TODO: decide if this should just be merged with the above reader
  */
-bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstring, Sequence & seq) {
-    string tline;
+bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string& retstring, Sequence& seq) {
+    std::string tline;
     if (ftype == 1) { // phylip
-        vector<string> tokens;
+        std::vector<std::string> tokens;
         tokens.clear();
-        string del(" \t");
-        string tline;
+        std::string del(" \t");
+        std::string tline;
         //check to see if we are at the beginning of the file
         if (retstring.size() > 0) {
             tokenize(retstring,tokens,del);
@@ -414,10 +416,10 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
     } else if (ftype == 2) { // fasta
         bool first = true;
         bool going = true;
-        vector<string> tokens;
-        string del(" \t");
-        string tline;
-        string curseq = "";
+        std::vector<std::string> tokens;
+        std::string del(" \t");
+        std::string tline;
+        std::string curseq = "";
         while (going) {
             if (first == true && retstring.size() > 0) {
                 tline = retstring;
@@ -440,7 +442,7 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
             }
             if (tline.substr(0,1) == ">") {
                 if (first == true) {
-                    string id_ = tline.substr(1,tline.size()-1);
+                    std::string id_ = tline.substr(1,tline.size()-1);
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
@@ -469,16 +471,16 @@ bool read_next_seq_char_from_stream(istream & stri, int ftype, string & retstrin
 }
 
 // file-version of above. used by concatenator
-void get_nexus_dimensions_file (string & filen, int & numTaxa, int & numChar, bool & interleave) {
+void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, bool& interleave) {
     numTaxa = numChar = 0;
-    string tline;
-    string temp;
-    ifstream infile(filen.c_str());
+    std::string tline;
+    std::string temp;
+    std::ifstream infile(filen.c_str());
     while (getline(infile, tline)) {
         if (!tline.empty()) {
             // convert to uppercase
             tline = string_to_upper(tline);
-            vector <string> searchtokens = tokenize(tline);
+            std::vector<std::string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
                 replace(tline.begin(), tline.end(), '=', ' ');
@@ -524,16 +526,17 @@ void get_nexus_dimensions_file (string & filen, int & numTaxa, int & numChar, bo
     infile.close();
 }
 
+
 // overloaded stream version
-void get_nexus_dimensions (istream & stri, int & numTaxa, int & numChar, bool & interleave) {
+void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool& interleave) {
     numTaxa = numChar = 0;
-    string tline;
+    std::string tline;
     //string temp;
     while (getline(stri, tline)) {
         if (!tline.empty()) {
             // convert to uppercase
             tline = string_to_upper(tline);
-            vector <string> searchtokens = tokenize(tline);
+            std::vector<std::string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
                 replace(tline.begin(), tline.end(), '=', ' ');
@@ -578,24 +581,25 @@ void get_nexus_dimensions (istream & stri, int & numTaxa, int & numChar, bool & 
     }
 }
 
+
 // same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
-void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numChar,
-        bool & interleave, string & alpha_name, string & symbols, char & gap, char & missing) {
+void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numChar,
+        bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing) {
     numTaxa = numChar = 0;
     alpha_name = symbols = "";
     // set defaults, in case not explicitly stated
     gap = '-';
     missing = '?';
     
-    string tline;
+    std::string tline;
     //string temp;
     while (getline(stri, tline)) {
         if (!tline.empty()) {
             // convert to uppercase
             tline = string_to_upper(tline);
-            vector <string> searchtokens = tokenize(tline);
+            std::vector<std::string> searchtokens = tokenize(tline);
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
                 replace(tline.begin(), tline.end(), '=', ' ');
@@ -643,7 +647,7 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
                         } else if (searchtokens[i] == "PROTEIN") {
                             alpha_name = "AA";
                         } else {
-                            cout << "Datatype '" << searchtokens[i] << "' not supported" << endl;
+                            std::cout << "Datatype '" << searchtokens[i] << "' not supported" << std::endl;
                         }
                     } else if (searchtokens[i] == "GAP") {
                         i++;
@@ -657,7 +661,7 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
                         // just need to make sure both " are captured, and we should be cool
                         bool done = false;
                         bool first = true;
-                        string terp = "";
+                        std::string terp = "";
                         while (!done) {
                             i++;
                             if (first) {
@@ -666,7 +670,7 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
                                 if (terp.front() == '"') {
                                     // check if symbols contain no gaps
                                     if (terp.back() == '"') {
-                                        //cout << "symbols are (rationally) contiguous!" << endl;
+                                        //std::cout << "symbols are (rationally) contiguous!" << std::endl;
                                         terp.erase (std::remove (terp.begin(), terp.end(), '"'), terp.end());
                                         symbols = terp;
                                         done = true;
@@ -676,14 +680,14 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
                             } else {
                                 terp += searchtokens[i];
                                 if (searchtokens[i].back() == '"') {
-                                    //cout << "found the end of symbols!" << endl;
+                                    //std::cout << "found the end of symbols!" << std::endl;
                                     terp.erase (std::remove (terp.begin(), terp.end(), '"'), terp.end());
                                     symbols = terp;
                                     done = true;
                                 }
                             }
                         }
-                        //cout << "Captured symbols: " << symbols << endl;
+                        //std::cout << "Captured symbols: " << symbols << std::endl;
                     }
                 }
             } else if (searchtokens[0] == "MATRIX") {
@@ -710,9 +714,9 @@ void get_nexus_alignment_properties (istream & stri, int & numTaxa, int & numCha
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
  */
 
-int test_seq_filetype(string filen) {
-    string tline;
-    ifstream infile(filen.c_str());
+int test_seq_filetype (std::string filen) {
+    std::string tline;
+    std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
     while (getline(infile,tline)) {
         if (tline.size() < 1) {
@@ -722,8 +726,8 @@ int test_seq_filetype(string filen) {
             ret = 0;
             break;
         }
-        vector<string> tokens;
-        string del(" \t");
+        std::vector<std::string> tokens;
+        std::string del(" \t");
         tokenize(tline,tokens,del);
         if (tokens.size() > 1) {
             trim_spaces(tokens[0]);
@@ -841,7 +845,7 @@ bool read_phylip_file_strec(string filen, vector <Sequence>& seqs) {
         if (searchtokens.size() < 2) {
             continue;
         }
-        cout << searchtokens[0] << " " << searchtokens[1] << endl;
+        std::cout << searchtokens[0] << " " << searchtokens[1] << std::endl;
         Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
         seqs.push_back(a);
     }

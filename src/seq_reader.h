@@ -7,6 +7,7 @@
 
 #include "sequence.h"
 
+
 std::string get_filetype_string(const int& ft);
 int test_seq_filetype_stream(std::istream& stri, std::string& retstring);
 int test_char_filetype_stream(std::istream& stri, std::string& retstring);
@@ -26,6 +27,6 @@ int test_seq_filetype (std::string filen);
 //bool read_fasta_file (std::string filen, std::vector<Sequence>& seqs);
 //bool read_phylip_file (std::string filen, std::vector<Sequence>& seqs);
 //bool read_phylip_file_strec (std::string filen, std::vector<Sequence>& seqs);
-//bool read_nexus_seqs_file(std::string filen, std::vector<Sequence>& seqs);
+//bool read_nexus_seqs_file (std::string filen, std::vector<Sequence>& seqs);
 
 #endif /* _SEQ_READER_H_ */
