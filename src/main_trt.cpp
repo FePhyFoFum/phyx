@@ -199,7 +199,7 @@ int main(int argc, char * argv[]) {
         }
     } else {
         // don't assume all trees have the same leaf set
-        std::vector <std::string> toKeep;
+        std::vector<std::string> toKeep;
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;

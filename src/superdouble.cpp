@@ -241,10 +241,11 @@ void Superdouble::switch_sign() {
 
 
 /*bool Superdouble::operator > (double x) {
-    if (double() > x)
+    if (double() > x) {
         return true;
-    else
+    } else {
         return false;
+    }
 }*/
 
 

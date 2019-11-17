@@ -150,7 +150,7 @@ void paint_nodes (Tree * tree, std::vector<std::string> & names, const bool& sil
 }
 
 
-// treemap: key is focal node, value is vector of adjacent nodes
+// treemap: key is focal node, value is vectorof adjacent nodes
 // both keys and values can be internal or terminal nodes
 void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
         std::vector<Node*> > & tree_map) {
@@ -358,7 +358,7 @@ bool is_ultrametric_paths (Tree * tr) {
     */
     // this might be better, as it exits earlier on a fail.
     /*
-    vector <double>::iterator it = find_if_not(paths.begin()+1, paths.end(), bind(essentially_equal, placeholders::_1, paths[0]));
+    vector<double>::iterator it = find_if_not(paths.begin()+1, paths.end(), bind(essentially_equal, placeholders::_1, paths[0]));
     if (it == end(paths)) {
         ultrametric = true;
     }
@@ -394,7 +394,7 @@ void set_node_heights (Node * node) {
         return;
     }
     if (node->getChildCount() > 0) {
-        std::vector <double> heights;
+        std::vector<double> heights;
         //bool parentHeight = 0.0; // not used
         for (int i = 0; i < node->getChildCount(); i++) {
             set_node_heights(node->getChild(i));
@@ -431,7 +431,7 @@ bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
             return ultrametric;
         }
         if (node->getChildCount() > 0) {
-            std::vector <double> heights;
+            std::vector<double> heights;
             //double parentHeight = 0.0; // not used
             for (int i = 0; i < node->getChildCount(); i++) {
                 postorder_ultrametricity_check(node->getChild(i), ultrametric);
@@ -571,7 +571,7 @@ std::vector<std::string> get_complement_tip_set (Tree * tr, std::vector<std::str
 }
 
 
-// returns a sorted vector of all terminal labels
+// returns a sorted vectorof all terminal labels
 std::vector<std::string> get_tip_labels (Tree * tr) {
     std::vector<std::string> labels;
     for (int i = 0; i < tr->getExternalNodeCount(); i++) {
@@ -648,7 +648,7 @@ std::string double_to_str (double d) {
     snprintf(&s[0], len+1, "%.16f", d);
     s.pop_back();
     s.erase(s.find_last_not_of('0') + 1, std::string::npos);
-    if(s.back() == '.') {
+    if (s.back() == '.') {
         s.pop_back();
     }
     return s;

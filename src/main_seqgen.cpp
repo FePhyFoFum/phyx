@@ -110,7 +110,7 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    std::vector< std::vector <double> > rmatrix(4, std::vector<double>(4, 0.33));
+    std::vector< std::vector<double> > rmatrix(4, std::vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i == j) { // Fill Diagonal
@@ -211,11 +211,11 @@ int main(int argc, char * argv[]) {
                 pos = 0;
                 pos2 = 1;
                 //Fill the Matrix
-                for (unsigned int i = 0; i < userrates.size(); i++){
+                for (unsigned int i = 0; i < userrates.size(); i++) {
                     aa_rmatrix[pos][pos2] = userrates[i];
                     aa_rmatrix[pos2][pos] = userrates[i];
                     pos2++;
-                    if (pos2 == 20){
+                    if (pos2 == 20) {
                         pos += 1;
                         pos2 = (pos + 1);
                     }
@@ -223,7 +223,7 @@ int main(int argc, char * argv[]) {
                 //Replace Diagonal
                 for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
                     for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
-                        if (i != j){
+                        if (i != j) {
                             tot += aa_rmatrix[i][j];
                         }
                     }
@@ -333,13 +333,13 @@ int main(int argc, char * argv[]) {
      * Default Base Frequencies and Rate Matrix
      *
      */
-    //vector <double> basefreq(4, 0.0);
+    //vector<double> basefreq(4, 0.0);
     //basefreq[0] = .25;
     //basefreq[1] = .25;
     //basefreq[2] = .25;
     //basefreq[3] = 1.0 - basefreq[0] - basefreq[1] - basefreq[2];
     /*    
-    vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
+    vector< vector<double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i == j) {//Fill Diagnol

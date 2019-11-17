@@ -42,26 +42,26 @@ static struct option const long_options[] =
     {NULL, 0, NULL, 0}
 };
 
-struct SequenceIDListCompare{
-    bool operator()(const Sequence & lhs, const Sequence & rhs){
+struct SequenceIDListCompare {
+    bool operator()(const Sequence & lhs, const Sequence & rhs) {
       return lhs.get_id() < rhs.get_id();
     }
 } SequenceIDListCompare;
 
-struct SequenceRevIDListCompare{
-    bool operator()(const Sequence & lhs, const Sequence & rhs){
+struct SequenceRevIDListCompare {
+    bool operator()(const Sequence & lhs, const Sequence & rhs) {
       return lhs.get_id() > rhs.get_id();
     }
 } SequenceRevIDListCompare;
 
-struct SequenceLengthListCompare{
-    bool operator()(const Sequence & lhs, const Sequence & rhs){
+struct SequenceLengthListCompare {
+    bool operator()(const Sequence & lhs, const Sequence & rhs) {
       return lhs.get_sequence().length() < rhs.get_sequence().length();
   }
 } SequenceLengthListCompare;
 
-struct SequenceRevLengthListCompare{
-    bool operator()(const Sequence & lhs, const Sequence & rhs){
+struct SequenceRevLengthListCompare {
+    bool operator()(const Sequence & lhs, const Sequence & rhs) {
       return lhs.get_sequence().length() > rhs.get_sequence().length();
   }
 } SequenceRevLengthListCompare;

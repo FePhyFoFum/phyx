@@ -76,7 +76,7 @@ std::vector< std::vector<int> > TopologyGenerator::initialize_edge_matrix_rooted
 // add next taxon to existing edge matrices
 // for the nth taxon, there are 2(n-1)-3 possible attachment points
 // - i.e., the edges of the previous iteration
-std::vector< std::vector< std::vector<int> > > TopologyGenerator::add_taxon_unrooted (std::vector < std::vector< std::vector <int> > > edges,
+std::vector< std::vector< std::vector<int> > > TopologyGenerator::add_taxon_unrooted (std::vector< std::vector< std::vector<int> > > edges,
         const int& taxon, const int& new_node) {
     std::vector< std::vector< std::vector<int> > > trees;
     int num_attach = 2 * (taxon - 1) - 3; // also the row where next edge will be added
@@ -218,7 +218,7 @@ void TopologyGenerator::newick_from_tree_map (int node, std::map<int, std::vecto
 // this will send newick to poos
 void TopologyGenerator::get_newicks (std::ostream* poos) {
     generate_trees();
-    std::vector < std::vector<int> > tree;
+    std::vector< std::vector<int> > tree;
     for (unsigned long int i = 0; i < ntopos_; i++) {
         tree = trees_[i];
         std::string newick = edge_matrix_to_newick(tree);

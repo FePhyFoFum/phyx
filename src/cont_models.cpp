@@ -208,7 +208,7 @@ void calc_postorder_square_change (Node * node, std::map<Node *,int> & nodenum,
 double calc_bm_node_postorder (Node * node, int nch, double sigma) {
     double node_like = 0.;
     for (int i=0;i<node->getChildCount();i++) {
-        if(node->getChild(i)->isInternal()) {
+        if (node->getChild(i)->isInternal()) {
            node_like += calc_bm_node_postorder(node->getChild(i),nch,sigma);
         }
     }

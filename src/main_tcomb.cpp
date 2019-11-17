@@ -203,14 +203,14 @@ int main(int argc, char * argv[]) {
                         std::set<std::string> cs = cn->get_leave_names_set();
                         std::vector<std::string> v_int;
                         set_intersection(cs.begin(),cs.end(),atns.begin(),atns.end(),back_inserter(v_int));
-                        if(v_int.size() > 0) {
+                        if (v_int.size() > 0) {
                              std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
                             //get nodes
                             //get mrca
                             Node * nd = addtree->getMRCA(v_int);
                              std::cout << "would add to " <<  nd->getNewick(false) << std::endl;
                             //START HERE
-                            if(v_int.size() == 1) {
+                            if (v_int.size() == 1) {
                                 
                             }
                             std::vector<std::string> lvsnms = prn->get_leave_names();
@@ -231,8 +231,9 @@ int main(int argc, char * argv[]) {
             }
             (*poos) << getNewickString(addtree) << std::endl;
             delete addtree;
-        }else
+        } else {
             going = false;
+        }
     }
 
     if (outfileset) {

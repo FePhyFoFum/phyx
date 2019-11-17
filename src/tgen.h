@@ -6,6 +6,7 @@
 #include <map>
 #include <iostream>
 
+
 class TopologyGenerator {
 private:
     int ntax_;

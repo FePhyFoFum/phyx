@@ -16,9 +16,9 @@ std::map<std::string, std::string> AAtoCDN::convert_to_codons(std::map<std::stri
         } else {
             amino_acid_sequence_ = iter_ -> second;
             nucleotide_sequence_ = nuc_sequences[iter_ -> first];
-            if(rm_last == true){
+            if (rm_last == true) {
                 len = amino_acid_sequence_.size() - 1;
-            }else{
+            } else {
                 len = amino_acid_sequence_.size();
             }
             for (int i=0; i < len; i++) {

@@ -78,7 +78,7 @@ void TreeInfo::calc_stats () {
     rooted_tree_ = is_rooted(tree_);
     binary_tree_ = is_binary(tree_);
     ultrametric_tree_ = is_ultrametric_paths(tree_);
-    if (rooted_tree_){
+    if (rooted_tree_) {
         rtvar_ = get_root_tip_var(tree_);
     } else {
         rtvar_ = 0.0;
@@ -98,7 +98,7 @@ void TreeInfo::get_stats (std::ostream* poos) {
     (*poos) << "ninternal: " << nintnodes_ << std::endl;
     (*poos) << "branch lengths: " << std::boolalpha << has_branchlengths_ << std::endl;
     if (has_branchlengths_) {
-        if(rooted_tree_) {
+        if (rooted_tree_) {
             (*poos) << "rttipvar: " << rtvar_ << std::endl;
         } else {
             (*poos) << "rttipvar: NA" << std::endl;

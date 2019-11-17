@@ -165,7 +165,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                if(mrcaset){
+                if (mrcaset) {
                     std::map<std::string, std::vector<std::string> >::iterator it;
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
                         //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;

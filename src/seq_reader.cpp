@@ -220,7 +220,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
 // by using this function, the file has already been checked, so we know ntax and nchar
 // prolly get rid of this in favour of the stream-based one
 std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, int nchar) {
-    std::vector <Sequence> seqs;
+    std::vector<Sequence> seqs;
     std::string tline;
     std::ifstream infile(filen.c_str());
     //bool done = false; // not used
@@ -752,7 +752,7 @@ int test_seq_filetype (std::string filen) {
 
 
 /*
-bool read_phylip_file(string filen, vector <Sequence>& seqs) {
+bool read_phylip_file(string filen, vector<Sequence>& seqs) {
     string tline;
     ifstream infile(filen.c_str());
     bool first = true;
@@ -785,7 +785,7 @@ bool read_phylip_file(string filen, vector <Sequence>& seqs) {
 
 // return false if not a fasta
 /*
-bool read_fasta_file(string filen, vector <Sequence>& seqs) {
+bool read_fasta_file(string filen, vector<Sequence>& seqs) {
     string tline;
     ifstream infile(filen.c_str());
     bool first = true;
@@ -822,7 +822,7 @@ bool read_fasta_file(string filen, vector <Sequence>& seqs) {
 */
 
 /*
-bool read_phylip_file_strec(string filen, vector <Sequence>& seqs) {
+bool read_phylip_file_strec(string filen, vector<Sequence>& seqs) {
     string tline;
     ifstream infile(filen.c_str());
     bool first = true;
@@ -856,12 +856,12 @@ bool read_phylip_file_strec(string filen, vector <Sequence>& seqs) {
 
 //TODO: INCOMPLETE
 /*
-bool read_nexus_seqs_file(string filen, vector <Sequence>& seqs) {
+bool read_nexus_seqs_file(string filen, vector<Sequence>& seqs) {
     string tline;
     ifstream infile(filen.c_str());
     bool first = true;
     while (getline(infile, tline)) {
-        vector <string> searchtokens;
+        vector<string> searchtokens;
         tokenize(tline, searchtokens, "    ");
         for (unsigned int j=0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);

@@ -96,7 +96,7 @@ void update_tree(std::string& newname, std::vector<std::string>& names, std::map
     //    << "; mini1 = " << mini1 << "; mini2 = " << mini2 << std::endl;
     // mini1 is always < mini2
     for (int i = 0; i < matrixsize; i++) {
-        // print vector contents
+        // print vectorcontents
         //print_vector(NewMatrix[i]);
         //std::copy(NewMatrix[i].begin(), NewMatrix[i].end(), std::ostream_iterator<double>(std:: std::cout, " "));
         jcount = 1;
@@ -191,7 +191,7 @@ std::vector< std::vector<double> > UPGMA::BuildMatrix (std::map<std::string, std
     int FirstCount = 0;
     double MatchScore;
 
-    // an easier way to initialize a vector of vectors:
+    // an easier way to initialize a vectorof vectors:
     int ntax = sequences.size(); // this should be a property of the class, calculated once
     std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
     

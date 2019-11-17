@@ -290,12 +290,13 @@ int main(int argc, char * argv[]) {
                 continue;
             }
             //if we are using a cutoff, skip the edge that is below the num
-            if(cutoff == true) {
-                if(trees[i]->getInternalNode(j)->getName().length() < 1)
+            if (cutoff == true) {
+                if (trees[i]->getInternalNode(j)->getName().length() < 1) {
                     continue;
+                }
                 char* pEnd;
                 double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd) ;
-                if(td < cutnum) {
+                if (td < cutnum) {
                     continue;
                 }
             }
@@ -401,11 +402,12 @@ int main(int argc, char * argv[]) {
             for (int j=0; j < trees[i]->getInternalNodeCount(); j++) {
                 //if we are using a cutoff, skip the edge that is below the num
                 if (cutoff == true) {
-                    if(trees[i]->getInternalNode(j)->getName().length() < 1)
+                    if (trees[i]->getInternalNode(j)->getName().length() < 1) {
                         continue;
+                    }
                     char* pEnd;
                     double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd) ;
-                    if(td < cutnum) {
+                    if (td < cutnum) {
                         continue;
                     }
                 }
@@ -425,14 +427,14 @@ int main(int argc, char * argv[]) {
                 if (edgewisealltaxa == true) {
                     if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
                         index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
-                    }else{
+                    } else {
                         index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
                     } 
-                }else{
+                } else {
                     index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
                 }
                 matrix[i][index] = 1;
-                if(unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()) {
+                if (unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()) {
                     std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
                     std::set<std::string> rt_nms_set;
                     copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
@@ -485,7 +487,7 @@ int main(int argc, char * argv[]) {
         std::vector<std::vector<int> > logical_matrix (biparts.size(),cols2);
         for (unsigned int i=0; i < biparts.size(); i++) {
             for (unsigned int j=0; j < names.size(); j++) {
-                if (count(biparts[i].begin(), biparts[i].end(), name_index[names[j]]) != 0) {
+                if (std::count(biparts[i].begin(), biparts[i].end(), name_index[names[j]]) != 0) {
                     logical_matrix[i][j] = 1;
                 }
             }
@@ -509,7 +511,7 @@ int main(int argc, char * argv[]) {
                     nms.push_back(name_st_index[biparts[i][k]]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
-                if(edgewisealltaxa == true) {
+                if (edgewisealltaxa == true) {
                     std::vector<std::string> nms_o;
                     for (unsigned int k=0; k < biparts2[i].size(); k++) {
                         nms_o.push_back(name_st_index[biparts2[i][k]]);
@@ -519,8 +521,9 @@ int main(int argc, char * argv[]) {
                 double totalcount = bp_count[i];
                 std::vector<double> conflict_nums;
                 conflict_nums.push_back(bp_count[i]);
-                if (verbose)
+                if (verbose) {
                     (*poos) << "\n\tCONFLICTS:" << std::endl;
+                }
                 for (unsigned int j=0; j < biparts.size(); j++) {
                     unsigned int sumc2 = sum_matrix_col(matrix,j);
                     if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
@@ -532,9 +535,9 @@ int main(int argc, char * argv[]) {
                             }    
                             totalcount += bp_count[j];
                             conflict_nums.push_back(bp_count[j]);
-                            if(verbose) {
+                            if (verbose) {
                                 (*poos) << " \t "<< get_string_vector(nms2);
-                                if(edgewisealltaxa == true) {
+                                if (edgewisealltaxa == true) {
                                     std::vector<std::string> nms_o;
                                     for (unsigned int k=0; k < biparts2[j].size(); k++) {
                                         nms_o.push_back(name_st_index[biparts2[j][k]]);
@@ -561,7 +564,7 @@ int main(int argc, char * argv[]) {
                 TSCA += ICA;
                 ICA *= sign;
                 (*poos) << "\tFREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  std::endl;
-                if(verbose) {
+                if (verbose) {
                     (*poos) << "\tTREES:\t";
                     for (unsigned int j=0;j<matrix.size();j++) {
                         if (matrix[j][i] == 1) {
@@ -576,7 +579,7 @@ int main(int argc, char * argv[]) {
                     nms.push_back(name_st_index[biparts[i][k]]);
                 }
                 (*poos) << "CLADE: " <<  get_string_vector(nms);
-                if(edgewisealltaxa == true) {
+                if (edgewisealltaxa == true) {
                     std::vector<std::string> nms_o;
                     for (unsigned int k=0; k < biparts2[i].size(); k++) {
                         nms_o.push_back(name_st_index[biparts2[i][k]]);
@@ -585,7 +588,7 @@ int main(int argc, char * argv[]) {
                 }
                 (*poos) << "\tFREQ:\t1.\tICA:\t1.\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t1." << std::endl;
                 TSCA += 1;
-                if(verbose) {
+                if (verbose) {
                     (*poos) << "\tTREES:\t";
                     for (unsigned int j=0;j<matrix.size();j++) {
                         if (matrix[j][i] == 1) {
@@ -615,21 +618,21 @@ int main(int argc, char * argv[]) {
             sort(nms_i.begin(), nms_i.end());
             size_t index;
             bool found = false;
-            if(edgewisealltaxa == true) {
+            if (edgewisealltaxa == true) {
                 if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
                     index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
                     found = true;
-                }else{
+                } else {
                     index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
                     found = true;
                 } 
-            }else{
+            } else {
                 index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
                 found = true;
             }
             if (found == false) {
                 maptree->getInternalNode(i)->setName("0.0");
-            }else{
+            } else {
                 maptree->getInternalNode(i)->setName(std::to_string(bp_count[index]/trees.size()));
             }
         }

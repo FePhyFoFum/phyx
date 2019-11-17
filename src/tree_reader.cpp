@@ -43,7 +43,7 @@ Tree * TreeReader::readTree (std::string trees) {
                 currNode = root;
                 start = false;
             } else {
-                if (currNode == NULL){
+                if (currNode == NULL) {
                     std::cerr << "Malformed newick string. Can read until char " << x << "." << std::endl;
                     exit(1);
                 }
@@ -168,7 +168,7 @@ Tree * TreeReader::readTree (std::string trees) {
             std::string nodeName = "";
             bool goingName = true;
             in_quote = false;
-            if (nextChar == '"' || nextChar == '\''){
+            if (nextChar == '"' || nextChar == '\'') {
                 in_quote = true;
                 quoteType = nextChar;
                 nodeName = nodeName + nextChar;

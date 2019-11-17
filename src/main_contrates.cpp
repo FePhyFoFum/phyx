@@ -167,7 +167,7 @@ int main(int argc, char * argv[]) {
             if (c == 0) {
                 (*poouts) << "#nexus" << std::endl << "begin trees;" << std::endl;
             }
-            for (unsigned int x = 0; x < trees.size(); x++){
+            for (unsigned int x = 0; x < trees.size(); x++) {
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
                     std::vector<Superdouble> tv (1);
                     tv[0] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);

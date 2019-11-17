@@ -182,13 +182,13 @@ int main(int argc, char * argv[]) {
             if (tree != NULL) {
                 for (int i=0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
-                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
                 for (int i=0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
-                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }   

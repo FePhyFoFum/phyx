@@ -149,9 +149,9 @@ void SequenceGenerator::initialize () {
  * if each individual state will undergo some type of change
  */
 std::string SequenceGenerator::simulate_sequence (const std::string& anc, 
-    std::vector < std::vector<double> >& QMatrix, const float& brlength) {
+    std::vector< std::vector<double> >& QMatrix, const float& brlength) {
     std::vector<double>::iterator low;
-    std::vector < std::vector<double> > PMatrix(nstates_, std::vector<double>(nstates_, 0.0));
+    std::vector< std::vector<double> > PMatrix(nstates_, std::vector<double>(nstates_, 0.0));
     //int ancChar = 0;
     std::string newstring = anc; // instead of building, set size and replace
     for (int i = 0; i < seqlen_; i++) {
@@ -186,8 +186,8 @@ std::string SequenceGenerator::simulate_sequence (const std::string& anc,
  * Calculate the Q Matrix (Substitution rate matrix)
  */
 std::vector< std::vector<double> > SequenceGenerator::calculate_q_matrix () {
-    std::vector < std::vector<double> > bigpi(nstates_, std::vector<double>(nstates_, 1.0));
-    std::vector < std::vector<double> > t(nstates_, std::vector<double>(nstates_, 0.0));
+    std::vector< std::vector<double> > bigpi(nstates_, std::vector<double>(nstates_, 1.0));
+    std::vector< std::vector<double> > t(nstates_, std::vector<double>(nstates_, 0.0));
     
     double tscale = 0.0;
     
@@ -283,7 +283,7 @@ void SequenceGenerator::preorder_tree_traversal () {
     int rate_count = 0;
     int check = 0;
     std::vector< std::vector<double> > QMatrix(nstates_, std::vector<double>(nstates_, 0.0));
-    //vector < vector <double> > PMatrix(4, vector <double>(4, 0.0));
+    //vector< vector<double> > PMatrix(4, vector<double>(4, 0.0));
     // NOTE: this uses order: A,T,C,G
     if (multi_model_) {
         rmatrix_[0][2] = multi_rates_[0]; // A->C
@@ -458,7 +458,7 @@ std::string SequenceGenerator::generate_random_sequence () {
     if (is_dna_) {
         //string ancseq(seqlen, 'G');
         std::vector<double> cumsum(4);
-        std::vector <double>::iterator low;
+        std::vector<double>::iterator low;
         // cumulative sum
         std::partial_sum(base_freqs_.begin(), base_freqs_.end(), cumsum.begin(), std::plus<double>());
     
@@ -470,7 +470,7 @@ std::string SequenceGenerator::generate_random_sequence () {
     } else {
         //string ancseq(seqlen, 'G');
         std::vector<double> cumsum(20);
-        std::vector <double>::iterator low;
+        std::vector<double>::iterator low;
         // cumulative sum
         std::partial_sum(aa_freqs_.begin(), aa_freqs_.end(), cumsum.begin(), std::plus<double>());
     

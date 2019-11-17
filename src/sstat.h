@@ -6,6 +6,7 @@
 
 #include "sequence.h"
 
+
 class MultinomialSeqStat {
 private:
     int num_char_;

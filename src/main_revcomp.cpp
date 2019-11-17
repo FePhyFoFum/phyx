@@ -55,7 +55,7 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
     int best_dis_rev = 100000000;
     std::string comp = comp_seq.get_sequence();
     std::string revcomp = comp_seq.reverse_complement();
-    for (unsigned int i=0;i<seqs.size();i++){
+    for (unsigned int i=0;i<seqs.size();i++) {
         EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0)
@@ -64,7 +64,7 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
             best_distance = result.editDistance;
         edlibFreeAlignResult(result);
     }
-    for (unsigned int i=0;i<seqs.size();i++){
+    for (unsigned int i=0;i<seqs.size();i++) {
         EdlibAlignResult result = edlibAlign(revcomp.c_str(), revcomp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_sequence().length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0)
@@ -175,44 +175,44 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios,retstring);
-    if (guess == false){
+    if (guess == false) {
         while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
-            if(idsset == false || count(ids.begin(),ids.end(),seq.get_id())==1){
+            if (idsset == false || std::count(ids.begin(),ids.end(),seq.get_id())==1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
         }
         if (ft == 2) {
-            if(idsset == false || count(ids.begin(),ids.end(),seq.get_id())==1){
+            if (idsset == false || std::count(ids.begin(),ids.end(),seq.get_id())==1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
         }
-    }else{
+    } else {
        bool first = true;
        std::vector<Sequence> done; //for pguess
        while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
-           if (first == true){
+           if (first == true) {
                done.push_back(seq);
                (*poos) << seq.get_fasta();
                first = false;
-           }else{
-               if (reverse_it_or_not(done, seq)){
+           } else {
+               if (reverse_it_or_not(done, seq)) {
                     seq.perm_reverse_complement();
                }
                (*poos) << seq.get_fasta();
-               if(pguess){
+               if (pguess) {
                    done.push_back(seq);
-               }else if(sguess){
+               } else if (sguess) {
                    double r = ((double) rand() / (RAND_MAX));
-                    if (r < sguess_samplenum){
+                    if (r < sguess_samplenum) {
                         done.push_back(seq);
                     }
                }
            }
         }
         if (ft == 2) {
-           if (reverse_it_or_not(done, seq)){
+           if (reverse_it_or_not(done, seq)) {
                 seq.perm_reverse_complement();
            }
            (*poos) << seq.get_fasta();

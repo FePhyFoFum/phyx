@@ -104,7 +104,7 @@ void tokenize (const std::string& str, std::vector<std::string>& tokens, const s
 
 // deprecated in favour of template version (in header file)
 //std::vector<double> parse_double_comma_list (std::string& str) {
-//    vector <double> res;
+//    vector<double> res;
 //    std::stringstream ss(str);
 //    double i;
 //    while (ss >> i) {
@@ -123,7 +123,7 @@ void tokenize (const std::string& str, std::vector<std::string>& tokens, const s
 
 // deprecated in favour of template version (in header file)
 //std::vector<int> parse_int_comma_list (std::string& str) {
-//    vector <int> res;
+//    vector<int> res;
 //    std::stringstream ss(str);
 //    int i;
 //    while (ss >> i) {
@@ -169,7 +169,7 @@ unsigned int get_clock_seed () {
 
 // works a little differently than above; don't need to trim spaces
 // assumes delimiter is some form of whitespace
-std::vector <std::string> tokenize (const std::string& input) {
+std::vector<std::string> tokenize (const std::string& input) {
     std::vector<std::string> tokens;
     std::string temp;
     std::istringstream str(input);
@@ -220,7 +220,7 @@ bool check_comment_line (const std::string& line) {
 
 std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numstates) {
     std::vector<double> cols(numstates,1);
-    std::vector<std::vector<double> > ratematrix = std::vector<std::vector <double> > (numstates, cols);
+    std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (numstates, cols);
     //read file
     std::ifstream ifs(filename.c_str());
     std::string line;
@@ -256,9 +256,9 @@ int random_int_range (int min, int max) {
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
 // ok, this is pretty sweet, if i do say so myself
-std::vector <int> sample_without_replacement (const int& numTotal, const int& numSample) {
-    std::vector <int> randsites (numSample); // numchar zero-initialized elements
-    std::vector <int> allsites (numTotal);
+std::vector<int> sample_without_replacement (const int& numTotal, const int& numSample) {
+    std::vector<int> randsites (numSample); // numchar zero-initialized elements
+    std::vector<int> allsites (numTotal);
     std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0,1,2...n-1
     
     int randNum = 0;
@@ -305,7 +305,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB) {
  *
  * TODO : should probably look at this
  */
-bool test_logical (std::vector<int>& matA, std::vector <int>& matB, bool edgewise) {
+bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
@@ -319,7 +319,7 @@ bool test_logical (std::vector<int>& matA, std::vector <int>& matB, bool edgewis
     //had to change because of negatives
     if ((match1 != sum(matA)) && (match1 != sum(matB))) {
         if (numdiffs != matA.size()) {
-            if(edgewise == true){
+            if (edgewise == true) {
                 int match2 = 0;
                 unsigned int numdiffs2 = 0;
                 for (unsigned int i=0; i < matA.size(); i++) {
@@ -334,7 +334,7 @@ bool test_logical (std::vector<int>& matA, std::vector <int>& matB, bool edgewis
                         test = true;
                     }
                 }
-            }else{
+            } else {
                 test = true;
             }
         }
@@ -397,7 +397,7 @@ int sum (std::vector<int>& in) {
 
 int count_zeros (std::vector<int>& in) {
     int x = 0;
-    for (unsigned int i=0;i < in.size(); i++){
+    for (unsigned int i=0;i < in.size(); i++) {
         if (in[i] == 0) {
             x += 1;
         }
@@ -435,7 +435,7 @@ std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
 //------------------------------------------------------------------------//
 
 
-std::string get_string_vector (std::vector<std::string>& sts) {
+std::string get_string_vector(std::vector<std::string>& sts) {
     std::string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
         rets += sts[i]+ " ";
@@ -444,7 +444,7 @@ std::string get_string_vector (std::vector<std::string>& sts) {
 }
 
 
-std::string get_string_vector (std::vector<int>& sts) {
+std::string get_string_vector(std::vector<int>& sts) {
     std::string rets;
     for (unsigned int i=0; i < sts.size(); i++) {
         rets += std::to_string(sts[i]) + " ";
