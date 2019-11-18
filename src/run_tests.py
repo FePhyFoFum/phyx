@@ -178,6 +178,7 @@ if __name__ == "__main__":
     for i in os.listdir("."):
         if i[:2] == "px":
             if i in notest:
+                print (bcolors.WARNING+"skipping "+i+bcolors.ENDC)
                 continue
             t = test_program(i)
             if t == True:
