@@ -318,13 +318,13 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
     int start = site*3;
     for (unsigned int i=0; i < origseqs.size(); i++) {
-        std::string codon = origseqs[i].get_sequence().substr(start,3);
+        std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq = "";
         for (int j=0; j < 61; j++) {
             setsq += "0";
         }
         for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
-            setsq.replace(codon_pos[codon][j],1,"1");
+            setsq.replace(codon_pos[codon][j], 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }

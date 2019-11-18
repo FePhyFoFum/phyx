@@ -255,7 +255,7 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    copy(names.begin(),names.end(),inserter(names_s,names_s.begin()));
+    copy(names.begin(), names.end(), inserter(names_s, names_s.begin()));
 
     std::vector<std::vector<int> > biparts; // first part of the bipart
     std::vector<std::vector<int> > biparts2; // second part of the bipart
@@ -270,7 +270,7 @@ int main(int argc, char * argv[]) {
         }
         std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
         std::set<std::string> rt_nms_set;
-        copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
+        copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
         //get the ones that aren't in the tree at all
         std::vector<std::string> not_included_nms(rt_nms_set.size());
         std::vector<int> not_included_i;
@@ -307,7 +307,7 @@ int main(int argc, char * argv[]) {
             for (unsigned int k=0; k < nms.size(); k++) {
                 nms_i.push_back(name_index[nms[k]]);
             }
-            sort(nms_i.begin(),nms_i.end());
+            sort(nms_i.begin(), nms_i.end());
             //get the other side of the bipart
             std::vector<int> nms_i2;
             std::vector<std::string> nms_s2(rt_nms.size());
@@ -318,7 +318,7 @@ int main(int argc, char * argv[]) {
             for (unsigned int k=0; k < nms_s2.size(); k++) {
                 nms_i2.push_back(name_index[nms_s2[k]]);
             }
-            sort(nms_i2.begin(),nms_i2.end());
+            sort(nms_i2.begin(), nms_i2.end());
             //check to see if the bipart is new
             if (edgewisealltaxa == false) {
                 //this is nodewise and we dont' assume we have all the taxa
@@ -330,7 +330,7 @@ int main(int argc, char * argv[]) {
                     bp_count.push_back(1);
                 } else {
                     //get index 
-                    size_t index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                    size_t index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     bp_count[index] += 1;
                 }
                 /*
@@ -344,7 +344,7 @@ int main(int argc, char * argv[]) {
                         not_included.push_back(not_included_i);
                         bp_count.push_back(1);
                     } else {
-                        size_t index = find(biparts.begin(),biparts.end(),nms_i2)-biparts.begin();
+                        size_t index = find(biparts.begin(), biparts.end(), nms_i2)-biparts.begin();
                         bp_count[index] += 1;
                     }
                 }
@@ -367,9 +367,9 @@ int main(int argc, char * argv[]) {
                     //get index 
                     size_t index;
                     if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
-                        index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                        index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     } else {
-                        index = find(biparts.begin(),biparts.end(),nms_i2)-biparts.begin();
+                        index = find(biparts.begin(), biparts.end(), nms_i2)-biparts.begin();
                     }
                     //need to accommodate that it can be reflected in the edgewise case
                     if ((int)count(bp_count_tree.begin(), bp_count_tree.end(), index) == 0) {
@@ -426,9 +426,9 @@ int main(int argc, char * argv[]) {
                 size_t index;
                 if (edgewisealltaxa == true) {
                     if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
-                        index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                        index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     } else {
-                        index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
+                        index = find(biparts2.begin(), biparts2.end(), nms_i)-biparts2.begin();
                     } 
                 } else {
                     index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
@@ -437,14 +437,14 @@ int main(int argc, char * argv[]) {
                 if (unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()) {
                     std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
                     std::set<std::string> rt_nms_set;
-                    copy(rt_nms.begin(),rt_nms.end(),inserter(rt_nms_set,rt_nms_set.begin()));
+                    copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
                     std::set<std::string> nms_s;
-                    copy(nms.begin(),nms.end(),inserter(nms_s,nms_s.begin()));
+                    copy(nms.begin(), nms.end(), inserter(nms_s, nms_s.begin()));
                     std::vector<int> nms_i;
                     std::vector<int> nms_i2;
                     std::vector<std::string> nms_s2(rt_nms.size());
                     std::vector<std::string>::iterator it;
-                    it = set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),nms_s.end(), nms_s2.begin());
+                    it = set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(), nms_s.end(), nms_s2.begin());
                     nms_s2.resize(it-nms_s2.begin());
                     for (unsigned int k=0; k < nms_s2.size(); k++) {
                         nms_i2.push_back(name_index[nms_s2[k]]);
@@ -452,11 +452,11 @@ int main(int argc, char * argv[]) {
                     for (auto it : nms_s) {
                         nms_i.push_back(name_index[it]);
                     }
-                    sort(nms_i2.begin(),nms_i2.end());
-                    sort(nms_i.begin(),nms_i.end());
+                    sort(nms_i2.begin(), nms_i2.end());
+                    sort(nms_i.begin(), nms_i.end());
                     int x = find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin();
                     if (x == (int)matrix[i].size()) {
-                        x = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                        x = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     }
                     matrix[i][x] = 1;
                 }
@@ -470,7 +470,7 @@ int main(int argc, char * argv[]) {
             std::set<std::string> un_trees;
             for (int i=0; i <numtrees; i++) {
                 std::string sv = get_string_vector(matrix[i]);
-                if (count(un_trees.begin(),un_trees.end(),sv)==0) {
+                if (count(un_trees.begin(), un_trees.end(), sv)==0) {
                     std::cout << trees[i]->getRoot()->getNewick(false) <<";" << std::endl;
                     un_trees.insert(sv);
                 }
@@ -483,8 +483,8 @@ int main(int argc, char * argv[]) {
         //the logical matrix has each row as a bipart1 and each col as a name
         //there is a one if the bipart has the name
         //need to add the -1 for bipart2
-        std::vector<int> cols2(names.size(),0);
-        std::vector<std::vector<int> > logical_matrix (biparts.size(),cols2);
+        std::vector<int> cols2(names.size(), 0);
+        std::vector<std::vector<int> > logical_matrix (biparts.size(), cols2);
         for (unsigned int i=0; i < biparts.size(); i++) {
             for (unsigned int j=0; j < names.size(); j++) {
                 if (std::count(biparts[i].begin(), biparts[i].end(), name_index[names[j]]) != 0) {
@@ -504,7 +504,7 @@ int main(int argc, char * argv[]) {
                     continue;
                 }
             }
-            unsigned int sumc = sum_matrix_col(matrix,i);
+            unsigned int sumc = sum_matrix_col(matrix, i);
             if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
                 std::vector<std::string> nms;
                 for (unsigned int k=0; k < biparts[i].size(); k++) {
@@ -525,9 +525,9 @@ int main(int argc, char * argv[]) {
                     (*poos) << "\n\tCONFLICTS:" << std::endl;
                 }
                 for (unsigned int j=0; j < biparts.size(); j++) {
-                    unsigned int sumc2 = sum_matrix_col(matrix,j);
+                    unsigned int sumc2 = sum_matrix_col(matrix, j);
                     if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
-                        bool logitest = test_logical(logical_matrix[i],logical_matrix[j],edgewisealltaxa);
+                        bool logitest = test_logical(logical_matrix[i], logical_matrix[j], edgewisealltaxa);
                         if (logitest) {
                             std::vector<std::string> nms2;
                             for (unsigned int k=0; k < biparts[j].size(); k++) {
@@ -557,7 +557,7 @@ int main(int argc, char * argv[]) {
                         sign = -1;
                     }
                 }
-                double ICA = 1;//same as logn(conflict_nums.size(),conflict_nums.size());
+                double ICA = 1;//same as logn(conflict_nums.size(), conflict_nums.size());
                 for (unsigned int j=0; j < conflict_nums.size(); j++) {
                     ICA += (conflict_nums[j] * logn(conflict_nums[j], conflict_nums.size()));
                 }
@@ -620,10 +620,10 @@ int main(int argc, char * argv[]) {
             bool found = false;
             if (edgewisealltaxa == true) {
                 if ((int)count(biparts.begin(), biparts.end(), nms_i) == 1) {
-                    index = find(biparts.begin(),biparts.end(),nms_i)-biparts.begin();
+                    index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     found = true;
                 } else {
-                    index = find(biparts2.begin(),biparts2.end(),nms_i)-biparts2.begin();
+                    index = find(biparts2.begin(), biparts2.end(), nms_i)-biparts2.begin();
                     found = true;
                 } 
             } else {

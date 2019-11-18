@@ -24,7 +24,7 @@ Node::Node ():BL(0.0), height(0.0), number(0), name(""), parent(NULL),
 
 
 Node::Node (Node * inparent):BL(0.0), height(0.0), number(0), name(""), parent(inparent),
-    children(std::vector<Node *> ()), assoc(std::map<std::string,NodeObject *>()),
+    children(std::vector<Node *> ()), assoc(std::map<std::string, NodeObject *>()),
     assocDV(std::map<std::string, std::vector<Superdouble> >()), comment(""), painted(false) {
 
 }
@@ -218,8 +218,8 @@ std::string Node::getNewick (bool bl) {
         if (bl == true) {
             //std::ostringstream o;
             ////20 is what you get from raxml
-            //o.setf(ios::fixed,ios::floatfield);
-            //o << setprecision(20) << this->getChild(i)->getBL();
+            //o.setf(ios::fixed, std::ios::floatfield);
+            //o << std::setprecision(20) << this->getChild(i)->getBL();
             //ret += ":" + o.str();
             ret += ":" + double_to_str(this->getChild(i)->getBL());
         }
@@ -299,7 +299,7 @@ std::string Node::getNewick (bool bl, std::string obj) {
         if (i == 0) {
             ret += "(";
         }
-        ret = ret+this->getChild(i)->getNewick(bl,obj);
+        ret = ret+this->getChild(i)->getNewick(bl, obj);
         if (bl == true) {
             std::ostringstream o;
             o << this->getChild(i)->getBL();
@@ -333,7 +333,7 @@ int Node::getChildCount () {
 }
 
 
-void Node::assocObject (std::string name,NodeObject & obj) {
+void Node::assocObject (std::string name, NodeObject & obj) {
     if (assoc.count(name) > 0) {
         delete assoc[name];
     }
@@ -472,13 +472,13 @@ std::vector<std::string> Node::get_leave_names () {
 /*
  * use the string ones like this
  * StringNodeObject sno("...a node object");
- * tree.getRoot()->assocObject("test",sno);
+ * tree.getRoot()->assocObject("test", sno);
  * std::cout << *((StringNodeObject*) (tree.getRoot()->getObject("test"))) << std::endl;
  *
  * and the vector like
  * VectorNodeObject<int> vno;
  * vno.push_back(1);vno.push_back(2);
- * tree.getRoot()->assocObject("testvno",vno);
+ * tree.getRoot()->assocObject("testvno", vno);
  * std::cout << ((VectorNodeObject<int> *) (tree.getRoot()->getObject("testvno")))->at(0) << std::endl;
  */
 NodeObject  * Node::getObject (std::string name) {
@@ -505,7 +505,7 @@ void Node::deleteSegVector () {
  * delete the node
  */
 Node::~Node () {
-    std::map<std::string,NodeObject *>::iterator it;
+    std::map<std::string, NodeObject *>::iterator it;
     for (it = assoc.begin() ; it != assoc.end(); it++) {
         delete assoc[it->first];
     }

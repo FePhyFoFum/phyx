@@ -110,7 +110,7 @@ void SequenceSampler::parse_partitions (std::string& partf) {
     std::string line;
     std::ifstream infile(partf.c_str());
     
-    while (getline(infile,line)) {
+    while (getline(infile, line)) {
         if (line.size() < 1) {
             continue;
         } else {

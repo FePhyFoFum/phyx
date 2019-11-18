@@ -12,7 +12,6 @@
 #include "tree.h"
 #include "tree_utils.h"
 #include "utils.h"
-//#include "bd_fit.h"
 #include "log.h"
 
 /*
@@ -157,12 +156,12 @@ int main(int argc, char * argv[]) {
             Tree * addtree = read_next_tree_from_stream_newick (*apios, retstring, &going);
             std::set<std::string> atns = addtree->getRoot()->get_leave_names_set();
             std::vector<std::string> v(btns.size());
-            std::vector<std::string>::iterator it = set_difference(btns.begin(),btns.end(),atns.begin(),atns.end(),v.begin());
+            std::vector<std::string>::iterator it = set_difference(btns.begin(), btns.end(), atns.begin(), atns.end(), v.begin());
             v.resize(it-v.begin());
-            std::map<std::string,Node *> diffnds;
+            std::map<std::string, Node *> diffnds;
             std::vector<std::string> diffnms; 
             for (int i = 0; i <bigtree->getExtantNodeCount(); i++) {
-                if (count(v.begin(),v.end(),bigtree->getExternalNode(i)->getName())==1) {
+                if (count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName())==1) {
                     diffnms.push_back(bigtree->getExternalNode(i)->getName());
                 }
             } 
@@ -173,13 +172,13 @@ int main(int argc, char * argv[]) {
                 std::vector<std::string> v_int(diffnms.size());
                 std::vector<std::string>::iterator it;
                 std::set<std::string> lvsset = childs[i]->get_leave_names_set();
-                it = set_intersection(lvsset.begin(),lvsset.end(),
-                                atns.begin(),atns.end(),v_int.begin());
+                it = set_intersection(lvsset.begin(), lvsset.end(),
+                                atns.begin(), atns.end(), v_int.begin());
                 v_int.resize(it-v_int.begin());
                 if (v_int.size() > 0) {
                     //need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
-                    std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(),lvsset.end(),atns.begin(),atns.end(),v2.begin());
+                    std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(), lvsset.end(), atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
                     for(unsigned int j=0;j<v2.size();j++) {
                         std::cout << "to add " <<  v2[j]<< std::endl; 
@@ -194,7 +193,7 @@ int main(int argc, char * argv[]) {
             addtree->setRoot(connecthere);
             bool didit = false;
             while (diffnds.size() > 0) {
-                for (std::map<std::string,Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
+                for (std::map<std::string, Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
                     //std::cout << it->first << std::endl;
                     Node * cn = it->second;
                     bool goi = true;
@@ -202,7 +201,7 @@ int main(int argc, char * argv[]) {
                         Node * prn = cn->getParent();
                         std::set<std::string> cs = cn->get_leave_names_set();
                         std::vector<std::string> v_int;
-                        set_intersection(cs.begin(),cs.end(),atns.begin(),atns.end(),back_inserter(v_int));
+                        set_intersection(cs.begin(), cs.end(), atns.begin(), atns.end(), back_inserter(v_int));
                         if (v_int.size() > 0) {
                             std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
                             //get nodes

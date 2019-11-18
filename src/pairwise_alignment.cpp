@@ -13,7 +13,7 @@
  *
  * scoringmatrix should come from read_score_matrix
  */
-double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >& scoringmatrix,
+double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> >& scoringmatrix,
     double gap_penalty, std::string& aln1, std::string& aln2) {
     
     std::string seq1 = iseq1.seq_to_upper();
@@ -68,22 +68,22 @@ double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >
             scoreleft = F[j][i-1];
         }
         if (i > 0 && j > 0 && score == scorediag + scoringmatrix[seq1[i-1]][seq2[j-1]]) {
-            aln1.append(1,seq1[i-1]);
-            aln2.append(1,seq2[j-1]);
+            aln1.append(1, seq1[i-1]);
+            aln2.append(1, seq2[j-1]);
             i = i - 1;
             j = j - 1;
         } else if ( i > 0 && score == scoreleft + d) {
-            aln1.append(1,seq1[i-1]);
+            aln1.append(1, seq1[i-1]);
             aln2.append("-");
             i = i - 1;
         } else if (j > 0 && score == scoreup + d) {
             aln1.append("-");
-            aln2.append(1,seq2[j-1]);
+            aln2.append(1, seq2[j-1]);
             j = j - 1;
         }
     }
-    std::reverse(aln1.begin(),aln1.end());
-    std::reverse(aln2.begin(),aln2.end());
+    std::reverse(aln1.begin(), aln1.end());
+    std::reverse(aln2.begin(), aln2.end());
     double score=0;
     for (unsigned int i=0; i < aln1.length(); i++) {
         if (aln1[i]!='-' && aln2[i]!='-') {
@@ -102,7 +102,7 @@ double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >
  *
  * scoringmatrix should come from read_score_matrix
  */
-double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >& scoringmatrix,
+double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> >& scoringmatrix,
     double gap_penalty, std::string& aln1, std::string& aln2) {
     
     std::string seq1 = iseq1.seq_to_upper();
@@ -168,22 +168,22 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char,int> >
             scoreleft = F[j][i-1];
         }
         if (i > 0 && j > 0 && score == scorediag + scoringmatrix[seq1[i-1]][seq2[j-1]]) {
-            aln1.append(1,seq1[i-1]);
-            aln2.append(1,seq2[j-1]);
+            aln1.append(1, seq1[i-1]);
+            aln2.append(1, seq2[j-1]);
             i = i - 1;
             j = j - 1;
         } else if (i > 0 && score == scoreleft + d) {
-            aln1.append(1,seq1[i-1]);
+            aln1.append(1, seq1[i-1]);
             aln2.append("-");
             i = i - 1;
         } else if (j > 0 && score == scoreup + d) {
             aln1.append("-");
-            aln2.append(1,seq2[j-1]);
+            aln2.append(1, seq2[j-1]);
             j = j - 1;
         }
     }
-    std::reverse(aln1.begin(),aln1.end());
-    std::reverse(aln2.begin(),aln2.end());
+    std::reverse(aln1.begin(), aln1.end());
+    std::reverse(aln2.begin(), aln2.end());
     double score=0;
     for (unsigned int i=0; i < aln1.length(); i++) {
         if (aln1[i]!='-' && aln2[i]!='-') {

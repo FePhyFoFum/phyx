@@ -45,8 +45,8 @@ void BirthDeathSimulator::setup_parameters () {
     currenttime_ = 0.0;
     extantnodes_ = std::vector<Node*>();
     dead_nodes_ = std::vector<Node*>();
-    BIRTHTIME_ = std::map<Node*,double>();
-    DEATHTIME_ = std::map<Node*,double>();
+    BIRTHTIME_ = std::map<Node*, double>();
+    DEATHTIME_ = std::map<Node*, double>();
 }
 
 
@@ -165,7 +165,7 @@ void BirthDeathSimulator::node_death (Node *innode) {
     DEATHTIME_[innode] = currenttime_;
     double bl = DEATHTIME_[innode] - BIRTHTIME_[innode];
     innode->setBL(bl);
-    extantnodes_.erase(find(extantnodes_.begin(),extantnodes_.end(),innode));
+    extantnodes_.erase(find(extantnodes_.begin(), extantnodes_.end(), innode));
 }
 
 

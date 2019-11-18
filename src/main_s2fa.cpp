@@ -11,7 +11,7 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Convert seqfiles from nexus,phylip, fastq to fasta." << std::endl;
+    std::cout << "Convert seqfiles from nexus, phylip, fastq to fasta." << std::endl;
     std::cout << "Can read from stdin or file." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxs2fa [OPTION]... [FILE]..." << std::endl;

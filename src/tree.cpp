@@ -387,7 +387,7 @@ Node * Tree::getInternalMRCA (std::vector<std::string> & innodes) {
 
 
 void Tree::setHeightFromRootToNodes () {
-    setHeightFromRootToNode(*this->root,this->root->getBL());
+    setHeightFromRootToNode(*this->root, this->root->getBL());
 }
 
 

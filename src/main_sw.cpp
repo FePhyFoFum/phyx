@@ -163,8 +163,8 @@ int main(int argc, char * argv[]) {
         afstr = new std::ofstream(outaf);
     }
 
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
     // fasta has a trailing one
@@ -182,7 +182,7 @@ int main(int argc, char * argv[]) {
             if (j > i) {
                 std::string aln1;
                 std::string aln2;
-                double sc = sw(seqs[i],seqs[j],sc_mat,0, aln1, aln2);
+                double sc = sw(seqs[i], seqs[j], sc_mat, 0, aln1, aln2);
                 #pragma omp critical
                 {
                     (*poos) << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << std::endl;

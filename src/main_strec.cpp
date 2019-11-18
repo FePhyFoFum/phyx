@@ -294,8 +294,8 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = new std::ifstream(dataf);
     std::istream * pios = fstr;
     line = "";
-    int ft = test_seq_filetype_stream(*pios,line);
-    while (read_next_seq_from_stream(*pios,ft,line,seq)) {
+    int ft = test_seq_filetype_stream(*pios, line);
+    while (read_next_seq_from_stream(*pios, ft, line, seq)) {
     //(*loos) << seq.get_sequence() << std::endl;
         seqs.push_back(seq);
     }
@@ -374,7 +374,7 @@ int main(int argc, char * argv[]) {
     }
     //reading ratematrixfile
     if (ratematrixfile.size() > 1) {
-        ratematrix = processRateMatrixConfigFile(ratematrixfile,nstates);
+        ratematrix = processRateMatrixConfigFile(ratematrixfile, nstates);
     }
     //end ratematrixfile
     std::ofstream ancout;
@@ -383,7 +383,7 @@ int main(int argc, char * argv[]) {
     std::ofstream sttnumout_any;
     
     if (ancstates.size() > 0 && outancfileset == true) {
-        ancout.open(outanc,ios::out);
+        ancout.open(outanc, std::ios::out);
         ancout << "site\ttree\tMRCA\tlnL";
         for (int i=0; i < nstates; i++) {
             ancout << "\tstate_" << i+1;
@@ -391,7 +391,7 @@ int main(int argc, char * argv[]) {
         ancout << std::endl;
     }
     if (stochnumber.size() > 0 && outstochnumfileset == true) {
-        stnumout.open(outnum,ios::out);
+        stnumout.open(outnum, std::ios::out);
         stnumout << "site\ttree\tMRCA\tlnL";
         for (int i=0; i < nstates; i++) {
             for (int j=0; j < nstates; j++) {
@@ -403,7 +403,7 @@ int main(int argc, char * argv[]) {
         stnumout << std::endl;
     }
     if (stochtime.size() > 0 && outstochtimefileset == true ) {
-        sttimeout.open(outtime,ios::out);
+        sttimeout.open(outtime, std::ios::out);
         sttimeout << "site\ttree\tMRCA\tlnL";
         for (int i=0; i < nstates; i++) {
             sttimeout << "\tstate_" << i+1;
@@ -411,7 +411,7 @@ int main(int argc, char * argv[]) {
         sttimeout << std::endl;
     }
     if (stochnumber_any.size() > 0 && outstochnumanyfileset == true) {
-        sttnumout_any.open(outnumany,ios::out);
+        sttnumout_any.open(outnumany, std::ios::out);
         sttnumout_any << "site\ttree\tMRCA\tlnL";
         sttnumout_any << "\tanystate";
         sttnumout_any << std::endl;
@@ -427,7 +427,7 @@ int main(int argc, char * argv[]) {
         //need to put the data into a wide view
         std::vector<Sequence> runseqs;
         int nstates_site_n;
-        std::vector<int> existing_states(nstates,0);
+        std::vector<int> existing_states(nstates, 0);
         if (datawide == false) {
             for (unsigned int se = 0;se<seqs.size();se++) {
                 std::vector<std::string> searchtokens;
@@ -435,21 +435,21 @@ int main(int argc, char * argv[]) {
                 for (unsigned int j=0; j < searchtokens.size(); j++) {
                     trim_spaces(searchtokens[j]);
                 }
-                std::string tseqs(nstates,'0');
+                std::string tseqs(nstates, '0');
                 if (searchtokens[n]=="?") {
                     for (int mse = 0; mse < nstates; mse++) {
-                    tseqs.replace(mse,1,"1");
+                        tseqs.replace(mse, 1, "1");
                     }
                 } else {
                     int pos = atoi(searchtokens[n].c_str());
-                    tseqs.replace(pos,1,"1");
+                    tseqs.replace(pos, 1, "1");
                 }
                 for (int i=0; i < nstates; i++) {
                     if (tseqs.at(i) =='1') {
                         existing_states[i] = 1;
                     }
                 }
-                Sequence tse =Sequence(seqs[se].get_id(),tseqs,true);
+                Sequence tse = Sequence(seqs[se].get_id(), tseqs, true);
                 runseqs.push_back(tse);
             }
             nstates_site_n = sum(existing_states);
@@ -478,7 +478,7 @@ int main(int argc, char * argv[]) {
                 continue;
             } else {
                 for (unsigned int se=0; se < runseqs.size(); se++) {
-                    runseqs[se].set_sequence(runseqs[se].get_sequence().erase(i,1));
+                    runseqs[se].set_sequence(runseqs[se].get_sequence().erase(i, 1));
                 }
             }
         }
@@ -493,16 +493,16 @@ int main(int argc, char * argv[]) {
             }
             std::vector<RateModel> rms;
             RateModel rm(nstates_site_n);
-            StateReconstructor sr(rm,rms);
-            rm.setup_P(0.1,false);
+            StateReconstructor sr(rm, rms);
+            rm.setup_P(0.1, false);
             if (periodsset == true) {
                 rms.push_back(rm);
                 for (unsigned int p=1; p < period_times.size(); p++) {
                     RateModel rm2(nstates_site_n);
-                    rm2.setup_P(0.1,false);
+                    rm2.setup_P(0.1, false);
                     rms.push_back(rm2);
                 }
-                sr.set_periods(period_times,rms);
+                sr.set_periods(period_times, rms);
             }
             sr.set_store_p_matrices(false);
             Tree * tree = trees[i];
@@ -514,7 +514,7 @@ int main(int argc, char * argv[]) {
                 sr.set_periods_model();
             }
             //checking that the data and the tree have the same names
-            if (checkdata(tree,runseqs) == 0) {
+            if (checkdata(tree, runseqs) == 0) {
                 exit(0);
             }
             bool same;
@@ -529,7 +529,7 @@ int main(int argc, char * argv[]) {
             }
             double finallike; Superdouble totlike_sd;
             if (periodsset == false) {
-                mat free_var(nstates_site_n,nstates_site_n);
+                mat free_var(nstates_site_n, nstates_site_n);
                 free_var.fill(0);
                 int ct = 0;
                 if (freeparams == "_one_") {
@@ -539,7 +539,7 @@ int main(int argc, char * argv[]) {
                     for (int k=0; k < nstates_site_n; k++) {
                         for (int j=0; j < nstates_site_n; j++) {
                             if (k != j) {
-                                free_var(k,j) = ct;
+                                free_var(k, j) = ct;
                                 ct += 1;
                             }
                         }
@@ -553,11 +553,11 @@ int main(int argc, char * argv[]) {
                 std::cout << "likelihood: " << sr.eval_likelihood() << std::endl;
                 //estimating the optimal rates
                 if (estimate) {//optimize
-                    optimize_sr_nlopt(&rm,&sr,&free_var,ct);
+                    optimize_sr_nlopt(&rm, &sr, &free_var, ct);
                 } else { // requires that the ratematrix is available
                     for (int i=0; i < nstates_site_n; i++) {
                         for (int j=0; j < nstates_site_n; j++) {
-                            free_var(i,j) = ratematrix[i][j];
+                            free_var(i, j) = ratematrix[i][j];
                         }
                     }
                 }
@@ -577,13 +577,15 @@ int main(int argc, char * argv[]) {
                 if (freeparams == "_one_") {
                     ct = 1;
                     for (unsigned int s=0; s < period_times.size(); s++) {
-                        mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
+                        mat free_var(nstates_site_n, nstates_site_n);
+                        free_var.fill(0);
                         periods_free_var[s] = free_var;
                     }
                 } else if (freeparams == "_all_") {
                     ct = 0;
                     for (unsigned int s=0; s < period_times.size(); s++) {
-                        mat free_var(nstates_site_n,nstates_site_n);free_var.fill(0);
+                        mat free_var(nstates_site_n, nstates_site_n);
+                        free_var.fill(0);
                         for (int k=0; k < nstates_site_n; k++) {
                             for (int j=0; j < nstates_site_n; j++) {
                             if (k != j) {
@@ -603,7 +605,7 @@ int main(int argc, char * argv[]) {
                 }
                 rm.neg_p = false;
                 std::cout << "likelihood: " << sr.eval_likelihood() << std::endl;
-                optimize_sr_periods_nlopt(&rms,&sr,&periods_free_var,ct);
+                optimize_sr_periods_nlopt(&rms, &sr, &periods_free_var, ct);
                 if (verbose) {
                     for (unsigned int s=0; s < period_times.size(); s++) {
                         (*loos) << periods_free_var[s] << std::endl;
@@ -703,9 +705,9 @@ int main(int argc, char * argv[]) {
                 int excount = 0;
                 for (int k=0; k < nstates; k++) {
                     if (existing_states[k]==1) {
-                        sr.prepare_stochmap_reverse_all_nodes(excount,excount);
+                        sr.prepare_stochmap_reverse_all_nodes(excount, excount);
                         sr.prepare_ancstate_reverse();
-                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]),true);
+                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]), true);
                         double tnum = sum(stoch)/double(totlike_sd);
                         double bl = tree->getMRCA(mrcas[stochtime[j]])->getBL();
                         if (verbose) {
@@ -756,9 +758,9 @@ int main(int argc, char * argv[]) {
                                             (*loos) << " - ";
                                         }
                                     } else {
-                                        sr.prepare_stochmap_reverse_all_nodes(excount,excount2);
+                                        sr.prepare_stochmap_reverse_all_nodes(excount, excount2);
                                         sr.prepare_ancstate_reverse();
-                                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]),false);
+                                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]), false);
                                         double tnum = sum(stoch)/totlike_sd;
                                         if (verbose) {
                                             (*loos) << tnum << " ";
@@ -824,7 +826,7 @@ int main(int argc, char * argv[]) {
                         (*loos) <<"node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  std::endl;
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
-                    std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]),false);
+                    std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]), false);
                     double tnum = sum(stoch)/totlike_sd;
                     //(*loos) << sum(stoch)<< " "<<totlike << std::endl;
                     if (verbose) {

@@ -219,13 +219,13 @@ bool check_comment_line (const std::string& line) {
 
 
 std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numstates) {
-    std::vector<double> cols(numstates,1);
+    std::vector<double> cols(numstates, 1);
     std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (numstates, cols);
     //read file
     std::ifstream ifs(filename.c_str());
     std::string line;
     int fromarea = 0;
-    while (getline(ifs,line)) {
+    while (getline(ifs, line)) {
         if (line.size() > 3) {
             std::vector<std::string> tokens;
             std::string del(" ,\t");
@@ -259,7 +259,7 @@ int random_int_range (int min, int max) {
 std::vector<int> sample_without_replacement (const int& numTotal, const int& numSample) {
     std::vector<int> randsites (numSample); // numchar zero-initialized elements
     std::vector<int> allsites (numTotal);
-    std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0,1,2...n-1
+    std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0, 1, 2..., n-1
     
     int randNum = 0;
     for (int i = 0; i < numSample; i++) {

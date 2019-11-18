@@ -174,16 +174,16 @@ int main(int argc, char * argv[]) {
     }
     Sequence seq;
     std::string retstring;
-    int ft = test_seq_filetype_stream(*pios,retstring);
+    int ft = test_seq_filetype_stream(*pios, retstring);
     if (guess == false) {
-        while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
-            if (idsset == false || std::count(ids.begin(),ids.end(),seq.get_id())==1) {
+        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+            if (idsset == false || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
         }
         if (ft == 2) {
-            if (idsset == false || std::count(ids.begin(),ids.end(),seq.get_id())==1) {
+            if (idsset == false || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
@@ -191,7 +191,7 @@ int main(int argc, char * argv[]) {
     } else {
        bool first = true;
        std::vector<Sequence> done; //for pguess
-       while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+       while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
            if (first == true) {
                done.push_back(seq);
                (*poos) << seq.get_fasta();

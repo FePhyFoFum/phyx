@@ -48,7 +48,7 @@ static struct option const long_options[] =
     {"binary", no_argument, NULL, 'b'},
     {"length", no_argument, NULL, 'l'},
     {"tiplabels", no_argument, NULL, 'i'},
-    {"rtvar",no_argument, NULL, 'v'},
+    {"rtvar", no_argument, NULL, 'v'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},

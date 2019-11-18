@@ -123,7 +123,7 @@ int main(int argc, char * argv[]) {
     if (nodeidfset == true) {
         std::ifstream nfstr(nodeidf);
         std::string tline;
-        while (getline(nfstr,tline)) {
+        while (getline(nfstr, tline)) {
             trim_spaces(tline);
             std::vector<std::string> tokens2;
             tokenize(tline, tokens2, "\t");

@@ -155,7 +155,7 @@ int main(int argc, char * argv[]) {
     //read trees
     TreeReader tr;
     std::vector<Tree *> trees;
-    while (getline(*poos,retstring)) {
+    while (getline(*poos, retstring)) {
         trees.push_back(tr.readTree(retstring));
     }
     
@@ -171,14 +171,14 @@ int main(int argc, char * argv[]) {
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
                     std::vector<Superdouble> tv (1);
                     tv[0] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);
-                    trees[x]->getExternalNode(i)->assocDoubleVector("val",tv);
+                    trees[x]->getExternalNode(i)->assocDoubleVector("val", tv);
                 }
                 for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
                     std::vector<Superdouble> tv (1);
                     tv[0] = 0;
-                    trees[x]->getInternalNode(i)->assocDoubleVector("val",tv);
+                    trees[x]->getInternalNode(i)->assocDoubleVector("val", tv);
                 }
-                calc_square_change_anc_states(trees[x],0); // second character dies here
+                calc_square_change_anc_states(trees[x], 0); // second character dies here
                 for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
                     double tv = (*trees[x]->getInternalNode(i)->getDoubleVector("val"))[0];
                     trees[x]->getInternalNode(i)->deleteDoubleVector("val");
@@ -186,7 +186,7 @@ int main(int argc, char * argv[]) {
                     s.precision(9);
                     s << std::fixed << tv;
                     StringNodeObject nob(s.str());
-                    trees[x]->getInternalNode(i)->assocObject("value",nob);
+                    trees[x]->getInternalNode(i)->assocObject("value", nob);
                     //trees[x]->getInternalNode(i)->setName(s.str());
                 }
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
@@ -196,7 +196,7 @@ int main(int argc, char * argv[]) {
                     s.precision(9);
                     s << std::fixed << tv;
                     StringNodeObject nob(s.str());
-                    trees[x]->getExternalNode(i)->assocObject("value",nob);
+                    trees[x]->getExternalNode(i)->assocObject("value", nob);
                     //s << fixed << trees[x]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
                     //trees[x]->getExternalNode(i)->setName(s.str());
                 }
@@ -213,7 +213,7 @@ int main(int argc, char * argv[]) {
             mat vcv;
             int t_ind = 0; // TODO: do this over trees
             int c_ind = c;
-            calc_vcv(trees[t_ind],vcv);
+            calc_vcv(trees[t_ind], vcv);
             int n = trees[t_ind]->getExternalNodeCount();
             rowvec x = rowvec(n);
             for (int i=0; i < n; i++) {

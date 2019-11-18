@@ -624,7 +624,7 @@ std::string getNewickString (Tree * tree) {
 // same as above but with objects
 std::string getNewickString (Tree * tree, std::string obj) {
     bool bl = tree->hasEdgeLengths();
-    std::string phy = tree->getRoot()->getNewick(bl,obj) + ";";
+    std::string phy = tree->getRoot()->getNewick(bl, obj) + ";";
     return phy;
 }
 

@@ -101,8 +101,8 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     std::vector<Sequence> seqs;
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
     if (ft == 2) {

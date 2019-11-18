@@ -19,11 +19,11 @@ inline double roundto (double in) {
 }
 
 
-RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),
-    lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),
-    eigval(_nstates,_nstates),eigvec(_nstates,_nstates),
-    lasteigval_simple(_nstates,_nstates),lasteigvec_simple(_nstates,_nstates),
-    eigval_simple(_nstates,_nstates),eigvec_simple(_nstates,_nstates),nstates(_nstates) {
+RateModel::RateModel(int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
+    lasteigval(_nstates, _nstates), lasteigvec(_nstates, _nstates),
+    eigval(_nstates, _nstates), eigvec(_nstates, _nstates),
+    lasteigval_simple(_nstates, _nstates), lasteigvec_simple(_nstates, _nstates),
+    eigval_simple(_nstates, _nstates), eigvec_simple(_nstates, _nstates), nstates(_nstates) {
     
     setup_Q();
     sameQ = false;
@@ -39,7 +39,7 @@ RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),
 
 
 void RateModel::set_Q_cell(int from, int to, double num) {
-    Q(from,to) = num;
+    Q(from, to) = num;
     sameQ = false;
 }
 
@@ -77,7 +77,7 @@ void RateModel::setup_Q(std::vector< std::vector<double> > & inQ) {
         }
     }
     for (unsigned int i=0; i < Q.n_rows; i++) {
-        colvec a = (sum(Q,1));
+        colvec a = (sum(Q, 1));
         Q(i, i) = -(a(i)-Q(i, i));
     }
     sameQ = false;
@@ -95,12 +95,12 @@ void RateModel::setup_Q(mat & inQ) {
 
 void RateModel::set_n_qs(int number) {
     for (int i=0; i < number; i++) {
-        mat tm(nstates,nstates);
+        mat tm(nstates, nstates);
         Qs.push_back(tm);
     }
 }
 
-void RateModel::set_Q_which(mat & inQ,int which) {
+void RateModel::set_Q_which(mat & inQ, int which) {
     for (unsigned int i=0; i < Qs[which].n_rows; i++) {
         for (unsigned int j=0; j < Qs[which].n_cols; j++) {
             Qs[which](i, j) = inQ(i, j);
@@ -131,7 +131,7 @@ mat & RateModel::get_Q() {
     return Q;
 }
 
-cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
+cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
     //sameQ = false;
     eigvec.fill(0);
     eigval.fill(0);
@@ -156,7 +156,7 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
     return P;
 }
 
-void RateModel::setup_P_simple(mat & p,double bl,bool store_p_matrices) {
+void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
 //    sameQ = false;
     eigvec_simple.fill(0);
     eigval_simple.fill(0);
@@ -184,7 +184,7 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
         }
         return;
     }
-    mat tQ(nstates,nstates); tQ.fill(0);
+    mat tQ(nstates, nstates); tQ.fill(0);
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -192,7 +192,7 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
     }
     colvec eigva;
     mat eigve;
-    eig_sym(eigva,eigve,tQ);
+    eig_sym(eigva, eigve, tQ);
     //bool isImag = false; // not used
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
@@ -227,7 +227,7 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
         }
         return lastImag;
     }
-    mat tQ(nstates,nstates); tQ.fill(0);
+    mat tQ(nstates, nstates); tQ.fill(0);
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -235,7 +235,7 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     }
     cx_colvec eigva;
     cx_mat eigve;
-    eig_gen(eigva,eigve,tQ);
+    eig_gen(eigva, eigve, tQ);
     bool isImag = false;
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
@@ -320,7 +320,8 @@ void RateModel::set_sameQ(bool s) {
     sameQ = s;
 }
 
-void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw) {
+void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
+        mat& bigpiK, mat& bigpiw) {
     double s = 0;
     for (int i=0; i < 61; i++) {
         for (int j=0; j < 61; j++) {
@@ -374,7 +375,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std:
                 if (codon_list[i][m] != codon_list[j][m]) {
                     diff += 1;
                 }
-                transit = test_transition(codon_list[i][m],codon_list[j][m]);
+                transit = test_transition(codon_list[i][m], codon_list[j][m]);
             }
             if (diff > 1) {
                 (*bf)(i, j) = 0;

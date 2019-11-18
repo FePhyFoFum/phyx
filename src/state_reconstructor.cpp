@@ -76,7 +76,7 @@ void StateReconstructor::set_tree (Tree * tr) {
                         if (t < s) {
                             double duration = std::min(s-t, anc-t);
                             if (duration > 0) {
-                                BranchSegment tseg = BranchSegment(duration,j);
+                                BranchSegment tseg = BranchSegment(duration, j);
                                 tree->getNode(i)->getSegVector()->push_back(tseg);
                             }
                             t += duration; // TODO: make sure that this is all working
@@ -86,7 +86,7 @@ void StateReconstructor::set_tree (Tree * tr) {
                         }
                     }
                 } else {
-                    BranchSegment tseg = BranchSegment(tree->getNode(i)->getBL(),0);
+                    BranchSegment tseg = BranchSegment(tree->getNode(i)->getBL(), 0);
                     tree->getNode(i)->getSegVector()->push_back(tseg);
                 }
             }
@@ -103,16 +103,16 @@ void StateReconstructor::set_periods_model () {
         std::vector<BranchSegment> * tsegs = tree->getNode(i)->getSegVector();
         for (unsigned int j=0; j < tsegs->size(); j++) {
             tsegs->at(j).setModel(&rm_periods[tsegs->at(j).getPeriod()]);
-            std::vector<Superdouble> * distconds = new std::vector<Superdouble> (nstates,0);
+            std::vector<Superdouble> * distconds = new std::vector<Superdouble> (nstates, 0);
             tsegs->at(j).distconds = distconds;
-            std::vector<Superdouble> * ancdistconds = new std::vector<Superdouble> (nstates,0);
+            std::vector<Superdouble> * ancdistconds = new std::vector<Superdouble> (nstates, 0);
             tsegs->at(j).ancdistconds = ancdistconds;
         }
     }
-    std::vector<Superdouble> * distconds = new std::vector<Superdouble> (nstates,0);
+    std::vector<Superdouble> * distconds = new std::vector<Superdouble> (nstates, 0);
     tree->getRoot()->assocDoubleVector(dc,*distconds);
     delete distconds;
-    std::vector<Superdouble> * ancdistconds = new std::vector<Superdouble> (nstates,0);
+    std::vector<Superdouble> * ancdistconds = new std::vector<Superdouble> (nstates, 0);
     tree->getRoot()->assocDoubleVector(andc, *ancdistconds);
     delete ancdistconds;
 }
@@ -220,8 +220,8 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals (Node& node) {
         distconds[j] = v->at(j);
     }
     if (store_p_matrices == true) {
-        node.assocObject(sp_alphas,distconds);
-        node.assocObject(alphas,distconds);
+        node.assocObject(sp_alphas, distconds);
+        node.assocObject(alphas, distconds);
     }
     delete v;
     return distconds;
@@ -241,7 +241,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
         //vector<vector<double > > p;
         cx_mat p;
         if (use_stored_matrices == false) {
-            //p= trm->setup_fortran_P(tsegs->at(i).getPeriod(),tsegs->at(i).getDuration(),store_p_matrices);
+            //p= trm->setup_fortran_P(tsegs->at(i).getPeriod(), tsegs->at(i).getDuration(), store_p_matrices);
             p = trm->setup_P(tsegs->at(i).getDuration(), store_p_matrices);
         } else {
             //p = trm->stored_p_matrices[tsegs->at(i).getPeriod()][tsegs->at(i).getDuration()];
@@ -371,7 +371,7 @@ void StateReconstructor::reverse (Node * node) {
             sisdistconds = *talph;
         }
 
-        VectorNodeObject<Superdouble> tempA (nstates,0);
+        VectorNodeObject<Superdouble> tempA(nstates, 0);
         //needs to be the same as ancdist_cond_lh
         for (int i = 0; i < nstates; i++) {
             //root has i, curnode has left, sister of cur has right
@@ -425,7 +425,7 @@ void StateReconstructor::reverse (Node * node) {
 
 
 std::vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node& node) {
-    std::vector<Superdouble> LHOODS (nstates,0);
+    std::vector<Superdouble> LHOODS(nstates, 0);
     if (node.isExternal() == false) {//is not a tip
         VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
         Node * c1 = node.getChild(0);
@@ -445,7 +445,7 @@ std::vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node
 
 
 std::vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) {
-    std::vector<double> LHOODS (nstates,0);
+    std::vector<double> LHOODS(nstates, 0);
     if (node.isExternal() == false) {//is not a tip
         VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
         Node * c1 = node.getChild(0);
@@ -472,26 +472,26 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
         cx_mat eigvec(nstates, nstates); eigvec.fill(0);
         cx_mat eigval(nstates, nstates); eigval.fill(0);
         bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
-        mat Ql(nstates, nstates);Ql.fill(0); Ql(from,to) = rm.get_Q()(from,to);
-        mat W(nstates, nstates);W.fill(0); W(from,from) = 1;
+        mat Ql(nstates, nstates);Ql.fill(0); Ql(from, to) = rm.get_Q()(from, to);
+        mat W(nstates, nstates);W.fill(0); W(from, from) = 1;
         cx_mat summed(nstates, nstates); summed.fill(0);
         cx_mat summedR(nstates, nstates); summedR.fill(0);
         for (int i=0; i < nstates; i++) {
-            mat Ei(nstates, nstates); Ei.fill(0);Ei(i,i)=1;
+            mat Ei(nstates, nstates); Ei.fill(0);Ei(i, i)=1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
             for (int j=0; j < nstates; j++) {
-                cx_double dij = (eigval(i,i)-eigval(j, j)) * dur;
+                cx_double dij = (eigval(i, i)-eigval(j, j)) * dur;
                 mat Ej(nstates, nstates); Ej.fill(0); Ej(j, j)=1;
                 cx_mat Sj(nstates, nstates);
                 Sj = eigvec * Ej * inv(eigvec);
                 cx_double Iijt = 0;
                 if (abs(dij) > 10) {
-                    Iijt = (exp(eigval(i,i)*dur)-exp(eigval(j, j)*dur))/(eigval(i,i)-eigval(j, j));
+                    Iijt = (exp(eigval(i, i)*dur)-exp(eigval(j, j)*dur))/(eigval(i, i)-eigval(j, j));
                 } else if (abs(dij) < 10e-20) {
-                    Iijt = dur*exp(eigval(j, j)*dur)*(1.+dij/2.+pow(dij,2.)/6.+pow(dij,3.)/24.);
+                    Iijt = dur*exp(eigval(j, j)*dur)*(1.+dij/2.+pow(dij, 2.)/6.+pow(dij, 3.)/24.);
                 } else {
-                    if (eigval(i,i) == eigval(j, j)) {
+                    if (eigval(i, i) == eigval(j, j)) {
                         //WAS Iijt = dur*exp(eigval(j, j)*dur)*expm1(dij)/dij;
                         if (isImag) {
                             Iijt = dur*exp(eigval(j, j)*dur)*(exp(dij)-1.)/dij;
@@ -499,11 +499,11 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
                             Iijt = dur*exp(eigval(j, j)*dur)*(expm1(real(dij)))/dij;
                         }
                     } else {
-                        //WAS Iijt = -dur*exp(eigval(i,i)*dur)*expm1(-dij)/dij;
+                        //WAS Iijt = -dur*exp(eigval(i, i)*dur)*expm1(-dij)/dij;
                         if (isImag) {
-                            Iijt = -dur*exp(eigval(i,i)*dur)*(exp(-dij)-1.)/dij;
+                            Iijt = -dur*exp(eigval(i, i)*dur)*(exp(-dij)-1.)/dij;
                         } else {
-                            Iijt = -dur*exp(eigval(i,i)*dur)*(expm1(real(-dij)))/dij;
+                            Iijt = -dur*exp(eigval(i, i)*dur)*(expm1(real(-dij)))/dij;
                         }
                     }
                 }
@@ -540,25 +540,25 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
                 }
             }
         }
-        mat W(nstates, nstates); W.fill(0); W(1,1) = 1;
+        mat W(nstates, nstates); W.fill(0); W(1, 1) = 1;
         cx_mat summed(nstates, nstates); summed.fill(0);
         cx_mat summedR(nstates, nstates); summedR.fill(0);
         for (int i=0; i < nstates; i++) {
-            mat Ei(nstates, nstates);Ei.fill(0);Ei(i,i)=1;
+            mat Ei(nstates, nstates);Ei.fill(0);Ei(i, i)=1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
             for (int j=0; j < nstates; j++) {
-                cx_double dij = (eigval(i,i)-eigval(j, j)) * dur;
+                cx_double dij = (eigval(i, i)-eigval(j, j)) * dur;
                 mat Ej(nstates, nstates);Ej.fill(0);Ej(j, j)=1;
                 cx_mat Sj(nstates, nstates);
                 Sj = eigvec * Ej * inv(eigvec);
                 cx_double Iijt = 0;
                 if (abs(dij) > 10) {
-                    Iijt = (exp(eigval(i,i)*dur)-exp(eigval(j, j)*dur))/(eigval(i,i)-eigval(j, j));
+                    Iijt = (exp(eigval(i, i)*dur)-exp(eigval(j, j)*dur))/(eigval(i, i)-eigval(j, j));
                 } else if (abs(dij) < 10e-20) {
-                    Iijt = dur*exp(eigval(j, j)*dur)*(1.+dij/2.+pow(dij,2.)/6.+pow(dij,3.)/24.);
+                    Iijt = dur*exp(eigval(j, j)*dur)*(1.+dij/2.+pow(dij, 2.)/6.+pow(dij, 3.)/24.);
                 } else {
-                    if (eigval(i,i) == eigval(j, j)) {
+                    if (eigval(i, i) == eigval(j, j)) {
                         //WAS Iijt = dur*exp(eigval(j, j)*dur)*expm1(dij)/dij;
                         if (isImag) {
                             Iijt = dur*exp(eigval(j, j)*dur)*(exp(dij)-1.)/dij;
@@ -566,11 +566,11 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
                             Iijt = dur*exp(eigval(j, j)*dur)*(expm1(real(dij)))/dij;
                         }
                     } else {
-                        //WAS Iijt = -dur*exp(eigval(i,i)*dur)*expm1(-dij)/dij;
+                        //WAS Iijt = -dur*exp(eigval(i, i)*dur)*expm1(-dij)/dij;
                         if (isImag) {
-                            Iijt = -dur*exp(eigval(i,i)*dur)*(exp(-dij)-1.)/dij;
+                            Iijt = -dur*exp(eigval(i, i)*dur)*(exp(-dij)-1.)/dij;
                         } else {
-                            Iijt = -dur*exp(eigval(i,i)*dur)*(expm1(real(-dij)))/dij;
+                            Iijt = -dur*exp(eigval(i, i)*dur)*(expm1(real(-dij)))/dij;
                         }
                     }
                 }
@@ -589,7 +589,7 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
 
 std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, bool tm) {
     if (node.isExternal()==false) {//is not a tip
-        std::vector<double> totalExp (nstates,0);
+        std::vector<double> totalExp(nstates, 0);
         std::vector<Superdouble> Bs;
         if (tm) {
             Bs = node.seg_sp_stoch_map_revB_time;
@@ -600,7 +600,7 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
         Node * c2 = node.getChild(1);
         VectorNodeObject<Superdouble> * v1 = ((VectorNodeObject<Superdouble>*) c1->getObject(alphas));
         VectorNodeObject<Superdouble> * v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
-        VectorNodeObject<double> LHOODS (nstates,0);
+        VectorNodeObject<double> LHOODS(nstates, 0);
         for (int i = 0; i < nstates; i++) {
             //for (int j=0; j < nstates; j++) {
             //int ind1 = leftdists[j];
@@ -616,14 +616,14 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
         //not sure if this should return a Superdouble or not when doing a bigtree
         return totalExp;
     } else { // hmm don't really need this else
-        std::vector<double> totalExp (nstates,0);
+        std::vector<double> totalExp(nstates, 0);
         std::vector<Superdouble> Bs;
         if (tm) {
             Bs = node.seg_sp_stoch_map_revB_time;
         } else {
             Bs =  node.seg_sp_stoch_map_revB_number;
         }
-        VectorNodeObject<double> LHOODS (nstates,0);
+        VectorNodeObject<double> LHOODS(nstates, 0);
         VectorNodeObject<Superdouble>* distconds = ((VectorNodeObject<Superdouble>*) node.getObject(dc));
         for (int i = 0; i < nstates; i++) {
             LHOODS[i] = double(Bs.at(i) * (distconds->at(i) ));

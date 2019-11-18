@@ -45,8 +45,8 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& s
         rm.setup_Q(inq);
         sr.clear_std::map_ps();
         for (int s=0; s < sites; s++) {
-            //create_std::vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
-            //sr.set_tip_conditionals(sr_seqs,s);
+            //create_std::vector_seq_codon_state_reconstructor(seqs, sr_seqs, s, codon_pos);
+            //sr.set_tip_conditionals(sr_seqs, s);
             newlike +=  sr.eval_likelihood(s);
             rm.set_sameQ(true);
         }
@@ -64,11 +64,11 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& s
 
 /**
  * this should have 5 parameters
- * K = free, w0 = 0,w1 = 1,w2 = free ,p0 = free ,p1 = free ,p2 = free
+ * K = free, w0 = 0, w1 = 1, w2 = free, p0 = free, p1 = free, p2 = free
  */
 void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& sr,
     RateModel& rm, std::vector<Sequence>& seqs, std::vector<Sequence>& sr_seqs,
-    std::map<std::string,std::vector<int> >& codon_pos, mat& bf, mat& K, mat& w, mat& inq0,
+    std::map<std::string, std::vector<int> >& codon_pos, mat& bf, mat& K, mat& w, mat& inq0,
     mat& inq1, mat& inq2) {
     
     int sites = (seqs[0].get_sequence().size()/3);
@@ -123,8 +123,8 @@ void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& 
         rm.set_Q_which(inq2, 2);
         sr.clear_std::map_ps();
         for (int s=0; s < sites; s++) {
-            //create_std::vector_seq_codon_state_reconstructor(seqs,sr_seqs,s,codon_pos);
-            //sr.set_tip_conditionals(sr_seqs,s);
+            //create_std::vector_seq_codon_state_reconstructor(seqs, sr_seqs, s, codon_pos);
+            //sr.set_tip_conditionals(sr_seqs, s);
             newlike +=  sr.eval_likelihood(s);
             rm.set_sameQ(true);
         }

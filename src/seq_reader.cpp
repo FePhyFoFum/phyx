@@ -87,7 +87,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         getline(stri, tline);
         trim_spaces(tline);
         while (tline.size() == 0  || check_comment_line(tline)) {
-            if (getline(stri,tline)) {
+            if (getline(stri, tline)) {
                 trim_spaces(tline);
             } else {
                 return false;
@@ -174,9 +174,9 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                     return false;
                 }
             }
-            if (tline.substr(0,1) == ">") {
+            if (tline.substr(0, 1) == ">") {
                 if (first == true) {
-                    std::string id_ = tline.substr(1,tline.size()-1);
+                    std::string id_ = tline.substr(1, tline.size()-1);
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
@@ -191,25 +191,25 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             }
         }
     } else if (ftype == 3) {//fastq assumes a 33 offset for now
-        std::string line1,line2,line3,line4;
+        std::string line1, line2, line3, line4;
         if (retstring.size() > 0) {
             line1 = retstring;
             retstring = "";
-        } else if (!getline(stri,line1)) {
+        } else if (!getline(stri, line1)) {
             return false;
         }
-        if (!getline(stri,line2)) {
+        if (!getline(stri, line2)) {
             return false;
         }
-        if (!getline(stri,line3)) {
+        if (!getline(stri, line3)) {
             return false;
         }
-        if (!getline(stri,line4)) {
+        if (!getline(stri, line4)) {
             return false;
         }
-        seq.set_id(line1.substr(1,line1.size()-1));
+        seq.set_id(line1.substr(1, line1.size()-1));
         seq.set_sequence(line2);
-        seq.set_qualstr(line4,33);
+        seq.set_qualstr(line4, 33);
         return true;
     }
     return false;
@@ -357,7 +357,7 @@ int test_char_filetype_stream(std::istream& stri, std::string& retstring) {
     } else {
         std::vector<std::string> tokens;
         std::string del(" \t");
-        tokenize(retstring,tokens,del);
+        tokenize(retstring, tokens, del);
         if (tokens.size() > 1) {
             trim_spaces(tokens[0]);
             if (is_number(tokens[0])) {
@@ -383,11 +383,11 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         std::string tline;
         //check to see if we are at the beginning of the file
         if (retstring.size() > 0) {
-            tokenize(retstring,tokens,del);
+            tokenize(retstring, tokens, del);
             if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
                 if (is_number(tokens[0])) {
-                    getline(stri,tline);
+                    getline(stri, tline);
                 } else {
                     tline = retstring;
                 }
@@ -395,12 +395,12 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             retstring = "";
         }
         if (tline.size() == 0) {
-            if (!getline(stri,tline)) {
+            if (!getline(stri, tline)) {
                 return false;
             }
         }
         tokens.clear();
-        tokenize(tline,tokens,del);
+        tokenize(tline, tokens, del);
         for (unsigned int i=0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
@@ -427,7 +427,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             } else {
                 if (!getline(stri, tline)) {
                     tokens.clear();
-                    tokenize(curseq,tokens,del);
+                    tokenize(curseq, tokens, del);
                     for (unsigned int i=0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
@@ -440,16 +440,16 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     return false;
                 }
             }
-            if (tline.substr(0,1) == ">") {
+            if (tline.substr(0, 1) == ">") {
                 if (first == true) {
-                    std::string id_ = tline.substr(1,tline.size()-1);
+                    std::string id_ = tline.substr(1, tline.size()-1);
                     first = false;
                     seq.set_id(id_);
                     curseq = "";
                 } else {
                     //split the tokens by spaces
                     tokens.clear();
-                    tokenize(curseq,tokens,del);
+                    tokenize(curseq, tokens, del);
                     for (unsigned int i=0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
@@ -718,7 +718,7 @@ int test_seq_filetype (std::string filen) {
     std::string tline;
     std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
-    while (getline(infile,tline)) {
+    while (getline(infile, tline)) {
         if (tline.size() < 1) {
             continue;
         }
@@ -728,7 +728,7 @@ int test_seq_filetype (std::string filen) {
         }
         std::vector<std::string> tokens;
         std::string del(" \t");
-        tokenize(tline,tokens,del);
+        tokenize(tline, tokens, del);
         if (tokens.size() > 1) {
             trim_spaces(tokens[0]);
             if (is_number(tokens[0])) {
@@ -775,7 +775,7 @@ bool read_phylip_file(string filen, vector<Sequence>& seqs) {
         if (searchtokens.size() < 2) {
             continue;
         }
-        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
+        Sequence a = Sequence(searchtokens[0], searchtokens[1], true);
         seqs.push_back(a);
     }
     infile.close();
@@ -796,8 +796,8 @@ bool read_fasta_file(string filen, vector<Sequence>& seqs) {
         if (tline.size() < 1) {
             continue;
         }
-        if (tline.substr(0,1) == ">") {
-            string id_ = tline.substr(1,tline.size()-1);
+        if (tline.substr(0, 1) == ">") {
+            string id_ = tline.substr(1, tline.size()-1);
             if (first == true) {
                 first = false;
                 cur = Sequence();
@@ -846,7 +846,7 @@ bool read_phylip_file_strec(string filen, vector<Sequence>& seqs) {
             continue;
         }
         std::cout << searchtokens[0] << " " << searchtokens[1] << std::endl;
-        Sequence a = Sequence(searchtokens[0],searchtokens[1],true);
+        Sequence a = Sequence(searchtokens[0], searchtokens[1], true);
         seqs.push_back(a);
     }
     infile.close();

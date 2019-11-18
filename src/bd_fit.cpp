@@ -107,7 +107,7 @@ void BDFit::fit_bd() {
     // explore different algorithms here
     // the following give error: nlopt roundoff-limited
     //nlopt::opt opt(nlopt::LN_COBYLA, 2);
-    //nlopt::opt opt(nlopt::LN_BOBYQA,2);
+    //nlopt::opt opt(nlopt::LN_BOBYQA, 2);
     
     nlopt::opt opt(nlopt::LN_PRAXIS, 2); // example: variable iterations, most smaller
     //nlopt::opt opt(nlopt::LN_NELDERMEAD, 2); // example: 223 iterations

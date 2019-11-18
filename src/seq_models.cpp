@@ -16,13 +16,13 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
     std::vector<char> order;
     bool first = true;
     std::string line;
-    while (getline(fstr,line)) {
+    while (getline(fstr, line)) {
         if (line[0] == '#') {
             continue;
         } else {
             std::vector<std::string> tokens;
             std::string del(" \t");
-            tokenize(line,tokens,del);
+            tokenize(line, tokens, del);
             for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
@@ -56,7 +56,7 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
         } else {
             std::vector<std::string> tokens;
             std::string del(" \t");
-            tokenize(line,tokens,del);
+            tokenize(line, tokens, del);
             for (unsigned int i=0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
@@ -105,11 +105,11 @@ void get_ednafull(std::map<char, std::map<char, int> >& sc_mat) {
     sts.push_back("D  -1  -1  -1  -4  -3  -1  -1  -3  -1  -3  -2  -2  -2  -1  -1  -1");
     sts.push_back("N  -2  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2");
     sts.push_back("U  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2   5");
-    read_scoring_matrix_from_lines(sts,sc_mat);
+    read_scoring_matrix_from_lines(sts, sc_mat);
 }
 
 
-void get_blosum62(std::map<char, std::map<char,int> >& sc_mat) {
+void get_blosum62(std::map<char, std::map<char, int> >& sc_mat) {
     std::vector<std::string> sts;
     sts.push_back("#  Matrix made by matblas from blosum62.iij");
     sts.push_back("#  * column uses minimum score");
@@ -142,5 +142,5 @@ void get_blosum62(std::map<char, std::map<char,int> >& sc_mat) {
     sts.push_back("Z -1  0  0  1 -3  3  4 -2  0 -3 -3  1 -1 -3 -1  0 -1 -3 -2 -2  1  4 -1 -4 ");
     sts.push_back("X  0 -1 -1 -1 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -2  0  0 -2 -1 -1 -1 -1 -1 -4 ");
     sts.push_back("* -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4 -4  1 ");
-    read_scoring_matrix_from_lines(sts,sc_mat);
+    read_scoring_matrix_from_lines(sts, sc_mat);
 }

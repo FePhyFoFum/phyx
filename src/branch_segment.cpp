@@ -4,9 +4,9 @@
 #include "rate_model.h"
 
 
-BranchSegment::BranchSegment(double dur,int per):duration(dur),period(per),
-        model(NULL),fossilareaindices(std::vector<int>()),startdistint(-666),
-        distconds(NULL),ancdistconds(NULL) {}
+BranchSegment::BranchSegment(double dur, int per):duration(dur), period(per),
+        model(NULL), fossilareaindices(std::vector<int>()), startdistint(-666),
+        distconds(NULL), ancdistconds(NULL) {}
 
 
 void BranchSegment::setModel (RateModel * mod) {

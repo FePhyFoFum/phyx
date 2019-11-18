@@ -34,7 +34,7 @@ std::string versionline("pxrms 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
-    {"names",required_argument,NULL,'n'},
+    {"names", required_argument, NULL, 'n'},
     {"namesf", required_argument, NULL, 'f'},
     {"comp", no_argument, NULL, 'c'},
     {"outf", required_argument, NULL, 'o'},

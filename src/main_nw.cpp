@@ -121,7 +121,7 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-    std::map<char, std::map<char,int> > sc_mat;
+    std::map<char, std::map<char, int> > sc_mat;
     if (matrixfileset == true) {
         read_scoring_matrix(matf, sc_mat);
     } else {
@@ -159,8 +159,8 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
 
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
     //fasta has a trailing one
@@ -178,7 +178,7 @@ int main(int argc, char * argv[]) {
             if (j > i) {
                 std::string aln1;
                 std::string aln2;
-                double sc = nw(seqs[i],seqs[j],sc_mat,0, aln1, aln2);
+                double sc = nw(seqs[i], seqs[j], sc_mat, 0, aln1, aln2);
                 #pragma omp critical
                 {
                     std::cout << seqs[i].get_id() << "\t" << seqs[j].get_id()

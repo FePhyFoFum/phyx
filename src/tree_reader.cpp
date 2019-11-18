@@ -243,7 +243,7 @@ Tree * read_tree_string (std::string trees) {
 /*
  * tests the filetype by checking the first string and guessing based on
  * #nexus, ( newick
- * returns in the order above, 0 ,1 , 666 --- no filetype recognized
+ * returns in the order above, 0, 1, 666 --- no filetype recognized
  * currently this only tests for nexus and newick
  *  if it is nexus, then the nexus reader will need 
  *  to deal with translate or not
@@ -252,7 +252,7 @@ int test_tree_filetype (std::string filen) {
     std::string tline;
     std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
-    while (getline(infile,tline)) {
+    while (getline(infile, tline)) {
         if (tline.size() < 1) {
             continue;
         }
@@ -275,7 +275,7 @@ int test_tree_filetype (std::string filen) {
 
 /* tests the filetype by checking the first string and guessing based on 
  * #nexus, ( newick
- * returns in the order above, 0 ,1, 666 --- no filetype recognized
+ * returns in the order above, 0, 1, 666 --- no filetype recognized
  */
 int test_tree_filetype_stream (std::istream& stri, std::string& retstring) {
     if (!getline(stri, retstring)) {

@@ -37,7 +37,7 @@ std::string versionline("pxtrt 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"names",required_argument,NULL,'n'},
+    {"names", required_argument, NULL, 'n'},
     {"comp", no_argument, NULL, 'c'},
     {"outf", required_argument, NULL, 'o'},
     {"silent", required_argument, NULL, 's'},
@@ -121,7 +121,7 @@ int main(int argc, char * argv[]) {
     } else if (namefileset == true) {
         std::ifstream nfstr(namesfc);
         std::string tline;
-        while (getline(nfstr,tline)) {
+        while (getline(nfstr, tline)) {
             trim_spaces(tline);
             names.push_back(tline);
         }

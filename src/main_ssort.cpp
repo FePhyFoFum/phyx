@@ -135,21 +135,21 @@ int main(int argc, char * argv[]) {
     std::vector<Sequence> seqs;
     Sequence seq;
     std::string retstring;
-    int ft = test_seq_filetype_stream(*pios,retstring);
-    while (read_next_seq_from_stream(*pios,ft,retstring,seq)) {
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
     }
     if (ft == 2) {
         seqs.push_back(seq);
     }
     if (sortby == 1) {
-        sort(seqs.begin(),seqs.end(),SequenceIDListCompare);
+        sort(seqs.begin(), seqs.end(), SequenceIDListCompare);
     } else if (sortby == 2) {
-        sort(seqs.begin(),seqs.end(),SequenceRevIDListCompare);
+        sort(seqs.begin(), seqs.end(), SequenceRevIDListCompare);
     } else if (sortby == 3) {
-        sort(seqs.begin(),seqs.end(),SequenceLengthListCompare);
+        sort(seqs.begin(), seqs.end(), SequenceLengthListCompare);
     } else if (sortby == 4) {
-        sort(seqs.begin(),seqs.end(),SequenceRevLengthListCompare);
+        sort(seqs.begin(), seqs.end(), SequenceRevLengthListCompare);
     }
     for (unsigned int i=0;i<seqs.size();i++) {
         (*poos) << seqs[i].get_fasta();
