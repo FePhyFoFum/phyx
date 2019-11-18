@@ -104,23 +104,34 @@ int main(int argc, char * argv[]) {
     //read trees 
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
-    if (ft != 0) {
-        std::cerr << "this really only converts nexus." << std::endl;
-        exit(0);
-    }
-    std::map<std::string, std::string> translation_table;
-    bool ttexists;
-    ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-    bool going = true;
-    Tree * tree;
-    while (going) {
-        tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
-            &translation_table, &going);
-        if (going == true) {
-            (*poos) << getNewickString(tree) << std::endl;
-            delete tree;
+    
+    if (ft == 0) {
+        std::map<std::string, std::string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        bool going = true;
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (going == true) {
+                (*poos) << getNewickString(tree) << std::endl;
+                delete tree;
+            }
+        }
+    } else {
+        // newick. just return original tree
+        Tree * tree;
+        bool going = true;
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (going == true) {
+                (*poos) << getNewickString(tree) << std::endl;
+                delete tree;
+            }
         }
     }
+    
     if (fileset) {
         fstr->close();
         delete pios;
