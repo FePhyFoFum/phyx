@@ -119,7 +119,7 @@ int main(int argc, char * argv[]) {
                 delete tree;
             }
         }
-    } else {
+    } else if (ft == 1) {
         // newick. just return original tree
         Tree * tree;
         bool going = true;
@@ -130,6 +130,9 @@ int main(int argc, char * argv[]) {
                 delete tree;
             }
         }
+    } else {
+        std::cerr << "Tree format not recognized. Exiting." << std::endl;
+        exit(1);
     }
     
     if (fileset) {
