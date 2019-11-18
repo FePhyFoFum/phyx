@@ -33,8 +33,8 @@ LogManipulator::LogManipulator (const std::string& logtype, const std::vector<st
 }
 
 
-void LogManipulator::sample (int const& burnin, int const& nthin, int const& nrandom,
-    int const& seed) {
+void LogManipulator::sample (const int& burnin, const int& nthin, const int& nrandom,
+    const int& seed) {
     burnin_ = burnin;
     nthin_= nthin;
     nrandom_ = nrandom;

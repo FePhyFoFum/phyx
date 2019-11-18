@@ -7,12 +7,12 @@
 #include "collapse_tree.h"
 
 
-Collapser::Collapser (double const& threshold):scale_set_(false) {
+Collapser::Collapser (const double& threshold):scale_set_(false) {
     threshold_ = threshold;
 }
 
 
-void Collapser::set_sup_string (std::string const& str) {
+void Collapser::set_sup_string (const std::string& str) {
     sup_string_ = str;
 }
 

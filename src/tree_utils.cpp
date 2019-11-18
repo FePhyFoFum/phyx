@@ -82,7 +82,7 @@ void remove_internal_names(Tree * tr) {
 
 
 // this is _very_ slow compared to painting the induced tree (pxtrt)
-void remove_tips (Tree * tree, std::vector<std::string> & names, const bool& silent) {
+void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent) {
     int num_names = names.size();
     int counter = 0;
     
@@ -113,7 +113,7 @@ void remove_tips (Tree * tree, std::vector<std::string> & names, const bool& sil
 
 
 // tree must be rooted. assumes this is checked upstream (so alternative can be considered)
-Tree * get_induced_tree (Tree * tree, std::vector<std::string> & names, const bool& silent) {
+Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const bool& silent) {
     paint_nodes(tree, names, silent);
     std::string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
     Tree * indTree = read_tree_string(tracetreenewick);
@@ -123,7 +123,7 @@ Tree * get_induced_tree (Tree * tree, std::vector<std::string> & names, const bo
 
 
 // assumes a rooted tree
-void paint_nodes (Tree * tree, std::vector<std::string> & names, const bool& silent) {
+void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& silent) {
     int num_names = names.size();
     tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
@@ -153,7 +153,7 @@ void paint_nodes (Tree * tree, std::vector<std::string> & names, const bool& sil
 // treemap: key is focal node, value is vectorof adjacent nodes
 // both keys and values can be internal or terminal nodes
 void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
-        std::vector<Node*> > & tree_map) {
+        std::vector<Node*> >& tree_map) {
     
     bool debug = true;
     
@@ -219,7 +219,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
 }
 
 
-void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> > & tree_map) {
+void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
     bool debug = true;
     bool success = false;
     while (!success) {
@@ -316,7 +316,7 @@ bool has_branchlengths (Tree * tr) {
 
 
 // simply multiply each edge by some scalar (determined somehow)
-void rescale_tree (Tree * tr, double const& scalef) {
+void rescale_tree (Tree * tr, const double& scalef) {
     int numNodes = tr->getNodeCount();
     for (int i = 0; i < numNodes; i++) {
         double terp = tr->getNode(i)->getBL();
@@ -425,7 +425,7 @@ bool is_ultrametric_postorder (Tree * tr) {
 
 
 // postorder
-bool postorder_ultrametricity_check (Node * node, bool & ultrametric) {
+bool postorder_ultrametricity_check (Node * node, bool& ultrametric) {
     if (ultrametric) {
         if (node == NULL) {
             return ultrametric;
@@ -544,7 +544,7 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
 
 
 // return all names that are found in tree
-std::vector<std::string> get_names_in_tree (Tree * tr, std::vector<std::string> const& names) {
+std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::string>& names) {
     std::vector<std::string> matched;
     for (unsigned int i = 0; i < names.size(); i++) {
     //std::cout << "Checking name '" << names[i] << "'." << std::endl;
@@ -557,7 +557,7 @@ std::vector<std::string> get_names_in_tree (Tree * tr, std::vector<std::string> 
 }
 
 
-std::vector<std::string> get_complement_tip_set (Tree * tr, std::vector<std::string> const& orig_names) {
+std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<std::string>& orig_names) {
     std::vector<std::string> comp = get_tip_labels(tr);
     std::vector<std::string>::iterator it;
     for (unsigned int i = 0; i < orig_names.size(); i++) {
@@ -654,6 +654,6 @@ std::string double_to_str (double d) {
     return s;
 }
 
-unsigned long int get_num_possible_trees (int const& n, const bool& rooted) {
+unsigned long int get_num_possible_trees (const int& n, const bool& rooted) {
     return doublefactorial(2 * (n + rooted) - 5);
 }

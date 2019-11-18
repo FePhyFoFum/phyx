@@ -116,8 +116,6 @@ int main(int argc, char * argv[]) {
         seqs.push_back(seq);
     }
     
-    //std::cout << "Read in " << seqs.size() << " sequences!" << std::endl;
-    
     MultinomialSeqStat mm(seqs);
     (*poos) << mm.get_test_statistic() << std::endl;
     

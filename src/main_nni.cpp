@@ -8,8 +8,6 @@
 
 #include "node.h"
 #include "tree_reader.h"
-#include "string_node_object.h"
-#include "vector_node_object.h"
 #include "tree.h"
 #include "utils.h"
 #include "tree_utils.h"
@@ -121,7 +119,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -135,6 +133,7 @@ int main(int argc, char * argv[]) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree, tree_map);
+                std::cout << std:: endl << "hey mutherfuker" << std::endl;
                 nni_from_tree_map(tree, tree_map);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;

@@ -79,11 +79,6 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    if (!fileset) {
-         std::cout << "you must specify an input file, for options try (-h)" << std::endl;
-        exit(0);
-    }
-    
     std::ostream * poos = NULL;
     std::ofstream * ofstr = NULL;
     std::ifstream * fstr = NULL;

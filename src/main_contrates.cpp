@@ -117,7 +117,8 @@ int main(int argc, char * argv[]) {
         cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
-        std::cout << "you have to set a character file. Only a tree file can be read in through the stream;" << std::endl;
+        std::cerr << "You have to set a character file. Only a tree file can be read in through the stream. Exiting." << std::endl;
+        exit(1);
     }
 
     //out file
@@ -161,7 +162,7 @@ int main(int argc, char * argv[]) {
     
     //conduct analyses for each character
     for (int c=0; c < nchars; c++) {
-        cerr << "character: " << c << std::endl;
+        std::cerr << "character: " << c << std::endl;
         if (analysis == 0) {
            // std::cout << "Input tree: " << getNewickString(trees[0]) << ";" << std::endl;
             if (c == 0) {

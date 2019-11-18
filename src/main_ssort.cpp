@@ -43,25 +43,25 @@ static struct option const long_options[] =
 };
 
 struct SequenceIDListCompare {
-    bool operator()(const Sequence & lhs, const Sequence & rhs) {
+    bool operator()(const Sequence& lhs, const Sequence& rhs) {
       return lhs.get_id() < rhs.get_id();
     }
 } SequenceIDListCompare;
 
 struct SequenceRevIDListCompare {
-    bool operator()(const Sequence & lhs, const Sequence & rhs) {
+    bool operator()(const Sequence& lhs, const Sequence& rhs) {
       return lhs.get_id() > rhs.get_id();
     }
 } SequenceRevIDListCompare;
 
 struct SequenceLengthListCompare {
-    bool operator()(const Sequence & lhs, const Sequence & rhs) {
+    bool operator()(const Sequence& lhs, const Sequence& rhs) {
       return lhs.get_sequence().length() < rhs.get_sequence().length();
   }
 } SequenceLengthListCompare;
 
 struct SequenceRevLengthListCompare {
-    bool operator()(const Sequence & lhs, const Sequence & rhs) {
+    bool operator()(const Sequence& lhs, const Sequence& rhs) {
       return lhs.get_sequence().length() > rhs.get_sequence().length();
   }
 } SequenceRevLengthListCompare;
@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:b:o:hgV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:b:o:hgV", long_options,&oi);
         if (c == -1) {
             break;
         }
@@ -107,7 +107,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (fileset && outfileset) {
+    if (fileset&& outfileset) {
         check_inout_streams_identical(seqf, outf);
     }
     
@@ -120,7 +120,7 @@ int main(int argc, char * argv[]) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &std::cin;
+        pios =&std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
@@ -130,7 +130,7 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &std::cout;
+        poos =&std::cout;
     }
     std::vector<Sequence> seqs;
     Sequence seq;

@@ -113,23 +113,30 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &std::cout;
     }
-    if (tfileset == true) {
-        fstr = new std::ifstream(treef);
-        pios = fstr;
-    } else {
-        std::cout << "you need to set an tfile (-t)" << std::endl;
-    }
+    
     if (addfileset == true) {
         afstr = new std::ifstream(addtreef);
         apios = afstr;
     } else {
-        std::cout << "you need to set an addfile (-a)" << std::endl;
+        std::cerr << "You need to set an addfile (-a). Exiting." << std::endl;
+        exit(0);
+    }
+    
+    if (tfileset == true) {
+        fstr = new std::ifstream(treef);
+        pios = fstr;
+    } else {
+        pios = &std::cin;
+        if (check_for_input_to_stream() == false) {
+            std::cerr << "You need to set an tfile (-t). Exiting." << std::endl;
+            exit(1);
+        }
     }
     
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick" << std::endl;
         exit(0);
     }
     
@@ -146,7 +153,7 @@ int main(int argc, char * argv[]) {
 
     ft = test_tree_filetype_stream(*apios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -224,8 +231,9 @@ int main(int argc, char * argv[]) {
                         }
                         cn = prn;
                     }
-                    if (didit == true)
+                    if (didit == true) {
                         break;
+                    }
                 }
             }
             (*poos) << getNewickString(addtree) << std::endl;

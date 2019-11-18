@@ -85,7 +85,7 @@ int main(int argc, char * argv[]) {
             case 'f':
                 jackfract = string_to_float(optarg, "-f");
                 if (jackfract < 0 || jackfract > 1) {
-                    std::cout << "Jackknife fraction must be 0 < x < 1" << std::endl;
+                    std::cerr << "Jackknife fraction must be 0 < x < 1. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
     }
     
     if (partitioned && (jackfract != 0.0)) {
-        std::cout << "Partitioned jackknife not implemented. Exiting." << std::endl;
+        std::cerr << "Partitioned jackknife not implemented. Exiting." << std::endl;
         exit (0);
     }
     
@@ -148,9 +148,9 @@ int main(int argc, char * argv[]) {
             numchar = (int)seq.get_sequence().size(); // check against partition information
             if (partitioned) {
                 if (numchar != ss.get_num_partitioned_sites()) {
-                    std::cout << "Error: numSites in sequence (" << numchar <<
+                    std::cerr << "Error: numSites in sequence (" << numchar <<
                         ") does not match that in partition file (" << ss.get_num_partitioned_sites() <<
-                        ")." << std::endl;
+                        "). Exiting." << std::endl;
                 }
             }
             ss.sample_sites(numchar);

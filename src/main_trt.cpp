@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
         }
         nfstr.close();
     } else {
-        std::cerr << "you need to set the names of the tips you want to remove (-n)" << std::endl;
+        std::cerr << "You need to set the names of the tips you want to remove (-n). Exiting." << std::endl;
         exit(0);
     }
 
@@ -173,7 +173,7 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     tree = get_induced_tree(tree, names, silent);
@@ -188,7 +188,7 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     tree = get_induced_tree(tree, names, silent);
@@ -210,7 +210,7 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     toKeep = get_complement_tip_set(tree, names);
@@ -227,7 +227,7 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     if (!is_rooted(tree)) {
-                        std::cout << "This only works with rooted trees. Exiting." << std::endl;
+                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
                         exit(0);
                     }
                     toKeep = get_complement_tip_set(tree, names);

@@ -104,7 +104,7 @@ int main(int argc, char * argv[]) {
                             input_files.push_back(temp);
                             infile.close();
                         } else {
-                            std::cout << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
+                            std::cerr << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -126,7 +126,7 @@ int main(int argc, char * argv[]) {
                             input_files.push_back(temp);
                             infile.close();
                         } else {
-                            std::cout << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
+                            std::cerr << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -193,19 +193,19 @@ int main(int argc, char * argv[]) {
     //ifstream * fstr = NULL;
     
     if (!tfileset && !pfileset) {
-        std::cout << "Must specify a tree file or parameter file. Exiting." << std::endl;
+        std::cerr << "Must specify a tree file or parameter file. Exiting." << std::endl;
         exit (0);
     }
     
     if (tfileset == true && pfileset == true) {
-        std::cout << "Set tree file *or* parameter file, not both. Exiting." << std::endl;
+        std::cerr << "Set tree file *or* parameter file, not both. Exiting." << std::endl;
         exit (0);
     }
     
     // abort if invalid args
     if (tfileset) {
         if (get_columns || delete_columns || keep_columns) {
-            std::cout << "Column arguments are not applicable for tree files. Exiting." << std::endl;
+            std::cerr << "Column arguments are not applicable for tree files. Exiting." << std::endl;
             exit (0);
         }
     }
@@ -213,7 +213,7 @@ int main(int argc, char * argv[]) {
     // exit if not 1-indexed (just check first column
     if (delete_columns || keep_columns) {
         if (col_indices[0] < 1) {
-            std::cout << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
+            std::cerr << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
             exit (0);
         }
     }

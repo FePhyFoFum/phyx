@@ -109,7 +109,7 @@ int main(int argc, char * argv[]) {
     std::ofstream * ofstr = NULL;
     
     if (!nfileset | !cfileset) {
-        std::cout << "Must supply both name files (-c for current, -n for new)." << std::endl;
+        std::cout << "Must supply both name files (-c for current, -n for new). Exiting." << std::endl;
         exit(0);
     }
     

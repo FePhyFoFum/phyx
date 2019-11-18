@@ -85,14 +85,14 @@ int main(int argc, char * argv[]) {
             case 'b':
                 birth = string_to_float(optarg, "-b");
                 if (birth <= 0) {
-                    std::cout << "Birth rate must be > 0" << std::endl;
+                    std::cerr << "Birth rate must be > 0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
             case 'd':
                 death = string_to_float(optarg, "-d");
                 if (death < 0) {
-                    std::cout << "Death rate must be >= 0" << std::endl;
+                    std::cerr << "Death rate must be >= 0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -122,11 +122,11 @@ int main(int argc, char * argv[]) {
     }
     
     if (ext == 0 && time == 0) {
-        std::cout << "you have to set -e or -t" << std::endl;
+        std::cerr << "You have to set -e or -t. Exiting." << std::endl;
         exit(0);
     }
     if (timeset && extantset) {
-        std::cout << "Set -e or -t, not both" << std::endl;
+        std::cerr << "Set -e or -t, not both. Exiting." << std::endl;
         exit(0);
     }
     

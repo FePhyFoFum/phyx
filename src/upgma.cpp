@@ -124,7 +124,7 @@ void update_tree(std::string& newname, std::vector<std::string>& names, std::map
 }
 
 
-void Choose_Small(int& node_list, std::vector< std::vector<double> > const& Matrix,
+void Choose_Small(int& node_list, const std::vector< std::vector<double> >& Matrix,
     int& mini1, int& mini2) {
     //super large value
     double MIN = 99999999999.99;

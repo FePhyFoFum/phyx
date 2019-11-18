@@ -440,7 +440,7 @@ SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
 // return whichever property set to true
 void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
-        double const& get_missing) {
+        const double& get_missing) {
     
     if (get_labels) {
         collect_taxon_labels();

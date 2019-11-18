@@ -155,7 +155,7 @@ int SequenceConcatenater::get_num_taxa () {
 }
 
 
-void SequenceConcatenater::delete_sequence (SequenceConcatenater & newSeqs, int const& index) {
+void SequenceConcatenater::delete_sequence (SequenceConcatenater & newSeqs, const int& index) {
     newSeqs.seqs_.erase(newSeqs.seqs_.begin() + index);
     newSeqs.num_taxa_--;
 }

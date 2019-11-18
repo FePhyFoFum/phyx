@@ -93,7 +93,7 @@ int main(int argc, char * argv[]) {
     }
 
     if (!mrcaset) {
-        std::cout << "Must supply mrca file." << std::endl;
+        std::cerr << "Must supply mrca file. Exiting." << std::endl;
         exit(0);
     }
     
@@ -141,8 +141,6 @@ int main(int argc, char * argv[]) {
     }
     inmrca.close();
     
-    
-    
     // this does not use the conventional tree reader functions
     // update this
     
@@ -162,7 +160,7 @@ int main(int argc, char * argv[]) {
             //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
             if (!check_names_against_tree(tree, (*it).second)) {
                 // allow more flexibility here
-                std::cout << "Check mrca file for typos." << std::endl;
+                std::cerr << "Check mrca file for typos. Exiting." << std::endl;
                 exit(0);
             }
             Node * nd = tree->getMRCA((*it).second);

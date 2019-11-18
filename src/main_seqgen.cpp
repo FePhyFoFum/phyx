@@ -146,12 +146,12 @@ int main(int argc, char * argv[]) {
                 infreqs = strdup(optarg);
                 parse_comma_list(infreqs, basefreq);
                 if (basefreq.size() != 4) {
-                    std::cout << "Error: must provide 4 base frequencies (" << basefreq.size()
+                    std::cerr << "Error: must provide 4 base frequencies (" << basefreq.size()
                         << " provided). Exiting." << std::endl;
                     exit(0);
                 }
                 if (!essentially_equal(sum(basefreq), 1.0)) {
-                    std::cout << "Error: base frequencies must sum to 1.0. Exiting." << std::endl;
+                    std::cerr << "Error: base frequencies must sum to 1.0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -167,7 +167,7 @@ int main(int argc, char * argv[]) {
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 6) {
-                    std::cout << "Error: must provide 6 substitution parameters. " <<
+                    std::cerr << "Error: must provide 6 substitution parameters. " <<
                         "Only " << userrates.size() << " provided. Exiting." << std::endl;
                     exit(0);
                 }
@@ -204,7 +204,7 @@ int main(int argc, char * argv[]) {
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 190) {
-                    std::cout << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
+                    std::cerr << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
                         "Only " << userrates.size() << " provided. Exiting." << std::endl;
                     exit(0);
                 }
@@ -249,12 +249,12 @@ int main(int argc, char * argv[]) {
                 infreqs = strdup(optarg);
                 parse_comma_list(infreqs, aabasefreq);
                 if (aabasefreq.size() != 20) {
-                    std::cout << "Error: must provide 20 base frequencies (" << aabasefreq.size()
+                    std::cerr << "Error: must provide 20 base frequencies (" << aabasefreq.size()
                         << " provided). Exiting." << std::endl;
                     exit(0);
                 }
                 if (!essentially_equal(sum(aabasefreq), 1.0)) {
-                    std::cout << "Error: base frequencies must sum to 1.0. Exiting." << std::endl;
+                    std::cerr << "Error: base frequencies must sum to 1.0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -275,7 +275,7 @@ int main(int argc, char * argv[]) {
                 parse_comma_list(holdrates, multirates);
                 numpars = multirates.size();
                 if ((numpars - 6) % 7 != 0) {
-                    std::cout << "Error: must provide 6 background substitution "
+                    std::cerr << "Error: must provide 6 background substitution "
                         << "parameters and 7 values (1 node id + 6 subst. par.) "
                         << "for each piecewise model. Exiting." << std::endl;
                     exit(0);
@@ -351,7 +351,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -386,7 +386,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (going == true) {
-                std::cout << "Working on tree #" << treeCounter << std::endl;
+                //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);
                 std::vector<Sequence> seqs = SGen.get_sequences();

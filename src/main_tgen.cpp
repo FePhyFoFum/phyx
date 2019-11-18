@@ -103,13 +103,13 @@ int main(int argc, char * argv[]) {
     std::string rootstat = (rooted) ? "rooted" : "unrooted";
     
     if (ntax == 0) {
-        std::cout << "You have to set the number of taxa -n. Exiting." << std::endl;
+        std::cerr << "You have to set the number of taxa -n. Exiting." << std::endl;
         exit(0);
     } else if (ntax < 3) {
-        std::cout << "The number of taxa -n must be >= 3. Exiting." << std::endl;
+        std::cerr << "The number of taxa -n must be >= 3. Exiting." << std::endl;
         exit(0);
     } else if (ntax > sim_limit_exh) {
-        std::cout << "The number of taxa -n is currently limited to " << sim_limit_exh
+        std::cerr << "The number of taxa -n is currently limited to " << sim_limit_exh
                 << " (" << get_num_possible_trees(sim_limit_exh, rooted) << " "
                 << rootstat << " topologies). Exiting." << std::endl;
         exit(0);

@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
         }
     }
     if (!fileset) {
-        std::cout << "you must specify an input sequence file" << std::endl;
+        std::cerr << "You must specify an input sequence file. Exiting." << std::endl;
         exit(0);
     }
     

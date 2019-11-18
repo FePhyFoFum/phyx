@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
         }
         nfstr.close();
     } else {
-        std::cerr << "you need to set the names of the tips you want to remove (-n)" << std::endl;
+        std::cerr << "You need to set the names of the tips you want to remove (-n). Exiting." << std::endl;
         exit(0);
     }
 
@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -222,8 +222,6 @@ int main(int argc, char * argv[]) {
                 if (going == true) {
                     toPrune = get_complement_tip_set(tree, names);
                     numLeaves = tree->getExternalNodeCount();
-                    //std::cout << "numLeaves = " << numLeaves << std::endl;
-                    //print_vector(toPrune);
                     if (numLeaves - (int)toPrune.size() > 1) {
                         remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << std::endl;

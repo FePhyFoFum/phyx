@@ -117,7 +117,7 @@ int main(int argc, char * argv[]) {
         }
     }
     if (!outgroupsset && !unroot) {
-        std::cerr << "you need to set the outgroup (-g)" << std::endl;
+        std::cerr << "You need to set the outgroup (-g). Exiting." << std::endl;
         exit(0);
     }
 
@@ -147,7 +147,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     bool going = true;
@@ -183,7 +183,7 @@ int main(int argc, char * argv[]) {
                         exists = reroot(tree, outgroups, silent);
                     }
                     if (!exists) {
-                        std::cerr << "the outgroup taxa don't exist in this tree " << std::endl;
+                        std::cerr << "The outgroup taxa don't exist in this tree." << std::endl;
                     } else {
                         (*poos) << getNewickString(tree) << std::endl;
                     }
@@ -216,7 +216,7 @@ int main(int argc, char * argv[]) {
                         exists = reroot(tree, outgroups, silent);
                     }
                     if (!exists) {
-                        std::cerr << "the outgroup taxa don't exist in this tree " << std::endl;
+                        std::cerr << "The outgroup taxa don't exist in this tree." << std::endl;
                     } else {
                         (*poos) << getNewickString(tree) << std::endl;
                     }
@@ -252,6 +252,7 @@ int main(int argc, char * argv[]) {
             }
         }
     }
+    
     if (fileset) {
         fstr->close();
         delete pios;

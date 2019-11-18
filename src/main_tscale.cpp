@@ -101,7 +101,7 @@ int main(int argc, char * argv[]) {
     std::ofstream * ofstr = NULL;
     
     if (heightset && scaleset) {
-        std::cout << "Supply only 'rootheight' or 'scale', not both. Exiting." << std::endl;
+        std::cerr << "Supply only 'rootheight' or 'scale', not both. Exiting." << std::endl;
         exit(0);
     }
     

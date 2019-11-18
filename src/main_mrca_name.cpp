@@ -154,7 +154,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "This really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -202,8 +202,8 @@ int main(int argc, char * argv[]) {
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
                         //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
-                            std::cout << "Check mrca file for typos." << std::endl;
-                            exit (0);
+                            std::cout << "Check mrca file for typos. Exiting." << std::endl;
+                            exit(0);
                         }
                         Node * nd = tree->getMRCA((*it).second);
                         nd->setName((*it).first);

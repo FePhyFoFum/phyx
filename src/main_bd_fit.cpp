@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -131,12 +131,13 @@ int main(int argc, char * argv[]) {
                     bd.get_pars(poos);
                     delete tree;
                 } else {
-                    std::cout << "Tree is not ultrametric. Exiting." << std::endl;
+                    std::cerr << "Tree is not ultrametric. Exiting." << std::endl;
                     exit(0);
                 }
             }
         }
-    } if (ft == 0) {
+    }
+    if (ft == 0) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
@@ -151,7 +152,7 @@ int main(int argc, char * argv[]) {
                     bd.get_pars(poos);
                     delete tree;
                 } else {
-                    std::cout << "Tree is not ultrametric. Exiting." << std::endl;
+                    std::cerr << "Tree is not ultrametric. Exiting." << std::endl;
                     exit(0);
                 }
             }

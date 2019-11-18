@@ -95,7 +95,7 @@ std::vector<std::string> VcfReader::get_alts (const std::string& str) {
 }
 
 
-void VcfReader::write_seqs (bool const& uppercase, std::ostream* poos) {
+void VcfReader::write_seqs (const bool& uppercase, std::ostream* poos) {
     for (unsigned int i = 0; i < taxa_.size(); i++) {
         (*poos) << ">" << taxa_[i] << std::endl;
         if (uppercase) {

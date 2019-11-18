@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
     std::istream * pios = NULL;
     
     if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
-        std::cout << "Specify 1 property only (or leave blank to show all properties)" << std::endl;
+        std::cerr << "Specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }
     
