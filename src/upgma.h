@@ -13,10 +13,10 @@ class UPGMA {
 private:
     int ntax_;
     int nchar_;
-    std::string newickstring_; // temporary
+    std::string newickstring_;
     
     // to purge
-    std::map<int, std::string> nameKey_;
+    //std::map<int, std::string> nameKey_; // never used
     std::map<std::string, std::string> sequences_;
     std::vector<std::string> names_;
     
@@ -35,9 +35,10 @@ private:
     // std::vector< std::vector<double> > build_matrix (std::map<std::string,
     //     std::string>& sequences);
     std::vector< std::vector<double> > build_matrix ();
-    void make_tree (std::vector<std::string>&, std::map <int, std::string>&,
-        std::vector< std::vector<double> >&);
-    void choose_small (int& node_list, const std::vector< std::vector<double> >& Matrix,
+    //void make_tree (std::vector<std::string>&, std::map <int, std::string>&,
+    //    std::vector< std::vector<double> >&);
+    void make_tree ();
+    void choose_small (int& numseqs, const std::vector< std::vector<double> >& dmatrix,
         int& mini1, int& mini2);
 
 public:

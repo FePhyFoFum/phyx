@@ -33,7 +33,7 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
             nchar_ = seq.get_length();
             first = false;
         }
-        nameKey_[seqcount] = seq.get_id();
+        //nameKey_[seqcount] = seq.get_id();
         names_.push_back(seq.get_id());
         seqcount++;
     }
@@ -48,14 +48,15 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
                 << nchar_ << ". Exiting." << std::endl;
             exit(1);
         }
-        nameKey_[seqcount] = seq.get_id();
+        //nameKey_[seqcount] = seq.get_id();
         names_.push_back(seq.get_id());
         seqcount++;
     }
     ntax_ = seqcount;
     //distmatrix_ = build_matrix(sequences_);
     distmatrix_ = build_matrix();
-    make_tree(names_, nameKey_, distmatrix_);
+    //make_tree(names_, nameKey_, distmatrix_);
+    make_tree();
 }
 
 
@@ -143,8 +144,8 @@ std::vector< std::vector<double> > UPGMA::build_matrix () {
 }
 
 
-void update_tree (std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& numkeys, 
-    int& node_list, std::vector< std::vector<double> >& newmatrix, int& mini1, int& mini2) {
+void update_tree (std::string& newname, std::vector<std::string>& names,
+    int& numseqs, std::vector< std::vector<double> >& newmatrix, int& mini1, int& mini2) {
     //update the tree values, Tree Size is the node it is at
     std::vector<double> row_hits, col_hits, new_ColRow;
     double br_length = newmatrix[mini1][mini2] / 2.0;
@@ -174,7 +175,7 @@ void update_tree (std::string& newname, std::vector<std::string>& names, std::ma
     }
 
     newname = "(" + names[mini1] + ":" + length1 + "," + names[mini2] + ":" + length2 + ")";
-    if (node_list > 1) {
+    if (numseqs > 1) {
         newname += "#" + std::to_string(br_length); // store height
     }
 
@@ -183,7 +184,7 @@ void update_tree (std::string& newname, std::vector<std::string>& names, std::ma
     names.insert(names.begin(), newname);
     
     // Make Smaller Matrix
-    std::vector< std::vector<double> > temp_matrix(node_list, std::vector<double>(node_list, 0.0));
+    std::vector< std::vector<double> > temp_matrix(numseqs, std::vector<double>(numseqs, 0.0));
     
     // Reformat Matrix
     for (int i = 0; i < matrixsize; i++) {
@@ -238,33 +239,37 @@ void update_tree (std::string& newname, std::vector<std::string>& names, std::ma
 }
 
 
-void UPGMA::choose_small (int& node_list, const std::vector< std::vector<double> >& Matrix,
+// find smallest pairwise distance. will always find this on the top half of the matrix
+void UPGMA::choose_small (int& numseqs, const std::vector< std::vector<double> >& dmatrix,
     int& mini1, int& mini2) {
     //super large value
     double MIN = 99999999999.99;
-    for (int i = 0; i < (node_list - 1); i++) {
-        int idx = std::min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
-        if (Matrix[i][idx] < MIN) {
-            MIN = Matrix[i][idx];
+    for (int i = 0; i < (numseqs - 1); i++) {
+        int idx = std::min_element(dmatrix[i].begin() + (i + 1), dmatrix[i].end()) - dmatrix[i].begin();
+        if (dmatrix[i][idx] < MIN) {
+            MIN = dmatrix[i][idx];
             mini1 = i;
             mini2 = idx;
         }
     }
-    node_list--;
+    numseqs--;
 }
 
 
-// numkeys contains the names and their matching number
+// numkeys contains the names and their matching number. this is never used
 // Matrix contains the original matrix
-void UPGMA::make_tree (std::vector<std::string>& names, std::map<int, std::string>& numkeys,
-    std::vector< std::vector<double> >& Matrix) {
-
+void UPGMA::make_tree () {
+    // initialize
     int mini1 = 0, mini2 = 0;
+    std::vector<std::string> names = names_;
+    std::vector< std::vector<double> > dmatrix = distmatrix_;
     int numseqs = ntax_;
     std::string newname;
+    
     while (numseqs > 1) {
-        choose_small(numseqs, Matrix, mini1, mini2);
-        update_tree(newname, names, numkeys, numseqs, Matrix, mini1, mini2);
+        choose_small(numseqs, dmatrix, mini1, mini2);
+        //update_tree(newname, names, numkeys, numseqs, Matrix, mini1, mini2);
+        update_tree(newname, names, numseqs, dmatrix, mini1, mini2);
     }
     newickstring_ = newname + ";";
 }
