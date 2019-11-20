@@ -10,6 +10,51 @@
 #include "seq_reader.h"
 
 
+UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
+    Sequence seq;
+    std::string retstring;
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    
+    int seqcount = 0;
+    // some error checking. should be in general seq reader class
+    bool first = true;
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+        sequences_[seq.get_id()] = seq.get_sequence();
+        if (!first) {
+            if ((int)seq.get_length() != nchar_) {
+                std::cout << "Error: sequence " << seq.get_id() << " has "
+                    << seq.get_length() << " characters, was expecting " 
+                    << nchar_ << "." << std::endl << "Exiting." << std::endl;
+                exit(1);
+            }
+        } else {
+            nchar_ = seq.get_length();
+            first = false;
+        }
+        nameKey_[seqcount] = seq.get_id();
+        names_.push_back(seq.get_id());
+        seqcount++;
+    }
+    //fasta has a trailing one
+    if (ft == 2) {
+        sequences_[seq.get_id()] = seq.get_sequence();
+        if ((int)seq.get_length() != nchar_) {
+            std::cout << "Error: sequence " << seq.get_id() << " has "
+                << seq.get_length() << " characters, was expecting " 
+                << nchar_ << "." << std::endl << "Exiting." << std::endl;
+            exit(1);
+        }
+        nameKey_[seqcount] = seq.get_id();
+        names_.push_back(seq.get_id());
+        seqcount++;
+    }
+    ntax_ = seqcount;
+    //set_name_key ();
+    distmatrix_ = build_matrix(sequences_);
+    make_tree(names_, nameKey_, distmatrix_);
+}
+
+
 void update_tree (std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& numkeys, 
     int& node_list, std::vector< std::vector<double> >& newmatrix, int& mini1, int& mini2) {
     //update the tree values, Tree Size is the node it is at
@@ -101,41 +146,21 @@ void update_tree (std::string& newname, std::vector<std::string>& names, std::ma
 //            }
         }
     }
-    /*
-    // Print the new matrix makes it very verbose but
-    // fun to watch
-    // std::cout << name1 << "  <===============newmatrix==============>  " << name2 << std::endl;
-    for (unsigned int i = 0; i < temp_matrix.size(); i++) {
-        for (unsigned int j = 0; j < temp_matrix.size(); j++) {
-            std::cout <<temp_matrix[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-    */
     newmatrix = temp_matrix;
 }
 
 
-void Choose_Small(int& node_list, const std::vector< std::vector<double> >& Matrix,
+void UPGMA::choose_small (int& node_list, const std::vector< std::vector<double> >& Matrix,
     int& mini1, int& mini2) {
     //super large value
     double MIN = 99999999999.99;
     for (int i = 0; i < (node_list - 1); i++) {
-        
         int idx = std::min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];
             mini1 = i;
             mini2 = idx;
         }
-        
-//        for (int j = i + 1; j < node_list; j++) {
-//            if (Matrix[i][j] < MIN) {
-//                MIN = Matrix[i][j];
-//                mini1 = i;
-//                mini2 = j;
-//            }
-//        }
     }
     node_list--;
 }
@@ -143,7 +168,7 @@ void Choose_Small(int& node_list, const std::vector< std::vector<double> >& Matr
 
 // numkeys Contains the names and their matching number
 // Matrix Contains The original matrix
-void UPGMA::TREEMAKE(std::vector<std::string>& names, std::map<int, std::string>& numkeys,
+void UPGMA::make_tree (std::vector<std::string>& names, std::map<int, std::string>& numkeys,
     std::vector< std::vector<double> >& Matrix) {
 
     int mini1 = 0, mini2 = 0;
@@ -152,26 +177,14 @@ void UPGMA::TREEMAKE(std::vector<std::string>& names, std::map<int, std::string>
     std::map<int, std::string>::iterator iter;
     std::string newname;
     while (NumbOfSequences > 1) {
-        Choose_Small(NumbOfSequences, Matrix, mini1, mini2);
+        choose_small(NumbOfSequences, Matrix, mini1, mini2);
         update_tree(newname, names, numkeys, NumbOfSequences, Matrix, mini1, mini2);
     }
     newickstring_ = newname + ";";
 }
 
 
-// not used
-double CalcSeqDiffs (std::string& sequence1, std::string& sequence2) {
-    double score = 0;
-    for (unsigned int i = 0; i < sequence1.size(); i++) {
-        if (sequence1[i] != sequence2[i]) {
-            score++;
-        }
-    }
-    return score;
-}
-
-
-std::vector< std::vector<double> > UPGMA::BuildMatrix (std::map<std::string, std::string>& sequences) {
+std::vector< std::vector<double> > UPGMA::build_matrix (std::map<std::string, std::string>& sequences) {
 
     std::vector<std::string> SequenceName;
     std::map<std::string, std::string>::iterator iter, iter2;
@@ -199,7 +212,6 @@ std::vector< std::vector<double> > UPGMA::BuildMatrix (std::map<std::string, std
 
     }
     //prints the distance matrix maybe too verbose
-    
     std::cout << "\t";
     for (unsigned int i = 0; i < SequenceName.size(); i++) {
         std::cout << SequenceName[i] << "\t";
@@ -216,64 +228,18 @@ std::vector< std::vector<double> > UPGMA::BuildMatrix (std::map<std::string, std
 }
 
 
-// *** some alternate functions below *** //
-
-UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
-    Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    int seqcount = 0;
-    // some error checking. should be in general seq reader class
-    bool first = true;
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        sequences_[seq.get_id()] = seq.get_sequence();
-        if (!first) {
-            if ((int)seq.get_length() != nchar_) {
-                std::cout << "Error: sequence " << seq.get_id() << " has "
-                    << seq.get_length() << " characters, was expecting " 
-                    << nchar_ << "." << std::endl << "Exiting." << std::endl;
-                exit(1);
-            }
-        } else {
-            nchar_ = seq.get_length();
-            first = false;
-        }
-        nameKey_[seqcount] = seq.get_id();
-        names_.push_back(seq.get_id());
-        seqcount++;
-    }
-    //fasta has a trailing one
-    if (ft == 2) {
-        sequences_[seq.get_id()] = seq.get_sequence();
-        if ((int)seq.get_length() != nchar_) {
-            std::cout << "Error: sequence " << seq.get_id() << " has "
-                << seq.get_length() << " characters, was expecting " 
-                << nchar_ << "." << std::endl << "Exiting." << std::endl;
-            exit(1);
-        }
-        nameKey_[seqcount] = seq.get_id();
-        names_.push_back(seq.get_id());
-        seqcount++;
-    }
-    ntax_ = seqcount;
-    //set_name_key ();
-    distmatrix_ = BuildMatrix(sequences_);
-    TREEMAKE(names_, nameKey_, distmatrix_);
-}
-
-
 // populate these when reading in the sequences
 void UPGMA::set_name_key () {
     int count = 0;
-    for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
-        nameKey_[count] = iter_ -> first;
-        names_.push_back(iter_ -> first);
+    std::map<std::string, std::string>::iterator iter;
+    for (iter = sequences_.begin(); iter != sequences_.end(); iter++) {
+        nameKey_[count] = iter -> first;
+        names_.push_back(iter -> first);
         count++;
     }
 }
 
 
-std::string UPGMA::get_newick () {
+std::string UPGMA::get_newick () const {
     return newickstring_;
 }
