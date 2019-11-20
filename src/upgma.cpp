@@ -19,12 +19,14 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
     // some error checking. should be in general seq reader class
     bool first = true;
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+        seqs_.push_back(seq);
+        
         sequences_[seq.get_id()] = seq.get_sequence();
         if (!first) {
             if ((int)seq.get_length() != nchar_) {
-                std::cout << "Error: sequence " << seq.get_id() << " has "
+                std::cerr << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
-                    << nchar_ << "." << std::endl << "Exiting." << std::endl;
+                    << nchar_ << ". Exiting." << std::endl;
                 exit(1);
             }
         } else {
@@ -35,13 +37,15 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
         names_.push_back(seq.get_id());
         seqcount++;
     }
-    //fasta has a trailing one
+    //seq has a trailing one
     if (ft == 2) {
+        seqs_.push_back(seq);
+        
         sequences_[seq.get_id()] = seq.get_sequence();
         if ((int)seq.get_length() != nchar_) {
-            std::cout << "Error: sequence " << seq.get_id() << " has "
+            std::cerr << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
-                << nchar_ << "." << std::endl << "Exiting." << std::endl;
+                << nchar_ << ". Exiting." << std::endl;
             exit(1);
         }
         nameKey_[seqcount] = seq.get_id();
@@ -49,9 +53,93 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
         seqcount++;
     }
     ntax_ = seqcount;
-    //set_name_key ();
-    distmatrix_ = build_matrix(sequences_);
+    //distmatrix_ = build_matrix(sequences_);
+    distmatrix_ = build_matrix();
     make_tree(names_, nameKey_, distmatrix_);
+}
+
+
+// get rid of all the map stuff
+//std::vector< std::vector<double> > UPGMA::build_matrix (std::map<std::string, std::string>& sequences) {
+std::vector< std::vector<double> > UPGMA::build_matrix () {
+
+    /*
+    //std::vector<std::string> SequenceName; // but this is already present as names_
+    std::map<std::string, std::string>::iterator iter, iter2;
+    std::string seq, SeqName, MatchName;
+    int FirstCount = 0;
+    double MatchScore;
+
+    // an easier way to initialize a vector of vectors:
+    std::vector< std::vector<double> > Score(ntax_, std::vector<double>(ntax_, 0.0));
+    
+    // compare all sequences to other sequences
+    // really only need half the matrix
+    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
+        seq = iter -> second;
+        SeqName = iter -> first;
+        //SequenceName.push_back(SeqName);
+        int SecondCount = 0;
+        for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
+            //MatchScore = CalcSeqDiffs(seq, iter2 -> second);
+            MatchScore = (double) calc_hamming_dist(seq, iter2 -> second);
+            MatchName = SeqName + "," + iter2 -> first;
+            //std::cout << "MatchName = " << MatchName << std::endl;
+            Score[FirstCount][SecondCount] = MatchScore;
+            SecondCount++;
+        }
+        FirstCount++;
+    }
+    */
+    
+    // smarter version:
+    // 1) skip self comparisons
+    // 2) only calculate one half of matrix (i.e., no duplicate calcs)
+    std::vector< std::vector<double> > distances(ntax_, std::vector<double>(ntax_, 0.0));
+    double tempScore = 0.0;
+    for (int i = 0; i < ntax_; i++) {
+        std::string seq1 = seqs_[i].get_sequence();
+        for (int j = (i + 1); j < ntax_; j++) {
+            std::string seq2 = seqs_[j].get_sequence();
+            // get distance
+            tempScore = (double) calc_hamming_dist(seq1, seq2);
+            // put in both top and bottom of matrix
+            distances[i][j] = distances[j][i] = tempScore;
+        }
+    }
+    
+    // don't want this
+    /*
+    std::cout << std::endl << "OLD" << std::endl;
+    std::cout << "\t";
+    for (unsigned int i = 0; i < names_.size(); i++) {
+        std::cout << names_[i] << "\t";
+    }
+    std::cout << std::endl;
+    for (int i = 0; i < ntax_; i++) {
+        std::cout << names_[i] << "\t";
+        for (int j = 0; j < ntax_; j++) {
+            std::cout << Score[i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    */
+    //std::cout << std::endl << "NEW" << std::endl;
+    
+    std::cout << "\t";
+    for (unsigned int i = 0; i < names_.size(); i++) {
+        std::cout << names_[i] << "\t";
+    }
+    std::cout << std::endl;
+    for (int i = 0; i < ntax_; i++) {
+        std::cout << names_[i] << "\t";
+        for (int j = 0; j < ntax_; j++) {
+            std::cout << distances[i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+    
+    return distances;
 }
 
 
@@ -166,77 +254,19 @@ void UPGMA::choose_small (int& node_list, const std::vector< std::vector<double>
 }
 
 
-// numkeys Contains the names and their matching number
-// Matrix Contains The original matrix
+// numkeys contains the names and their matching number
+// Matrix contains the original matrix
 void UPGMA::make_tree (std::vector<std::string>& names, std::map<int, std::string>& numkeys,
     std::vector< std::vector<double> >& Matrix) {
 
     int mini1 = 0, mini2 = 0;
-    int NumbOfSequences = numkeys.size();
-    std::vector< std::vector<double> > newmatrix;
-    std::map<int, std::string>::iterator iter;
+    int numseqs = ntax_;
     std::string newname;
-    while (NumbOfSequences > 1) {
-        choose_small(NumbOfSequences, Matrix, mini1, mini2);
-        update_tree(newname, names, numkeys, NumbOfSequences, Matrix, mini1, mini2);
+    while (numseqs > 1) {
+        choose_small(numseqs, Matrix, mini1, mini2);
+        update_tree(newname, names, numkeys, numseqs, Matrix, mini1, mini2);
     }
     newickstring_ = newname + ";";
-}
-
-
-std::vector< std::vector<double> > UPGMA::build_matrix (std::map<std::string, std::string>& sequences) {
-
-    std::vector<std::string> SequenceName;
-    std::map<std::string, std::string>::iterator iter, iter2;
-    std::string fasta, SeqName, MatchName;
-    int FirstCount = 0;
-    double MatchScore;
-
-    // an easier way to initialize a vector of vectors:
-    std::vector< std::vector<double> > Score(ntax_, std::vector<double>(ntax_, 0.0));
-    
-    //compare all sequences to other sequences
-    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-        fasta = iter -> second;
-        SeqName = iter -> first;
-        SequenceName.push_back(SeqName);
-        int SecondCount = 0;
-        for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
-            //MatchScore = CalcSeqDiffs(fasta, iter2 -> second);
-            MatchScore = (double) calc_hamming_dist(fasta, iter2 -> second);
-            MatchName = SeqName + "," + iter2 -> first;
-            Score[FirstCount][SecondCount] = MatchScore;
-            SecondCount++;
-        }
-        FirstCount++;
-
-    }
-    //prints the distance matrix maybe too verbose
-    std::cout << "\t";
-    for (unsigned int i = 0; i < SequenceName.size(); i++) {
-        std::cout << SequenceName[i] << "\t";
-    }
-    std::cout << std::endl;
-    for (unsigned int i = 0; i < Score.size(); i++) {
-        std::cout << SequenceName[i] << "\t";
-        for (unsigned int j = 0; j < Score[i].size(); j++) {
-            std::cout << Score[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-    return Score;
-}
-
-
-// populate these when reading in the sequences
-void UPGMA::set_name_key () {
-    int count = 0;
-    std::map<std::string, std::string>::iterator iter;
-    for (iter = sequences_.begin(); iter != sequences_.end(); iter++) {
-        nameKey_[count] = iter -> first;
-        names_.push_back(iter -> first);
-        count++;
-    }
 }
 
 
