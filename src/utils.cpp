@@ -18,6 +18,8 @@
 #include "superdouble.h"
 
 
+// TODO: use const where possible
+
 // set threshold. should maybe use superdouble.
 double EPSILON = 1e-7;
 
@@ -419,8 +421,7 @@ Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in) {
 
 // add element i in vec1 to element i in vec2
 std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
-    
-    // bail if sequences are of different lengths. should be caught earlier than this
+    // bail if sequences are of different lengths.
     if (vec1.size() != vec2.size()) {
       throw std::invalid_argument(
           "Vectors must be of equal length"
@@ -431,6 +432,19 @@ std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
     return res;
 }
 
+
+std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std::vector<double>& vec2) {
+    // bail if sequences are of different lengths.
+    if (vec1.size() != vec2.size()) {
+      throw std::invalid_argument(
+          "Vectors must be of equal length"
+      );
+    }
+    std::vector<double> res = sum_vectors_elementwise(vec1, vec2);
+    std::transform(res.begin(), res.end(), res.begin(), std::bind1st (std::multiplies <double> () , 0.5));
+    
+    return res;
+}
 
 //------------------------------------------------------------------------//
 

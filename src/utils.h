@@ -10,6 +10,9 @@
 #include "superdouble.h"
 
 
+// TODO organize this stuff
+
+
 void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);
 int string_to_int (const std::string& in, const std::string& arg);
@@ -50,14 +53,32 @@ template<typename T> void parse_comma_list (std::string& str, std::vector<T>& re
     }
 }
 
+//------------------------------------------------------------------------//
 // do stuff over vectors
 double sum (std::vector<double>& in);
 int sum (std::vector<int>& in);
+
 int count_zeros (std::vector<int>& in);
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in);
 double mean (std::vector<double>& in);
 double variance (std::vector<double>& in);
 std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2);
+
+template<typename T> std::vector<T> sum_vectors_elementwise (std::vector<T>& vec1, std::vector<T>& vec2) {
+    // bail if sequences are of different lengths.
+    if (vec1.size() != vec2.size()) {
+      throw std::invalid_argument(
+          "Vectors must be of equal length"
+      );
+    }
+    std::vector<T> res = vec1;
+    std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<T>());
+    return res;
+}
+
+std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std::vector<double>& vec2);
+
+//------------------------------------------------------------------------//
 
 std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numareas);
 int random_int_range (int min, int max);
@@ -82,7 +103,6 @@ std::string get_valid_nexus_label (const std::string& inLabel);
 std::string get_safe_taxon_label (const std::string& inLabel);
 void quotify_label (std::string& token);
 
-// not currently used (but cool, and good for debugging)
 template<typename T> void print_vector (std::vector<T>& vec) {
     std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(std::cout, " "));
     std::cout << std::endl;
