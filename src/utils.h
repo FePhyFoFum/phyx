@@ -6,6 +6,7 @@
 #include <iterator>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include "superdouble.h"
 
