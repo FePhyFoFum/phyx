@@ -84,6 +84,8 @@ int main(int argc, char * argv[]) {
     
     Sequence seq;
     std::string retstring;
+    int ntax = 0;
+    int nchar = 0;
     
     std::istream * pios = NULL;
     std::ostream * poos = NULL;
@@ -108,9 +110,9 @@ int main(int argc, char * argv[]) {
     }
 
     int ft = test_seq_filetype_stream(*pios, retstring);
+    
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {
-        int ntax, nchar = 0;
         bool interleave = false;
         get_nexus_dimensions(*pios, ntax, nchar, interleave);
         retstring = ""; // need to do this to let seqreader know we are mid-file
@@ -125,13 +127,26 @@ int main(int argc, char * argv[]) {
             }
         }
     } else {
-        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            (*poos) << seq.get_fasta(toupcase);
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, ntax, nchar);
+            complicated_phylip = is_complicated_phyip(pios, nchar);
         }
-        //fasta has a trailing one
-        if (ft == 2) {
-            (*poos) << seq.get_fasta(toupcase);
+        if (complicated_phylip) {
+            std::cout << "Complicated phylip format detected. I'm working on this." << std::endl;
+            exit(0);
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                (*poos) << seq.get_fasta(toupcase);
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                (*poos) << seq.get_fasta(toupcase);
+            }
         }
+        
     }
     
     if (fileset) {

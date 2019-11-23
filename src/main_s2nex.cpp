@@ -86,6 +86,8 @@ int main(int argc, char * argv[]) {
     std::vector<Sequence> seqs;
     Sequence seq;
     std::string retstring;
+    int ntax = 0;
+    int nchar = 0;
     
     std::istream * pios = NULL;
     std::ostream * poos = NULL;
@@ -113,7 +115,6 @@ int main(int argc, char * argv[]) {
     // extra stuff to deal with possible interleaved nexus
     // yes, nexus to nexus conversion is silly. but could go from interleaved to non-interleaved
     if (ft == 0) {
-        int ntax, nchar = 0;
         bool interleave = false;
         get_nexus_dimensions(*pios, ntax, nchar, interleave);
         retstring = ""; // need to do this to let seqreader know we are mid-file
@@ -125,13 +126,26 @@ int main(int argc, char * argv[]) {
             seqs = read_interleaved_nexus (*pios, ntax, nchar);
         }
     } else {
-        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            seqs.push_back(seq);
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, ntax, nchar);
+            complicated_phylip = is_complicated_phyip(pios, nchar);
         }
-        // fasta has a trailing one
-        if (ft == 2) {
-            seqs.push_back(seq);
+        if (complicated_phylip) {
+            std::cout << "Complicated phylip format detected. I'm working on this." << std::endl;
+            exit(0);
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seqs.push_back(seq);
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                seqs.push_back(seq);
+            }
         }
+        
     }
     
     write_nexus_alignment(seqs, toupcase, poos);
