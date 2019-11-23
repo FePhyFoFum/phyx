@@ -476,6 +476,27 @@ void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar) {
 }
 
 
+bool is_complicated_phyip (std::istream* pios, const int& nchar) {
+    bool complicated = false;
+    std::string peek = peek_line(pios);
+    std::vector<std::string> tokens = tokenize(peek);
+    
+    if (tokens.size() != 2) {
+        // if only 1, no space between label and sequence
+        // if > 2, internal spaces in the sequence itself
+        complicated = true;
+    } else {
+        // if it seems good, check that length of seq equals stated value
+        // if not, we are dealing with 1) interleaved or 2) multi-line
+        if ((int)tokens[1].size() != nchar) {
+            complicated = true;
+        }
+    }
+    
+    return complicated;
+}
+
+
 // file-version of above. used by concatenator
 void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, bool& interleave) {
     numTaxa = numChar = 0;
