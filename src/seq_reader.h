@@ -19,6 +19,7 @@ void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, 
 void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool& interleave);
 void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numChar,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing);
+void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar);
 std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, int nchar);
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int nchar);
 

@@ -333,8 +333,6 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int 
             }
         }
     }
-    //std::cout << "Seqs has " << seqs.size() << " taxa and "
-    //        << seqs[0].get_sequence().size() << " sites." << std::endl;
     return seqs;
 }
 
@@ -470,11 +468,18 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
     return false;
 }
 
+
+void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar) {
+    std::vector<std::string> header = tokenize(head);
+    numTaxa = stoi(header[0]);
+    numChar = stoi(header[1]);
+}
+
+
 // file-version of above. used by concatenator
 void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, bool& interleave) {
     numTaxa = numChar = 0;
     std::string tline;
-    std::string temp;
     std::ifstream infile(filen.c_str());
     while (getline(infile, tline)) {
         if (!tline.empty()) {
