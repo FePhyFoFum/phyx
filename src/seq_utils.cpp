@@ -238,7 +238,9 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
     for (unsigned int i=0; i < seqs.size(); i++) {
         assert((int)seqs[i].get_sequence().length() == seqlength);
     }
+    // header: ntax, nchar
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
+    
     for (unsigned int i=0; i < seqs.size(); i++) {
         if (uppercase) {
             std::string terp = seqs[i].seq_to_upper();

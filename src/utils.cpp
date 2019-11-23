@@ -104,43 +104,17 @@ void tokenize (const std::string& str, std::vector<std::string>& tokens, const s
 }
 
 
-// deprecated in favour of template version (in header file)
-//std::vector<double> parse_double_comma_list (std::string& str) {
-//    vector<double> res;
-//    std::stringstream ss(str);
-//    double i;
-//    while (ss >> i) {
-//        res.push_back(i);
-//        bool done = false;
-//        while (!done) { // shouldn't be any spaces, but let's be safe
-//            if (ss.peek() == ' ' || ss.peek() == ',') {
-//                ss.ignore();
-//            } else {
-//                done = true;
-//            }
-//        }
-//    }
-//    return res;
-//}
-
-// deprecated in favour of template version (in header file)
-//std::vector<int> parse_int_comma_list (std::string& str) {
-//    vector<int> res;
-//    std::stringstream ss(str);
-//    int i;
-//    while (ss >> i) {
-//        res.push_back(i);
-//        bool done = false;
-//        while (!done) { // shouldn't be any spaces, but let's be safe
-//            if (ss.peek() == ' ' || ss.peek() == ',') {
-//                ss.ignore();
-//            } else {
-//                done = true;
-//            }
-//        }
-//    }
-//    return res;
-//}
+// works a little differently than above; don't need to trim spaces
+// assumes delimiter is some form of whitespace
+std::vector<std::string> tokenize (const std::string& input) {
+    std::vector<std::string> tokens;
+    std::string temp;
+    std::istringstream str(input);
+    while (str >> temp) {
+        tokens.push_back(temp);
+    }
+    return tokens;
+}
 
 
 bool is_number (const std::string& s) {
@@ -166,19 +140,6 @@ int doublefactorial(int n) {
 // higher resolution than time( NULL );
 unsigned int get_clock_seed () {
     return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
-}
-
-
-// works a little differently than above; don't need to trim spaces
-// assumes delimiter is some form of whitespace
-std::vector<std::string> tokenize (const std::string& input) {
-    std::vector<std::string> tokens;
-    std::string temp;
-    std::istringstream str(input);
-    while (str >> temp) {
-        tokens.push_back(temp);
-    }
-    return tokens;
 }
 
 

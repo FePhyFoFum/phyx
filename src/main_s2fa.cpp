@@ -113,7 +113,7 @@ int main(int argc, char * argv[]) {
         int ntax, nchar = 0;
         bool interleave = false;
         get_nexus_dimensions(*pios, ntax, nchar, interleave);
-        retstring = ""; // ugh hacky
+        retstring = ""; // need to do this to let seqreader know we are mid-file
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 (*poos) << seq.get_fasta(toupcase);

@@ -33,9 +33,6 @@ int doublefactorial (int n);
 
 unsigned int get_clock_seed ();
 
-//std::vector<double> parse_double_comma_list (string& str);
-//std::vector<int> parse_int_comma_list (string& str);
-
 // template version. pass result vector as arg; will delete anything already in res
 template<typename T> void parse_comma_list (std::string& str, std::vector<T>& res) {
     std::stringstream ss(str);
