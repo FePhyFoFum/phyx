@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
         // check if we are dealing with a complicated phylip format
         if (ft == 1) {
             get_phylip_dimensions(retstring, ntax, nchar);
-            complicated_phylip = is_complicated_phyip(pios, nchar);
+            complicated_phylip = is_complicated_phylip(*pios, nchar);
         }
         if (complicated_phylip) {
             std::cout << "Complicated phylip format detected. I'm working on this." << std::endl;
@@ -146,7 +146,6 @@ int main(int argc, char * argv[]) {
                 (*poos) << seq.get_fasta(toupcase);
             }
         }
-        
     }
     
     if (fileset) {

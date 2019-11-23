@@ -20,7 +20,7 @@ void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool&
 void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numChar,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing);
 void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar);
-bool is_complicated_phyip (std::istream* pios, const int& nchar);
+bool is_complicated_phylip (std::istream& pios, const int& nchar);
 std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, int nchar);
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int nchar);
 
@@ -28,7 +28,6 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int 
 int test_seq_filetype (std::string filen);
 //bool read_fasta_file (std::string filen, std::vector<Sequence>& seqs);
 //bool read_phylip_file (std::string filen, std::vector<Sequence>& seqs);
-//bool read_phylip_file_strec (std::string filen, std::vector<Sequence>& seqs);
-//bool read_nexus_seqs_file (std::string filen, std::vector<Sequence>& seqs);
+//bool read_phylip_file_strec (std::string filen, std::vector<Sequence>& seqs);//bool read_nexus_seqs_file (std::string filen, std::vector<Sequence>& seqs);
 
 #endif /* _SEQ_READER_H_ */

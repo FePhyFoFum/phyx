@@ -476,7 +476,7 @@ void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar) {
 }
 
 
-bool is_complicated_phyip (std::istream* pios, const int& nchar) {
+bool is_complicated_phylip (std::istream& pios, const int& nchar) {
     bool complicated = false;
     std::string peek = peek_line(pios);
     std::vector<std::string> tokens = tokenize(peek);
@@ -728,6 +728,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numC
 }
 
 
+
 // **************************** //
 // *** Deprecated functions *** //
 // **************************** //
@@ -872,39 +873,6 @@ bool read_phylip_file_strec(string filen, vector<Sequence>& seqs) {
             continue;
         }
         std::cout << searchtokens[0] << " " << searchtokens[1] << std::endl;
-        Sequence a = Sequence(searchtokens[0], searchtokens[1], true);
-        seqs.push_back(a);
-    }
-    infile.close();
-    return true;
-}
-*/
-
-//TODO: INCOMPLETE
-/*
-bool read_nexus_seqs_file(string filen, vector<Sequence>& seqs) {
-    string tline;
-    ifstream infile(filen.c_str());
-    bool first = true;
-    while (getline(infile, tline)) {
-        vector<string> searchtokens;
-        tokenize(tline, searchtokens, "    ");
-        for (unsigned int j=0; j < searchtokens.size(); j++) {
-            trim_spaces(searchtokens[j]);
-        }
-        if (first == true) { //reading past the first line
-            first = false;
-            try {
-                //int nseqs = atoi(searchtokens[0].c_str());
-                //int nsites = atoi(searchtokens[1].c_str());
-            } catch( char * str ) {
-                return false; //not a phylip
-            }
-            continue;
-        }
-        if (searchtokens.size() < 2) {
-            continue;
-        }
         Sequence a = Sequence(searchtokens[0], searchtokens[1], true);
         seqs.push_back(a);
     }
