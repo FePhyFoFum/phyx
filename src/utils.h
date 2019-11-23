@@ -116,4 +116,6 @@ bool all_equal (std::vector<double> vals);
 // a basic poll checker for stream inputs
 bool check_for_input_to_stream ();
 
+std::string peek_line (std::istream* pios);
+
 #endif /* _UTILS_H_ */
