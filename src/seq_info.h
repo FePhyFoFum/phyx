@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 
+#include "sequence.h"
+
 class SeqInfo {
 private:
     std::string concatenated_;
@@ -31,6 +33,7 @@ private:
     double percent_missing_;
     
     // new stuff
+    std::vector<Sequence> seqs_;
     std::vector<std::string> taxon_labels_;
     std::vector<int> seq_lengths_;
     std::vector<int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
@@ -41,9 +44,10 @@ private:
     std::ostream* poos_;
     int longest_tax_label_;
     
+    void read_in_alignment ();
     void collect_taxon_labels ();
     void check_is_aligned ();
-    void get_nseqs ();
+    void make_concatenated_sequence ();
     void get_nchars ();
     void set_alphabet ();
     void count_chars_indiv_seq (std::string& seq);

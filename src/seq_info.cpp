@@ -63,174 +63,96 @@ void SeqInfo::count_chars (std::string& seq) {
 }
 
 
-// calculate character state frequencies
-void SeqInfo::calculate_freqs () {
-    seqcount_ = 0;
-    bool first = true;
+// moving this outside, since so many functions need it
+// read everything in, process afterwards
+// this means that all seqs reside in memory. oh well...
+// seqs are stored, datatype and alphabet is set
+void SeqInfo::read_in_alignment () {
     Sequence seq;
-    std::vector<Sequence> seqs; // needed for interleaved nexus, or non-nexus multi
+    //std::vector<Sequence> seqs; // needed for interleaved nexus, or non-nexus multi
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios_, retstring);
+    int file_ntax = 0; // ntax declared in the file itself
     file_type_ = get_filetype_string(ft);
     
-    // if nexus, a bunch of metadata are available
-    // this is mostly useful with morphology
-    // data may also be interleaved
-    // so treat separately
+    // if nexus, grab metadata
     if (file_type_.compare("nexus") == 0) {
-        int nexus_ntax = 0; // compare to num read to find issues
         bool is_interleaved = false;
-        get_nexus_alignment_properties (*pios_, nexus_ntax, seq_length_,
+        get_nexus_alignment_properties (*pios_, file_ntax, seq_length_,
                 is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
         // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
         set_datatype();
         if (is_multi_ && seq_chars_.compare("") != 0) {
             seq_chars_ += gap_;
             seq_chars_ += missing_;
+            char_counts_.resize(seq_chars_.size(), 0);
             alpha_set_ = true;
         }
         retstring = ""; // have to set so seq_reader knows we are mid-file
         if (!is_interleaved) {
             while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-                if (first) {
-                    if (!datatype_set_) {
-                        alpha_name_ = seq.get_alpha_name();
-                        std::cout << "am i here?" << std::endl;
-                        set_datatype();
-                    }
-                    if (!alpha_set_) {
-                        // i believe this is dead
-                        set_alphabet();
-                        // std::cout << std::endl << "i am going to use alphabet: " << seq_chars_ << std::endl << std::endl;
-                    } else {
-                        // std::cout << "already got alphabet: " << seq_chars_ << std::endl;
-                        // set in nexus. dead code
-                        char_counts_.resize(seq_chars_.size(), 0);
-                    }
-                    first = false;
-                }
-                seqcount_++;
-                temp_seq_ = seq.get_sequence();
-                concatenated_ += temp_seq_;
-                name_ = seq.get_id();
-                seq_lengths_.push_back(temp_seq_.length());
-                count_chars(temp_seq_);
-                taxon_labels_.push_back(name_);
+                seqs_.push_back(seq);
             }
         } else {
             // need to read in everything at once
-            seqs = read_interleaved_nexus (*pios_, nexus_ntax, seq_length_);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
-                seqcount_++;
-                temp_seq_ = seq.get_sequence();
-                concatenated_ += temp_seq_;
-                name_ = seq.get_id();
-                seq_lengths_.push_back(temp_seq_.length());
-                count_chars(temp_seq_);
-                taxon_labels_.push_back(name_);
-            }
-        }
-        if (nexus_ntax != seqcount_) {
-            std::cout << "Badly formatted nexus file: " << seqcount_ << " sequences read but "
-                    << nexus_ntax << " expected. Exiting." <<  std::endl;
-            exit(1);
+            seqs_ = read_interleaved_nexus (*pios_, file_ntax, seq_length_);
         }
     } else {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
-        int phylip_ntax = 0; // compare declare to actually read
-        
         if (file_type_.compare("phylip") == 0) {
-            get_phylip_dimensions(retstring, phylip_ntax, seq_length_);
+            get_phylip_dimensions(retstring, file_ntax, seq_length_);
             complicated_phylip = is_complicated_phylip(*pios_, seq_length_);
         }
         if (complicated_phylip) {
-            // like interleaved nexus, need to read in everything at once
-            seqs = read_phylip(*pios_, phylip_ntax, seq_length_);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
-                if (first) {
-                    if (!datatype_set_) { // only if forced protein
-                        alpha_name_ = seq.get_alpha_name();
-                        set_datatype();
-                    }
-                    // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
-                    first = false;
-                }
-                if (!is_multi_) {
-                    seqcount_++;
-                    concatenated_ += seq.get_sequence();
-                    temp_seq_ = seq.get_sequence();
-                    name_ = seq.get_id();
-                    seq_lengths_.push_back(temp_seq_.length());
-                    count_chars(temp_seq_);
-                    taxon_labels_.push_back(name_);
-                } else {
-                    concatenated_ += seq.get_sequence();
-                }
-            }
-            if (phylip_ntax != (int)seqs.size()) {
-                // this likely will never get called, as seq reader has its own error-checking
-                std::cout << "Badly formatted phylip file: " << seqcount_ << " sequences read but "
-                        << phylip_ntax << " expected. Exiting." <<  std::endl;
-                exit(1);
+            seqs_ = read_phylip(*pios_, file_ntax, seq_length_);
+            if (!datatype_set_) {
+                alpha_name_ = seqs_[0].get_alpha_name();
+                set_datatype();
             }
         } else {
             while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-                if (first) {
-                    if (!datatype_set_) { // only if forced protein
-                        alpha_name_ = seq.get_alpha_name();
-                        set_datatype();
-                    }
-                    // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
-                    first = false;
-                }
-                if (!is_multi_) {
-                    seqcount_++;
-                    concatenated_ += seq.get_sequence();
-                    temp_seq_ = seq.get_sequence();
-                    name_ = seq.get_id();
-                    seq_lengths_.push_back(temp_seq_.length());
-                    count_chars(temp_seq_);
-                    taxon_labels_.push_back(name_);
-                } else {
-                    seqs.push_back(seq);
-                    concatenated_ += seq.get_sequence();
+                seqs_.push_back(seq);
+                if (!datatype_set_) {
+                    alpha_name_ = seq.get_alpha_name();
+                    set_datatype();
                 }
             }
-            if (ft == 2) {
-                if (!is_multi_) {
-                    seqcount_++;
-                    concatenated_ += seq.get_sequence();
-                    temp_seq_ = seq.get_sequence();
-                    name_ = seq.get_id();
-                    seq_lengths_.push_back(temp_seq_.length());
-                    count_chars(temp_seq_);
-                    taxon_labels_.push_back(name_);
-                } else {
-                    seqs.push_back(seq);
-                    concatenated_ += seq.get_sequence();
-                }
+            if (ft == 2) { // fasta has an trailing one
+                seqs_.push_back(seq);
             }
-            
         }
-        // figure out alphabet from entire alignment
-            if (is_multi_) {
-                // grab all unique characters from the input string
-                // here, seqs from all individuals are concatenated, so represents all sampled characters
-                set_alphabet_from_sampled_seqs(concatenated_);
-                // now, do the character counting as above
-                for (unsigned int i = 0; i < seqs.size(); i++) {
-                    seq = seqs[i];
-                    seqcount_++;
-                    temp_seq_ = seq.get_sequence();
-                    name_ = seq.get_id();
-                    seq_lengths_.push_back(temp_seq_.length());
-                    count_chars(temp_seq_);
-                    taxon_labels_.push_back(name_);
-                }
-            }
+    }
+    
+    // now do the counting
+    if (is_multi_ && !alpha_set_) {
+        // grab all unique characters from the input string
+        // here, seqs from all individuals are concatenated, so represents all sampled characters
+        make_concatenated_sequence();
+        set_alphabet_from_sampled_seqs(concatenated_);
+    }
+    if (file_ntax != 0) {
+        if (file_ntax != (int)seqs_.size()) {
+            std::cerr << "Error: number of taxa declared in the file ("
+                << ") does not match the number read (" << seqs_.size()
+                << "). Exiting." << std::endl;
+            exit(1);
+        }
+    }
+    seqcount_ = (int)seqs_.size();
+}
+
+
+// calculate character state frequencies
+void SeqInfo::calculate_freqs () {
+    Sequence seq;
+    for (unsigned int i = 0; i < seqs_.size(); i++) {
+        seq = seqs_[i];
+        temp_seq_ = seq.get_sequence();
+        name_ = seq.get_id();
+        seq_lengths_.push_back(temp_seq_.length());
+        count_chars(temp_seq_);
+        taxon_labels_.push_back(name_);
     }
 }
 
@@ -338,18 +260,21 @@ void SeqInfo::print_summary_table_whole_alignment (std::ostream* poos) {
 }
 
 
+void SeqInfo::make_concatenated_sequence () {
+    if (concatenated_.length() == 0) {
+        for (unsigned int i = 0; i < seqs_.size(); i++) {
+            concatenated_ += seqs_[i].get_sequence();
+        }
+    }
+}
+
+
 // just grab labels, disregard the rest
 void SeqInfo::collect_taxon_labels () {
     Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios_, retstring);
-    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-        name_ = seq.get_id();
-        taxon_labels_.push_back(name_);
-    }
-    if (ft == 2) {
-        name_ = seq.get_id();
-        taxon_labels_.push_back(name_);
+    for (unsigned int i = 0; i < seqs_.size(); i++) {
+        seq = seqs_[i];
+        taxon_labels_.push_back(seq.get_id());
     }
     sort(taxon_labels_.begin(), taxon_labels_.end());
 }
@@ -358,15 +283,9 @@ void SeqInfo::collect_taxon_labels () {
 // assumed aligned if all seqs are the same length
 void SeqInfo::check_is_aligned () {
     Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios_, retstring);
-    while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-        int terp = seq.get_sequence().size();
-        seq_lengths_.push_back(terp);
-    }
-    if (ft == 2) {
-        int terp = seq.get_sequence().size();
-        seq_lengths_.push_back(terp);
+    for (unsigned int i = 0; i < seqs_.size(); i++) {
+        seq = seqs_[i];
+        seq_lengths_.push_back(seq.get_sequence().size());
     }
     // check if all seqs are the same length
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
@@ -377,58 +296,19 @@ void SeqInfo::check_is_aligned () {
 }
 
 
-void SeqInfo::get_nseqs () {
-    seqcount_ = 0;
-    bool is_interleaved = false;
-    Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios_, retstring);
-    
-    // if nexus, grab from dimensions; no need to read alignment
-    if (ft == 0) {
-        get_nexus_dimensions (*pios_, seqcount_, seq_length_, is_interleaved);
-    } else {
-        while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-            seqcount_++;
-        }
-        if (ft == 2) {
-            seqcount_++;
-        }
-    }
-}
-
-
 void SeqInfo::get_nchars () {
     Sequence seq;
-    std::string retstring;
-    bool is_interleaved = false;
-    int ft = test_seq_filetype_stream(*pios_, retstring);
-    
-    // if nexus, grab from dimensions; no need to read alignment (i.e., trusting file is valid)
-    if (ft == 0) {
-        get_nexus_dimensions (*pios_, seqcount_, seq_length_, is_interleaved);
+    for (unsigned int i = 0; i < seqs_.size(); i++) {
+        seq = seqs_[i];
+        seq_lengths_.push_back(seq.get_sequence().size());
+    }
+    // check if all seqs are the same length
+    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+        is_aligned_ = true;
+        seq_length_ = seq_lengths_[0];
     } else {
-        while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-            int terp = seq.get_sequence().size();
-            name_ = seq.get_id();
-            taxon_labels_.push_back(name_);
-            seq_lengths_.push_back(terp);
-        }
-        if (ft == 2) {
-            int terp = seq.get_sequence().size();
-            name_ = seq.get_id();
-            taxon_labels_.push_back(name_);
-            seq_lengths_.push_back(terp);
-        }
-        // check if all seqs are the same length
-        if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
-            is_aligned_ = true;
-            seq_length_ = seq_lengths_[0];
-        } else {
-            is_aligned_ = false;
-            seq_length_ = -1;
-        }
-        seqcount_ = (int)seq_lengths_.size();
+        is_aligned_ = false;
+        seq_length_ = -1;
     }
 }
 
@@ -447,9 +327,8 @@ void SeqInfo::calc_missing () {
         miss += char_counts_[i];
     }
     percent_missing_ = temp;
-    
-    std::cout << "total_num_chars = " << total_num_chars << std::endl;
-    std::cout << "total missing = " << miss << std::endl;
+    //std::cout << "total_num_chars = " << total_num_chars << std::endl;
+    //std::cout << "total missing = " << miss << std::endl;
 }
 
 
@@ -465,9 +344,10 @@ void SeqInfo::get_longest_taxon_label () {
 
 
 SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
-        const bool& force_protein):seq_chars_(""), output_indiv_(indiv), datatype_set_(false),
+        const bool& force_protein):concatenated_(""), seq_chars_(""), output_indiv_(indiv), datatype_set_(false),
         is_dna_(false), is_protein_(false), is_multi_(false), is_binary_(false),
-        alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'), missing_('?') {
+        alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'), missing_('?'),
+        seqcount_(0) {
     // maybe get rid of this? how often is inference wrong?
     if (force_protein) {
         is_protein_ = true;
@@ -476,6 +356,7 @@ SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
     }
     pios_ = pios;
     poos_ = poos;
+    read_in_alignment();
 }
 
 
@@ -493,7 +374,6 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         check_is_aligned();
         (*poos_) << std::boolalpha << is_aligned_ << std::endl;
     } else if (get_nseq) {
-        get_nseqs();
         (*poos_) << seqcount_ << std::endl;
     } else if (get_freqs) {
         calculate_freqs();
@@ -580,6 +460,7 @@ void SeqInfo::summarize () {
     } else {
         // pass the seq concatenated across all individuals
         // probably can skip a bunch fo the stuff above...
+        make_concatenated_sequence();
         count_chars_indiv_seq(concatenated_);
         print_summary_table_whole_alignment(poos_);
     }
