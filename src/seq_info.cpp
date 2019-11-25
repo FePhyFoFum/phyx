@@ -36,7 +36,7 @@ void SeqInfo::count_chars (std::string& seq) {
     if (output_indiv_) {
         std::vector<int> icounts(seq_chars_.length(), 0);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            int num = count(seq.begin(), seq.end(), seq_chars_[i]);
+            int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
             char_counts_[i] += num;
             icounts[i] += num;
             sum += num;
@@ -51,7 +51,7 @@ void SeqInfo::count_chars (std::string& seq) {
         //std::transform(char_counts_.begin(), char_counts_.end(), icounts.begin(), char_counts_.begin(), std::plus<int>());
     } else {
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            int num = count(seq.begin(), seq.end(), seq_chars_[i]);
+            int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
             char_counts_[i] += num;
             sum += num;
         }
@@ -132,63 +132,105 @@ void SeqInfo::calculate_freqs () {
             }
         }
         if (nexus_ntax != seqcount_) {
-            std::cout << "badly formatted nexus file: " << seqcount_ << " sequences read but "
+            std::cout << "Badly formatted nexus file: " << seqcount_ << " sequences read but "
                     << nexus_ntax << " expected. Exiting." <<  std::endl;
             exit(1);
         }
     } else {
-        while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-            if (first) {
-                if (!datatype_set_) { // only if forced protein
-                    alpha_name_ = seq.get_alpha_name();
-                    set_datatype();
-                }
-                // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
-                first = false;
-            }
-            if (!is_multi_) {
-                seqcount_++;
-                concatenated_ += seq.get_sequence();
-                temp_seq_ = seq.get_sequence();
-                name_ = seq.get_id();
-                seq_lengths_.push_back(temp_seq_.length());
-                count_chars(temp_seq_);
-                taxon_labels_.push_back(name_);
-            } else {
-                seqs.push_back(seq);
-                concatenated_ += seq.get_sequence();
-            }
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        int phylip_ntax = 0; // compare declare to actually read
+        
+        if (file_type_.compare("phylip") == 0) {
+            get_phylip_dimensions(retstring, phylip_ntax, seq_length_);
+            complicated_phylip = is_complicated_phylip(*pios_, seq_length_);
         }
-        if (ft == 2) {
-            if (!is_multi_) {
-                seqcount_++;
-                concatenated_ += seq.get_sequence();
-                temp_seq_ = seq.get_sequence();
-                name_ = seq.get_id();
-                seq_lengths_.push_back(temp_seq_.length());
-                count_chars(temp_seq_);
-                taxon_labels_.push_back(name_);
-            } else {
-                seqs.push_back(seq);
-                concatenated_ += seq.get_sequence();
-            }
-        }
-        // figure out alphabet from entire alignment
-        if (is_multi_) {
-            // grab all unique characters from the input string
-            // here, seqs from all individuals are concatenated, so represents all sampled characters
-            set_alphabet_from_sampled_seqs(concatenated_);
-            // now, do the character counting as above
+        if (complicated_phylip) {
+            // like interleaved nexus, need to read in everything at once
+            seqs = read_phylip(*pios_, phylip_ntax, seq_length_);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
-                seqcount_++;
-                temp_seq_ = seq.get_sequence();
-                name_ = seq.get_id();
-                seq_lengths_.push_back(temp_seq_.length());
-                count_chars(temp_seq_);
-                taxon_labels_.push_back(name_);
+                if (first) {
+                    if (!datatype_set_) { // only if forced protein
+                        alpha_name_ = seq.get_alpha_name();
+                        set_datatype();
+                    }
+                    // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
+                    first = false;
+                }
+                if (!is_multi_) {
+                    seqcount_++;
+                    concatenated_ += seq.get_sequence();
+                    temp_seq_ = seq.get_sequence();
+                    name_ = seq.get_id();
+                    seq_lengths_.push_back(temp_seq_.length());
+                    count_chars(temp_seq_);
+                    taxon_labels_.push_back(name_);
+                } else {
+                    concatenated_ += seq.get_sequence();
+                }
             }
+            if (phylip_ntax != (int)seqs.size()) {
+                // this likely will never get called, as seq reader has its own error-checking
+                std::cout << "Badly formatted phylip file: " << seqcount_ << " sequences read but "
+                        << phylip_ntax << " expected. Exiting." <<  std::endl;
+                exit(1);
+            }
+        } else {
+            while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
+                if (first) {
+                    if (!datatype_set_) { // only if forced protein
+                        alpha_name_ = seq.get_alpha_name();
+                        set_datatype();
+                    }
+                    // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
+                    first = false;
+                }
+                if (!is_multi_) {
+                    seqcount_++;
+                    concatenated_ += seq.get_sequence();
+                    temp_seq_ = seq.get_sequence();
+                    name_ = seq.get_id();
+                    seq_lengths_.push_back(temp_seq_.length());
+                    count_chars(temp_seq_);
+                    taxon_labels_.push_back(name_);
+                } else {
+                    seqs.push_back(seq);
+                    concatenated_ += seq.get_sequence();
+                }
+            }
+            if (ft == 2) {
+                if (!is_multi_) {
+                    seqcount_++;
+                    concatenated_ += seq.get_sequence();
+                    temp_seq_ = seq.get_sequence();
+                    name_ = seq.get_id();
+                    seq_lengths_.push_back(temp_seq_.length());
+                    count_chars(temp_seq_);
+                    taxon_labels_.push_back(name_);
+                } else {
+                    seqs.push_back(seq);
+                    concatenated_ += seq.get_sequence();
+                }
+            }
+            
         }
+        // figure out alphabet from entire alignment
+            if (is_multi_) {
+                // grab all unique characters from the input string
+                // here, seqs from all individuals are concatenated, so represents all sampled characters
+                set_alphabet_from_sampled_seqs(concatenated_);
+                // now, do the character counting as above
+                for (unsigned int i = 0; i < seqs.size(); i++) {
+                    seq = seqs[i];
+                    seqcount_++;
+                    temp_seq_ = seq.get_sequence();
+                    name_ = seq.get_id();
+                    seq_lengths_.push_back(temp_seq_.length());
+                    count_chars(temp_seq_);
+                    taxon_labels_.push_back(name_);
+                }
+            }
     }
 }
 
