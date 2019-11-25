@@ -117,5 +117,6 @@ bool all_equal (std::vector<double> vals);
 bool check_for_input_to_stream ();
 
 std::string peek_line (std::istream& pios);
+std::vector<std::string> peek_lines (std::istream& pios, const int& n);
 
 #endif /* _UTILS_H_ */

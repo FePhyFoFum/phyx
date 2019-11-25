@@ -121,7 +121,7 @@ int main(int argc, char * argv[]) {
                 (*poos) << seq.get_fasta(toupcase);
             }
         } else {
-            std::vector<Sequence> seqs = read_interleaved_nexus (*pios, ntax, nchar);
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 (*poos) << seqs[i].get_fasta(toupcase);
             }
@@ -134,8 +134,10 @@ int main(int argc, char * argv[]) {
             complicated_phylip = is_complicated_phylip(*pios, nchar);
         }
         if (complicated_phylip) {
-            std::cout << "Complicated phylip format detected. I'm working on this." << std::endl;
-            exit(0);
+            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                (*poos) << seqs[i].get_fasta(toupcase);
+            }
         } else {
             // fasta, fastq, or simple phylip
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {

@@ -641,3 +641,20 @@ std::string peek_line (std::istream& pios) {
     pios.seekg(spt, std::ios_base::beg);
     return nextLine;
 }
+
+
+// same as above, except read in the next n lines
+std::vector<std::string> peek_lines (std::istream& pios, const int& n) {
+    std::vector<std::string> peekedLines;
+    std::string nextLine = "";
+    // get current position
+    std::streampos spt = pios.tellg();
+    // read in the lines
+    for (int i = 0; i < n; i++) {
+        getline(pios, nextLine);
+        peekedLines.push_back(nextLine);
+    }
+    // return to the original position in the stream
+    pios.seekg(spt, std::ios_base::beg);
+    return peekedLines;
+}

@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
                 seqs.push_back(seq);
             }
         } else {
-            seqs = read_interleaved_nexus (*pios, ntax, nchar);
+            seqs = read_interleaved_nexus(*pios, ntax, nchar);
         }
     } else {
         bool complicated_phylip = false;
@@ -132,8 +132,7 @@ int main(int argc, char * argv[]) {
             complicated_phylip = is_complicated_phylip(*pios, nchar);
         }
         if (complicated_phylip) {
-            std::cout << "Complicated phylip format detected. I'm working on this." << std::endl;
-            exit(0);
+            seqs = read_phylip(*pios, ntax, nchar);
         } else {
             // fasta, fastq, or simple phylip
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
