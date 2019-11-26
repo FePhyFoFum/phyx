@@ -73,6 +73,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 'p':
                 proportion = string_to_float(optarg, "-p");
+                if (proportion > 1.0 || proportion < 0.0) {
+                    std::cerr << "Proportion required data (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
+                    exit(0);
+                }
                 break;
             case 'a':
                 force_protein = true;
