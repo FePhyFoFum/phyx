@@ -95,10 +95,6 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
-    if (!fileset) {
-        std::cerr << "You must specify an input sequence file. Exiting." << std::endl;
-        exit(0);
-    }
     
     if (fileset && outfileset) {
         check_inout_streams_identical(seqf, outf);
