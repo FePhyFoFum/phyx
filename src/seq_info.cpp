@@ -69,7 +69,6 @@ void SeqInfo::count_chars (std::string& seq) {
 // seqs are stored, datatype and alphabet is set
 void SeqInfo::read_in_alignment () {
     Sequence seq;
-    //std::vector<Sequence> seqs; // needed for interleaved nexus, or non-nexus multi
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios_, retstring);
     int file_ntax = 0; // ntax declared in the file itself

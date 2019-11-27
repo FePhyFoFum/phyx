@@ -27,7 +27,7 @@ SequenceSampler::SequenceSampler (const int& seed, const float& jackfract,
 }
 
 
-// not used
+// not currently used
 std::vector<int> SequenceSampler::get_sampled_sites () {
     return sample_sites_;
 }
