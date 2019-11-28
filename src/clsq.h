@@ -35,7 +35,7 @@ private:
     void generate_cleaned_sequences ();
     std::string get_cleaned_seq (const std::string& origseq);
     int get_longest_taxon_label ();
-    void get_sequences (std::istream* pios);
+    void read_in_sequences (std::istream* pios);
     void set_bad_chars ();
 
 public:

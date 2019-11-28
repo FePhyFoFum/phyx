@@ -14,7 +14,7 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required, con
         const bool& count_only, const bool& verbose):num_tax_(0), num_char_(0), num_retained_(0),
         missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), count_only_(count_only), verbose_(verbose) {
     //read_in_alignment(pios);
-    get_sequences(pios);
+    read_in_sequences(pios);
     count_missing();
     if (!count_only_) {
         generate_cleaned_sequences();
@@ -24,7 +24,7 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required, con
 }
 
 
-void SequenceCleaner::get_sequences (std::istream* pios) {
+void SequenceCleaner::read_in_sequences (std::istream* pios) {
     seqs_ = ingest_alignment(pios, alpha_name_);
     num_tax_ = (int)seqs_.size();
     
@@ -36,7 +36,7 @@ void SequenceCleaner::get_sequences (std::istream* pios) {
         }
     }
     if (!aligned) {
-        std::cerr << "Sequences are not aligned. Exiting." << std::endl;
+        std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
     set_bad_chars(); // uses alpha name
