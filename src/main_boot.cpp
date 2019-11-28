@@ -57,7 +57,6 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool partitioned = false;
     float jackfract = 0.0;
-    int numchar = 0;
     char * outf = NULL;
     char * seqf = NULL;
     std::string partf = "";
@@ -135,35 +134,8 @@ int main(int argc, char * argv[]) {
         exit (0);
     }
     
-    SequenceSampler ss(seed, jackfract, partf);
-    
-    Sequence seq;
-    std::string retstring;
-    bool first = true;
-    
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        if (first) { // need to read in first sequence to get numchar
-            numchar = (int)seq.get_sequence().size(); // check against partition information
-            if (partitioned) {
-                if (numchar != ss.get_num_partitioned_sites()) {
-                    std::cerr << "Error: numSites in sequence (" << numchar <<
-                        ") does not match that in partition file (" << ss.get_num_partitioned_sites() <<
-                        "). Exiting." << std::endl;
-                }
-            }
-            ss.sample_sites(numchar);
-            first = false;
-        }
-        (*poos) << ">" << seq.get_id() << std::endl;
-        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << std::endl;
-    }
-    // have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        (*poos) << ">" << seq.get_id() << std::endl;
-        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << std::endl;
-    }
+    SequenceSampler ss(pios, seed, jackfract, partf);
+    ss.write_resampled_seqs(poos);
     
     if (fileset) {
         fstr->close();

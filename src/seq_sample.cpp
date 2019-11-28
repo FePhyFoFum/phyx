@@ -5,12 +5,14 @@
 #include <algorithm>
 #include <fstream>
 
+#include "sequence.h"
+#include "seq_reader.h"
 #include "seq_sample.h"
 #include "utils.h"
 
 
-SequenceSampler::SequenceSampler (const int& seed, const float& jackfract,
-        std::string& partf):jkfract_(jackfract), jackknife_(false),
+SequenceSampler::SequenceSampler (std::istream* pios, const int& seed, const float& jackfract,
+        std::string& partf):num_tax_(0), num_char_(0), jkfract_(jackfract), jackknife_(false),
         partitioned_(false), num_partitioned_sites_(0), num_partitions_(0) {
     if (seed == -1) {
         srand(get_clock_seed());
@@ -24,6 +26,39 @@ SequenceSampler::SequenceSampler (const int& seed, const float& jackfract,
         partitioned_ = true;
         parse_partitions(partf);
     }
+    read_in_sequences(pios);
+}
+
+
+void SequenceSampler::read_in_sequences (std::istream* pios) {
+    std::string alphaName = ""; // not used, but required by reader
+    seqs_ = ingest_alignment(pios, alphaName);
+    num_tax_ = (int)seqs_.size();
+    num_char_ = (int)seqs_[0].get_sequence().size();
+    
+    // check that it is aligned (doesn't make sense otherwise)
+    bool aligned = true;
+    for (int i = 1; i < num_tax_; i++) {
+        if ((int)seqs_[i].get_sequence().size() != num_char_) {
+            aligned = false;
+        }
+    }
+    if (!aligned) {
+        std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+        exit(0);
+    }
+    
+    // check that partitions lengths match alignment
+    if (partitioned_) {
+        if (num_char_ != get_num_partitioned_sites()) {
+            std::cerr << "Error: nchar in sequence (" << num_char_ <<
+                ") does not match that in partition file (" << get_num_partitioned_sites() <<
+                "). Exiting." << std::endl;
+        }
+    }
+    
+    // good to go
+    sample_sites(num_char_);
 }
 
 
@@ -233,6 +268,7 @@ void SequenceSampler::check_valid_partitions () {
 }
 
 
+// find sites 1) present in more than 1 partition or 2) not present in any
 void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites) {
     std::vector<int> unique;
     std::vector<int> duplicates;
@@ -274,4 +310,12 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
     }
     std::cout << "Exiting." << std::endl;
     exit (0);
+}
+
+
+void SequenceSampler::write_resampled_seqs (std::ostream* poos) {
+    for (int i = 0; i < num_tax_; i++) {
+        (*poos) << ">" << seqs_[i].get_id() << std::endl;
+        (*poos) << get_resampled_seq(seqs_[i].get_sequence()) << std::endl;
+    }
 }
