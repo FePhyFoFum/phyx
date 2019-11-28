@@ -12,7 +12,7 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Removes unwanted sequences" << std::endl;
+    std::cout << "Removes sequences by label" << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxrms [OPTION]... " << std::endl;
@@ -151,17 +151,13 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     std::string seq_name;
     
-    int ft = test_seq_filetype_stream(*pios, retstring);
+    std::string alphaName = "";
+    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
+    int ntax = (int)seqs.size();
     
     if (!complement) {
-        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) == names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
-            }
-        }
-        // fasta has a trailing one
-        if (ft == 2) {
+        for (int i = 0; i < ntax; i++) {
+            seq = seqs[i];
             seq_name = seq.get_id();
             if (find(names.begin(), names.end(), seq_name) == names.end()) {
                 *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
@@ -170,14 +166,8 @@ int main(int argc, char * argv[]) {
     } else {
         // keep the taxa passed in
         // complicating factor: not guaranteed to have any taxa left (i.e. empty output)
-        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) != names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
-            }
-        }
-        // fasta has a trailing one
-        if (ft == 2) {
+        for (int i = 0; i < ntax; i++) {
+            seq = seqs[i];
             seq_name = seq.get_id();
             if (find(names.begin(), names.end(), seq_name) != names.end()) {
                 *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
