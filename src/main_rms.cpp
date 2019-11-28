@@ -12,7 +12,7 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Removes sequences by label" << std::endl;
+    std::cout << "Remove sequences by label" << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxrms [OPTION]... " << std::endl;
@@ -150,31 +150,75 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     std::string seq_name;
+    int ntax, nchar; // not used, but required by some readers
     
-    std::string alphaName = "";
-    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
-    int ntax = (int)seqs.size();
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    std::vector<std::string>::iterator it;
     
-    if (!complement) {
-        for (int i = 0; i < ntax; i++) {
-            seq = seqs[i];
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) == names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seq_name = seq.get_id();
+                it = find(names.begin(), names.end(), seq_name);
+                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                }
+            }
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                seq_name = seq.get_id();
+                it = find(names.begin(), names.end(), seq_name);
+                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                }
             }
         }
     } else {
-        // keep the taxa passed in
-        // complicating factor: not guaranteed to have any taxa left (i.e. empty output)
-        for (int i = 0; i < ntax; i++) {
-            seq = seqs[i];
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) != names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, ntax, nchar);
+            complicated_phylip = is_complicated_phylip(*pios, nchar);
+        }
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                seq_name = seq.get_id();
+                it = find(names.begin(), names.end(), seq_name);
+                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                }
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seq_name = seq.get_id();
+                it = find(names.begin(), names.end(), seq_name);
+                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                }
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                seq_name = seq.get_id();
+                it = find(names.begin(), names.end(), seq_name);
+                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                }
             }
         }
     }
-
+    
+    
+    
+    
     if (outfileset) {
         ofstr->close();
         delete poos;
