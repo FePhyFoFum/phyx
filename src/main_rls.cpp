@@ -58,6 +58,7 @@ int main(int argc, char * argv[]) {
     char * seqf = NULL;
     std::string cnamef = "";
     std::string nnamef = "";
+    
     while (1) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:c:n:o:vhV", long_options, &oi);
@@ -136,29 +137,80 @@ int main(int argc, char * argv[]) {
     
     Sequence seq;
     std::string retstring;
+    bool success = false;
+    int ntax, nchar; // not used, but required by some reader functions
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     
-    bool success = false;
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        std::string terp = seq.get_id();
-        success = rl.relabel_sequence(seq);
-        if (success) {
-            orig.erase(terp);
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
         }
-        (*poos) << ">" << seq.get_id() << std::endl;
-        (*poos) << seq.get_sequence() << std::endl;
-    }
-// have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        std::string terp = seq.get_id();
-        success = rl.relabel_sequence(seq);
-        if (success) {
-            orig.erase(terp);
+    } else {
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, ntax, nchar);
+            complicated_phylip = is_complicated_phylip(*pios, nchar);
         }
-        (*poos) << ">" << seq.get_id() << std::endl;
-        (*poos) << seq.get_sequence() << std::endl;
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+        }
     }
     
     if (orig.size() > 0) {
