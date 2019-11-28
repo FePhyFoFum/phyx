@@ -98,18 +98,12 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &std::cout;
     }
-    Sequence seq;
-    std::string retstring;
-    std::vector<Sequence> seqs;
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs.push_back(seq);
-    }
-    if (ft == 2) {
-        seqs.push_back(seq);
-    }
-    std::string alpha = seqs[0].get_alpha_name();
-    std::string rets = consensus_seq(seqs, alpha);
+    
+    std::string alphaName = "";
+    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
+    
+    //std::string alpha = seqs[0].get_alpha_name();
+    std::string rets = consensus_seq(seqs, alphaName);
 
     (*poos) << ">consensus" << std::endl;
     (*poos) << rets << std::endl;
