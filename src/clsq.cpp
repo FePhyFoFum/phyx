@@ -37,7 +37,7 @@ void SequenceCleaner::read_in_alignment (std::istream* pios) {
         std::string symbols = ""; // another dummy
         get_nexus_alignment_properties (*pios, file_ntax, num_char_,
                 is_interleaved, alpha_name_, symbols, gap, missing);
-        std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
+        //std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
         retstring = ""; // have to set so seq_reader knows we are mid-file
         if (!is_interleaved) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
@@ -85,7 +85,7 @@ void SequenceCleaner::read_in_alignment (std::istream* pios) {
     num_char_ = (int)seqs_[0].get_sequence().size();
     bool aligned = true;
     for (int i = 1; i < num_tax_; i++) {
-        if ((int)seqs_[0].get_sequence().size() != num_char_) {
+        if ((int)seqs_[i].get_sequence().size() != num_char_) {
             aligned = false;
         }
     }
@@ -93,7 +93,7 @@ void SequenceCleaner::read_in_alignment (std::istream* pios) {
         std::cerr << "Sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
-    set_bad_chars();
+    set_bad_chars(); // uses alpha name
 }
 
 
