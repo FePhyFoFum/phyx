@@ -133,7 +133,6 @@ int main(int argc, char * argv[]) {
              
         }
     }
-    std::vector<Sequence> seqs;
     Sequence seq;
     std::string retstring;
     
@@ -163,14 +162,8 @@ int main(int argc, char * argv[]) {
         afstr = new std::ofstream(outaf);
     }
 
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs.push_back(seq);
-    }
-    // fasta has a trailing one
-    if (ft == 2) {
-        seqs.push_back(seq);
-    }
+    std::string alphaName = "";
+    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
 
     // go all by all
     for (unsigned int i=0; i < seqs.size(); i++) {
