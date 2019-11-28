@@ -13,7 +13,8 @@
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required, const bool& by_taxon,
         const bool& count_only, const bool& verbose):num_tax_(0), num_char_(0), num_retained_(0),
         missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), count_only_(count_only), verbose_(verbose) {
-    read_in_alignment(pios);
+    //read_in_alignment(pios);
+    get_sequences(pios);
     count_missing();
     if (!count_only_) {
         generate_cleaned_sequences();
@@ -23,63 +24,8 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required, con
 }
 
 
-void SequenceCleaner::read_in_alignment (std::istream* pios) {
-    Sequence seq;
-    std::string retstring;
-    alpha_name_ = "";
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    int file_ntax = 0; // ntax declared in the file itself
-    std::string file_type = get_filetype_string(ft);
-    
-    if (file_type.compare("nexus") == 0) {
-        bool is_interleaved = false;
-        char gap, missing; // dummy variables, not used but required
-        std::string symbols = ""; // another dummy
-        get_nexus_alignment_properties (*pios, file_ntax, num_char_,
-                is_interleaved, alpha_name_, symbols, gap, missing);
-        //std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
-        retstring = ""; // have to set so seq_reader knows we are mid-file
-        if (!is_interleaved) {
-            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-                seqs_.push_back(seq);
-            }
-        } else {
-            seqs_ = read_interleaved_nexus(*pios, file_ntax, num_char_);
-        }
-    } else {
-        bool complicated_phylip = false;
-        // check if we are dealing with a complicated phylip format
-        if (file_type.compare("phylip") == 0) {
-            get_phylip_dimensions(retstring, file_ntax, num_char_);
-            complicated_phylip = is_complicated_phylip(*pios, num_char_);
-        }
-        if (complicated_phylip) {
-            seqs_ = read_phylip(*pios, file_ntax, num_char_);
-            if (alpha_name_ == "") {
-                alpha_name_ = seqs_[0].get_alpha_name();
-            }
-        } else {
-            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-                seqs_.push_back(seq);
-                if (alpha_name_ == "") {
-                    alpha_name_ = seq.get_alpha_name();
-                }
-            }
-            if (ft == 2) { // fasta has an trailing one
-                seqs_.push_back(seq);
-            }
-        }
-    }
-    
-    // some simple error-checking
-    if (file_ntax != 0) {
-        if (file_ntax != (int)seqs_.size()) {
-            std::cerr << "Error: number of taxa declared in the file ("
-                << ") does not match the number read (" << seqs_.size()
-                << "). Exiting." << std::endl;
-            exit(1);
-        }
-    }
+void SequenceCleaner::get_sequences (std::istream* pios) {
+    seqs_ = ingest_alignment(pios, alpha_name_);
     num_tax_ = (int)seqs_.size();
     
     num_char_ = (int)seqs_[0].get_sequence().size();
@@ -131,9 +77,10 @@ void SequenceCleaner::write_seqs (std::ostream* poos) {
                 (*poos) << ">" << cleaned_seqs_[i].get_id() << std::endl;
                 (*poos) << cleaned_seqs_[i].get_sequence() << std::endl;
             } else {
+                // rare case where removal of sites leaves only missing data for a taxon
                 if (verbose_) {
                     std::cerr << "Taxon '" << cleaned_seqs_[i].get_id()
-                        << "' consists only of missing characters. Skipping." << std::endl;
+                        << "' consists only of missing characters. Removing." << std::endl;
                 }
             }
             

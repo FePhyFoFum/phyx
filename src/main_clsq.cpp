@@ -10,6 +10,10 @@
 #include "seq_reader.h"
 #include "log.h"
 
+// TODO: support codon data (i.e., remove triplets, retain reading frame)
+// kick out early if seqlength is not a multiple of 3
+// throw out stop_codons: "TAG", "TAA", "TGA"
+
 void print_help() {
     std::cout << "Cleans alignments by removing positions with too much ambiguous data." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
