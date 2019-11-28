@@ -30,7 +30,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
 }
 
-std::string versionline("pxssort 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxssort 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -132,16 +132,10 @@ int main(int argc, char * argv[]) {
     } else {
         poos =&std::cout;
     }
-    std::vector<Sequence> seqs;
-    Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs.push_back(seq);
-    }
-    if (ft == 2) {
-        seqs.push_back(seq);
-    }
+    
+    std::string alphaName = "";
+    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
+    
     if (sortby == 1) {
         sort(seqs.begin(), seqs.end(), SequenceIDListCompare);
     } else if (sortby == 2) {
