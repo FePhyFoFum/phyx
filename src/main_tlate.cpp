@@ -118,21 +118,61 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     std::string aa_seq;
     std::string nuc_seq;
-
+    
     int ft = test_seq_filetype_stream(*pios, retstring);
-    // send sequences to be translated here
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        nuc_seq = seq.get_sequence();
-        aa_seq = tl.translate(nuc_seq);
-        (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+    int ntax, nchar; // not used, but required by some readers
+    
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        }
+    } else {
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, ntax, nchar);
+            complicated_phylip = is_complicated_phylip(*pios, nchar);
+        }
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        }
     }
-    // fasta has a trailing one
-    if (ft == 2) {
-        nuc_seq = seq.get_sequence();
-        aa_seq = tl.translate(nuc_seq);
-        (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
-    }
-
+    
     if (outfileset) {
         ofstr->close();
         delete poos;
