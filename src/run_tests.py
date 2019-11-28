@@ -56,8 +56,8 @@ def test_program(name):
         cm = "./pxrms -s TEST/test.fa -n TaxonA"
         t = '>TaxonB\nGCTCGAGGGGCCCCAAGACC\n>TaxonC\nACGCTCCCCCTTAAAAATGA\n>TaxonD\nTCCTTGTTCAACTCCGGTGG\n>TaxonE\nTTACTATTCCCCCCCGCCGG\n'
     elif name == "pxboot":
-        cm = "./pxboot -s TEST/test.fa -x 1 | grep -c \>"
-        t = '5\n'
+        cm = "./pxboot -s TEST/test.fa -x 1"
+        t = '>TaxonA\nAAATTCCCCCTGCCCTTTTA\n>TaxonB\nGCTCCGGGGGGCCCCAAGAC\n>TaxonC\nACGCCCCCCCCTAAAAAATA\n>TaxonD\nTCCTTTTTTTAATTCGGGTG\n>TaxonE\nTTACCTTTTTCCCCCGGCCG\n'
     elif name == "pxrevcomp":
         cm = "./pxrevcomp -s TEST/test.fa"
         t = '>TaxonA\nTTAAAGGGACAGGGAAATTT\n>TaxonB\nGGTCTTGGGGCCCCTCGAGC\n>TaxonC\nTCATTTTTAAGGGGGAGCGT\n>TaxonD\nCCACCGGAGTTGAACAAGGA\n>TaxonE\nCCGGCGGGGGGGAATAGTAA\n'
