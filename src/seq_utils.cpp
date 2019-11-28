@@ -153,7 +153,7 @@ char get_prot_char (std::set<char> inc) {
 
 /**
  * string alpha: either "DNA" or "AA"
- */
+*/
 std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
     int seqlength = seqs[0].get_sequence().length();
     for (unsigned int i=0; i < seqs.size(); i++) {
@@ -184,7 +184,8 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
             retstring += get_prot_char(fullset);
         }
     } else {
-        std::cerr << "I don't know what kind of sequence that is..." << std::endl;
+        std::cerr << "Cannot make consensus of sequence type '" << alpha
+                << "'. Exiting." << std::endl;
         exit(0);
     }
     return retstring;
