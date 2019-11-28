@@ -102,19 +102,8 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    Sequence seq;
-    std::vector<Sequence> seqs;
-    std::string retstring;
-    
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs.push_back(seq);
-    }
-// have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        seqs.push_back(seq);
-    }
+    std::string alphaName = "";
+    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
     
     MultinomialSeqStat mm(seqs);
     (*poos) << mm.get_test_statistic() << std::endl;

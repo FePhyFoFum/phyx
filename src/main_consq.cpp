@@ -102,7 +102,6 @@ int main(int argc, char * argv[]) {
     std::string alphaName = "";
     std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
     
-    //std::string alpha = seqs[0].get_alpha_name();
     std::string rets = consensus_seq(seqs, alphaName);
 
     (*poos) << ">consensus" << std::endl;
