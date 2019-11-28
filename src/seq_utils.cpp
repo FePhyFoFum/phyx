@@ -184,7 +184,7 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
             retstring += get_prot_char(fullset);
         }
     } else {
-        std::cout << "I don't know what kind of sequence that is..." << std::endl;
+        std::cerr << "I don't know what kind of sequence that is..." << std::endl;
         exit(0);
     }
     return retstring;
@@ -271,7 +271,7 @@ void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, s
     }
     if (datatype == "MULTI") {
         datatype = "STANDARD";
-        std::cout << "assembling symbols now" << std::endl;
+        //std::cout << "assembling symbols now" << std::endl;
         std::string combined;
         for (unsigned int i=0; i < seqs.size(); i++) {
             if (uppercase) {
