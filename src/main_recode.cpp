@@ -135,6 +135,8 @@ int main(int argc, char * argv[]) {
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     int ntax, nchar; // not used, but required by some reader functions
+    bool first = true; // check first seq alphabet to make sure DNA. exit otherwise
+    std::string alpha = "";
     
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {
@@ -143,6 +145,14 @@ int main(int argc, char * argv[]) {
         retstring = ""; // need to do this to let seqreader know we are mid-file
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                if (first) {
+                    alpha = seq.get_alpha_name();
+                    if (alpha.compare("DNA") != 0) {
+                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 (*poos) << ">" << seq.get_id() << std::endl;
                 (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
@@ -150,6 +160,14 @@ int main(int argc, char * argv[]) {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
+                if (first) {
+                    alpha = seq.get_alpha_name();
+                    if (alpha.compare("DNA") != 0) {
+                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 (*poos) << ">" << seq.get_id() << std::endl;
                 (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
@@ -165,12 +183,28 @@ int main(int argc, char * argv[]) {
             std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
+                if (first) {
+                    alpha = seq.get_alpha_name();
+                    if (alpha.compare("DNA") != 0) {
+                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 (*poos) << ">" << seq.get_id() << std::endl;
                 (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
         } else {
             // fasta, fastq, or simple phylip
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                if (first) {
+                    alpha = seq.get_alpha_name();
+                    if (alpha.compare("DNA") != 0) {
+                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 (*poos) << ">" << seq.get_id() << std::endl;
                 (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
