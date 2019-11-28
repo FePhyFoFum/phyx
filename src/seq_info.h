@@ -23,9 +23,8 @@ private:
     bool is_binary_;
     bool alpha_set_;
     
-    std::string alpha_name_; // phyx seq ids: DNA, AA, BINARY (not currently supported), MULTI
+    std::string alpha_name_; // phyx seq ids: DNA, AA, BINARY, MULTI
     std::string seq_type_; // label used for output table: Prot, Nucl, Mult, Binary
-    std::string name_;
     char gap_;
     char missing_;
     std::map<char, double> total_;

@@ -77,7 +77,7 @@ void SeqInfo::read_in_alignment () {
     // if nexus, grab metadata
     if (file_type_.compare("nexus") == 0) {
         bool is_interleaved = false;
-        get_nexus_alignment_properties (*pios_, file_ntax, seq_length_,
+        get_nexus_alignment_properties(*pios_, file_ntax, seq_length_,
                 is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
         // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
         set_datatype();
@@ -94,7 +94,7 @@ void SeqInfo::read_in_alignment () {
             }
         } else {
             // need to read in everything at once
-            seqs_ = read_interleaved_nexus (*pios_, file_ntax, seq_length_);
+            seqs_ = read_interleaved_nexus(*pios_, file_ntax, seq_length_);
         }
     } else {
         bool complicated_phylip = false;
@@ -145,13 +145,14 @@ void SeqInfo::read_in_alignment () {
 // calculate character state frequencies
 void SeqInfo::calculate_freqs () {
     Sequence seq;
+    std::string name = "";
     for (unsigned int i = 0; i < seqs_.size(); i++) {
         seq = seqs_[i];
         temp_seq_ = seq.get_sequence();
-        name_ = seq.get_id();
+        name = seq.get_id();
         seq_lengths_.push_back(temp_seq_.length());
         count_chars(temp_seq_);
-        taxon_labels_.push_back(name_);
+        taxon_labels_.push_back(name);
     }
 }
 

@@ -17,13 +17,14 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "Usage: pxclsq [OPTION]... " << std::endl;
     std::cout << std::endl;
-    std::cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE       output fasta file, stout otherwise" << std::endl;
-    std::cout << " -p, --prop=DOUBLE     proportion required to be present, default=0.5" << std::endl;
-    std::cout << " -a, --aminoacid       force interpret as protein (if inference fails)" << std::endl;
-    std::cout << " -v, --verbose         more verbose output (i.e. if entire seqs are removed)" << std::endl;
-    std::cout << " -h, --help            display this help and exit" << std::endl;
-    std::cout << " -V, --version         display version and exit" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta file, stout otherwise" << std::endl;
+    std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
+    std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
+    std::cout << " -i, --info          report counts of missing data and exit" << std::endl;
+    std::cout << " -v, --verbose       more verbose output (i.e. if entire seqs are removed)" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
@@ -36,7 +37,8 @@ static struct option const long_options[] =
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"prop", required_argument, NULL, 'p'},
-    {"aminoacid", required_argument, NULL, 'a'},
+    {"taxa", required_argument, NULL, 't'},
+    {"info", required_argument, NULL, 'i'},
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -49,15 +51,16 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    bool force_protein = false;
     char * seqf = NULL;
     char * outf = NULL;
-    double proportion = 0.5;
+    double prop_required = 0.5;
     bool verbose = false;
+    bool by_taxon = false;
+    bool count_only = false;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:avhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:ativhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -72,14 +75,17 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-                proportion = string_to_float(optarg, "-p");
-                if (proportion > 1.0 || proportion < 0.0) {
+                prop_required = string_to_float(optarg, "-p");
+                if (prop_required > 1.0 || prop_required < 0.0) {
                     std::cerr << "Proportion required data (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
-            case 'a':
-                force_protein = true;
+            case 't':
+                by_taxon = true;
+                break;
+            case 'i':
+                count_only = true;
                 break;
             case 'v':
                 verbose = true;
@@ -122,10 +128,14 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    SequenceCleaner toClean(pios, proportion, force_protein, verbose);
+    SequenceCleaner SC(pios, prop_required, by_taxon, count_only, verbose);
     
     // write sequences. currently only fasta format.
-    toClean.write_seqs(poos);
+    if (!count_only) {
+        SC.write_seqs(poos);
+    } else {
+        SC.write_stats(poos);
+    }
     
     if (outfileset) {
         ofstr->close();
