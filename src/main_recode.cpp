@@ -134,16 +134,55 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
+    int ntax, nchar; // not used, but required by some reader functions
     
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        (*poos) << ">" << seq.get_id() << std::endl;
-        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+            }
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+            }
+        }
+    } else {
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, ntax, nchar);
+            complicated_phylip = is_complicated_phylip(*pios, nchar);
+        }
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+            }
+        }
     }
-// have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        (*poos) << ">" << seq.get_id() << std::endl;
-        (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
-    }
+    
+    
     if (fileset) {
         fstr->close();
         delete pios;
