@@ -1153,6 +1153,90 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
 }
 
 
+// general reader that is used by a bunch of stuff (i.e., avoid code duplication)
+// returns vector of sequences and (by reference) alphabet name
+// all other properties are determined elsewhere
+std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName) {
+    std::vector<Sequence> seqs;
+    Sequence seq;
+    std::string retstring;
+    alphaName = "";
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    int file_ntax = 0; // ntax declared in the file itself
+    int file_nchar = 0; // likewise for nchar
+    std::string file_type = get_filetype_string(ft);
+    
+    if (file_type.compare("nexus") == 0) {
+        bool is_interleaved = false;
+        // a bunch of required variables, not used here:
+        char gap, missing;
+        std::string symbols = "";
+        get_nexus_alignment_properties (*pios, file_ntax, file_nchar,
+                is_interleaved, alphaName, symbols, gap, missing);
+        //std::cout << "alphaName = " << alphaName << std::endl;
+        retstring = ""; // have to set so seq_reader knows we are mid-file
+        if (!is_interleaved) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seqs.push_back(seq);
+            }
+        } else {
+            seqs = read_interleaved_nexus(*pios, file_ntax, file_nchar);
+        }
+    } else {
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (file_type.compare("phylip") == 0) {
+            get_phylip_dimensions(retstring, file_ntax, file_nchar);
+            complicated_phylip = is_complicated_phylip(*pios, file_nchar);
+        }
+        if (complicated_phylip) {
+            seqs = read_phylip(*pios, file_ntax, file_nchar);
+            if (alphaName == "") {
+                alphaName = seqs[0].get_alpha_name();
+            }
+        } else {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seqs.push_back(seq);
+                if (alphaName == "") {
+                    alphaName = seq.get_alpha_name();
+                }
+            }
+            if (ft == 2) { // fasta has an trailing one
+                seqs.push_back(seq);
+            }
+        }
+    }
+    
+    // some simple error-checking
+    if (file_ntax != 0) {
+        if (file_ntax != (int)seqs.size()) {
+            std::cerr << "Error: number of taxa declared in the file ("
+                << ") does not match the number read (" << seqs.size()
+                << "). Exiting." << std::endl;
+            exit(1);
+        }
+    }
+    if (file_nchar != 0) {
+        // if nchar comes from a file, _must_ be aligned
+        bool aligned = true;
+        for (unsigned int i = 0; i < seqs.size(); i++) {
+            if ((int)seqs[i].get_sequence().size() != file_nchar) {
+                aligned = false;
+            }
+        }
+        if (!aligned) {
+            std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+            exit(0);
+        }
+    }
+    
+    return seqs;
+}
+
+
+
+
+
 // **************************** //
 // *** Deprecated functions *** //
 // **************************** //

@@ -26,6 +26,7 @@ bool is_complicated_phylip (std::istream& pios, const int& nchar);
 void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numChar,
         bool& interleaved, bool& spaces, bool& multiline);
 std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const int& numChar);
+std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);
 
 // deprecated
 int test_seq_filetype (std::string filen);
