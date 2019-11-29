@@ -15,13 +15,14 @@ Some of the sequence comparison operations use the very nice [edlib library](htt
 ## Documentation
 Documentation resides in several locations (all slightly out of date, alas). A [pdf manual](https://github.com/FePhyFoFum/phyx/tree/master/doc) is available in the `doc/` directory. A slightly-less-out-of-date list of the current programs with examples can be found [on the wiki](https://github.com/FePhyFoFum/phyx/wiki/Program-list). See a brief overview [here](https://twitter.com/i/moments/1067839564927008769).
 
-## Update 31 May 2018
+## Problems after updating (git pull)
 If you have been using phyx and things are not working after a recent pull, this is because of a change in configuration. Please do the following in the `src` directory to remedy the situation:
 
     make distclean
     autoreconf -fi
     ./configure
     make
+    make check
     sudo make install
 
 # Installation instructions 
@@ -59,7 +60,7 @@ Mac has become increasingly difficult to support at the command line with change
         cd phyx/src
         ./configure
         make
-        python run_tests.py
+        make check
 
 If you want to install it so it is available anywhere in your system, do:
 
@@ -99,7 +100,7 @@ If you want to install it so it is available anywhere in your system, do:
 
         ./configure
         make
-        python run_tests.py
+        make check
         sudo make install
 
 and all the programs should compile without issue. 
@@ -141,7 +142,7 @@ If that is not possible, compile the provided code:
         cd phyx/src
         ./configure
         make
-        python run_tests.py
+        make check
 
 If you want to install it so it is available anywhere in your system, do:
 
