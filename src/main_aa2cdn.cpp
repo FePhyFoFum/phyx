@@ -123,7 +123,7 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
     }
-    if (fileset == true) {
+    if (nucfileset == true) {
         nucfstr = new std::ifstream(nucseqf);
         nucpios = nucfstr;
     } else {
@@ -175,6 +175,14 @@ int main(int argc, char * argv[]) {
     }
     
     
+    if (fileset) {
+        fstr->close();
+        delete pios;
+    }
+    if (nucfileset) {
+        nucfstr->close();
+        delete nucpios;
+    }
     if (outfileset) {
         ofstr->close();
         delete poos;
