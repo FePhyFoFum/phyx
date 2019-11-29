@@ -12,8 +12,8 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Takes in AA alignment and unaligned Nucleotide file to give a Codon Alignment." << std::endl;
-    std::cout << "This will get rid of any sequences found in either only the Nucleotide or the Amino Acid Alignment" << std::endl;
+    std::cout << "Takes in an AA alignment and unaligned nucleotide file to generate a codon alignment." << std::endl;
+    std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxaa2cdn [OPTION]... " << std::endl;
@@ -142,6 +142,10 @@ int main(int argc, char * argv[]) {
     
     Sequence aa_seq, nuc_seq;
     std::string retstring;
+    
+    
+    // TODO: get rid of all of this map shit
+    
     std::map<std::string, std::string> aa_sequences, nuc_sequences, codon_sequences;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
@@ -162,13 +166,14 @@ int main(int argc, char * argv[]) {
     if (ft == 2) {
         nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
     }
-
-    AAtoCDN functions;
+    
+    AAtoCDN A2C;
     std::map<std::string, std::string>::iterator iter;
-    codon_sequences = functions.convert_to_codons(aa_sequences, nuc_sequences, rm_last);
+    codon_sequences = A2C.convert_to_codons(aa_sequences, nuc_sequences, rm_last);
     for (iter = codon_sequences.begin(); iter != codon_sequences.end(); iter++) {
         *poos << ">" << iter -> first << "\n" << iter -> second << std::endl;
     }
+    
     
     if (outfileset) {
         ofstr->close();
