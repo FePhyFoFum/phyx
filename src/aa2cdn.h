@@ -4,18 +4,28 @@
 #include <string>
 #include <map>
 
+#include "sequence.h"
+
+
 class AAtoCDN {
 private:
-    std::map <std::string, std::string> codon_sequences_;
-    std::map <std::string, std::string>::iterator iter_;
-    std::string amino_acid_sequence_;
-    std::string nucleotide_sequence_;
+    // use vector<Sequence> instead of map
+    bool remove_last_;
+    std::vector<Sequence> nuc_seqs_;
+    std::vector<Sequence> aa_seqs_;
+    std::vector<Sequence> codon_seqs_;
+    std::vector<std::string> nuc_names_;
+    std::vector<std::string> aa_names_;
+    
+    void check_names ();
+    void generate_codon_alignment ();
 
 public:
     AAtoCDN ();
-    std::map <std::string, std::string> convert_to_codons (std::map <std::string,
-        std::string>& aa_sequences, std::map <std::string,
-        std::string>& nuc_sequences, bool& rm_last);
+    AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Sequence>& aa_seqs,
+        const bool& remove_last);
+    void write_codon_alignment (std::ostream* poos);
+    std::vector<Sequence> get_codon_alignment ();
 };
 
 #endif /* _AA_TO_CDN_H_ */

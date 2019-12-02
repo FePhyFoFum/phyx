@@ -21,7 +21,7 @@ void print_help() {
     std::cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << std::endl;
     std::cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output fasta file, stout otherwise" << std::endl;
-    std::cout << " -r, --rmlastcdn     removes last codon                " << std::endl;
+    std::cout << " -r, --rmlastcdn     removes last codon (default: false)" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << std::endl;
@@ -145,34 +145,46 @@ int main(int argc, char * argv[]) {
     
     
     // TODO: get rid of all of this map shit
+    // use general purpose reader
+    std::vector<Sequence> nuc_seqs;
+    std::vector<Sequence> aa_seqs;
+    std::vector<Sequence> codon_seqs;
+    std::string alphaName = "";
     
-    std::map<std::string, std::string> aa_sequences, nuc_sequences, codon_sequences;
-    
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    while (read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
-        aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
-    }
-    // fasta has a trailing one
-    if (ft == 2) {
-        aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
-    }
-    
-    // don't assume nuc and aa alignments are the same type
-    ft = test_seq_filetype_stream(*nucpios, retstring);
-    while (read_next_seq_from_stream(*nucpios, ft, retstring, nuc_seq)) {
-        nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
-    }
-    // fasta has a trailing one
-    if (ft == 2) {
-        nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    // read in nucleotide seqs
+    nuc_seqs = ingest_alignment(nucpios, alphaName);
+    if (alphaName.compare("DNA") != 0) {
+        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+            << alphaName << " detected. Exiting." << std::endl;
+        exit(0);
     }
     
-    AAtoCDN A2C;
-    std::map<std::string, std::string>::iterator iter;
-    codon_sequences = A2C.convert_to_codons(aa_sequences, nuc_sequences, rm_last);
-    for (iter = codon_sequences.begin(); iter != codon_sequences.end(); iter++) {
-        *poos << ">" << iter -> first << "\n" << iter -> second << std::endl;
+    bool inFrame = true;
+    unsigned int curN = 0;
+    for (unsigned int i = 0; i < nuc_seqs.size(); i++) {
+        curN = nuc_seqs[i].get_sequence().length();
+        if (curN % 3 != 0) {
+            std::cerr << "Error: nucleotide sequence length for '" << nuc_seqs[i].get_id()
+                << "' is not a multiple of 3." << std::endl;
+            inFrame = false;
+        }
     }
+    if (!inFrame) {
+        std::cerr << "Error: nucleotide alignment does not appear to be in frame. Exiting" << std::endl;
+        exit(0);
+    }
+    
+    // and amino acid alignment
+    aa_seqs = ingest_alignment(pios, alphaName);
+    if (alphaName.compare("AA") != 0) {
+        std::cerr << "Error: incorrect alignment type provided. Amino acids was expected, but "
+            << alphaName << " detected. Exiting." << std::endl;
+        exit(0);
+    }
+    
+    AAtoCDN A2C(nuc_seqs, aa_seqs, rm_last);
+    A2C.write_codon_alignment(poos);
+    
     
     
     if (fileset) {

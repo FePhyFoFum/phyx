@@ -1,45 +1,120 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
 
 #include "aa2cdn.h"
+#include "sequence.h"
+#include "seq_utils.h"
+#include "utils.h"
 
 
-std::map<std::string, std::string> AAtoCDN::convert_to_codons(std::map<std::string,
-        std::string>& aa_sequences, std::map<std::string, std::string>& nuc_sequences,
-        bool& rm_last) {
-    
-    int len;
-    std::string temp = "";
-    for (iter_ = aa_sequences.begin(); iter_ != aa_sequences.end(); iter_++) {
-        if (nuc_sequences.find(iter_ -> first) == nuc_sequences.end()) {
-            std::cout << "Only in the AA File: " << iter_ -> first << std::endl;
-        } else {
-            amino_acid_sequence_ = iter_ -> second;
-            nucleotide_sequence_ = nuc_sequences[iter_ -> first];
-            if (rm_last == true) {
-                len = amino_acid_sequence_.size() - 1;
-            } else {
-                len = amino_acid_sequence_.size();
-            }
-            for (int i=0; i < len; i++) {
-                if (amino_acid_sequence_[i] == '-') {
-                    temp += "---";
-                } else {
-                    temp += nucleotide_sequence_[0];
-                    temp += nucleotide_sequence_[1];
-                    temp += nucleotide_sequence_[2];
-                    nucleotide_sequence_.erase(0, 3);
-                }
-            }
-            codon_sequences_[iter_ -> first] = temp;
-            temp = "";
-        }
+struct SequenceIDListCompare {
+    bool operator()(const Sequence& lhs, const Sequence& rhs) {
+      return lhs.get_id() < rhs.get_id();
     }
-    return codon_sequences_;
+} SequenceIDListCompare;
+
+
+AAtoCDN::AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Sequence>& aa_seqs,
+        const bool& remove_last):remove_last_(remove_last), nuc_seqs_(nuc_seqs), aa_seqs_(aa_seqs) {
+    // set up names
+    nuc_names_ = collect_names(nuc_seqs_);
+    aa_names_ = collect_names(aa_seqs_);
+    
+    sort(aa_seqs_.begin(), aa_seqs_.end(), SequenceIDListCompare);
+    sort(nuc_seqs_.begin(), nuc_seqs_.end(), SequenceIDListCompare);
+    check_names();
+    generate_codon_alignment();
 }
 
 
-AAtoCDN::AAtoCDN() {
-    // TODO Auto-generated constructor stub
+// check for taxa present in only nuc or aa alignments.
+// print these to cerr, and remove from the respective alignment
+void AAtoCDN::check_names () {    
+    std::vector<std::string> diff;
+    diff = in_first_not_second(nuc_names_, aa_names_);
+    if (diff.size() > 0) {
+        std::cerr << "The following names are present in the nucleotide alignment, but not the protein alignment:"
+                << std::endl;
+        for (unsigned int i = 0; i < diff.size(); i++) {
+            std::cerr << diff[i] << std::endl;
+            // remove from alignment
+            for (unsigned int j = 0; j < nuc_seqs_.size(); j++) {
+                if (nuc_seqs_[j].get_id().compare(diff[i]) == 0) {
+                    nuc_seqs_.erase(nuc_seqs_.begin()+j);
+                    break;
+                }
+            }
+        }
+    }
+    if (nuc_seqs_.size() == 0) {
+        std::cerr << "Error: no names are present in both the nucleotide and protein alignments. Exiting."
+                << std::endl;
+        exit(1);
+    }
+    
+    // now the other direction
+    diff = in_first_not_second(aa_names_, nuc_names_);
+    if (diff.size() > 0) {
+        std::cerr << "The following names are present in the protein alignment, but not the nucleotide alignment:"
+                << std::endl;
+        for (unsigned int i = 0; i < diff.size(); i++) {
+            std::cerr << diff[i] << std::endl;
+            // remove from alignment
+            for (unsigned int j = 0; j < aa_seqs_.size(); j++) {
+                if (aa_seqs_[j].get_id().compare(diff[i]) == 0) {
+                    aa_seqs_.erase(aa_seqs_.begin()+j);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+// at this point, alignments should be of the same size and order
+void AAtoCDN::generate_codon_alignment () {
+    std::string aaseq = "";
+    std::string nucseq = "";
+    std::string codonseq = "";
+    int len = 0;
+    Sequence seq;
+    for (unsigned int i = 0; i < aa_seqs_.size(); i++) {
+        seq.set_id(aa_seqs_[i].get_id());
+        aaseq = aa_seqs_[i].get_sequence();
+        nucseq = nuc_seqs_[i].get_sequence();
+        codonseq = "";
+        len = aaseq.size();
+        if (remove_last_) {
+            len--;
+        }
+        int nuccntr = 0;
+        for (int j=0; j < len; j++) {
+            if (aaseq[j] == '-') {
+                codonseq += "---";
+            } else {
+                for (int k = 0; k < 3; k++) {
+                    codonseq += nucseq[nuccntr];
+                    nuccntr++;
+                }
+            }
+        }
+        seq.set_sequence(codonseq);
+        codon_seqs_.push_back(seq);
+    }
+}
+
+
+void AAtoCDN::write_codon_alignment (std::ostream* poos) {
+    for (unsigned int i = 0; i < codon_seqs_.size(); i++) {
+        (*poos) << ">" << codon_seqs_[i].get_id() << std::endl;
+        (*poos) << codon_seqs_[i].get_sequence() << std::endl;
+    }
+}
+
+
+// not currently used, but available
+std::vector<Sequence> AAtoCDN::get_codon_alignment () {
+    return codon_seqs_;
 }
