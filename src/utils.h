@@ -76,6 +76,21 @@ template<typename T> std::vector<T> sum_vectors_elementwise (std::vector<T>& vec
 
 std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std::vector<double>& vec2);
 
+// find elements present in the first vector but not the second. does not do symmetric search
+template<typename T> std::vector<T> in_first_not_second (std::vector<T> firstv, std::vector<T> secondv) {
+    std::vector<T> res(firstv.size());
+    std::sort(firstv.begin(), firstv.end());
+    std::sort(secondv.begin(), secondv.end());
+    
+    typename std::vector<T>::iterator it;
+    it=std::set_difference(firstv.begin(), firstv.end(), secondv.begin(), secondv.end(), res.begin());
+    res.resize(it-res.begin());
+    
+    //std::remove_copy_if(firstv.begin(), firstv.end(), std::back_inserter(res),
+    //    [&secondv](const T& arg) {return (std::find(secondv.begin(), secondv.end(), arg) != secondv.end());});
+    return res;
+}
+
 //------------------------------------------------------------------------//
 
 std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numareas);
