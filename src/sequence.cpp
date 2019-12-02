@@ -70,7 +70,7 @@ void Sequence::set_alpha (seqAlpha s) {
 }
 
 
-// figure out the sequence type. for now, just DNA/AA
+// figure out the sequence type.
 // not perfect: for _very_ short AA seqs it is possible all chars are valid nuc chars
 void Sequence::infer_alpha () {
     std::string str = seq_;
@@ -87,64 +87,50 @@ void Sequence::infer_alpha () {
         return;
     }
     
-    // the multi version below counts the number of digits.
-    // i think the above version (_any_ digits) should suffice, and will be faster
-    /*
-    int digitCount = 0; // could exit after first digit
-    for (unsigned int i=0; i < str.size(); i++) {
-        if (isdigit(str[i])) digitCount++;
-    }
-    if (digitCount > 0) {
-        alphabet = MULTI;
-        return;
-    }
-    */
-    
     int dnaHit = 0;
     int proteinHit = 0;
     int validChars = 0;
     
+    // dnachars  = "ACGTURYSWKMBDHVN";
+    // protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
+    
     str = string_to_upper(str);
     
-    // iterate over unique characters
+    // grab unique characters
     std::string uniqueChars = get_alphabet_from_sequence(str);
     
+    // if the above fails (e.g., RNA), do the former check
     for (size_t i=0; i < uniqueChars.length(); ++i) {
         int num = std::count(str.begin(), str.end(), uniqueChars[i]);
         if (is_prot_char(uniqueChars[i])) {
             proteinHit += num;
-            validChars++;
+            validChars += num;
             // DNA chars are a subset of protein chars
             if (is_dna_char(uniqueChars[i])) {
                 dnaHit += num;
             }
         }
     }
+    
+    if (uniqueChars.find_first_not_of(dnachars_with_ambiguous) == std::string::npos) {
+        alphabet_ = DNA;
+        // edge case: short protein alignment which by chance contains DNA-valid states
+        int nDNA = count_dna_chars(str);
+        if ( ((double)nDNA / (double)validChars) < 0.5) {
+            alphabet_ = AA;
+        }
+        return;
+    } else if (uniqueChars.find_first_not_of(protchars) == std::string::npos) {
+        alphabet_ = AA;
+        return;
+    }
+    
     if (proteinHit > dnaHit) {
         alphabet_ = AA;
     } else if (proteinHit == dnaHit) {
         alphabet_ = DNA;
     }
-}
-
-
-bool Sequence::is_dna_char (char& residue) {
-    bool isDNA = false;
-    std::size_t found = dnachars.find(residue);
-    if (found != std::string::npos) {
-        isDNA = true;
-    }
-    return isDNA;
-}
-
-
-bool Sequence::is_prot_char (char& residue) {
-    bool isAA = false;
-    std::size_t found = protchars.find(residue);
-    if (found != std::string::npos) {
-        isAA = true;
-    }
-    return isAA;
+    
 }
 
 
@@ -167,7 +153,7 @@ unsigned int Sequence::get_length () {
     if (length_ == 0) {
         length_ = seq_.size();
     }
-    return seq_.size();
+    return length_;
 }
 
 
@@ -211,11 +197,13 @@ void Sequence::set_sequence (std::string _seq) {
     length_ = seq_.size();
 }
 
+
 void Sequence::set_id (std::string _id) {
     id_ = _id;
 }
 
 
+// not used
 void Sequence::set_aligned (bool _aligned) {
     aligned_ = _aligned;
 }

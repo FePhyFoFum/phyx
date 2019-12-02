@@ -34,12 +34,12 @@ void SequenceSampler::read_in_sequences (std::istream* pios) {
     std::string alphaName = ""; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
     num_tax_ = (int)seqs_.size();
-    num_char_ = (int)seqs_[0].get_sequence().size();
+    num_char_ = (int)seqs_[0].get_sequence().length();
     
     // check that it is aligned (doesn't make sense otherwise)
     bool aligned = true;
     for (int i = 1; i < num_tax_; i++) {
-        if ((int)seqs_[i].get_sequence().size() != num_char_) {
+        if ((int)seqs_[i].get_sequence().length() != num_char_) {
             aligned = false;
         }
     }

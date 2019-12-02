@@ -13,7 +13,6 @@
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required, const bool& by_taxon,
         const bool& count_only, const bool& verbose):num_tax_(0), num_char_(0), num_retained_(0),
         missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), count_only_(count_only), verbose_(verbose) {
-    //read_in_alignment(pios);
     read_in_sequences(pios);
     count_missing();
     if (!count_only_) {
@@ -28,10 +27,10 @@ void SequenceCleaner::read_in_sequences (std::istream* pios) {
     seqs_ = ingest_alignment(pios, alpha_name_);
     num_tax_ = (int)seqs_.size();
     
-    num_char_ = (int)seqs_[0].get_sequence().size();
+    num_char_ = (int)seqs_[0].get_sequence().length();
     bool aligned = true;
     for (int i = 1; i < num_tax_; i++) {
-        if ((int)seqs_[i].get_sequence().size() != num_char_) {
+        if ((int)seqs_[i].get_sequence().length() != num_char_) {
             aligned = false;
         }
     }

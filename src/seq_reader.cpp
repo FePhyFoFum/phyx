@@ -283,7 +283,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, 
     }
     infile.close();
     //std::cout << "Seqs has " << seqs.size() << " taxa and "
-    //        << seqs[0].get_sequence().size() << " sites." << std::endl;
+    //        << seqs[0].get_sequence().length() << " sites." << std::endl;
     return seqs;
 }
 
@@ -770,7 +770,7 @@ bool is_complicated_phylip (std::istream& pios, const int& nchar) {
   - this includes not allowing internal spaces in taxon labels
 - also assuming that there is not a combination of multiline _and_ interleaved
 */
-void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numChar,
+void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const unsigned int& numChar,
         bool& interleaved, bool& spaces, bool& multiline) {
     // store current position of the stream so we can rewind after determining format
     std::streampos spt = pios.tellg();
@@ -793,7 +793,7 @@ void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numCh
     if (num_elem == 2) {
         // could be: 1) simple, 2) multiline, or interleaved
         seq = tokens[1];
-        if ((int)seq.size() == numChar) {
+        if (seq.length() == numChar) {
             // return to the original position in the stream
             pios.seekg(spt, std::ios_base::beg);
             return; // simple single line //
@@ -809,7 +809,7 @@ void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numCh
                 done = false;
                 while (!done) {
                     seq += tokens[0];
-                    if ((int)seq.size() == numChar) {
+                    if (seq.length() == numChar) {
                         done = true;
                     } else {
                         getline(pios, line);
@@ -849,7 +849,7 @@ void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numCh
                             std::cout << "Um, I'm not sure what is happening..." << std::endl;
                         } else {
                             seq += tokens[0];
-                            if ((int)seq.size() == numChar) {
+                            if (seq.length() == numChar) {
                                 done = true;
                             }
                         }
@@ -876,7 +876,7 @@ void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numCh
             seq += tokens[i];
         }
         // check if that is all that is going on
-        if ((int)seq.size() == numChar) {
+        if (seq.length() == numChar) {
             //std::cout << "Successfully read in spaces-only sequence ;)" << std::endl;
             //std::cout << seq << std::endl;
             // return to the original position in the stream
@@ -913,7 +913,7 @@ void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numCh
                         for (unsigned int i = 0; i < tokens.size(); i++) {
                             seq += tokens[i];
                         }
-                        if ((int)seq.size() == numChar) {
+                        if (seq.length() == numChar) {
                             done = true;
                         }
                     } else {
@@ -938,7 +938,7 @@ void get_phylip_format (std::istream& pios, const int& numTaxa, const int& numCh
                         seq += tokens[i];
                         lcnt++;
                     }
-                    if ((int)seq.size() == numChar) {
+                    if (seq.length() == numChar) {
                         done = true;
                     }
                 }
@@ -1220,7 +1220,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
         // if nchar comes from a file, _must_ be aligned
         bool aligned = true;
         for (unsigned int i = 0; i < seqs.size(); i++) {
-            if ((int)seqs[i].get_sequence().size() != file_nchar) {
+            if ((int)seqs[i].get_sequence().length() != file_nchar) {
                 aligned = false;
             }
         }

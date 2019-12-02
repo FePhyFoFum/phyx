@@ -285,7 +285,7 @@ void SeqInfo::check_is_aligned () {
     Sequence seq;
     for (unsigned int i = 0; i < seqs_.size(); i++) {
         seq = seqs_[i];
-        seq_lengths_.push_back(seq.get_sequence().size());
+        seq_lengths_.push_back(seq.get_sequence().length());
     }
     // check if all seqs are the same length
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
@@ -300,7 +300,7 @@ void SeqInfo::get_nchars () {
     Sequence seq;
     for (unsigned int i = 0; i < seqs_.size(); i++) {
         seq = seqs_[i];
-        seq_lengths_.push_back(seq.get_sequence().size());
+        seq_lengths_.push_back(seq.get_sequence().length());
     }
     // check if all seqs are the same length
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {

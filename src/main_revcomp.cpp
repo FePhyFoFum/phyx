@@ -176,6 +176,7 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &std::cout;
     }
+    
     Sequence seq;
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);

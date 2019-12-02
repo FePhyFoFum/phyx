@@ -12,7 +12,7 @@
 
 
 // IUPAC codes
-std::string dnachars  = "ACGTURYSWKMBDHVN";
+std::string dnachars_with_ambiguous = "ACGTURYSWKMBDHVN";
 std::string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
 
 
@@ -354,6 +354,16 @@ void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>&
 }
 
 
+// get set of names from an alignment
+std::vector<std::string> collect_names (const std::vector<Sequence>& algnmnt) {
+    std::vector<std::string> names(algnmnt.size(), "");
+    for (unsigned int i = 0; i < algnmnt.size(); i++) {
+        names[i] = algnmnt[i].get_id();
+    }
+    return names;
+}
+
+
 void populate_codon_list(std::vector<std::string> * codon_list) {
     (*codon_list).push_back("TTT");
     (*codon_list).push_back("TTC");
@@ -565,4 +575,35 @@ std::string get_alphabet_from_sequence (const std::string& instr) {
     std::sort(sorted.begin(), sorted.end());
     std::unique_copy(sorted.begin(), sorted.end(), std::back_inserter(uniqueChars));
     return uniqueChars;
+}
+
+
+bool is_dna_char (char& residue) {
+    bool isDNA = false;
+    std::size_t found = dnachars_with_ambiguous.find(residue);
+    if (found != std::string::npos) {
+        isDNA = true;
+    }
+    return isDNA;
+}
+
+
+bool is_prot_char (char& residue) {
+    bool isAA = false;
+    std::size_t found = protchars.find(residue);
+    if (found != std::string::npos) {
+        isAA = true;
+    }
+    return isAA;
+}
+
+
+// ignore ambiguity codes
+int count_dna_chars (const std::string& str) {
+    int ndna = 0;
+    std::string dnaChars = "ACGT";
+    for (size_t i=0; i < dnaChars.length(); ++i) {
+        ndna += std::count(str.begin(), str.end(), dnaChars[i]);
+    }
+    return ndna;
 }

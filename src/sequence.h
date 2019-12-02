@@ -4,15 +4,12 @@
 #include <vector>
 #include <string>
 
-// not sure if we need this or not
-// should maybe just store the DNA or AA?
-// could even store those as separate
-// JWB: yes, this is clunky
+
 typedef enum {
     DNA = 0, AA = 1, BINARY = 2, MULTI = 3, CODON = 4, NA = 5
 } seqAlpha; 
 
-extern std::string dnachars;
+extern std::string dnachars_with_ambiguous;
 extern std::string protchars;
 
 class Sequence {
@@ -37,8 +34,6 @@ public:
     void set_alpha (seqAlpha);
     
     void infer_alpha ();
-    bool is_dna_char (char& residue);
-    bool is_prot_char (char& residue);
     
     bool is_aligned ();
     std::string get_sequence ()const;

@@ -40,7 +40,7 @@ void SequenceConcatenater::read_sequences (std::string& seqf) {
         }
         if (!interleave_) {
             while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
-                length = (int)seq.get_sequence().size();
+                length = (int)seq.get_sequence().length();
                 if (length != num_char_) {
                     std::cout << "Sequence '" << seq.get_id() << "' has " << length << " characters, but the file '"
                         << filename_ << "' specified " << num_char_ << " characters. Exiting." << std::endl;
@@ -71,7 +71,7 @@ void SequenceConcatenater::read_sequences (std::string& seqf) {
     } else if (ft_ == 2) { // fasta
         bool first = true;
         while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
-            int curr = (int)seq.get_sequence().size();
+            int curr = (int)seq.get_sequence().length();
             if (!first) {
                 if (curr != length) {
                     std::cout << "Error: current sequence has " << curr << " characters, but previous sequence had "

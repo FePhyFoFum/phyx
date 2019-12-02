@@ -26,11 +26,11 @@ MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs) {
 
 bool MultinomialSeqStat::checked_aligned () {
     bool is_aligned_ = true;
-    std::vector<int> seq_lengths (num_taxa_, 0);
+    std::vector<int> seq_lengths(num_taxa_, 0);
     
     // gather all lengths
     for (int i = 0; i < num_taxa_; i++) {
-        seq_lengths[i] = (int)seqs_[i].get_sequence().size();
+        seq_lengths[i] = (int)seqs_[i].get_sequence().length();
     }
     
     // check if all seqs are the same length
