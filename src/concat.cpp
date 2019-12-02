@@ -8,99 +8,41 @@
 #include "seq_reader.h"
 #include "concat.h"
 
-SequenceConcatenater::SequenceConcatenater (std::string& seqf, bool & toupcase):num_partitions_(0),
-    num_char_(0), num_taxa_(0), ft_(0) {
-    toupcase_ = toupcase;
+SequenceConcatenater::SequenceConcatenater (std::string& seqf):num_partitions_(0),
+    num_char_(0), num_taxa_(0) {
     read_sequences(seqf);
 }
 
 
-SequenceConcatenater::SequenceConcatenater ():num_partitions_(0), num_char_(0),
-    num_taxa_(0), ft_(0), interleave_(false) {
+SequenceConcatenater::SequenceConcatenater (const bool& toupcase):num_partitions_(0), num_char_(0),
+    num_taxa_(0), toupcase_(toupcase) {
 }
 
 
 void SequenceConcatenater::read_sequences (std::string& seqf) {
-    filename_ = seqf;
-    std::string retstring;
-    std::istream * pios = new std::ifstream(filename_);
-    ft_ = test_seq_filetype_stream(*pios, retstring);
-    Sequence seq;
-    int counter = 0;
-    int length = 0;
+    std::istream * pios = new std::ifstream(seqf);
     
-    // phylip (1) NEXUS (0)
-    if (ft_ == 1 || ft_ == 0) {
-        if (ft_ == 1) {
-            std::vector<std::string> fileDim = tokenize(retstring);
-            num_taxa_ = std::stoi(fileDim[0]);
-            num_char_ = std::stoi(fileDim[1]);
-        } else {
-            get_nexus_dimensions_file(seqf, num_taxa_, num_char_, interleave_);
+    std::string alphaName = "";
+    seqs_ = ingest_alignment(pios, alphaName);
+    num_taxa_ = (int)seqs_.size();
+    
+    bool aligned = true;
+    num_char_ = seqs_[0].get_sequence().length();
+    for (unsigned int i = 1; i < seqs_.size(); i++) {
+        if ((int)seqs_[i].get_sequence().length() != num_char_) {
+            aligned = false;
         }
-        if (!interleave_) {
-            while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
-                length = (int)seq.get_sequence().length();
-                if (length != num_char_) {
-                    std::cout << "Sequence '" << seq.get_id() << "' has " << length << " characters, but the file '"
-                        << filename_ << "' specified " << num_char_ << " characters. Exiting." << std::endl;
-                    delete pios;
-                    exit(1);
-                }
-                if (toupcase_) {
-                    seq.set_sequence(seq.seq_to_upper());
-                }
-                seqs_.push_back(seq);
-                counter++;
-            }
-            if (counter != num_taxa_) {
-                std::cout << "Read " << counter << " taxa, but the file '" << filename_ << "' specified "
-                    << num_taxa_ << " taxa. Exiting." << std::endl;
-                delete pios;
-                exit(1);
-            }
-        } else {
-            seqs_ = read_interleaved_nexus_file(seqf, num_taxa_, num_char_);
-            if (toupcase_) {
-                for (int i = 0; i < num_taxa_; i++) {
-                    seqs_[i].set_sequence(seqs_[i].seq_to_upper());
-                }
-            }
-        }
-        
-    } else if (ft_ == 2) { // fasta
-        bool first = true;
-        while (read_next_seq_from_stream(*pios, ft_, retstring, seq)) {
-            int curr = (int)seq.get_sequence().length();
-            if (!first) {
-                if (curr != length) {
-                    std::cout << "Error: current sequence has " << curr << " characters, but previous sequence had "
-                        << length << " characters. Exiting." << std::endl;
-                    delete pios;
-                    exit(1);
-                }
-            } else {
-                length = curr;
-                first = false;
-            }
-            if (toupcase_) {
-                seq.set_sequence(seq.seq_to_upper());
-            }
-            seqs_.push_back(seq);
-            counter++;
-        }
-        // fasta has a trailing one
         if (toupcase_) {
-            seq.set_sequence(seq.seq_to_upper());
+            seqs_[i].set_sequence(seqs_[i].seq_to_upper());
         }
-        seqs_.push_back(seq);
-        counter++;
-        num_taxa_ = counter;
-        num_char_ = length;
-    } else {
-        std::cout << "I don't know what that alignment file format is! Exiting." << std::endl;
-        exit(0);
     }
+    if (!aligned) {
+        std::cerr << "Error: sequences in file '" << seqf << "' are not aligned. Exiting."
+            << std::endl;
+        delete pios;
+        exit(1);
+    }
+    
     num_partitions_ = 1;
     partition_sizes_.push_back(num_char_);
     delete pios;

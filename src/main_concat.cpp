@@ -144,11 +144,11 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    SequenceConcatenater result;
+    SequenceConcatenater result(toupcase);
     bool first = true;
 
     for (unsigned int i = 0; i < inputFiles.size(); i++) {
-        SequenceConcatenater curr(inputFiles[i], toupcase);
+        SequenceConcatenater curr(inputFiles[i]);
         if (!first) {
             result.concatenate(curr);
         } else {
@@ -157,7 +157,7 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    // write sequences. currently only fasta format.
+    // write sequences
     for (int i = 0; i < result.get_num_taxa(); i++) {
         Sequence curr = result.get_sequence(i);
         (*poos) << ">" << curr.get_id() << std::endl;
