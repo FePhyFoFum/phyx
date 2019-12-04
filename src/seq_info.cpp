@@ -418,7 +418,7 @@ void SeqInfo::set_datatype () {
         seq_type_ = "Multi";
         // alphabet is either 1) supplied (nexus) or 2) comes from entire alignment
     } else {
-        std::cout << "Don't know what kind of alignment this is :( Exiting." << std::endl;
+        std::cerr << "Error: cannot determine alignment type. Exiting." << std::endl;
         exit(0);
     }
     datatype_set_ = true;

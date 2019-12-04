@@ -83,7 +83,7 @@ int main(int argc, char * argv[]) {
                             inputFiles.push_back(temp);
                             infile.close();
                         } else {
-                            std::cerr << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
+                            std::cerr << "Error: cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -120,7 +120,7 @@ int main(int argc, char * argv[]) {
     }
     
     if (!fileset) {
-        std::cerr << "Must specify 1 or more files to concatenate. Exiting." << std::endl;
+        std::cerr << "Error: must specify 1 or more files to concatenate. Exiting." << std::endl;
         exit(0);
     }
     if (listf != "") {

@@ -39,8 +39,8 @@ void SequenceRecoder::parse_scheme () {
     for (unsigned int i = 0; i < recodescheme_.size(); i++) {
         char terp = recodescheme_[i];
         if (recognized_.find(terp) == recognized_.end()) {
-            std::cout << "Recoding scheme '" << terp << "' not recognized. Exiting." << std::endl;
-            exit (0);
+            std::cerr << "Error: recoding scheme '" << terp << "' not recognized. Exiting." << std::endl;
+            exit(0);
         }
         switch (terp) {
             case 'R':
@@ -103,13 +103,13 @@ void SequenceRecoder::check_valid_scheme () {
     for (unsigned int i = 0; i < ncounts.size(); i++) {
         if (ncounts[i] > 1) {
             invalid = true;
-            std::cout << "Error: nucleotide '" << nucs[i] << "' involved in "
+            std::cerr << "Error: nucleotide '" << nucs[i] << "' involved in "
                     << ncounts[i] << " proposed recoding operations," << std::endl;
         }
     }
     if (invalid) {
-        std::cout << "Invalid recoding scheme. Exiting." << std::endl;
-        exit (0);
+        std::cerr << "Error: invalid recoding scheme. Exiting." << std::endl;
+        exit(0);
     }
 }
 

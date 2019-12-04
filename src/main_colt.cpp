@@ -72,7 +72,7 @@ int main(int argc, char * argv[]) {
             case 'l':
                 threshold = string_to_float(optarg, "-l");
                 if (threshold <= 0 || threshold > 1) {
-                    std::cerr << "Specify proportional threshold: (0,1). Exiting." << std::endl;
+                    std::cerr << "Error: specify proportional threshold: (0,1). Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     bool going = true;
@@ -154,9 +154,11 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
+                /*
                 if (!tree->hasNodeAnnotations()) {
                     std::cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << std::endl;
                 }
+                */
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }

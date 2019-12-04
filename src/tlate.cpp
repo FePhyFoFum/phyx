@@ -321,7 +321,7 @@ TLATE::TLATE (const std::string& table) {
     } else if (table == "ivmt") {
         table_ = invert_mtdna_;
     } else {
-        std::cout << "Table argument '" << table << "' not recognized. Exiting." << std::endl;
+        std::cerr << "Error: table argument '" << table << "' not recognized. Exiting." << std::endl;
         exit(0);
     }
 }

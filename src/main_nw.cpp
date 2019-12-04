@@ -95,8 +95,8 @@ int main(int argc, char * argv[]) {
             case 't':
                 seqtype = string_to_int(optarg, "-t");
                 if (seqtype > 1) {
-                    std::cerr << "Don't recognize seqtype " << seqtype
-                        << ". Must be 0 (DNA) or 1 (AA). Exiting." << std::endl;
+                    std::cerr << "Error: don't recognize seqtype '" << seqtype
+                        << "'. Must be 0 (DNA) or 1 (AA). Exiting." << std::endl;
                     exit(0);
                 }
                 break;

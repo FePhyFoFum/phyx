@@ -15,7 +15,7 @@ MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs) {
     //std::cout << "Read in " << num_taxa_ << " sequences!" << std::endl;
     
     if (!checked_aligned()) {
-        std::cout << "Cannot calculate statistic as sequences are not aligned. Exiting." << std::endl;
+        std::cerr << "Error: cannot calculate statistic as sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
     

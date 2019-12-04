@@ -109,7 +109,7 @@ int main(int argc, char * argv[]) {
     int ft = test_seq_filetype_stream(*pios, retstring);
     
     if (ft != 3) {
-        std::cerr << "Must be fastq input. Exiting." << std::endl;
+        std::cerr << "Error: must be fastq input. Exiting." << std::endl;
         exit(1);
     }
     

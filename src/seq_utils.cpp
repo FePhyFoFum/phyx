@@ -184,7 +184,7 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
             retstring += get_prot_char(fullset);
         }
     } else {
-        std::cerr << "Cannot make consensus of sequence type '" << alpha
+        std::cerr << "Error: cannot make consensus of sequence type '" << alpha
                 << "'. Exiting." << std::endl;
         exit(0);
     }

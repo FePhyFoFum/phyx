@@ -117,7 +117,7 @@ int main(int argc, char * argv[]) {
         cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
-        std::cerr << "You have to set a character file. Only a tree file can be read in through the stream. Exiting." << std::endl;
+        std::cerr << "Error: you have to set a character file. Only a tree file can be read in through the stream. Exiting." << std::endl;
         exit(1);
     }
 
@@ -132,7 +132,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if (ft != 1 && ft != 2) {
-        std::cout << "only fasta and phylip (with spaces) supported so far" << std::endl;
+        std::cerr << "Error: only fasta and phylip (with spaces) supported so far. Exiting." << std::endl;
         exit(0);
     }
     Sequence seq;

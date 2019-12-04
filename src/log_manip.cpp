@@ -78,13 +78,13 @@ void LogManipulator::count_parameter_samples () {
                     } else {
                         // check that we've still got the same number of parameters i.e. files match
                         if (curpars != num_cols_) {
-                            std::cout << "Error: number of parameters in file " << (i + 1)
+                            std::cerr << "Error: number of parameters in file " << (i + 1)
                                 << "(" << curpars << ") does not match that from first file ("
                                 << num_cols_ << "). Exiting." << std::endl;
                             exit(0);
                         } else if (header != parm_columns_) {
                             // check that headers are identical
-                            std::cout << "Error: header for file " << (i + 1)
+                            std::cerr << "Error: header for file " << (i + 1)
                                 << "does not match that from first file. Exiting." << std::endl;
                             exit(0);
                         }
@@ -224,8 +224,8 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 // check that right end of col_ids is valid (0 already checked upstream)
                 // vector has been sorted
                 if (col_ids.back() > num_cols_) {
-                    std::cout << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
-                    exit (0);
+                    std::cerr << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
+                    exit(0);
                 }
                 
                 std::iota(cols_to_retain.begin(), cols_to_retain.end(), 0);
@@ -294,8 +294,8 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 // check that right end of col_ids is valid (0 already checked upstream)
                 // vector has been sorted
                 if (col_ids.back() > num_cols_) {
-                    std::cout << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
-                    exit (0);
+                    std::cerr << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
+                    exit(0);
                 }
                 
                 parm_columns_ = header;
@@ -359,13 +359,13 @@ void LogManipulator::sample_parameters () {
                     } else {
                         // check that we've still got the same number of parameters i.e. files match
                         if (curpars != num_cols_) {
-                            std::cout << "Error: number of parameters in file " << (i + 1)
+                            std::cerr << "Error: number of parameters in file " << (i + 1)
                                 << "(" << curpars << ") does not match that from first file ("
                                 << num_cols_ << "). Exiting." << std::endl;
                             exit(0);
                         } else if (header != parm_columns_) {
                             // check that headers are identical
-                            std::cout << "Error: header for file " << (i + 1)
+                            std::cerr << "Error: header for file " << (i + 1)
                                 << "does not match that from first file. Exiting." << std::endl;
                             exit(0);
                         }

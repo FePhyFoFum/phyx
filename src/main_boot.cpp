@@ -84,7 +84,7 @@ int main(int argc, char * argv[]) {
             case 'f':
                 jackfract = string_to_float(optarg, "-f");
                 if (jackfract < 0 || jackfract > 1) {
-                    std::cerr << "Jackknife fraction must be 0 < x < 1. Exiting." << std::endl;
+                    std::cerr << "Error: jackknife fraction must be 0 < x < 1. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -130,8 +130,8 @@ int main(int argc, char * argv[]) {
     }
     
     if (partitioned && (jackfract != 0.0)) {
-        std::cerr << "Partitioned jackknife not implemented. Exiting." << std::endl;
-        exit (0);
+        std::cerr << "Error: partitioned jackknife not implemented. Exiting." << std::endl;
+        exit(0);
     }
     
     SequenceSampler ss(pios, seed, jackfract, partf);

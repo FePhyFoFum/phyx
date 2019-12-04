@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
         }
         nfstr.close();
     } else {
-        std::cerr << "You need to set the names of the tips you want to remove (-n). Exiting." << std::endl;
+        std::cerr << "Error: you need to set the names of the tips you want to remove (-n). Exiting." << std::endl;
         exit(0);
     }
 
@@ -157,7 +157,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "this really only works with nexus or newick" << std::endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting" << std::endl;
         exit(0);
     }
     bool going = true;

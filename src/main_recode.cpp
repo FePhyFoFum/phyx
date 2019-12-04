@@ -148,7 +148,7 @@ int main(int argc, char * argv[]) {
                 if (first) {
                     alpha = seq.get_alpha_name();
                     if (alpha.compare("DNA") != 0) {
-                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
                     first = false;
@@ -163,7 +163,7 @@ int main(int argc, char * argv[]) {
                 if (first) {
                     alpha = seq.get_alpha_name();
                     if (alpha.compare("DNA") != 0) {
-                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
                     first = false;
@@ -186,7 +186,7 @@ int main(int argc, char * argv[]) {
                 if (first) {
                     alpha = seq.get_alpha_name();
                     if (alpha.compare("DNA") != 0) {
-                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
                     first = false;
@@ -200,7 +200,7 @@ int main(int argc, char * argv[]) {
                 if (first) {
                     alpha = seq.get_alpha_name();
                     if (alpha.compare("DNA") != 0) {
-                        std::cerr << "This only works for DNA. Exiting." << std::endl;
+                        std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
                     first = false;

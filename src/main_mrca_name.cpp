@@ -101,7 +101,7 @@ int main(int argc, char * argv[]) {
     
     if (!mrcaset) {
         std::cerr << "Because no file was provided, all the internal nodes" << std::endl;
-        std::cerr << "will be labeled" << std::endl;
+        std::cerr << "will be labelled" << std::endl;
     }
     
     std::istream * pios = NULL;
@@ -154,7 +154,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "This really only works with nexus or newick. Exiting." << std::endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -170,8 +170,8 @@ int main(int argc, char * argv[]) {
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
                         //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
-                            std::cout << "Check mrca file for typos." << std::endl;
-                            exit (0);
+                            std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
+                            exit(0);
                         }
                         Node * nd = tree->getMRCA((*it).second);
                         nd->setName((*it).first);
@@ -202,7 +202,7 @@ int main(int argc, char * argv[]) {
                     for (it = mrcas.begin(); it != mrcas.end(); it++) {
                         //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
-                            std::cout << "Check mrca file for typos. Exiting." << std::endl;
+                            std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
                             exit(0);
                         }
                         Node * nd = tree->getMRCA((*it).second);

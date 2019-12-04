@@ -126,7 +126,7 @@ int main(int argc, char * argv[]) {
         }
         nfstr.close();
     } else {
-        std::cerr << "You need to set the names of the taxa you want to remove (-n). Exiting." << std::endl;
+        std::cerr << "Error: you need to set the names of the taxa you want to remove (-n). Exiting." << std::endl;
         exit(0);
     }
     

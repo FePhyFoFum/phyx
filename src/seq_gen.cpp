@@ -525,14 +525,14 @@ void SequenceGenerator::check_valid_sequence () {
     if (is_dna_) {
         std::size_t found = root_sequence_.find_first_not_of(nucleotides_);
         if (found != std::string::npos) {
-            std::cout << "Error: illegal character '" << root_sequence_[found] << "' at position " 
+            std::cerr << "Error: illegal character '" << root_sequence_[found] << "' at position " 
                 << found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << std::endl;
             exit(0);
         }
     } else {
         std::size_t found = root_sequence_.find_first_not_of(amino_acids_);
         if (found != std::string::npos) {
-            std::cout << "Error: illegal character '" << root_sequence_[found] << "' at position " 
+            std::cerr << "Error: illegal character '" << root_sequence_[found] << "' at position " 
                 << found+1 << " (only AA chars allowed). Exiting." << std::endl;
             exit(0);
         }        

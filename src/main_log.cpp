@@ -104,7 +104,7 @@ int main(int argc, char * argv[]) {
                             input_files.push_back(temp);
                             infile.close();
                         } else {
-                            std::cerr << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
+                            std::cerr << "Error: cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -126,7 +126,7 @@ int main(int argc, char * argv[]) {
                             input_files.push_back(temp);
                             infile.close();
                         } else {
-                            std::cerr << "Cannot find input file '" << temp << "'. Exiting." << std::endl;
+                            std::cerr << "Error: cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -193,20 +193,20 @@ int main(int argc, char * argv[]) {
     //ifstream * fstr = NULL;
     
     if (!tfileset && !pfileset) {
-        std::cerr << "Must specify a tree file or parameter file. Exiting." << std::endl;
-        exit (0);
+        std::cerr << "Error: must specify a tree file or parameter file. Exiting." << std::endl;
+        exit(0);
     }
     
     if (tfileset == true && pfileset == true) {
-        std::cerr << "Set tree file *or* parameter file, not both. Exiting." << std::endl;
-        exit (0);
+        std::cerr << "Error: set tree file *or* parameter file, not both. Exiting." << std::endl;
+        exit(0);
     }
     
     // abort if invalid args
     if (tfileset) {
         if (get_columns || delete_columns || keep_columns) {
-            std::cerr << "Column arguments are not applicable for tree files. Exiting." << std::endl;
-            exit (0);
+            std::cerr << "Error: column arguments are not applicable for tree files. Exiting." << std::endl;
+            exit(0);
         }
     }
     
@@ -214,7 +214,7 @@ int main(int argc, char * argv[]) {
     if (delete_columns || keep_columns) {
         if (col_indices[0] < 1) {
             std::cerr << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
-            exit (0);
+            exit(0);
         }
     }
     

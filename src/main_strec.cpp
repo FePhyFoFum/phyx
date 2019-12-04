@@ -78,8 +78,9 @@ bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
     std::vector<std::string>::iterator it;
     it=set_difference (seqnames.begin(), seqnames.end(), treenames.begin(), treenames.end(), v.begin());
     if (int(it-v.begin()) > 0) {
-        std::cerr << "There are " << int(it - v.begin())
+        std::cerr << "Error: there are " << int(it - v.begin())
                 << " taxa that have the wrong names. Exiting." << std::endl;
+        exit(1);
     }
     for (it=v.begin() ; it != v.end(); it++) {
         if ((*it).size() > 1) {
@@ -193,7 +194,7 @@ int main(int argc, char * argv[]) {
     }
 
     if (conffileset == false) {
-        std::cerr << "Right now, you need to have a conf file. To change soon. Exiting." << std::endl;
+        std::cerr << "Error: you need to have a conf file. May change soon. Exiting." << std::endl;
         print_help();
         exit(0);
     }
@@ -315,8 +316,8 @@ int main(int argc, char * argv[]) {
     std::vector<Tree *> trees;
     std::ifstream infile2(treef);
     if (!infile2) {
-        std::cerr << "Could not open treefile. Exiting." << std::endl;
-        return 1;
+        std::cerr << "Error: could not open treefile. Exiting." << std::endl;
+        exit(1);
     }
     line = "";
     while (getline(infile2, line)) {

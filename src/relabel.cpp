@@ -33,7 +33,7 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
     // check all current names are unique (otherwise won't work with existing map)
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
     if (orig.size() < old_names_.size()) {
-        std::cerr << "Oops! Current name list contains duplicates. Exiting." << std::endl;
+        std::cerr << "Error: the current name list contains duplicates. Exiting." << std::endl;
         exit(0);
     }
     
@@ -54,7 +54,7 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
     new_names_ = terp;
     
     if (ccount != ncount) {
-        std::cerr << "Current (" << ccount << ") and new (" << ncount
+        std::cerr << "Error: the current (" << ccount << ") and new (" << ncount
             << ") lists differ in length. Exiting." << std::endl;
         exit(0);
     } else {

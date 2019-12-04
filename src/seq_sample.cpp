@@ -207,8 +207,8 @@ void SequenceSampler::get_site_partitions () {
 void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens,
         int & start, int & stop, int & interval) {
     if ((int)tokens.size() < 4 || (int)tokens.size() > 5) {
-        std::cout << "Error: invalid/unsupported partition specification." << std::endl;
-        exit (0);
+        std::cerr << "Error: invalid/unsupported partition specification. Exiting." << std::endl;
+        exit(0);
     }
     
     // ignore first token. will be either CHARSET of DNA,
@@ -262,7 +262,7 @@ void SequenceSampler::check_valid_partitions () {
     int diff = max - count + 1;
     
     if (diff != 0) { // sites are duplicated
-        //std::cout << "Error in partitioning: maximum site value " << max << " does not equal site count " << count << "." << std::endl;
+        //std::cerr << "Error in partitioning: maximum site value " << max << " does not equal site count " << count << "." << std::endl;
         find_duplicates_missing(allSites);
     }
 }
@@ -295,21 +295,21 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
     }
     
     if (duplicates.size() != 0) {
-        std::cout << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
+        std::cerr << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
         for (unsigned int i = 0; i < duplicates.size(); i++) {
-            std::cout << duplicates[i] << " ";
+            std::cerr << duplicates[i] << " ";
         }
-        std::cout << std::endl;
+        std::cerr << std::endl;
     }
     if (missing.size() != 0) {
-        std::cout << "Error: the following " << missing.size() << " sites are not found in any partition: ";
+        std::cerr << "Error: the following " << missing.size() << " sites are not found in any partition: ";
         for (unsigned int i = 0; i < missing.size(); i++) {
-            std::cout << missing[i] << " ";
+            std::cerr << missing[i] << " ";
         }
-        std::cout << std::endl;
+        std::cerr << std::endl;
     }
-    std::cout << "Exiting." << std::endl;
-    exit (0);
+    std::cerr << "Exiting." << std::endl;
+    exit(0);
 }
 
 

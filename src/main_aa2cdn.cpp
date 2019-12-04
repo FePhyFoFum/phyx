@@ -98,11 +98,11 @@ int main(int argc, char * argv[]) {
     }
     
     if (!fileset) {
-        std::cerr << "You must specify an input amino acid sequence file. Exiting." << std::endl;
+        std::cerr << "Error: you must specify an input amino acid sequence file. Exiting." << std::endl;
         exit(0);
     }
     if (!nucfileset) {
-        std::cerr << "You must specify an input nucleotide sequence file. Exiting." << std::endl;
+        std::cerr << "Error: you must specify an input nucleotide sequence file. Exiting." << std::endl;
         exit(0);
     }
     

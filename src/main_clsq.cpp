@@ -81,7 +81,7 @@ int main(int argc, char * argv[]) {
             case 'p':
                 prop_required = string_to_float(optarg, "-p");
                 if (prop_required > 1.0 || prop_required < 0.0) {
-                    std::cerr << "Proportion required data (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
+                    std::cerr << "Error: proportion of required data present (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;

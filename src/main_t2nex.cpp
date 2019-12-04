@@ -151,7 +151,7 @@ int main(int argc, char * argv[]) {
         }
         (*poos) << "end;" << std::endl;
     } else {
-        std::cerr << "Tree format not recognized. Exiting." << std::endl;
+        std::cerr << "Error: tree format not recognized. Exiting." << std::endl;
         exit(1);
     }
     

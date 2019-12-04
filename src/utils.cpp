@@ -37,7 +37,7 @@ double EPSILON = 1e-7;
 void check_file_exists (const std::string& filename) {
     std::ifstream infile(filename);
     if (!infile.good()) {
-        std::cout << "File '" << filename << "' not found. Exiting." << std::endl;
+        std::cerr << "Error: file '" << filename << "' not found. Exiting." << std::endl;
         exit(0);
     }
 }
@@ -45,7 +45,7 @@ void check_file_exists (const std::string& filename) {
 
 void check_inout_streams_identical (char * in, char * out) {
     if ((std::string)in == (std::string)out) {
-        std::cout << "Warning: input and output file names must differ (streams!). Exiting." << std::endl;
+        std::cerr << "Error: input and output file names must differ (streams!). Exiting." << std::endl;
         exit(0);
     }
 }
@@ -58,7 +58,7 @@ int string_to_int (const std::string& in, const std::string& arg) {
             res = stoi(in);
         }
         catch (const std::invalid_argument& ia) {
-            std::cerr << "Invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
+            std::cerr << "Error: invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
             exit(0);
         }
     return res;
@@ -72,7 +72,7 @@ float string_to_float (const std::string& in, const std::string& arg) {
             res = stof(in);
         }
         catch (const std::invalid_argument& ia) {
-            std::cerr << "Invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
+            std::cerr << "Error: invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
             exit(0);
         }
     return res;

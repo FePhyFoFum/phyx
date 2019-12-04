@@ -202,7 +202,7 @@ NJOI::NJOI (std::istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(th
         sequences_[seq.get_id()] = seq.get_sequence();
         if (!first) {
             if ((int)seq.get_length() != nchar_) {
-                std::cout << "Error: sequence " << seq.get_id() << " has "
+                std::cerr << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
                     << nchar_ << "." << std::endl << "Exiting." << std::endl;
                 exit(1);
@@ -217,7 +217,7 @@ NJOI::NJOI (std::istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(th
     if (ft == 2) {
         sequences_[seq.get_id()] = seq.get_sequence();
         if ((int)seq.get_length() != nchar_) {
-            std::cout << "Error: sequence " << seq.get_id() << " has "
+            std::cerr << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
                 << nchar_ << "." << std::endl << "Exiting." << std::endl;
             exit(1);

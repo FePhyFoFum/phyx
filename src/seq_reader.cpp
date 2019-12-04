@@ -237,7 +237,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, 
         }
     }
     if (found == false) {
-        std::cout << "badly formatted nexus file: missing 'MATRIX' in data/character block. Exiting." << std::endl;
+        std::cerr << "Error: badly formatted nexus file: missing 'MATRIX' in data/character block. Exiting." << std::endl;
         exit(1);
     }
     
@@ -865,7 +865,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
                 pios.seekg(spt, std::ios_base::beg);
                 return; // interleaved //
             } else {
-                std::cerr << "Unrecognized phylip format. Exiting." << std::endl; 
+                std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
                 exit(1);
             }
         }
@@ -952,7 +952,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
             }
         }
     } else {
-        std::cerr << "Unrecognized phylip format. Exiting." << std::endl; 
+        std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
         exit(1);
     }
 }
@@ -1111,7 +1111,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
             }
         }
         if (!good) {
-            std::cerr << "Bad phylip file. Taxon '" << seqs[bad_idx].get_id()
+            std::cerr << "Error: bad phylip file. Taxon '" << seqs[bad_idx].get_id()
                 << "' had " << bad_len << " characters, but " << numChar
                 << " were expected. Exiting." << std::endl;
             exit(1);
@@ -1128,7 +1128,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
                 residues += tokens[i];
             }
             if ((int)residues.size() != numChar) {
-                std::cerr << "Bad phylip file. Taxon '" << name
+                std::cerr << "Error: bad phylip file. Taxon '" << name
                     << "' had " << residues.size() << " characters, but " << numChar
                     << " were expected. Exiting." << std::endl;
                     exit(1);
@@ -1139,13 +1139,13 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
             residues = "";
         }
     } else {
-        std::cerr << "Unrecognized phylip format. Exiting." << std::endl; 
+        std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
         exit(1);
     }
     
     //std::cout << "Read in " << seqs.size() << " sequences." << std::endl;
     if ((int)seqs.size() != numTaxa) {
-        std::cerr << "Bad phylip file. Read in " << seqs.size()
+        std::cerr << "Error: bad phylip file. Read in " << seqs.size()
                 << " sequences, but expected " << numTaxa << ". Exiting." << std::endl;
         exit(1);
     }

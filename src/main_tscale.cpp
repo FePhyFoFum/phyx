@@ -101,7 +101,7 @@ int main(int argc, char * argv[]) {
     std::ofstream * ofstr = NULL;
     
     if (heightset && scaleset) {
-        std::cerr << "Supply only 'rootheight' or 'scale', not both. Exiting." << std::endl;
+        std::cerr << "Error: supply only rootheight (-r) or scale (-s), not both. Exiting." << std::endl;
         exit(0);
     }
     
@@ -133,7 +133,7 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        std::cerr << "This really only works with nexus or newick" << std::endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     bool going = true;
@@ -146,7 +146,7 @@ int main(int argc, char * argv[]) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);
                     if (!isultra) {
-                        std::cout << "Setting root height only works for ultrametric trees. Exiting." << std::endl;
+                        std::cerr << "Error: setting root height only works for ultrametric trees. Exiting." << std::endl;
                         exit(0);
                     }
                 }
@@ -168,7 +168,7 @@ int main(int argc, char * argv[]) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);
                     if (!isultra) {
-                        std::cout << "Setting root height only works for ultrametric trees. Exiting." << std::endl;
+                        std::cerr << "Error: setting root height only works for ultrametric trees. Exiting." << std::endl;
                         exit(0);
                     }
                 }

@@ -50,7 +50,7 @@ void SequenceCleaner::set_bad_chars () {
     } else if (alpha_name_ == "BINARY" || alpha_name_ == "MULTI") {
         badChars_ = "-?";
     } else {
-        std::cout << "Don't know what kind of alignment this is :( Exiting." << std::endl;
+        std::cerr << "Error: cannot determine alignment type. Exiting." << std::endl;
         exit(0);
     }
 }
