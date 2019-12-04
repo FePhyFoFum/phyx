@@ -340,7 +340,7 @@ int main(int argc, char * argv[]) {
     int nsites;
     if (datawide) {
         if (dataz == false) {
-            nstates = seqs[0].get_sequence().length();
+            nstates = seqs[0].get_length();
         } else {
             std::vector<std::string> searchtokens;
             tokenize(seqs[0].get_sequence(), searchtokens, ",");

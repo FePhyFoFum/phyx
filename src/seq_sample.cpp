@@ -8,6 +8,7 @@
 #include "sequence.h"
 #include "seq_reader.h"
 #include "seq_sample.h"
+#include "seq_utils.h"
 #include "utils.h"
 
 
@@ -34,15 +35,10 @@ void SequenceSampler::read_in_sequences (std::istream* pios) {
     std::string alphaName = ""; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
     num_tax_ = (int)seqs_.size();
-    num_char_ = (int)seqs_[0].get_sequence().length();
+    num_char_ = (int)seqs_[0].get_length();
     
     // check that it is aligned (doesn't make sense otherwise)
-    bool aligned = true;
-    for (int i = 1; i < num_tax_; i++) {
-        if ((int)seqs_[i].get_sequence().length() != num_char_) {
-            aligned = false;
-        }
-    }
+    bool aligned = is_aligned(seqs_);
     if (!aligned) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);

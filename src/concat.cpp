@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
+#include "seq_utils.h"
 #include "concat.h"
 
 SequenceConcatenater::SequenceConcatenater (std::string& seqf):num_partitions_(0),
@@ -26,23 +27,14 @@ void SequenceConcatenater::read_sequences (std::string& seqf) {
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = (int)seqs_.size();
     
-    bool aligned = true;
-    num_char_ = seqs_[0].get_sequence().length();
-    for (unsigned int i = 1; i < seqs_.size(); i++) {
-        if ((int)seqs_[i].get_sequence().length() != num_char_) {
-            aligned = false;
-        }
-        if (toupcase_) {
-            seqs_[i].set_sequence(seqs_[i].seq_to_upper());
-        }
-    }
+    bool aligned = is_aligned(seqs_);
     if (!aligned) {
         std::cerr << "Error: sequences in file '" << seqf << "' are not aligned. Exiting."
             << std::endl;
         delete pios;
         exit(1);
     }
-    
+    num_char_ = seqs_[0].get_length();
     num_partitions_ = 1;
     partition_sizes_.push_back(num_char_);
     delete pios;

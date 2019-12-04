@@ -9,6 +9,7 @@
 
 #include "sequence.h"
 #include "seq_reader.h"
+#include "seq_utils.h"
 #include "utils.h"
 #include "aa2cdn.h"
 
@@ -283,7 +284,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, 
     }
     infile.close();
     //std::cout << "Seqs has " << seqs.size() << " taxa and "
-    //        << seqs[0].get_sequence().length() << " sites." << std::endl;
+    //        << seqs[0].get_length() << " sites." << std::endl;
     return seqs;
 }
 
@@ -1218,12 +1219,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
     }
     if (file_nchar != 0) {
         // if nchar comes from a file, _must_ be aligned
-        bool aligned = true;
-        for (unsigned int i = 0; i < seqs.size(); i++) {
-            if ((int)seqs[i].get_sequence().length() != file_nchar) {
-                aligned = false;
-            }
-        }
+        bool aligned = is_aligned(seqs);
         if (!aligned) {
             std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
             exit(0);

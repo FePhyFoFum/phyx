@@ -281,7 +281,7 @@ void SeqInfo::collect_taxon_labels () {
 // assumed aligned if all seqs are the same length
 void SeqInfo::check_is_aligned () {
     for (unsigned int i = 0; i < seqs_.size(); i++) {
-        seq_lengths_.push_back(seqs_[i].get_sequence().length());
+        seq_lengths_.push_back(seqs_[i].get_length());
     }
     // check if all seqs are the same length
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
@@ -294,7 +294,7 @@ void SeqInfo::check_is_aligned () {
 
 void SeqInfo::get_nchars () {
     for (unsigned int i = 0; i < seqs_.size(); i++) {
-        seq_lengths_.push_back(seqs_[i].get_sequence().length());
+        seq_lengths_.push_back(seqs_[i].get_length());
     }
     // check if all seqs are the same length
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {

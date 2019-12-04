@@ -155,10 +155,12 @@ char get_prot_char (std::set<char> inc) {
  * string alpha: either "DNA" or "AA"
 */
 std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
-    int seqlength = seqs[0].get_sequence().length();
-    for (unsigned int i=0; i < seqs.size(); i++) {
-        assert((int)seqs[i].get_sequence().length() == seqlength);
+    bool aligned = is_aligned(seqs);
+    if (!aligned) {
+        std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+        exit(0);
     }
+    int seqlength = seqs[0].get_length();
     std::string retstring;
     if (alpha == "DNA") {
         for (int i=0; i < seqlength; i++) {
@@ -235,10 +237,12 @@ char single_dna_complement (char inc) {
 
 
 void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
-    int seqlength = seqs[0].get_sequence().length();
-    for (unsigned int i=0; i < seqs.size(); i++) {
-        assert((int)seqs[i].get_sequence().length() == seqlength);
+    bool aligned = is_aligned(seqs);
+    if (!aligned) {
+        std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+        exit(0);
     }
+    int seqlength = seqs[0].get_length();
     // header: ntax, nchar
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
     
@@ -258,7 +262,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * another one needs to be written for concatenation
  */
 void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
-    int seqlength = seqs[0].get_sequence().length();
+    int seqlength = seqs[0].get_length();
     std::string datatype = seqs[0].get_alpha_name();
     std::string symbols = ""; // not required for binary (default), protein, DNA
     //std::cout << std::endl << "datatype = " << datatype << std::endl << std::endl;
@@ -286,9 +290,12 @@ void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, s
         symbols.erase(std::remove(symbols.begin(), symbols.end(), '?'), symbols.end());
     }
     
-    for (unsigned int i=0; i < seqs.size(); i++) {
-        assert((int)seqs[i].get_sequence().length() == seqlength);
+    bool aligned = is_aligned(seqs);
+    if (!aligned) {
+        std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+        exit(0);
     }
+    
     (*ostr) << "#NEXUS" << std::endl;
     (*ostr) << "BEGIN DATA;\n\tDIMENSIONS NTAX=";
     (*ostr) << seqs.size() << " NCHAR=" << seqlength << ";" << std::endl;
@@ -606,4 +613,23 @@ int count_dna_chars (const std::string& str) {
         ndna += std::count(str.begin(), str.end(), dnaChars[i]);
     }
     return ndna;
+}
+
+
+bool is_aligned (const std::vector<Sequence>& seqs) {
+    bool aligned = true;
+    bool first = true;
+    Sequence seq;
+    int nchar = 0;
+    for (unsigned int i = 1; i < seqs.size(); i++) {
+        seq = seqs[i];
+        if (!first) {
+            if ((int)seq.get_length() != nchar) {
+                aligned = false;
+            }
+        } else {
+            nchar = seq.get_length();
+        }
+    }
+    return aligned;
 }

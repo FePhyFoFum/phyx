@@ -7,6 +7,7 @@
 #include "clsq.h"
 #include "sequence.h"
 #include "seq_reader.h"
+#include "seq_utils.h"
 #include "utils.h"
 
 
@@ -27,17 +28,13 @@ void SequenceCleaner::read_in_sequences (std::istream* pios) {
     seqs_ = ingest_alignment(pios, alpha_name_);
     num_tax_ = (int)seqs_.size();
     
-    num_char_ = (int)seqs_[0].get_sequence().length();
-    bool aligned = true;
-    for (int i = 1; i < num_tax_; i++) {
-        if ((int)seqs_[i].get_sequence().length() != num_char_) {
-            aligned = false;
-        }
-    }
+    bool aligned = is_aligned(seqs_);
     if (!aligned) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
+    
+    num_char_ = (int)seqs_[0].get_length();
     set_bad_chars(); // uses alpha name
 }
 

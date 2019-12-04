@@ -18,7 +18,7 @@ void sm0_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& s
     RateModel& rm, std::vector<Sequence>& seqs, std::vector<Sequence>& sr_seqs,
     std::map<std::string, std::vector<int> >& codon_pos, mat& bf, mat& K, mat& w, mat& inq) {
     
-    int sites = (seqs[0].get_sequence().length()/3);
+    int sites = (seqs[0].get_length()/3);
     double curlike = 0;
     double sw = 0.5;
     rm.selection_model = 0;
@@ -71,7 +71,7 @@ void sm2a_mcmc(int reps, int sampleiter, Tree * tree, StateReconstructorSimple& 
     std::map<std::string, std::vector<int> >& codon_pos, mat& bf, mat& K, mat& w, mat& inq0,
     mat& inq1, mat& inq2) {
     
-    int sites = (seqs[0].get_sequence().length()/3);
+    int sites = (seqs[0].get_length()/3);
     double curlike = 0;
     double sw = 0.2;
     sr.pp0 = 0.38008; sr.pp1 = 0.28326; sr.pp2 = 0.33666;

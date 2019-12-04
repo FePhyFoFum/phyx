@@ -30,7 +30,7 @@ bool MultinomialSeqStat::checked_aligned () {
     
     // gather all lengths
     for (int i = 0; i < num_taxa_; i++) {
-        seq_lengths[i] = (int)seqs_[i].get_sequence().length();
+        seq_lengths[i] = (int)seqs_[i].get_length();
     }
     
     // check if all seqs are the same length

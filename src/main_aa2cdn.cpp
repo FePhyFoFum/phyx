@@ -162,7 +162,7 @@ int main(int argc, char * argv[]) {
     bool inFrame = true;
     unsigned int curN = 0;
     for (unsigned int i = 0; i < nuc_seqs.size(); i++) {
-        curN = nuc_seqs[i].get_sequence().length();
+        curN = nuc_seqs[i].get_length();
         if (curN % 3 != 0) {
             std::cerr << "Error: nucleotide sequence length for '" << nuc_seqs[i].get_id()
                 << "' is not a multiple of 3." << std::endl;
