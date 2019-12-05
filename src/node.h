@@ -1,10 +1,3 @@
-/*
- * node.h
- *
- *  Created on: Nov 24, 2009
- *      Author: smitty
- */
-
 #ifndef _NODE_H_
 #define _NODE_H_
 
@@ -20,7 +13,7 @@ class Node {
 private:
     double BL; // branch length, points to parent
     double height; // could be from tip or from root
-    double depth;
+    double depth; // not being used
     int number;
     std::string name;
     Node * parent;

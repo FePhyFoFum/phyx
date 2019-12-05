@@ -20,12 +20,12 @@ void print_help () {
     std::cout << "Usage: pxbdsim [OPTION]... " << std::endl;
     std::cout << std::endl;
     std::cout << " -e, --extant=INT    number of extant species, alt to time" << std::endl;
-    std::cout << " -t, --time=INT      depth of the tree, alt to extant" << std::endl;
+    std::cout << " -t, --time=DOUBLE   timespan of simulation (age of root), alt to extant" << std::endl;
     std::cout << " -b, --birth=DOUBLE  birth rate, default=1" << std::endl;
     std::cout << " -d, --death=DOUBLE  death rate, default=0" << std::endl;
     std::cout << " -n, --nreps=INT     number of replicates, default=1" << std::endl;
     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
-    std::cout << " -s, --showd         show dead taxa" << std::endl;
+    std::cout << " -s, --showextinct   show lineages that went extinct, default=false" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -44,7 +44,7 @@ static struct option const long_options[] =
     {"death", required_argument, NULL, 'd'},
     {"nreps", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
-    {"showd", no_argument, NULL, 's'},
+    {"showextinct", no_argument, NULL, 's'},
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},

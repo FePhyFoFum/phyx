@@ -391,6 +391,7 @@ void Tree::setHeightFromRootToNodes () {
 }
 
 
+// this should be called depth
 void Tree::setHeightFromRootToNode (Node & inNode, double newHeight) {
     if (inNode.isRoot() == false) {
         newHeight += inNode.getBL();
