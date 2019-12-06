@@ -6,127 +6,52 @@
 
 #include "upgma.h"
 #include "utils.h"
+#include "seq_utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
+#include "node.h"
+#include "tree.h"
+#include "tree_utils.h"
 
 
-UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0) {
-    Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios, retstring);
+UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0), newickstring_("") {
+    std::string alphaName = ""; // not used, but required by reader
+    seqs_ = ingest_alignment(pios, alphaName);
+    ntax_ = (int)seqs_.size();
+    nchar_ = (int)seqs_[0].get_length();
     
-    int seqcount = 0;
-    // some error checking. should be in general seq reader class
-    bool first = true;
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs_.push_back(seq);
-        
-        sequences_[seq.get_id()] = seq.get_sequence();
-        if (!first) {
-            if ((int)seq.get_length() != nchar_) {
-                std::cerr << "Error: sequence " << seq.get_id() << " has "
-                    << seq.get_length() << " characters, was expecting " 
-                    << nchar_ << ". Exiting." << std::endl;
-                exit(1);
-            }
-        } else {
-            nchar_ = seq.get_length();
-            first = false;
-        }
-        //nameKey_[seqcount] = seq.get_id();
-        names_.push_back(seq.get_id());
-        seqcount++;
+    // check that it is aligned (doesn't make sense otherwise)
+    bool aligned = is_aligned(seqs_);
+    if (!aligned) {
+        std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+        exit(0);
     }
-    //seq has a trailing one
-    if (ft == 2) {
-        seqs_.push_back(seq);
-        
-        sequences_[seq.get_id()] = seq.get_sequence();
-        if ((int)seq.get_length() != nchar_) {
-            std::cerr << "Error: sequence " << seq.get_id() << " has "
-                << seq.get_length() << " characters, was expecting " 
-                << nchar_ << ". Exiting." << std::endl;
-            exit(1);
-        }
-        //nameKey_[seqcount] = seq.get_id();
-        names_.push_back(seq.get_id());
-        seqcount++;
-    }
-    ntax_ = seqcount;
-    //distmatrix_ = build_matrix(sequences_);
-    distmatrix_ = build_matrix();
-    //make_tree(names_, nameKey_, distmatrix_);
-    make_tree();
+    names_ = collect_names(seqs_);
+    full_distmatrix_ = build_matrix();
 }
 
 
-// get rid of all the map stuff
-//std::vector< std::vector<double> > UPGMA::build_matrix (std::map<std::string, std::string>& sequences) {
 std::vector< std::vector<double> > UPGMA::build_matrix () {
-
-    /*
-    //std::vector<std::string> SequenceName; // but this is already present as names_
-    std::map<std::string, std::string>::iterator iter, iter2;
-    std::string seq, SeqName, MatchName;
-    int FirstCount = 0;
-    double MatchScore;
-
-    // an easier way to initialize a vector of vectors:
-    std::vector< std::vector<double> > Score(ntax_, std::vector<double>(ntax_, 0.0));
-    
-    // compare all sequences to other sequences
-    // really only need half the matrix
-    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
-        seq = iter -> second;
-        SeqName = iter -> first;
-        //SequenceName.push_back(SeqName);
-        int SecondCount = 0;
-        for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
-            //MatchScore = CalcSeqDiffs(seq, iter2 -> second);
-            MatchScore = (double) calc_hamming_dist(seq, iter2 -> second);
-            MatchName = SeqName + "," + iter2 -> first;
-            //std::cout << "MatchName = " << MatchName << std::endl;
-            Score[FirstCount][SecondCount] = MatchScore;
-            SecondCount++;
-        }
-        FirstCount++;
-    }
-    */
-    
-    // smarter version:
     // 1) skip self comparisons
     // 2) only calculate one half of matrix (i.e., no duplicate calcs)
     std::vector< std::vector<double> > distances(ntax_, std::vector<double>(ntax_, 0.0));
+    
     double tempScore = 0.0;
     for (int i = 0; i < ntax_; i++) {
         std::string seq1 = seqs_[i].get_sequence();
         for (int j = (i + 1); j < ntax_; j++) {
             std::string seq2 = seqs_[j].get_sequence();
             // get distance
-            tempScore = (double) calc_hamming_dist(seq1, seq2);
-            // put in both top and bottom of matrix
+            tempScore = (double)calc_hamming_dist(seq1, seq2);
+            // put scale in terms of number of sites. original version did not do this
+            tempScore /= (double)nchar_;
+            // put in both top and bottom of matrix, even though only top is used
             distances[i][j] = distances[j][i] = tempScore;
         }
     }
     
-    // don't want this
+    // just for debugging
     /*
-    std::cout << std::endl << "OLD" << std::endl;
-    std::cout << "\t";
-    for (unsigned int i = 0; i < names_.size(); i++) {
-        std::cout << names_[i] << "\t";
-    }
-    std::cout << std::endl;
-    for (int i = 0; i < ntax_; i++) {
-        std::cout << names_[i] << "\t";
-        for (int j = 0; j < ntax_; j++) {
-            std::cout << Score[i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-    */
-    //std::cout << std::endl << "NEW" << std::endl;
-    
     std::cout << "\t";
     for (unsigned int i = 0; i < names_.size(); i++) {
         std::cout << names_[i] << "\t";
@@ -139,142 +64,147 @@ std::vector< std::vector<double> > UPGMA::build_matrix () {
         }
         std::cout << std::endl;
     }
+    */
     
     return distances;
 }
 
 
-void update_tree (std::string& newname, std::vector<std::string>& names,
-    int& numseqs, std::vector< std::vector<double> >& newmatrix, int& mini1, int& mini2) {
-    //update the tree values, Tree Size is the node it is at
-    std::vector<double> row_hits, col_hits, new_ColRow;
-    double br_length = newmatrix[mini1][mini2] / 2.0;
-        
-    std::string length1 = std::to_string(br_length);
-    std::string length2 = length1;
-    double ColRow = 0.0;
-    int matrixsize = newmatrix.size();
-
-    // extremely hacky way to get correct ELs
-    std::size_t found = names[mini1].find("#");
-    if (found != std::string::npos) {
-        std::string terp = names[mini1];
-        std::size_t pos = terp.find("#"); 
-        double oldheight = std::stod(terp.substr(pos+1));
-        names[mini1] = terp.substr(0, pos);
-        length1 = std::to_string(br_length - oldheight);
-    }
-    // have to do it for the other side too
-    found = names[mini2].find("#");
-    if (found != std::string::npos) {
-        std::string terp = names[mini2];
-        std::size_t pos = terp.find("#"); 
-        double oldheight = std::stod(terp.substr(pos+1));
-        names[mini2] = terp.substr(0, pos);
-        length2 = std::to_string(br_length - oldheight);
-    }
-
-    newname = "(" + names[mini1] + ":" + length1 + "," + names[mini2] + ":" + length2 + ")";
-    if (numseqs > 1) {
-        newname += "#" + std::to_string(br_length); // store height
-    }
-
-    names.erase(names.begin()+mini1);
-    names.erase(names.begin()+(mini2-1));
-    names.insert(names.begin(), newname);
-    
-    // Make Smaller Matrix
-    std::vector< std::vector<double> > temp_matrix(numseqs, std::vector<double>(numseqs, 0.0));
-    
-    // Reformat Matrix
-    for (int i = 0; i < matrixsize; i++) {
-        for (int j = 0; j < matrixsize; j++) {
-            if (i == mini1) {
-                row_hits.push_back(newmatrix[mini1][j]);
-            } else if (i == mini2) {
-                col_hits.push_back(newmatrix[mini2][j]);
-            }
-        }
-    }
-    
-    int count = 0;
-    //Make a new First Row and Column
-    for (int i = 0; i < (int)col_hits.size(); i++) {
-        ColRow = (col_hits[i] + row_hits[i]) / 2;
-        if (i != mini1) {
-            if (i != mini2) {
-                count++;
-                temp_matrix[0][count] = ColRow;
-                temp_matrix[count][0] = ColRow;
-            }
-        }
-        new_ColRow.push_back(ColRow);
-    }
-    
-    // Need to fill the rest of the matrix up again
-    int icount = 1;
-    int jcount = 0;
-    //std::cout << "newmatrix.size() = " << newmatrix.size()
-    //    << "; mini1 = " << mini1 << "; mini2 = " << mini2 << std::endl;
-    // mini1 is always < mini2
-    for (int i = 0; i < matrixsize; i++) {
-        //print_vector(newmatrix[i]);
-        //std::copy(newmatrix[i].begin(), newmatrix[i].end(), std::ostream_iterator<double>(std::cout, " "));
-        jcount = 1;
-        if (i != mini1 && i != mini2) {
-//            if (i != mini2) {
-            for (int j = 0; j < matrixsize; j++) {
-                if (j != mini1 && j != mini2) {
-                    //if (j != mini2) {
-                        temp_matrix[icount][jcount] = newmatrix[i][j];
-                        jcount++;
-                    //}
-                }
-            }
-            icount++;
-//            }
-        }
-    }
-    newmatrix = temp_matrix;
-}
-
-
-// find smallest pairwise distance. will always find this on the top half of the matrix
-void UPGMA::choose_small (int& numseqs, const std::vector< std::vector<double> >& dmatrix,
-    int& mini1, int& mini2) {
-    //super large value
-    double MIN = 99999999999.99;
+// find smallest pairwise distance
+// will always find this on the top half of the matrix i.e., mini1 < mini2
+double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& dmatrix, int& mini1, int& mini2) {
+    // super large value
+    double minD = 99999999999.99;
+    int numseqs = dmatrix.size();
     for (int i = 0; i < (numseqs - 1); i++) {
         int idx = std::min_element(dmatrix[i].begin() + (i + 1), dmatrix[i].end()) - dmatrix[i].begin();
-        if (dmatrix[i][idx] < MIN) {
-            MIN = dmatrix[i][idx];
+        if (dmatrix[i][idx] < minD) {
+            minD = dmatrix[i][idx];
             mini1 = i;
             mini2 = idx;
         }
     }
-    numseqs--;
+    return minD;
 }
 
 
-// numkeys contains the names and their matching number. this is never used
-// Matrix contains the original matrix
-void UPGMA::make_tree () {
-    // initialize
-    int mini1 = 0, mini2 = 0;
-    std::vector<std::string> names = names_;
-    std::vector< std::vector<double> > dmatrix = distmatrix_;
-    int numseqs = ntax_;
-    std::string newname;
+void UPGMA::construct_tree () {
+    // location of minimum distance (top half)
+    int ind1 = 0;
+    int ind2 = 0;
+    double minD = 0.0;
     
-    while (numseqs > 1) {
-        choose_small(numseqs, dmatrix, mini1, mini2);
-        //update_tree(newname, names, numkeys, numseqs, Matrix, mini1, mini2);
-        update_tree(newname, names, numseqs, dmatrix, mini1, mini2);
+    // initialize
+    std::vector< std::vector<double> > dMatrix = full_distmatrix_;
+    double newHeight = 0.0;
+    int numClusters = ntax_;
+    Node * anc = NULL; // new node, ancestor of 2 clusters
+    Node * left = NULL;
+    Node * right = NULL;
+    
+    // keep list of nodes left to be clustered. initially all terminal nodes
+    std::vector<Node *> nodes(ntax_);
+    for (int i = 0; i < ntax_; i++) {
+        Node * nd = new Node();
+        nd->setName(names_[i]);
+        nd->setHeight(0.0);
+        nodes[i] = nd;
     }
-    newickstring_ = newname + ";";
+    
+    while (numClusters > 1) {
+        // 1. get smallest distance present in the matrix
+        minD = get_smallest_distance(dMatrix, ind1, ind2);
+        left = nodes[ind1];
+        right = nodes[ind2];
+        
+        // 2. create new ancestor node
+        anc = new Node();
+        
+        // 3. add nodes in new cluster above as children to new ancestor
+        anc->addChild(*left); // addChild calls setParent
+        anc->addChild(*right);
+        
+        // 4. compute edgelengths: half of the distance
+        // edgelengths must subtract the existing height
+        newHeight = 0.5 * minD;
+        left->setBL(newHeight - left->getHeight());
+        right->setBL(newHeight - right->getHeight());
+        
+        // make sure to set the height of anc for the next iteration to use
+        anc->setHeight(newHeight);
+        
+        // 5. compute new distance matrix (1 fewer rows & columns)
+        // new distances are proportional averages (size of clusters)
+        // new cluster is placed first (row & column)
+        std::vector<double> avdists(numClusters, 0.0);
+        double Lweight = left->isExternal() ? 1.0 : (double)left->getChildCount();
+        double Rweight = right->isExternal() ? 1.0 : (double)right->getChildCount();
+        for (int i = 0; i < numClusters; i++) {
+            avdists[i] = ((dMatrix[ind1][i] * Lweight) + (dMatrix[ind2][i] * Rweight)) / (Lweight + Rweight);
+        }
+        
+        numClusters--;
+        std::vector< std::vector<double> > newDistances(numClusters, std::vector<double>(numClusters, 0.0));
+        
+        // put in distances to new clusters first
+        double tempDist = 0.0;
+        int count = 0;
+        for (int i = 0; i < (int)nodes.size(); i++) {
+            if (i != ind1 && i != ind2) {
+                count++;
+                tempDist = avdists[i];
+                newDistances[0][count] = tempDist;
+                newDistances[count][0] = tempDist;
+            }
+        }
+        
+        // now, fill in remaining
+        int icount = 1;
+        int jcount = 1;
+        for (int i = 0; i < (int)nodes.size(); i++) {
+            jcount = 1;
+            if (i != ind1 && i != ind2) {
+                for (int j = 0; j < (int)nodes.size(); j++) {
+                    if (j != ind1 && j != ind2) {
+                        newDistances[icount][jcount] = dMatrix[i][j];
+                        newDistances[jcount][icount] = dMatrix[i][j];
+                        jcount++;
+                    }
+                }
+                icount++;
+            }
+        }
+        
+        // replace distance matrix
+        dMatrix = newDistances;
+        
+        // 6. finally, update node vector (1 shorter). new node always goes first)
+        std::vector<Node *> newNodes(numClusters);
+        newNodes[0] = anc;
+        int counter = 1;
+        for (int i = 0; i < (int)nodes.size(); i++) {
+            if (i != ind1 && i != ind2) {
+                newNodes[counter] = nodes[i];
+                counter++;
+            }
+        }
+        // replace node vector
+        nodes = newNodes;
+    }
+    tree_ = new Tree(anc);
+    tree_->setEdgeLengthsPresent(true); // used by newick writer
 }
 
 
-std::string UPGMA::get_newick () const {
+std::string UPGMA::get_newick () {
+    if (newickstring_.empty()) {
+        construct_tree();
+    }
+    newickstring_ = getNewickString(tree_);
     return newickstring_;
+}
+
+
+std::vector< std::vector<double> > UPGMA::get_matrix () const {
+    return full_distmatrix_;
 }

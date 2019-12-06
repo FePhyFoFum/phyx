@@ -10,8 +10,12 @@
 #include "seq_reader.h"
 #include "log.h"
 
+// original version did WPGMA (kind of; distances were unscaled by # of sites)
+// add UPGMA method. make default
+
 void print_help() {
-    std::cout << "Basic UPGMA Tree Maker." << std::endl;
+    std::cout << "UPGMA tree generator" << std::endl;
+    std::cout << "Currently only uses uncorrected p-distances." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxupgma [OPTION]... " << std::endl;
@@ -25,7 +29,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxupgma 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxupgma 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Joseph F. Walker, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
