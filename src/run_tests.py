@@ -32,8 +32,8 @@ def test_program(name):
         cm = "./pxtscale -t TEST/test.tre -s 10"
         t = '(((TaxonA:1,TaxonB:0.3):1.25,TaxonC:2.5):4,(TaxonD:2.3000000000000003,TaxonE:1.6000000000000001):3);\n'
     elif name == "pxupgma":
-        cm = "./pxupgma -s TEST/test.fa"
-        t = 'TaxonA\tTaxonB\tTaxonC\tTaxonD\tTaxonE\t\nTaxonA\t0\t18\t12\t14\t14\t\nTaxonB\t18\t0\t16\t16\t14\t\nTaxonC\t12\t16\t0\t15\t15\t\nTaxonD\t14\t16\t15\t0\t9\t\nTaxonE\t14\t14\t15\t9\t0\t\n(((TaxonA:6.000000,TaxonC:6.000000):1.250000,(TaxonD:4.500000,TaxonE:4.500000):2.750000):0.750000,TaxonB:8.000000);\n'
+        cm = "./pxupgma -s TEST/AA_5tax_interleaved.NEX"
+        t = '(((TaxonB:0.068,TaxonA:0.068):0.108,TaxonC:0.176):0.171,(TaxonE:0.164,TaxonD:0.164):0.183);\n'
     elif name == "pxs2phy":
         cm = "./pxs2phy -s TEST/test.fa"
         t = '5 20\nTaxonA\tAAATTTCCCTGTCCCTTTAA\nTaxonB\tGCTCGAGGGGCCCCAAGACC\nTaxonC\tACGCTCCCCCTTAAAAATGA\nTaxonD\tTCCTTGTTCAACTCCGGTGG\nTaxonE\tTTACTATTCCCCCCCGCCGG\n'
