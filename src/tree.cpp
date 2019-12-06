@@ -138,12 +138,12 @@ void Tree::setRoot (Node * inroot) {
 }
 
 
-void Tree::setEdgeLengthsPresent (bool & res) {
+void Tree::setEdgeLengthsPresent (bool res) {
     edgeLengths = res;
 }
 
 
-void Tree::setNodeAnnotationsPresent (bool & res) {
+void Tree::setNodeAnnotationsPresent (bool res) {
     nodeAnnotations = res;
 }
 
@@ -153,7 +153,7 @@ bool Tree::hasNodeAnnotations () {
 }
 
 
-void Tree::setNodeNamesPresent (bool & res) {
+void Tree::setNodeNamesPresent (bool res) {
     internalNodeNames = res;
 }
 
@@ -483,8 +483,9 @@ void Tree::exchangeNodes (Node * node1, Node * node2) {
 
 
 void Tree::postOrderProcessRoot (Node * node) {
-    if (node == NULL)
+    if (node == NULL) {
         return;
+    }
     if (node->getChildCount() > 0) {
         for (int i = 0; i < node->getChildCount(); i++) {
             postOrderProcessRoot(node->getChild(i));

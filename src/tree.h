@@ -55,11 +55,11 @@ public:
     int getInternalNodeCount ();
     Node * getRoot ();
     void setRoot (Node * inroot);
-    void setEdgeLengthsPresent (bool& res);
+    void setEdgeLengthsPresent (bool res);
     bool hasEdgeLengths ();
-    void setNodeAnnotationsPresent (bool& res);
+    void setNodeAnnotationsPresent (bool res);
     bool hasNodeAnnotations ();
-    void setNodeNamesPresent (bool& res);
+    void setNodeNamesPresent (bool res);
     bool hasNodeNames ();
     void unRoot ();
     bool reRoot (Node * inroot);
