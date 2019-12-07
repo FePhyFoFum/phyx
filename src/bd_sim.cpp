@@ -14,19 +14,19 @@
 #include "utils.h"
 
 
-BirthDeathSimulator::BirthDeathSimulator (double estop, double tstop, double brate,
-    double drate, int seed):failures_(0), maxfailures_(1000), birthrate_(brate),
+BirthDeathSimulator::BirthDeathSimulator (const double& estop, const double& tstop,
+    const double& brate, const double& drate, const int& seed):failures_(0), maxfailures_(1000), birthrate_(brate),
     deathrate_(drate), sumrate_(brate+drate), relative_birth_rate_(brate/(brate+drate)),
     extantstop_(estop), timestop_(tstop), numofchanges_(0), currenttime_(0.0),
     extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
     DEATHTIME_(std::map<Node*, double>()) {
-        if (seed == -1) {
-            generator_ =  std::mt19937(get_clock_seed());
-        } else {
-            generator_ =  std::mt19937(seed);
-        }
-        uniformDistrib_ =  std::uniform_real_distribution<double>(0.0, 1.0);
+    if (seed == -1) {
+        generator_ =  std::mt19937(get_clock_seed());
+    } else {
+        generator_ =  std::mt19937(seed);
     }
+    uniformDistrib_ =  std::uniform_real_distribution<double>(0.0, 1.0);
+}
 
 
 // not currently used
@@ -50,7 +50,7 @@ void BirthDeathSimulator::setup_parameters () {
 }
 
 
-Tree * BirthDeathSimulator::make_tree (bool show_dead) {
+Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
     setup_parameters();
     root_ = new Node();
     BIRTHTIME_[root_] = currenttime_;
@@ -145,8 +145,6 @@ double BirthDeathSimulator::time_to_next_event () {
 
 
 void BirthDeathSimulator::event () {
-    //int random_integer = 0 + int((extantnodes.size()-1) * rand() / (RAND_MAX + 1.0));
-    //int random_integer = 0 + int((extantnodes.size()-1) * generator() / (generator.max() + 1.0));
     std::uniform_int_distribution<int> intDistrib(0, (extantnodes_.size()-1));
     int random_integer = intDistrib(generator_);
     //std::cout << "extantnodes.size() = " << extantnodes.size() << "; random_integer = "
@@ -186,18 +184,6 @@ void BirthDeathSimulator::delete_dead_nodes () {
     for (unsigned int i=0; i < dead_nodes_.size(); i++) {
         delete_a_node(dead_nodes_[i]);
     }
-    /*
-    std::vector<Node *> kill;
-    set_distance_to_tip();
-    for (int i=0; i<tree->getExternalNodeCount(); i++) {
-        if (abs(get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()) > 3.55271e-14) {
-            kill.push_back(tree->getExternalNode(i));
-            std::cout << get_distance_from_tip(tree->getExternalNode(i)) << " "<< root->getHeight() << " " << get_distance_from_tip(tree->getExternalNode(i)) - root->getHeight()<<  std::endl;
-        }
-    }
-    for (unsigned int i=0; i < kill.size(); i++) {
-        delete_a_node(kill[i]);
-    }*/
 }
 
 
@@ -250,7 +236,6 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
 
 
 bool BirthDeathSimulator::event_is_birth () {
-    //double x = rand() / double(RAND_MAX);
     double x = uniformDistrib_(generator_);
     if (x < relative_birth_rate_) {
         return true;

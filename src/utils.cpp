@@ -65,7 +65,7 @@ int string_to_int (const std::string& in, const std::string& arg) {
 }
 
 
-// catch exception (atoi does not do this)
+// catch exception (atof does not do this)
 float string_to_float (const std::string& in, const std::string& arg) {
     float res = 0;
     try {

@@ -16,7 +16,7 @@
 #include "log.h"
 
 void print_help () {
-    std::cout << "Lineage diversification model fitting" << std::endl;
+    std::cout << "Fit a lineage diversification model to a tree" << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxbdfit [OPTION]... " << std::endl;
     std::cout << std::endl;

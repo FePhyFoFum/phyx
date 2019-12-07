@@ -26,7 +26,6 @@ BDFit::BDFit (Tree * intree, const std::string& modelflavour):model_(modelflavou
     lambda_bd_(0.0), lambda_yule_(0.0), mu_(0.0), r_(0.0), epsilon_(0.0), likelihood_bd_(0.0),
     likelihood_yule_(0.0), aic_bd_(0.0), aicc_bd_(0.0), aic_yule_(0.0), aicc_yule_(0.0) {
     tree_ = intree;
-    ;
     fit_model();
 }
 
@@ -177,12 +176,10 @@ void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
         K = 2.0;
     }
     aic = (-2.0 * lik) + (2.0 * K);
-    aicc = aic + (2 * K * (K + 1)) / (n - K - 1);
+    aicc = aic + (2.0 * K * (K + 1.0)) / (n - K - 1.0);
 }
 
 
-// probably want in terms of r/epsilon too
-// probably want to support model comparison, too
 void BDFit::get_pars (std::ostream* poos) {
     (*poos) << "ntips: " << ntips_ << std::endl;
     (*poos) << "nspeciation: " << nspeciation_ << std::endl;

@@ -15,7 +15,7 @@
 #include "log.h"
 
 void print_help () {
-    std::cout << "Birth-death simulator." << std::endl;
+    std::cout << "Birth-death tree simulator." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxbdsim [OPTION]... " << std::endl;
     std::cout << std::endl;
