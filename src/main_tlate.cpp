@@ -121,6 +121,8 @@ int main(int argc, char * argv[]) {
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     int ntax, nchar; // not used, but required by some readers
+    std::string alphaName = ""; // will check first sequence type
+    bool first = true;
     
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {
@@ -129,6 +131,15 @@ int main(int argc, char * argv[]) {
         retstring = ""; // need to do this to let seqreader know we are mid-file
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
                 (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
@@ -137,6 +148,15 @@ int main(int argc, char * argv[]) {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
                 (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
@@ -153,6 +173,15 @@ int main(int argc, char * argv[]) {
             std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
                 (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
@@ -160,6 +189,15 @@ int main(int argc, char * argv[]) {
         } else {
             // fasta, fastq, or simple phylip
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
                 (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
