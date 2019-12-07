@@ -15,7 +15,9 @@
 void print_help() {
     std::cout << "Collapse edges with support below some threshold." << std::endl;
     std::cout << "If annotated Nexus, may require passing in the support identifier (-s)." << std::endl;
-    std::cout << "This will take nexus and newick inputs." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxcolt [OPTION]... " << std::endl;
     std::cout << std::endl;

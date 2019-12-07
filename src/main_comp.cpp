@@ -11,7 +11,7 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Compositional homogeneity test" << std::endl;
+    std::cout << "Sequence compositional homogeneity test." << std::endl;
     std::cout << "This will take fasta, phylip or nexus file formats" << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxcomp [OPTION]... " << std::endl;

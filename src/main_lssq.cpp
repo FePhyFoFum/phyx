@@ -14,7 +14,7 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Print sequence file summary" << std::endl;
+    std::cout << "Print sequence file summary." << std::endl;
     std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
     std::cout << "This will take fasta, phylip or nexus file formats" << std::endl;
     std::cout << std::endl;

@@ -16,8 +16,10 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "This will remove tips from a tree file and produce newick" << std::endl;
-    std::cout << "Can read from stdin or file" << std::endl;
+    std::cout << "Remove tree tips by label." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxrmt [OPTION]... [FILE]..."<<std::endl;
     std::cout << std::endl;

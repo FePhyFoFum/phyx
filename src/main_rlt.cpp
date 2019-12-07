@@ -14,8 +14,10 @@
 
 void print_help() {
     std::cout << "Taxon relabelling for trees." << std::endl;
-    std::cout << "This will take nexus and newick inputs." << std::endl;
     std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxrlt [OPTION]... " << std::endl;
     std::cout << std::endl;

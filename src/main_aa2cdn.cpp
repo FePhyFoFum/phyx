@@ -12,7 +12,7 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Takes in an AA alignment and unaligned nucleotide file to generate a codon alignment." << std::endl;
+    std::cout << "Generate a codon alignment from aligned amino acids and unaligned nucleotides." << std::endl;
     std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;

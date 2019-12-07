@@ -15,8 +15,10 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "This will reroot (or unroot) a tree file and produce a newick." << std::endl;
+    std::cout << "Reroot (or unroot) a tree file and produce a newick." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
     std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxrr [OPTION]... [FILE]..." << std::endl;
     std::cout << std::endl;

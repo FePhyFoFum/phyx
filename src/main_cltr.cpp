@@ -19,7 +19,9 @@ void print_help () {
     std::cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << std::endl;
     std::cout << "root edges to generate a 'vanilla' newick representation." << std::endl;
     std::cout << "By default removes all properties. Alternatively choose 1 property." << std::endl;
-    std::cout << "This will take newick or nexus files" << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxcltr [OPTION]... " << std::endl;
     std::cout << std::endl;

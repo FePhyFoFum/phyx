@@ -13,7 +13,9 @@
 
 void print_help() {
     std::cout << "Tree rescaling by providing either scaling factor or root height." << std::endl;
-    std::cout << "This will take nexus and newick inputs." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
+    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxtscale [OPTION]... " << std::endl;
     std::cout << std::endl;

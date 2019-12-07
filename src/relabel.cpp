@@ -37,7 +37,7 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
         exit(0);
     }
     
-    // TODO? clean names to make them jointly newick/nexus compliant
+    // TODO: clean names to make them jointly newick/nexus compliant
     // should we 'correct' invalid names? or leave it to user?
     // can use get_valid_newick_label or get_valid_nexus_label from utils.cpp
     // downside: if we change these, will not match what the user expects downstream

@@ -14,6 +14,7 @@
 
 void print_help() {
     std::cout << "This will convert a tree file to newick." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
     std::cout << "Can read from stdin or file." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxt2new [OPTION]... [FILE]..." << std::endl;

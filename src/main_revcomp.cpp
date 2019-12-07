@@ -16,8 +16,9 @@
 #include "edlib.h"
 
 void print_help() {
-    std::cout << "Reverse complement sequences from nexus, phylip, or fastq to fasta." << std::endl;
-    std::cout << "Can read from stdin or file, but output is fasta." << std::endl;
+    std::cout << "Reverse complement sequences." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxrevcomp [OPTION]... [FILE]..."<<std::endl;
     std::cout << std::endl;

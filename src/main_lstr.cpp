@@ -13,9 +13,9 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Print tree summary" << std::endl;
+    std::cout << "Print tree summary." << std::endl;
     std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
-    std::cout << "This will take newick or nexus files" << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxlstr [OPTION]... " << std::endl;
     std::cout << std::endl;

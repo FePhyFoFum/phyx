@@ -12,8 +12,9 @@
 #include "log.h"
 
 void print_help() {
-    std::cout << "Consensus sequences from nexus, phylip, or fastq to fasta." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Compute a consensus sequence from an alignment." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxconsq [OPTION]... [FILE]..." << std::endl;
     std::cout << std::endl;
