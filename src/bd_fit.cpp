@@ -22,9 +22,11 @@ typedef struct {
 } analysis_data;
 
 
-BDFit::BDFit (Tree * intree, const std::string& modelflavour) {
+BDFit::BDFit (Tree * intree, const std::string& modelflavour):model_(modelflavour),
+    lambda_bd_(0.0), lambda_yule_(0.0), mu_(0.0), r_(0.0), epsilon_(0.0), likelihood_bd_(0.0),
+    likelihood_yule_(0.0), aic_bd_(0.0), aicc_bd_(0.0), aic_yule_(0.0), aicc_yule_(0.0) {
     tree_ = intree;
-    model_ = modelflavour;
+    ;
     fit_model();
 }
 

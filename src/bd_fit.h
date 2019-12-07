@@ -10,13 +10,6 @@
 class BDFit {
 private:
     std::string model_;
-    Tree* tree_;
-    double treelength_;
-    double nintnodes_;
-    double nspeciation_;
-    double ntips_;
-    std::vector<double> branching_times_;
-    double rootheight_;
     
     double lambda_bd_;
     double lambda_yule_;
@@ -31,6 +24,14 @@ private:
     double aicc_bd_;
     double aic_yule_;
     double aicc_yule_;
+    
+    Tree* tree_;
+    double treelength_;
+    double nintnodes_;
+    double nspeciation_;
+    double ntips_;
+    std::vector<double> branching_times_;
+    double rootheight_;
     
     void fit_model();
     void get_best_model();
