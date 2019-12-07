@@ -57,13 +57,13 @@ void BDFit::get_best_model () {
     rootheight_ = tree_->getRoot()->getHeight();
     fit_yule();
     fit_bd();
-    if (aic_yule_ < aic_bd_) {
-        std::cout << "yule model fits better by " << aic_bd_ - aic_yule_
-                << " AIC units" << std::endl;
+    if (aicc_yule_ < aicc_bd_) {
+        std::cout << "yule model fits better by " << aicc_bd_ - aicc_yule_
+                << " AICc units" << std::endl;
         model_ = "yule";
     } else {
-        std::cout << "bd model fits better by " << aic_yule_ - aic_bd_
-                << " AIC units" << std::endl;
+        std::cout << "bd model fits better by " << aicc_yule_ - aicc_bd_
+                << " AICc units" << std::endl;
         model_ = "bd";
     }
     
@@ -130,7 +130,6 @@ void BDFit::fit_bd() {
     opt.set_upper_bounds(ub);
     
     double minf;
-    //nlopt::result result = opt.optimize(x, minf);
     opt.optimize(x, minf);
     
     r_ = x[0];
