@@ -68,8 +68,8 @@ def test_program(name):
         cm = "./pxt2nex -t TEST/collapse.tre"
         t = '#NEXUS\nBegin trees;\ntree tree0 = [&R] (((TaxonA:0.1,TaxonB:0.03)0.43:0.125,TaxonC:0.25)1.0:0.4,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\nend;\n'
     elif name == "pxbdsim":
-        cm = "./pxbdsim -e 5 -x 1 | grep -o taxon | wc -l"
-        t = '5\n'
+        cm = "./pxbdsim -e 5 -x 1"
+        t = '((taxon_1:0.3085569342610965,taxon_2:0.3085569342610965):0.6313710462719906,(taxon_3:0.9385183995956337,(taxon_4:0.5397758496988591,taxon_5:0.5397758496988591):0.3987425498967747):0.0014095809374534);\n'
     elif name == "pxs2fa":
         cm = "./pxs2fa -s TEST/Concat_Sequence2.NEX"
         t = '>Sequence1\nAAATTTCCCTTTCCCTTTAAA\n>Sequence2\nGGGGGGGGGGCCCCCCCCCCA\n>Sequence3\nCCCCCCCCCCCCAAAAAAAAA\n>Sequence9\nAAATTTCCCTTTCCCTTTAAA\n>Sequence10\nGGGGGGGGGGCCCCCCCCCCA\n>Sequence11\nCCCCCCCCCCCCAAAAAAAAA\n>Sequence8\nTTTTTTTTCCCCCCCGGGGGA\n'
