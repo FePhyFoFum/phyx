@@ -35,14 +35,13 @@ void BDFit::fit_model () {
     nspeciation_ = nintnodes_ - 1.0;
     ntips_ = tree_->getExternalNodeCount();
     rootheight_ = tree_->getRoot()->getHeight();
+    // model flavour is checked 
     if (model_ == "yule") {
         fit_yule();
     } else if (model_ == "bd") {
         fit_bd();
     } else if (model_ == "best") {
         get_best_model();
-    } else {
-        std::cout << "Huh?!?" << std::endl;
     }
 }
 
@@ -56,12 +55,12 @@ void BDFit::get_best_model () {
     rootheight_ = tree_->getRoot()->getHeight();
     fit_yule();
     fit_bd();
-    if (aic_yule_ < aic_) {
-        std::cout << "yule model fits better by " << aic_ - aic_yule_
+    if (aic_yule_ < aic_bd_) {
+        std::cout << "yule model fits better by " << aic_bd_ - aic_yule_
                 << " AIC units" << std::endl;
         model_ = "yule";
     } else {
-        std::cout << "bd model fits better by " << aic_yule_ - aic_
+        std::cout << "bd model fits better by " << aic_yule_ - aic_bd_
                 << " AIC units" << std::endl;
         model_ = "bd";
     }
@@ -85,9 +84,7 @@ void BDFit::fit_yule () {
     lambda_yule_ = nspeciation_ / treelength_;
     likelihood_yule_ = nspeciation_ * log(lambda_yule_) - lambda_yule_ * treelength_
         + std::lgamma(nintnodes_ + 1.0);
-    get_aic (likelihood_yule_);
-    aicc_yule_ = aicc_;
-    aic_yule_ = aic_;
+    get_aic (likelihood_yule_, aic_yule_, aicc_yule_);
 }
 
 
@@ -136,11 +133,11 @@ void BDFit::fit_bd() {
     
     r_ = x[0];
     epsilon_ = x[1];
-    lambda_ = r_ / (1 - epsilon_);
-    mu_ = lambda_ - r_;
+    lambda_bd_ = r_ / (1 - epsilon_);
+    mu_ = lambda_bd_ - r_;
     
-    likelihood_ = -minf;
-    get_aic (likelihood_);
+    likelihood_bd_ = -minf;
+    get_aic (likelihood_bd_, aic_bd_, aicc_bd_);
     //std::cout << "found minimum after " << counter << " evaluations." << std::endl;
 }
 
@@ -172,14 +169,14 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
 
 // calculate model-specific raw and small-sample-corrected AIC
 // 'n' here (number of data points) is taken as the number of terminals
-void BDFit::get_aic (const double& lik) {
+void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
     double K = 1.0;
     double n = ntips_;
     if (model_ == "bd") {
         K = 2.0;
     }
-    aic_ = (-2.0 * lik) + (2.0 * K);
-    aicc_ = aic_ + (2 * K * (K + 1)) / (n - K - 1);
+    aic = (-2.0 * lik) + (2.0 * K);
+    aicc = aic + (2 * K * (K + 1)) / (n - K - 1);
 }
 
 
@@ -197,10 +194,10 @@ void BDFit::get_pars (std::ostream* poos) {
         (*poos) << "aicc: " << aicc_yule_ << std::endl;
         (*poos) << "b: " << lambda_yule_ << std::endl;
     } else if (model_ == "bd") {
-        (*poos) << "likelihood: " << likelihood_ << std::endl;
-        (*poos) << "aic: " << aic_ << std::endl;
-        (*poos) << "aicc: " << aicc_ << std::endl;
-        (*poos) << "b: " << lambda_ << std::endl;
+        (*poos) << "likelihood: " << likelihood_bd_ << std::endl;
+        (*poos) << "aic: " << aic_bd_ << std::endl;
+        (*poos) << "aicc: " << aicc_bd_ << std::endl;
+        (*poos) << "b: " << lambda_bd_ << std::endl;
         (*poos) << "d: " << mu_ << std::endl;
         (*poos) << "r (b-d): " << r_ << std::endl;
         (*poos) << "e (d/b): " << epsilon_ << std::endl;

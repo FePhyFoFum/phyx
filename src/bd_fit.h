@@ -17,23 +17,26 @@ private:
     double ntips_;
     std::vector<double> branching_times_;
     double rootheight_;
-    double lambda_yule_; // separate for model selection
-    double lambda_;
+    
+    double lambda_bd_;
+    double lambda_yule_;
     double mu_;
     double r_;
     double epsilon_;
-    double likelihood_;
-    double likelihood_yule_; // separate for model selection
-    double aicc_;
-    double aic_;
-    double aicc_yule_; // separate for model selection
-    double aic_yule_; // separate for model selection
+    
+    double likelihood_bd_;
+    double likelihood_yule_;
+    
+    double aic_bd_;
+    double aicc_bd_;
+    double aic_yule_;
+    double aicc_yule_;
     
     void fit_model();
     void get_best_model();
     void fit_yule();
     void fit_bd();
-    void get_aic(const double& lik);
+    void get_aic(const double& lik, double& aic, double& aicc);
 
 public:
     BDFit(Tree * intree, const std::string& modelflavour);
