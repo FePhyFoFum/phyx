@@ -10,11 +10,8 @@
 #include "seq_reader.h"
 #include "log.h"
 
-// original version did WPGMA (kind of; distances were unscaled by # of sites)
-// add UPGMA method. make default
-
 void print_help() {
-    std::cout << "UPGMA tree generator" << std::endl;
+    std::cout << "Bare bones UPGMA tree generator" << std::endl;
     std::cout << "Currently only uses uncorrected p-distances." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
@@ -100,7 +97,7 @@ int main(int argc, char * argv[]) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = & std::cout;
+        poos = &std::cout;
     }
     
     UPGMA upgma(pios);

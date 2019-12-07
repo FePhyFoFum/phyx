@@ -201,7 +201,7 @@ void SequenceSampler::get_site_partitions () {
 // after being tokenized, should be of length 4 or 5 (latter when interval)
 // convert from 1-start to 0-start
 void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens,
-        int & start, int & stop, int & interval) {
+        int& start, int& stop, int& interval) {
     if ((int)tokens.size() < 4 || (int)tokens.size() > 5) {
         std::cerr << "Error: invalid/unsupported partition specification. Exiting." << std::endl;
         exit(0);

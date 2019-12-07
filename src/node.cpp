@@ -91,7 +91,7 @@ bool Node::hasParent () {
 }
 
 
-void Node::setParent (Node & p) {
+void Node::setParent (Node& p) {
     parent = &p;
 }
 
@@ -146,7 +146,7 @@ void Node::setDepth (double de) {
 }
 
 
-bool Node::hasChild (Node & test) {
+bool Node::hasChild (Node& test) {
     bool ret = false;
     for (unsigned int i=0; i < children.size(); i++) {
         if (children.at(i) == &test) {
@@ -158,7 +158,7 @@ bool Node::hasChild (Node & test) {
 }
 
 
-bool Node::addChild (Node & c) {
+bool Node::addChild (Node& c) {
     if (hasChild(c) == false) {
         children.push_back(&c);
         c.setParent(*this);
@@ -169,7 +169,7 @@ bool Node::addChild (Node & c) {
 }
 
 
-bool Node::removeChild (Node & c) {
+bool Node::removeChild (Node& c) {
     if (hasChild(c) == true) {
         for (unsigned int i=0; i < children.size(); i++) {
             if (children.at(i) == &c) {
@@ -333,7 +333,7 @@ int Node::getChildCount () {
 }
 
 
-void Node::assocObject (std::string name, NodeObject & obj) {
+void Node::assocObject (std::string name, NodeObject& obj) {
     if (assoc.count(name) > 0) {
         delete assoc[name];
     }
@@ -341,7 +341,7 @@ void Node::assocObject (std::string name, NodeObject & obj) {
 }
 
 
-void Node::assocDoubleVector (std::string name, std::vector<Superdouble> & obj) {
+void Node::assocDoubleVector (std::string name, std::vector<Superdouble>& obj) {
     if (assocDV.count(name) > 0) {
         assocDV.erase(name);
     }

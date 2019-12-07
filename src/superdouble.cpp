@@ -191,7 +191,7 @@ void Superdouble::operator -= (Superdouble x) {
 }
 
 
-bool Superdouble::operator > (const Superdouble & x)const {
+bool Superdouble::operator > (const Superdouble& x)const {
     if (exponent > x.exponent) {
         return true;
     } else if (exponent == x.exponent && mantissa > x.mantissa) {
@@ -202,7 +202,7 @@ bool Superdouble::operator > (const Superdouble & x)const {
 }
 
 
-bool Superdouble::operator >= (const Superdouble & x)const {
+bool Superdouble::operator >= (const Superdouble& x)const {
     if (exponent > x.exponent) {
         return true;
     } else if (exponent == x.exponent && mantissa >= x.mantissa) {
@@ -213,7 +213,7 @@ bool Superdouble::operator >= (const Superdouble & x)const {
 }
 
 
-bool Superdouble::operator < (const Superdouble & x)const {
+bool Superdouble::operator < (const Superdouble& x)const {
     if (exponent < x.exponent) {
         return true;
     } else if (exponent == x.exponent && mantissa < x.mantissa) {
@@ -224,7 +224,7 @@ bool Superdouble::operator < (const Superdouble & x)const {
 }
 
 
-bool Superdouble::operator <= (const Superdouble & x)const {
+bool Superdouble::operator <= (const Superdouble& x)const {
     if (exponent < x.exponent) {
         return true;
     } else if (exponent == x.exponent && mantissa <= x.mantissa) {

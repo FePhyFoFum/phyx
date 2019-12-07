@@ -89,13 +89,13 @@ int SequenceConcatenater::get_num_taxa () {
 }
 
 
-void SequenceConcatenater::delete_sequence (SequenceConcatenater & newSeqs, const int& index) {
+void SequenceConcatenater::delete_sequence (SequenceConcatenater& newSeqs, const int& index) {
     newSeqs.seqs_.erase(newSeqs.seqs_.begin() + index);
     newSeqs.num_taxa_--;
 }
 
 
-Sequence SequenceConcatenater::get_sequence (int const & index) {
+Sequence SequenceConcatenater::get_sequence (const int& index) {
     return seqs_[index];
 }
 

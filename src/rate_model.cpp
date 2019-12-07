@@ -70,7 +70,7 @@ void RateModel::setup_Q() {
     sameQ = false;
 }
 
-void RateModel::setup_Q(std::vector< std::vector<double> > & inQ) {
+void RateModel::setup_Q(std::vector< std::vector<double> >& inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ[i][j];
@@ -83,7 +83,7 @@ void RateModel::setup_Q(std::vector< std::vector<double> > & inQ) {
     sameQ = false;
 }
 
-void RateModel::setup_Q(mat & inQ) {
+void RateModel::setup_Q(mat& inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ(i, j);
@@ -100,7 +100,7 @@ void RateModel::set_n_qs(int number) {
     }
 }
 
-void RateModel::set_Q_which(mat & inQ, int which) {
+void RateModel::set_Q_which(mat& inQ, int which) {
     for (unsigned int i=0; i < Qs[which].n_rows; i++) {
         for (unsigned int j=0; j < Qs[which].n_cols; j++) {
             Qs[which](i, j) = inQ(i, j);
@@ -118,7 +118,7 @@ void RateModel::set_Q_which(mat & inQ, int which) {
     sameQ = false;
 }
 
-void RateModel::set_Q(mat & inQ) {
+void RateModel::set_Q(mat& inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ(i, j);
@@ -127,7 +127,7 @@ void RateModel::set_Q(mat & inQ) {
     sameQ = false;
 }
 
-mat & RateModel::get_Q() {
+mat& RateModel::get_Q() {
     return Q;
 }
 
@@ -268,7 +268,7 @@ extern"C" {
     void wrapdgpadm_(int * ideg,int * m,double * t,double * H,int * ldh,double * wsp,int * lwsp,int * ipiv,int * iexph,int *ns,int *iflag );
 }
 
-void RateModel::setup_fortran_P_whichQ(int which, mat & P, double t) {
+void RateModel::setup_fortran_P_whichQ(int which, mat& P, double t) {
     Q = Qs[which];
     setup_fortran_P(P,t,false);
 }
@@ -277,7 +277,7 @@ void RateModel::setup_fortran_P_whichQ(int which, mat & P, double t) {
 /*
  * runs the basic padm fortran expokit full matrix exp
  *
-void RateModel::setup_fortran_P(mat & P, double t, bool store_p_matrices) {
+void RateModel::setup_fortran_P(mat& P, double t, bool store_p_matrices) {
     //
     //  return P, the matrix of dist-to-dist transition probabilities,
     //  from the model's rate matrix (Q) over a time duration (t)
@@ -364,8 +364,8 @@ bool test_transition(char a, char b) {
     return ret;
 }
 
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string> & codon_dict, 
-    std::map<std::string, std::vector<int> > & codon_index, std::vector<std::string> & codon_list) {
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string>& codon_dict, 
+    std::map<std::string, std::vector<int> >& codon_index, std::vector<std::string>& codon_list) {
     for (int i=0; i < 61; i++) {
         for (int j=0; j < 61; j++) {
             int diff = 0;
@@ -397,7 +397,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std:
 
 //take out fortran
 /*
-void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H) {
+void convert_matrix_to_single_row_for_fortran(mat& inmatrix, double t, double * H) {
     int count = 0;
     for (unsigned int i=0; i < inmatrix.n_cols; i++) {
         for (unsigned int j=0; j < inmatrix.n_cols; j++) {

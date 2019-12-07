@@ -294,7 +294,7 @@ int test_tree_filetype_stream (std::istream& stri, std::string& retstring) {
 /**
  * this will look for the translation table if it exists
  */
-bool get_nexus_translation_table (std::istream & stri, std::map<std::string, std::string> * trans,
+bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std::string> * trans,
     std::string * retstring) {
     std::string line1;
     std::string del(" \t");

@@ -11,7 +11,7 @@ using namespace arma;
 #include "constants.h" // for PI and E
 
 
-void calc_vcv (Tree * tree, mat & vcv) {
+void calc_vcv (Tree * tree, mat& vcv) {
     int numlvs = tree->getExternalNodeCount();
     vcv = mat(numlvs, numlvs);
     int count = 0;
@@ -75,7 +75,6 @@ Node * getMRCA_forVCV (Node * curn1, Node * curn2) {
  * this saves a great deal of time as it takes the already
  * obtained path and finds the match with the second node
  */
-
 Node * getMRCAFromPath_forVCV (std::vector<Node *> * path1, Node * curn2) {
     Node * mrca = NULL;
     Node * parent = curn2;
@@ -103,7 +102,7 @@ x should be a vector
 mu should be a vector
 sigma should be vcv with sigma already applied
  */
-double norm_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
+double norm_pdf_multivariate (rowvec& x, rowvec& mu, mat& sigma) {
     unsigned int size = x.n_cols;
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET = det(sigma);
@@ -125,7 +124,7 @@ double norm_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
 }
 
 
-double norm_log_pdf_multivariate (rowvec & x, rowvec & mu, mat & sigma) {
+double norm_log_pdf_multivariate (rowvec& x, rowvec& mu, mat& sigma) {
     unsigned int size = x.n_cols;
     if (size == mu.n_cols && sigma.n_rows == size && sigma.n_cols == size) {
         double DET;
@@ -182,7 +181,7 @@ void calc_square_change_anc_states (Tree * tree, int index) {
 }
 
 
-void calc_postorder_square_change (Node * node, std::map<Node *, int> & nodenum,
+void calc_postorder_square_change (Node * node, std::map<Node *, int>& nodenum,
     mat * fullMcp, mat * fullVcp, int index) {
     for (int i=0; i < node->getChildCount(); i++) {
         calc_postorder_square_change(node->getChild(i), nodenum, fullMcp, fullVcp, index);    

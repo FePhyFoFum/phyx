@@ -26,7 +26,7 @@ std::regex SequenceRecoder::v_ ("A|C|G");
 
 
 // should check if nucleotide (not applicable to other seq types)
-SequenceRecoder::SequenceRecoder (std::string & recodescheme):R_(false), Y_(false), S_(false),
+SequenceRecoder::SequenceRecoder (std::string& recodescheme):R_(false), Y_(false), S_(false),
     W_(false), M_(false), K_(false), B_(false), D_(false), H_(false), V_(false),
     A_(false), C_(false), G_(false), T_(false) {
     recodescheme_ = string_to_upper(recodescheme);

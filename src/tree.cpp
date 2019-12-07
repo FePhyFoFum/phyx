@@ -364,7 +364,7 @@ Node * Tree::getMRCA (std::vector<Node *> innodes) {
  * when the MRCA is returned as root, this will find 
  * the other node, internal that can serve as another root
  */
-Node * Tree::getInternalMRCA (std::vector<std::string> & innodes) {
+Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
     Node * mrca = NULL;
     std::set<Node *> original; // original set of nodes
     if (innodes.size() == 1) {
@@ -392,7 +392,7 @@ void Tree::setHeightFromRootToNodes () {
 
 
 // this should be called depth
-void Tree::setHeightFromRootToNode (Node & inNode, double newHeight) {
+void Tree::setHeightFromRootToNode (Node& inNode, double newHeight) {
     if (inNode.isRoot() == false) {
         newHeight += inNode.getBL();
         inNode.setHeight(newHeight);
