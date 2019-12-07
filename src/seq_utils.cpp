@@ -621,7 +621,7 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
     bool first = true;
     Sequence seq;
     int nchar = 0;
-    for (unsigned int i = 1; i < seqs.size(); i++) {
+    for (unsigned int i = 0; i < seqs.size(); i++) {
         seq = seqs[i];
         if (!first) {
             if ((int)seq.get_length() != nchar) {
@@ -629,6 +629,7 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
             }
         } else {
             nchar = seq.get_length();
+            first = false;
         }
     }
     return aligned;
