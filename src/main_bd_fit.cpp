@@ -6,6 +6,7 @@
 #include <getopt.h>
 #include <algorithm>
 #include <cmath>
+#include <set>
 
 #include "tree_reader.h"
 #include "tree.h"
@@ -15,7 +16,7 @@
 #include "log.h"
 
 void print_help () {
-    std::cout << "Birth-death inference" << std::endl;
+    std::cout << "Lineage diversification model fitting" << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxbdfit [OPTION]... " << std::endl;
     std::cout << std::endl;
@@ -53,6 +54,7 @@ int main(int argc, char * argv[]) {
     char * outf = NULL;
     
     std::string model = "bd";
+    std::set<std::string> avail_models{"bd", "yule", "best"};
     
     while (1) {
         int oi = -1;
@@ -67,8 +69,13 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'm':
-                // need to check valid models here
-                model = strdup(optarg);
+                // check valid models here
+                model = string_to_lower(optarg);
+                if (avail_models.find(model) == avail_models.end()) {
+                    std::cerr << "Error: model '" << model << "' is not recognized. Exiting."
+                            << std::endl;
+                    exit(0);
+                }
                 break;
             case 'o':
                 outfileset = true;
