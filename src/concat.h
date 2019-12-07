@@ -14,10 +14,10 @@ private:
     std::string filename_;
     std::vector<int> partition_sizes_;
     
-    void read_sequences (std::string& seqf);
-    int get_sequence_length ();
+    void read_sequences ();
+    int get_sequence_length ()const;
     
-    std::vector<int> get_partition_sizes ();
+    std::vector<int> get_partition_sizes ()const;
     void delete_sequence (SequenceConcatenater& newSeqs, const int& index);
 
 public:
@@ -25,8 +25,8 @@ public:
     SequenceConcatenater (std::string& seqf);
     void concatenate (SequenceConcatenater& newSeqs);
     
-    int get_num_taxa ();
-    Sequence get_sequence (const int& index);
+    int get_num_taxa ()const;
+    Sequence get_sequence (const int& index)const;
     void write_partition_information (const std::vector<std::string>& inputFiles,
         std::string& partfile);
     //~SequenceConcatenater ();

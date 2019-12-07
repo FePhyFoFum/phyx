@@ -9,19 +9,22 @@
 #include "seq_utils.h"
 #include "concat.h"
 
-SequenceConcatenater::SequenceConcatenater (std::string& seqf):num_partitions_(0),
-    num_char_(0), num_taxa_(0) {
-    read_sequences(seqf);
-}
 
-
+// parent constructor. where things get concatenated
 SequenceConcatenater::SequenceConcatenater (const bool& toupcase):num_partitions_(0), num_char_(0),
     num_taxa_(0), toupcase_(toupcase) {
 }
 
 
-void SequenceConcatenater::read_sequences (std::string& seqf) {
-    std::istream * pios = new std::ifstream(seqf);
+// constructor for individual file
+SequenceConcatenater::SequenceConcatenater (std::string& seqf):num_partitions_(0),
+    num_char_(0), num_taxa_(0), filename_(seqf) {
+    read_sequences();
+}
+
+
+void SequenceConcatenater::read_sequences () {
+    std::istream * pios = new std::ifstream(filename_);
     
     std::string alphaName = "";
     seqs_ = ingest_alignment(pios, alphaName);
@@ -29,7 +32,7 @@ void SequenceConcatenater::read_sequences (std::string& seqf) {
     
     bool aligned = is_aligned(seqs_);
     if (!aligned) {
-        std::cerr << "Error: sequences in file '" << seqf << "' are not aligned. Exiting."
+        std::cerr << "Error: sequences in file '" << filename_ << "' are not aligned. Exiting."
             << std::endl;
         delete pios;
         exit(1);
@@ -79,12 +82,12 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
 }
 
 
-int SequenceConcatenater::get_sequence_length () {
+int SequenceConcatenater::get_sequence_length ()const {
     return num_char_;
 }
 
 
-int SequenceConcatenater::get_num_taxa () {
+int SequenceConcatenater::get_num_taxa ()const {
     return num_taxa_;
 }
 
@@ -95,12 +98,12 @@ void SequenceConcatenater::delete_sequence (SequenceConcatenater& newSeqs, const
 }
 
 
-Sequence SequenceConcatenater::get_sequence (const int& index) {
+Sequence SequenceConcatenater::get_sequence (const int& index)const {
     return seqs_[index];
 }
 
 
-std::vector<int> SequenceConcatenater::get_partition_sizes () {
+std::vector<int> SequenceConcatenater::get_partition_sizes ()const {
     return partition_sizes_;
 }
 
