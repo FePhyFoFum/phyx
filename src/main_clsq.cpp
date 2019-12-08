@@ -15,7 +15,7 @@
 // throw out stop_codons: "TAG", "TAA", "TGA"
 
 void print_help() {
-    std::cout << "Clean alignments by removing positions with too much ambiguous data." << std::endl;
+    std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;
     std::cout << std::endl;
@@ -25,8 +25,11 @@ void print_help() {
     std::cout << " -o, --outf=FILE     output fasta file, stout otherwise" << std::endl;
     std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
     std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
+    std::cout << " -c, --codon         examine sequences by codon rather than site" << std::endl;
+    std::cout << "                       - requires all sequences be in frame and of correct length" << std::endl;
     std::cout << " -i, --info          report counts of missing data and exit" << std::endl;
     std::cout << "                       - combine with -t to get report by taxon (rather than site)" << std::endl;
+    std::cout << "                       - combine with -c to use codons as units" << std::endl;
     std::cout << " -v, --verbose       more verbose output (i.e. if entire seqs are removed)" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -43,6 +46,7 @@ static struct option const long_options[] =
     {"outf", required_argument, NULL, 'o'},
     {"prop", required_argument, NULL, 'p'},
     {"taxa", required_argument, NULL, 't'},
+    {"codon", required_argument, NULL, 'c'},
     {"info", required_argument, NULL, 'i'},
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
@@ -61,11 +65,12 @@ int main(int argc, char * argv[]) {
     double prop_required = 0.5;
     bool verbose = false;
     bool by_taxon = false;
+    bool by_codon = false;
     bool count_only = false;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:ativhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:atcivhV", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -88,6 +93,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 't':
                 by_taxon = true;
+                break;
+            case 'c':
+                by_codon = true;
                 break;
             case 'i':
                 count_only = true;
@@ -133,7 +141,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    SequenceCleaner SC(pios, prop_required, by_taxon, count_only, verbose);
+    SequenceCleaner SC(pios, prop_required, by_taxon, by_codon, count_only, verbose);
     
     // write sequences. currently only fasta format.
     if (!count_only) {

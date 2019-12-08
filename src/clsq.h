@@ -16,6 +16,7 @@ private:
     double missing_allowed_;
     
     bool by_taxon_;
+    bool by_codon_;
     bool count_only_;
     bool verbose_;
     
@@ -40,7 +41,8 @@ private:
 
 public:
     SequenceCleaner (std::istream* pios, double& prop_required,
-        const bool& by_taxon, const bool& count_only, const bool& verbose);
+        const bool& by_taxon, const bool& by_codon, const bool& count_only,
+        const bool& verbose);
     std::vector<Sequence> get_cleaned_seqs (); // not used, but available
     void write_seqs (std::ostream* poos);
     void write_stats (std::ostream* poos);
