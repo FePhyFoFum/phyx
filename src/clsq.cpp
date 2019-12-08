@@ -110,7 +110,6 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
                     << std::setfill(separator) << missing_per_taxon_proportion_[i] << std::endl;
         }
     } else {
-        std::cout << "num_char_ = " << num_char_ << std::endl;
         (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << "Character" << " "
                 << std::right << std::setw(colWidth) << std::setfill(separator) << "Missing" << " "
                 << std::right << std::setw(colWidth) << std::setfill(separator) << "Prop."
