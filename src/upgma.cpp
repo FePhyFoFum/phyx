@@ -21,8 +21,7 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0), newickstring_("") {
     nchar_ = (int)seqs_[0].get_length();
     
     // check that it is aligned (doesn't make sense otherwise)
-    bool aligned = is_aligned(seqs_);
-    if (!aligned) {
+    if (!is_aligned(seqs_)) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }

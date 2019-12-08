@@ -30,8 +30,7 @@ void SequenceConcatenater::read_sequences () {
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = (int)seqs_.size();
     
-    bool aligned = is_aligned(seqs_);
-    if (!aligned) {
+    if (!is_aligned(seqs_)) {
         std::cerr << "Error: sequences in file '" << filename_ << "' are not aligned. Exiting."
             << std::endl;
         delete pios;

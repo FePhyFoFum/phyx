@@ -38,8 +38,7 @@ void SequenceSampler::read_in_sequences (std::istream* pios) {
     num_char_ = (int)seqs_[0].get_length();
     
     // check that it is aligned (doesn't make sense otherwise)
-    bool aligned = is_aligned(seqs_);
-    if (!aligned) {
+    if (!is_aligned(seqs_)) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
