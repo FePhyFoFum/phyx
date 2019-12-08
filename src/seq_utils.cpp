@@ -634,3 +634,16 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
     }
     return aligned;
 }
+
+
+bool is_codon_alignment (const std::vector<Sequence>& seqs) {
+    bool codons = true;
+    Sequence seq;
+    for (unsigned int i = 0; i < seqs.size(); i++) {
+        seq = seqs[i];
+        if ((int)seq.get_length() % 3 != 0) {
+            codons = false;
+        }
+    }
+    return codons;
+}
