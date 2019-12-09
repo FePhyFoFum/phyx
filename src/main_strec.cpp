@@ -47,7 +47,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxstrec 0.2\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxstrec 0.2\nCopyright (C) 2017-2019 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
