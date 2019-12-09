@@ -14,6 +14,10 @@
 #include "utils.h"
 #include "tree_utils.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
     std::cout << "Remove tree tips by label." << std::endl;
@@ -31,6 +35,7 @@ void print_help() {
     std::cout << " -s, --silent        suppress warnings of missing tips" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "NOTE: if you get a segfault, you may try unrooting (pxrr -u) before pruning" << std::endl;
     std::cout << std::endl;
@@ -49,6 +54,7 @@ static struct option const long_options[] =
     {"silent", required_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -70,7 +76,7 @@ int main(int argc, char * argv[]) {
     char * namesfc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:n:f:co:shV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:n:f:co:shVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -104,6 +110,9 @@ int main(int argc, char * argv[]) {
                 exit(0);
             case 'V':
                 std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);

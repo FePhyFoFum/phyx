@@ -9,10 +9,12 @@
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
+#include "constants.h"
 
-// TODO: support codon data (i.e., remove triplets, retain reading frame)
-// kick out early if seqlength is not a multiple of 3
-// throw out stop_codons: "TAG", "TAA", "TGA"
+extern std::string PHYX_CITATION;
+
+
+// TODO: throw out stop_codons: "TAG", "TAA", "TGA"
 
 void print_help() {
     std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
@@ -33,6 +35,7 @@ void print_help() {
     std::cout << " -v, --verbose       more verbose output (i.e. if entire seqs are removed)" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
@@ -51,6 +54,7 @@ static struct option const long_options[] =
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -70,7 +74,7 @@ int main(int argc, char * argv[]) {
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:atcivhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:atcivhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -108,6 +112,9 @@ int main(int argc, char * argv[]) {
                 exit(0);
             case 'V':
                 std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
