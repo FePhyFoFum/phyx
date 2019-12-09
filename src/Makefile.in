@@ -6,7 +6,10 @@ CXX := @CXX@
 CPPFLAGS := @CPPFLAGS@
 LDFLAGS := @LDFLAGS@
 
-##set the nlopt around
+# set help2man
+HELP2MAN := @HELP2MAN@
+
+## set the nlopt around
 HNLOPT := @HNLOPT@
 HARM := @HARM@
 HOMP := @HOMP@
@@ -76,10 +79,6 @@ NNI_DEP = main_nni.d
 UPGMA_SRC = upgma.cpp main_upgma.cpp
 UPGMA_OBJ = upgma.o main_upgma.o
 UPGMA_DEP = upgma.d main_upgma.d
-
-SEQT_SRC = main_seq_test.cpp
-SEQT_OBJ = main_seq_test.o
-SEQT_DEP = main_seq_test.d
 
 2FA_SRC = main_s2fa.cpp
 2FA_OBJ = main_s2fa.o
@@ -412,10 +411,6 @@ pxtlate: $(CPP_OBJS) $(TLATE_OBJ)
 pxaa2cdn: $(CPP_OBJS) $(AA2C_OBJ)
 	@echo 'building pxaa2cdn'
 	$(CXX) -o "pxaa2cdn" $(OPT_FLAGS) $(AA2C_OBJ) $(CPP_OBJS)
-
-pxseqtest: $(CPP_OBJS) $(SEQT_OBJ)
-	@echo 'building pxseqtest'
-	$(CXX) -o "pxseqtest" $(OPT_FLAGS) $(SEQT_OBJ) $(CPP_OBJS)
 
 pxs2fa: $(CPP_OBJS) $(2FA_OBJ)
 	@echo 'building pxs2fa'
