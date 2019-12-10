@@ -219,9 +219,9 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
 
 
 // interleaved data do not work with the stream philosophy
-// by using this function, the file has already been checked, so we know ntax and nchar
+// by using this function, the file has already been checked, so we know num_taxa and num_char
 // prolly get rid of this in favour of the stream-based one
-std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, int nchar) {
+std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int num_taxa, int num_char) {
     std::vector<Sequence> seqs;
     std::string tline;
     std::ifstream infile(filen.c_str());
@@ -261,7 +261,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, 
                 } else {
                     seq.set_id(tokens[0]);
                     seq.set_sequence(tokens[1]);
-                    if (totcount < ntax) {
+                    if (totcount < num_taxa) {
                         seqs.push_back(seq);
                     } else {
                         // finished with first block. match and concatenate with existing seq
@@ -272,11 +272,11 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, 
             }
             totcount++;
             loopcount++;
-            if (loopcount == ntax) {
+            if (loopcount == num_taxa) {
                 loopcount = 0; // reset
                 // check if we're done
-                std::string terp = seqs[ntax - 1].get_sequence();
-                if ((int)terp.size() == nchar) {
+                std::string terp = seqs[num_taxa - 1].get_sequence();
+                if ((int)terp.size() == num_char) {
                     break;
                 }
             }
@@ -290,7 +290,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, 
 
 
 // don't search for MATRIX; if we know it is interleaved, MATRIX has already been read
-std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int nchar) {
+std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char) {
     std::vector<Sequence> seqs;
     std::string tline;
     //bool done = false; // not used
@@ -314,7 +314,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int 
                 } else {
                     seq.set_id(tokens[0]);
                     seq.set_sequence(tokens[1]);
-                    if (totcount < ntax) {
+                    if (totcount < num_taxa) {
                         seqs.push_back(seq);
                     } else {
                         // finished with first block. match and concatenate with existing seq
@@ -325,11 +325,11 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int 
             }
             totcount++;
             loopcount++;
-            if (loopcount == ntax) {
+            if (loopcount == num_taxa) {
                 loopcount = 0; // reset
                 // check if we're done
-                std::string terp = seqs[ntax - 1].get_sequence();
-                if ((int)terp.size() == nchar) {
+                std::string terp = seqs[num_taxa - 1].get_sequence();
+                if ((int)terp.size() == num_char) {
                     break;
                 }
             }
@@ -472,8 +472,8 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
 
 
 // file-version of above. used by concatenator
-void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, bool& interleave) {
-    numTaxa = numChar = 0;
+void get_nexus_dimensions_file (std::string& filen, int& num_taxa, int& numChar, bool& interleave) {
+    num_taxa = numChar = 0;
     std::string tline;
     std::ifstream infile(filen.c_str());
     while (getline(infile, tline)) {
@@ -489,7 +489,7 @@ void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, 
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "NTAX") {
                         i++;
-                        numTaxa = stoi(searchtokens[i]);
+                        num_taxa = stoi(searchtokens[i]);
                     } else if (searchtokens[i].substr(0, 4) == "NCHA") {
                         i++;
                         numChar = stoi(searchtokens[i]);
@@ -528,8 +528,8 @@ void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, 
 
 
 // overloaded stream version
-void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool& interleave) {
-    numTaxa = numChar = 0;
+void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool& interleave) {
+    num_taxa = numChar = 0;
     std::string tline;
     //string temp;
     while (getline(stri, tline)) {
@@ -545,7 +545,7 @@ void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool&
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "NTAX") {
                         i++;
-                        numTaxa = stoi(searchtokens[i]);
+                        num_taxa = stoi(searchtokens[i]);
                     } else if (searchtokens[i].substr(0, 4) == "NCHA") {
                         i++;
                         numChar = stoi(searchtokens[i]);
@@ -585,9 +585,9 @@ void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool&
 // same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
-void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numChar,
+void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& numChar,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing) {
-    numTaxa = numChar = 0;
+    num_taxa = numChar = 0;
     alpha_name = symbols = "";
     // set defaults, in case not explicitly stated
     gap = '-';
@@ -608,7 +608,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numC
                 for (unsigned int i = 0; i < searchtokens.size(); i++) {
                     if (searchtokens[i].substr(0, 4) == "NTAX") {
                         i++;
-                        numTaxa = stoi(searchtokens[i]);
+                        num_taxa = stoi(searchtokens[i]);
                     } else if (searchtokens[i].substr(0, 4) == "NCHA") {
                         i++;
                         numChar = stoi(searchtokens[i]);
@@ -702,14 +702,14 @@ void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numC
 }
 
 
-void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar) {
+void get_phylip_dimensions (std::string head, int& num_taxa, int& numChar) {
     std::vector<std::string> header = tokenize(head);
-    numTaxa = stoi(header[0]);
+    num_taxa = stoi(header[0]);
     numChar = stoi(header[1]);
 }
 
 
-bool is_complicated_phylip (std::istream& pios, const int& nchar) {
+bool is_complicated_phylip (std::istream& pios, const int& num_char) {
     bool complicated = false;
     std::string peek = peek_line(pios);
     std::vector<std::string> tokens = tokenize(peek);
@@ -721,7 +721,7 @@ bool is_complicated_phylip (std::istream& pios, const int& nchar) {
     } else {
         // if it seems good, check that length of seq equals stated value
         // if not, we are dealing with 1) interleaved or 2) multi-line
-        if ((int)tokens[1].size() != nchar) {
+        if ((int)tokens[1].size() != num_char) {
             complicated = true;
         }
     }
@@ -763,7 +763,7 @@ bool is_complicated_phylip (std::istream& pios, const int& nchar) {
     TaxonC  ACGCT CCCCC TTAAA AATGA
     TaxonD  TCCTT GTTCA ACTCC GGTGG
     TaxonE  TTACT ATTCC CCCCC GCCGG
-- header has already been processed (ntax, nchar)
+- header has already been processed (num_taxa, num_char)
 - all bools have been initialized to false above
 - for spaces-only, we will know the format after reading the first line.
 - atm we are _not_ considering 10 character limit labels
@@ -771,7 +771,7 @@ bool is_complicated_phylip (std::istream& pios, const int& nchar) {
   - this includes not allowing internal spaces in taxon labels
 - also assuming that there is not a combination of multiline _and_ interleaved
 */
-void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const unsigned int& numChar,
+void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& numChar,
         bool& interleaved, bool& spaces, bool& multiline) {
     // store current position of the stream so we can rewind after determining format
     std::streampos spt = pios.tellg();
@@ -826,7 +826,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
             } else if (tokens.size() == 2) {
                 // likely interleaved format
                 interleaved = true;
-                // keep reading to check. seq continues every numTaxa lines
+                // keep reading to check. seq continues every num_taxa lines
                 /*
                 done = false;
                 int tcnt = 2; // we've read in two already
@@ -835,7 +835,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
                     getline(pios, line);
                     tcnt++;
                     //std::cout << "tcnt = " << tcnt << std::endl;
-                    if (tcnt == numTaxa) {
+                    if (tcnt == num_taxa) {
                         //std::cout << "skipping line: " << line << std::endl;
                         tcnt = 0;
                     } else if (tcnt == 1) {
@@ -891,7 +891,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
             tokens = tokenize(line);
             if ((int)tokens.size() == num_elem) {
                 interleaved = true;
-                // keep reading to check. seq continues every numTaxa lines
+                // keep reading to check. seq continues every num_taxa lines
                 /*
                 done = false;
                 int tcnt = 2; // we've read in two already
@@ -900,7 +900,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
                     getline(pios, line);
                     tcnt++;
                     //std::cout << "tcnt = " << tcnt << std::endl;
-                    if (tcnt == numTaxa) {
+                    if (tcnt == num_taxa) {
                         //std::cout << "skipping line: " << line << std::endl;
                         tcnt = 0;
                     } else if (tcnt == 1) {
@@ -960,7 +960,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const u
 
 
 // read in various phylip formats
-std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const int& numChar) {
+std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& numChar) {
     
     std::vector<Sequence> seqs;
     Sequence seq;
@@ -976,7 +976,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
     std::string residues = "";
     std::string name = "";
     
-    get_phylip_format (pios, numTaxa, numChar, interleaved, spaces, multiline);
+    get_phylip_format (pios, num_taxa, numChar, interleaved, spaces, multiline);
     
     //std::cout << "interleaved = " << interleaved << "; spaces = "
     //        << spaces << "; multiline = " << multiline<< std::endl;
@@ -1050,7 +1050,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
                     continue;
                 }
                 tokens = tokenize(line);
-                if (lineCount < numTaxa) {
+                if (lineCount < num_taxa) {
                     name = tokens[0];
                     for (unsigned int i = 1; i < tokens.size(); i++) {
                         residues += tokens[i];
@@ -1066,7 +1066,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
                     }
                     seqs[taxcnt].set_sequence(seqs[taxcnt].get_sequence() + residues);
                     taxcnt++;
-                    if (taxcnt == numTaxa) {
+                    if (taxcnt == num_taxa) {
                         taxcnt = 0;
                     }
                     residues = "";
@@ -1082,7 +1082,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
                     continue;
                 }
                 tokens = tokenize(line);
-                if (lineCount < numTaxa) {
+                if (lineCount < num_taxa) {
                     name = tokens[0];
                     residues = tokens[1];
                     seq.set_id(name);
@@ -1091,7 +1091,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
                 } else {
                     seqs[taxcnt].set_sequence(seqs[taxcnt].get_sequence() + tokens[0]);
                     taxcnt++;
-                    if (taxcnt == numTaxa) {
+                    if (taxcnt == num_taxa) {
                         taxcnt = 0;
                     }
                 }
@@ -1145,9 +1145,9 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const
     }
     
     //std::cout << "Read in " << seqs.size() << " sequences." << std::endl;
-    if ((int)seqs.size() != numTaxa) {
+    if ((int)seqs.size() != num_taxa) {
         std::cerr << "Error: bad phylip file. Read in " << seqs.size()
-                << " sequences, but expected " << numTaxa << ". Exiting." << std::endl;
+                << " sequences, but expected " << num_taxa << ". Exiting." << std::endl;
         exit(1);
     }
     return seqs;
@@ -1163,8 +1163,8 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
     std::string retstring;
     alphaName = "";
     int ft = test_seq_filetype_stream(*pios, retstring);
-    int file_ntax = 0; // ntax declared in the file itself
-    int file_nchar = 0; // likewise for nchar
+    int file_num_taxa = 0; // num_taxa declared in the file itself
+    int file_num_char = 0; // likewise for num_char
     std::string file_type = get_filetype_string(ft);
     
     if (file_type.compare("nexus") == 0) {
@@ -1172,7 +1172,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
         // a bunch of required variables, not used here:
         char gap, missing;
         std::string symbols = "";
-        get_nexus_alignment_properties (*pios, file_ntax, file_nchar,
+        get_nexus_alignment_properties (*pios, file_num_taxa, file_num_char,
                 is_interleaved, alphaName, symbols, gap, missing);
         //std::cout << "alphaName = " << alphaName << std::endl;
         retstring = ""; // have to set so seq_reader knows we are mid-file
@@ -1181,17 +1181,17 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
                 seqs.push_back(seq);
             }
         } else {
-            seqs = read_interleaved_nexus(*pios, file_ntax, file_nchar);
+            seqs = read_interleaved_nexus(*pios, file_num_taxa, file_num_char);
         }
     } else {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
         if (file_type.compare("phylip") == 0) {
-            get_phylip_dimensions(retstring, file_ntax, file_nchar);
-            complicated_phylip = is_complicated_phylip(*pios, file_nchar);
+            get_phylip_dimensions(retstring, file_num_taxa, file_num_char);
+            complicated_phylip = is_complicated_phylip(*pios, file_num_char);
         }
         if (complicated_phylip) {
-            seqs = read_phylip(*pios, file_ntax, file_nchar);
+            seqs = read_phylip(*pios, file_num_taxa, file_num_char);
             if (alphaName == "") {
                 alphaName = seqs[0].get_alpha_name();
             }
@@ -1209,16 +1209,16 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
     }
     
     // some simple error-checking
-    if (file_ntax != 0) {
-        if (file_ntax != (int)seqs.size()) {
+    if (file_num_taxa != 0) {
+        if (file_num_taxa != (int)seqs.size()) {
             std::cerr << "Error: number of taxa declared in the file ("
                 << ") does not match the number read (" << seqs.size()
                 << "). Exiting." << std::endl;
             exit(1);
         }
     }
-    if (file_nchar != 0) {
-        // if nchar comes from a file, _must_ be aligned
+    if (file_num_char != 0) {
+        // if num_char comes from a file, _must_ be aligned
         bool aligned = is_aligned(seqs);
         if (!aligned) {
             std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;

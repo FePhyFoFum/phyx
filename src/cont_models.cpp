@@ -230,11 +230,11 @@ double calc_bm_node_postorder (Node * node, int nch, double sigma) {
 
 
 double calc_bm_prune (Tree * tr, double sigma) {
-    int nchar = (*tr->getRoot()->getDoubleVector("val")).size();
+    int num_char = (*tr->getRoot()->getDoubleVector("val")).size();
     double tlike = 0;
     std::map<Node *, double> oldlen;
     for (int i=0;i<tr->getNodeCount();i++) {oldlen[tr->getNode(i)] = tr->getNode(i)->getBL();}
-    for (int i=0;i<nchar;i++) {
+    for (int i=0;i<num_char;i++) {
         for (int j=0;j<tr->getNodeCount();j++) {tr->getNode(j)->setBL(oldlen[tr->getNode(j)]);}
         tlike += calc_bm_node_postorder(tr->getRoot(), i, sigma);
     }

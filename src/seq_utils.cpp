@@ -243,7 +243,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
         exit(0);
     }
     int seqlength = seqs[0].get_length();
-    // header: ntax, nchar
+    // header: num_taxa, num_char
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
     
     for (unsigned int i=0; i < seqs.size(); i++) {
@@ -620,15 +620,15 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
     bool aligned = true;
     bool first = true;
     Sequence seq;
-    int nchar = 0;
+    int num_char = 0;
     for (unsigned int i = 0; i < seqs.size(); i++) {
         seq = seqs[i];
         if (!first) {
-            if ((int)seq.get_length() != nchar) {
+            if ((int)seq.get_length() != num_char) {
                 aligned = false;
             }
         } else {
-            nchar = seq.get_length();
+            num_char = seq.get_length();
             first = false;
         }
     }

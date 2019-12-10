@@ -15,17 +15,17 @@ bool read_next_seq_from_stream (std::istream& stri, int ftype, std::string& rets
     Sequence& seq);
 bool read_next_seq_char_from_stream (std::istream& stri, int ftype,
     std::string& retstring, Sequence& seq);
-void get_nexus_dimensions_file (std::string& filen, int& numTaxa, int& numChar, bool& interleave);
-void get_nexus_dimensions (std::istream& stri, int& numTaxa, int& numChar, bool& interleave);
-void get_nexus_alignment_properties (std::istream& stri, int& numTaxa, int& numChar,
+void get_nexus_dimensions_file (std::string& filen, int& num_taxa, int& numChar, bool& interleave);
+void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool& interleave);
+void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& numChar,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing);
-std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int ntax, int nchar);
-std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int ntax, int nchar);
-void get_phylip_dimensions (std::string head, int& numTaxa, int& numChar);
-bool is_complicated_phylip (std::istream& pios, const int& nchar);
-void get_phylip_format (std::istream& pios, const unsigned int& numTaxa, const unsigned int& numChar,
+std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int num_taxa, int num_char);
+std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char);
+void get_phylip_dimensions (std::string head, int& num_taxa, int& numChar);
+bool is_complicated_phylip (std::istream& pios, const int& num_char);
+void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& numChar,
         bool& interleaved, bool& spaces, bool& multiline);
-std::vector<Sequence> read_phylip (std::istream& pios, const int& numTaxa, const int& numChar);
+std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& numChar);
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);
 
 // deprecated

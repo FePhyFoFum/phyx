@@ -1,10 +1,3 @@
-/*
- * tree.h
- *
- *  Created on: Nov 24, 2009
- *      Author: smitty
- */
-
 #ifndef _TREE_H_
 #define _TREE_H_
 

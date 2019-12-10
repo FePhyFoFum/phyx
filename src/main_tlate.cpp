@@ -129,14 +129,14 @@ int main(int argc, char * argv[]) {
     std::string nuc_seq;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
-    int ntax, nchar; // not used, but required by some readers
+    int num_taxa, num_char; // not used, but required by some readers
     std::string alphaName = ""; // will check first sequence type
     bool first = true;
     
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {
         bool interleave = false;
-        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        get_nexus_dimensions(*pios, num_taxa, num_char, interleave);
         retstring = ""; // need to do this to let seqreader know we are mid-file
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
@@ -154,7 +154,7 @@ int main(int argc, char * argv[]) {
                 (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
             }
         } else {
-            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
                 if (first) {
@@ -175,11 +175,11 @@ int main(int argc, char * argv[]) {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
         if (ft == 1) {
-            get_phylip_dimensions(retstring, ntax, nchar);
-            complicated_phylip = is_complicated_phylip(*pios, nchar);
+            get_phylip_dimensions(retstring, num_taxa, num_char);
+            complicated_phylip = is_complicated_phylip(*pios, num_char);
         }
         if (complicated_phylip) {
-            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
                 if (first) {

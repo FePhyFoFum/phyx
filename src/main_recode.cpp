@@ -142,14 +142,14 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     
     int ft = test_seq_filetype_stream(*pios, retstring);
-    int ntax, nchar; // not used, but required by some reader functions
+    int num_taxa, num_char; // not used, but required by some reader functions
     bool first = true; // check first seq alphabet to make sure DNA. exit otherwise
     std::string alpha = "";
     
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {
         bool interleave = false;
-        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        get_nexus_dimensions(*pios, num_taxa, num_char, interleave);
         retstring = ""; // need to do this to let seqreader know we are mid-file
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
@@ -165,7 +165,7 @@ int main(int argc, char * argv[]) {
                 (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
         } else {
-            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
                 if (first) {
@@ -184,11 +184,11 @@ int main(int argc, char * argv[]) {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
         if (ft == 1) {
-            get_phylip_dimensions(retstring, ntax, nchar);
-            complicated_phylip = is_complicated_phylip(*pios, nchar);
+            get_phylip_dimensions(retstring, num_taxa, num_char);
+            complicated_phylip = is_complicated_phylip(*pios, num_char);
         }
         if (complicated_phylip) {
-            std::vector<Sequence> seqs = read_phylip(*pios, ntax, nchar);
+            std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
                 if (first) {

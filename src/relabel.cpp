@@ -58,8 +58,8 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
             << ") lists differ in length. Exiting." << std::endl;
         exit(0);
     } else {
-        num_tax_ = (int)old_names_.size();
-        for (int i = 0; i < num_tax_; i++) {
+        num_taxa_ = (int)old_names_.size();
+        for (int i = 0; i < num_taxa_; i++) {
             name_map_[old_names_[i]] = new_names_[i];
         }
     }

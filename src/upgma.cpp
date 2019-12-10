@@ -14,11 +14,11 @@
 #include "tree_utils.h"
 
 
-UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0), newickstring_("") {
+UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_("") {
     std::string alphaName = ""; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
-    ntax_ = (int)seqs_.size();
-    nchar_ = (int)seqs_[0].get_length();
+    num_taxa_ = (int)seqs_.size();
+    num_char_ = (int)seqs_[0].get_length();
     
     // check that it is aligned (doesn't make sense otherwise)
     if (!is_aligned(seqs_)) {
@@ -33,17 +33,17 @@ UPGMA::UPGMA (std::istream* pios):ntax_(0), nchar_(0), newickstring_("") {
 std::vector< std::vector<double> > UPGMA::build_matrix () {
     // 1) skip self comparisons
     // 2) only calculate one half of matrix (i.e., no duplicate calcs)
-    std::vector< std::vector<double> > distances(ntax_, std::vector<double>(ntax_, 0.0));
+    std::vector< std::vector<double> > distances(num_taxa_, std::vector<double>(num_taxa_, 0.0));
     
     double tempScore = 0.0;
-    for (int i = 0; i < ntax_; i++) {
+    for (int i = 0; i < num_taxa_; i++) {
         std::string seq1 = seqs_[i].get_sequence();
-        for (int j = (i + 1); j < ntax_; j++) {
+        for (int j = (i + 1); j < num_taxa_; j++) {
             std::string seq2 = seqs_[j].get_sequence();
             // get distance
             tempScore = (double)calc_hamming_dist(seq1, seq2);
             // put scale in terms of number of sites. original version did not do this
-            tempScore /= (double)nchar_;
+            tempScore /= (double)num_char_;
             // put in both top and bottom of matrix, even though only top is used
             distances[i][j] = distances[j][i] = tempScore;
         }
@@ -56,9 +56,9 @@ std::vector< std::vector<double> > UPGMA::build_matrix () {
         std::cout << names_[i] << "\t";
     }
     std::cout << std::endl;
-    for (int i = 0; i < ntax_; i++) {
+    for (int i = 0; i < num_taxa_; i++) {
         std::cout << names_[i] << "\t";
-        for (int j = 0; j < ntax_; j++) {
+        for (int j = 0; j < num_taxa_; j++) {
             std::cout << distances[i][j] << "\t";
         }
         std::cout << std::endl;
@@ -96,14 +96,14 @@ void UPGMA::construct_tree () {
     // initialize
     std::vector< std::vector<double> > dMatrix = full_distmatrix_;
     double newHeight = 0.0;
-    int numClusters = ntax_;
+    int numClusters = num_taxa_;
     Node * anc = NULL; // new node, ancestor of 2 clusters
     Node * left = NULL;
     Node * right = NULL;
     
     // keep list of nodes left to be clustered. initially all terminal nodes
-    std::vector<Node *> nodes(ntax_);
-    for (int i = 0; i < ntax_; i++) {
+    std::vector<Node *> nodes(num_taxa_);
+    for (int i = 0; i < num_taxa_; i++) {
         Node * nd = new Node();
         nd->setName(names_[i]);
         nd->setHeight(0.0);

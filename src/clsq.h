@@ -10,7 +10,7 @@
 
 class SequenceCleaner {
 private:
-    int num_tax_;
+    int num_taxa_;
     int num_char_;
     int num_retained_;
     double missing_allowed_;

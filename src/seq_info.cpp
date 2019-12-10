@@ -138,7 +138,7 @@ void SeqInfo::read_in_alignment () {
             exit(1);
         }
     }
-    seqcount_ = (int)seqs_.size();
+    num_taxa_ = (int)seqs_.size();
 }
 
 
@@ -173,7 +173,7 @@ void SeqInfo::return_freq_table (std::ostream* poos) {
         }
         // return nchar for individual seqs
         (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
-        for (int i = 0; i < seqcount_; i++) {
+        for (int i = 0; i < num_taxa_; i++) {
             int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
             if (diff > 0) {
@@ -227,7 +227,7 @@ void SeqInfo::print_summary_table_whole_alignment (std::ostream* poos) {
     
     //(*poos) << "General Stats For All Sequences" << std::endl;
     (*poos) << "File type: " << file_type_ << std::endl;
-    (*poos) << "Number of sequences: " << seqcount_ << std::endl;
+    (*poos) << "Number of sequences: " << num_taxa_ << std::endl;
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
         is_aligned_ = true;
     } else {
@@ -237,7 +237,7 @@ void SeqInfo::print_summary_table_whole_alignment (std::ostream* poos) {
     if (is_aligned_) {
         seq_length_ = seq_lengths_[0];
         (*poos_) << "Sequence length: " << seq_length_ << std::endl;
-        total_num_chars = (double)(seq_lengths_[0] * seqcount_);
+        total_num_chars = (double)(seq_lengths_[0] * num_taxa_);
     } else {
         total_num_chars = (double)sum(seq_lengths_);
     }
@@ -292,7 +292,7 @@ void SeqInfo::check_is_aligned () {
 }
 
 
-void SeqInfo::get_nchars () {
+void SeqInfo::get_num_chars () {
     for (unsigned int i = 0; i < seqs_.size(); i++) {
         seq_lengths_.push_back(seqs_[i].get_length());
     }
@@ -329,7 +329,7 @@ void SeqInfo::calc_missing () {
 // get the longest label. for printing purposes
 void SeqInfo::get_longest_taxon_label () {
     longest_tax_label_ = 0;
-    for (int i = 0; i < seqcount_; i++) {
+    for (int i = 0; i < num_taxa_; i++) {
         if ((int)taxon_labels_[i].size() > longest_tax_label_) {
             longest_tax_label_ = taxon_labels_[i].size();
         }
@@ -341,7 +341,7 @@ SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
         const bool& force_protein):concatenated_(""), seq_chars_(""), output_indiv_(indiv), datatype_set_(false),
         is_dna_(false), is_protein_(false), is_multi_(false), is_binary_(false),
         alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'), missing_('?'),
-        seqcount_(0) {
+        num_taxa_(0) {
     // maybe get rid of this? how often is inference wrong?
     if (force_protein) {
         is_protein_ = true;
@@ -368,7 +368,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         check_is_aligned();
         (*poos_) << std::boolalpha << is_aligned_ << std::endl;
     } else if (get_nseq) {
-        (*poos_) << seqcount_ << std::endl;
+        (*poos_) << num_taxa_ << std::endl;
     } else if (get_freqs) {
         calculate_freqs();
         return_freq_table(poos_);
@@ -376,7 +376,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         calc_missing();
         (*poos_) << percent_missing_ << std::endl;
     } else if (get_nchar) {
-        get_nchars ();
+        get_num_chars ();
         if (!output_indiv_) { // single return value
             if (seq_length_ != -1) {
                 (*poos_) << seq_length_ << std::endl;
@@ -386,7 +386,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
             }
         } else { // individual lengths
             get_longest_taxon_label();
-            for (int i = 0; i < seqcount_; i++) {
+            for (int i = 0; i < num_taxa_; i++) {
                 int diff = longest_tax_label_ - taxon_labels_[i].size();
                 (*poos_) << taxon_labels_[i];
                 if (diff > 0) {

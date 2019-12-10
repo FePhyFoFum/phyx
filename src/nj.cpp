@@ -67,8 +67,8 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names, s
     
     double ColRow = 0.0;
     double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
-    newname = "(" + names[mini1] + ":" + std::to_string(brlength2 / (double)nchar_) +  ","
-        + names[mini2] + ":" + std::to_string(brlength1 / (double)nchar_) +  ")";
+    newname = "(" + names[mini1] + ":" + std::to_string(brlength2 / (double)num_char_) +  ","
+        + names[mini2] + ":" + std::to_string(brlength1 / (double)num_char_) +  ")";
     
     // erase in backwards order as it preserves the indexes
     names.erase(names.begin()+mini2);
@@ -153,7 +153,7 @@ void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>
             mini2, brlength1, brlength2);
     }
     //double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
-    double adjlength = (Matrix[mini1][mini2] / 2) / (double)nchar_;
+    double adjlength = (Matrix[mini1][mini2] / 2) / (double)num_char_;
     newname = "(" + names[mini1] + ":" + std::to_string(adjlength) +  "," + names[mini2]
         + ":" + std::to_string(adjlength) +  ")";
     newick_string_ = newname + ";";
@@ -190,7 +190,7 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
 }
 
 
-NJOI::NJOI (std::istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(threads) {
+NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthreads_(threads) {
     Sequence seq;
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
@@ -201,14 +201,14 @@ NJOI::NJOI (std::istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(th
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences_[seq.get_id()] = seq.get_sequence();
         if (!first) {
-            if ((int)seq.get_length() != nchar_) {
+            if ((int)seq.get_length() != num_char_) {
                 std::cerr << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
-                    << nchar_ << "." << std::endl << "Exiting." << std::endl;
+                    << num_char_ << "." << std::endl << "Exiting." << std::endl;
                 exit(1);
             }
         } else {
-            nchar_ = seq.get_length();
+            num_char_ = seq.get_length();
             first = false;
         }
         seqcount++;
@@ -216,15 +216,15 @@ NJOI::NJOI (std::istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(th
     //fasta has a trailing one
     if (ft == 2) {
         sequences_[seq.get_id()] = seq.get_sequence();
-        if ((int)seq.get_length() != nchar_) {
+        if ((int)seq.get_length() != num_char_) {
             std::cerr << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
-                << nchar_ << "." << std::endl << "Exiting." << std::endl;
+                << num_char_ << "." << std::endl << "Exiting." << std::endl;
             exit(1);
         };
         seqcount++;
     }
-    ntax_ = seqcount;
+    num_taxa_ = seqcount;
     set_name_key ();
     Matrix = BuildMatrix(sequences_);
     TREEMAKE(names_, name_key_, Matrix);

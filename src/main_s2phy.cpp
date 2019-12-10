@@ -95,8 +95,8 @@ int main(int argc, char * argv[]) {
     std::vector<Sequence> seqs;
     Sequence seq;
     std::string retstring;
-    int ntax = 0;
-    int nchar = 0;
+    int num_taxa = 0;
+    int num_char = 0;
     
     std::istream * pios = NULL;
     std::ostream * poos = NULL;
@@ -124,24 +124,24 @@ int main(int argc, char * argv[]) {
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {
         bool interleave = false;
-        get_nexus_dimensions(*pios, ntax, nchar, interleave);
+        get_nexus_dimensions(*pios, num_taxa, num_char, interleave);
         retstring = ""; // need to do this to let seqreader know we are mid-file
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 seqs.push_back(seq);
             }
         } else {
-            seqs = read_interleaved_nexus(*pios, ntax, nchar);
+            seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
         }
     } else {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
         if (ft == 1) {
-            get_phylip_dimensions(retstring, ntax, nchar);
-            complicated_phylip = is_complicated_phylip(*pios, nchar);
+            get_phylip_dimensions(retstring, num_taxa, num_char);
+            complicated_phylip = is_complicated_phylip(*pios, num_char);
         }
         if (complicated_phylip) {
-            seqs = read_phylip(*pios, ntax, nchar);
+            seqs = read_phylip(*pios, num_taxa, num_char);
         } else {
             // fasta, fastq, or simple phylip
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {

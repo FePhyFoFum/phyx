@@ -13,7 +13,7 @@
 
 
 SequenceSampler::SequenceSampler (std::istream* pios, const int& seed, const float& jackfract,
-        std::string& partf):num_tax_(0), num_char_(0), jkfract_(jackfract), jackknife_(false),
+        std::string& partf):num_taxa_(0), num_char_(0), jkfract_(jackfract), jackknife_(false),
         partitioned_(false), num_partitioned_sites_(0), num_partitions_(0) {
     if (seed == -1) {
         srand(get_clock_seed());
@@ -34,7 +34,7 @@ SequenceSampler::SequenceSampler (std::istream* pios, const int& seed, const flo
 void SequenceSampler::read_in_sequences (std::istream* pios) {
     std::string alphaName = ""; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
-    num_tax_ = (int)seqs_.size();
+    num_taxa_ = (int)seqs_.size();
     num_char_ = (int)seqs_[0].get_length();
     
     // check that it is aligned (doesn't make sense otherwise)
@@ -46,7 +46,7 @@ void SequenceSampler::read_in_sequences (std::istream* pios) {
     // check that partitions lengths match alignment
     if (partitioned_) {
         if (num_char_ != get_num_partitioned_sites()) {
-            std::cerr << "Error: nchar in sequence (" << num_char_ <<
+            std::cerr << "Error: the number of characters in the sequence (" << num_char_ <<
                 ") does not match that in partition file (" << get_num_partitioned_sites() <<
                 "). Exiting." << std::endl;
         }
@@ -309,7 +309,7 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
 
 
 void SequenceSampler::write_resampled_seqs (std::ostream* poos) {
-    for (int i = 0; i < num_tax_; i++) {
+    for (int i = 0; i < num_taxa_; i++) {
         (*poos) << ">" << seqs_[i].get_id() << std::endl;
         (*poos) << get_resampled_seq(seqs_[i].get_sequence()) << std::endl;
     }

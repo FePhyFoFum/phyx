@@ -28,7 +28,7 @@ private:
     char gap_;
     char missing_;
     std::map<char, double> total_;
-    int seqcount_;
+    int num_taxa_;
     double percent_missing_;
     
     // new stuff
@@ -47,7 +47,7 @@ private:
     void collect_taxon_labels ();
     void check_is_aligned ();
     void make_concatenated_sequence ();
-    void get_nchars ();
+    void get_num_chars ();
     void set_alphabet ();
     void count_chars_indiv_seq (std::string& seq);
     void count_chars (std::string& seq);

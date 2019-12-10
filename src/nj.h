@@ -16,8 +16,8 @@ private:
     void set_name_key ();
 
     // additions:
-    int ntax_;
-    int nchar_;
+    int num_taxa_;
+    int num_char_;
     int nthreads_; // not implemented yet
     std::map<int, std::string> name_key_;
     std::string newick_string_; // temporary

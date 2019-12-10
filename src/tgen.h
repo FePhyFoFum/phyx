@@ -9,7 +9,7 @@
 
 class TopologyGenerator {
 private:
-    int ntax_;
+    int num_taxa_;
     bool rooted_;
     std::string lprefix_;
     
@@ -22,7 +22,7 @@ private:
     std::vector<std::string> newicks_; // sweet, sweet results
     
     void initialize();
-    int get_num_edges (const int& ntax, const int& rooted);
+    int get_num_edges (const int& num_taxa, const int& rooted);
     std::vector< std::vector<int> > initialize_edge_matrix_unrooted (const int& n);
     std::vector< std::vector<int> > initialize_edge_matrix_rooted (const int& n);
     std::vector< std::vector< std::vector<int> > > add_taxon_unrooted (std::vector< std::vector< std::vector<int> > > edges,
@@ -34,7 +34,7 @@ private:
     void generate_trees ();
     
 public:
-    TopologyGenerator (const int& ntax, const bool& rooted, const std::string& lprefix);
+    TopologyGenerator (const int& num_taxa, const bool& rooted, const std::string& lprefix);
     void get_newicks (std::ostream* poos);
     //~TopologyGenerator();
 };

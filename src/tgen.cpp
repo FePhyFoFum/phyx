@@ -11,8 +11,8 @@
 #include "tree_utils.h"
 
 
-TopologyGenerator::TopologyGenerator(const int& ntax, const bool& rooted,
-        const std::string& lprefix):ntax_(ntax), rooted_(rooted), lprefix_(lprefix) {
+TopologyGenerator::TopologyGenerator(const int& num_taxa, const bool& rooted,
+        const std::string& lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(lprefix) {
     initialize();
 }
 
@@ -20,13 +20,13 @@ TopologyGenerator::TopologyGenerator(const int& ntax, const bool& rooted,
 // generate starting star tree (edge matrix), set starting taxon and node
 void TopologyGenerator::initialize () {
     std::vector< std::vector<int> > init_edges_;
-    ntopos_ = get_num_possible_trees(ntax_, rooted_);
-    nedges_ = get_num_edges(ntax_, rooted_);
+    ntopos_ = get_num_possible_trees(num_taxa_, rooted_);
+    nedges_ = get_num_edges(num_taxa_, rooted_);
     if (!rooted_) {
-        init_edges_ = initialize_edge_matrix_unrooted(ntax_);
+        init_edges_ = initialize_edge_matrix_unrooted(num_taxa_);
         curtax_ = 4;
     } else {
-        init_edges_ = initialize_edge_matrix_rooted (ntax_);
+        init_edges_ = initialize_edge_matrix_rooted (num_taxa_);
         curtax_ = 3;
     }
     curnode_ = init_edges_[0][0] + 1; // increment largest initialized node
@@ -36,8 +36,8 @@ void TopologyGenerator::initialize () {
 
 // the number of edges in the final trees
 // 2n-3 for unrooted, 2n-2 for rooted
-int TopologyGenerator::get_num_edges (const int& ntax, const int& rooted) {
-    int nedges = 2 * ntax - 3 + (int)rooted;
+int TopologyGenerator::get_num_edges (const int& num_taxa, const int& rooted) {
+    int nedges = 2 * num_taxa - 3 + (int)rooted;
     return nedges;
 }
 
@@ -128,8 +128,8 @@ std::vector< std::vector< std::vector<int> > > TopologyGenerator::add_taxon_root
         }
         // now for the flipped matrix
         edge = edges[j];
-        // first, swap new node in for root node (always ntax+1)
-        int root = ntax_ + 1;
+        // first, swap new node in for root node (always num_taxa+1)
+        int root = num_taxa_ + 1;
         for (unsigned int i = 0; i < edge.size(); i++) {
             if (edge[i][0] == root) {
                 edge[i][0] = new_node;
@@ -153,7 +153,7 @@ std::vector< std::vector< std::vector<int> > > TopologyGenerator::add_taxon_root
 
 
 void TopologyGenerator::generate_trees () {
-    while (curtax_ <= ntax_) {
+    while (curtax_ <= num_taxa_) {
         //std::cout << "adding taxon: " << curtax_ << std::endl;
         if (!rooted_) {
             trees_ = add_taxon_unrooted (trees_, curtax_, curnode_);
@@ -170,8 +170,8 @@ void TopologyGenerator::generate_trees () {
 std::string TopologyGenerator::edge_matrix_to_newick (const std::vector< std::vector<int> >& edges) {
     std::string tree = "";
     //int num_edges = (int)edges.size();
-    //int ntax = (int)((num_edges + 3)/2);
-    int min_node = ntax_ + 1;
+    //int num_taxa = (int)((num_edges + 3)/2);
+    int min_node = num_taxa_ + 1;
     int max_node = nedges_ + 1;
     
     std::map<int, std::vector<int>> m;

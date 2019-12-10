@@ -147,10 +147,10 @@ int main(int argc, char * argv[]) {
     std::vector<Sequence> seqs;
     std::map<std::string, int> seq_map;
     int y = 0;
-    int nchars = 0 ;
+    int num_chars = 0 ;
     while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
-        nchars = seq.get_num_cont_char();
+        num_chars = seq.get_num_cont_char();
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
         y++;
@@ -169,7 +169,7 @@ int main(int argc, char * argv[]) {
     }
     
     //conduct analyses for each character
-    for (int c=0; c < nchars; c++) {
+    for (int c=0; c < num_chars; c++) {
         std::cerr << "character: " << c << std::endl;
         if (analysis == 0) {
            // std::cout << "Input tree: " << getNewickString(trees[0]) << ";" << std::endl;
@@ -212,7 +212,7 @@ int main(int argc, char * argv[]) {
                 (*poouts) << "tree tree" << c << " = ";
                 (*poouts) << getNewickString(trees[x],"value") << std::endl;
             }
-            if (c == (nchars - 1)) {
+            if (c == (num_chars - 1)) {
                 (*poouts) << "end;\n" << std::endl;
             }
             // remove annotations

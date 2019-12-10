@@ -9,7 +9,7 @@
 
 class SequenceSampler {
 private:
-    int num_tax_;
+    int num_taxa_;
     int num_char_;
     float jkfract_;
     bool jackknife_;

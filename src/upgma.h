@@ -11,8 +11,8 @@
 
 class UPGMA {
 private:
-    int ntax_; 
-    int nchar_;
+    int num_taxa_; 
+    int num_char_;
     std::string newickstring_;
     std::vector<std::string> names_;
     std::vector<Sequence> seqs_;

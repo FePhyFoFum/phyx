@@ -10,7 +10,7 @@
 
 class Relabel {
 private:
-    int num_tax_;
+    int num_taxa_;
     std::vector<std::string> old_names_;
     std::vector<std::string> new_names_;
     std::map<std::string, std::string> name_map_;
