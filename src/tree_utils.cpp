@@ -81,7 +81,7 @@ void remove_internal_names(Tree * tr) {
 }
 
 
-// this is _very_ slow compared to painting the induced tree (pxtrt)
+// this is _very_ slow (for large trees) compared to painting the induced tree (pxtrt)
 void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent) {
     int num_names = names.size();
     int counter = 0;
