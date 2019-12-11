@@ -24,7 +24,7 @@ void print_help() {
     std::cout << "Usage: pxlstr [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
     std::cout << " -r, --rooted        return whether the tree is rooted" << std::endl;
     std::cout << " -a, --age           return the height of root (must be rooted and ultrametric)" << std::endl;
     std::cout << " -n, --ntips         return the number of terminals" << std::endl;
@@ -33,7 +33,7 @@ void print_help() {
     std::cout << " -l, --length        return the length of the tree" << std::endl;
     std::cout << " -i, --tiplabels     return all tip labels (one per line)" << std::endl;
     std::cout << " -v, --rtvar         return root-to-tip variance" << std::endl;
-    std::cout << " -o, --outf=FILE     output tree stats file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree stats file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

@@ -24,10 +24,10 @@ void print_help() {
     std::cout << "Usage: pxssort [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
     std::cout << " -b, --sortby        what to sort by: 1:id (default) 2:id rev" << std::endl;
     std::cout << "                                      3:length (<)   4:length (>)" << std::endl;
-    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

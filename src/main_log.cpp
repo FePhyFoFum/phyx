@@ -27,7 +27,7 @@ void print_help() {
     std::cout << "Options:" << std::endl;
     std::cout << " -p, --parmf=FILE    input parameter log file(s)" << std::endl;
     std::cout << " -t, --treef=FILE    input tree log file(s)" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << std::endl;
     std::cout << " -n, --thin=INT      interval of resampling" << std::endl;
     std::cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << std::endl;

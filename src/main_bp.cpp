@@ -24,7 +24,7 @@ void print_help() {
     std::cout << "Usage: pxbp [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE    input treefile, STDIN otherwise" << std::endl;
     std::cout << " -v, --verbose       give more output" << std::endl;
     std::cout << " -e, --edgeall       force edgewise (not node - so when things are unrooted) and" << std::endl; 
     std::cout << "                           assume all taxa are present in all trees" << std::endl;
@@ -34,7 +34,7 @@ void print_help() {
     std::cout << " -c, --cutoff        skip biparts that have support lower than this." << std::endl;
     std::cout << " -s, --suppress      don't print all the output (maybe you use this" << std::endl;
     std::cout << "                           with the maptree feature" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

@@ -27,10 +27,10 @@ void print_help() {
     std::cout << "Usage: pxcontrates [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -c, --charf=FILE     input character file, stdin otherwise" << std::endl;
-    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -c, --charf=FILE     input character file, STDIN otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
     std::cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << std::endl;
-    std::cout << " -o, --outf=FILE      output sequence file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE      output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
     std::cout << " -C, --citation       display phyx citation and exit" << std::endl;

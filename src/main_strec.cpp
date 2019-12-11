@@ -39,7 +39,7 @@ void print_help() {
     std::cout << " -a, --outstnumany=FILE output file for stochastic mapping number any" << std::endl;
     std::cout << " -m, --outsttim=FILE output file for stochastic mapping duration" << std::endl;
     std::cout << " -p, --periods=NUMS  comma separated times" << std::endl;
-    std::cout << " -l, --logf=FILE     log file, stout otherwise" << std::endl;
+    std::cout << " -l, --logf=FILE     log file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

@@ -22,13 +22,13 @@ void print_help() {
     std::cout << "Usage: pxtlate [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input nucleotide sequence file, STDIN otherwise" << std::endl;
     std::cout << " -t, --table=STRING  which translation table to use. currently available:" << std::endl;
     std::cout << "                       'std' (standard, default)" << std::endl;
     std::cout << "                       'vmt' (vertebrate mtDNA)" << std::endl;
     std::cout << "                       'ivmt' (invertebrate mtDNA)" << std::endl;
     std::cout << "                       'ymt' (yeast mtDNA)" << std::endl;
-    std::cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output aa sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

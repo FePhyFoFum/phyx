@@ -25,10 +25,10 @@ void print_help() {
     std::cout << "Usage: pxrls [OPTIONS]... FILES" << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
     std::cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << std::endl;
     std::cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -v, --verbose       make the output more verbose" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;

@@ -27,13 +27,13 @@ void print_help() {
     std::cout << "Usage: pxrevcomp [OPTIONS]... [FILE]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
     std::cout << " -i, --ids=IDS       a comma sep list of ids to flip (NO SPACES!)" << std::endl;
     std::cout << " -g, --guess         EXPERIMENTAL: guess whether there are seqs that need to be " << std::endl;
     std::cout << "                       rev comp. uses edlib library on first seq" << std::endl;
     std::cout << " -p, --pguess        EXPERIMENTAL: progressively guess " << std::endl;
     std::cout << " -m, --sguess        EXPERIMENTAL: sampled guess " << std::endl;
-    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

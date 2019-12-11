@@ -25,10 +25,10 @@ void print_help() {
     std::cout << "Usage: pxcolt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
     std::cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << std::endl;
     std::cout << " -s, --sup=STRING    string identifying support values (if default fails)" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

@@ -23,10 +23,10 @@ void print_help() {
     std::cout << "Usage: pxtcol [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
     std::cout << " -m, --mrcaf=FILE     file with mrcas and annotations, tab separated" << std::endl;
     std::cout << " -d, --nodeidf=FILE   file with nodeids (labels) and annotations, tab separated" << std::endl;
-    std::cout << " -o, --outf=FILE      output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE      output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
     std::cout << " -C, --citation       display phyx citation and exit" << std::endl;

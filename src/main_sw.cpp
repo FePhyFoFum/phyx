@@ -29,8 +29,8 @@ void print_help() {
     std::cout << "Usage: pxsw [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output score/distance file, stout otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output score/distance file, STOUT otherwise" << std::endl;
     std::cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise" << std::endl;
     std::cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)" << std::endl;
     std::cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62" << std::endl;

@@ -25,7 +25,7 @@ void print_help() {
     std::cout << " -r, --rooted        whether generated trees are rooted (default: false)" << std::endl;
     std::cout << " -c, --count         give the number of possible trees for n taxa and exit" << std::endl;
     std::cout << " -l, --label=STRING  prefix label for taxon names (default: 't')" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
 //    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;

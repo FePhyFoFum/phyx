@@ -27,11 +27,11 @@ void print_help() {
     std::cout << "Usage: pxrmt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
     std::cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
     std::cout << " -c, --comp          take the complement (i.e. remove any taxa not in list)" << std::endl;
-    std::cout << " -o, --outf=FILE     output tree file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree file, STOUT otherwise" << std::endl;
     std::cout << " -s, --silent        suppress warnings of missing tips" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;

@@ -25,7 +25,7 @@ void print_help() {
     std::cout << "Usage: pxlssq [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
     std::cout << " -i, --indiv         output stats for individual sequences" << std::endl;
     std::cout << " -n, --nseq          return the number of sequences" << std::endl;
     std::cout << " -c, --nchar         return the number of characters (only if aligned)" << std::endl;
@@ -35,7 +35,7 @@ void print_help() {
     std::cout << " -a, --aligned       return whether sequences are aligned (same length)" << std::endl;
     std::cout << " -f, --freqs         return character state frequencies" << std::endl;
     std::cout << " -m, --missing       return the proportion of missing (-,?) characters" << std::endl;
-    std::cout << " -o, --outf=FILE     output stats file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output stats file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

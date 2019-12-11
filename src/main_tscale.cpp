@@ -23,10 +23,10 @@ void print_help() {
     std::cout << "Usage: pxtscale [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE        input tree file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE        input tree file, STDIN otherwise" << std::endl;
     std::cout << " -s, --scale=DOUBLE      edge length scaling factor" << std::endl;
     std::cout << " -r, --rootheight=DOUBLE height of root (tree must be ultrametric)" << std::endl;
-    std::cout << " -o, --outf=FILE         output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE         output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help              display this help and exit" << std::endl;
     std::cout << " -V, --version           display version and exit" << std::endl;
     std::cout << " -C, --citation          display phyx citation and exit" << std::endl;

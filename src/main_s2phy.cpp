@@ -17,12 +17,12 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Convert seqfiles from nexus, phylip, or fastq to phylip." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Can read from STDIN or file." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxs2phy [OPTIONS]..." << std::endl;
     std::cout << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -u, --uppercase     export characters in uppercase" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;

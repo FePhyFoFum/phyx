@@ -24,8 +24,8 @@ void print_help() {
     std::cout << "Usage: pxclsq [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output fasta file, stout otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta file, STOUT otherwise" << std::endl;
     std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
     std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
     std::cout << " -c, --codon         examine sequences by codon rather than site" << std::endl;

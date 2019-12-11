@@ -27,7 +27,7 @@ void print_help() {
     std::cout << "Usage: pxrecode [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE      input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE      input sequence file, STDIN otherwise" << std::endl;
     std::cout << " -r, --recode=STRING  string identifying recoding scheme (default: RY)" << std::endl;
     std::cout << "  Supported recodings (use any valid combination):" << std::endl;
     std::cout << "      R = A|G" << std::endl;
@@ -40,7 +40,7 @@ void print_help() {
     std::cout << "      D = A|G|T" << std::endl;
     std::cout << "      H = A|C|T" << std::endl;
     std::cout << "      V = A|C|G" << std::endl;
-    std::cout << " -o, --outf=FILE      output sequence file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE      output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
     std::cout << " -C, --citation       display phyx citation and exit" << std::endl;

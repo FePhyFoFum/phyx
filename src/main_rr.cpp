@@ -26,11 +26,11 @@ void print_help() {
     std::cout << "Usage: pxrr [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
     std::cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -r, --ranked         turn on ordering of outgroups. will root on first one present" << std::endl;
     std::cout << " -u, --unroot         unroot the tree" << std::endl;
-    std::cout << " -o, --outf=FILE      output tree file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE      output tree file, STOUT otherwise" << std::endl;
     std::cout << " -s, --silent         do not error if outgroup(s) not found" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;

@@ -27,8 +27,8 @@ void print_help() {
     std::cout << "Usage: pxboot [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -p, --partf=FILE    file listing empirical partitions: NAME = START-STOP[\\INTERVAL]" << std::endl;
     std::cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap (i.e. -f 1.0)" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;

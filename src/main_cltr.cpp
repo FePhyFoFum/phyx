@@ -29,10 +29,10 @@ void print_help () {
     std::cout << "Usage: pxcltr [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE    input treefile, STDIN otherwise" << std::endl;
     std::cout << " -r, --root          remove root edge (if present)" << std::endl;
     std::cout << " -l, --labels        remove internal node labels" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

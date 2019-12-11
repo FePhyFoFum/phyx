@@ -22,8 +22,8 @@ void print_help() {
     std::cout << "Usage: pxvcf2fa [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input vcf file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output fasta sequence file, stout otherwise" << std::endl;
+    std::cout << " -s, --seqf=FILE     input vcf file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta sequence file, STOUT otherwise" << std::endl;
     std::cout << " -u, --uppercase     export characters in uppercase" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
