@@ -23,12 +23,12 @@ void print_help () {
     std::cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << std::endl;
     std::cout << "root edges to generate a 'vanilla' newick representation." << std::endl;
     std::cout << "By default removes all properties. Alternatively choose 1 property." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxcltr [OPTION]... " << std::endl;
+    std::cout << "Usage: pxcltr [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
     std::cout << " -r, --root          remove root edge (if present)" << std::endl;
     std::cout << " -l, --labels        remove internal node labels" << std::endl;
@@ -41,7 +41,7 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxcltr 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxcltr 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

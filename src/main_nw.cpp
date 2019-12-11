@@ -24,29 +24,28 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Conduct Needleman-Wunsch analysis for all the seqs in a file." << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
-    std::cout << "Output is a list of the scores and distances (and the alignments"<< std::endl;
-    std::cout << "if asked)." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << "Output is a list of the scores and distances (and the alignments if asked)." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxnw [OPTION]... [FILE]..."<<std::endl;
+    std::cout << "Usage: pxnw [OPTIONS]..." << std::endl;
     std::cout << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<std::endl;
-    std::cout << " -o, --outf=FILE     output score/distance file, stout otherwise"<<std::endl;
-    std::cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise"<<std::endl;
-    std::cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)"<<std::endl;
-    std::cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62"<<std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output score/distance file, stout otherwise" << std::endl;
+    std::cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise" << std::endl;
+    std::cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)" << std::endl;
+    std::cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62" << std::endl;
     std::cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << std::endl;
     std::cout << " -v, --verbose       make the output more verbose, turns off parallel" << std::endl;
-    std::cout << " -h, --help          display this help and exit"<<std::endl;
-    std::cout << " -V, --version       display version and exit"<<std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
     std::cout << std::endl;
-    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
-    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxnw 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxnw 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

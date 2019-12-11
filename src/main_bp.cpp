@@ -17,19 +17,20 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "This will print out bipartitions found in treefile. It assumes " << std::endl;
-    std::cout << "things are rooted unless you use -e" << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will print out bipartitions found in treefile." << std::endl;
+    std::cout << "Trees are assumed rooted unless the -e argument is provided." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxbp [OPTION]... [FILE]..."<<std::endl;
+    std::cout << "Usage: pxbp [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
     std::cout << " -v, --verbose       give more output" << std::endl;
     std::cout << " -e, --edgeall       force edgewise (not node - so when things are unrooted) and" << std::endl; 
     std::cout << "                           assume all taxa are present in all trees" << std::endl;
     std::cout << " -u, --uniquetree    output unique trees and *no* other output" << std::endl;
     std::cout << " -m, --maptree=FILE  put the bipart freq on the edges of this tree. This will " << std::endl;
-    std::cout << "                           create a *.pxbpmapped.tre file." <<std::endl;
+    std::cout << "                           create a *.pxbpmapped.tre file." << std::endl;
     std::cout << " -c, --cutoff        skip biparts that have support lower than this." << std::endl;
     std::cout << " -s, --suppress      don't print all the output (maybe you use this" << std::endl;
     std::cout << "                           with the maptree feature" << std::endl;
@@ -42,7 +43,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxbp 0.991\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxbp 0.991\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -286,7 +287,7 @@ int main(int argc, char * argv[]) {
                 rt_nms_set.end(), not_included_nms.begin());
         not_included_nms.resize(it2-not_included_nms.begin());
         for (unsigned int j=0; j < not_included_nms.size(); j++) {
-            std::cerr <<" not included: "  << not_included_nms[j]<< std::endl;
+            std::cerr << " not included: "  << not_included_nms[j]<< std::endl;
             not_included_i.push_back(name_index[not_included_nms[j]]);
         }
         std::vector<int> bp_count_tree; // for edgewise to make sure we don't double count
@@ -478,7 +479,7 @@ int main(int argc, char * argv[]) {
             for (int i=0; i <numtrees; i++) {
                 std::string sv = get_string_vector(matrix[i]);
                 if (count(un_trees.begin(), un_trees.end(), sv)==0) {
-                    std::cout << trees[i]->getRoot()->getNewick(false) <<";" << std::endl;
+                    std::cout << trees[i]->getRoot()->getNewick(false) << ";" << std::endl;
                     un_trees.insert(sv);
                 }
             }
@@ -543,7 +544,7 @@ int main(int argc, char * argv[]) {
                             totalcount += bp_count[j];
                             conflict_nums.push_back(bp_count[j]);
                             if (verbose) {
-                                (*poos) << " \t "<< get_string_vector(nms2);
+                                (*poos) << " \t " << get_string_vector(nms2);
                                 if (edgewisealltaxa == true) {
                                     std::vector<std::string> nms_o;
                                     for (unsigned int k=0; k < biparts2[j].size(); k++) {
@@ -570,7 +571,7 @@ int main(int argc, char * argv[]) {
                 }
                 TSCA += ICA;
                 ICA *= sign;
-                (*poos) << "\tFREQ:\t"<< conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  std::endl;
+                (*poos) << "\tFREQ:\t" << conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  std::endl;
                 if (verbose) {
                     (*poos) << "\tTREES:\t";
                     for (unsigned int j=0;j<matrix.size();j++) {

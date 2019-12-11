@@ -26,10 +26,11 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "This will conduct state reconstruction analyses." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxstrec [OPTION]... [FILE]..." << std::endl;
+    std::cout << "Usage: pxstrec [OPTIONS]... FILES" << std::endl;
     std::cout << std::endl;
-    std::cout << " -d, --dataf=FILE    input data file" <<std::endl;
-    std::cout << " -w, --datawide      data is in wide format so (001 instead of 2)" <<std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -d, --dataf=FILE    input data file" << std::endl;
+    std::cout << " -w, --datawide      data is in wide format so (001 instead of 2)" << std::endl;
     std::cout << " -z, --dataz         data is in probability format (0,1,0,0)" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file" << std::endl;
     std::cout << " -c, --conf=FILE     configuration file" << std::endl;
@@ -47,7 +48,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxstrec 0.2\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxstrec 0.2\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -335,7 +336,7 @@ int main(int argc, char * argv[]) {
     }
     infile2.close();
     if (verbose) {
-        (*loos) << "trees: "<< trees.size() << std::endl;
+        (*loos) << "trees: " << trees.size() << std::endl;
     }
     
     /**
@@ -494,7 +495,7 @@ int main(int argc, char * argv[]) {
         }
 
         if (verbose) {
-            (*loos) <<"states: " << nstates_site_n << std::endl;
+            (*loos) << "states: " << nstates_site_n << std::endl;
             (*loos) << "trees: ";
         }
         for (unsigned int i=0; i < trees.size(); i++) {
@@ -517,7 +518,7 @@ int main(int argc, char * argv[]) {
             sr.set_store_p_matrices(false);
             Tree * tree = trees[i];
             if (verbose) {
-                (*loos) << "tips: "<< tree->getExternalNodeCount() << std::endl;
+                (*loos) << "tips: " << tree->getExternalNodeCount() << std::endl;
             }
             sr.set_tree(tree);
             if (periodsset == true) {
@@ -534,7 +535,7 @@ int main(int argc, char * argv[]) {
                 same = sr.set_tip_conditionals_already_given(runseqs);
             }
             if (same == true) {
-                (*loos) << "skipping calculation" <<std::endl;
+                (*loos) << "skipping calculation" << std::endl;
                 continue;
             }
             double finallike; Superdouble totlike_sd;
@@ -635,7 +636,7 @@ int main(int argc, char * argv[]) {
                 continue;
             }
             if (verbose) {
-                (*loos) << "ancestral states" <<std::endl;
+                (*loos) << "ancestral states" << std::endl;
             }
             sr.prepare_ancstate_reverse();
             for (unsigned int j=0; j < ancstates.size(); j++) {
@@ -667,7 +668,7 @@ int main(int argc, char * argv[]) {
             } else {
                 std::vector<Superdouble> lhoods;
                 if (verbose) {
-                    (*loos) <<"node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  std::endl;
+                    (*loos) << "node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  std::endl;
                 }
                 ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
                 lhoods = sr.calculate_ancstate_reverse_sd(*tree->getMRCA(mrcas[ancstates[j]]));
@@ -693,7 +694,7 @@ int main(int argc, char * argv[]) {
                 if (neg == true) {
                     exit(0);
                 }
-                ancout <<std::endl;
+                ancout << std::endl;
                 if (verbose) {
                     (*loos) << std::endl;
                 }
@@ -833,12 +834,12 @@ int main(int argc, char * argv[]) {
                 if (tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot() == false) {
                     std::vector<double> lhoods;
                     if (verbose) {
-                        (*loos) <<"node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  std::endl;
+                        (*loos) << "node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  std::endl;
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
                     std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]), false);
                     double tnum = sum(stoch)/totlike_sd;
-                    //(*loos) << sum(stoch)<< " "<<totlike << std::endl;
+                    //(*loos) << sum(stoch) << " " << totlike << std::endl;
                     if (verbose) {
                         (*loos) << tnum << " " ;
                     }

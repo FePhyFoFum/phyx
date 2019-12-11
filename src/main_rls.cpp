@@ -18,11 +18,13 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Taxon relabelling for alignments." << std::endl;
-    std::cout << "This will take fasta, phylip or nexus file formats" << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxrls [OPTION]... " << std::endl;
+    std::cout << "Usage: pxrls [OPTIONS]... FILES" << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
     std::cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << std::endl;
     std::cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << std::endl;
@@ -36,7 +38,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrls 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrls 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

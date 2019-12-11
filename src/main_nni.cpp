@@ -19,12 +19,12 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Generate a Nearest Neighbor Interchange (NNI) tree." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxnni [OPTION]... " << std::endl;
+    std::cout << "Usage: pxnni [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output tree file, stout otherwise" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
@@ -36,7 +36,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxnni 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown");
+std::string versionline("pxnni 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown");
 
 static struct option const long_options[] =
 {

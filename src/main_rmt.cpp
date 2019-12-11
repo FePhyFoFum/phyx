@@ -21,12 +21,12 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Remove tree tips by label." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxrmt [OPTION]... [FILE]..."<<std::endl;
+    std::cout << "Usage: pxrmt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
@@ -39,11 +39,11 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "NOTE: if you get a segfault, you may try unrooting (pxrr -u) before pruning" << std::endl;
     std::cout << std::endl;
-    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
-    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrmt 1.0\nCopyright (C) 2014-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxrmt 1.0\nCopyright (C) 2014-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

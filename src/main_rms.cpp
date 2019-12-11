@@ -16,11 +16,13 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "Remove sequences by label" << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "Remove sequences by label." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxrms [OPTION]... " << std::endl;
+    std::cout << "Usage: pxrms [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << std::endl;
     std::cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
@@ -34,7 +36,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrms 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrms 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

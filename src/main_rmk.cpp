@@ -20,12 +20,12 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Remove two-degree internal nodes ('knuckles') from a tree." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxrmk [OPTION]... " << std::endl;
+    std::cout << "Usage: pxrmk [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output tree file, stout otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
@@ -36,7 +36,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrmk 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrmk 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

@@ -21,8 +21,9 @@ extern std::string PHYX_CITATION;
 void print_help () {
     std::cout << "Birth-death tree simulator." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxbdsim [OPTION]... " << std::endl;
+    std::cout << "Usage: pxbdsim [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -e, --extant=INT    number of extant species, alt to time" << std::endl;
     std::cout << " -t, --time=DOUBLE   timespan of simulation (age of root), alt to extant" << std::endl;
     std::cout << " -b, --birth=DOUBLE  birth rate, default=1" << std::endl;
@@ -39,7 +40,7 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
- std::string versionline("pxbdsim 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+ std::string versionline("pxbdsim 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

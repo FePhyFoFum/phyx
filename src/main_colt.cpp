@@ -19,12 +19,12 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "Collapse edges with support below some threshold." << std::endl;
     std::cout << "If annotated Nexus, may require passing in the support identifier (-s)." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxcolt [OPTION]... " << std::endl;
+    std::cout << "Usage: pxcolt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << std::endl;
     std::cout << " -s, --sup=STRING    string identifying support values (if default fails)" << std::endl;
@@ -37,7 +37,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxcolt 1.0\nCopyright (C) 2018-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxcolt 1.0\nCopyright (C) 2018-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

@@ -17,24 +17,25 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Add information to a tree so that you can color the edges." << std::endl;
-    std::cout << "This will take nexus and newick inputs and will output nexus so" << std::endl;
-    std::cout << "that it can be read by figtree." << std::endl;
+    std::cout << "This will take nexus and newick inputs from a file or STDIN." << std::endl;
+    std::cout << "Results are written in nexus format so that it can be read by figtree." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxtcol [OPTION]... " << std::endl;
+    std::cout << "Usage: pxtcol [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
     std::cout << " -m, --mrcaf=FILE     file with mrcas and annotations, tab separated" << std::endl;
     std::cout << " -d, --nodeidf=FILE   file with nodeids (labels) and annotations, tab separated" << std::endl;
     std::cout << " -o, --outf=FILE      output file, stout otherwise" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtcol 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxtcol 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

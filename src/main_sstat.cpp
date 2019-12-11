@@ -19,10 +19,11 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "Calculates multinomial alignment test statistics." << std::endl;
     std::cout << "Currently only calculates the test statistic from Bollback (2002) MBE." << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxsstat [OPTION]... " << std::endl;
+    std::cout << "Usage: pxsstat [OPTIONS]... " << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
@@ -33,7 +34,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxsstat 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxsstat 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

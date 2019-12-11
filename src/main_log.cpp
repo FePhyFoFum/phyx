@@ -22,8 +22,9 @@ void print_help() {
     std::cout << "Parameter log files are expected to be whitespace delimited." << std::endl;
     std::cout << "*NOTE* All values are in terms of number of SAMPLES (NOT generations)." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxlog [OPTION]... " << std::endl;
+    std::cout << "Usage: pxlog [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -p, --parmf=FILE    input parameter log file(s)" << std::endl;
     std::cout << " -t, --treef=FILE    input tree log file(s)" << std::endl;
     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
@@ -44,7 +45,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxlog 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxlog 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

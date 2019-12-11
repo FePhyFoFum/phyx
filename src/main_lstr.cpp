@@ -19,10 +19,11 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "Print tree summary." << std::endl;
     std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxlstr [OPTION]... " << std::endl;
+    std::cout << "Usage: pxlstr [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -r, --rooted        return whether the tree is rooted" << std::endl;
     std::cout << " -a, --age           return the height of root (must be rooted and ultrametric)" << std::endl;
@@ -41,7 +42,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxlstr 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxlstr 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense: GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

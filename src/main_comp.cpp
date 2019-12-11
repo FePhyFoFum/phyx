@@ -16,10 +16,11 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Sequence compositional homogeneity test." << std::endl;
-    std::cout << "This will take fasta, phylip or nexus file formats" << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxcomp [OPTION]... " << std::endl;
+    std::cout << "Usage: pxcomp [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
     std::cout << " -p, --prot          force interpret as protein (if inference fails)" << std::endl;
     std::cout << " -o, --outf=FILE     output stats file, stout otherwise" << std::endl;
@@ -30,7 +31,7 @@ void print_help() {
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-std::string versionline("pxcomp 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxcomp 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

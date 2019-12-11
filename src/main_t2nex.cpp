@@ -18,11 +18,11 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "This will convert a tree file to vanilla Nexus format." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxt2nex [OPTION]... [FILE]..." << std::endl;
+    std::cout << "Usage: pxt2nex [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output tree file, stout otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
@@ -33,7 +33,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxt2nex 1.0\nCopyright (C) 2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxt2nex 1.0\nCopyright (C) 2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

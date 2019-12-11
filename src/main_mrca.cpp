@@ -19,14 +19,16 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Get the number of descendant tips of internal nodes specified by mrca statements." << std::endl;
-    std::cout << "Takes in newick tree and MRCA file with format:" << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN," << std::endl;
+    std::cout << "and an MRCA file with format:" << std::endl;
     std::cout << "MRCANAME = tip1 tip2 ..." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxmrca [OPTION]... " << std::endl;
+    std::cout << "Usage: pxmrca [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input newick tree file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output newick file, stout otherwise" << std::endl;
     std::cout << " -m, --mrca=FILE     file containing MRCA declarations" << std::endl;
+    std::cout << " -o, --outf=FILE     output newick file, stout otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
@@ -34,7 +36,7 @@ void print_help() {
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-std::string versionline("pxmrca 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxmrca 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -83,8 +85,7 @@ int main(int argc, char * argv[]) {
                 exit(0);
             case 'V':
                 std::cout << versionline << std::endl;
-                exit(0);
-                
+                exit(0);  
             case 'C':
                 std::cout << PHYX_CITATION << std::endl;
                 exit(0);

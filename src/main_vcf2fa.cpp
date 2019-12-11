@@ -17,10 +17,11 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "Convert vcf file to fasta." << std::endl;
     std::cout << "Currently only handles haploid data; phased data will come soon." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "Data can be read from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxvcf2fa [OPTION]... [FILE]..." << std::endl;
+    std::cout << "Usage: pxvcf2fa [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input vcf file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output fasta sequence file, stout otherwise" << std::endl;
     std::cout << " -u, --uppercase     export characters in uppercase" << std::endl;
@@ -32,7 +33,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxvcf2fa 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxvcf2fa 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

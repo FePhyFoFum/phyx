@@ -28,8 +28,9 @@ void print_help () {
     std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;
     std::cout << "Pass in 2 trees with `t` and `a`." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxtcomb [OPTION]... " << std::endl;
+    std::cout << "Usage: pxtcomb [OPTIONS]... FILE" << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    reference treefile, stdin otherwise" << std::endl;
     std::cout << " -a, --addtree=FILE  alternate treefile" << std::endl;
     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
@@ -41,7 +42,7 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtcomb 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxtcomb 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

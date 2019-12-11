@@ -22,24 +22,24 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Continuous character rate estimation with Brownian and OU." << std::endl;
-    std::cout << "This will take fasta, phylip (and soon nexus) inputs." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxcontrates [OPTION]... " << std::endl;
+    std::cout << "Usage: pxcontrates [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -c, --charf=FILE     input character file, stdin otherwise" << std::endl;
     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
     std::cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << std::endl;
     std::cout << " -o, --outf=FILE      output sequence file, stout otherwise" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxcontrates 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim)");
+std::string versionline("pxcontrates 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

@@ -25,16 +25,18 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Label internal nodes with clade names." << std::endl;
-    std::cout << "Takes in newick tree and MRCA file with format:" << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN," << std::endl;
+    std::cout << "and an MRCA file with format:" << std::endl;
     std::cout << "MRCANAME = tip1 tip2 ..." << std::endl;
     std::cout << "If no MRCA file is present, this will label anything" << std::endl;
     std::cout << "that isn't labeled" << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxmrcaname [OPTION]... " << std::endl;
+    std::cout << "Usage: pxmrcaname [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input newick tree file, stdin otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output newick file, stout otherwise" << std::endl;
     std::cout << " -m, --mrca=FILE     file containing MRCA declarations" << std::endl;
+    std::cout << " -o, --outf=FILE     output newick file, stout otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
@@ -43,7 +45,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxmrcaname 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxmrcaname 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

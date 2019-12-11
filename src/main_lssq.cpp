@@ -20,10 +20,11 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "Print sequence file summary." << std::endl;
     std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
-    std::cout << "This will take fasta, phylip or nexus file formats" << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxlssq [OPTION]... " << std::endl;
+    std::cout << "Usage: pxlssq [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << std::endl;
     std::cout << " -i, --indiv         output stats for individual sequences" << std::endl;
     std::cout << " -n, --nseq          return the number of sequences" << std::endl;
@@ -43,7 +44,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxlssq 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown");
+std::string versionline("pxlssq 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown");
 
 static struct option const long_options[] =
 {

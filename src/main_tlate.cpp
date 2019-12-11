@@ -16,11 +16,12 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Translate DNA alignment to amino acids." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "NOTE: assumes sequences are in frame." << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxtlate [OPTION]... " << std::endl;
+    std::cout << "Usage: pxtlate [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << std::endl;
     std::cout << " -t, --table=STRING  which translation table to use. currently available:" << std::endl;
     std::cout << "                       'std' (standard, default)" << std::endl;
@@ -36,7 +37,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtlate 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxtlate 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 
 static struct option const long_options[] =

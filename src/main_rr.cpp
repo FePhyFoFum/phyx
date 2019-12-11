@@ -20,12 +20,12 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Reroot (or unroot) a tree file and produce a newick." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxrr [OPTION]... [FILE]..." << std::endl;
+    std::cout << "Usage: pxrr [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
     std::cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -r, --ranked         turn on ordering of outgroups. will root on first one present" << std::endl;
@@ -34,13 +34,13 @@ void print_help() {
     std::cout << " -s, --silent         do not error if outgroup(s) not found" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrr 1.0\nCopyright (C) 2014-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxrr 1.0\nCopyright (C) 2014-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

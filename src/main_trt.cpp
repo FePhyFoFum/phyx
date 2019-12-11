@@ -18,11 +18,12 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "This will trace a big tree given a taxon list and and produce newick" << std::endl;
-    std::cout << "Can read from stdin or file" << std::endl;
+    std::cout << "This will trace a big tree given a taxon list and and produce newick." << std::endl;
+    std::cout << "Data can be read from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxtrt [OPTION]... [FILE]..."<<std::endl;
+    std::cout << "Usage: pxtrt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE     input tree file, stdin otherwise" << std::endl;
     std::cout << " -n, --names=CSL      names sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -f, --namesf=FILE    names in a file (each on a line)" << std::endl;
@@ -31,13 +32,13 @@ void print_help() {
     std::cout << " -s, --silent         suppress warnings of missing tips" << std::endl;
     std::cout << " -h, --help           display this help and exit" << std::endl;
     std::cout << " -V, --version        display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
     std::cout << std::endl;
-    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
-    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtrt 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxtrt 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

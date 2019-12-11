@@ -17,25 +17,25 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Tree rescaling by providing either scaling factor or root height." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxtscale [OPTION]... " << std::endl;
+    std::cout << "Usage: pxtscale [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE        input tree file, stdin otherwise" << std::endl;
     std::cout << " -s, --scale=DOUBLE      edge length scaling factor" << std::endl;
     std::cout << " -r, --rootheight=DOUBLE height of root (tree must be ultrametric)" << std::endl;
     std::cout << " -o, --outf=FILE         output file, stout otherwise" << std::endl;
     std::cout << " -h, --help              display this help and exit" << std::endl;
     std::cout << " -V, --version           display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -C, --citation          display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtscale 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxtscale 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

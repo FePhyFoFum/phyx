@@ -16,10 +16,11 @@ extern std::string PHYX_CITATION;
 
 void print_help() {
     std::cout << "Basic sequence simulator under the GTR model." << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxseqgen [OPTION]... " << std::endl;
+    std::cout << "Usage: pxseqgen [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE       input treefile, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE        output seq file, stout otherwise" << std::endl;
     std::cout << " -l, --length=INT       length of sequences to generate. default is 1000" << std::endl;
@@ -50,7 +51,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxseqgen 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxseqgen 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

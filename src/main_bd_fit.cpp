@@ -21,9 +21,11 @@ extern std::string PHYX_CITATION;
 
 void print_help () {
     std::cout << "Fit a lineage diversification model to a tree." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxbdfit [OPTION]... " << std::endl;
+    std::cout << "Usage: pxbdfit [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input treefile, stdin otherwise" << std::endl;
     std::cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << std::endl;
     std::cout << " -o, --outf=FILE     output file, stout otherwise" << std::endl;
@@ -35,7 +37,7 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxbdfit 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxbdfit 1.0\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {

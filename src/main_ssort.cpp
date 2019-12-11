@@ -18,24 +18,25 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "Sort sequences by id or length" << std::endl;
-    std::cout << "Can read from stdin or file, but output is fasta." << std::endl;
+    std::cout << "Sort sequences by id or length." << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxssort [OPTION]... [FILE]..."<<std::endl;
+    std::cout << "Usage: pxssort [OPTIONS]..." << std::endl;
     std::cout << std::endl;
-    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise"<<std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
     std::cout << " -b, --sortby        what to sort by: 1:id (default) 2:id rev" << std::endl;
     std::cout << "                                      3:length (<)   4:length (>)" << std::endl;
-    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise"<<std::endl;
-    std::cout << " -h, --help          display this help and exit"<<std::endl;
-    std::cout << " -V, --version       display version and exit"<<std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
     std::cout << std::endl;
-    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" <<std::endl;
-    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>"<<std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxssort 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxssort 1.0\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

@@ -19,7 +19,7 @@ void print_help() {
     std::cout << "Convert seqfiles from nexus, phylip, or fastq to phylip." << std::endl;
     std::cout << "Can read from stdin or file." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxs2phy [OPTION]... [FILE]..." << std::endl;
+    std::cout << "Usage: pxs2phy [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
@@ -32,7 +32,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxs2phy 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+std::string versionline("pxs2phy 1.0\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {

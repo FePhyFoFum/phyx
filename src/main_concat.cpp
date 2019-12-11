@@ -23,11 +23,12 @@ void print_help() {
     std::cout << "  for x in *.phy; do echo $x >> flist.txt; done" << std::endl;
     std::cout << "and call using the -f option:" << std::endl;
     std::cout << "  pxcat -f flist.txt -o my_cat_file.fa" << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
-    std::cout << "Individual files can be of different formats." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus sequence formats." << std::endl;
+    std::cout << "Individual files may be of different formats." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxcat [OPTION]... " << std::endl;
+    std::cout << "Usage: pxcat [OPTIONS]... FILES" << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     list of input sequence files (space delimited)" << std::endl;
     std::cout << " -f, --flistFILE     file listing input files (one per line)" << std::endl;
     std::cout << " -o, --outf=FILE     output sequence file, stout otherwise" << std::endl;
@@ -41,7 +42,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxcat 0.9\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxcat 0.9\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

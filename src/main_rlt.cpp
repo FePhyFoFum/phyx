@@ -19,12 +19,12 @@ extern std::string PHYX_CITATION;
 void print_help() {
     std::cout << "Taxon relabelling for trees." << std::endl;
     std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree." << std::endl;
-    std::cout << "Can read from stdin or file." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxrlt [OPTION]... " << std::endl;
+    std::cout << "Usage: pxrlt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, stdin otherwise" << std::endl;
     std::cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << std::endl;
     std::cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << std::endl;
@@ -38,7 +38,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrlt 1.0\nCopyright (C) 2018-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrlt 1.0\nCopyright (C) 2018-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

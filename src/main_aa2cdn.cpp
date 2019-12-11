@@ -20,8 +20,9 @@ void print_help() {
     std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxaa2cdn [OPTION]... " << std::endl;
+    std::cout << "Usage: pxaa2cdn [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << std::endl;
     std::cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output fasta file, stout otherwise" << std::endl;
@@ -34,7 +35,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxaa2cdn 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxaa2cdn 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

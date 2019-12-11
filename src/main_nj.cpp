@@ -22,11 +22,12 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "Basic Neighbour-Joining Tree Maker." << std::endl;
-    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << "Basic neighbour-joining tree maker." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs from a file or STDIN." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxnj [OPTION]... " << std::endl;
+    std::cout << "Usage: pxnj [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output newick file, stout otherwise" << std::endl;
     std::cout << " -n, --nthreads=INT  number of threads, default=1" << std::endl;
@@ -38,7 +39,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxnj 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxnj 1.0\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {

@@ -18,8 +18,9 @@ void print_help() {
     std::cout << "Generate all tree topologies for n taxa." << std::endl;
     std::cout << "Random tree samples are a-coming." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxtgen [OPTION]... " << std::endl;
+    std::cout << "Usage: pxtgen [OPTIONS]..." << std::endl;
     std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << " -n, --ntax=INT      number of taxa" << std::endl;
     std::cout << " -r, --rooted        whether generated trees are rooted (default: false)" << std::endl;
     std::cout << " -c, --count         give the number of possible trees for n taxa and exit" << std::endl;
@@ -34,7 +35,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtgen 1.0\nCopyright (C) 2020 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown");
+std::string versionline("pxtgen 1.0\nCopyright (C) 2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
