@@ -57,6 +57,7 @@ Mac has become increasingly difficult to support at the command line with change
 4. Install phyx
 
         cd phyx/src
+        autoconf
         ./configure
         make
         python run_tests.py
@@ -97,6 +98,7 @@ If you want to install it so it is available anywhere in your system, do:
 
 6. Compile phyx. Now you can go to the src directory of phyx and type:
 
+        autoconf
         ./configure
         make
         python run_tests.py
@@ -139,6 +141,7 @@ If that is not possible, compile the provided code:
 4. Finally, install phyx:
 
         cd phyx/src
+        autoconf
         ./configure
         make
         python run_tests.py
