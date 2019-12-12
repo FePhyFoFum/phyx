@@ -7,7 +7,7 @@ Makefile
 config.h
 config.log
 config.status
-#config.h.in
+configure
 autom4te.cache
 .cproject
 .project
