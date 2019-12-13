@@ -247,7 +247,6 @@ COLLAPSE_TREE_SRC = collapse_tree.cpp main_colt.cpp
 COLLAPSE_TREE_OBJ = collapse_tree.o main_colt.o
 COLLAPSE_TREE_DEP = collapse_tree.d main_colt.d
 
-## doesn't seem to be used
 CPP_SRCS += \
 ./utils.cpp \
 ./log.cpp \
@@ -260,9 +259,9 @@ CPP_SRCS += \
 ./seq_utils.cpp \
 ./seq_models.cpp \
 ./pairwise_alignment.cpp \
-./superdouble.cpp  
+./superdouble.cpp \
+./timer.cpp
 
-## doesn't seem to be used
 RATE_SRCS += \
 ./rate_model.cpp \
 ./state_reconstructor.cpp \
@@ -287,7 +286,8 @@ CPP_OBJS += \
 ./seq_utils.o \
 ./seq_models.o \
 ./pairwise_alignment.o \
-./superdouble.o 
+./superdouble.o \
+./timer.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -301,7 +301,6 @@ RATE_OBJS += \
 #./mcmc.o \
 #./state_reconstructor_simple.o \
 
-## doesn't seem to be used
 CPP_DEPS += \
 ./utils.d \
 ./log.d \
@@ -314,9 +313,9 @@ CPP_DEPS += \
 ./seq_utils.d \
 ./seq_models.d \
 ./pairwise_alignment.d \
-./superdouble.d  
+./superdouble.d \
+./timer.d
 
-## doesn't seem to be used
 RATE_DEPS += \
 ./rate_model.d \
 ./state_reconstructor.d \
@@ -334,10 +333,9 @@ RATE_DEPS += \
 %.o: ./%.cpp
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
-
 PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxt2nex pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxtgen pxssort pxcolt $(NLOPT_PROGRAMS)
 
-# All Target
+# default all target
 all: $(PROGS)
 
 pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
