@@ -150,6 +150,10 @@ RR_SRC = main_rr.cpp
 RR_OBJ = main_rr.o
 RR_DEP = main_rr.d
 
+MONO_SRC = main_mono.cpp
+MONO_OBJ = main_mono.o
+MONO_DEP = main_mono.d
+
 RMT_SRC = main_rmt.cpp
 RMT_OBJ = main_rmt.o
 RMT_DEP = main_rmt.d
@@ -333,7 +337,7 @@ RATE_DEPS += \
 %.o: ./%.cpp
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
-PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxt2nex pxrr pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxtgen pxssort pxcolt $(NLOPT_PROGRAMS)
+PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxt2nex pxrr pxmono pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxtgen pxssort pxcolt $(NLOPT_PROGRAMS)
 
 # default all target
 all: $(PROGS)
@@ -516,6 +520,11 @@ pxt2nex: $(CPP_OBJS) $(T2NEX_OBJ)
 pxrr: $(CPP_OBJS) $(RR_OBJ)
 	@echo 'building pxrr'
 	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxmono: $(CPP_OBJS) $(MONO_OBJ)
+	@echo 'building pxmono'
+	$(CXX) -o "pxmono" $(OPT_FLAGS) $(MONO_OBJ) $(CPP_OBJS)
 	cat man/$@.1.in > man/$@.1
 
 pxrmt: $(CPP_OBJS) $(RMT_OBJ)
