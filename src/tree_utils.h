@@ -23,6 +23,7 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
 Tree * get_induced_tree  (Tree * tree, std::vector<std::string>& names, const bool& silent);
 void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& silent);
 
+bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& skip_missing);
 bool is_rooted (Tree * tr);
 bool is_binary (Tree * tr);
 double get_tree_length (Tree * tr);

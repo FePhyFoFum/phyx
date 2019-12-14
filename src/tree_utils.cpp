@@ -12,6 +12,7 @@
 #include "tree_utils.h"
 #include "tree_reader.h"
 #include "utils.h"
+#include "aa2cdn.h"
 
 extern double EPSILON;
 
@@ -120,6 +121,42 @@ Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const boo
     deknuckle_tree(indTree); // guaranteed to have knuckles atm
     indTree->removeRootEdge();
     return indTree;
+}
+
+
+// check whether the names provided for a monophyletic clade
+bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& skip_missing) {
+    bool mono = true;
+    
+    bool names_good = check_names_against_tree(tree, names);
+    if (!names_good) {
+        if (!skip_missing) {
+            std::cerr << "Exiting." << std::endl;
+            exit(0);
+        } else {
+            std::vector<std::string> good_names;
+            std::vector<std::string>::iterator it;
+            for (unsigned int i = 0; i < names.size(); i++) {
+                if (check_name_against_tree(tree, names[i])) {
+                    good_names.push_back(names[i]);
+                }
+            }
+            if (good_names.size() == 0) {
+                std::cerr << "Error: no names are present in the tree. Exiting." << std::endl;
+                exit(1);
+            }
+            
+            names = good_names;
+        }
+    }
+    
+    Node * nd = tree->getMRCA(names);
+    int num_leaves = nd->get_num_leaves();
+    
+    if (num_leaves != (int)names.size()) {
+        mono = false;
+    }
+    return mono;
 }
 
 
@@ -459,7 +496,7 @@ bool check_names_against_tree (Tree * tr, std::vector<std::string> names) {
     //std::cout << "Checking name '" << names[i] << "'." << std::endl;
         Node * nd = tr->getExternalNode(names[i]);
         if (nd == NULL) {
-            std::cout << "Taxon '" << names[i] << "' not found in tree." << std::endl;
+            std::cerr << "Taxon '" << names[i] << "' not found in tree." << std::endl;
             allgood = false;
         }
     }
