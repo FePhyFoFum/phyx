@@ -145,6 +145,9 @@ def test_program(name):
     elif name == "pxtrt":
         cm = "./pxtrt -t TEST/yule_100taxa.tre -n taxon_1,taxon_2,taxon_3,taxon_5,taxon_8,taxon_13,taxon_21,taxon_34,taxon_55,taxon_89"
         t = '((((taxon_1:0.6982661782487307,taxon_2:0.6982661782487307):1.6249815565818162,(((taxon_3:1.312206397223513,(taxon_5:0.9561412887678671,taxon_8:0.9561412887678671):0.3560651084556459):0.4159628031666056,taxon_13:1.7281692003901186):0.4425292521420627,taxon_21:2.1706984525321813):0.1525492822983656):0.645808102187384,taxon_34:2.969055837017931):2.0856420237227193,(taxon_55:3.3233579219493956,taxon_89:3.3233579219493956):1.7313399387912545);\n'
+    elif name == "pxmono":
+        cm = "./pxmono -t TEST/yule_10taxa.trees -n taxon_1,taxon_2,taxon_3,taxon_4"
+        t = 'true\nfalse\nfalse\nfalse\ntrue\nfalse\ntrue\nfalse\ntrue\nfalse\n'
     else:
         return
     p = subprocess.Popen(cm,shell=True,stdout=subprocess.PIPE)
