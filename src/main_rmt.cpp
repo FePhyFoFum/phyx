@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -222,6 +221,11 @@ int main(int argc, char * argv[]) {
                     if (numLeaves - (int)toPrune.size() > 1) {
                         remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << std::endl;
+                    } else {
+                        if (!silent) {
+                            std::cerr << "No tips to remove. Returning original tree." << std::endl;
+                        }
+                        (*poos) << getNewickString(tree) << std::endl;
                     }
                     delete tree;
                 }
@@ -237,6 +241,10 @@ int main(int argc, char * argv[]) {
                         remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << std::endl;
                     }
+                    if (!silent) {
+                            std::cerr << "No tips to remove. Returning original tree." << std::endl;
+                        }
+                        (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
                 }
             }
