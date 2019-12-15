@@ -175,8 +175,17 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
+    
+    // TODO: if tree is large and/or the number to prune is large, use trace method instead
+    // magic number: if number to be remove is > than this, use the induced tree procedure instead
+    // this is demonstrated here: https://github.com/FePhyFoFum/phyx/issues/74
+    int MAX_RMT = 50;
+    
     bool going = true;
     int numLeaves;
+    int num_names = names.size();
+    std::vector<std::string> toKeep;
+    
     if (!complement) {
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
@@ -188,11 +197,16 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - (int)names.size() < 2) {
+                    if (numLeaves - num_names < 2) {
                         std::cerr << "Error: pruning would produce a tree with "
-                            << (numLeaves - (int)names.size()) << " tips. No result is returned." << std::endl;
+                            << (numLeaves - num_names) << " tips. No result is returned." << std::endl;
                     } else {
-                        remove_tips(tree, names, silent);
+                        if (num_names < MAX_RMT) {
+                            remove_tips(tree, names, silent);
+                        } else {
+                            toKeep = get_complement_tip_set(tree, names);
+                            tree = get_induced_tree(tree, toKeep, silent);
+                        }
                         (*poos) << getNewickString(tree) << std::endl;
                     }
                     delete tree;
@@ -204,11 +218,16 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - (int)names.size() < 2) {
+                    if (numLeaves - num_names < 2) {
                         std::cerr << "Error: pruning would produce a tree with "
-                            << (numLeaves - (int)names.size()) << " tips. No result is returned." << std::endl;
+                            << (numLeaves - num_names) << " tips. No result is returned." << std::endl;
                     } else {
-                        remove_tips(tree, names, silent);
+                        if (num_names < MAX_RMT) {
+                            remove_tips(tree, names, silent);
+                        } else {
+                            toKeep = get_complement_tip_set(tree, names);
+                            tree = get_induced_tree(tree, toKeep, silent);
+                        }
                         (*poos) << getNewickString(tree) << std::endl;
                     }
                     delete tree;
@@ -229,13 +248,18 @@ int main(int argc, char * argv[]) {
                     &translation_table, &going);
                 if (going == true) {
                     toPrune = get_complement_tip_set(tree, names);
+                    num_names = toPrune.size();
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - (int)toPrune.size() > 1) {
-                        remove_tips(tree, toPrune, silent);
+                    if (numLeaves - num_names > 1) {
+                        if (num_names < MAX_RMT) {
+                            remove_tips(tree, toPrune, silent);
+                        } else {
+                            tree = get_induced_tree(tree, names, silent);
+                        }
                         (*poos) << getNewickString(tree) << std::endl;
                     } else {
                         std::cerr << "Error: pruning would produce a tree with "
-                            << (numLeaves - (int)toPrune.size()) << " tips. No result is returned." << std::endl;
+                            << (numLeaves - num_names) << " tips. No result is returned." << std::endl;
                     }
                     delete tree;
                 }
@@ -246,13 +270,18 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
                     toPrune = get_complement_tip_set(tree, names);
+                    num_names = toPrune.size();
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - (int)toPrune.size() > 1) {
-                        remove_tips(tree, toPrune, silent);
+                    if (numLeaves - num_names > 1) {
+                        if (num_names < MAX_RMT) {
+                            remove_tips(tree, toPrune, silent);
+                        } else {
+                            tree = get_induced_tree(tree, names, silent);
+                        }
                         (*poos) << getNewickString(tree) << std::endl;
                     } else {
                         std::cerr << "Error: pruning would produce a tree with "
-                            << (numLeaves - (int)toPrune.size()) << " tips. No result is returned." << std::endl;
+                            << (numLeaves - num_names) << " tips. No result is returned." << std::endl;
                     }
                     delete tree;
                 }
