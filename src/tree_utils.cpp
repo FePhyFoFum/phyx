@@ -113,13 +113,27 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
 }
 
 
-// tree must be rooted. assumes this is checked upstream (so alternative can be considered)
+// tree must be rooted
+// if it is not, root on first name, do trace, and unroot
+// this has been tested and works (https://github.com/FePhyFoFum/phyx/issues/74)
 Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const bool& silent) {
+    bool rooted = is_rooted(tree);
+    
+    if (!rooted) {
+        std::vector<std::string> og;
+        og.push_back(names[0]);
+        reroot(tree, og, silent);
+    }
+    
     paint_nodes(tree, names, silent);
     std::string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
     Tree * indTree = read_tree_string(tracetreenewick);
     deknuckle_tree(indTree); // guaranteed to have knuckles atm
     indTree->removeRootEdge();
+    
+    if (!rooted) {
+        tree->unRoot();
+    }
     return indTree;
 }
 

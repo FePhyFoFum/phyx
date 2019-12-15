@@ -182,10 +182,6 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going == true) {
-                    if (!is_rooted(tree)) {
-                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
-                        exit(0);
-                    }
                     tree = get_induced_tree(tree, names, silent);
                     (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
@@ -197,10 +193,6 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
-                    if (!is_rooted(tree)) {
-                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
-                        exit(0);
-                    }
                     tree = get_induced_tree(tree, names, silent);
                     (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
@@ -219,10 +211,6 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going == true) {
-                    if (!is_rooted(tree)) {
-                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
-                        exit(0);
-                    }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
                         tree = get_induced_tree(tree, toKeep, silent);
@@ -236,10 +224,6 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
-                    if (!is_rooted(tree)) {
-                        std::cerr << "This only works with rooted trees. Exiting." << std::endl;
-                        exit(0);
-                    }
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {
                         tree = get_induced_tree(tree, toKeep, silent);

@@ -20,7 +20,7 @@ void rescale_tree (Tree * tr, const double& scalef);
 void remove_annotations (Tree * tr);
 void remove_internal_names (Tree * tr);
 void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent);
-Tree * get_induced_tree  (Tree * tree, std::vector<std::string>& names, const bool& silent);
+Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const bool& silent);
 void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& silent);
 
 bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& skip_missing);
