@@ -176,6 +176,7 @@ int main(int argc, char * argv[]) {
     }
     
     bool going = true;
+    int numLeaves;
     if (!complement) {
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
@@ -186,8 +187,14 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going == true) {
-                    remove_tips(tree, names, silent);
-                    (*poos) << getNewickString(tree) << std::endl;
+                    numLeaves = tree->getExternalNodeCount();
+                    if (numLeaves - (int)names.size() < 2) {
+                        std::cerr << "Error: pruning would produce a tree with "
+                            << (numLeaves - (int)names.size()) << " tips. No result is returned." << std::endl;
+                    } else {
+                        remove_tips(tree, names, silent);
+                        (*poos) << getNewickString(tree) << std::endl;
+                    }
                     delete tree;
                 }
             }
@@ -196,8 +203,14 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going == true) {
-                    remove_tips(tree, names, silent);
-                    (*poos) << getNewickString(tree) << std::endl;
+                    numLeaves = tree->getExternalNodeCount();
+                    if (numLeaves - (int)names.size() < 2) {
+                        std::cerr << "Error: pruning would produce a tree with "
+                            << (numLeaves - (int)names.size()) << " tips. No result is returned." << std::endl;
+                    } else {
+                        remove_tips(tree, names, silent);
+                        (*poos) << getNewickString(tree) << std::endl;
+                    }
                     delete tree;
                 }
             }
@@ -206,7 +219,6 @@ int main(int argc, char * argv[]) {
         // *** check list of names to keep is at least 2
         // don't assume all trees have the same leaf set
         std::vector<std::string> toPrune;
-        int numLeaves;
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
@@ -222,10 +234,8 @@ int main(int argc, char * argv[]) {
                         remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << std::endl;
                     } else {
-                        if (!silent) {
-                            std::cerr << "No tips to remove. Returning original tree." << std::endl;
-                        }
-                        (*poos) << getNewickString(tree) << std::endl;
+                        std::cerr << "Error: pruning would produce a tree with "
+                            << (numLeaves - (int)toPrune.size()) << " tips. No result is returned." << std::endl;
                     }
                     delete tree;
                 }
@@ -240,11 +250,10 @@ int main(int argc, char * argv[]) {
                     if (numLeaves - (int)toPrune.size() > 1) {
                         remove_tips(tree, toPrune, silent);
                         (*poos) << getNewickString(tree) << std::endl;
+                    } else {
+                        std::cerr << "Error: pruning would produce a tree with "
+                            << (numLeaves - (int)toPrune.size()) << " tips. No result is returned." << std::endl;
                     }
-                    if (!silent) {
-                            std::cerr << "No tips to remove. Returning original tree." << std::endl;
-                    }
-                    (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
                 }
             }
