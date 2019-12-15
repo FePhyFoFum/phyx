@@ -243,8 +243,8 @@ int main(int argc, char * argv[]) {
                     }
                     if (!silent) {
                             std::cerr << "No tips to remove. Returning original tree." << std::endl;
-                        }
-                        (*poos) << getNewickString(tree) << std::endl;
+                    }
+                    (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
                 }
             }
