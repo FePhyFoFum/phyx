@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
     }
     
     NJOI nj(pios, threads);
-    *poos << nj.get_newick() << std::endl;
+    (*poos) << nj.get_newick() << std::endl;
     
     if (fileset) {
         fstr->close();

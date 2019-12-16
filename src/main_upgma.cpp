@@ -111,7 +111,7 @@ int main(int argc, char * argv[]) {
     }
     
     UPGMA upgma(pios);
-    *poos << upgma.get_newick() << std::endl;
+    (*poos) << upgma.get_newick() << std::endl;
     
     if (fileset) {
         fstr->close();
