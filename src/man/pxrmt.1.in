@@ -20,6 +20,9 @@ names sep by commas (NO SPACES!)
 \fB\-f\fR, \fB\-\-namesf\fR=\fI\,FILE\/\fR
 names in a file (each on a line)
 .TP
+\fB\-r\fR, \fB\-\-regex\fR=\fI\,STRING\/\fR
+match tip labels by a regular expression
+.TP
 \fB\-c\fR, \fB\-\-comp\fR
 take the complement (i.e. remove any taxa not in list)
 .TP
@@ -37,12 +40,10 @@ display version and exit
 .TP
 \fB\-C\fR, \fB\-\-citation\fR
 display phyx citation and exit
-.PP
-NOTE: if you get a segfault, you may try unrooting (pxrr \fB\-u\fR) before pruning
 .SH CITATION
 Brown, Joseph W., Joseph F. Walker, and Stephen A. Smith. 2017. Phyx: phylogenetic tools for unix. Bioinformatics 33(12), 1886-1888.
 .SH AUTHOR
-Written by Stephen A. Smith (blackrim), Joseph W. Brown
+Written by Joseph W. Brown, Stephen A. Smith (blackrim)
 .SH "REPORTING BUGS"
 Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>
 phyx home page: <https://github.com/FePhyFoFum/phyx>
