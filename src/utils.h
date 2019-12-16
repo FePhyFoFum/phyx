@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <regex>
 
 #include "superdouble.h"
 
@@ -134,5 +135,8 @@ bool check_for_input_to_stream ();
 
 std::string peek_line (std::istream& pios);
 std::vector<std::string> peek_lines (std::istream& pios, const int& n);
+
+std::vector<std::string> regex_search_labels (const std::vector<std::string>& names,
+        const std::string& pattern);
 
 #endif /* _UTILS_H_ */

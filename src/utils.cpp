@@ -666,3 +666,18 @@ std::vector<std::string> peek_lines (std::istream& pios, const int& n) {
     pios.seekg(spt, std::ios_base::beg);
     return peekedLines;
 }
+
+
+// given a list of names and a regex pattern, return the list of names that match
+std::vector<std::string> regex_search_labels (const std::vector<std::string>& names,
+        const std::string& pattern) {
+    std::vector<std::string> results;
+    const std::regex regexp(pattern);
+    for (int i = 0; i < (int)names.size(); i++) {
+        //std::cout << names[i] << ": " << std::regex_search(names[i], regexp) << std::endl;
+        if (std::regex_search(names[i], regexp)) {
+            results.push_back(names[i]);
+        }
+    }
+    return results;
+}
