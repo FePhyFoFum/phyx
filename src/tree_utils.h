@@ -39,6 +39,7 @@ bool check_name_against_tree (Tree * tr, const std::string& name);
 bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool& silent);
 std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::string>& names);
 std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<std::string>& orig_names);
+std::vector<std::string> get_names_in_tree_regex (Tree * tr, const std::string& pattern);
 std::vector<std::string> get_tip_labels (Tree * tr);
 void deknuckle_tree (Tree * tree);
 void remove_knuckle (Node * node);

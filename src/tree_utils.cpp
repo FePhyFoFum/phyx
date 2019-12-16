@@ -622,6 +622,13 @@ std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<st
 }
 
 
+std::vector<std::string> get_names_in_tree_regex (Tree * tr, const std::string& pattern) {
+    std::vector<std::string> labels = get_tip_labels(tr);
+    std::vector<std::string> matched = regex_search_labels(labels, pattern);
+    return matched;
+}
+
+
 // returns a sorted vector of all terminal labels
 std::vector<std::string> get_tip_labels (Tree * tr) {
     std::vector<std::string> labels;
