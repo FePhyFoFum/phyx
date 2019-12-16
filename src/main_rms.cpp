@@ -5,6 +5,7 @@
 #include <cstring>
 #include <getopt.h>
 #include <algorithm>
+#include <regex>
 
 #include "utils.h"
 #include "sequence.h"
@@ -26,6 +27,7 @@ void print_help() {
     std::cout << " -s, --seqf=FILE     input nucleotide sequence file, STDIN otherwise" << std::endl;
     std::cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << std::endl;
     std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
+    std::cout << " -r, --regex=STRING  match tip labels by a regular expression" << std::endl;
     std::cout << " -c, --comp          take the complement (i.e. remove any taxa not in list)" << std::endl;
     std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
@@ -43,6 +45,7 @@ static struct option const long_options[] =
     {"seqf", required_argument, NULL, 's'},
     {"names", required_argument, NULL, 'n'},
     {"namesf", required_argument, NULL, 'f'},
+    {"regex", required_argument, NULL, 'r'},
     {"comp", no_argument, NULL, 'c'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
@@ -60,6 +63,11 @@ int main(int argc, char * argv[]) {
     bool namesset = false;
     bool namefileset = false;
     bool complement = false;
+    bool regex = false;
+    std::regex regexp;
+    std::string regex_pattern = "";
+    bool match = false; // for regex searches
+    
     char * namesc = NULL;
     char * namesfc = NULL;
     char * seqf = NULL;
@@ -69,7 +77,7 @@ int main(int argc, char * argv[]) {
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:n:f:co:hVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:n:f:r:co:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -87,6 +95,11 @@ int main(int argc, char * argv[]) {
                 namefileset = true;
                 namesfc = strdup(optarg);
                 check_file_exists(namesfc);
+                break;
+            case 'r':
+                regex = true;
+                regex_pattern = strdup(optarg);
+                regexp.assign(regex_pattern);
                 break;
             case 'c':
                 complement = true;
@@ -136,8 +149,10 @@ int main(int argc, char * argv[]) {
             names.push_back(tline);
         }
         nfstr.close();
-    } else {
-        std::cerr << "Error: you need to set the names of the taxa you want to remove (-n). Exiting." << std::endl;
+    } else if (!regex) {
+        std::cerr << "Error: you must specify which tips to remove." << std::endl;
+        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)." << std::endl;
+        std::cerr << "Exiting." << std::endl;
         exit(0);
     }
     
@@ -174,9 +189,16 @@ int main(int argc, char * argv[]) {
         if (!interleave) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 seq_name = seq.get_id();
-                it = find(names.begin(), names.end(), seq_name);
-                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
-                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
                 }
             }
         } else {
@@ -184,9 +206,16 @@ int main(int argc, char * argv[]) {
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
                 seq_name = seq.get_id();
-                it = find(names.begin(), names.end(), seq_name);
-                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
-                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
                 }
             }
         }
@@ -202,33 +231,51 @@ int main(int argc, char * argv[]) {
             for (unsigned int i = 0; i < seqs.size(); i++) {
                 seq = seqs[i];
                 seq_name = seq.get_id();
-                it = find(names.begin(), names.end(), seq_name);
-                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
-                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
                 }
             }
         } else {
             // fasta, fastq, or simple phylip
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 seq_name = seq.get_id();
-                it = find(names.begin(), names.end(), seq_name);
-                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
-                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
                 }
             }
             // fasta has a trailing one
             if (ft == 2) {
                 seq_name = seq.get_id();
-                it = find(names.begin(), names.end(), seq_name);
-                if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
-                    *poos << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
                 }
             }
         }
     }
-    
-    
-    
     
     if (outfileset) {
         ofstr->close();
