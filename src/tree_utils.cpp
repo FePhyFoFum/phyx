@@ -12,7 +12,6 @@
 #include "tree_utils.h"
 #include "tree_reader.h"
 #include "utils.h"
-#include "aa2cdn.h"
 
 extern double EPSILON;
 
@@ -623,7 +622,7 @@ std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<st
 }
 
 
-// returns a sorted vectorof all terminal labels
+// returns a sorted vector of all terminal labels
 std::vector<std::string> get_tip_labels (Tree * tr) {
     std::vector<std::string> labels;
     for (int i = 0; i < tr->getExternalNodeCount(); i++) {
@@ -705,6 +704,7 @@ std::string double_to_str (double d) {
     }
     return s;
 }
+
 
 unsigned long int get_num_possible_trees (const int& n, const bool& rooted) {
     return doublefactorial(2 * (n + rooted) - 5);

@@ -11,7 +11,6 @@
 #include "seq_reader.h"
 #include "seq_utils.h"
 #include "utils.h"
-#include "aa2cdn.h"
 
 
 // for printing purposes
