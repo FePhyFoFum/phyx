@@ -40,7 +40,7 @@ display phyx citation and exit
 .SH CITATION
 Brown, Joseph W., Joseph F. Walker, and Stephen A. Smith. 2017. Phyx: phylogenetic tools for unix. Bioinformatics 33(12), 1886-1888.
 .SH AUTHOR
-Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)
+Written by Joseph W. Brown, Joseph F. Walker, Stephen A. Smith (blackrim)
 .SH "REPORTING BUGS"
 Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>
 phyx home page: <https://github.com/FePhyFoFum/phyx>
