@@ -112,7 +112,7 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
 }
 
 
-// tree must be rooted
+// tree must be rooted (traces terminate at root node)
 // if it is not, root on first name, do trace, and unroot
 // this has been tested and works (https://github.com/FePhyFoFum/phyx/issues/74)
 Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const bool& silent) {
@@ -201,7 +201,7 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
 }
 
 
-// treemap: key is focal node, value is vectorof adjacent nodes
+// treemap: key is focal node, value is vector of adjacent nodes
 // both keys and values can be internal or terminal nodes
 void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
         std::vector<Node*> >& tree_map) {
