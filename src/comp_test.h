@@ -2,7 +2,6 @@
 #define _COMP_TEST_H_
 
 #include <string>
-#include <map>
 #include <vector>
 #include <iostream>
 

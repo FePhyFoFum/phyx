@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <map>
 #include <vector>
 
 #include "aa2cdn.h"

@@ -2,7 +2,6 @@
 #define _CLSQ_H_
 
 #include <string>
-#include <map>
 #include <vector>
 #include <iostream>
 

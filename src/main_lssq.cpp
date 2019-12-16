@@ -2,7 +2,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <map>
 #include <cstring>
 #include <getopt.h>
 #include <sstream>

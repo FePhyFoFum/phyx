@@ -2,14 +2,12 @@
 #define _AA_TO_CDN_H_
 
 #include <string>
-#include <map>
 
 #include "sequence.h"
 
 
 class AAtoCDN {
 private:
-    // use vector<Sequence> instead of map
     bool remove_last_;
     std::vector<Sequence> nuc_seqs_;
     std::vector<Sequence> aa_seqs_;

@@ -5,7 +5,6 @@
 #include <cstring>
 #include <getopt.h>
 #include <algorithm>
-#include <set>
 #include <map>
 
 #include "tree.h"

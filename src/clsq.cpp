@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
 #include <iomanip>
 
 #include "clsq.h"

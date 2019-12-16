@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <map>
 #include <cstring>
 #include <getopt.h>
 
@@ -154,7 +153,6 @@ int main(int argc, char * argv[]) {
     std::string retstring;
     
     
-    // TODO: get rid of all of this map shit
     // use general purpose reader
     std::vector<Sequence> nuc_seqs;
     std::vector<Sequence> aa_seqs;
