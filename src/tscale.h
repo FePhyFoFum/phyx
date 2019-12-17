@@ -1,7 +1,7 @@
 #ifndef _TSCALE_H_
 #define _TSCALE_H_
 
-#include "tree.h"
+class Tree; // forward declaration
 
 class TScale {
 private:

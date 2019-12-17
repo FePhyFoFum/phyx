@@ -5,6 +5,7 @@
 #include "relabel.h"
 #include "tree.h"
 #include "utils.h"
+#include "sequence.h"
 
 
 Relabel::Relabel (std::string& cnamesf, std::string nnamesf, const bool& verbose) {

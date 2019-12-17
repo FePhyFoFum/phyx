@@ -5,8 +5,8 @@
 #include <vector>
 #include <map>
 
-#include "tree.h"
-#include "node.h"
+class Tree; // forward declaration
+class Node; // forward declaration
 
 class Tree;
 

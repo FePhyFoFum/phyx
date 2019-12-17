@@ -5,8 +5,9 @@
 #include <map>
 #include <cmath>
 
-#include "node.h"
 #include "tree.h"
+
+class Node; // forward declaration
 
 #include <armadillo>
 

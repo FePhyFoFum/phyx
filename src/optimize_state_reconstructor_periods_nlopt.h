@@ -1,18 +1,11 @@
-/*
- * optimize_tnc.h
- *
- *  Created on: Feb 9, 2010
- *      Author: smitty
- */
-
 #ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_
 #define _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_
 
 #include <vector>
 #include <nlopt.h>
 
-#include "state_reconstructor.h"
-#include "rate_model.h"
+class RateModel; // forward declaration
+class StateReconstructor; // forward declaration
 
 #include <armadillo>
 using namespace arma;

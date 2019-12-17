@@ -7,6 +7,7 @@
 
 #include "node.h"
 
+
 class Tree {
 private:
     Node * root;

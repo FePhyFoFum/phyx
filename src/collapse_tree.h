@@ -2,7 +2,8 @@
 #define _COLLAPSE_TREE_H_
 
 #include <string>
-#include "tree.h"
+
+class Tree; // forward declaration
 
 /*
 so the way i have this set up is for the class to only involve

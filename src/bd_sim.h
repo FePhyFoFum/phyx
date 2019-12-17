@@ -4,8 +4,8 @@
 #include <vector>
 #include <random>
 
-#include "tree.h"
-#include "node.h"
+class Tree; // forward declaration
+class Node; // forward declaration
 
 class BirthDeathSimulator {
 private:

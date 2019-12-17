@@ -5,8 +5,7 @@
 #include <vector>
 #include <iostream>
 
-#include "sequence.h"
-
+class Sequence; // forward declaration
 
 std::string get_filetype_string (const int& ft);
 int test_seq_filetype_stream (std::istream& stri, std::string& retstring);

@@ -1,10 +1,3 @@
-/*
- * optimize_tnc.h
- *
- *  Created on: Feb 9, 2010
- *      Author: smitty
- */
-
 #ifndef _OPTIMIZE_CONT_MODELS_NLOPT_H_
 #define _OPTIMIZE_CONT_MODELS_NLOPT_H_
 
@@ -12,7 +5,8 @@
 #include <nlopt.h>
 
 #include "cont_models.h"
-#include "tree.h"
+
+class Tree; // forward declaration
 
 #include <armadillo>
 using namespace arma;

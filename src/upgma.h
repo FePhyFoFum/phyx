@@ -6,7 +6,8 @@
 #include <iostream>
 
 #include "sequence.h"
-#include "tree.h"
+
+class Tree; // forward declaration
 
 
 class UPGMA {

@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#include "tree.h"
+class Tree; // forward declaration
 
 class BDFit {
 private:

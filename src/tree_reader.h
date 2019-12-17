@@ -1,10 +1,3 @@
-/*
- * tree_reader.h
- *
- *  Created on: Nov 24, 2009
- *      Author: smitty
- */
-
 #ifndef _TREE_READER_H_
 #define _TREE_READER_H_
 
@@ -14,6 +7,7 @@
 
 #include "node.h"
 #include "tree.h"
+
 
 class TreeReader {
 public:

@@ -7,7 +7,8 @@
 #include <set>
 #include <iostream>
 
-#include "sequence.h"
+class Sequence; // forward declarations
+
 
 std::string guess_alignment_type (std::string& sequence);
 char get_dna_from_pos (std::set<int> ins);

@@ -5,12 +5,13 @@
 #include <string>
 #include <map>
 
-#include "tree.h"
-#include "node.h"
 #include "rate_model.h"
-#include "vector_node_object.h"
-#include "sequence.h"
 #include "superdouble.h"
+#include "vector_node_object.h"
+
+class Sequence; // forward declaration
+class Node; // forward declaration
+class Tree; // forward declaration
 
 
 class StateReconstructor {

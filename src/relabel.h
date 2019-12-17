@@ -5,8 +5,8 @@
 #include <vector>
 #include <set>
 
-#include "tree.h"
-#include "sequence.h"
+class Tree; // forward declaration
+class Sequence; // forward declaration
 
 class Relabel {
 private:

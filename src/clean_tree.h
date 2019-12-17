@@ -1,8 +1,8 @@
 #ifndef _CL_TR_H_
 #define _CL_TR_H_
 
-#include "tree.h"
-#include "node.h"
+class Tree; // forward declaration
+class Node; // forward declaration
 
 class CleanTree {
 private:

@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-#include "tree.h"
+class Tree; // forward declaration
 
 class TreeInfo {
 private:
