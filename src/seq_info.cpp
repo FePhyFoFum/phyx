@@ -271,24 +271,14 @@ void SeqInfo::make_concatenated_sequence () {
 
 // just grab labels, disregard the rest
 void SeqInfo::collect_taxon_labels () {
-    for (unsigned int i = 0; i < seqs_.size(); i++) {
-        taxon_labels_.push_back(seqs_[i].get_id());
-    }
+    taxon_labels_ = collect_names(seqs_);
     sort(taxon_labels_.begin(), taxon_labels_.end());
 }
 
 
 // assumed aligned if all seqs are the same length
 void SeqInfo::check_is_aligned () {
-    for (unsigned int i = 0; i < seqs_.size(); i++) {
-        seq_lengths_.push_back(seqs_[i].get_length());
-    }
-    // check if all seqs are the same length
-    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
-        is_aligned_ = true;
-    } else {
-        is_aligned_ = false;
-    }
+    is_aligned_ = is_aligned(seqs_);
 }
 
 

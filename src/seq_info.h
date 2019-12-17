@@ -12,7 +12,7 @@ class SeqInfo {
 private:
     std::string concatenated_;
     std::string temp_seq_;
-    std::string seq_chars_; // the alphabet (DNA or AA only at present)
+    std::string seq_chars_; // the alphabet
     std::string file_type_; //"nexus", "phylip", "fasta", "fastq"
     bool output_indiv_; // report stats for each seq
 
