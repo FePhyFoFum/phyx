@@ -9,7 +9,7 @@
 #include "tree.h"
 #include "sequence.h"
 
-#include <armadillo
+#include <armadillo>
 using namespace arma;
 
 
