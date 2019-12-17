@@ -156,7 +156,6 @@ int main(int argc, char * argv[]) {
     // use general purpose reader
     std::vector<Sequence> nuc_seqs;
     std::vector<Sequence> aa_seqs;
-    std::vector<Sequence> codon_seqs;
     std::string alphaName = "";
     
     // read in nucleotide seqs
