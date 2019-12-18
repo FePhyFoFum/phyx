@@ -168,19 +168,20 @@ void CompTest::get_longest_taxon_label () {
 }
 
 
-void CompTest::return_freq_table (std::ostream* poos) {
+void CompTest::return_freq_table () {
     const char separator = ' ';
     const int colWidth = 8;
     // need to take into account longest_tax_label_
     get_longest_taxon_label();
     std::string pad = std::string(longest_tax_label_, ' ');
     // header
-    (*poos) << pad << " ";
+    (*poos_) << "Observed character counts:" << std::endl;
+    (*poos_) << pad << " ";
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
             << seq_chars_[i] << " ";
     }
-    (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
+    (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
     for (int i = 0; i < num_taxa_; i++) {
         int diff = longest_tax_label_ - taxon_labels_[i].size();
         (*poos_) << taxon_labels_[i];
@@ -190,16 +191,16 @@ void CompTest::return_freq_table (std::ostream* poos) {
         }
         (*poos_) << " ";
         for (unsigned int j = 0; j < seq_chars_.length(); j++) {
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
                 << indiv_char_counts_[i][j] << " ";
         }
-        (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << row_totals_[i] << std::endl;
+        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << row_totals_[i] << std::endl;
     }
     int diff = longest_tax_label_ - 5;
     pad = std::string(diff, ' ');
     (*poos_) << "Total" << pad << " ";
     for (unsigned int i = 0; i < col_totals_.size(); i++) {
-        (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
             << col_totals_[i] << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << total_ << std::endl;
@@ -222,7 +223,7 @@ void CompTest::calc_chi_square () {
 }
 
 void CompTest::print_results () {
-    return_freq_table(poos_);
+    return_freq_table();
     (*poos_) << "chi-square test stat. = " << test_stat_ << std::endl;
     (*poos_) << "df = " << df_ << std::endl;
     (*poos_) << "prob = " << prob_ << std::endl;
@@ -279,6 +280,6 @@ double CompTest::lower_incomplete_gamma_function (double s, double t) {
             done = true;
         }
     }
-    std::cerr << "LIGF run for " << counter++ << " iterations" << std::endl;
+    //std::cerr << "LIGF run for " << counter++ << " iterations" << std::endl;
     return sum * Sc;
 }

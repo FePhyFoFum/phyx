@@ -40,7 +40,7 @@ private:
     void read_in_alignment ();
     void set_datatype ();
     void count_chars ();
-    void return_freq_table (std::ostream* poos);
+    void return_freq_table ();
     void get_longest_taxon_label ();
     double get_cell_value (const double& observed, const double& expected);
     void calc_chi_square ();
