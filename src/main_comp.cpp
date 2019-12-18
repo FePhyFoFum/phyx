@@ -22,7 +22,6 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
-    std::cout << " -p, --prot          force interpret as protein (if inference fails)" << std::endl;
     std::cout << " -o, --outf=FILE     output stats file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -37,7 +36,6 @@ static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-    {"prot", no_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
     {"citation", no_argument, NULL, 'C'},
@@ -52,11 +50,10 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     char * outf = NULL;
     char * seqf = NULL;
-    bool force_protein = false; // i.e. if inference fails -- should get rid of this
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:hVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -69,9 +66,6 @@ int main(int argc, char * argv[]) {
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
-                break;
-            case 'p':
-                force_protein = true;
                 break;
             case 'h':
                 print_help();
@@ -88,6 +82,9 @@ int main(int argc, char * argv[]) {
                 exit(0);
         }
     }
+    
+    
+    // hmm does this require a file atm?!?
     
     if (fileset && outfileset) {
         check_inout_streams_identical(seqf, outf);
@@ -115,7 +112,8 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    CompTest ct(pios, poos, force_protein);
+    CompTest ct(pios, poos);
+    ct.print_results();
     
     if (fileset) {
         fstr->close();

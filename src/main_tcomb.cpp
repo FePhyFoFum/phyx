@@ -178,7 +178,7 @@ int main(int argc, char * argv[]) {
             std::map<std::string, Node *> diffnds;
             std::vector<std::string> diffnms; 
             for (int i = 0; i <bigtree->getExtantNodeCount(); i++) {
-                if (count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName())==1) {
+                if (std::count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName())==1) {
                     diffnms.push_back(bigtree->getExternalNode(i)->getName());
                 }
             } 
@@ -198,7 +198,7 @@ int main(int argc, char * argv[]) {
                     std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(), lvsset.end(), atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
                     for(unsigned int j=0;j<v2.size();j++) {
-                        std::cout << "to add " <<  v2[j]<< std::endl; 
+                        std::cout << "to add " << v2[j]<< std::endl; 
                         diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
                     }
                     connecthere->removeChild(*childs[i]);
@@ -210,8 +210,9 @@ int main(int argc, char * argv[]) {
             addtree->setRoot(connecthere);
             bool didit = false;
             while (diffnds.size() > 0) {
+                std::cout << "diffnds.size() = " << diffnds.size() << std::endl;
                 for (std::map<std::string, Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
-                    //std::cout << it->first << std::endl;
+                    std::cout << it->first << std::endl;
                     Node * cn = it->second;
                     bool goi = true;
                     while (goi == true) {
@@ -226,7 +227,10 @@ int main(int argc, char * argv[]) {
                             Node * nd = addtree->getMRCA(v_int);
                             std::cout << "would add to " <<  nd->getNewick(false) << std::endl;
                             //START HERE
+                            std::cout << "v_int.size() = " << v_int.size() << std::endl;
                             if (v_int.size() == 1) {
+                                
+                                // missing something?
                                 
                             }
                             std::vector<std::string> lvsnms = prn->get_leave_names();
