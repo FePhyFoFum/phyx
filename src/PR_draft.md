@@ -24,8 +24,7 @@
     - this is an issue that appeared in a [paper](https://academic.oup.com/bioinformatics/article/34/6/1053/4582279) for the R package `castor`
     - the issue involves the extensive memory management overhead involved with deleting nodes. `pxrmt` now will use the `pxtrt` tracing procedure is the number of nodes to remove are too large
     - the `castor` example now takes 5 seconds (instead of more than 3 hours; the author actually killed the job at this point)
-- `pxrls` now uses regex ([feature request](https://github.com/FePhyFoFum/phyx/issues/59))
-- so does `pxrlt` ([feature request](https://github.com/FePhyFoFum/phyx/issues/106))
+- `pxrms` (and `pxrmt`) now uses regex for removing taxa ([feature request](https://github.com/FePhyFoFum/phyx/issues/59))
 
 ### New programs
 - pxmono: test the monophyletic status of a list of names in a tree (or distribution)
@@ -34,7 +33,7 @@
     - for hypothesis testing
 
 ### Miscellaneous (no particular order)
-- RAII timer added with `timer.h`
+- RAII timer added with `timer.h` for quick 'n easy code timing
     - to use this, do something like:
 ```c++
 include "timer.h"
@@ -53,12 +52,11 @@ void foo (some args) {
 - `pslssq` now handles all the supported datatypes (DNA, AA, BINARY, MULTI) rather than just the first 2
 - `pxboot` overhauled
 - `pxclsq` refactored
-- `utils.h` now has the following:
+- added the ability to peek at line(s) in a stream to make decisions for downstream procedures without losing position in the stream. found in `utils.h`:
 ```
 std::string peek_line (std::istream& pios);
 std::vector<std::string> peek_lines (std::istream& pios, const int& n);
 ```
-    - this allows one to peek at line(s) in a stream to make decisions for downstream procedures without losing position in the stream
 - `pxaa2cdn` was overhauled (more efficient, and better error-checking)
 - more consistent member variable names and formatting
 - remedy various `-Wall` compiler warnings
