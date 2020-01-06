@@ -152,8 +152,16 @@ int main(int argc, char * argv[]) {
     }
     inmrca.close();
     
+    
+    
+    
     // this does not use the conventional tree reader functions
     // update this
+    
+    
+    
+    
+    
     
     // collect tree(s)
     std::vector<std::string> lines;

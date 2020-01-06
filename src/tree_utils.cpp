@@ -151,7 +151,7 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
             std::vector<std::string>::iterator it;
             for (unsigned int i = 0; i < names.size(); i++) {
                 if (check_name_against_tree(tree, names[i])) {
-                    good_names.push_back(names[i]);
+                    good_names.emplace_back(names[i]);
                 }
             }
             if (good_names.size() == 0) {
@@ -203,8 +203,7 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
 
 // treemap: key is focal node, value is vector of adjacent nodes
 // both keys and values can be internal or terminal nodes
-void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
-        std::vector<Node*> >& tree_map) {
+void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
     
     bool debug = true;
     
