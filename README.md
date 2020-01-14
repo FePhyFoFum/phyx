@@ -1,6 +1,6 @@
-<img src="logo.png" alt="phyx logo" width=208px/> 
-
 [![Build Status](https://travis-ci.com/FePhyFoFum/phyx.svg?branch=master)](https://travis-ci.com/FePhyFoFum/phyx)
+
+<img src="logo.png" alt="phyx logo" width=208px/> 
 
 **phyx** performs phylogenetics analyses on trees and sequences. See installation instructions for Linux and Mac including any dependencies on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation) or below.
 
