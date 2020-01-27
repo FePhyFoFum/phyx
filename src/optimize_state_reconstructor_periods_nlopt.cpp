@@ -1,17 +1,10 @@
-/*
- * optimize_tnc.cpp
- *
- *  Created on: Feb 9, 2010
- *      Author: smitty
- */
-
-#include "optimize_state_reconstructor_periods_nlopt.h"
 #include <iostream>
-#include <stdio.h>
+//#include <stdio.h>
 #include <nlopt.hpp>
-#include <math.h>
+#include <cmath>
 #include <vector>
 
+#include "optimize_state_reconstructor_periods_nlopt.h"
 #include "state_reconstructor.h"
 #include "rate_model.h"
 
@@ -20,12 +13,11 @@ using namespace arma;
 
 
 StateReconstructor * nloptsr_periods;
-vector<RateModel> * nloptrm_periods;
-vector<mat> * nloptfree_variables_periods;
+std::vector<RateModel> * nloptrm_periods;
+std::vector<mat> * nloptfree_variables_periods;
 
-//double nlopt_sr(int n, const double *x, void *state) {
-//double nlopt_sr(unsigned n, const double *x, double *grad, void *my_func_data);
-double nlopt_sr_periods(unsigned n, const double *x, double *grad, void *my_func_data) {
+
+double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_func_data) {
     for (unsigned int k=0; k < nloptfree_variables_periods->size(); k++) {
         for (unsigned int i=0; i < (*nloptfree_variables_periods)[k].n_rows; i++) {
             for (unsigned int j=0; j < (*nloptfree_variables_periods)[k].n_cols; j++) {
@@ -49,14 +41,15 @@ double nlopt_sr_periods(unsigned n, const double *x, double *grad, void *my_func
             break;
         }
     }
-//    cout << like << endl;
+//    std::cout << like << std::endl;
     if (like < 0 || like == std::numeric_limits<double>::infinity()) {
         like = 10000000000000;
     }
     return like;
 }
 
-void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr, vector<mat> * _free_mask, int _nfree) {
+void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor * _sr,
+        std::vector<mat> * _free_mask, int _nfree) {
     nloptsr_periods = _sr;
     nloptrm_periods = _rm;
     nloptfree_variables_periods = _free_mask;
@@ -74,29 +67,29 @@ void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr,
     opt.set_xtol_rel(0.001);
     opt.set_maxeval(10000);
     
-    vector<double> x(_nfree,0);
+    std::vector<double> x(_nfree,0);
     for (unsigned int k=0; k < _rm->size(); k++) {
         for (unsigned int i=0; i < _rm->at(k).get_Q().n_rows; i++) {
             for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {
                     x[int((*_free_mask)[k](i, j))] = _rm->at(k).get_Q()(i, j);
-                    //cout << x[int((*_free_mask)[k](i,j))] << " ";
+                    //std::cout << x[int((*_free_mask)[k](i,j))] << " ";
                 }
             }
-            cout << endl;
+            std::cout << std::endl;
         }
     }
     //double minf;
-    vector<double> result = opt.optimize(x);
+    std::vector<double> result = opt.optimize(x);
     for (unsigned int k=0; k < _rm->size(); k++) {
         for (unsigned int i=0; i < _rm->at(k).get_Q().n_rows; i++) {
             for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {
                     (*_free_mask)[k](i, j) = result[int((*_free_mask)[k](i, j))];
-                    //cout << x[int((*(*_free_mask)[k])(i,j))] << " ";
+                    //std::cout << x[int((*(*_free_mask)[k])(i,j))] << " ";
                 }
             }
-        //cout << endl;
+        //std::cout << std::endl;
         }
     }
     //if ((&minf) < 0) {
@@ -106,6 +99,3 @@ void optimize_sr_periods_nlopt(vector<RateModel> * _rm,StateReconstructor * _sr,
     //    printf("found minimum at %0.10g\n", x[0], x[1], minf);
     //}
 }
-
-
-

@@ -1,41 +1,36 @@
-/*
- * upgma.h
- *
- *  Created on: Jun 10, 2015
- *      Author: joe
- */
-
 #ifndef _UPGMA_H_
 #define _UPGMA_H_
 
+#include <string>
 #include <vector>
-#include <map>
+#include <iostream>
 
-using namespace std;
+#include "sequence.h"
+
+class Tree; // forward declaration
+
 
 class UPGMA {
 private:
-
-    map <string, string> sequences;
-    map <string, string>::iterator iter;
-    vector<string> names;
-    vector< vector<double> > Matrix;
-    void set_name_key ();
+    int num_taxa_; 
+    int num_char_;
+    std::string newickstring_;
+    std::vector<std::string> names_;
+    std::vector<Sequence> seqs_;
+    std::vector< std::vector<double> > full_distmatrix_;
+    Tree* tree_;
     
-    // additions:
-    int ntax;
-    int nchar;
-    string seqfile;
-    map<int, string> NameKey;
-    string newickstring; // temporary
+    void update_tree (std::string& newname, std::vector<std::string>& names,
+        std::vector< std::vector<double> >& newmatrix);
+    std::vector< std::vector<double> > build_matrix ();
+    double get_smallest_distance (const std::vector< std::vector<double> >& dmatrix,
+        int& mini1, int& mini2);
+    void construct_tree ();
 
 public:
-    UPGMA();
-    UPGMA (istream* pios);
-    map<string, string> FastaToOneLine(ifstream&);
-    vector< vector<double> > BuildMatrix(map<string, string>& sequences);
-    void TREEMAKE(vector<string>&, map <int, string>&, vector< vector<double> >&);
-    string get_newick ();
+    UPGMA (std::istream* pios);
+    std::vector< std::vector<double> > get_matrix () const;
+    std::string get_newick ();
 };
 
 #endif /* _UPGMA_H_ */

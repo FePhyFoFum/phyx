@@ -1,19 +1,15 @@
-/*
- * seqgen.h
- *
- *  Created on: Jun 23, 2015
- *      Author: joe
- */
-
 #ifndef _SEQ_GEN_H_
 #define _SEQ_GEN_H_
 
+#include <string>
+#include <vector>
+#include <map>
 #include <random>
 
-using namespace std;
-
 #include "sequence.h"
-#include "tree.h"
+
+class Tree; // forward declaration
+class Node; // forward declaration
 
 class SequenceGenerator {
 
@@ -29,13 +25,13 @@ private:
     float alpha_;
     float pinvar_;
     
-    string root_sequence_;
+    std::string root_sequence_;
     
-    vector <double> base_freqs_;
-    vector <double> aa_freqs_;
-    vector < vector <double> > rmatrix_;
-    vector <double> multi_rates_;
-    vector <float> site_rates_;
+    std::vector<double> base_freqs_;
+    std::vector<double> aa_freqs_;
+    std::vector< std::vector<double> > rmatrix_;
+    std::vector<double> multi_rates_;
+    std::vector<float> site_rates_;
     
     bool show_ancs_;
     bool print_node_labels_;
@@ -43,55 +39,52 @@ private:
     bool is_dna_;
     
     // hard-coded stuff
-    static map<char, int> nuc_map_;
-    static map<char, int> aa_map_;
-    static string nucleotides_;
-    static string amino_acids_;
+    static std::map<char, int> nuc_map_;
+    static std::map<char, int> aa_map_;
+    static std::string nucleotides_;
+    static std::string amino_acids_;
     
-    mt19937 generator_;
+    std::mt19937 generator_;
     std::uniform_real_distribution<float> uniformDistrib_;
     std::gamma_distribution<float> gammaDistrib_;
     
-    
     // set all values
-    void initialize ();
+    void initialize();
     
     // intermediate results
-    map <Node *, string> seqs_;
-    map <Node *, vector < vector <double> > > ancq_;
+    std::map<Node *, std::string> seqs_;
+    std::map<Node *, std::vector< std::vector<double> > > ancq_;
     
     // the result to return
-    vector <Sequence> res;
+    std::vector<Sequence> res;
     
     // los funciones
     void print_node_labels ();
-    void label_internal_nodes();
+    void label_internal_nodes ();
     void preorder_tree_traversal ();
-    //vector <float> site_rates;
-    vector < vector <double> > calculate_q_matrix ();
-    vector < vector<double> > calcQmatrix (vector<vector <double>>);
-    vector < vector <double> > calculate_p_matrix (vector < vector <double> > const&QMatrix,
+    //std::vector<float> site_rates;
+    std::vector< std::vector<double> > calculate_q_matrix ();
+    std::vector< std::vector<double> > calcQmatrix (std::vector< std::vector<double> >);
+    std::vector< std::vector<double> > calculate_p_matrix (const std::vector< std::vector<double> >& QMatrix,
         float br);
-    string simulate_sequence (string const& anc, vector < vector <double> >& Matrix,
-        float const& brlength);
-    string generate_random_sequence ();
-    vector < vector <double> > construct_rate_matrix (vector <double> const& rates);
+    std::string simulate_sequence (const std::string& anc, std::vector< std::vector<double> >& Matrix,
+        const float& brlength);
+    std::string generate_random_sequence ();
+    std::vector< std::vector<double> > construct_rate_matrix (const std::vector<double>& rates);
     void check_valid_sequence ();
     float get_uniform_random_deviate ();
     float get_gamma_random_deviate (float);
-    vector <float> set_site_rates ();
+    std::vector<float> set_site_rates ();
     
 public:
-    
-    SequenceGenerator (int const &seqlength, vector <double> const& basefreq,
-        vector < vector<double> >& rmatrix, Tree * tree, bool const& showancs, 
-        int const& nreps, int const & seed, float const& alpha, float const& pinvar,
-        string const& ancseq, bool const& printpost, vector<double> const& multirates,
-        vector <double> const& aabasefreq, bool const& is_dna);
+    SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
+        std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
+        const int& nreps, const int& seed, const float& alpha, const float& pinvar,
+        const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
+        const std::vector<double>& aabasefreq, const bool& is_dna);
     
     // return results
-    vector<Sequence> get_sequences ();
-    
+    std::vector<Sequence> get_sequences ();
 };
 
 #endif /* _SEQ_GEN_H_ */

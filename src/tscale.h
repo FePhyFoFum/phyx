@@ -1,9 +1,7 @@
 #ifndef _TSCALE_H_
 #define _TSCALE_H_
 
-#include "tree.h"
-
-using namespace std;
+class Tree; // forward declaration
 
 class TScale {
 private:
@@ -13,8 +11,8 @@ private:
     
 public:
     TScale ();
-    void set_scalef (double const& scalef);
-    void set_rootheight (double const& rootheight);
+    void set_scalef (const double& scalef);
+    void set_rootheight (const double& rootheight);
     void rescale (Tree * tr);
 };
 

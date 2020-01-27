@@ -10,34 +10,37 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "seq_sample.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Sequence alignment bootstrap or jackknife resampling." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxboot [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
-    cout << " -p, --partf=FILE    file listing empirical partitions: NAME = START-STOP[\\INTERVAL]" << endl;
-    cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap (i.e. -f 1.0)" << endl;
-    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Sequence alignment bootstrap or jackknife resampling." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxboot [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
+    std::cout << " -p, --partf=FILE    file listing empirical partitions: NAME = START-STOP[\\INTERVAL]" << std::endl;
+    std::cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap (i.e. -f 1.0)" << std::endl;
+    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxboot 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxboot 1.1\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -48,6 +51,7 @@ static struct option const long_options[] =
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -59,14 +63,13 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool partitioned = false;
     float jackfract = 0.0;
-    int numchar = 0;
     char * outf = NULL;
     char * seqf = NULL;
-    string partf = "";
+    std::string partf = "";
     int seed = -1;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:f:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:f:x:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -87,7 +90,7 @@ int main(int argc, char * argv[]) {
             case 'f':
                 jackfract = string_to_float(optarg, "-f");
                 if (jackfract < 0 || jackfract > 1) {
-                    cout << "Jackknife fraction must be 0 < x < 1" << endl;
+                    std::cerr << "Error: jackknife fraction must be 0 < x < 1. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -98,7 +101,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -110,22 +116,22 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
@@ -133,39 +139,12 @@ int main(int argc, char * argv[]) {
     }
     
     if (partitioned && (jackfract != 0.0)) {
-        cout << "Partitioned jackknife not implemented. Exiting." << endl;
-        exit (0);
+        std::cerr << "Error: partitioned jackknife not implemented. Exiting." << std::endl;
+        exit(0);
     }
     
-    SequenceSampler ss(seed, jackfract, partf);
-    
-    Sequence seq;
-    string retstring;
-    bool first = true;
-    
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        if (first) { // need to read in first sequence to get numchar
-            numchar = (int)seq.get_sequence().size(); // check against partition information
-            if (partitioned) {
-                if (numchar != ss.get_num_partitioned_sites()) {
-                    cout << "Error: numSites in sequence (" << numchar <<
-                        ") does not match that in partition file (" << ss.get_num_partitioned_sites() <<
-                        ")." << endl;
-                }
-            }
-            ss.sample_sites(numchar);
-            first = false;
-        }
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
-    }
-    // have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << ss.get_resampled_seq(seq.get_sequence()) << endl;
-    }
+    SequenceSampler ss(pios, seed, jackfract, partf);
+    ss.write_resampled_seqs(poos);
     
     if (fileset) {
         fstr->close();

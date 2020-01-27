@@ -1,54 +1,61 @@
-/*
- * main_clsq.cpp
- *
- *  Created on: Jun 15, 2015
- *      Author: joe
- */
-
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "clsq.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
+
+// TODO: throw out stop_codons: "TAG", "TAA", "TGA"
 
 void print_help() {
-    cout << "Cleans alignments by removing positions with too much ambiguous data." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << "Results are written in fasta format." << endl;
-    cout << endl;
-    cout << "Usage: pxclsq [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE       input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE       output fasta file, stout otherwise" << endl;
-    cout << " -p, --prop=DOUBLE     proportion required to be present, default=0.5" << endl;
-    cout << " -a, --aminoacid       force interpret as protein (if inference fails)" << endl;
-    cout << " -v, --verbose         more verbose output (i.e. if entire seqs are removed)" << endl;
-    cout << " -h, --help            display this help and exit" << endl;
-    cout << " -V, --version         display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxclsq [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta file, STOUT otherwise" << std::endl;
+    std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
+    std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
+    std::cout << " -c, --codon         examine sequences by codon rather than site" << std::endl;
+    std::cout << "                       - requires all sequences be in frame and of correct length" << std::endl;
+    std::cout << " -i, --info          report counts of missing data and exit" << std::endl;
+    std::cout << "                       - combine with -t to get report by taxon (rather than site)" << std::endl;
+    std::cout << "                       - combine with -c to use codons as units" << std::endl;
+    std::cout << " -v, --verbose       more verbose output (i.e. if entire seqs are removed)" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxclsq 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxclsq 1.1\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
     {"prop", required_argument, NULL, 'p'},
-    {"aminoacid", required_argument, NULL, 'a'},
+    {"taxa", required_argument, NULL, 't'},
+    {"codon", required_argument, NULL, 'c'},
+    {"info", required_argument, NULL, 'i'},
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -58,15 +65,17 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    bool force_protein = false;
     char * seqf = NULL;
     char * outf = NULL;
-    double proportion = 0.5;
+    double prop_required = 0.5;
     bool verbose = false;
+    bool by_taxon = false;
+    bool by_codon = false;
+    bool count_only = false;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:avhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:atcivhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -81,10 +90,20 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-                proportion = string_to_float(optarg, "-p");
+                prop_required = string_to_float(optarg, "-p");
+                if (prop_required > 1.0 || prop_required < 0.0) {
+                    std::cerr << "Error: proportion of required data present (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
+                    exit(0);
+                }
                 break;
-            case 'a':
-                force_protein = true;
+            case 't':
+                by_taxon = true;
+                break;
+            case 'c':
+                by_codon = true;
+                break;
+            case 'i':
+                count_only = true;
                 break;
             case 'v':
                 verbose = true;
@@ -93,48 +112,51 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
                 exit(0);
         }
     }
-    if (!fileset) {
-        cout << "you must specify an input sequence file" << endl;
-        exit(0);
-    }
     
     if (fileset && outfileset) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    istream * pios = NULL;
-    ifstream * fstr = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ifstream * fstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     
-    SequenceCleaner toClean(pios, proportion, force_protein, verbose);
+    SequenceCleaner SC(pios, prop_required, by_taxon, by_codon, count_only, verbose);
     
     // write sequences. currently only fasta format.
-    toClean.write_seqs(poos);
+    if (!count_only) {
+        SC.write_seqs(poos);
+    } else {
+        SC.write_stats(poos);
+    }
     
     if (outfileset) {
         ofstr->close();

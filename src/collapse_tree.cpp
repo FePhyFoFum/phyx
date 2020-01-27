@@ -1,21 +1,21 @@
-// collapse internal edges below some support threshold
-
+#include <string>
 #include <iostream>
-#include <math.h>       /* rint */
-
-using namespace std;
+#include <cmath>       /* rint */
 
 #include "tree.h"
 #include "tree_utils.h"
 #include "collapse_tree.h"
 
-Collapser::Collapser (double const& threshold):scale_set_(false) {
+
+Collapser::Collapser (const double& threshold):scale_set_(false) {
     threshold_ = threshold;
 }
 
-void Collapser::set_sup_string (string const& str) {
+
+void Collapser::set_sup_string (const std::string& str) {
     sup_string_ = str;
 }
+
 
 /*
 need to consider both node `names' _and_ `comments'
@@ -23,7 +23,6 @@ former can be newick or Nexus, latter are only Nexus (e.g. BEAST)
 - annotations have certain strings identifying support:
     - 'posterior=', 'prob=', 'label='
 */
-
 void Collapser::collapse_edges (Tree * tr) {
     has_labels_ = tr->hasNodeNames();
     has_annotations_ = tr->hasNodeAnnotations();
@@ -45,11 +44,11 @@ void Collapser::collapse_edges (Tree * tr) {
             //cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " nodes to deal with." << endl;
             for (int i=0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
-                string str = m->getName();
+                std::string str = m->getName();
                 if (str == "") {
                     //cout << "Whoops. This node has no support value." << endl;
                 } else {
-                    float cursup = stof(str);
+                    float cursup = std::stof(str);
                     if (!scale_set_) {
                         guess_scale(cursup);
                     }
@@ -71,7 +70,6 @@ void Collapser::collapse_edges (Tree * tr) {
 }
 
 
-
 /*
 need to consider ranges:
 1) 0-100 (e.g., bootstraps)
@@ -79,11 +77,9 @@ need to consider ranges:
 - use rint to find out if what is passed in is an integer or float:
 - rintf(f)==f
 */
-
-
 // using a support value (the first encountered), determine whether scale is proportions or percentages
 // if appropriate will reset threshold (e.g. from 0.5 to 50)
-void Collapser::guess_scale (float const& sup) {
+void Collapser::guess_scale (const float& sup) {
     float f = sup;
     if (rintf(f) == f) {
         //cout << "Support is an integer" << endl;

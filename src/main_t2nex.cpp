@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,32 +6,34 @@
 #include <getopt.h>
 #include <map>
 
-using namespace std;
-
 #include "tree.h"
 #include "tree_reader.h"
 #include "utils.h"
 #include "tree_utils.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "This will convert a tree file to vanilla Nexus format." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxt2nex [OPTION]... [FILE]..." << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input tree file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output tree file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "This will convert a tree file to vanilla Nexus format." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxt2nex [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-/*
- * add you name if you contribute (probably add another line)
- */
-string versionline("pxt2nex 0.1\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+
+std::string versionline("pxt2nex 1.1\nCopyright (C) 2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -40,6 +41,7 @@ static struct option const long_options[] =
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -53,7 +55,7 @@ int main(int argc, char * argv[]) {
     char * outf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -71,7 +73,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                 std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -84,30 +89,30 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (fileset == true ) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     //read trees 
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     
     int treeCounter = 0;
@@ -119,21 +124,21 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
                 if (treeCounter == 0) {
-                    (*poos) << "#NEXUS" << endl << "Begin trees;" << endl;
+                    (*poos) << "#NEXUS" << std::endl << "Begin trees;" << std::endl;
                 }
                 if (is_rooted(tree)) {
                     (*poos) << "tree tree" << treeCounter << " = [&R] "
-                            << getNewickString(tree) << endl;
+                            << getNewickString(tree) << std::endl;
                 } else {
                     (*poos) << "tree tree" << treeCounter << " = [&U] "
-                            << getNewickString(tree) << endl;
+                            << getNewickString(tree) << std::endl;
                 }
                 treeCounter++;
             }
         }
-        (*poos) << "end;" << endl;
+        (*poos) << "end;" << std::endl;
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -142,19 +147,22 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 if (treeCounter == 0) {
-                    (*poos) << "#NEXUS" << endl << "Begin trees;" << endl;
+                    (*poos) << "#NEXUS" << std::endl << "Begin trees;" << std::endl;
                 }
                 if (is_rooted(tree)) {
                     (*poos) << "tree tree" << treeCounter << " = [&R] "
-                            << getNewickString(tree) << endl;
+                            << getNewickString(tree) << std::endl;
                 } else {
                     (*poos) << "tree tree" << treeCounter << " = [&U] "
-                            << getNewickString(tree) << endl;
+                            << getNewickString(tree) << std::endl;
                 }
                 treeCounter++;
             }
         }
-        (*poos) << "end;" << endl;
+        (*poos) << "end;" << std::endl;
+    } else {
+        std::cerr << "Error: tree format not recognized. Exiting." << std::endl;
+        exit(1);
     }
     
     if (fileset) {

@@ -1,11 +1,3 @@
-/*
- * main_seqgen.cpp
- *
- *  Created on: Jun 23, 2015
- *      Author: joe
- */
-
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -13,50 +5,53 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "seq_gen.h"
 #include "utils.h"
 #include "tree.h"
 #include "tree_reader.h"
 #include "log.h"
 
+extern std::string PHYX_CITATION;
+
+
 void print_help() {
-    cout << "Basic sequence simulator under the GTR model." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxseqgen [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE       input treefile, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE        output seq file, stout otherwise" << endl;
-    cout << " -l, --length=INT       length of sequences to generate. default is 1000" << endl;
-    cout << " -b, --basef=Input      comma-delimited base freqs in order: A,C,G,T. default is equal" << endl;
-    cout << " -g, --gamma=INT        gamma shape value. default is no rate variation" << endl;
-    cout << " -i, --pinvar=FLOAT     proportion of invariable sites. default is 0.0" << endl;
-    cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << endl;
-    cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
-    cout << " -w, --aaratemat=Input  comma-delimited amino acid rate matrix. default is all freqs equal" << endl;
-    cout << "                        order is ARNDCQEGHILKMFPSTWYV" << endl;
-    cout << " -q, --aabasefreq=Input AA frequencies, order: ARNDCQEGHILKMFPSTWYV" << endl;
-    cout << " -c, --protein          run as amino acid" << endl;
-    cout << " -n, --nreps=INT        number of replicates" << endl;
-    cout << " -x, --seed=INT         random number seed, clock otherwise" << endl;
-    cout << " -a, --ancestors        print the ancestral node sequences. default is no" << endl;
-    cout << "                          use -p for the nodes labels" << endl;
-    cout << " -p, --printnodelabels  print newick with internal node labels. default is no" << endl;
-    cout << " -m, --multimodel=Input specify multiple models across tree" << endl;
-    cout << "                          input is as follows:" << endl;
-    cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << endl;
-    cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << endl;
-    cout << " -k, --rootseq=STRING   set root sequence. default is random (from basefreqs)" << endl;
-    cout << " -h, --help             display this help and exit" << endl;
-    cout << " -V, --version          display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Basic sequence simulator under the GTR model." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxseqgen [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -t, --treef=FILE       input treefile, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE        output seq file, STOUT otherwise" << std::endl;
+    std::cout << " -l, --length=INT       length of sequences to generate. default is 1000" << std::endl;
+    std::cout << " -b, --basef=Input      comma-delimited base freqs in order: A,C,G,T. default is equal" << std::endl;
+    std::cout << " -g, --gamma=INT        gamma shape value. default is no rate variation" << std::endl;
+    std::cout << " -i, --pinvar=FLOAT     proportion of invariable sites. default is 0.0" << std::endl;
+    std::cout << " -r, --ratemat=Input    comma-delimited input values for rate matrix. default is JC69" << std::endl;
+    std::cout << "                          order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << std::endl;
+    std::cout << " -w, --aaratemat=Input  comma-delimited amino acid rate matrix. default is all freqs equal" << std::endl;
+    std::cout << "                        order is ARNDCQEGHILKMFPSTWYV" << std::endl;
+    std::cout << " -q, --aabasefreq=Input AA frequencies, order: ARNDCQEGHILKMFPSTWYV" << std::endl;
+    std::cout << " -c, --protein          run as amino acid" << std::endl;
+    std::cout << " -n, --nreps=INT        number of replicates" << std::endl;
+    std::cout << " -x, --seed=INT         random number seed, clock otherwise" << std::endl;
+    std::cout << " -a, --ancestors        print the ancestral node sequences. default is no" << std::endl;
+    std::cout << "                          use -p for the nodes labels" << std::endl;
+    std::cout << " -p, --printnodelabels  print newick with internal node labels. default is no" << std::endl;
+    std::cout << " -m, --multimodel=Input specify multiple models across tree" << std::endl;
+    std::cout << "                          input is as follows:" << std::endl;
+    std::cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << std::endl;
+    std::cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << std::endl;
+    std::cout << " -k, --rootseq=STRING   set root sequence. default is random (from basefreqs)" << std::endl;
+    std::cout << " -h, --help             display this help and exit" << std::endl;
+    std::cout << " -V, --version          display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxseqgen 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxseqgen 1.1\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -78,6 +73,7 @@ static struct option const long_options[] =
     {"rootseq", required_argument, NULL, 'k'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -92,27 +88,27 @@ int main(int argc, char * argv[]) {
     bool is_dna = true;
     float pinvar = 0.0;
     double tot;
-    string yorn = "n";
+    std::string yorn = "n";
     int seqlen = 1000;
     int pos = 0;
     int pos2 = 0;
-    string infreqs;
-    string inrates;
-    string holdrates;
-    string ancseq;
+    std::string infreqs;
+    std::string inrates;
+    std::string holdrates;
+    std::string ancseq;
     char * outf = NULL;
     char * treef = NULL;
-    vector <double> diag(20, 0.0);
-    vector <double> basefreq(4, 0.25);
-    vector <double> aabasefreq(20, 0.05);
-    vector <double> userrates;
-    vector <double> multirates;
+    std::vector<double> diag(20, 0.0);
+    std::vector<double> basefreq(4, 0.25);
+    std::vector<double> aabasefreq(20, 0.05);
+    std::vector<double> userrates;
+    std::vector<double> multirates;
     int nreps = 1; // not implemented at the moment
     int seed = -1;
     int numpars = 0;
     float alpha = -1.0;
-    vector<vector <double>> dmatrix;
-    vector< vector <double> > aa_rmatrix(20, vector<double>(20, 1));
+    std::vector< std::vector<double>> dmatrix;
+    std::vector< std::vector<double> > aa_rmatrix(20, std::vector<double>(20, 1));
         for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
         for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
             if (i == j) { // Fill Diagonal
@@ -120,7 +116,7 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
+    std::vector< std::vector<double> > rmatrix(4, std::vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i == j) { // Fill Diagonal
@@ -131,14 +127,14 @@ int main(int argc, char * argv[]) {
     /*dmatrix = aa_rmatrix;
     for (unsigned int i = 0; i < dmatrix.size(); i++) {
         for (unsigned int j = 0; j < dmatrix.size(); j++) {
-            cout << dmatrix[i][j] << " ";
+            std::cout << dmatrix[i][j] << " ";
         }
-        cout << "\n";
+        std::cout << "\n";
     }*/
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apcm:k:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apcm:k:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -156,12 +152,12 @@ int main(int argc, char * argv[]) {
                 infreqs = strdup(optarg);
                 parse_comma_list(infreqs, basefreq);
                 if (basefreq.size() != 4) {
-                    cout << "Error: must provide 4 base frequencies (" << basefreq.size()
-                        << " provided). Exiting." << endl;
+                    std::cerr << "Error: must provide 4 base frequencies (" << basefreq.size()
+                        << " provided). Exiting." << std::endl;
                     exit(0);
                 }
                 if (!essentially_equal(sum(basefreq), 1.0)) {
-                    cout << "Error: base frequencies must sum to 1.0. Exiting." << endl;
+                    std::cerr << "Error: base frequencies must sum to 1.0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -177,8 +173,8 @@ int main(int argc, char * argv[]) {
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 6) {
-                    cout << "Error: must provide 6 substitution parameters. " <<
-                        "Only " << userrates.size() << " provided. Exiting." << endl;
+                    std::cerr << "Error: must provide 6 substitution parameters. " <<
+                        "Only " << userrates.size() << " provided. Exiting." << std::endl;
                     exit(0);
                 }
                 // NOTE: this uses order: A,T,C,G for matrix, but
@@ -202,9 +198,9 @@ int main(int argc, char * argv[]) {
                 /*//Turn on to check matrix
                 for (unsigned int i = 0; i < rmatrix.size(); i++) {
                    for (unsigned int j = 0; j < rmatrix.size(); j++) {
-                      cout << rmatrix[i][j] << " ";
+                      std::cout << rmatrix[i][j] << " ";
                    }
-                    cout << "\n";
+                    std::cout << "\n";
                 }*/
                 break;
             case 'w':
@@ -214,18 +210,18 @@ int main(int argc, char * argv[]) {
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 190) {
-                    cout << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
-                        "Only " << userrates.size() << " provided. Exiting." << endl;
+                    std::cerr << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
+                        "Only " << userrates.size() << " provided. Exiting." << std::endl;
                     exit(0);
                 }
                 pos = 0;
                 pos2 = 1;
                 //Fill the Matrix
-                for (unsigned int i = 0; i < userrates.size(); i++){
+                for (unsigned int i = 0; i < userrates.size(); i++) {
                     aa_rmatrix[pos][pos2] = userrates[i];
                     aa_rmatrix[pos2][pos] = userrates[i];
                     pos2++;
-                    if (pos2 == 20){
+                    if (pos2 == 20) {
                         pos += 1;
                         pos2 = (pos + 1);
                     }
@@ -233,7 +229,7 @@ int main(int argc, char * argv[]) {
                 //Replace Diagonal
                 for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
                     for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
-                        if (i != j){
+                        if (i != j) {
                             tot += aa_rmatrix[i][j];
                         }
                     }
@@ -243,9 +239,9 @@ int main(int argc, char * argv[]) {
                 /*
                 for (unsigned int i = 0; i < aa_rmatrix.size(); i++) {
                     for (unsigned int j = 0; j < aa_rmatrix.size(); j++) {
-                        cout << aa_rmatrix[i][j] << " ";
+                        std::cout << aa_rmatrix[i][j] << " ";
                     }
-                    cout << "\n";
+                    std::cout << "\n";
                 }*/
                 break;
             case 'n':
@@ -259,12 +255,12 @@ int main(int argc, char * argv[]) {
                 infreqs = strdup(optarg);
                 parse_comma_list(infreqs, aabasefreq);
                 if (aabasefreq.size() != 20) {
-                    cout << "Error: must provide 20 base frequencies (" << aabasefreq.size()
-                        << " provided). Exiting." << endl;
+                    std::cerr << "Error: must provide 20 base frequencies (" << aabasefreq.size()
+                        << " provided). Exiting." << std::endl;
                     exit(0);
                 }
                 if (!essentially_equal(sum(aabasefreq), 1.0)) {
-                    cout << "Error: base frequencies must sum to 1.0. Exiting." << endl;
+                    std::cerr << "Error: base frequencies must sum to 1.0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -285,9 +281,9 @@ int main(int argc, char * argv[]) {
                 parse_comma_list(holdrates, multirates);
                 numpars = multirates.size();
                 if ((numpars - 6) % 7 != 0) {
-                    cout << "Error: must provide 6 background substitution "
+                    std::cerr << "Error: must provide 6 background substitution "
                         << "parameters and 7 values (1 node id + 6 subst. par.) "
-                        << "for each piecewise model. Exiting." << endl;
+                        << "for each piecewise model. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -298,7 +294,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -316,22 +315,22 @@ int main(int argc, char * argv[]) {
         dmatrix = aa_rmatrix;
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (fileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
@@ -343,13 +342,13 @@ int main(int argc, char * argv[]) {
      * Default Base Frequencies and Rate Matrix
      *
      */
-    //vector <double> basefreq(4, 0.0);
+    //vector<double> basefreq(4, 0.0);
     //basefreq[0] = .25;
     //basefreq[1] = .25;
     //basefreq[2] = .25;
     //basefreq[3] = 1.0 - basefreq[0] - basefreq[1] - basefreq[2];
     /*    
-    vector< vector <double> > rmatrix(4, vector<double>(4, 0.33));
+    vector< vector<double> > rmatrix(4, vector<double>(4, 0.33));
     for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             if (i == j) {//Fill Diagnol
@@ -358,10 +357,10 @@ int main(int argc, char * argv[]) {
         }
     }
     */
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -373,22 +372,22 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
-                //cout << "Working on tree #" << treeCounter << endl;
+                //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);
-                vector <Sequence> seqs = SGen.get_sequences();
+                std::vector<Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
-                    (*poos) << ">" << seq.get_id() << endl;
-                    //cout << "Here" << endl;
-                    (*poos) << seq.get_sequence() << endl;
+                    (*poos) << ">" << seq.get_id() << std::endl;
+                    //std::cout << "Here" << std::endl;
+                    (*poos) << seq.get_sequence() << std::endl;
                 }
                 delete tree;
                 treeCounter++;
             }
         }
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -396,20 +395,19 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (going == true) {
-                cout << "Working on tree #" << treeCounter << endl;
+                //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);
-                vector <Sequence> seqs = SGen.get_sequences();
+                std::vector<Sequence> seqs = SGen.get_sequences();
                 for (unsigned int i = 0; i < seqs.size(); i++) {
                     Sequence seq = seqs[i];
-                    (*poos) << ">" << seq.get_id() << endl;
-                    (*poos) << seq.get_sequence() << endl;
+                    (*poos) << ">" << seq.get_id() << std::endl;
+                    (*poos) << seq.get_sequence() << std::endl;
                 }
                 delete tree;
                 treeCounter++;
             }
         }
     }
-    
     return EXIT_SUCCESS;
 }

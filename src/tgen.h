@@ -1,39 +1,41 @@
 #ifndef _TGEN_H_
 #define _TGEN_H_
 
+#include <string>
+#include <vector>
 #include <map>
+#include <iostream>
 
-using namespace std;
 
 class TopologyGenerator {
 private:
-    int ntax_;
+    int num_taxa_;
     bool rooted_;
-    string lprefix_;
+    std::string lprefix_;
     
     unsigned long int ntopos_; // number of possible topologies for n taxa. depends on rootedness
     int nedges_; // the number of edges in the final trees. depends on rootedness
     int curtax_; // the next taxon to add
     int curnode_; // the next internal node to add
     
-    vector < vector < vector <int> > > trees_;
-    vector <string> newicks_; // sweet, sweet results
+    std::vector< std::vector< std::vector<int> > > trees_;
+    std::vector<std::string> newicks_; // sweet, sweet results
     
-    void initialize ();
-    int get_num_edges (int const& ntax, int const& rooted);
-    vector < vector <int> > initialize_edge_matrix_unrooted (int const& n);
-    vector < vector <int> > initialize_edge_matrix_rooted (int const& n);
-    vector < vector < vector <int> > > add_taxon_unrooted (vector < vector < vector <int> > > edges,
-        int const& taxon, int const& new_node);
-    vector < vector < vector <int> > > add_taxon_rooted (vector < vector < vector <int> > > edges,
-        int const& taxon, int const& new_node);
-    void newick_from_tree_map (int node, map <int, vector <int>> m, string & tree);
-    string edge_matrix_to_newick (vector < vector <int> > const& edges);
+    void initialize();
+    int get_num_edges (const int& num_taxa, const int& rooted);
+    std::vector< std::vector<int> > initialize_edge_matrix_unrooted (const int& n);
+    std::vector< std::vector<int> > initialize_edge_matrix_rooted (const int& n);
+    std::vector< std::vector< std::vector<int> > > add_taxon_unrooted (std::vector< std::vector< std::vector<int> > > edges,
+        const int& taxon, const int& new_node);
+    std::vector< std::vector< std::vector<int> > > add_taxon_rooted (std::vector< std::vector< std::vector<int> > > edges,
+        const int& taxon, const int& new_node);
+    void newick_from_tree_map (int node, std::map<int, std::vector<int> > m, std::string& tree);
+    std::string edge_matrix_to_newick (const std::vector< std::vector<int> >& edges);
     void generate_trees ();
     
 public:
-    TopologyGenerator(int const& ntax, bool const& rooted, string const& lprefix);
-    void get_newicks(ostream* poos);
+    TopologyGenerator (const int& num_taxa, const bool& rooted, const std::string& lprefix);
+    void get_newicks (std::ostream* poos);
     //~TopologyGenerator();
 };
 

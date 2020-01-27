@@ -1,10 +1,3 @@
-/*
- * main_NJ.cpp
- *
- *  Created on: Jun 12, 2015
- *      Author: joe
- */
-
 #ifdef _OPENMP
     #include <omp.h>
 #else
@@ -12,42 +5,41 @@
     #define omp_get_max_threads() 1
 #endif
 
-
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <vector>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "nj.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
 #include "log.h"
+#include "constants.h"
 
-//g++ -std=c++11 nj.cpp main_nj.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp log.cpp -o test
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Basic Neighbour-Joining Tree Maker." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxnj [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output newick file, stout otherwise" << endl;
-    cout << " -n, --nthreads=INT  number of threads, default=1" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Basic neighbour-joining tree maker." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxnj [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output newick file, STOUT otherwise" << std::endl;
+    std::cout << " -n, --nthreads=INT  number of threads, default=1" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxnj 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
-
+std::string versionline("pxnj 1.1\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -56,6 +48,7 @@ static struct option const long_options[] =
     {"nthreads", required_argument, NULL, 'n'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -63,7 +56,7 @@ static struct option const long_options[] =
 void printInfo () {
     int foo = omp_get_num_procs();
     int bar = omp_get_max_threads();
-    cout << "numprocs = " << foo << "; threads = " << bar << endl;
+    std::cout << "numprocs = " << foo << "; threads = " << bar << std::endl;
 }
 
 int main(int argc, char * argv[]) {
@@ -78,7 +71,7 @@ int main(int argc, char * argv[]) {
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:n:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:n:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -100,7 +93,10 @@ int main(int argc, char * argv[]) {
                 //printInfo(); // temp
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -112,30 +108,30 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     NJOI nj(pios, threads);
-    *poos << nj.get_newick() << endl;
+    (*poos) << nj.get_newick() << std::endl;
     
     if (fileset) {
         fstr->close();

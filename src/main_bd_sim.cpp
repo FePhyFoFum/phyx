@@ -1,16 +1,9 @@
-/*
- * main_bd.cpp
- *
-*/
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "node.h"
 #include "tree_reader.h"
@@ -20,28 +13,34 @@ using namespace std;
 #include "utils.h"
 #include "bd_sim.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help () {
-    cout << "Birth-death simulator." << endl;
-    cout << endl;
-    cout << "Usage: pxbdsim [OPTION]... " << endl;
-    cout << endl;
-    cout << " -e, --extant=INT    number of extant species, alt to time" << endl;
-    cout << " -t, --time=INT      depth of the tree, alt to extant" << endl;
-    cout << " -b, --birth=DOUBLE  birth rate, default=1" << endl;
-    cout << " -d, --death=DOUBLE  death rate, default=0" << endl;
-    cout << " -n, --nreps=INT     number of replicates, default=1" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -s, --showd         show dead taxa" << endl;
-    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Birth-death tree simulator." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxbdsim [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -e, --extant=INT    number of extant species, alt to time" << std::endl;
+    std::cout << " -t, --time=DOUBLE   timespan of simulation (age of root), alt to extant" << std::endl;
+    std::cout << " -b, --birth=DOUBLE  birth rate, default=1" << std::endl;
+    std::cout << " -d, --death=DOUBLE  death rate, default=0" << std::endl;
+    std::cout << " -n, --nreps=INT     number of replicates, default=1" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
+    std::cout << " -s, --showextinct   show lineages that went extinct, default=false" << std::endl;
+    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxbdsim 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+ std::string versionline("pxbdsim 1.1\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -51,10 +50,11 @@ static struct option const long_options[] =
     {"death", required_argument, NULL, 'd'},
     {"nreps", required_argument, NULL, 'n'},
     {"outf", required_argument, NULL, 'o'},
-    {"showd", no_argument, NULL, 's'},
+    {"showextinct", no_argument, NULL, 's'},
     {"seed", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -76,7 +76,7 @@ int main(int argc, char * argv[]) {
     int seed = -1;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:shV", long_options, &oi);
+        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:shVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -92,14 +92,14 @@ int main(int argc, char * argv[]) {
             case 'b':
                 birth = string_to_float(optarg, "-b");
                 if (birth <= 0) {
-                    cout << "Birth rate must be > 0" << endl;
+                    std::cerr << "Error: birth rate must be > 0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
             case 'd':
                 death = string_to_float(optarg, "-d");
                 if (death < 0) {
-                    cout << "Death rate must be >= 0" << endl;
+                    std::cerr << "Error: death rate must be >= 0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
@@ -120,7 +120,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -129,34 +132,32 @@ int main(int argc, char * argv[]) {
     }
     
     if (ext == 0 && time == 0) {
-        cout << "you have to set -e or -t" << endl;
+        std::cerr << "Error: you have to set -e or -t. Exiting." << std::endl;
         exit(0);
     }
     if (timeset && extantset) {
-        cout << "Set -e or -t, not both" << endl;
+        std::cerr << "Error: set -e or -t, not both. Exiting." << std::endl;
         exit(0);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
+     std::ostream * poos = NULL;
+     std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     BirthDeathSimulator bd(ext, time, birth, death, seed);
     for (int i = 0; i < nreps; i++) {
         Tree * bdtr = bd.make_tree(showd);
         if (bdtr->getExtantNodeCount() > 1) {
-            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << endl;
+            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << std::endl;
         } else {
-            (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << endl;
+            (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << std::endl;
         }
-        
-        
     }
     if (outfileset) {
         ofstr->close();

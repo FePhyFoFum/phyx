@@ -1,31 +1,25 @@
-/*
- * NJOI.cpp
- *
- *  Created on: Jun 12, 2015
- *      Author: joe
- */
-
 #include <vector>
 #include <algorithm>
 #include <map>
 
-using namespace std;
+using namespace std; // commenting this out changes the result?!? ***
 
 #include "nj.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 
+
 /*Calculates the Q matrix
  * Original Matrix: All the Original Distances
  * ConvertedMatrix: Conversion to Q Matrix
  * LengthMatrix: Adjusted values for branch length calculations
  */
-void NJOI::CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalMatrix, 
-    vector< vector<double> >& ConvertedMatrix, vector< vector<double> >& LengthMatrix) {
+void NJOI::CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >& OriginalMatrix, 
+    std::vector< std::vector<double> >& ConvertedMatrix, std::vector< std::vector<double> >& LengthMatrix) {
 
     ConvertedMatrix = OriginalMatrix;
-    vector<double> Sums (NumbOfSequences, 0.0);
+    std::vector<double> Sums(NumbOfSequences, 0.0);
     
     for (int i = 0; i < NumbOfSequences; i++) {
         Sums[i] = sum(OriginalMatrix[i]);
@@ -43,37 +37,38 @@ void NJOI::CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalM
     }
 }
 
+
 /*Calculate the Branch Lengths
  * NewMatrix: Has original distances
  * LengthMatrix: Has adjusted lengths
  */
-void NJOI::FetchLengths(int const& NumbOfSequences, vector< vector<double> > const& NewMatrix,
-    vector< vector<double> >& LengthMatrix, int const& mini1, int const& mini2,
+void NJOI::FetchLengths (const int& NumbOfSequences, const std::vector< std::vector<double> >& NewMatrix,
+    std::vector< std::vector<double> >& LengthMatrix, const int& mini1, const int& mini2,
     double & brlength1, double & brlength2) {
 
     brlength1 = (NewMatrix[mini1][mini2] + (LengthMatrix[mini1][mini2] / (double)(NumbOfSequences - 2))) * 0.5;
     brlength2 = NewMatrix[mini1][mini2] - brlength1;
-
 }
+
 
 /*Tree_Update
  *Updates the Tree info and bypasses using a tree structure by storing parts in an array
  *NewMatrix: Has the adjusted values from the QMatrix calculation
 */
-void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
-    int& NumbOfSequences, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
+void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
+    int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2,
     double& brlength1, double& brlength2) {
     
     int msize = (int)NewMatrix.size();
     
     //update the tree values, Tree Size is the node it is at
-    vector<double> row_hits (NewMatrix[mini1]);
-    vector<double> col_hits = (NewMatrix[mini2]);
+    std::vector<double> row_hits = NewMatrix[mini1];
+    std::vector<double> col_hits = NewMatrix[mini2];
     
     double ColRow = 0.0;
     double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
-    newname = "(" + names[mini1] + ":" + to_string(brlength2 / (double)nchar_) +  ","
-        + names[mini2] + ":" + to_string(brlength1 / (double)nchar_) +  ")";
+    newname = "(" + names[mini1] + ":" + std::to_string(brlength2 / (double)num_char_) +  ","
+        + names[mini2] + ":" + std::to_string(brlength1 / (double)num_char_) +  ")";
     
     // erase in backwards order as it preserves the indexes
     names.erase(names.begin()+mini2);
@@ -81,7 +76,8 @@ void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>&
     names.insert(names.begin(), newname);
     
     //Make Smaller Matrix
-    vector< vector<double> > temp_matrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+    std::vector< std::vector<double> > temp_matrix(NumbOfSequences,
+            std::vector<double>(NumbOfSequences, 0.0));
     
     int count = 0;
     //Make a new First Row and Column
@@ -109,20 +105,21 @@ void NJOI::Tree_Update(string& newname, vector<string>& names, map<int, string>&
             icount++;
         }
     }
-    //cout << "NewMatrix.size() = " << NewMatrix.size() << "; temp_matrix.size() = "
-    //    << temp_matrix.size() << "; NumbOfSequences = " << NumbOfSequences << endl;
-    // NewMatrix is reduced b y1 in each dimension
+    //std::cout << "NewMatrix.size() = " << NewMatrix.size() << "; temp_matrix.size() = "
+    //    << temp_matrix.size() << "; NumbOfSequences = " << NumbOfSequences << std::endl;
+    // NewMatrix is reduced by 1 in each dimension
     NewMatrix = temp_matrix;
 }
 
+
 // has to be a more efficient way of doing this!
-void NJOI::Choose_Smallest(int& NumbOfSequences, vector< vector<double> > const& Matrix,
+void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector<double> >& Matrix,
     int & mini1, int & mini2) {
     //super large value
     double MIN = 99999999999.99;
     for (int i = 0; i < (NumbOfSequences - 1); i++) {
         
-        int idx = min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
+        int idx = std::min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];
             mini1 = i;
@@ -132,20 +129,21 @@ void NJOI::Choose_Smallest(int& NumbOfSequences, vector< vector<double> > const&
     NumbOfSequences--;
 }
 
+
 //NumbKeys Contains the names and their matching number
 //Matrix Contains The original matrix
 //Main Tree Making Matrix
-void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
-    vector< vector<double> >& Matrix) {
+void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
+    std::vector< std::vector<double> >& Matrix) {
 
     int mini1 = 0, mini2 = 0;
     int NumbOfSequences = NumbKeys.size();
     double brlength1 = 0.0;
     double brlength2 = 0.0;
-    vector< vector<double> > LengthMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
-    string newname;
+    std::vector< std::vector<double> > LengthMatrix(NumbOfSequences, std::vector<double>(NumbOfSequences, 0.0));
+    std::string newname;
     while (NumbOfSequences > 2) {
-        vector< vector<double> > QMatrix(NumbOfSequences, vector<double>(NumbOfSequences, 0.0));
+        std::vector< std::vector<double> > QMatrix(NumbOfSequences, std::vector<double>(NumbOfSequences, 0.0));
         CalcQ(NumbOfSequences, Matrix, QMatrix, LengthMatrix);
         Choose_Smallest(NumbOfSequences, QMatrix, mini1, mini2);
         FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2,
@@ -155,24 +153,24 @@ void NJOI::TREEMAKE(vector<string>& names, map <int, string>& NumbKeys,
             mini2, brlength1, brlength2);
     }
     //double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
-    double adjlength = (Matrix[mini1][mini2] / 2) / (double)nchar_;
-    newname = "(" + names[mini1] + ":" + to_string(adjlength) +  "," + names[mini2]
-        + ":" + to_string(adjlength) +  ")";
+    double adjlength = (Matrix[mini1][mini2] / 2) / (double)num_char_;
+    newname = "(" + names[mini1] + ":" + std::to_string(adjlength) +  "," + names[mini2]
+        + ":" + std::to_string(adjlength) +  ")";
     newick_string_ = newname + ";";
 }
 
 
-vector< vector<double> > NJOI::BuildMatrix (map <string, string>& sequences) {
+std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std::string>& sequences) {
 
-    vector<string> SequenceName;
-    map <string, string>::iterator iter, iter2;
-    string fasta, SeqName, MatchName;
+    std::vector<std::string> SequenceName;
+    std::map <std::string, std::string>::iterator iter, iter2;
+    std::string fasta, SeqName, MatchName;
     int FirstCount = 0;
     double MatchScore;
 
-    // an easier way to initialize a vector of vectors:
+    // an easier way to initialize a std::vector of std::vectors:
     int ntax = sequences.size();
-    vector< vector<double> > Score(ntax, vector<double>(ntax, 0.0));
+    std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
 
     //compare all sequences to other sequences
     for (iter = sequences.begin(); iter != sequences.end(); iter++) {
@@ -192,10 +190,9 @@ vector< vector<double> > NJOI::BuildMatrix (map <string, string>& sequences) {
 }
 
 
-
-NJOI::NJOI (istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(threads) {
+NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthreads_(threads) {
     Sequence seq;
-    string retstring;
+    std::string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
     
     int seqcount = 0;
@@ -204,14 +201,14 @@ NJOI::NJOI (istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(threads
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences_[seq.get_id()] = seq.get_sequence();
         if (!first) {
-            if ((int)seq.get_length() != nchar_) {
-                cout << "Error: sequence " << seq.get_id() << " has "
+            if ((int)seq.get_length() != num_char_) {
+                std::cerr << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
-                    << nchar_ << "." << endl << "Exiting." << endl;
+                    << num_char_ << "." << std::endl << "Exiting." << std::endl;
                 exit(1);
             }
         } else {
-            nchar_ = seq.get_length();
+            num_char_ = seq.get_length();
             first = false;
         }
         seqcount++;
@@ -219,19 +216,20 @@ NJOI::NJOI (istream* pios, int & threads):ntax_(0), nchar_(0), nthreads_(threads
     //fasta has a trailing one
     if (ft == 2) {
         sequences_[seq.get_id()] = seq.get_sequence();
-        if ((int)seq.get_length() != nchar_) {
-            cout << "Error: sequence " << seq.get_id() << " has "
+        if ((int)seq.get_length() != num_char_) {
+            std::cerr << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
-                << nchar_ << "." << endl << "Exiting." << endl;
+                << num_char_ << "." << std::endl << "Exiting." << std::endl;
             exit(1);
         };
         seqcount++;
     }
-    ntax_ = seqcount;
+    num_taxa_ = seqcount;
     set_name_key ();
     Matrix = BuildMatrix(sequences_);
     TREEMAKE(names_, name_key_, Matrix);
 }
+
 
 void NJOI::set_name_key () {
     int count = 0;
@@ -242,6 +240,7 @@ void NJOI::set_name_key () {
     }
 }
 
-string NJOI::get_newick () {
+
+std::string NJOI::get_newick () {
     return newick_string_;
 }

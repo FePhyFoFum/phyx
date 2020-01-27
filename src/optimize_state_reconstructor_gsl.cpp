@@ -1,8 +1,7 @@
-
-#include <math.h>
+#include <cmath>
+//#include <stdio.h>
 #include <vector>
 #include <limits>
-using namespace std;
 
 #include <armadillo>
 using namespace arma;
@@ -14,10 +13,12 @@ using namespace arma;
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_vector.h>
 
-OptimizeStateReconstructor::OptimizeStateReconstructor(RateModel * _rm,StateReconstructor * _sr, mat * _free_mask, int _nfree):
+
+OptimizeStateReconstructor::OptimizeStateReconstructor (RateModel * _rm,StateReconstructor * _sr, mat * _free_mask, int _nfree):
     rm(_rm),sr(_sr),free_variables(_free_mask),nfree_variables(_nfree),maxiterations(10000),stoppingprecision(0.001) {}
 
-double OptimizeStateReconstructor::GetLikelihoodWithOptimized(const gsl_vector * variables) {
+
+double OptimizeStateReconstructor::GetLikelihoodWithOptimized (const gsl_vector * variables) {
     for (unsigned int i=0; i < free_variables->n_rows; i++) {
         for (unsigned int j=0; j < free_variables->n_cols; j++) {
             if (i != j) {
@@ -31,7 +32,7 @@ double OptimizeStateReconstructor::GetLikelihoodWithOptimized(const gsl_vector *
     double like;
     rm->set_Q_diag();
     like = sr->eval_likelihood();
-    //cout << like << endl;
+    //std::cout << like << std::endl;
     if (like < 0 || like == std::numeric_limits<double>::infinity()) {
         like = 100000000;
     }
@@ -39,17 +40,17 @@ double OptimizeStateReconstructor::GetLikelihoodWithOptimized(const gsl_vector *
 }
 
 
-double OptimizeStateReconstructor::GetLikelihoodWithOptimized_gsl(const gsl_vector * variables, void *obj) {
+double OptimizeStateReconstructor::GetLikelihoodWithOptimized_gsl (const gsl_vector * variables, void *obj) {
     double temp;
     temp= ((OptimizeStateReconstructor*)obj)->GetLikelihoodWithOptimized(variables);
     return temp;
 }
 
+
 /*
  * USES THE SIMPLEX ALGORITHM
- *
  */
-mat OptimizeStateReconstructor::optimize() {
+mat OptimizeStateReconstructor::optimize () {
     const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2;
     gsl_multimin_fminimizer *s = NULL;
     gsl_vector *ss, *x;
@@ -62,7 +63,7 @@ mat OptimizeStateReconstructor::optimize() {
     /* Set all step sizes to .01 */ //Note that it was originally 1
     gsl_vector_set_all (ss, .2);
     /* Starting point */
-    //cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<endl;
+    //std::cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<std::endl;
     x = gsl_vector_alloc (np);
     for (unsigned int i=0; i < np; i++) {
         gsl_vector_set (x, i, 0.1);
@@ -79,7 +80,7 @@ mat OptimizeStateReconstructor::optimize() {
     s = gsl_multimin_fminimizer_alloc (T, np);
     gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
     do {
-        //cout<<"Now on iteration "<<iter<<endl;
+        //std::cout<<"Now on iteration "<<iter<<std::endl;
         iter++;
         status = gsl_multimin_fminimizer_iterate(s);
         if (status != 0) { //0 Means it's a success

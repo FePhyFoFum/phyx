@@ -6,42 +6,46 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "utils.h"
 #include "log_manip.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "MCMC log file manipulator." << endl;
-    cout << "Can combine and resample parameters or trees across files." << endl;
-    cout << "Log files need not contain the same number of samples." << endl;
-    cout << "Input files may be indicated using wildcards e.g. '*.trees'" << endl;
-    cout << "Parameter log files are expected to be whitespace delimited." << endl;
-    cout << "*NOTE* All values are in terms of number of SAMPLES (NOT generations)." << endl;
-    cout << endl;
-    cout << "Usage: pxlog [OPTION]... " << endl;
-    cout << endl;
-    cout << " -p, --parmf=FILE    input parameter log file(s)" << endl;
-    cout << " -t, --treef=FILE    input tree log file(s)" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << endl;
-    cout << " -n, --thin=INT      interval of resampling" << endl;
-    cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << endl;
-    cout << " -i, --info          calculate log file attributes and exit" << endl;
-    cout << " -c, --columns       print out column names (parameter logs only)" << endl;
-    cout << " -d, --delete=CSL    delete columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << endl;
-    cout << " -k, --keep=CSL      keep only columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << endl;
-    cout << " -x, --seed=INT      random number seed, clock otherwise" << endl;
-    cout << " -v, --verbose       make the output more verbose" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "MCMC log file manipulator." << std::endl;
+    std::cout << "Can combine and resample parameters or trees across files." << std::endl;
+    std::cout << "Log files need not contain the same number of samples." << std::endl;
+    std::cout << "Input files may be indicated using wildcards e.g. '*.trees'" << std::endl;
+    std::cout << "Parameter log files are expected to be whitespace delimited." << std::endl;
+    std::cout << "*NOTE* All values are in terms of number of SAMPLES (NOT generations)." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxlog [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -p, --parmf=FILE    input parameter log file(s)" << std::endl;
+    std::cout << " -t, --treef=FILE    input tree log file(s)" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
+    std::cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << std::endl;
+    std::cout << " -n, --thin=INT      interval of resampling" << std::endl;
+    std::cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << std::endl;
+    std::cout << " -i, --info          calculate log file attributes and exit" << std::endl;
+    std::cout << " -c, --columns       print out column names (parameter logs only)" << std::endl;
+    std::cout << " -d, --delete=CSL    delete columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
+    std::cout << " -k, --keep=CSL      keep only columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
+    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -v, --verbose       make the output more verbose" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxlog 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxlog 1.1\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -59,6 +63,7 @@ static struct option const long_options[] =
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -69,8 +74,8 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool pfileset = false;
     bool tfileset = false;
-    vector <string> input_files;
-    vector <int> col_indices;
+    std::vector<std::string> input_files;
+    std::vector<int> col_indices;
     
     int burnin = 0;
     int nthin = 1;
@@ -81,16 +86,15 @@ int main(int argc, char * argv[]) {
     bool get_columns = false;
     bool delete_columns = false;
     bool keep_columns = false;
-    string incolids;
-    
-    string logtype;
+    std::string incolids;
+    std::string logtype;
     
     char * outf = NULL;
     
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "p:t:o:b:n:r:icd:k:x:vhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "p:t:o:b:n:r:icd:k:x:vhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -99,15 +103,15 @@ int main(int argc, char * argv[]) {
                 pfileset = true;
                 curind = optind - 1;
                 while (curind < argc) {
-                    string temp = strdup(argv[curind]);
+                    std::string temp = strdup(argv[curind]);
                     curind++;
                     if (temp[0] != '-') {
-                        ifstream infile(temp.c_str());
+                        std::ifstream infile(temp.c_str());
                         if (infile.good()) { // check that file exists
                             input_files.push_back(temp);
                             infile.close();
                         } else {
-                            cout << "Cannot find input file '" << temp << "'. Exiting." << endl;
+                            std::cerr << "Error: cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -121,15 +125,15 @@ int main(int argc, char * argv[]) {
                 tfileset = true;
                 curind = optind - 1;
                 while (curind < argc) {
-                    string temp = strdup(argv[curind]);
+                    std::string temp = strdup(argv[curind]);
                     curind++;
                     if (temp[0] != '-') {
-                        ifstream infile(temp.c_str());
+                        std::ifstream infile(temp.c_str());
                         if (infile.good()) { // check that file exists
                             input_files.push_back(temp);
                             infile.close();
                         } else {
-                            cout << "Cannot find input file '" << temp << "'. Exiting." << endl;
+                            std::cerr << "Error: cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -180,7 +184,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -188,44 +195,44 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
     
     // not used at the moment: assumed that all input comes from files
     //istream * pios = NULL;
     //ifstream * fstr = NULL;
     
     if (!tfileset && !pfileset) {
-        cout << "Must specify a tree file or parameter file. Exiting." << endl;
-        exit (0);
+        std::cerr << "Error: must specify a tree file or parameter file. Exiting." << std::endl;
+        exit(0);
     }
     
     if (tfileset == true && pfileset == true) {
-        cout << "Set tree file *or* parameter file, not both. Exiting." << endl;
-        exit (0);
+        std::cerr << "Error: set tree file *or* parameter file, not both. Exiting." << std::endl;
+        exit(0);
     }
     
     // abort if invalid args
     if (tfileset) {
         if (get_columns || delete_columns || keep_columns) {
-            cout << "Column arguments are not applicable for tree files. Exiting." << endl;
-            exit (0);
+            std::cerr << "Error: column arguments are not applicable for tree files. Exiting." << std::endl;
+            exit(0);
         }
     }
     
     // exit if not 1-indexed (just check first column
     if (delete_columns || keep_columns) {
         if (col_indices[0] < 1) {
-            cout << "Warning: column numbers are 1-indexed. Exiting." << endl;
-            exit (0);
+            std::cerr << "Warning: column numbers are 1-indexed. Exiting." << std::endl;
+            exit(0);
         }
     }
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     //LogManipulator lm (logtype, input_files, pios, poos);

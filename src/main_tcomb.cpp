@@ -1,8 +1,3 @@
-/*
- * main_bd.cpp
- *
-*/
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -13,38 +8,41 @@
 #include <iterator>
 #include <cmath>
 
-using namespace std;
-
 #include "tree_reader.h"
 #include "tree.h"
 #include "tree_utils.h"
 #include "utils.h"
-#include "bd_fit.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 /*
 Give two options:
 1. pass in 2 trees
 2. pass in 1 distribution of trees
- */
+*/
 
 void print_help () {
-    cout << "Combine a set of trees from one file into a tree from another." << endl;
-    cout << "Pass in 2 trees with `t` and `a`." << endl;
-    cout << endl;
-    cout << "Usage: pxtcomb [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    reference treefile, stdin otherwise" << endl;
-    cout << " -a, --addtree=FILE  alternate treefile" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;
+    std::cout << "Pass in 2 trees with `t` and `a`." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtcomb [OPTIONS]... FILE" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -t, --treef=FILE    reference treefile, STDIN otherwise" << std::endl;
+    std::cout << " -a, --addtree=FILE  alternate treefile" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxtcomb 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxtcomb 1.1\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -53,6 +51,7 @@ static struct option const long_options[] =
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -70,7 +69,7 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:a:o:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:a:o:x:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -93,7 +92,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -108,41 +110,48 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(addtreef, outf);
     }
     
-    istream * pios = NULL;
-    istream * apios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ifstream * afstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::istream * apios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ifstream * afstr = NULL;
+    std::ofstream * ofstr = NULL;
 
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
-    }
-    if (tfileset == true) {
-        fstr = new ifstream(treef);
-        pios = fstr;
-    } else {
-        cout << "you need to set an tfile (-t)" << endl;
-    }
-    if (addfileset == true) {
-        afstr = new ifstream(addtreef);
-        apios = afstr;
-    } else {
-        cout << "you need to set an addfile (-a)" << endl;
+        poos = &std::cout;
     }
     
-    string retstring;
+    if (addfileset == true) {
+        afstr = new std::ifstream(addtreef);
+        apios = afstr;
+    } else {
+        std::cerr << "Error: you need to set an addfile (-a). Exiting." << std::endl;
+        exit(0);
+    }
+    
+    if (tfileset == true) {
+        fstr = new std::ifstream(treef);
+        pios = fstr;
+    } else {
+        pios = &std::cin;
+        if (check_for_input_to_stream() == false) {
+            std::cerr << "Error: you need to set an tfile (-t). Exiting." << std::endl;
+            exit(1);
+        }
+    }
+    
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
     bool going = true;
-    Tree * bigtree;
+    Tree * bigtree = NULL;
     while (going) {
         if (retstring.size() > 1) {
             bigtree = read_next_tree_from_stream_newick (*pios, retstring, &going);
@@ -150,46 +159,46 @@ int main(int argc, char * argv[]) {
             going = false;
         }
     }
-    set<string> btns = bigtree->getRoot()->get_leave_names_set();
+    std::set<std::string> btns = bigtree->getRoot()->get_leave_names_set();
 
     ft = test_tree_filetype_stream(*apios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
     going = true;
     while (going) {
-        if (retstring.size() > 1){
+        if (retstring.size() > 1) {
             Tree * addtree = read_next_tree_from_stream_newick (*apios, retstring, &going);
-            set<string> atns = addtree->getRoot()->get_leave_names_set();
-            vector<string> v(btns.size());
-            vector<string>::iterator it = set_difference(btns.begin(),btns.end(),atns.begin(),atns.end(),v.begin());
+            std::set<std::string> atns = addtree->getRoot()->get_leave_names_set();
+            std::vector<std::string> v(btns.size());
+            std::vector<std::string>::iterator it = set_difference(btns.begin(), btns.end(), atns.begin(), atns.end(), v.begin());
             v.resize(it-v.begin());
-            map<string,Node *> diffnds;
-            vector<string> diffnms; 
-            for (int i = 0; i<bigtree->getExtantNodeCount();i++){
-                if (count(v.begin(),v.end(),bigtree->getExternalNode(i)->getName())==1){
+            std::map<std::string, Node *> diffnds;
+            std::vector<std::string> diffnms; 
+            for (int i = 0; i <bigtree->getExtantNodeCount(); i++) {
+                if (std::count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName())==1) {
                     diffnms.push_back(bigtree->getExternalNode(i)->getName());
                 }
             } 
             //get start node on big tree by getting the mrca
             Node * connecthere = bigtree->getMRCA(diffnms);
-            vector<Node *> childs = connecthere->getChildren();
-            for (unsigned int i=0;i <childs.size();i++){
-                vector<string> v_int(diffnms.size());
-                vector<string>::iterator it;
-                set<string> lvsset = childs[i]->get_leave_names_set();
-                it = set_intersection(lvsset.begin(),lvsset.end(),
-                                atns.begin(),atns.end(),v_int.begin());
+            std::vector<Node *> childs = connecthere->getChildren();
+            for (unsigned int i=0; i < childs.size(); i++) {
+                std::vector<std::string> v_int(diffnms.size());
+                std::vector<std::string>::iterator it;
+                std::set<std::string> lvsset = childs[i]->get_leave_names_set();
+                it = set_intersection(lvsset.begin(), lvsset.end(),
+                                atns.begin(), atns.end(), v_int.begin());
                 v_int.resize(it-v_int.begin());
-                if (v_int.size() > 0){
+                if (v_int.size() > 0) {
                     //need to add those missing not the overlapping
-                    vector<string> v2(lvsset.size());
-                    vector<string>::iterator it2 = set_difference(lvsset.begin(),lvsset.end(),atns.begin(),atns.end(),v2.begin());
+                    std::vector<std::string> v2(lvsset.size());
+                    std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(), lvsset.end(), atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
-                    for(unsigned int j=0;j<v2.size();j++){
-                        cout << "to add " <<  v2[j]<< endl; 
+                    for(unsigned int j=0;j<v2.size();j++) {
+                        std::cout << "to add " << v2[j]<< std::endl; 
                         diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
                     }
                     connecthere->removeChild(*childs[i]);
@@ -200,30 +209,33 @@ int main(int argc, char * argv[]) {
             connecthere->addChild(*oldroot);
             addtree->setRoot(connecthere);
             bool didit = false;
-            while (diffnds.size() > 0){
-                for (map<string,Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it){
-                    //cout << it->first << endl;
+            while (diffnds.size() > 0) {
+                std::cout << "diffnds.size() = " << diffnds.size() << std::endl;
+                for (std::map<std::string, Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
+                    std::cout << it->first << std::endl;
                     Node * cn = it->second;
                     bool goi = true;
-                    while (goi == true){
+                    while (goi == true) {
                         Node * prn = cn->getParent();
-                        set <string> cs = cn->get_leave_names_set();
-                        vector<string> v_int;
-                        set_intersection(cs.begin(),cs.end(),atns.begin(),atns.end(),back_inserter(v_int));
-                        if(v_int.size() > 0){
-                            cout <<  "this is what we need to add " << prn->getNewick(false) << endl;
+                        std::set<std::string> cs = cn->get_leave_names_set();
+                        std::vector<std::string> v_int;
+                        set_intersection(cs.begin(), cs.end(), atns.begin(), atns.end(), back_inserter(v_int));
+                        if (v_int.size() > 0) {
+                            std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
                             //get nodes
                             //get mrca
                             Node * nd = addtree->getMRCA(v_int);
-                            cout << "would add to " <<  nd->getNewick(false) << endl;
+                            std::cout << "would add to " <<  nd->getNewick(false) << std::endl;
                             //START HERE
-                            if(v_int.size() == 1){
+                            std::cout << "v_int.size() = " << v_int.size() << std::endl;
+                            if (v_int.size() == 1) {
+                                
+                                // missing something?
                                 
                             }
-                            
-                            vector<string> lvsnms = prn->get_leave_names();
-                            for(unsigned int i =0; i < lvsnms.size(); i++){
-                                if (diffnds.count(lvsnms[i]) > 0){
+                            std::vector<std::string> lvsnms = prn->get_leave_names();
+                            for(unsigned int i=0; i < lvsnms.size(); i++) {
+                                if (diffnds.count(lvsnms[i]) > 0) {
                                     diffnds.erase(lvsnms[i]);
                                 }
                             }
@@ -233,16 +245,17 @@ int main(int argc, char * argv[]) {
                         }
                         cn = prn;
                     }
-                    if (didit == true)
+                    if (didit == true) {
                         break;
+                    }
                 }
             }
-            (*poos) << getNewickString(addtree) << endl;
+            (*poos) << getNewickString(addtree) << std::endl;
             delete addtree;
-        }else
+        } else {
             going = false;
+        }
     }
-    
 
     if (outfileset) {
         ofstr->close();

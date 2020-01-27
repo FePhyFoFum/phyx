@@ -4,43 +4,42 @@
 #include <map>
 #include <vector>
 #include <string>
-
-using namespace std;
+#include <iostream>
 
 class NJOI {
 private:
-
-    map <string, string> sequences_;
-    map <string, string>::iterator iter_;
-    vector<string> names_;
-    //string fasta;
-    vector< vector<double> > Matrix;
+    std::map<std::string, std::string> sequences_;
+    std::map<std::string, std::string>::iterator iter_;
+    std::vector<std::string> names_;
+    //std::string fasta;
+    std::vector< std::vector<double> > Matrix;
     void set_name_key ();
 
     // additions:
-    int ntax_;
-    int nchar_;
+    int num_taxa_;
+    int num_char_;
     int nthreads_; // not implemented yet
-    map<int, string> name_key_;
-    string newick_string_; // temporary
+    std::map<int, std::string> name_key_;
+    std::string newick_string_; // temporary
     
-    void CalcQ(int const& NumbOfSequences, vector< vector<double> >& OriginalMatrix, 
-        vector< vector<double> >& ConvertedMatrix, vector< vector<double> >& LengthMatrix);
-    void FetchLengths(int const& NumbOfSequences, vector< vector<double> > const& NewMatrix,
-    vector< vector<double> >& LengthMatrix, int const& mini1, int const& mini2,
-        double & brlength1, double & brlength2);
-    void Tree_Update(string& newname, vector<string>& names, map<int, string>& NumbKeys,
-        int& NumbOfSequences, vector< vector<double> >& NewMatrix, int& mini1, int& mini2,
+    void CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >& OriginalMatrix, 
+        std::vector< std::vector<double> >& ConvertedMatrix, std::vector< std::vector<double> >& LengthMatrix);
+    void FetchLengths (const int& NumbOfSequences, const std::vector< std::vector<double> >& NewMatrix,
+        std::vector< std::vector<double> >& LengthMatrix, const int& mini1, const int& mini2,
         double& brlength1, double& brlength2);
-    void Choose_Smallest(int& NumbOfSequences, vector< vector<double> > const& Matrix,
-        int & mini1, int & mini2);
+    void Tree_Update (std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
+        int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2,
+        double& brlength1, double& brlength2);
+    void Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector<double> >& Matrix,
+        int& mini1, int& mini2);
     
 public:
-    NJOI (istream* pios, int & threads);
-    map<string, string> FastaToOneLine(string& fasta);
-    vector< vector<double> > BuildMatrix(map<string, string>& sequences);
-    void TREEMAKE(vector<string>&, map <int, string>&, vector< vector<double> >&);
-    string get_newick ();
+    NJOI (std::istream* pios, int& threads);
+    std::map<std::string, std::string> FastaToOneLine (std::string& fasta);
+    std::vector< std::vector<double> > BuildMatrix (std::map<std::string, std::string>& sequences);
+    void TREEMAKE (std::vector<std::string>&, std::map<int, std::string>&,
+        std::vector< std::vector<double> >&);
+    std::string get_newick ();
 };
 
 #endif /* _NJ_H_ */

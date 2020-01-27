@@ -8,14 +8,14 @@
 #ifndef _STRING_NODE_OBJECT_H_
 #define _STRING_NODE_OBJECT_H_
 
-using namespace std;
+#include <string>
 
 #include "node_object.h"
 
-class StringNodeObject: public string, public NodeObject{
+class StringNodeObject: public std::string, public NodeObject {
 public:
-    StringNodeObject(const char * value): string(value) {}
-    StringNodeObject(const string & value): string(value) {}
+    StringNodeObject(const char * value): std::string(value) {}
+    StringNodeObject(const std::string& value): std::string(value) {}
     virtual ~StringNodeObject() {}
 
 public:

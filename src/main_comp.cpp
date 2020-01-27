@@ -1,49 +1,49 @@
-
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
-#include <map>
 #include <cstring>
 #include <getopt.h>
-#include <sstream>
-
-using namespace std;
 
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "comp_test.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Compositional homogeneity test" << endl;
-    cout << "This will take fasta, phylip or nexus file formats" << endl;
-    cout << endl;
-    cout << "Usage: pxcomp [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
-    cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
-    cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Sequence compositional homogeneity test." << std::endl;
+    std::cout << "Chi-square test for equivalent character state counts across lineages." << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcomp [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output stats file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-string versionline("pxcomp 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown and Stephen A. Smith (blackrim)");
+std::string versionline("pxcomp 1.1\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
     {"outf", required_argument, NULL, 'o'},
-    {"prot", no_argument, NULL, 'p'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
@@ -51,11 +51,10 @@ int main(int argc, char * argv[]){
     bool fileset = false;
     char * outf = NULL;
     char * seqf = NULL;
-    bool force_protein = false; // i.e. if inference fails
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -69,14 +68,15 @@ int main(int argc, char * argv[]){
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
-            case 'p':
-                force_protein = true;
-                break;
             case 'h':
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+                
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -84,33 +84,37 @@ int main(int argc, char * argv[]){
         }
     }
     
+    
+    // hmm does this require a file atm?!?
+    
     if (fileset && outfileset) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
-    CompTest ct(pios, poos, force_protein);
+    CompTest ct(pios, poos);
+    ct.print_results();
     
     if (fileset) {
         fstr->close();

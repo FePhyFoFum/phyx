@@ -1,12 +1,3 @@
-/*
- * main_rms.cpp
- *
- *  Created on: Jun 16, 2015
- *      Author: joe
- */
-
-
-//g++ -std=c++11 rms.cpp main_rms.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -14,43 +5,52 @@
 #include <cstring>
 #include <getopt.h>
 #include <algorithm>
-
-using namespace std;
+#include <regex>
 
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Removes unwanted sequences" << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxrms [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << endl;
-    cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << endl;
-    cout << " -f, --namesf=FILE   names in a file (each on a line)" << endl;
-    cout << " -c, --comp          take the complement (i.e. remove any taxa not in list)" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Remove sequences by label." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxrms [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input nucleotide sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -n, --names=CSL     names sep by commas (NO SPACES!)" << std::endl;
+    std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
+    std::cout << " -r, --regex=STRING  match tip labels by a regular expression" << std::endl;
+    std::cout << " -c, --comp          take the complement (i.e. remove any taxa not in list)" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxrms 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrms 1.1\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Joseph F. Walker, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
     {"seqf", required_argument, NULL, 's'},
-    {"names",required_argument,NULL,'n'},
+    {"names", required_argument, NULL, 'n'},
     {"namesf", required_argument, NULL, 'f'},
+    {"regex", required_argument, NULL, 'r'},
     {"comp", no_argument, NULL, 'c'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -63,16 +63,21 @@ int main(int argc, char * argv[]) {
     bool namesset = false;
     bool namefileset = false;
     bool complement = false;
+    bool regex = false;
+    std::regex regexp;
+    std::string regex_pattern = "";
+    bool match = false; // for regex searches
+    
     char * namesc = NULL;
     char * namesfc = NULL;
     char * seqf = NULL;
     char * outf = NULL;
-    string rmf = "";
-    vector <string> names;
+    std::string rmf = "";
+    std::vector<std::string> names;
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:n:f:co:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:n:f:r:co:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -91,6 +96,11 @@ int main(int argc, char * argv[]) {
                 namesfc = strdup(optarg);
                 check_file_exists(namesfc);
                 break;
+            case 'r':
+                regex = true;
+                regex_pattern = strdup(optarg);
+                regexp.assign(regex_pattern);
+                break;
             case 'c':
                 complement = true;
                 break;
@@ -102,7 +112,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -114,14 +127,14 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (namesset == true) {
-        vector <string> tokens2;
-        string del2(",");
+        std::vector<std::string> tokens2;
+        std::string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
         for (unsigned int j=0; j < tokens2.size(); j++) {
@@ -129,73 +142,141 @@ int main(int argc, char * argv[]) {
             names.push_back(tokens2[j]);
         }
     } else if (namefileset == true) {
-        ifstream nfstr(namesfc);
-        string tline;
+        std::ifstream nfstr(namesfc);
+        std::string tline;
         while (getline(nfstr, tline)) {
             trim_spaces(tline);
             names.push_back(tline);
         }
         nfstr.close();
-    } else {
-        cerr << "you need to set the names of the taxa you want to remove (-n)" << endl;
+    } else if (!regex) {
+        std::cerr << "Error: you must specify which tips to remove." << std::endl;
+        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)." << std::endl;
+        std::cerr << "Exiting." << std::endl;
         exit(0);
     }
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }    
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     Sequence seq;
-    string retstring;
-    string seq_name;
+    std::string retstring;
+    std::string seq_name;
+    int num_taxa, num_char; // not used, but required by some readers
     
     int ft = test_seq_filetype_stream(*pios, retstring);
+    std::vector<std::string>::iterator it;
     
-    if (!complement) {
-        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) == names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, num_taxa, num_char, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seq_name = seq.get_id();
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                }
             }
-        }
-        // fasta has a trailing one
-        if (ft == 2) {
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) == names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                seq_name = seq.get_id();
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                }
             }
         }
     } else {
-        // keep the taxa passed in
-        // complicating factor: not guaranteed to have any taxa left (i.e. empty output)
-        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) != names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
-            }
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, num_taxa, num_char);
+            complicated_phylip = is_complicated_phylip(*pios, num_char);
         }
-        // fasta has a trailing one
-        if (ft == 2) {
-            seq_name = seq.get_id();
-            if (find(names.begin(), names.end(), seq_name) != names.end()) {
-                *poos << ">" << seq_name << "\n" << seq.get_sequence() << endl;
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                seq_name = seq.get_id();
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                }
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                seq_name = seq.get_id();
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                }
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                seq_name = seq.get_id();
+                if (regex) {
+                    match = std::regex_search(seq_name, regexp);
+                    if ( (match && complement) || (!match && !complement) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                } else {
+                    it = find(names.begin(), names.end(), seq_name);
+                    if ( ((!complement) && (it == names.end())) || ((complement) && (it != names.end())) ) {
+                        (*poos) << ">" << seq_name << "\n" << seq.get_sequence() << std::endl;
+                    }
+                }
             }
         }
     }
-
+    
     if (outfileset) {
         ofstr->close();
         delete poos;

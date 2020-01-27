@@ -1,54 +1,48 @@
-/*
- * Main_concat.cpp
- *
- *  Created on: Sep 22, 2014
- *      Author: joe
-*/
-
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
-#include <sstream>
-#include <iterator>
-#include <algorithm>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
 #include "concat.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Sequence file concatenation." << endl;
-    cout << "Can use wildcards e.g.:" << endl;
-    cout << "  pxcat -s *.phy -o my_cat_file.fa" << endl;
-    cout << "However, if the argument list is too long (shell limit), put filenames in a file:" << endl;
-    cout << "  for x in *.phy; do echo $x >> flist.txt; done" << endl;
-    cout << "and call using the -f option:" << endl;
-    cout << "  pxcat -f flist.txt -o my_cat_file.fa" << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << "Individual files can be of different formats." << endl;
-    cout << endl;
-    cout << "Usage: pxcat [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     list of input sequence files (space delimited)" << endl;
-    cout << " -f, --flistFILE     file listing input files (one per line)" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
-    cout << " -p, --partf=FILE    output partition file, none otherwise" << endl;
-    cout << " -u, --uppercase     export characters in uppercase" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Sequence file concatenation." << std::endl;
+    std::cout << "Can use wildcards e.g.:" << std::endl;
+    std::cout << "  pxcat -s *.phy -o my_cat_file.fa" << std::endl;
+    std::cout << "However, if the argument list is too long (shell limit), put filenames in a file:" << std::endl;
+    std::cout << "  for x in *.phy; do echo $x >> flist.txt; done" << std::endl;
+    std::cout << "and call using the -f option:" << std::endl;
+    std::cout << "  pxcat -f flist.txt -o my_cat_file.fa" << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus sequence formats." << std::endl;
+    std::cout << "Individual files may be of different formats." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcat [OPTIONS]... FILES" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     list of input sequence files (space delimited)" << std::endl;
+    std::cout << " -f, --flistFILE     file listing input files (one per line)" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
+    std::cout << " -p, --partf=FILE    output partition file, none otherwise" << std::endl;
+    std::cout << " -u, --uppercase     export characters in uppercase" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxcat 0.9\nCopyright (C) 2019 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxcat 0.9\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -59,6 +53,7 @@ static struct option const long_options[] =
     {"uppercase", no_argument, NULL, 'u'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -70,15 +65,15 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool logparts = false;
     bool toupcase = false;
-    vector <string> inputFiles;
+    std::vector<std::string> inputFiles;
     char * outf = NULL;
-    string partf = "";
-    string listf = "";
+    std::string partf = "";
+    std::string listf = "";
 
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "s:f:o:p:uhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:f:o:p:uhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -87,15 +82,15 @@ int main(int argc, char * argv[]) {
                 fileset = true;
                 curind = optind - 1;
                 while (curind < argc) {
-                    string temp = strdup(argv[curind]);
+                    std::string temp = strdup(argv[curind]);
                     curind++;
                     if (temp[0] != '-') {
-                        ifstream infile(temp.c_str());
+                        std::ifstream infile(temp.c_str());
                         if (infile.good()) { // check that file exists
                             inputFiles.push_back(temp);
                             infile.close();
                         } else {
-                            cout << "Cannot find input file '" << temp << "'. Exiting." << endl;
+                            std::cerr << "Error: cannot find input file '" << temp << "'. Exiting." << std::endl;
                             exit(0);
                         }
                     } else {
@@ -123,7 +118,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -132,12 +130,12 @@ int main(int argc, char * argv[]) {
     }
     
     if (!fileset) {
-        cout << "Must specify 1 or more files to concatenate. Exiting." << endl;
+        std::cerr << "Error: must specify 1 or more files to concatenate. Exiting." << std::endl;
         exit(0);
     }
     if (listf != "") {
-        string line;
-        ifstream ifs(listf.c_str());
+        std::string line;
+        std::ifstream ifs(listf.c_str());
         while (getline (ifs, line)) {
             if (!line.empty()) {
                 inputFiles.push_back(line);
@@ -146,21 +144,21 @@ int main(int argc, char * argv[]) {
         ifs.close();
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
 
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
-    SequenceConcatenater result;
+    SequenceConcatenater result(toupcase);
     bool first = true;
 
     for (unsigned int i = 0; i < inputFiles.size(); i++) {
-        SequenceConcatenater curr(inputFiles[i], toupcase);
+        SequenceConcatenater curr(inputFiles[i]);
         if (!first) {
             result.concatenate(curr);
         } else {
@@ -169,11 +167,11 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    // write sequences. currently only fasta format.
+    // write sequences
     for (int i = 0; i < result.get_num_taxa(); i++) {
         Sequence curr = result.get_sequence(i);
-        (*poos) << ">" << curr.get_id() << endl;
-        (*poos) << curr.get_sequence() << endl;
+        (*poos) << ">" << curr.get_id() << std::endl;
+        (*poos) << curr.get_sequence() << std::endl;
     }
 
     if (outfileset) {
@@ -188,4 +186,3 @@ int main(int argc, char * argv[]) {
 
     return EXIT_SUCCESS;
 }
-

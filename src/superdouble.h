@@ -29,8 +29,6 @@
 #include <cmath>
 #include <iostream>
 
-using namespace std;
-
 class Superdouble {
 private:
     long double mantissa;
@@ -39,7 +37,7 @@ private:
     double upperlimit;
     double lowerlimit;
     void adjustDecimal();
-    friend ostream& operator<<(ostream& os, const Superdouble& x);
+    friend std::ostream& operator<<(std::ostream& os, const Superdouble& x);
     
 public:
     Superdouble(long double mantissa=1.0, int exponent=0);
@@ -55,10 +53,10 @@ public:
     void operator/= (Superdouble x);
     void operator+= (Superdouble x);
     void operator-= (Superdouble x);
-    bool operator < (const Superdouble &x)const;
-    bool operator > (const Superdouble &x)const;
-    bool operator >= (const Superdouble &x)const;
-    bool operator <= (const Superdouble &x)const;
+    bool operator < (const Superdouble& x)const;
+    bool operator > (const Superdouble& x)const;
+    bool operator >= (const Superdouble& x)const;
+    bool operator <= (const Superdouble& x)const;
     int getExponent();
     double getMantissa();
     Superdouble getLn();
@@ -66,6 +64,5 @@ public:
     void switch_sign();
     
     operator double() {return mantissa*pow(10.,exponent);};
-    
 };
 #endif /* _SUPERDOUBLE_H_ */

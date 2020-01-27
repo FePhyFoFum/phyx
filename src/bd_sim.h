@@ -1,12 +1,11 @@
 #ifndef _BD_SIM_H_
 #define _BD_SIM_H_
 
+#include <vector>
 #include <random>
 
-using namespace std;
-
-#include "tree.h"
-#include "node.h"
+class Tree; // forward declaration
+class Node; // forward declaration
 
 class BirthDeathSimulator {
 private:
@@ -20,34 +19,33 @@ private:
     double timestop_;
     int numofchanges_;
     double currenttime_;
-    vector<Node*> extantnodes_;
-    vector<Node*> dead_nodes_;
-    map<Node*,double> BIRTHTIME_;
-    map<Node*,double> DEATHTIME_;
+    std::vector<Node*> extantnodes_;
+    std::vector<Node*> dead_nodes_;
+    std::map<Node*, double> BIRTHTIME_;
+    std::map<Node*, double> DEATHTIME_;
     Node* root_;
     Tree* tree_;
     
-    mt19937 generator_;
+    std::mt19937 generator_;
     std::uniform_real_distribution<double> uniformDistrib_;
 
-    bool check_stop_conditions();
-    double time_to_next_event();
-    void event();
-    void node_death(Node *);
-    void node_birth(Node *);
-    void delete_dead_nodes();
-    void setup_parameters();
-    bool event_is_birth();
-    void delete_a_node(Node *);
-    double get_distance_from_tip(Node *innode);
-    void set_distance_to_tip();
+    bool check_stop_conditions ();
+    double time_to_next_event ();
+    void event ();
+    void node_death (Node *);
+    void node_birth (Node *);
+    void delete_dead_nodes ();
+    void setup_parameters ();
+    bool event_is_birth ();
+    void delete_a_node (Node *);
+    double get_distance_from_tip (Node *innode);
+    void set_distance_to_tip ();
 
 public:
-    BirthDeathSimulator();
-    BirthDeathSimulator(double estop, double tstop, double brate, double drate, int seed);
-
-    Tree * make_tree(bool);
-
+    BirthDeathSimulator ();
+    BirthDeathSimulator (const double& estop, const double& tstop, const double& brate,
+        const double& drate, const int& seed);
+    Tree * make_tree (const bool& show_dead);
     //~BirthDeathSimulator();
 };
 

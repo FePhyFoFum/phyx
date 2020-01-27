@@ -6,8 +6,7 @@
 #include <getopt.h>
 #include <algorithm>
 #include <cmath>
-
-using namespace std;
+#include <set>
 
 #include "tree_reader.h"
 #include "tree.h"
@@ -15,23 +14,30 @@ using namespace std;
 #include "utils.h"
 #include "bd_fit.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help () {
-    cout << "Birth-death inference" << endl;
-    cout << endl;
-    cout << "Usage: pxbdfit [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE    input treefile, stdin otherwise" << endl;
-    cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Fit a lineage diversification model to a tree." << std::endl;
+    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxbdfit [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -t, --treef=FILE    input treefile, STDIN otherwise" << std::endl;
+    std::cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxbdfit 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxbdfit 1.1\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -41,6 +47,7 @@ static struct option const long_options[] =
     {"showd", no_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -54,11 +61,12 @@ int main(int argc, char * argv[]) {
     char * treef = NULL;
     char * outf = NULL;
     
-    string model = "bd";
+    std::string model = "bd";
+    std::set<std::string> avail_models{"bd", "yule", "best"};
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:m:o:x:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:m:o:x:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -69,8 +77,13 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'm':
-                // need to check valid models here
-                model = strdup(optarg);
+                // check valid models here
+                model = string_to_lower(optarg);
+                if (avail_models.find(model) == avail_models.end()) {
+                    std::cerr << "Error: model '" << model << "' is not recognized. Exiting."
+                            << std::endl;
+                    exit(0);
+                }
                 break;
             case 'o':
                 outfileset = true;
@@ -80,7 +93,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -92,32 +108,32 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
 
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     if (tfileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "this really only works with nexus or newick" << endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     
@@ -133,13 +149,14 @@ int main(int argc, char * argv[]) {
                     bd.get_pars(poos);
                     delete tree;
                 } else {
-                    cout << "Tree is not ultrametric. Exiting." << endl;
+                    std::cerr << "Error: tree is not ultrametric. Exiting." << std::endl;
                     exit(0);
                 }
             }
         }
-    } if (ft == 0) {
-        map <string, string> translation_table;
+    }
+    if (ft == 0) {
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
@@ -153,7 +170,7 @@ int main(int argc, char * argv[]) {
                     bd.get_pars(poos);
                     delete tree;
                 } else {
-                    cout << "Tree is not ultrametric. Exiting." << endl;
+                    std::cerr << "Error: tree is not ultrametric. Exiting." << std::endl;
                     exit(0);
                 }
             }

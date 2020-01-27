@@ -35,3 +35,6 @@ Phyxed_Manual.dvi
 main_JWB.cpp
 compile_JWB.sh
 
+# do not exclude manpage sources
+!px*.1.in
+

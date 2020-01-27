@@ -1,9 +1,11 @@
 #ifndef _LS_TR_H_
 #define _LS_TR_H_
 
-using namespace std;
+#include <string>
+#include <vector>
+#include <iostream>
 
-#include "tree.h"
+class Tree; // forward declaration
 
 class TreeInfo {
 private:
@@ -17,17 +19,17 @@ private:
     double ntips_;
     double rootheight_;
     double rtvar_;
-    vector <string> tip_labels_;
+    std::vector<std::string> tip_labels_;
     
     void calc_stats ();
 
 public:
     TreeInfo (Tree * intree);
-    TreeInfo (Tree * intree, bool const& ultracheck, bool const& binarycheck,
-        bool const& agecheck, bool const& rootedcheck, bool const& ntipcheck,
-        bool const& lengthcheck, bool const& namecheck, bool const& rtvarcheck,
-        ostream* poos);
-    void get_stats (ostream* poos);
+    TreeInfo (Tree * intree, const bool& ultracheck, const bool& binarycheck,
+        const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
+        const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,
+        std::ostream* poos);
+    void get_stats (std::ostream* poos);
 };
 
 #endif /* _LS_TR_H_ */

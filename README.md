@@ -1,6 +1,6 @@
-<img src="logo.png" alt="phyx logo" width=208px/> 
-
 [![Build Status](https://travis-ci.com/FePhyFoFum/phyx.svg?branch=master)](https://travis-ci.com/FePhyFoFum/phyx)
+
+<img src="logo.png" alt="phyx logo" width=208px/> 
 
 **phyx** performs phylogenetics analyses on trees and sequences. See installation instructions for Linux and Mac including any dependencies on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation) or below.
 
@@ -13,15 +13,16 @@ License: GPL https://www.gnu.org/licenses/gpl-3.0.html
 Some of the sequence comparison operations use the very nice [edlib library](https://github.com/Martinsos/edlib#alignment-methods). These are reported in this publication: [Martin Šošić, Mile Šikić; Edlib: a C/C ++ library for fast, exact sequence alignment using edit distance. Bioinformatics 2017 btw753. doi: 10.1093/bioinformatics/btw753](https://academic.oup.com/bioinformatics/article/33/9/1394/2964763/Edlib-a-C-C-library-for-fast-exact-sequence).
 
 ## Documentation
-Documentation resides in several locations (all slightly out of date, alas). A [pdf manual](https://github.com/FePhyFoFum/phyx/tree/master/doc) is available in the `doc/` directory. A slightly-less-out-of-date list of the current programs with examples can be found [on the wiki](https://github.com/FePhyFoFum/phyx/wiki/Program-list). See a brief overview [here](https://twitter.com/i/moments/1067839564927008769).
+Documentation resides in several locations (all slightly out of date, alas). A [pdf manual](https://github.com/FePhyFoFum/phyx/tree/master/doc) is available in the `doc/` directory. A slightly-less-out-of-date list of the current programs with examples can be found [on the wiki](https://github.com/FePhyFoFum/phyx/wiki/Program-list). Help for individual programs can be obtained with either `PROGRAM -h` or (if installed, see below) `man PROGRAM`. See a brief overview [here](https://twitter.com/i/moments/1067839564927008769).
 
-## Update 31 May 2018
+## Problems after updating (git pull)
 If you have been using phyx and things are not working after a recent pull, this is because of a change in configuration. Please do the following in the `src` directory to remedy the situation:
 
     make distclean
     autoreconf -fi
     ./configure
     make
+    make check
     sudo make install
 
 # Installation instructions 
@@ -60,7 +61,7 @@ Mac has become increasingly difficult to support at the command line with change
         autoconf
         ./configure
         make
-        python run_tests.py
+        make check
 
 If you want to install it so it is available anywhere in your system, do:
 
@@ -101,7 +102,7 @@ If you want to install it so it is available anywhere in your system, do:
         autoconf
         ./configure
         make
-        python run_tests.py
+        make check
         sudo make install
 
 and all the programs should compile without issue. 
@@ -144,7 +145,7 @@ If that is not possible, compile the provided code:
         autoconf
         ./configure
         make
-        python run_tests.py
+        make check
 
 If you want to install it so it is available anywhere in your system, do:
 

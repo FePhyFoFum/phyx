@@ -1,9 +1,8 @@
 #ifndef _CL_TR_H_
 #define _CL_TR_H_
 
-using namespace std;
-
-#include "tree.h"
+class Tree; // forward declaration
+class Node; // forward declaration
 
 class CleanTree {
 private:
@@ -14,7 +13,6 @@ private:
     bool binary_tree_;
     bool has_branchlengths_;
     //double treelength_;
-
     void clean_all ();
 
 public:

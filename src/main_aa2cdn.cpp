@@ -1,50 +1,40 @@
-/*
- * main_aatocdn.cpp
- *
- *  Created on: Jun 15, 2015
- *      Author: joe
- */
-
-
-//g++ -std=c++11 main_aatocdn.cpp aatocdn.cpp utils.cpp superdouble.cpp sequence.cpp seq_utils.cpp seq_reader.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
-//#include <vector>
-//#include <sstream>
-#include <iterator>
-#include <map>
-#include <iterator>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "aa2cdn.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Takes in AA alignment and unaligned Nucleotide file to give a Codon Alignment." << endl;
-    cout << "This will get rid of any sequences found in either only the Nucleotide or the Amino Acid Alignment" << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxaa2cdn [OPTION]... " << endl;
-    cout << endl;
-    cout << " -a, --aaseqf=FILE   input sequence file, stdin otherwise" << endl;
-    cout << " -n, --nucseqf=FILE  input sequence file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output fasta file, stout otherwise" << endl;
-    cout << " -r, --rmlastcdn     removes last codon                " << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Generate a codon alignment from aligned amino acids and unaligned nucleotides." << std::endl;
+    std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxaa2cdn [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -a, --aaseqf=FILE   input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -n, --nucseqf=FILE  input sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta file, STOUT otherwise" << std::endl;
+    std::cout << " -r, --rmlastcdn     removes last codon (default: false)" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxaa2cdn 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxaa2cdn 1.1\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -54,6 +44,7 @@ static struct option const long_options[] =
     {"rmlastcdn", no_argument, NULL, 'r'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -71,7 +62,7 @@ int main(int argc, char * argv[]) {
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "a:o:n:rhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "a:o:n:rhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -97,7 +88,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -113,76 +107,100 @@ int main(int argc, char * argv[]) {
     }
     
     if (!fileset) {
-        cout << "you must specify an input amino acid sequence file" << endl;
+        std::cerr << "Error: you must specify an input amino acid sequence file. Exiting." << std::endl;
         exit(0);
     }
     if (!nucfileset) {
-        cout << "you must specify an input nucleotide sequence file" << endl;
+        std::cerr << "Error: you must specify an input nucleotide sequence file. Exiting." << std::endl;
         exit(0);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
-    ifstream * nucfstr = NULL;
-    istream * nucpios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
+    std::ifstream * nucfstr = NULL;
+    std::istream * nucpios = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(aaseqf);
+        fstr = new std::ifstream(aaseqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
-    if (fileset == true) {
-        nucfstr = new ifstream(nucseqf);
+    if (nucfileset == true) {
+        nucfstr = new std::ifstream(nucseqf);
         nucpios = nucfstr;
     } else {
-        nucpios = &cin;
+        nucpios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     Sequence aa_seq, nuc_seq;
-    string retstring;
-    map<string, string> aa_sequences, nuc_sequences, codon_sequences;
+    std::string retstring;
     
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    while (read_next_seq_from_stream(*pios, ft, retstring, aa_seq)) {
-        aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
-    }
-    // fasta has a trailing one
-    if (ft == 2) {
-        aa_sequences[aa_seq.get_id()] = aa_seq.get_sequence();
+    
+    // use general purpose reader
+    std::vector<Sequence> nuc_seqs;
+    std::vector<Sequence> aa_seqs;
+    std::string alphaName = "";
+    
+    // read in nucleotide seqs
+    nuc_seqs = ingest_alignment(nucpios, alphaName);
+    if (alphaName.compare("DNA") != 0) {
+        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+            << alphaName << " detected. Exiting." << std::endl;
+        exit(0);
     }
     
-    // don't assume nuc and aa alignments are the same type
-    ft = test_seq_filetype_stream(*nucpios, retstring);
-    while (read_next_seq_from_stream(*nucpios, ft, retstring, nuc_seq)) {
-        nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    bool inFrame = true;
+    unsigned int curN = 0;
+    for (unsigned int i = 0; i < nuc_seqs.size(); i++) {
+        curN = nuc_seqs[i].get_length();
+        if (curN % 3 != 0) {
+            std::cerr << "Error: nucleotide sequence length for '" << nuc_seqs[i].get_id()
+                << "' is not a multiple of 3." << std::endl;
+            inFrame = false;
+        }
     }
-    // fasta has a trailing one
-    if (ft == 2) {
-        nuc_sequences[nuc_seq.get_id()] = nuc_seq.get_sequence();
+    if (!inFrame) {
+        std::cerr << "Error: nucleotide alignment does not appear to be in frame. Exiting" << std::endl;
+        exit(0);
     }
-
-    AAtoCDN functions;
-    map<string, string>::iterator iter;
-    codon_sequences = functions.convert_to_codons(aa_sequences, nuc_sequences, rm_last);
-    for (iter = codon_sequences.begin(); iter != codon_sequences.end(); iter++) {
-        *poos << ">" << iter -> first << "\n" << iter -> second << endl;
+    
+    // and amino acid alignment
+    aa_seqs = ingest_alignment(pios, alphaName);
+    if (alphaName.compare("AA") != 0) {
+        std::cerr << "Error: incorrect alignment type provided. Amino acids was expected, but "
+            << alphaName << " detected. Exiting." << std::endl;
+        exit(0);
+    }
+    
+    AAtoCDN A2C(nuc_seqs, aa_seqs, rm_last);
+    A2C.write_codon_alignment(poos);
+    
+    
+    
+    if (fileset) {
+        fstr->close();
+        delete pios;
+    }
+    if (nucfileset) {
+        nucfstr->close();
+        delete nucpios;
     }
     if (outfileset) {
         ofstr->close();

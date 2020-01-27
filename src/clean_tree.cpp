@@ -1,15 +1,8 @@
-#include <string>
-#include <vector>
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-
-using namespace std;
-
 #include "tree.h"
 #include "node.h"
 #include "tree_utils.h"
 #include "clean_tree.h"
+
 
 CleanTree::CleanTree (Tree * intree) {
     tree_ = intree;

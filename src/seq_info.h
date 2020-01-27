@@ -1,17 +1,19 @@
 #ifndef _LS_SEQ_H_
 #define _LS_SEQ_H_
 
+#include <string>
 #include <map>
 #include <vector>
+#include <iostream>
 
-using namespace std;
+#include "sequence.h"
 
 class SeqInfo {
 private:
-    string concatenated_;
-    string temp_seq_;
-    string seq_chars_; // the alphabet (DNA or AA only at present)
-    string file_type_; //"nexus", "phylip", "fasta", "fastq"
+    std::string concatenated_;
+    std::string temp_seq_;
+    std::string seq_chars_; // the alphabet
+    std::string file_type_; //"nexus", "phylip", "fasta", "fastq"
     bool output_indiv_; // report stats for each seq
 
     bool datatype_set_;
@@ -21,47 +23,48 @@ private:
     bool is_binary_;
     bool alpha_set_;
     
-    string alpha_name_; // phyx seq ids: DNA, AA, BINARY (not currently supported), MULTI
-    string seq_type_; // label used for output table: Prot, Nucl, Mult, Binary
-    string name_;
+    std::string alpha_name_; // phyx seq ids: DNA, AA, BINARY, MULTI
+    std::string seq_type_; // label used for output table: Prot, Nucl, Mult, Binary
     char gap_;
     char missing_;
-    map <char, double> total_;
-    int seqcount_;
+    std::map<char, double> total_;
+    int num_taxa_;
     double percent_missing_;
     
     // new stuff
-    vector <string> taxon_labels_;
-    vector <int> seq_lengths_;
-    vector <int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
-    vector < vector <int> > indiv_char_counts_;
+    std::vector<Sequence> seqs_;
+    std::vector<std::string> taxon_labels_;
+    std::vector<int> seq_lengths_;
+    std::vector<int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
+    std::vector< std::vector<int> > indiv_char_counts_;
     bool is_aligned_;
     int seq_length_;
-    istream* pios_;
-    ostream* poos_;
+    std::istream* pios_;
+    std::ostream* poos_;
     int longest_tax_label_;
     
+    void read_in_alignment ();
     void collect_taxon_labels ();
     void check_is_aligned ();
-    void get_nseqs ();
-    void get_nchars ();
+    void make_concatenated_sequence ();
+    void get_num_chars ();
     void set_alphabet ();
-    void count_chars_indiv_seq (string& seq);
-    void count_chars(string& seq);
-    void print_summary_table_whole_alignment (ostream* poos);
-    void return_freq_table (ostream* poos);
+    void count_chars_indiv_seq (std::string& seq);
+    void count_chars (std::string& seq);
+    void print_summary_table_whole_alignment (std::ostream* poos);
+    void return_freq_table (std::ostream* poos);
     void get_longest_taxon_label ();
     void calculate_freqs ();
     void calc_missing ();
     void set_datatype ();
-    void set_alphabet_from_sampled_seqs (string const& seq);
+    void set_alphabet_from_sampled_seqs (const std::string& seq);
 
 public:
-    SeqInfo (istream* pios, ostream* poos, bool& indiv, bool const& force_protein);
+    SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv, const bool& force_protein);
     void summarize ();
-    void get_property (bool const& get_labels, bool const& check_aligned,
-        bool const& get_nseq, bool const& get_freqs, bool const& get_nchar,
-        double const& get_missing);
+    void get_property (const bool& get_labels, const bool& check_aligned,
+        const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
+        const double& get_missing);
 };
 
 #endif /* _LS_SEQ_H_ */

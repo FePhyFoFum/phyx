@@ -2,37 +2,39 @@
 #include <string>
 #include <fstream>
 #include <vector>
-//#include <sstream>
-//#include <iterator>
 #include <algorithm>
 #include <cstring>
 #include <getopt.h>
-
-using namespace std;
 
 #include "sequence.h"
 #include "seq_reader.h"
 #include "utils.h"
 #include "sstat.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Calculates multinomial alignment test statistics." << endl;
-    cout << "Currently only calculates the test statistic from Bollback (2002) MBE." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxsstat [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
-    cout << " -o, --outf=FILE     output sequence file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Calculates multinomial alignment test statistics." << std::endl;
+    std::cout << "Currently only calculates the test statistic from Bollback (2002) MBE." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxsstat [OPTIONS]... " << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxsstat 0.1\nCopyright (C) 2017 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxsstat 1.1\nCopyright (C) 2017-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -40,6 +42,7 @@ static struct option const long_options[] =
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -53,7 +56,7 @@ int main(int argc, char * argv[]) {
     char * seqf = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -71,7 +74,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -83,53 +89,38 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
 
-    Sequence seq;
-    vector<Sequence> seqs;
-    string retstring;
-    
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        seqs.push_back(seq);
-    }
-// have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        seqs.push_back(seq);
-    }
-    
-    //cout << "Read in " << seqs.size() << " sequences!" << endl;
+    std::string alphaName = "";
+    std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
     
     MultinomialSeqStat mm(seqs);
-    (*poos) << mm.get_test_statistic() << endl;
+    (*poos) << mm.get_test_statistic() << std::endl;
     
     if (outfileset) {
         ofstr->close();
         delete poos;
     }
-
     return EXIT_SUCCESS;
 }
-

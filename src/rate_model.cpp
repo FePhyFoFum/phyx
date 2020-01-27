@@ -5,16 +5,25 @@
 #include "rate_model.h"
 
 #include <armadillo>
+
 using namespace arma;
 
-inline int signof(double d) {return d >= 0 ? 1 : -1;}
-inline double roundto(double in) {return floor(in*(1000)+0.5)/(1000);}
 
-RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),
-    lasteigval(_nstates,_nstates),lasteigvec(_nstates,_nstates),
-    eigval(_nstates,_nstates),eigvec(_nstates,_nstates),
-    lasteigval_simple(_nstates,_nstates),lasteigvec_simple(_nstates,_nstates),
-    eigval_simple(_nstates,_nstates),eigvec_simple(_nstates,_nstates),nstates(_nstates) {
+inline int signof (double d) {
+    return d >= 0 ? 1 : -1;
+}
+
+
+inline double roundto (double in) {
+    return floor(in*(1000)+0.5)/(1000);
+}
+
+
+RateModel::RateModel(int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
+    lasteigval(_nstates, _nstates), lasteigvec(_nstates, _nstates),
+    eigval(_nstates, _nstates), eigvec(_nstates, _nstates),
+    lasteigval_simple(_nstates, _nstates), lasteigvec_simple(_nstates, _nstates),
+    eigval_simple(_nstates, _nstates), eigvec_simple(_nstates, _nstates), nstates(_nstates) {
     
     setup_Q();
     sameQ = false;
@@ -30,7 +39,7 @@ RateModel::RateModel(int _nstates):Q(_nstates,_nstates),labels(),Q_mask(),
 
 
 void RateModel::set_Q_cell(int from, int to, double num) {
-    Q(from,to) = num;
+    Q(from, to) = num;
     sameQ = false;
 }
 
@@ -61,20 +70,20 @@ void RateModel::setup_Q() {
     sameQ = false;
 }
 
-void RateModel::setup_Q(vector<vector<double> > & inQ) {
+void RateModel::setup_Q(std::vector< std::vector<double> >& inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ[i][j];
         }
     }
     for (unsigned int i=0; i < Q.n_rows; i++) {
-        colvec a = (sum(Q,1));
+        colvec a = (sum(Q, 1));
         Q(i, i) = -(a(i)-Q(i, i));
     }
     sameQ = false;
 }
 
-void RateModel::setup_Q(mat & inQ) {
+void RateModel::setup_Q(mat& inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ(i, j);
@@ -86,12 +95,12 @@ void RateModel::setup_Q(mat & inQ) {
 
 void RateModel::set_n_qs(int number) {
     for (int i=0; i < number; i++) {
-        mat tm(nstates,nstates);
+        mat tm(nstates, nstates);
         Qs.push_back(tm);
     }
 }
 
-void RateModel::set_Q_which(mat & inQ,int which) {
+void RateModel::set_Q_which(mat& inQ, int which) {
     for (unsigned int i=0; i < Qs[which].n_rows; i++) {
         for (unsigned int j=0; j < Qs[which].n_cols; j++) {
             Qs[which](i, j) = inQ(i, j);
@@ -109,7 +118,7 @@ void RateModel::set_Q_which(mat & inQ,int which) {
     sameQ = false;
 }
 
-void RateModel::set_Q(mat & inQ) {
+void RateModel::set_Q(mat& inQ) {
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             Q(i, j) = inQ(i, j);
@@ -118,17 +127,17 @@ void RateModel::set_Q(mat & inQ) {
     sameQ = false;
 }
 
-mat & RateModel::get_Q() {
+mat& RateModel::get_Q() {
     return Q;
 }
 
-cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
+cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
     //sameQ = false;
     eigvec.fill(0);
     eigval.fill(0);
     get_eigenvec_eigenval_from_Q(&eigval, &eigvec); // not currently used
-    //cout << eigval << endl;
-    //cout << eigvec << endl;
+    //std::cout << eigval << std::endl;
+    //std::cout << eigvec << std::endl;
     for (int i=0; i < nstates; i++) {
         eigval(i, i) = exp(eigval(i, i) * bl);
     }
@@ -147,13 +156,13 @@ cx_mat RateModel::setup_P(double bl,bool store_p_matrices) {
     return P;
 }
 
-void RateModel::setup_P_simple(mat & p,double bl,bool store_p_matrices) {
+void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
 //    sameQ = false;
     eigvec_simple.fill(0);
     eigval_simple.fill(0);
     get_eigenvec_eigenval_from_Q_simple(&eigval_simple, &eigvec_simple);
-    //cout << eigval << endl;
-    //cout << eigvec << endl;
+    //std::cout << eigval << std::endl;
+    //std::cout << eigvec << std::endl;
     for (int i=0; i < nstates; i++) {
         eigval_simple(i, i) = exp(eigval_simple(i, i) * bl);
     }
@@ -175,7 +184,7 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
         }
         return;
     }
-    mat tQ(nstates,nstates); tQ.fill(0);
+    mat tQ(nstates, nstates); tQ.fill(0);
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -183,7 +192,7 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
     }
     colvec eigva;
     mat eigve;
-    eig_sym(eigva,eigve,tQ);
+    eig_sym(eigva, eigve, tQ);
     //bool isImag = false; // not used
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
@@ -218,7 +227,7 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
         }
         return lastImag;
     }
-    mat tQ(nstates,nstates); tQ.fill(0);
+    mat tQ(nstates, nstates); tQ.fill(0);
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -226,7 +235,7 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     }
     cx_colvec eigva;
     cx_mat eigve;
-    eig_gen(eigva,eigve,tQ);
+    eig_gen(eigva, eigve, tQ);
     bool isImag = false;
     for (unsigned int i=0; i < Q.n_rows; i++) {
         for (unsigned int j=0; j < Q.n_cols; j++) {
@@ -259,7 +268,7 @@ extern"C" {
     void wrapdgpadm_(int * ideg,int * m,double * t,double * H,int * ldh,double * wsp,int * lwsp,int * ipiv,int * iexph,int *ns,int *iflag );
 }
 
-void RateModel::setup_fortran_P_whichQ(int which, mat & P, double t) {
+void RateModel::setup_fortran_P_whichQ(int which, mat& P, double t) {
     Q = Qs[which];
     setup_fortran_P(P,t,false);
 }
@@ -268,7 +277,7 @@ void RateModel::setup_fortran_P_whichQ(int which, mat & P, double t) {
 /*
  * runs the basic padm fortran expokit full matrix exp
  *
-void RateModel::setup_fortran_P(mat & P, double t, bool store_p_matrices) {
+void RateModel::setup_fortran_P(mat& P, double t, bool store_p_matrices) {
     //
     //  return P, the matrix of dist-to-dist transition probabilities,
     //  from the model's rate matrix (Q) over a time duration (t)
@@ -311,7 +320,8 @@ void RateModel::set_sameQ(bool s) {
     sameQ = s;
 }
 
-void update_simple_goldman_yang_q(mat * inm, double K, double w, mat & bigpibf,mat &bigpiK, mat & bigpiw) {
+void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
+        mat& bigpiK, mat& bigpiw) {
     double s = 0;
     for (int i=0; i < 61; i++) {
         for (int j=0; j < 61; j++) {
@@ -354,8 +364,8 @@ bool test_transition(char a, char b) {
     return ret;
 }
 
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon_dict, 
-    map<string, vector<int> > & codon_index, vector<string> & codon_list) {
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string>& codon_dict, 
+    std::map<std::string, std::vector<int> >& codon_index, std::vector<std::string>& codon_list) {
     for (int i=0; i < 61; i++) {
         for (int j=0; j < 61; j++) {
             int diff = 0;
@@ -365,7 +375,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon
                 if (codon_list[i][m] != codon_list[j][m]) {
                     diff += 1;
                 }
-                transit = test_transition(codon_list[i][m],codon_list[j][m]);
+                transit = test_transition(codon_list[i][m], codon_list[j][m]);
             }
             if (diff > 1) {
                 (*bf)(i, j) = 0;
@@ -387,7 +397,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,map<string, string> & codon
 
 //take out fortran
 /*
-void convert_matrix_to_single_row_for_fortran(mat & inmatrix, double t, double * H) {
+void convert_matrix_to_single_row_for_fortran(mat& inmatrix, double t, double * H) {
     int count = 0;
     for (unsigned int i=0; i < inmatrix.n_cols; i++) {
         for (unsigned int j=0; j < inmatrix.n_cols; j++) {

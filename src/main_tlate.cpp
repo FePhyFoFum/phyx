@@ -1,49 +1,43 @@
-/*
- * main_tlate.cpp
- *
- *  Created on: Jun 16, 2015
- *      Author: joe
- */
-
-
-
-//g++ -std=c++11 tlate.cpp main_tlate.cpp utils.cpp superdouble.cpp sequence.cpp seq_reader.cpp seq_utils.cpp -o test
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "tlate.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Translate DNA alignment to amino acids." << endl;
-    cout << "NOTE: assumes sequences are in frame." << endl;
-    cout << "This will take fasta, fastq, phylip, and nexus inputs." << endl;
-    cout << endl;
-    cout << "Usage: pxtlate [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input nucleotide sequence file, stdin otherwise" << endl;
-    cout << " -t, --table=STRING  which translation table to use. currently available:" << endl;
-    cout << "                       'std' (standard, default)" << endl;
-    cout << "                       'vmt' (vertebrate mtDNA)" << endl;
-    cout << "                       'ivmt' (invertebrate mtDNA)" << endl;
-    cout << "                       'ymt' (yeast mtDNA)" << endl;
-    cout << " -o, --outf=FILE     output aa sequence file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Translate DNA alignment to amino acids." << std::endl;
+    std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << "NOTE: assumes sequences are in frame." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtlate [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input nucleotide sequence file, STDIN otherwise" << std::endl;
+    std::cout << " -t, --table=STRING  which translation table to use. currently available:" << std::endl;
+    std::cout << "                       'std' (standard, default)" << std::endl;
+    std::cout << "                       'vmt' (vertebrate mtDNA)" << std::endl;
+    std::cout << "                       'ivmt' (invertebrate mtDNA)" << std::endl;
+    std::cout << "                       'ymt' (yeast mtDNA)" << std::endl;
+    std::cout << " -o, --outf=FILE     output aa sequence file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxtlate 0.1\nCopyright (C) 2015 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxtlate 1.1\nCopyright (C) 2015-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 
 static struct option const long_options[] =
@@ -53,6 +47,7 @@ static struct option const long_options[] =
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -64,11 +59,11 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     char * seqf = NULL;
     char * outf = NULL;
-    string tab = "std";
+    std::string tab = "std";
 
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:t:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:t:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -90,7 +85,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -102,49 +100,127 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     TLATE tl (tab);
     
     Sequence seq;
-    string retstring;
-    string aa_seq;
-    string nuc_seq;
-
+    std::string retstring;
+    std::string aa_seq;
+    std::string nuc_seq;
+    
     int ft = test_seq_filetype_stream(*pios, retstring);
-    // send sequences to be translated here
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        nuc_seq = seq.get_sequence();
-        aa_seq = tl.translate(nuc_seq);
-        (*poos) << ">" << seq.get_id() << "\n" << aa_seq << endl;
+    int num_taxa, num_char; // not used, but required by some readers
+    std::string alphaName = ""; // will check first sequence type
+    bool first = true;
+    
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, num_taxa, num_char, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        }
+    } else {
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, num_taxa, num_char);
+            complicated_phylip = is_complicated_phylip(*pios, num_char);
+        }
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                if (first) {
+                    alphaName = seq.get_alpha_name();
+                    if (alphaName.compare("DNA") != 0) {
+                        std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
+                            << alphaName << " detected. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    first = false;
+                }
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                nuc_seq = seq.get_sequence();
+                aa_seq = tl.translate(nuc_seq);
+                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+            }
+        }
     }
-    // fasta has a trailing one
-    if (ft == 2) {
-        nuc_seq = seq.get_sequence();
-        aa_seq = tl.translate(nuc_seq);
-        (*poos) << ">" << seq.get_id() << "\n" << aa_seq << endl;
-    }
-
+    
     if (outfileset) {
         ofstr->close();
         delete poos;

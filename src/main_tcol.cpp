@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -7,32 +6,36 @@
 #include <map>
 #include <getopt.h>
 
-using namespace std;
-
 #include "utils.h"
 #include "tree_reader.h"
 #include "tree_utils.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Add information to a tree so that you can color the edges." << endl;
-    cout << "This will take nexus and newick inputs and will output nexus so" << endl;
-    cout << "that it can be read by figtree." << endl;
-    cout << endl;
-    cout << "Usage: pxtcol [OPTION]... " << endl;
-    cout << endl;
-    cout << " -t, --treef=FILE        input tree file, stdin otherwise" << endl;
-    cout << " -m, --mrcaf=FILE        file with mrcas and annotations, tab separated" << endl;
-    cout << " -d, --nodeidf=FILE      file with nodeids (labels) and annotations, tab separated" << endl;
-    cout << " -o, --outf=FILE         output file, stout otherwise" << endl;
-    cout << " -h, --help              display this help and exit" << endl;
-    cout << " -V, --version           display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Add information to a tree so that you can color the edges." << std::endl;
+    std::cout << "This will take nexus and newick inputs from a file or STDIN." << std::endl;
+    std::cout << "Results are written in nexus format so that it can be read by figtree." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxtcol [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
+    std::cout << " -m, --mrcaf=FILE     file with mrcas and annotations, tab separated" << std::endl;
+    std::cout << " -d, --nodeidf=FILE   file with nodeids (labels) and annotations, tab separated" << std::endl;
+    std::cout << " -o, --outf=FILE      output file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxtcol 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxtcol 1.1\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -42,6 +45,7 @@ static struct option const long_options[] =
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -57,11 +61,11 @@ int main(int argc, char * argv[]) {
     char * nodeidf = NULL;
     char * outf = NULL;
     char * treef = NULL;
-    string cnamef = "";
-    string nnamef = "";
+    std::string cnamef = "";
+    std::string nnamef = "";
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:m:d:o:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:m:d:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -87,7 +91,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -99,36 +106,36 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (tfileset == true) {
-        fstr = new ifstream(treef);
+        fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     //for node ids
-    map<string, string> nodeid_map;
+    std::map<std::string, std::string> nodeid_map;
     if (nodeidfset == true) {
-        ifstream nfstr(nodeidf);
-        string tline;
-        while (getline(nfstr,tline)) {
+        std::ifstream nfstr(nodeidf);
+        std::string tline;
+        while (getline(nfstr, tline)) {
             trim_spaces(tline);
-            vector<string> tokens2;
+            std::vector<std::string> tokens2;
             tokenize(tline, tokens2, "\t");
             for (unsigned int j=0; j < tokens2.size(); j++) {
                 trim_spaces(tokens2[j]);
@@ -140,17 +147,17 @@ int main(int argc, char * argv[]) {
         nfstr.close();
     }
     
-    string retstring;
+    std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
     if (ft != 0 && ft != 1) {
-        cerr << "This really only works with nexus or newick" << endl;
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
     bool going = true;
     if (ft == 1) {
         Tree * tree;
-        (*poos) << "#NEXUS" << endl;
-        (*poos) << "begin trees;" << endl;
+        (*poos) << "#NEXUS" << std::endl;
+        (*poos) << "begin trees;" << std::endl;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
@@ -167,36 +174,36 @@ int main(int argc, char * argv[]) {
                     } 
                 }
                 // put annotations here
-                (*poos) << "tree tree = " << getNewickString(tree) << endl;
+                (*poos) << "tree tree = " << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }
-        (*poos) << "end;" << endl;
+        (*poos) << "end;" << std::endl;
     } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        map <string, string> translation_table;
+        std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
-        (*poos) << "#NEXUS" << endl;
-        (*poos) << "begin trees;" << endl;
+        (*poos) << "#NEXUS" << std::endl;
+        (*poos) << "begin trees;" << std::endl;
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
                 for (int i=0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
-                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
                 for (int i=0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
-                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()){
+                    if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }   
                 // put annotations here
-                (*poos) << "tree tree = " << getNewickString(tree) << endl;
+                (*poos) << "tree tree = " << getNewickString(tree) << std::endl;
                 delete tree;
             }
         }

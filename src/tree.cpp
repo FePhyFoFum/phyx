@@ -1,8 +1,3 @@
-/*
- * tree.cpp
- *
- */
-
 #include <set>
 #include <map>
 #include <string>
@@ -10,41 +5,45 @@
 #include <iostream>
 #include <assert.h>
 
-using namespace std;
-
 #include "node.h"
 #include "tree.h"
 
-Tree::Tree() {
+
+Tree::Tree () {
     root = NULL;
     processRoot();
 }
 
-Tree::Tree(Node * inroot) {
+
+Tree::Tree (Node * inroot) {
     root = inroot;
     processRoot();
 }
 
-void Tree::addExternalNode(Node * tn) {
+
+void Tree::addExternalNode (Node * tn) {
     externalNodes.push_back(tn);
     externalNodeCount++;
     nodes.push_back(tn);
 }
 
-void Tree::addInternalNode(Node * tn) {
+
+void Tree::addInternalNode (Node * tn) {
     internalNodes.push_back(tn);
     internalNodeCount++;
     nodes.push_back(tn);
 }
 
-Node * Tree::getExternalNode(int num) {
+
+Node * Tree::getExternalNode (int num) {
     return externalNodes.at(num);
 }
+
 
 /*
  * could precompute this, check for run time differences
  */
-Node * Tree::getExternalNode(string name) {
+Node * Tree::getExternalNode (std::string name) {
     Node * ret = NULL;
     for (int i=0; i < externalNodeCount; i++) {
         if (externalNodes.at(i)->getName() == name) {
@@ -54,14 +53,16 @@ Node * Tree::getExternalNode(string name) {
     return ret;
 }
 
-Node * Tree::getInternalNode(int num) {
+
+Node * Tree::getInternalNode (int num) {
     return internalNodes.at(num);
 }
+
 
 /*
  * could precompute this, check for run time differences
  */
-Node * Tree::getInternalNode(string & name) {
+Node * Tree::getInternalNode (std::string& name) {
     Node * ret = NULL;
     for (int i=0; i < internalNodeCount; i++) {
         if (internalNodes.at(i)->getName() == name) {
@@ -71,11 +72,13 @@ Node * Tree::getInternalNode(string & name) {
     return ret;
 }
 
-int Tree::getExternalNodeCount() {
+
+int Tree::getExternalNodeCount () {
     return externalNodeCount;
 }
 
-int Tree::getExtantNodeCount() {
+
+int Tree::getExtantNodeCount () {
     setHeightFromRootToNodes();
     double largest = 0;
     for (int i=0; i < externalNodeCount; i++) {
@@ -94,18 +97,21 @@ int Tree::getExtantNodeCount() {
     return count;
 }
 
+
 // NOTE: this includes the root
-int Tree::getInternalNodeCount() {
+int Tree::getInternalNodeCount () {
     return internalNodeCount;
 }
 
-Node * Tree::getNode(int num) {
+
+Node * Tree::getNode (int num) {
     return nodes.at(num);
 }
 
-Node * Tree::getNode(string & name) {
+
+Node * Tree::getNode (std::string& name) {
     Node * ret = NULL;
-    if (name_node_map.size() == 0){
+    if (name_node_map.size() == 0) {
         for (unsigned int i=0; i < nodes.size(); i++) {
             if (nodes.at(i)->getName().size() > 0)
                 name_node_map[nodes.at(i)->getName()] = nodes.at(i);
@@ -116,43 +122,53 @@ Node * Tree::getNode(string & name) {
     return ret;
 }
 
-int Tree::getNodeCount() {
+
+int Tree::getNodeCount () {
     return nodes.size();
 }
 
-Node * Tree::getRoot() {
+
+Node * Tree::getRoot () {
     return root;
 }
 
-void Tree::setRoot(Node * inroot) {
+
+void Tree::setRoot (Node * inroot) {
     root = inroot;
 }
 
-void Tree::setEdgeLengthsPresent(bool & res) {
+
+void Tree::setEdgeLengthsPresent (bool res) {
     edgeLengths = res;
 }
 
-void Tree::setNodeAnnotationsPresent(bool & res) {
+
+void Tree::setNodeAnnotationsPresent (bool res) {
     nodeAnnotations = res;
 }
 
-bool Tree::hasNodeAnnotations() {
+
+bool Tree::hasNodeAnnotations () {
     return nodeAnnotations;
 }
 
-void Tree::setNodeNamesPresent(bool & res) {
+
+void Tree::setNodeNamesPresent (bool res) {
     internalNodeNames = res;
 }
 
-bool Tree::hasNodeNames() {
+
+bool Tree::hasNodeNames () {
     return internalNodeNames;
 }
 
-bool Tree::hasEdgeLengths() {
+
+bool Tree::hasEdgeLengths () {
     return edgeLengths;
 }
 
-void Tree::unRoot() {
+
+void Tree::unRoot () {
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
         tritomyRoot(NULL);
@@ -160,17 +176,18 @@ void Tree::unRoot() {
     }
 }
 
+
 /*
  * seems to be working but check for leaks
  */
-bool Tree::reRoot(Node * inroot) {
+bool Tree::reRoot (Node * inroot) {
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
         tritomyRoot(NULL); // not sure if this should actually be the inroot instead of NULL
     }
-    //cout << this->root->getNewick(false) << endl;
+    //std::cout << this->root->getNewick(false) << std::endl;
     if (root == inroot) {
-        cerr << "you asked to root at the current root" << endl;
+        std::cerr << "you asked to root at the current root" << std::endl;
         return false;
     } else {
         Node * tempParent = inroot->getParent();
@@ -191,7 +208,8 @@ bool Tree::reRoot(Node * inroot) {
     }
 }
 
-void Tree::removeRootEdge() {
+
+void Tree::removeRootEdge () {
     bool going = true; // multiple stems? nefarious...
     while (going) {
         if (root->getChildCount() == 1) {
@@ -212,15 +230,16 @@ void Tree::removeRootEdge() {
     }
 }
 
+
 void Tree::duplicateRootSupport () {
-    vector<Node*> kids = root->getChildren();
+    std::vector<Node*> kids = root->getChildren();
     bool supfound = false;
-    vector <string> sups;
+    std::vector<std::string> sups;
     unsigned int numnodes = 0; // want to guard against when only 1 outgroup
     for (unsigned int i = 0; i < kids.size(); i++) {
         if (kids[i]->isInternal()) {
             numnodes++;
-            string x = kids[i]->getName(); // support stored in name property
+            std::string x = kids[i]->getName(); // support stored in name property
             if (x != "") {
                 supfound = true;
                 sups.push_back(x);
@@ -232,23 +251,24 @@ void Tree::duplicateRootSupport () {
             if (sups.size() == 1) {
                 for (unsigned int i = 0; i < kids.size(); i++) {
                     if (kids[i]->isInternal()) {
-                        string x = kids[i]->getName();
+                        std::string x = kids[i]->getName();
                         if (x == "") {
                             kids[i]->setName(sups[0]);
                         }
                     }
                 }
             } else {
-                cout << "i don't know how this might happen..." << endl;
+                std::cout << "i don't know how this might happen..." << std::endl;
             }
         }
     }
 }
 
+
 /*
  * seems to be working now
  */
-void Tree::tritomyRoot(Node * toberoot) {
+void Tree::tritomyRoot (Node * toberoot) {
     Node * curroot = this->getRoot();
     if (toberoot == NULL) {
         if (curroot->getChild(0)->isInternal()) {
@@ -293,12 +313,13 @@ void Tree::tritomyRoot(Node * toberoot) {
     }
 }
 
-Node * Tree::getMRCA(vector<string> innodes) {
+
+Node * Tree::getMRCA (std::vector<std::string> innodes) {
     Node * mrca = NULL;
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
     } else {
-        vector<string> outgroup;
+        std::vector<std::string> outgroup;
         for (unsigned int i=0; i < innodes.size(); i++) {
             outgroup.push_back(innodes.at(i));
         }
@@ -317,7 +338,8 @@ Node * Tree::getMRCA(vector<string> innodes) {
     return mrca;
 }
 
-Node * Tree::getMRCA(vector<Node *> innodes) {
+
+Node * Tree::getMRCA (std::vector<Node *> innodes) {
     Node * mrca = NULL;
     if (innodes.size() == 1) {
         return innodes[0];
@@ -337,13 +359,14 @@ Node * Tree::getMRCA(vector<Node *> innodes) {
     return mrca;
 }
 
+
 /**
  * when the MRCA is returned as root, this will find 
  * the other node, internal that can serve as another root
  */
-Node * Tree::getInternalMRCA(vector<string> & innodes) {
+Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
     Node * mrca = NULL;
-    set<Node *> original; // original set of nodes
+    std::set<Node *> original; // original set of nodes
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
     } else {
@@ -362,11 +385,14 @@ Node * Tree::getInternalMRCA(vector<string> & innodes) {
     return mrca;
 }
 
-void Tree::setHeightFromRootToNodes() {
-    setHeightFromRootToNode(*this->root,this->root->getBL());
+
+void Tree::setHeightFromRootToNodes () {
+    setHeightFromRootToNode(*this->root, this->root->getBL());
 }
 
-void Tree::setHeightFromRootToNode(Node & inNode, double newHeight) {
+
+// this should be called depth
+void Tree::setHeightFromRootToNode (Node& inNode, double newHeight) {
     if (inNode.isRoot() == false) {
         newHeight += inNode.getBL();
         inNode.setHeight(newHeight);
@@ -378,10 +404,11 @@ void Tree::setHeightFromRootToNode(Node & inNode, double newHeight) {
     }
 }
 
+
 /*
  * only makes sense for ultrametric trees
  */
-void Tree::setHeightFromTipToNodes() {
+void Tree::setHeightFromTipToNodes () {
     for (int i = 0; i < externalNodeCount; i++) {
         double curh = 0.0;
         Node * cur = this->getExternalNode(i);
@@ -396,10 +423,11 @@ void Tree::setHeightFromTipToNodes() {
     }
 }
 
+
 /*
  * private
  */
-void Tree::processRoot() {
+void Tree::processRoot () {
     nodes.clear();
     internalNodes.clear();
     externalNodes.clear();
@@ -411,7 +439,8 @@ void Tree::processRoot() {
     postOrderProcessRoot(root);
 }
 
-void Tree::processReRoot(Node * node) {
+
+void Tree::processReRoot (Node * node) {
     if (node->isRoot() || node->isExternal()) {
         return;
     }
@@ -427,8 +456,9 @@ void Tree::processReRoot(Node * node) {
     parent->setParent(*node);
 }
 
+
 void Tree::exchangeInfo(Node * node1, Node * node2) {
-    string swaps;
+    std::string swaps;
     double swapd;
     swaps = node1->getName();
     node1->setName(node2->getName());
@@ -439,7 +469,8 @@ void Tree::exchangeInfo(Node * node1, Node * node2) {
     node2->setBL(swapd);
 }
 
-void Tree::exchangeNodes(Node * node1, Node * node2) {
+
+void Tree::exchangeNodes (Node * node1, Node * node2) {
     Node * par1 = node1->getParent();
     Node * par2 = node2->getParent();
     bool bp1 = par1->removeChild(*node1);
@@ -450,9 +481,11 @@ void Tree::exchangeNodes(Node * node1, Node * node2) {
     par2->addChild(*node1);
 }
 
-void Tree::postOrderProcessRoot(Node * node) {
-    if (node == NULL)
+
+void Tree::postOrderProcessRoot (Node * node) {
+    if (node == NULL) {
         return;
+    }
     if (node->getChildCount() > 0) {
         for (int i = 0; i < node->getChildCount(); i++) {
             postOrderProcessRoot(node->getChild(i));
@@ -467,6 +500,7 @@ void Tree::postOrderProcessRoot(Node * node) {
     }
 }
 
+
 /*
     * how this works
     *
@@ -478,7 +512,7 @@ void Tree::postOrderProcessRoot(Node * node) {
     * doesn't yet take care if node.parent == root
     * or polytomy
 */
-void Tree::pruneExternalNode(Node * node) {
+void Tree::pruneExternalNode (Node * node) {
     if (node->isInternal()) {
         return;
     }
@@ -504,7 +538,7 @@ void Tree::pruneExternalNode(Node * node) {
             }
         } else {
             root = other;
-            //cout << "i am here apparently..." << endl;
+            //std::cout << "i am here apparently..." << std::endl;
         }
     } else {
         parent->removeChild(*node);
@@ -514,7 +548,7 @@ void Tree::pruneExternalNode(Node * node) {
 }
 
 
-void Tree::pruneInternalNode(Node * node) {
+void Tree::pruneInternalNode (Node * node) {
     if (node->isExternal()) {
         return;
     }
@@ -530,18 +564,17 @@ void Tree::pruneInternalNode(Node * node) {
      * - this will arise with unrooted trees
     */
     double pel = node->getBL();
-    //cout << "Parent edge length: " << pel << endl;
+    //std::cout << "Parent edge length: " << pel << std::endl;
     Node * gparent = node->getParent();
     
     for (int i=0; i < node->getChildCount(); i++) {
         Node * child = node->getChild(i);
-        //cout << "  " << i << ". Original edge length: " << child->getBL() << endl;
+        //std::cout << "  " << i << ". Original edge length: " << child->getBL() << std::endl;
         double newEL = pel + child->getBL();
-        //cout << "     New edge length: " << newEL << endl;
+        //std::cout << "     New edge length: " << newEL << std::endl;
         child->setBL(newEL);
         gparent->addChild(*child);
     }
-    
     // now get rid of it
     gparent->removeChild(*node);
     delete node;
@@ -549,10 +582,10 @@ void Tree::pruneInternalNode(Node * node) {
 }
 
 
-Node * Tree::getMRCATraverse(Node * curn1, Node * curn2) {
+Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
     Node * mrca = NULL;
     //get path to root for first node
-    vector<Node *> path1;
+    std::vector<Node *> path1;
     Node * parent = curn1;
     path1.push_back(parent);
     while (parent != NULL) {
@@ -584,7 +617,7 @@ Node * Tree::getMRCATraverse(Node * curn1, Node * curn2) {
  * end private
  */
 
-Tree::~Tree() {
+Tree::~Tree () {
     for (int i=0; i < internalNodeCount; i++) {
         delete getInternalNode(i);
     }

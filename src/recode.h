@@ -1,15 +1,14 @@
 #ifndef _RECODE_H_
 #define _RECODE_H_
 
+#include <string>
 #include <set>
 #include <regex>
-
-using namespace std;
 
 class SequenceRecoder {
 
 public:
-    string recodescheme_;
+    std::string recodescheme_;
     
     // individual coding scheme
     bool R_;
@@ -27,24 +26,24 @@ public:
     bool G_;
     bool T_;
     
-    static set <char> recognized_;
+    static std::set<char> recognized_;
     
-    static regex r_;
-    static regex y_;
-    static regex s_;
-    static regex w_;
-    static regex m_;
-    static regex k_;
-    static regex b_;
-    static regex d_;
-    static regex h_;
-    static regex v_;
+    static std::regex r_;
+    static std::regex y_;
+    static std::regex s_;
+    static std::regex w_;
+    static std::regex m_;
+    static std::regex k_;
+    static std::regex b_;
+    static std::regex d_;
+    static std::regex h_;
+    static std::regex v_;
     
-    SequenceRecoder (string & recodescheme);
+    SequenceRecoder (std::string& recodescheme);
     void parse_scheme ();
     void check_valid_scheme ();
-    string get_recoded_seq (string const& origseq);
-    void recode_seq (string &s);
+    std::string get_recoded_seq (const std::string& origseq);
+    void recode_seq (std::string& s);
     
     //~SequenceRecoder();
 };

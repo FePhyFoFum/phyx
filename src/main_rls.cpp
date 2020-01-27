@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -7,34 +6,39 @@
 #include <cstring>
 #include <getopt.h>
 
-using namespace std;
-
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "relabel.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Taxon relabelling for alignments." << endl;
-    cout << "This will take fasta, phylip or nexus file formats" << endl;
-    cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << endl;
-    cout << endl;
-    cout << "Usage: pxrls [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
-    cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << endl;
-    cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << endl;
-    cout << " -o, --outf=FILE     output file, stout otherwise" << endl;
-    cout << " -v, --verbose       make the output more verbose" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Taxon relabelling for alignments." << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
+    std::cout << "Results are written in fasta format." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxrls [OPTIONS]... FILES" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
+    std::cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << std::endl;
+    std::cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
+    std::cout << " -v, --verbose       make the output more verbose" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxrls 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxrls 1.1\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -45,6 +49,7 @@ static struct option const long_options[] =
     {"verbose", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -59,11 +64,12 @@ int main(int argc, char * argv[]) {
     bool verbose = false;
     char * outf = NULL;
     char * seqf = NULL;
-    string cnamef = "";
-    string nnamef = "";
+    std::string cnamef = "";
+    std::string nnamef = "";
+    
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:c:n:o:vhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:c:n:o:vhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -94,7 +100,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -106,69 +115,120 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    istream * pios = NULL;
-    ostream * poos = NULL;
-    ifstream * fstr = NULL;
-    ofstream * ofstr = NULL;
+    std::istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ifstream * fstr = NULL;
+    std::ofstream * ofstr = NULL;
     
     if (!nfileset | !cfileset) {
-        cout << "Must supply both name files (-c for current, -n for new)." << endl;
+        std::cerr << "Error: must supply both name files (-c for current, -n for new). Exiting." << std::endl;
         exit(0);
     }
     
     if (sfileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
     
     Relabel rl (cnamef, nnamef, verbose);
     
-    set <string> orig = rl.get_names_to_replace();
+    std::set<std::string> orig = rl.get_names_to_replace();
     
     Sequence seq;
-    string retstring;
+    std::string retstring;
+    bool success = false;
+    int num_taxa, num_char; // not used, but required by some reader functions
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     
-    bool success = false;
-    
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        string terp = seq.get_id();
-        success = rl.relabel_sequence(seq);
-        if (success) {
-            orig.erase(terp);
+    // extra stuff to deal with possible interleaved nexus
+    if (ft == 0) {
+        bool interleave = false;
+        get_nexus_dimensions(*pios, num_taxa, num_char, interleave);
+        retstring = ""; // need to do this to let seqreader know we are mid-file
+        if (!interleave) {
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+        } else {
+            std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
         }
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << seq.get_sequence() << endl;
-    }
-// have to deal with last sequence outside while loop. fix this.
-    if (ft == 2) {
-        string terp = seq.get_id();
-        success = rl.relabel_sequence(seq);
-        if (success) {
-            orig.erase(terp);
+    } else {
+        bool complicated_phylip = false;
+        // check if we are dealing with a complicated phylip format
+        if (ft == 1) {
+            get_phylip_dimensions(retstring, num_taxa, num_char);
+            complicated_phylip = is_complicated_phylip(*pios, num_char);
         }
-        (*poos) << ">" << seq.get_id() << endl;
-        (*poos) << seq.get_sequence() << endl;
+        if (complicated_phylip) {
+            std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
+            for (unsigned int i = 0; i < seqs.size(); i++) {
+                seq = seqs[i];
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+        } else {
+            // fasta, fastq, or simple phylip
+            while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+            // fasta has a trailing one
+            if (ft == 2) {
+                std::string terp = seq.get_id();
+                success = rl.relabel_sequence(seq);
+                if (success) {
+                    orig.erase(terp);
+                }
+                (*poos) << ">" << seq.get_id() << std::endl;
+                (*poos) << seq.get_sequence() << std::endl;
+            }
+        }
     }
     
     if (orig.size() > 0) {
         if (verbose) {
-            cerr << "The following names to match were not found in the alignment:" << endl;
+            std::cerr << "The following names to match were not found in the alignment:" << std::endl;
             for (auto elem : orig) {
-                cerr << elem << endl;
+                std::cerr << elem << std::endl;
             }
         }
     }

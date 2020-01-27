@@ -1,18 +1,15 @@
-
 #ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_GSL_H_
 #define _OPTIMIZE_STATE_RECONSTRUCTOR_GSL_H_
 
-using namespace std;
+class RateModel; // forward declaration
+class StateReconstructor; // forward declaration
 
 #include <armadillo>
 using namespace arma;
 
-#include "rate_model.h"
-#include "state_reconstructor.h"
-
 #include <gsl/gsl_vector.h>
 
-class OptimizeStateReconstructor{
+class OptimizeStateReconstructor {
 private:
     RateModel * rm;
     StateReconstructor * sr;

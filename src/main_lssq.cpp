@@ -1,46 +1,49 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
-#include <map>
 #include <cstring>
 #include <getopt.h>
 #include <sstream>
-
-using namespace std;
 
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "seq_info.h"
 #include "log.h"
+#include "constants.h"
+
+extern std::string PHYX_CITATION;
+
 
 void print_help() {
-    cout << "Print sequence file summary" << endl;
-    cout << "By default returns all properties. Alternatively choose 1 property." << endl;
-    cout << "This will take fasta, phylip or nexus file formats" << endl;
-    cout << endl;
-    cout << "Usage: pxlssq [OPTION]... " << endl;
-    cout << endl;
-    cout << " -s, --seqf=FILE     input seq file, stdin otherwise" << endl;
-    cout << " -i, --indiv         output stats for individual sequences" << endl;
-    cout << " -n, --nseq          return the number of sequences" << endl;
-    cout << " -c, --nchar         return the number of characters (only if aligned)" << endl;
-    cout << "                        - for unaligned seqs, use with -i flag" << endl;
-    cout << " -l, --labels        return all taxon labels (one per line)" << endl;
-    cout << " -p, --prot          force interpret as protein (if inference fails)" << endl;
-    cout << " -a, --aligned       return whether sequences are aligned (same length)" << endl;
-    cout << " -f, --freqs         return character state frequencies" << endl;
-    cout << " -m, --missing       return the proportion of missing (-,?) characters" << endl;
-    cout << " -o, --outf=FILE     output stats file, stout otherwise" << endl;
-    cout << " -h, --help          display this help and exit" << endl;
-    cout << " -V, --version       display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Print sequence file summary." << std::endl;
+    std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxlssq [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
+    std::cout << " -i, --indiv         output stats for individual sequences" << std::endl;
+    std::cout << " -n, --nseq          return the number of sequences" << std::endl;
+    std::cout << " -c, --nchar         return the number of characters (only if aligned)" << std::endl;
+    std::cout << "                        - for unaligned seqs, use with -i flag" << std::endl;
+    std::cout << " -l, --labels        return all taxon labels (one per line)" << std::endl;
+    std::cout << " -p, --prot          force interpret as protein (if inference fails)" << std::endl;
+    std::cout << " -a, --aligned       return whether sequences are aligned (same length)" << std::endl;
+    std::cout << " -f, --freqs         return character state frequencies" << std::endl;
+    std::cout << " -m, --missing       return the proportion of missing (-,?) characters" << std::endl;
+    std::cout << " -o, --outf=FILE     output stats file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help          display this help and exit" << std::endl;
+    std::cout << " -V, --version       display version and exit" << std::endl;
+    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
-string versionline("pxlssq 0.1\nCopyright (C) 2016 FePhyFoFum\nLicense GPLv3\nwritten by Joseph F. Walker, Joseph W. Brown and Stephen A. Smith (blackrim)");
+
+std::string versionline("pxlssq 1.1\nCopyright (C) 2016-2020 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -56,10 +59,11 @@ static struct option const long_options[] =
     {"missing", no_argument, NULL, 'm'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
@@ -79,7 +83,7 @@ int main(int argc, char * argv[]){
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:inclpafmhV", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:inclpafmhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -127,7 +131,10 @@ int main(int argc, char * argv[]){
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -139,33 +146,32 @@ int main(int argc, char * argv[]){
         check_inout_streams_identical(seqf, outf);
     }
     
-    ostream * poos = NULL;
-    ofstream * ofstr = NULL;
-    ifstream * fstr = NULL;
-    istream * pios = NULL;
+    std::ostream * poos = NULL;
+    std::ofstream * ofstr = NULL;
+    std::ifstream * fstr = NULL;
+    std::istream * pios = NULL;
     
     if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
-        cout << "Specify 1 property only (or leave blank to show all properties)" << endl;
+        std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }
     
     if (fileset == true) {
-        fstr = new ifstream(seqf);
+        fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
-        pios = &cin;
+        pios = &std::cin;
         if (check_for_input_to_stream() == false) {
             print_help();
             exit(1);
         }
     }
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
-        poos = &cout;
+        poos = &std::cout;
     }
-    
     
     SeqInfo ls_Seq(pios, poos, indiv, force_protein);
     if (optionsset) {

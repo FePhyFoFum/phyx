@@ -1,13 +1,10 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+#include <map>
 #include <cstring>
 #include <getopt.h>
-#include <map>
-
-using namespace std;
 
 #include "string_node_object.h"
 #include "utils.h"
@@ -15,29 +12,34 @@ using namespace std;
 #include "seq_reader.h"
 #include "tree_reader.h"
 #include "tree.h"
+#include "tree_utils.h"
 #include "cont_models.h"
 #include "optimize_cont_models_nlopt.h"
 #include "log.h"
 
+extern std::string PHYX_CITATION;
+
+
 void print_help() {
-    cout << "Continuous character rate estimation with Brownian and OU." << endl;
-    cout << "This will take fasta, phylip (and soon nexus) inputs." << endl;
-    cout << "Can read from stdin or file." << endl;
-    cout << endl;
-    cout << "Usage: pxcontrates [OPTION]... " << endl;
-    cout << endl;
-    cout << " -c, --charf=FILE     input character file, stdin otherwise" << endl;
-    cout << " -t, --treef=FILE     input tree file, stdin otherwise" << endl;
-    cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << endl;
-    cout << " -o, --outf=FILE      output sequence file, stout otherwise" << endl;
-    cout << " -h, --help           display this help and exit" << endl;
-    cout << " -V, --version        display version and exit" << endl;
-    cout << endl;
-    cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << endl;
-    cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << endl;
+    std::cout << "Continuous character rate estimation with Brownian and OU." << std::endl;
+    std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Usage: pxcontrates [OPTIONS]..." << std::endl;
+    std::cout << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << " -c, --charf=FILE     input character file, STDIN otherwise" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
+    std::cout << " -a, --analysis=NUM   analysis type (0=anc[DEFAULT], 1=ratetest)" << std::endl;
+    std::cout << " -o, --outf=FILE      output sequence file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
+    std::cout << std::endl;
+    std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
+    std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-string versionline("pxcontrates 0.1\nCopyright (C) 2013 FePhyFoFum\nLicense GPLv3\nwritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string versionline("pxcontrates 1.1\nCopyright (C) 2013-2020 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
 
 static struct option const long_options[] =
 {
@@ -47,6 +49,7 @@ static struct option const long_options[] =
     {"analysis", required_argument, NULL, 'a'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
+    {"citation", no_argument, NULL, 'C'},
     {NULL, 0, NULL, 0}
 };
 
@@ -64,7 +67,7 @@ int main(int argc, char * argv[]) {
     int analysis = 0;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "c:t:o:a:hV", long_options, &oi);
+        int c = getopt_long(argc, argv, "c:t:o:a:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -92,7 +95,10 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                cout << versionline << endl;
+                std::cout << versionline << std::endl;
+                exit(0);
+            case 'C':
+                std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
                 print_error(argv[0], (char)c);
@@ -100,53 +106,51 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    istream * pios = NULL;
-    istream * poos = NULL;
-    ifstream * cfstr = NULL;
-    ifstream * tfstr = NULL;
+    std::istream * pios = NULL;
+    std::istream * poos = NULL;
+    std::ifstream * cfstr = NULL;
+    std::ifstream * tfstr = NULL;
 
-    ostream * poouts = NULL;
-    ofstream * ofstr = NULL;
+    std::ostream * poouts = NULL;
+    std::ofstream * ofstr = NULL;
     
-
     if (tfileset == true) {
-        tfstr = new ifstream(treef);
+        tfstr = new std::ifstream(treef);
         poos = tfstr;
     } else {
-        poos = &cin;
+        poos = &std::cin;
     }
 
     if (cfileset == true) {
-        cfstr = new ifstream(charf);
+        cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
-        cout << "you have to set a character file. Only a tree file can be read in through the stream;" << endl;
+        std::cerr << "Error: you have to set a character file. Only a tree file can be read in through the stream. Exiting." << std::endl;
+        exit(1);
     }
 
     //out file
-    //
     if (outfileset == true) {
-        ofstr = new ofstream(outf);
+        ofstr = new std::ofstream(outf);
         poouts = ofstr;
     } else {
-        poouts = &cout;
+        poouts = &std::cout;
     }
-    //
 
-    string retstring;
+    std::string retstring;
     int ft = test_char_filetype_stream(*pios, retstring);
     if (ft != 1 && ft != 2) {
-        cout << "only fasta and phylip (with spaces) supported so far" << endl;
+        std::cerr << "Error: only fasta and phylip (with spaces) supported so far. Exiting." << std::endl;
         exit(0);
     }
     Sequence seq;
-    vector <Sequence> seqs;
-    map <string, int> seq_map;
+    std::vector<Sequence> seqs;
+    std::map<std::string, int> seq_map;
     int y = 0;
-    int nchars = 0 ;
+    int num_chars = 0 ;
     while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
-        nchars = seq.get_num_cont_char();
+        num_chars = seq.get_num_cont_char();
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
         y++;
@@ -159,39 +163,39 @@ int main(int argc, char * argv[]) {
     }
     //read trees
     TreeReader tr;
-    vector<Tree *> trees;
-    while (getline(*poos,retstring)) {
+    std::vector<Tree *> trees;
+    while (getline(*poos, retstring)) {
         trees.push_back(tr.readTree(retstring));
     }
     
     //conduct analyses for each character
-    for (int c=0; c < nchars; c++) {
-        cerr << "character: " << c << endl;
+    for (int c=0; c < num_chars; c++) {
+        std::cerr << "character: " << c << std::endl;
         if (analysis == 0) {
-           // cout << "Input tree: " << getNewickString(trees[0]) << ";" << endl;
+           // std::cout << "Input tree: " << getNewickString(trees[0]) << ";" << std::endl;
             if (c == 0) {
-                (*poouts) << "#nexus" << endl << "begin trees;" << endl;
+                (*poouts) << "#nexus" << std::endl << "begin trees;" << std::endl;
             }
-            for (unsigned int x = 0; x < trees.size(); x++){
+            for (unsigned int x = 0; x < trees.size(); x++) {
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
-                    vector<Superdouble> tv (1);
+                    std::vector<Superdouble> tv (1);
                     tv[0] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);
-                    trees[x]->getExternalNode(i)->assocDoubleVector("val",tv);
+                    trees[x]->getExternalNode(i)->assocDoubleVector("val", tv);
                 }
                 for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
-                    vector<Superdouble> tv (1);
+                    std::vector<Superdouble> tv (1);
                     tv[0] = 0;
-                    trees[x]->getInternalNode(i)->assocDoubleVector("val",tv);
+                    trees[x]->getInternalNode(i)->assocDoubleVector("val", tv);
                 }
-                calc_square_change_anc_states(trees[x],0); // second character dies here
+                calc_square_change_anc_states(trees[x], 0); // second character dies here
                 for (int i=0; i < trees[x]->getInternalNodeCount(); i++) {
                     double tv = (*trees[x]->getInternalNode(i)->getDoubleVector("val"))[0];
                     trees[x]->getInternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
                     s.precision(9);
-                    s << fixed << tv;
+                    s << std::fixed << tv;
                     StringNodeObject nob(s.str());
-                    trees[x]->getInternalNode(i)->assocObject("value",nob);
+                    trees[x]->getInternalNode(i)->assocObject("value", nob);
                     //trees[x]->getInternalNode(i)->setName(s.str());
                 }
                 for (int i=0; i < trees[x]->getExternalNodeCount(); i++) {
@@ -199,17 +203,17 @@ int main(int argc, char * argv[]) {
                     trees[x]->getExternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
                     s.precision(9);
-                    s << fixed << tv;
+                    s << std::fixed << tv;
                     StringNodeObject nob(s.str());
-                    trees[x]->getExternalNode(i)->assocObject("value",nob);
+                    trees[x]->getExternalNode(i)->assocObject("value", nob);
                     //s << fixed << trees[x]->getExternalNode(i)->getName() << "[&value=" << tv << "]";
                     //trees[x]->getExternalNode(i)->setName(s.str());
                 }
                 (*poouts) << "tree tree" << c << " = ";
-                (*poouts) << getNewickString(trees[x],"value") << endl;
+                (*poouts) << getNewickString(trees[x],"value") << std::endl;
             }
-            if (c == (nchars - 1)) {
-                (*poouts) << "end;\n" << endl;
+            if (c == (num_chars - 1)) {
+                (*poouts) << "end;\n" << std::endl;
             }
             // remove annotations
             remove_annotations(trees[0]);
@@ -218,24 +222,24 @@ int main(int argc, char * argv[]) {
             mat vcv;
             int t_ind = 0; // TODO: do this over trees
             int c_ind = c;
-            calc_vcv(trees[t_ind],vcv);
+            calc_vcv(trees[t_ind], vcv);
             int n = trees[t_ind]->getExternalNodeCount();
             rowvec x = rowvec(n);
             for (int i=0; i < n; i++) {
                 x(i) = seqs[seq_map[trees[t_ind]->getExternalNode(i)->getName()]].get_cont_char(c_ind);
             }
-            vector<double> res = optimize_single_rate_bm_nlopt(x, vcv, true);
+            std::vector<double> res = optimize_single_rate_bm_nlopt(x, vcv, true);
             double aic = (2*2)-(2*(-res[2]));
             double aicc = aic + ((2*2*(2+1))/(n-2-1));
-            cout << c << " BM " << " state: " << res[0] <<  " rate: " << res[1]
-                << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  endl;
+            std::cout << c << " BM " << " state: " << res[0] <<  " rate: " << res[1]
+                << " like: " << -res[2] << " aic: " << aic << " aicc: " << aicc <<  std::endl;
 
-            vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
+            std::vector<double> res2 = optimize_single_rate_bm_ou_nlopt(x, vcv);
             aic = (2*3)-(2*(-res2[3]));
             aicc = aic + ((2*3*(3+1))/(n-3-1));
-            cout << c << " OU " << " state: " << res2[0] <<  " rate: "
+            std::cout << c << " OU " << " state: " << res2[0] <<  " rate: "
                 << res2[1] << " alpha: " << res2[2] <<  " like: " << -res2[3]
-                << " aic: " << aic << " aicc: " << aicc << endl;
+                << " aic: " << aic << " aicc: " << aicc << std::endl;
         }
     }
 
