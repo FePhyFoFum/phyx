@@ -598,7 +598,7 @@ pxcolt: $(CPP_OBJS) $(COLLAPSE_TREE_OBJ)
 
 install:
 	install -m 0755 px* $(PREFIX)/bin
-	install -m 0755 man/px*.1 $(MANDIR)/man1
+	mkdir -p $(MANDIR)/man1 && install -m 0755 man/px*.1 $(MANDIR)/man1
 
 uninstall:
 	-$(RM) $(addprefix $(PREFIX)/bin/, $(PROGS))
