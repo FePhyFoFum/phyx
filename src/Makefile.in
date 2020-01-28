@@ -612,7 +612,7 @@ distclean:
 	-$(RM) *.o *.d px* man/px*.1 configure config.log config.h config.status Makefile
 
 check:
-	python run_tests.py
+	python3 run_tests.py
 
 test:
-	python run_tests.py
+	python3 run_tests.py
