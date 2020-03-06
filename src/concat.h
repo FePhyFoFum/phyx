@@ -22,7 +22,7 @@ private:
 
 public:
     SequenceConcatenater (const bool& toupcase);
-    SequenceConcatenater (std::string& seqf);
+    SequenceConcatenater (std::string& seqf, const bool& toupcase);
     void concatenate (SequenceConcatenater& newSeqs);
     
     int get_num_taxa ()const;

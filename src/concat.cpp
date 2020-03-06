@@ -17,8 +17,8 @@ SequenceConcatenater::SequenceConcatenater (const bool& toupcase):num_partitions
 
 
 // constructor for individual file
-SequenceConcatenater::SequenceConcatenater (std::string& seqf):num_partitions_(0),
-    num_char_(0), num_taxa_(0), filename_(seqf) {
+SequenceConcatenater::SequenceConcatenater (std::string& seqf, const bool& toupcase):num_partitions_(0),
+    num_char_(0), num_taxa_(0), toupcase_(toupcase), filename_(seqf) {
     read_sequences();
 }
 
@@ -29,6 +29,12 @@ void SequenceConcatenater::read_sequences () {
     std::string alphaName = "";
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = (int)seqs_.size();
+    
+    if (toupcase_) {
+        for (int i = 0; i < num_taxa_; i++) {
+            seqs_[i].set_sequence(string_to_upper(seqs_[i].get_sequence()));
+        }
+    }
     
     if (!is_aligned(seqs_)) {
         std::cerr << "Error: sequences in file '" << filename_ << "' are not aligned. Exiting."
