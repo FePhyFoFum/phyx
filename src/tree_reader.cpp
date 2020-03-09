@@ -411,6 +411,9 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
                 //std::cout << "yikes a comment!" << std::endl;
                 process_nexus_comment(stri, tline);
                 getline(stri, tline);
+            } else if (tline.empty()) {
+                //std::cout << "empty line. keep reading!" << std::endl;
+                getline(stri, tline);
             } else {
                 done = true;
             }
