@@ -28,6 +28,7 @@ void print_help() {
     std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
     std::cout << " -g, --outgroups=CSL  outgroup sep by commas (NO SPACES!)" << std::endl;
+    std::cout << " -f, --namesf=FILE    outgroups in a file (each on a line)" << std::endl;
     std::cout << " -r, --ranked         turn on ordering of outgroups. will root on first one present" << std::endl;
     std::cout << " -u, --unroot         unroot the tree" << std::endl;
     std::cout << " -o, --outf=FILE      output tree file, STOUT otherwise" << std::endl;
@@ -46,6 +47,7 @@ static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
     {"outgroups", required_argument, NULL, 'g'},
+    {"namesf", required_argument, NULL, 'f'},
     {"ranked", no_argument, NULL, 'r'},
     {"unroot", no_argument, NULL, 'u'},
     {"outf", required_argument, NULL, 'o'},
@@ -62,6 +64,7 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outgroupsset = false;
+    bool namefileset = false;
     bool outfileset = false;
     bool silent = false;
     bool unroot = false;
@@ -71,9 +74,10 @@ int main(int argc, char * argv[]) {
     char * treef = NULL;
     char * outf = NULL;
     char * outgroupsc = NULL;
+    char * namesfc = NULL;
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:g:ruo:shVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:g:f:ruo:shVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -86,6 +90,11 @@ int main(int argc, char * argv[]) {
             case 'g':
                 outgroupsset = true;
                 outgroupsc = strdup(optarg);
+                break;
+            case 'f':
+                namefileset = true;
+                namesfc = strdup(optarg);
+                check_file_exists(namesfc);
                 break;
             case 'r':
                 ranked = true;
@@ -125,6 +134,21 @@ int main(int argc, char * argv[]) {
         for (unsigned int j=0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             outgroups.push_back(tokens2[j]);
+        }
+    } else if (namefileset == true) {
+        std::ifstream nfstr(namesfc);
+        std::string tline;
+        while (getline(nfstr, tline)) {
+            trim_spaces(tline);
+            outgroups.push_back(tline);
+        }
+        nfstr.close();
+        if (outgroups.size() > 0) {
+            outgroupsset = true;
+        } else {
+            // empty file
+            std::cerr << "Error: no names found. Exiting." << std::endl;
+            exit(0);
         }
     }
     if (!outgroupsset && !unroot) {
