@@ -3,7 +3,7 @@ RM := rm -f
 ## ./configure CXX=/usr/local/bin/g++-7
 CXX := @CXX@
 
-PREFIX := /usr/local
+PREFIX := @prefix@
 MANDIR = $(PREFIX)/share/man
 
 CPPFLAGS := @CPPFLAGS@
