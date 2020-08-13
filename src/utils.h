@@ -113,6 +113,9 @@ std::string get_string_vector (std::vector<int>& sts);
 void replace_all (std::string& str, const std::string& origSubStr, const std::string& replSubStr);
 void replace_each (std::string& str, const std::string& badChars, const std::string& replSubStr);
 
+bool check_nexus_comment (std::string line);
+void process_nexus_comment (std::istream& stri, std::string& tline);
+
 std::string get_valid_newick_label (const std::string& inLabel);
 std::string get_valid_nexus_label (const std::string& inLabel);
 std::string get_safe_taxon_label (const std::string& inLabel);

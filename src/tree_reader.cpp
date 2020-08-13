@@ -360,41 +360,6 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
 }
 
 
-// given a line that begins with [, keep reading until a line where last char is ] (i.e., end of comment)
-// NOTE: returns the end comment line (so reader will need to read in next valid line)
-void process_nexus_comment (std::istream& stri, std::string& tline) {
-    bool done = false;
-    std::string terp = tline;
-    trim_spaces(terp);
-    // check single-line comment
-    if (terp.back() == ']') {
-        //std::cout << "single-line comment!" << std::endl;
-        return;
-    }
-    // if not, dealing with a multi-line comment
-    while (!done) {
-        getline(stri, terp);
-        trim_spaces(terp);
-        if (!terp.empty()) {
-            if (terp.back() == ']') {
-                //std::cout << "found end of multi-line comment" << std::endl;
-                return;
-            }
-        }
-    }
-}
-
-
-bool check_nexus_comment (std::string line) {
-    bool comment = false;
-    trim_spaces(line);
-    if (line[0] == '[') {
-        comment = true;
-    }
-    return comment;
-}
-
-
 /*
  * this will read the nexus file after processing translating
  * should add some error correction code here

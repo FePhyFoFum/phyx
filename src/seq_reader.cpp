@@ -230,8 +230,8 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
     while (getline(stri, tline)) {
         trim_spaces(tline);
         if (tline.size() != 0) {
-            if (check_comment_nexus(tline)) {
-                process_comment_nexus(stri, tline);
+            if (check_nexus_comment(tline)) {
+                process_nexus_comment(stri, tline);
                 continue;
             }
             std::vector<std::string> tokens;
@@ -458,40 +458,6 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool
 }
 
 
-// copy from treereader (temp)
-bool check_comment_nexus (std::string line) {
-    bool comment = false;
-    trim_spaces(line);
-    if (line[0] == '[') {
-        comment = true;
-    }
-    return comment;
-}
-
-
-void process_comment_nexus (std::istream& stri, std::string& tline) {
-    bool done = false;
-    std::string terp = tline;
-    trim_spaces(terp);
-    // check single-line comment
-    if (terp.back() == ']') {
-        //std::cout << "single-line comment!" << std::endl;
-        return;
-    }
-    // if not, dealing with a multi-line comment
-    while (!done) {
-        getline(stri, terp);
-        trim_spaces(terp);
-        if (!terp.empty()) {
-            if (terp.back() == ']') {
-                //std::cout << "found end of multi-line comment" << std::endl;
-                return;
-            }
-        }
-    }
-}
-
-
 // same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
@@ -507,8 +473,8 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
     while (getline(stri, tline)) {
         if (!tline.empty()) {
             // check for comments. could be anywhere
-            if (check_comment_nexus(tline)) {
-                process_comment_nexus(stri, tline);
+            if (check_nexus_comment(tline)) {
+                process_nexus_comment(stri, tline);
                 continue;
             }
             // convert to uppercase
@@ -1158,7 +1124,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
  * # (nexus), num (phylip), > (fasta), @ (fastq)
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
  */
-
+/*
 int test_seq_filetype (std::string filen) {
     std::string tline;
     std::ifstream infile(filen.c_str());
@@ -1194,6 +1160,7 @@ int test_seq_filetype (std::string filen) {
     infile.close();
     return ret;
 }
+*/
 
 
 /*
