@@ -114,9 +114,9 @@ SEQGEN_SRC = main_seqgen.cpp
 SEQGEN_OBJ = main_seqgen.o
 SEQGEN_DEP = main_seqgen.d
 
-CONCAT_SRC = concat.cpp main_concat.cpp
-CONCAT_OBJ = concat.o main_concat.o
-CONCAT_DEP = concat.d main_concat.d
+CONCAT_SRC = concat.cpp main_cat.cpp
+CONCAT_OBJ = concat.o main_cat.o
+CONCAT_DEP = concat.d main_cat.d
 
 SSTAT_SRC = sstat.cpp main_sstat.cpp
 SSTAT_OBJ = sstat.o main_sstat.o
