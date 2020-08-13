@@ -217,6 +217,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
 }
 
 
+// *** this does not seem to be used anymore
 // interleaved data do not work with the stream philosophy
 // by using this function, the file has already been checked, so we know num_taxa and num_char
 // prolly get rid of this in favour of the stream-based one
@@ -289,6 +290,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int num_ta
 
 
 // don't search for MATRIX; if we know it is interleaved, MATRIX has already been read
+// need to check for internal comments
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char) {
     std::vector<Sequence> seqs;
     std::string tline;
@@ -300,6 +302,10 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
     while (getline(stri, tline)) {
         trim_spaces(tline);
         if (tline.size() != 0) {
+            if (check_comment_nexus(tline)) {
+                process_comment_nexus(stri, tline);
+                continue;
+            }
             std::vector<std::string> tokens;
             tokenize(tline, tokens, del);
             if (tokens.size() > 1) {
@@ -470,6 +476,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
 }
 
 
+// *** does not appear to be used anymore
 // file-version of above. used by concatenator
 void get_nexus_dimensions_file (std::string& filen, int& num_taxa, int& numChar, bool& interleave) {
     num_taxa = numChar = 0;
@@ -530,7 +537,6 @@ void get_nexus_dimensions_file (std::string& filen, int& num_taxa, int& numChar,
 void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool& interleave) {
     num_taxa = numChar = 0;
     std::string tline;
-    //string temp;
     while (getline(stri, tline)) {
         if (!tline.empty()) {
             // convert to uppercase
@@ -581,6 +587,40 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool
 }
 
 
+// copy from treereader (temp)
+bool check_comment_nexus (std::string line) {
+    bool comment = false;
+    trim_spaces(line);
+    if (line[0] == '[') {
+        comment = true;
+    }
+    return comment;
+}
+
+
+void process_comment_nexus (std::istream& stri, std::string& tline) {
+    bool done = false;
+    std::string terp = tline;
+    trim_spaces(terp);
+    // check single-line comment
+    if (terp.back() == ']') {
+        //std::cout << "single-line comment!" << std::endl;
+        return;
+    }
+    // if not, dealing with a multi-line comment
+    while (!done) {
+        getline(stri, terp);
+        trim_spaces(terp);
+        if (!terp.empty()) {
+            if (terp.back() == ']') {
+                //std::cout << "found end of multi-line comment" << std::endl;
+                return;
+            }
+        }
+    }
+}
+
+
 // same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
@@ -593,9 +633,13 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
     missing = '?';
     
     std::string tline;
-    //string temp;
     while (getline(stri, tline)) {
         if (!tline.empty()) {
+            // check for comments. could be anywhere
+            if (check_comment_nexus(tline)) {
+                process_comment_nexus(stri, tline);
+                continue;
+            }
             // convert to uppercase
             tline = string_to_upper(tline);
             std::vector<std::string> searchtokens = tokenize(tline);

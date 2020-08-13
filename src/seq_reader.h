@@ -27,6 +27,10 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
 std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& numChar);
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);
 
+bool check_comment_nexus (std::string line);
+void process_comment_nexus (std::istream& stri, std::string& tline);
+
+
 // deprecated
 int test_seq_filetype (std::string filen);
 //bool read_fasta_file (std::string filen, std::vector<Sequence>& seqs);
