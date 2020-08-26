@@ -410,6 +410,11 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool
     std::string tline;
     while (getline(stri, tline)) {
         if (!tline.empty()) {
+            // check for comments. could be anywhere
+            if (check_nexus_comment(tline)) {
+                process_nexus_comment(stri, tline);
+                continue;
+            }
             // convert to uppercase
             tline = string_to_upper(tline);
             std::vector<std::string> searchtokens = tokenize(tline);
