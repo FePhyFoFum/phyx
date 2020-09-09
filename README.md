@@ -114,7 +114,7 @@ These instructions work for most ubuntu versions as well as debian.
 
 1. Install general dependencies:
 
-        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-cpp-0.6-dev libnlopt-dev libnlopt0
+        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-cpp-0.6-dev libnlopt-cxx-dev
 
 2. Clone the phyx repo (if you haven't already):
 
