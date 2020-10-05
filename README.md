@@ -4,7 +4,7 @@
 
 **phyx** performs phylogenetics analyses on trees and sequences. See installation instructions for Linux and Mac including any dependencies on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation) or below.
 
-Authors: Joseph W. Brown, Joseph F. Walker, and Stephen A. Smith
+Authors: Joseph W. Brown\*, Joseph F. Walker\*, and Stephen A. Smith (\* equal contribution)
 
 Citation: [Brown, J. W., J. F. Walker, and S. A. Smith; Phyx: phylogenetic tools for unix. Bioinformatics 2017; 33 (12): 1886-1888. doi: 10.1093/bioinformatics/btx063](https://academic.oup.com/bioinformatics/article/33/12/1886/2975328/Phyx-phylogenetic-tools-for-unix)
 
