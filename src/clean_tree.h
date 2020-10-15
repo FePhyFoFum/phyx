@@ -14,10 +14,12 @@ private:
     bool has_branchlengths_;
     bool remove_root_edge_;
     bool remove_labels_;
+    bool remove_knuckles_;
     void clean_properties ();
 
 public:
-    CleanTree (Tree * intree, bool remove_root_edge, bool remove_labels);
+    CleanTree (Tree * intree, bool remove_root_edge, bool remove_labels,
+            bool remove_knuckles);
 };
 
 #endif /* _CL_TR_H_ */

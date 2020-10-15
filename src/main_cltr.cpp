@@ -32,6 +32,7 @@ void print_help () {
     std::cout << " -t, --treef=FILE    input treefile, STDIN otherwise" << std::endl;
     std::cout << " -r, --root          remove root edge (if present)" << std::endl;
     std::cout << " -l, --labels        remove internal node labels" << std::endl;
+    std::cout << " -k, --knuckles      remove 2-degree internal nodes" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -48,6 +49,7 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"root", no_argument, NULL, 'r'},
     {"labels", no_argument, NULL, 'l'},
+    {"knuckles", no_argument, NULL, 'k'},
     {"outf", required_argument, NULL, 'o'},
     {"showd", no_argument, NULL, 's'},
     {"help", no_argument, NULL, 'h'},
@@ -65,6 +67,7 @@ int main(int argc, char * argv[]) {
     bool optionsset = false;
     bool removerootedge = false;
     bool removelabels = false;
+    bool removeknuckles = false;
     
     // need option to write nexus
     
@@ -73,7 +76,7 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:rlo:x:hVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:rlko:x:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -89,6 +92,10 @@ int main(int argc, char * argv[]) {
                 break;
             case 'l':
                 removelabels = true;
+                optionsset = true;
+                break;
+             case 'k':
+                removeknuckles = true;
                 optionsset = true;
                 break;
             case 'o':
@@ -118,7 +125,7 @@ int main(int argc, char * argv[]) {
     if (!optionsset) {
         removerootedge = true;
         removelabels = true;
-    }
+        removeknuckles = true;    }
     /*
     if ((removerootedge + removelabels) > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to clean all). Exiting." << std::endl;
@@ -160,7 +167,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
-                CleanTree ct(tree, removerootedge, removelabels);
+                CleanTree ct(tree, removerootedge, removelabels, removeknuckles);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
@@ -174,7 +181,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                CleanTree ct(tree, removerootedge, removelabels);
+                CleanTree ct(tree, removerootedge, removelabels, removeknuckles);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
