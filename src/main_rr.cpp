@@ -197,6 +197,12 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (tree != NULL) {
+                    if (has_root_edge(tree)) {
+                        std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
+                        std::cerr << "The root edge can be removed with the -r option of pxcltr" << std::endl;
+                        std::cerr << "Exiting." << std::endl;
+                        exit(0);
+                    }
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
@@ -230,6 +236,12 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
+                    if (has_root_edge(tree)) {
+                        std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
+                        std::cerr << "The root edge can be removed with the -r option of pxcltr" << std::endl;
+                        std::cerr << "Exiting." << std::endl;
+                        exit(0);
+                    }
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
@@ -270,6 +282,12 @@ int main(int argc, char * argv[]) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (tree != NULL) {
+                    if (has_root_edge(tree)) {
+                        std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
+                        std::cerr << "The root edge can be removed with the -r option of pxcltr" << std::endl;
+                        std::cerr << "Exiting." << std::endl;
+                        exit(0);
+                    }
                     tree->unRoot();
                     (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
@@ -280,6 +298,12 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
+                    if (has_root_edge(tree)) {
+                        std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
+                        std::cerr << "The root edge can be removed with the -r option of pxcltr" << std::endl;
+                        std::cerr << "Exiting." << std::endl;
+                        exit(0);
+                    }
                     tree->unRoot();
                     (*poos) << getNewickString(tree) << std::endl;
                     delete tree;
