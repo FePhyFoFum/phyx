@@ -62,8 +62,8 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    //bool optionsset = false; // if true, do only 1 operation. not currently used
-    bool removeroot = false;
+    bool optionsset = false;
+    bool removerootedge = false;
     bool removelabels = false;
     
     // need option to write nexus
@@ -84,12 +84,12 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'r':
-                removeroot = true;
-                //optionsset = true;
+                removerootedge = true;
+                optionsset = true;
                 break;
             case 'l':
                 removelabels = true;
-                //optionsset = true;
+                optionsset = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -114,11 +114,17 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    if ((removeroot + removelabels) > 1) {
+    // if no options set, do all by default
+    if (!optionsset) {
+        removerootedge = true;
+        removelabels = true;
+    }
+    /*
+    if ((removerootedge + removelabels) > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to clean all). Exiting." << std::endl;
         exit(0);
     }
-    
+    */
     std::istream* pios = NULL;
     std::ostream* poos = NULL;
     std::ifstream* fstr = NULL;
@@ -154,7 +160,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
-                CleanTree ct(tree);
+                CleanTree ct(tree, removerootedge, removelabels);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
@@ -168,7 +174,7 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                CleanTree ct(tree);
+                CleanTree ct(tree, removerootedge, removelabels);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }

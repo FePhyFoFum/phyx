@@ -4,25 +4,32 @@
 #include "clean_tree.h"
 
 
-CleanTree::CleanTree (Tree * intree) {
+CleanTree::CleanTree (Tree * intree, bool remove_root_edge, bool remove_labels) {
     tree_ = intree;
     root_ = tree_->getRoot();
-    clean_all();
+    remove_root_edge_ = remove_root_edge;
+    remove_labels_ = remove_labels;
+    clean_properties();
 }
 
 // remove annotations, 'knuckles', and root edges
-void CleanTree::clean_all () {
-    if (tree_->hasNodeAnnotations()) {
-        //cout << "Found node annotations!" << endl;
-        remove_annotations(tree_);
+void CleanTree::clean_properties () {
+    if (remove_labels_) {
+        if (tree_->hasNodeAnnotations()) {
+            //cout << "Found node annotations!" << endl;
+            remove_annotations(tree_);
+        }
+        if (tree_->hasNodeNames()) {
+            //cout << "Found node names!" << endl;
+            remove_internal_names(tree_);
+        }
     }
-    if (tree_->hasNodeNames()) {
-        //cout << "Found node names!" << endl;
-        remove_internal_names(tree_);
-    }
+    
     deknuckle_tree(tree_);
-    if (has_root_edge(tree_)) {
-        //cout << "Tree has a root edge." << endl;
-        tree_->removeRootEdge();
+    if (remove_root_edge_) {
+        if (has_root_edge(tree_)) {
+            //cout << "Tree has a root edge." << endl;
+            tree_->removeRootEdge();
+        }
     }
 }

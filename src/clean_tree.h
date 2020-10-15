@@ -12,11 +12,12 @@ private:
     bool ultrametric_tree_;
     bool binary_tree_;
     bool has_branchlengths_;
-    //double treelength_;
-    void clean_all ();
+    bool remove_root_edge_;
+    bool remove_labels_;
+    void clean_properties ();
 
 public:
-    CleanTree (Tree * intree);
+    CleanTree (Tree * intree, bool remove_root_edge, bool remove_labels);
 };
 
 #endif /* _CL_TR_H_ */
