@@ -20,9 +20,7 @@ TreeReader::TreeReader() {}
  * the tree pointer coming in should just be a new Tree()
  * we should take this out as soon as we are ready to repoint
  * the existing code to the right bits
- */
-
-// TODO: record whether edge lengths are present, store as property
+*/
 Tree * TreeReader::readTree (std::string trees) {
     Tree * tree = new Tree();
     std::string pb = trees;
@@ -159,8 +157,7 @@ Tree * TreeReader::readTree (std::string trees) {
             }
             currNode->setComment(note);
         } else if (nextChar == ' ') {
-            // something supposed to be here?
-
+            // just skip internal whitespace
         }
         // external named node
         else {

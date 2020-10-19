@@ -14,6 +14,7 @@
 #include "node_object.h"
 #include "string_node_object.h"
 #include "tree_utils.h"
+#include "utils.h"
 
 
 Node::Node ():BL(0.0), height(0.0), number(0), name(""), parent(NULL),
@@ -208,6 +209,7 @@ void Node::setComment (std::string s) {
 }
 
 
+// since nexus writer uses this, using stricter nexus punctuation
 std::string Node::getNewick (bool bl) {
     std::string ret = "";
     for (int i=0; i < this->getChildCount(); i++) {
@@ -230,7 +232,9 @@ std::string Node::getNewick (bool bl) {
         }
     }
     if (name.size() > 0) {
-        ret += name;
+        // newick punct is a subset of Nexus, so labels will be safe
+        std::string compliantName = get_valid_nexus_label(name);
+        ret += compliantName;
     }
     return ret;
 }
