@@ -15,7 +15,7 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "Generate all tree topologies for n taxa." << std::endl;
+    std::cout << "Generate all tree topologies for n (<= 10) taxa." << std::endl;
     std::cout << "Random tree samples are a-coming." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxtgen [OPTIONS]..." << std::endl;
