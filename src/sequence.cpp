@@ -242,7 +242,7 @@ std::vector<double> Sequence::get_qualarr () {
 
 
 double Sequence::get_qualarr_mean () {
-    return mean(qualarr_);
+    return v_mean(qualarr_);
 }
 
 

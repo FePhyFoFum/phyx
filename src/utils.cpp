@@ -337,13 +337,14 @@ int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
 }
 
 
-double mean (std::vector<double>& in) {
+// should make this a templated function
+double v_mean (std::vector<double>& in) {
     return sum (in) / (double)in.size();
 }
 
 
 double variance (std::vector<double>& in) {
-    double meann = mean(in);
+    double meann = v_mean(in);
     
     std::vector<double> diff(in.size());
     std::transform(in.begin(), in.end(), diff.begin(),
