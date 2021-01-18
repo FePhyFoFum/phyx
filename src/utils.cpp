@@ -343,7 +343,7 @@ double v_mean (std::vector<double>& in) {
 }
 
 
-double variance (std::vector<double>& in) {
+double v_variance (std::vector<double>& in) {
     double meann = v_mean(in);
     
     std::vector<double> diff(in.size());

@@ -57,7 +57,7 @@ double get_root_tip_var (Tree * tr) {
     for (int i = 0; i < tr->getExternalNodeCount(); i++) {
         paths.push_back(get_length_to_root(tr->getExternalNode(i)));
     }
-    double var = variance(paths);
+    double var = v_variance(paths);
     return var;
 }
 
@@ -424,7 +424,7 @@ bool is_ultrametric_paths (Tree * tr) {
     */
     
     // alternate approach: look at variance of paths, compare to EPSILON
-    double var = variance(paths);
+    double var = v_variance(paths);
     if (var < EPSILON) {
         ultrametric = true;
         // if ultrametric, go ahead and set node heights
