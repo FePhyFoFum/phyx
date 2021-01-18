@@ -51,8 +51,8 @@ private:
     void set_alphabet ();
     void count_chars_indiv_seq (std::string& seq);
     void count_chars (std::string& seq);
-    void print_summary_table_whole_alignment (std::ostream* poos);
-    void return_freq_table (std::ostream* poos);
+    void print_summary_table_whole_alignment ();
+    void return_freq_table ();
     void get_longest_taxon_label ();
     void calculate_freqs ();
     void calc_missing ();

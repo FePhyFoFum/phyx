@@ -11,6 +11,23 @@
 #include "seq_reader.h"
 
 
+SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
+        const bool& force_protein):concatenated_(""), seq_chars_(""), output_indiv_(indiv), datatype_set_(false),
+        is_dna_(false), is_protein_(false), is_multi_(false), is_binary_(false),
+        alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'), missing_('?'),
+        num_taxa_(0) {
+    // maybe get rid of this? how often is inference wrong?
+    if (force_protein) {
+        is_protein_ = true;
+        datatype_set_ = true;
+        set_alphabet();
+    }
+    pios_ = pios;
+    poos_ = poos;
+    read_in_alignment();
+}
+
+
 // for each character in the alphabet 'seq_chars_'
 void SeqInfo::count_chars_indiv_seq (std::string& seq) {
     seq = string_to_upper(seq);
@@ -158,7 +175,7 @@ void SeqInfo::calculate_freqs () {
 
 
 // alt to print_summary_table_whole_alignment. essential difference is transposed results
-void SeqInfo::return_freq_table (std::ostream* poos) {
+void SeqInfo::return_freq_table () {
     const char separator = ' ';
     const int colWidth = 10;
     if (output_indiv_) {
@@ -166,13 +183,13 @@ void SeqInfo::return_freq_table (std::ostream* poos) {
         get_longest_taxon_label();
         std::string pad = std::string(longest_tax_label_, ' ');
         // header
-        (*poos) << pad << " ";
+        (*poos_) << pad << " ";
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
                 << seq_chars_[i] << " ";
         }
         // return nchar for individual seqs
-        (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
+        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
         for (int i = 0; i < num_taxa_; i++) {
             int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
@@ -182,52 +199,52 @@ void SeqInfo::return_freq_table (std::ostream* poos) {
             }
             (*poos_) << " ";
             for (unsigned int j = 0; j < seq_chars_.length(); j++) {
-                (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+                (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
                     << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i] << " ";
             }
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << seq_lengths_[i] << std::endl;
+            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << seq_lengths_[i] << std::endl;
         }
     } else {
         // header
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
                 << seq_chars_[i];
             if (i != seq_chars_.length() - 1) {
-                (*poos) << " ";
+                (*poos_) << " ";
             }
         }
-        (*poos) << std::endl;
+        (*poos_) << std::endl;
         // counts
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator)
+            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
                 << char_counts_[i];
             if (i != seq_chars_.length() - 1) {
-                (*poos) << " ";
+                (*poos_) << " ";
             }
         }
-        (*poos) << std::endl;
+        (*poos_) << std::endl;
         // freqs
         int total_num_chars = sum(char_counts_);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos) << std::fixed << std::right << std::setw(colWidth) << std::setfill(separator)
+            (*poos_) << std::fixed << std::right << std::setw(colWidth) << std::setfill(separator)
                 << (double)char_counts_[i] / (double)total_num_chars;
             if (i != seq_chars_.length() - 1) {
-                (*poos) << " ";
+                (*poos_) << " ";
             }
         }
-        (*poos) << std::endl;
+        (*poos_) << std::endl;
     }
 }
 
 
-void SeqInfo::print_summary_table_whole_alignment (std::ostream* poos) {
+void SeqInfo::print_summary_table_whole_alignment () {
     const char separator = ' ';
     const int colWidth = 10;
     double total_num_chars = 0.0;
     
     //(*poos) << "General Stats For All Sequences" << std::endl;
-    (*poos) << "File type: " << file_type_ << std::endl;
-    (*poos) << "Number of sequences: " << num_taxa_ << std::endl;
+    (*poos_) << "File type: " << file_type_ << std::endl;
+    (*poos_) << "Number of sequences: " << num_taxa_ << std::endl;
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
         is_aligned_ = true;
     } else {
@@ -242,21 +259,21 @@ void SeqInfo::print_summary_table_whole_alignment (std::ostream* poos) {
         total_num_chars = (double)sum(seq_lengths_);
     }
     
-    (*poos) << "--------" << seq_type_ << " TABLE---------" << std::endl;
-    (*poos) << std::left << std::setw(6) << std::setfill(separator) << seq_type_ << " "
+    (*poos_) << "--------" << seq_type_ << " TABLE---------" << std::endl;
+    (*poos_) << std::left << std::setw(6) << std::setfill(separator) << seq_type_ << " "
         << std::setw(colWidth) << std::setfill(separator) << "Total" << " "
         << std::setw(colWidth) << std::setfill(separator) << "Proportion" << std::endl;
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos) << std::left << std::setw(6) << std::setfill(separator) << seq_chars_[i] << " "
+        (*poos_) << std::left << std::setw(6) << std::setfill(separator) << seq_chars_[i] << " "
             << std::setw(colWidth) << std::setfill(separator) << total_[seq_chars_[i]] << " "
             << ((total_[seq_chars_[i]] / total_num_chars)) << std::endl;
     }
     if (is_dna_) {
-        (*poos) << std::left << std::setw(6) << std::setfill(separator) << "G+C" << " "
+        (*poos_) << std::left << std::setw(6) << std::setfill(separator) << "G+C" << " "
             << std::setw(colWidth) << std::setfill(separator) << (total_['G'] + total_['C']) << " "
             << (((total_['G'] + total_['C']) / total_num_chars)) << std::endl;
     }
-    (*poos) << "--------" << seq_type_ << " TABLE---------" << std::endl;
+    (*poos_) << "--------" << seq_type_ << " TABLE---------" << std::endl;
 }
 
 
@@ -327,23 +344,6 @@ void SeqInfo::get_longest_taxon_label () {
 }
 
 
-SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
-        const bool& force_protein):concatenated_(""), seq_chars_(""), output_indiv_(indiv), datatype_set_(false),
-        is_dna_(false), is_protein_(false), is_multi_(false), is_binary_(false),
-        alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'), missing_('?'),
-        num_taxa_(0) {
-    // maybe get rid of this? how often is inference wrong?
-    if (force_protein) {
-        is_protein_ = true;
-        datatype_set_ = true;
-        set_alphabet();
-    }
-    pios_ = pios;
-    poos_ = poos;
-    read_in_alignment();
-}
-
-
 // return whichever property set to true
 void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
@@ -361,7 +361,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         (*poos_) << num_taxa_ << std::endl;
     } else if (get_freqs) {
         calculate_freqs();
-        return_freq_table(poos_);
+        return_freq_table();
     } else if (get_missing) {
         calc_missing();
         (*poos_) << percent_missing_ << std::endl;
@@ -440,13 +440,13 @@ void SeqInfo::summarize () {
     
     if (output_indiv_) {
         // new one
-        return_freq_table(poos_);
+        return_freq_table();
     } else {
         // pass the seq concatenated across all individuals
-        // probably can skip a bunch fo the stuff above...
+        // probably can skip a bunch of the stuff above...
         make_concatenated_sequence();
         count_chars_indiv_seq(concatenated_);
-        print_summary_table_whole_alignment(poos_);
+        print_summary_table_whole_alignment();
     }
 }
 
