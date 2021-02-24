@@ -134,6 +134,18 @@ bool is_number (const std::string& s) {
 }
 
 
+// get the longest label. for printing/formatting purposes
+int get_longest_label (std::vector<std::string>& labels) {
+    int longest_label_ = 0;
+    for (unsigned int i = 0; i < labels.size(); i++) {
+        if ((int)labels[i].size() > longest_label_) {
+            longest_label_ = labels[i].size();
+        }
+    }
+    return longest_label_;
+}
+
+
 int factorial (int n) {
     return (n == 0 || n == 1) ? 1 : factorial(n - 1) * n;
 }
@@ -366,11 +378,13 @@ int sum (std::vector<int>& in) {
     return std::accumulate(in.begin(), in.end(), 0);
 }
 
+
 std::vector<double> string_v_to_double_v (const std::vector<std::string>& in) {
     std::vector<double> out(in.size());
     std::transform(in.begin(), in.end(), out.begin(), [](const std::string& val) {return std::stod(val);});
     return out;
 }
+
 
 int count_zeros (std::vector<int>& in) {
     int x = 0;

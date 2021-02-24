@@ -14,7 +14,6 @@
 
 // TODO organize this stuff
 
-
 void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);
 int string_to_int (const std::string& in, const std::string& arg);
@@ -29,6 +28,7 @@ std::vector<std::string> tokenize (const std::string& input);
 void trim_spaces (std::string& str);
 bool check_comment_line (const std::string& line);
 bool is_number (const std::string&);
+int get_longest_label (std::vector<std::string>& labels);
 
 int factorial (int n);
 int doublefactorial (int n);
