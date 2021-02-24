@@ -53,7 +53,6 @@ private:
     void count_chars (std::string& seq);
     void print_summary_table_whole_alignment ();
     void return_freq_table ();
-    void get_longest_taxon_label ();
     void calculate_freqs ();
     void calc_missing ();
     void set_datatype ();

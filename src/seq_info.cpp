@@ -180,7 +180,6 @@ void SeqInfo::return_freq_table () {
     const int colWidth = 10;
     if (output_indiv_) {
         // need to take into account longest_tax_label_
-        //get_longest_taxon_label();
         longest_tax_label_ = get_longest_label(taxon_labels_);
         std::string pad = std::string(longest_tax_label_, ' ');
         // header
@@ -334,17 +333,6 @@ void SeqInfo::calc_missing () {
 }
 
 
-// get the longest label. for printing purposes
-void SeqInfo::get_longest_taxon_label () {
-    longest_tax_label_ = 0;
-    for (int i = 0; i < num_taxa_; i++) {
-        if ((int)taxon_labels_[i].size() > longest_tax_label_) {
-            longest_tax_label_ = taxon_labels_[i].size();
-        }
-    }
-}
-
-
 // return whichever property set to true
 void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
@@ -376,7 +364,6 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
                 (*poos_) << "sequences are not aligned" << std::endl;
             }
         } else { // individual lengths
-            //get_longest_taxon_label();
             collect_taxon_labels();
             longest_tax_label_ = get_longest_label(taxon_labels_);
             for (int i = 0; i < num_taxa_; i++) {
