@@ -134,7 +134,7 @@ int main(int argc, char * argv[]) {
         std::string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
-        for (unsigned int j=0; j < tokens2.size(); j++) {
+        for (unsigned int j = 0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             names.push_back(tokens2[j]);
         }

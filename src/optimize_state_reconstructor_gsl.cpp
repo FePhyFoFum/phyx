@@ -19,8 +19,8 @@ OptimizeStateReconstructor::OptimizeStateReconstructor (RateModel * _rm,StateRec
 
 
 double OptimizeStateReconstructor::GetLikelihoodWithOptimized (const gsl_vector * variables) {
-    for (unsigned int i=0; i < free_variables->n_rows; i++) {
-        for (unsigned int j=0; j < free_variables->n_cols; j++) {
+    for (unsigned int i = 0; i < free_variables->n_rows; i++) {
+        for (unsigned int j = 0; j < free_variables->n_cols; j++) {
             if (i != j) {
                 rm->set_Q_cell(i,j,gsl_vector_get(variables,(*free_variables)(i, j)));
                 if (rm->get_Q()(i, j) < 0 || rm->get_Q()(i, j) >= 1000) {
@@ -65,7 +65,7 @@ mat OptimizeStateReconstructor::optimize () {
     /* Starting point */
     //std::cout<<"Now in OPtimizaRateWithGivenTipVariance in OptimizationFn"<<std::endl;
     x = gsl_vector_alloc (np);
-    for (unsigned int i=0; i < np; i++) {
+    for (unsigned int i = 0; i < np; i++) {
         gsl_vector_set (x, i, 0.1);
     }
     OptimizeStateReconstructor *pt;
@@ -101,8 +101,8 @@ mat OptimizeStateReconstructor::optimize () {
     }
     while (status == GSL_CONTINUE && iter < maxiterations);
     mat results (free_variables->n_rows, free_variables->n_cols); results.fill(0);
-    for (unsigned int i=0; i < results.n_rows; i++) {
-        for (unsigned int j=0; j < results.n_cols; j++) {
+    for (unsigned int i = 0; i < results.n_rows; i++) {
+        for (unsigned int j = 0; j < results.n_cols; j++) {
             if (i != j) {
                 results(i, j) = (gsl_vector_get(s->x, (*free_variables)(i, j)));
             }

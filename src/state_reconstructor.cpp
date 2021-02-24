@@ -42,7 +42,7 @@ void StateReconstructor::set_tree (Tree * tr) {
     if (verbose) {
         std::cout << "initializing nodes..." << std::endl;
     }
-    for (int i=0; i < tree->getNodeCount(); i++) {
+    for (int i = 0; i < tree->getNodeCount(); i++) {
         if (tree->getNode(i)->getBL()<MINBL) {
             tree->getNode(i)->setBL(MINBL * 100);
         }
@@ -59,18 +59,18 @@ void StateReconstructor::set_tree (Tree * tr) {
     if (use_periods == true) {
         std::cout << "initializing branch segments..." << std::endl;
         tree->setHeightFromTipToNodes();
-        for (int i=0; i < tree->getNodeCount(); i++) {
+        for (int i = 0; i < tree->getNodeCount(); i++) {
             if (tree->getNode(i)->hasParent()) {
                 std::vector<double> pers(periods);
                 double anc = tree->getNode(i)->getParent()->getHeight();
                 double des = tree->getNode(i)->getHeight();
                 double t = des;
                 if (pers.size() > 0) {
-                    for (unsigned int j=0; j < pers.size(); j++) {
+                    for (unsigned int j = 0; j < pers.size(); j++) {
                         double s = 0;
                         if (pers.size() == 1)
                             s = pers[0];
-                        for (unsigned int k=0; k < j+1; k++) {
+                        for (unsigned int k = 0; k < j+1; k++) {
                             s += pers[k];
                         }
                         if (t < s) {
@@ -99,9 +99,9 @@ void StateReconstructor::set_tree (Tree * tr) {
  * this will setup the distconds and ancdistconds for each segment
 */
 void StateReconstructor::set_periods_model () {
-    for (int i=0; i < tree->getNodeCount(); i++) {
+    for (int i = 0; i < tree->getNodeCount(); i++) {
         std::vector<BranchSegment> * tsegs = tree->getNode(i)->getSegVector();
-        for (unsigned int j=0; j < tsegs->size(); j++) {
+        for (unsigned int j = 0; j < tsegs->size(); j++) {
             tsegs->at(j).setModel(&rm_periods[tsegs->at(j).getPeriod()]);
             std::vector<Superdouble> * distconds = new std::vector<Superdouble> (nstates, 0);
             tsegs->at(j).distconds = distconds;
@@ -121,14 +121,14 @@ void StateReconstructor::set_periods_model () {
 bool StateReconstructor::set_tip_conditionals (std::vector<Sequence>& data) {
     bool allsame = true;
     std::string testsame = data[0].get_sequence();
-    for (unsigned int i=0; i < data.size(); i++) {
+    for (unsigned int i = 0; i < data.size(); i++) {
         Sequence seq = data[i];
         Node * nd = tree->getExternalNode(seq.get_id());
         if (verbose) {
             std::cout << nd->getName() << " ";
             }
         if (use_periods == false) {
-            for (int j=0; j < nstates; j++) {
+            for (int j = 0; j < nstates; j++) {
             if (seq.get_sequence().at(j) == '1') {
                 (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
             } else {
@@ -140,7 +140,7 @@ bool StateReconstructor::set_tip_conditionals (std::vector<Sequence>& data) {
             }
         } else {
             std::vector<BranchSegment> * tsegs = nd->getSegVector();
-            for (int j=0; j < nstates; j++) {
+            for (int j = 0; j < nstates; j++) {
                 if (seq.get_sequence().at(j) == '1') {
                     tsegs->at(0).distconds->at(j) = 1.0;
                 } else {
@@ -167,19 +167,19 @@ bool StateReconstructor::set_tip_conditionals (std::vector<Sequence>& data) {
 
 bool StateReconstructor::set_tip_conditionals_already_given (std::vector<Sequence>& data) {
     bool allsame = false;
-    for (unsigned int i=0; i < data.size(); i++) {
+    for (unsigned int i = 0; i < data.size(); i++) {
     Sequence seq = data[i];
     Node * nd = tree->getExternalNode(seq.get_id());
     std::vector<std::string> searchtokens;
     tokenize(seq.get_sequence(), searchtokens, ",");
-    for (unsigned int j=0; j < searchtokens.size(); j++) {
+    for (unsigned int j = 0; j < searchtokens.size(); j++) {
         trim_spaces(searchtokens[j]);
     }
     if (verbose) {
         std::cout << nd->getName() << " ";
     }
     if (use_periods == false) {
-        for (int j=0; j < nstates; j++) {
+        for (int j = 0; j < nstates; j++) {
             (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = atof(searchtokens[j].c_str());
             if (verbose) {
                 std::cout << searchtokens[j];
@@ -187,7 +187,7 @@ bool StateReconstructor::set_tip_conditionals_already_given (std::vector<Sequenc
         }
     } else {
         std::vector<BranchSegment> * tsegs = nd->getSegVector();
-        for (int j=0; j < nstates; j++) {
+        for (int j = 0; j < nstates; j++) {
         tsegs->at(0).distconds->at(j) = atof(searchtokens[j].c_str());
         if (verbose) {
             std::cout << searchtokens[j];
@@ -211,12 +211,12 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals (Node& node) {
     } else {
         p = rm.stored_p_matrices[node.getBL()];
     }
-    for (int j=0; j < nstates; j++) {
-        for (int k=0; k < nstates; k++) {
+    for (int j = 0; j < nstates; j++) {
+        for (int k = 0; k < nstates; k++) {
             v->at(j) += (distconds.at(k)*real(p(j, k)));
         }
     }
-    for (unsigned int j=0; j < distconds.size(); j++) {
+    for (unsigned int j = 0; j < distconds.size(); j++) {
         distconds[j] = v->at(j);
     }
     if (store_p_matrices == true) {
@@ -232,8 +232,8 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
     std::vector<Superdouble> distconds;
     std::vector<BranchSegment> * tsegs = node.getSegVector();
     distconds = *tsegs->at(0).distconds;
-    for (unsigned int i=0; i < tsegs->size(); i++) {
-        for (unsigned int j=0; j < distconds.size(); j++) {
+    for (unsigned int i = 0; i < tsegs->size(); i++) {
+        for (unsigned int j = 0; j < distconds.size(); j++) {
             tsegs->at(i).distconds->at(j) = distconds.at(j);
         }
         RateModel * trm = tsegs->at(i).getModel();
@@ -247,13 +247,13 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
             //p = trm->stored_p_matrices[tsegs->at(i).getPeriod()][tsegs->at(i).getDuration()];
             p = trm->stored_p_matrices[tsegs->at(i).getDuration()];
         }
-        for (int j=0; j < nstates; j++) {
-            for (int k=0; k < nstates; k++) {
+        for (int j = 0; j < nstates; j++) {
+            for (int k = 0; k < nstates; k++) {
             v->at(j) += (distconds.at(k)*real(p(j, k)));
             }
         }
 
-        for (int j=0; j < nstates; j++) {
+        for (int j = 0; j < nstates; j++) {
             distconds[j] = v->at(j);
         }
         if (store_p_matrices == true) {
@@ -269,7 +269,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
         tsegs->at(0).alphas = distconds;
     }
     VectorNodeObject<Superdouble> rdistconds(distconds.size());
-    for (unsigned int i=0; i < distconds.size(); i++) {
+    for (unsigned int i = 0; i < distconds.size(); i++) {
         rdistconds[i] = distconds[i];
     }
     return rdistconds;
@@ -292,12 +292,12 @@ void StateReconstructor::ancdist_conditional_lh (Node& node) {
             v1 = conditionals_periods(*c1);
             v2 = conditionals_periods(*c2);
         }
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             distconds.at(i)= v1[i] * v2[i];
         }
         //if (node.isRoot()) {
             //with equal freq!
-        //    for (int i=0; i < nstates; i++) {
+        //    for (int i = 0; i < nstates; i++) {
     //        distconds.at(i) = distconds.at(i) * (1./nstates);
     //        }
         //}
@@ -307,23 +307,23 @@ void StateReconstructor::ancdist_conditional_lh (Node& node) {
         } else {
             std::vector<BranchSegment> * tsegs = node.getSegVector();
             //distconds = *tsegs->at(0).distconds;
-            for (unsigned int i=0; i < distconds.size(); i++) {
+            for (unsigned int i = 0; i < distconds.size(); i++) {
                 distconds[i] = tsegs->at(0).distconds->at(i);
             }
         }
     }
     if (use_periods == false) {
-        for (unsigned int i=0; i < distconds.size(); i++) {
+        for (unsigned int i = 0; i < distconds.size(); i++) {
             ((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
         }
     } else {
         if (node.hasParent() == true) {
             std::vector<BranchSegment> * tsegs = node.getSegVector();
-            for (unsigned int i=0; i < distconds.size(); i++) {
+            for (unsigned int i = 0; i < distconds.size(); i++) {
                 tsegs->at(0).distconds->at(i) = distconds.at(i);
             }
         } else {
-            for (unsigned int i=0; i < distconds.size(); i++) {
+            for (unsigned int i = 0; i < distconds.size(); i++) {
                 ((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
             }
         }
@@ -348,7 +348,7 @@ void StateReconstructor::reverse (Node * node) {
     rev = true;
     VectorNodeObject<Superdouble> * revconds = new VectorNodeObject<Superdouble> (nstates, 0);//need to delete this at some point
     if (node == tree->getRoot()) {
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             revconds->at(i) = 1.0;//prior
         }
         node->assocObject(revB,*revconds);
@@ -381,7 +381,7 @@ void StateReconstructor::reverse (Node * node) {
         }
         //now calculate node B
         //VectorNodeObject<BranchSegment>* tsegs = ((VectorNodeObject<BranchSegment>*) node.getObject(seg));
-        for (int j=0; j < nstates; j++) {
+        for (int j = 0; j < nstates; j++) {
             revconds->at(j) = 0;
         }
         //RateModel * rm = tsegs->at(ts).getModel();
@@ -392,14 +392,14 @@ void StateReconstructor::reverse (Node * node) {
         VectorNodeObject<Superdouble> tempmoveAen(tempA);
         if (stochastic == true) {
             //initialize the segment B's
-            for (int j=0; j < nstates; j++) {
+            for (int j = 0; j < nstates; j++) {
                 tempmoveAer[j] = 0;
                 tempmoveAen[j] = 0;
             }
             EN = &stored_EN_matrices[node->getBL()];
             ER = &stored_ER_matrices[node->getBL()];
         }
-        for (int j=0; j < nstates; j++) {
+        for (int j = 0; j < nstates; j++) {
             for (int i = 0; i < nstates; i++) {
                 revconds->at(j) += tempA[i]*real((*p)(i, j));//tempA needs to change each time
                 if (stochastic == true) {
@@ -408,7 +408,7 @@ void StateReconstructor::reverse (Node * node) {
                 }
             }
         }
-        for (int j=0; j < nstates; j++) {
+        for (int j = 0; j < nstates; j++) {
             tempA[j] = revconds->at(j);
         }
         if (stochastic == true) {
@@ -434,7 +434,7 @@ std::vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node
         VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
 
         for (int i = 0; i < nstates; i++) {
-            //for (int j=0; j < nstates; j++) {
+            //for (int j = 0; j < nstates; j++) {
             //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
             //}
             LHOODS[i] = ((v1->at(i)*v2->at(i)) * Bs->at(i));
@@ -454,7 +454,7 @@ std::vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) 
         VectorNodeObject<Superdouble>* v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
 
         for (int i = 0; i < nstates; i++) {
-            //for (int j=0; j < nstates; j++) {
+            //for (int j = 0; j < nstates; j++) {
             //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
             //}
             LHOODS[i] = double((v1->at(i)*v2->at(i)) * Bs->at(i));
@@ -476,11 +476,11 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
         mat W(nstates, nstates);W.fill(0); W(from, from) = 1;
         cx_mat summed(nstates, nstates); summed.fill(0);
         cx_mat summedR(nstates, nstates); summedR.fill(0);
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             mat Ei(nstates, nstates); Ei.fill(0);Ei(i, i)=1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
-            for (int j=0; j < nstates; j++) {
+            for (int j = 0; j < nstates; j++) {
                 cx_double dij = (eigval(i, i)-eigval(j, j)) * dur;
                 mat Ej(nstates, nstates); Ej.fill(0); Ej(j, j)=1;
                 cx_mat Sj(nstates, nstates);
@@ -533,8 +533,8 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
         bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
         mat Ql(nstates, nstates);
         Ql.fill(0);
-        for (unsigned int i=0; i < Ql.n_rows; i++) {
-            for (unsigned int j=0; j < Ql.n_cols; j++) {
+        for (unsigned int i = 0; i < Ql.n_rows; i++) {
+            for (unsigned int j = 0; j < Ql.n_cols; j++) {
                 if (i != j) {
                     Ql(i, j) = rm.get_Q()(i, j);
                 }
@@ -543,11 +543,11 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
         mat W(nstates, nstates); W.fill(0); W(1, 1) = 1;
         cx_mat summed(nstates, nstates); summed.fill(0);
         cx_mat summedR(nstates, nstates); summedR.fill(0);
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             mat Ei(nstates, nstates);Ei.fill(0);Ei(i, i)=1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
-            for (int j=0; j < nstates; j++) {
+            for (int j = 0; j < nstates; j++) {
                 cx_double dij = (eigval(i, i)-eigval(j, j)) * dur;
                 mat Ej(nstates, nstates);Ej.fill(0);Ej(j, j)=1;
                 cx_mat Sj(nstates, nstates);
@@ -602,7 +602,7 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
         VectorNodeObject<Superdouble> * v2 = ((VectorNodeObject<Superdouble>*) c2->getObject(alphas));
         VectorNodeObject<double> LHOODS(nstates, 0);
         for (int i = 0; i < nstates; i++) {
-            //for (int j=0; j < nstates; j++) {
+            //for (int j = 0; j < nstates; j++) {
             //int ind1 = leftdists[j];
             //int ind2 = rightdists[j];
             //LHOODS[i] += (v1.at(ind1)*v2.at(ind2)*weight);
@@ -610,7 +610,7 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
             LHOODS[i] = double(v1->at(i) * v2->at(i) * Bs.at(i));
             //std::cout << v1->at(i) << " " <<  v2->at(i)<< " " << Bs.at(i) << std::endl;
         }
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             totalExp[i] = LHOODS[i];
         }
         //not sure if this should return a Superdouble or not when doing a bigtree
@@ -628,7 +628,7 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
         for (int i = 0; i < nstates; i++) {
             LHOODS[i] = double(Bs.at(i) * (distconds->at(i) ));
         }
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             totalExp[i] = LHOODS[i];
         }
         return totalExp;

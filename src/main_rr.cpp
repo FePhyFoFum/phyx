@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
     if (outgroupsset == true) {
         std::vector<std::string> tokens2;
         tokenize(outgroupsc, tokens2, ",");
-        for (unsigned int j=0; j < tokens2.size(); j++) {
+        for (unsigned int j = 0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             outgroups.push_back(tokens2[j]);
         }
@@ -206,7 +206,7 @@ int main(int argc, char * argv[]) {
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
-                        for (unsigned int i=0; i < outgroups.size(); i++) {
+                        for (unsigned int i = 0; i < outgroups.size(); i++) {
                             std::string name = outgroups[i];
                             if (check_name_against_tree(tree, name)) {
                                 std::vector<std::string> og;
@@ -245,7 +245,7 @@ int main(int argc, char * argv[]) {
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
-                        for (unsigned int i=0; i < outgroups.size(); i++) {
+                        for (unsigned int i = 0; i < outgroups.size(); i++) {
                             std::string name = outgroups[i];
                             if (check_name_against_tree(tree, name)) {
                                 std::vector<std::string> og;

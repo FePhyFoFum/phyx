@@ -15,9 +15,9 @@ void calc_vcv (Tree * tree, mat& vcv) {
     int numlvs = tree->getExternalNodeCount();
     vcv = mat(numlvs, numlvs);
     int count = 0;
-    for (int i=0; i < numlvs; i++) {
+    for (int i = 0; i < numlvs; i++) {
         int count2 = 0;
-        for (int j=0; j < numlvs; j++) {
+        for (int j = 0; j < numlvs; j++) {
             if (i != j) {
                 Node * a = getMRCA_forVCV(tree->getExternalNode(i), tree->getExternalNode(j));
                 double length = get_length_to_root(a);
@@ -158,7 +158,7 @@ void calc_square_change_anc_states (Tree * tree, int index) {
     int df = 0;
     int count = 0;
     std::map<Node *, int> nodenum;
-    for (int i=0; i < tree->getInternalNodeCount(); i++) {
+    for (int i = 0; i < tree->getInternalNodeCount(); i++) {
         nodenum[tree->getInternalNode(i)] = count;
         count += 1;
         df += 1;
@@ -174,7 +174,7 @@ void calc_square_change_anc_states (Tree * tree, int index) {
     vec mle;
     mat x = solve(trimatl(b.t())*b, fullVcp);
     count = 0;
-    for (int i=0; i < tree->getInternalNodeCount(); i++) {
+    for (int i = 0; i < tree->getInternalNodeCount(); i++) {
         (*tree->getInternalNode(i)->getDoubleVector("val"))[index] = x(nodenum[tree->getInternalNode(i)], 0);
         count += 1;
     }
@@ -183,12 +183,12 @@ void calc_square_change_anc_states (Tree * tree, int index) {
 
 void calc_postorder_square_change (Node * node, std::map<Node *, int>& nodenum,
     mat * fullMcp, mat * fullVcp, int index) {
-    for (int i=0; i < node->getChildCount(); i++) {
+    for (int i = 0; i < node->getChildCount(); i++) {
         calc_postorder_square_change(node->getChild(i), nodenum, fullMcp, fullVcp, index);    
     }
     if (node->getChildCount() > 0) {
         int nni = nodenum[node];
-        for (int j=0; j < node->getChildCount(); j++) {
+        for (int j = 0; j < node->getChildCount(); j++) {
             double tbl = 2./node->getChild(j)->getBL();
             (*fullMcp)(nni, nni) += tbl;
             if (node->getChild(j)->getChildCount() == 0) {
@@ -206,7 +206,7 @@ void calc_postorder_square_change (Node * node, std::map<Node *, int>& nodenum,
 
 double calc_bm_node_postorder (Node * node, int nch, double sigma) {
     double node_like = 0.;
-    for (int i=0;i<node->getChildCount();i++) {
+    for (int i = 0; i < node->getChildCount(); i++) {
         if (node->getChild(i)->isInternal()) {
            node_like += calc_bm_node_postorder(node->getChild(i), nch, sigma);
         }
@@ -233,9 +233,9 @@ double calc_bm_prune (Tree * tr, double sigma) {
     int num_char = (*tr->getRoot()->getDoubleVector("val")).size();
     double tlike = 0;
     std::map<Node *, double> oldlen;
-    for (int i=0;i<tr->getNodeCount();i++) {oldlen[tr->getNode(i)] = tr->getNode(i)->getBL();}
-    for (int i=0;i<num_char;i++) {
-        for (int j=0;j<tr->getNodeCount();j++) {tr->getNode(j)->setBL(oldlen[tr->getNode(j)]);}
+    for (int i = 0; i < tr->getNodeCount(); i++) {oldlen[tr->getNode(i)] = tr->getNode(i)->getBL();}
+    for (int i = 0; i < num_char; i++) {
+        for (int j = 0; j < tr->getNodeCount(); j++) {tr->getNode(j)->setBL(oldlen[tr->getNode(j)]);}
         tlike += calc_bm_node_postorder(tr->getRoot(), i, sigma);
     }
     return tlike;

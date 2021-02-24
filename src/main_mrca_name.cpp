@@ -188,7 +188,7 @@ int main(int argc, char * argv[]) {
                         nd->setName((*it).first);
                     }
                 } else {
-                    for (int i=0; i<tree->getInternalNodeCount();i++) {
+                    for (int i = 0; i < tree->getInternalNodeCount(); i++) {
                         if (tree->getInternalNode(i)->getName().size() == 0) {
                             tree->getInternalNode(i)->setName("px"+std::to_string(count));
                             count ++;
@@ -220,7 +220,7 @@ int main(int argc, char * argv[]) {
                         nd->setName((*it).first);
                     }
                 } else {
-                    for (int i=0; i<tree->getInternalNodeCount();i++) {
+                    for (int i = 0; i < tree->getInternalNodeCount(); i++) {
                         if (tree->getInternalNode(i)->getName().size() == 0) {
                             tree->getInternalNode(i)->setName("px"+std::to_string(count));
                             count ++;

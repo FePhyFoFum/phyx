@@ -85,7 +85,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
     }
     
     std::vector<Node*> temp_extant_nodes(extantnodes_);
-    for (unsigned int i=0; i < temp_extant_nodes.size(); i++) {
+    for (unsigned int i = 0; i < temp_extant_nodes.size(); i++) {
         try {
             DEATHTIME_[temp_extant_nodes[i]];
             node_death(temp_extant_nodes[i]);
@@ -105,7 +105,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
         delete_dead_nodes();
     }
 
-    for (int i=0; i < tree_->getExternalNodeCount(); i++) {
+    for (int i = 0; i < tree_->getExternalNodeCount(); i++) {
         totallength += tree_->getExternalNode(i)->getBL();
         std::stringstream out;
         out << count;
@@ -181,14 +181,14 @@ void BirthDeathSimulator::node_birth (Node *innode) {
 
 
 void BirthDeathSimulator::delete_dead_nodes () {
-    for (unsigned int i=0; i < dead_nodes_.size(); i++) {
+    for (unsigned int i = 0; i < dead_nodes_.size(); i++) {
         delete_a_node(dead_nodes_[i]);
     }
 }
 
 
 void BirthDeathSimulator::set_distance_to_tip () {
-    for (int i=0; i < tree_->getExternalNodeCount(); i++) {
+    for (int i = 0; i < tree_->getExternalNodeCount(); i++) {
         double curh = 0.0;
         tree_->getExternalNode(i)->setHeight(curh);
         Node * tnode = tree_->getExternalNode(i);
@@ -211,7 +211,7 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
     Node * tparent = innode->getParent();
     if (tparent != root_) {
         Node * child = NULL;
-        for (int i=0; i < tparent->getChildCount(); i++)
+        for (int i = 0; i < tparent->getChildCount(); i++)
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
             }
@@ -224,7 +224,7 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
         child->setBL(child->getBL()+tparent->getBL());
     } else {
         Node * child = NULL;
-        for (int i=0; i < tparent->getChildCount(); i++)
+        for (int i = 0; i < tparent->getChildCount(); i++)
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
             }

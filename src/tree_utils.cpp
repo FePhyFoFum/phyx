@@ -64,10 +64,10 @@ double get_root_tip_var (Tree * tr) {
 
 // assumes annotations are of form: [something]
 void remove_annotations (Tree * tr) {
-    for (int i=0; i < tr->getInternalNodeCount(); i++) {
+    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         tr->getInternalNode(i)->setComment("");
     }
-    for (int i=0; i < tr->getExternalNodeCount(); i++) {
+    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
         tr->getExternalNode(i)->setComment("");
     }
 }
@@ -75,7 +75,7 @@ void remove_annotations (Tree * tr) {
 
 // same as above, but for names
 void remove_internal_names(Tree * tr) {
-    for (int i=0; i < tr->getInternalNodeCount(); i++) {
+    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         tr->getInternalNode(i)->setName("");
     }
 }
@@ -90,7 +90,7 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
     bool rs = is_rooted(tree);
     //std::cout << "rooted tree: " << std::boolalpha << rs << std::endl;
     
-    for (int i=0; i < num_names; i++) {
+    for (int i = 0; i < num_names; i++) {
         //std::cout << "Attempting to remove tip '" << names[i] << "'." << std::endl;
         Node * m = tree->getExternalNode(names[i]);
         if (m != NULL) {
@@ -178,7 +178,7 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
     int num_names = names.size();
     tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
-    for (int i=0; i < num_names; i++) {
+    for (int i = 0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);
         if (m != NULL) {
             m->setPainted(true);
@@ -210,7 +210,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);
     if (debug) std::cout << "tree is rooted: " << std::boolalpha << rooted << std::endl;
-    for (int i=0; i < tr->getInternalNodeCount(); i++) {
+    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         Node * tnd = tr->getInternalNode(i);
         if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
         if (tnd->getParent() == NULL && rooted == true) { // root on rooted tree
@@ -218,12 +218,12 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
             continue;
         }
         std::vector<Node *> nds;
-        for (int j=0; j < tnd->getChildCount(); j++) {
+        for (int j = 0; j < tnd->getChildCount(); j++) {
             nds.push_back(tnd->getChild(j));
             if (debug) std::cout << "  Adding child node: " << tnd->getChild(j)->getName() << std::endl;
         }
         if (tnd->getParent() == tr->getRoot() && rooted == true) {
-            for (int j=0; j < tnd->getParent()->getChildCount(); j++) {
+            for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
                     if (debug) std::cout << "  Adding sibling node: " << tnd->getChild(j)->getName() << std::endl;
@@ -237,12 +237,12 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
         }
         tree_map[tnd] = nds;
     }
-    for (int i=0; i < tr->getExternalNodeCount(); i++) {
+    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
         std::vector<Node *> nds;
         Node * tnd = tr->getExternalNode(i);
         if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
         if (tnd->getParent() == tr->getRoot() && rooted == true) {
-            for (int j=0; j < tnd->getParent()->getChildCount(); j++) {
+            for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
                     if (debug) std::cout << "  Adding sibling node: " << tnd->getParent()->getChild(j)->getName() << std::endl;
@@ -641,7 +641,7 @@ std::vector<std::string> get_tip_labels (Tree * tr) {
 
 // remove all knuckles in a tree
 void deknuckle_tree (Tree * tree) {
-    for (int i=0; i < tree->getInternalNodeCount(); i++) {
+    for (int i = 0; i < tree->getInternalNodeCount(); i++) {
         Node * tnd = tree->getInternalNode(i);
         if (tnd->isKnuckle()) {
             //std::cout << tnd->getName() << " is a KNUCKLE!" << std::endl;

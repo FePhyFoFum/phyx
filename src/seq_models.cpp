@@ -23,20 +23,20 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
             std::vector<std::string> tokens;
             std::string del(" \t");
             tokenize(line, tokens, del);
-            for (unsigned int i=0; i < tokens.size(); i++) {
+            for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
             if (first == true) {
                 first = false;
-                for (unsigned int i=0; i < tokens.size(); i++) {
+                for (unsigned int i = 0; i < tokens.size(); i++) {
                     order.push_back(tokens[i][0]);
                 }
-                for (unsigned int j=0; j < order.size(); j++) {
+                for (unsigned int j = 0; j < order.size(); j++) {
                     sc_mat[order[j]] = std::map<char, int>();
                 }
                 continue;
             }
-            for (unsigned int j=0; j < order.size(); j++) {
+            for (unsigned int j = 0; j < order.size(); j++) {
                 sc_mat[tokens[0][0]][order[j]] = atoi(tokens[j+1].c_str()); //#changed from int to float
             }
         }
@@ -49,7 +49,7 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
     sc_mat.clear();
     std::vector<char> order;
     bool first = true;
-    for (unsigned int i=0; i < lines.size(); i++) {
+    for (unsigned int i = 0; i < lines.size(); i++) {
         std::string line = lines[i];
         if (line[0] == '#') {
             continue;
@@ -57,20 +57,20 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
             std::vector<std::string> tokens;
             std::string del(" \t");
             tokenize(line, tokens, del);
-            for (unsigned int i=0; i < tokens.size(); i++) {
+            for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
             if (first == true) {
                 first = false;
-                for (unsigned int i=0; i < tokens.size(); i++) {
+                for (unsigned int i = 0; i < tokens.size(); i++) {
                     order.push_back(tokens[i][0]);
                 }
-                for (unsigned int j=0; j < order.size(); j++) {
+                for (unsigned int j = 0; j < order.size(); j++) {
                     sc_mat[order[j]] = std::map<char, int>();
                 }
                 continue;
             }
-            for (unsigned int j=0; j < order.size(); j++) {
+            for (unsigned int j = 0; j < order.size(); j++) {
                 sc_mat[tokens[0][0]][order[j]] = atoi(tokens[j+1].c_str()); //#changed from int to float
             }
         }

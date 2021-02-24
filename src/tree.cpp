@@ -45,7 +45,7 @@ Node * Tree::getExternalNode (int num) {
  */
 Node * Tree::getExternalNode (std::string name) {
     Node * ret = NULL;
-    for (int i=0; i < externalNodeCount; i++) {
+    for (int i = 0; i < externalNodeCount; i++) {
         if (externalNodes.at(i)->getName() == name) {
             ret = externalNodes.at(i);
         }
@@ -64,7 +64,7 @@ Node * Tree::getInternalNode (int num) {
  */
 Node * Tree::getInternalNode (std::string& name) {
     Node * ret = NULL;
-    for (int i=0; i < internalNodeCount; i++) {
+    for (int i = 0; i < internalNodeCount; i++) {
         if (internalNodes.at(i)->getName() == name) {
             ret = internalNodes.at(i);
         }
@@ -81,14 +81,14 @@ int Tree::getExternalNodeCount () {
 int Tree::getExtantNodeCount () {
     setHeightFromRootToNodes();
     double largest = 0;
-    for (int i=0; i < externalNodeCount; i++) {
+    for (int i = 0; i < externalNodeCount; i++) {
         double th = getExternalNode(i)->getHeight();
         if (th > largest) {
             largest = th;
         }
     }
     int count = 0;
-    for (int i=0; i < externalNodeCount; i++) {
+    for (int i = 0; i < externalNodeCount; i++) {
         double th = getExternalNode(i)->getHeight();
         if (fabs(th-largest) < 0.00001) {
             count += 1;
@@ -112,7 +112,7 @@ Node * Tree::getNode (int num) {
 Node * Tree::getNode (std::string& name) {
     Node * ret = NULL;
     if (name_node_map.size() == 0) {
-        for (unsigned int i=0; i < nodes.size(); i++) {
+        for (unsigned int i = 0; i < nodes.size(); i++) {
             if (nodes.at(i)->getName().size() > 0)
                 name_node_map[nodes.at(i)->getName()] = nodes.at(i);
         }
@@ -320,7 +320,7 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
         return this->getExternalNode(innodes[0]);
     } else {
         std::vector<std::string> outgroup;
-        for (unsigned int i=0; i < innodes.size(); i++) {
+        for (unsigned int i = 0; i < innodes.size(); i++) {
             outgroup.push_back(innodes.at(i));
         }
         Node * cur1 = this->getExternalNode(outgroup.at(0));
@@ -376,7 +376,7 @@ Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
         // we want to choose a node that has all of the outgroups
         // and the smallest number of other nodes
         // this is the best case when there
-        for (int i=0; i < this->getInternalNodeCount(); i++) {
+        for (int i = 0; i < this->getInternalNodeCount(); i++) {
             
             // NOTE: this is missing!
             
@@ -520,7 +520,7 @@ void Tree::pruneExternalNode (Node * node) {
     Node * parent = node->getParent();
     if (parent->getChildCount() == 2) {
         Node * other = NULL;
-        for (int i=0; i < parent->getChildCount(); i++) {
+        for (int i = 0; i < parent->getChildCount(); i++) {
             if (parent->getChild(i) != node) {
                 other = parent->getChild(i);
             }
@@ -530,7 +530,7 @@ void Tree::pruneExternalNode (Node * node) {
         if (mparent != NULL) {
             mparent->addChild(*other);
             other->setBL(bl);
-            for (int i=0; i < mparent->getChildCount(); i++) {
+            for (int i = 0; i < mparent->getChildCount(); i++) {
                 if (mparent->getChild(i)==parent) {
                     mparent->removeChild(*parent);
                     break;
@@ -567,7 +567,7 @@ void Tree::pruneInternalNode (Node * node) {
     //std::cout << "Parent edge length: " << pel << std::endl;
     Node * gparent = node->getParent();
     
-    for (int i=0; i < node->getChildCount(); i++) {
+    for (int i = 0; i < node->getChildCount(); i++) {
         Node * child = node->getChild(i);
         //std::cout << "  " << i << ". Original edge length: " << child->getBL() << std::endl;
         double newEL = pel + child->getBL();
@@ -618,10 +618,10 @@ Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
  */
 
 Tree::~Tree () {
-    for (int i=0; i < internalNodeCount; i++) {
+    for (int i = 0; i < internalNodeCount; i++) {
         delete getInternalNode(i);
     }
-    for (int i=0; i < externalNodeCount; i++) {
+    for (int i = 0; i < externalNodeCount; i++) {
         delete getExternalNode(i);
     }
 }

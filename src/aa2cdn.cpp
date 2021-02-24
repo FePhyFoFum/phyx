@@ -103,7 +103,7 @@ void AAtoCDN::generate_codon_alignment () {
             aalen--;
         }
         int nuccntr = 0;
-        for (int j=0; j < aalen; j++) {
+        for (int j = 0; j < aalen; j++) {
             if (aaseq[j] == '-') {
                 codonseq += "---";
             } else {

@@ -149,7 +149,7 @@ void Node::setDepth (double de) {
 
 bool Node::hasChild (Node& test) {
     bool ret = false;
-    for (unsigned int i=0; i < children.size(); i++) {
+    for (unsigned int i = 0; i < children.size(); i++) {
         if (children.at(i) == &test) {
             ret = true;
             break;
@@ -172,7 +172,7 @@ bool Node::addChild (Node& c) {
 
 bool Node::removeChild (Node& c) {
     if (hasChild(c) == true) {
-        for (unsigned int i=0; i < children.size(); i++) {
+        for (unsigned int i = 0; i < children.size(); i++) {
             if (children.at(i) == &c) {
                 children.erase(children.begin()+i);
                 break;
@@ -212,7 +212,7 @@ void Node::setComment (std::string s) {
 // since nexus writer uses this, using stricter nexus punctuation
 std::string Node::getNewick (bool bl) {
     std::string ret = "";
-    for (int i=0; i < this->getChildCount(); i++) {
+    for (int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
         }
@@ -247,7 +247,7 @@ std::string Node::getNewick (bool bl) {
 std::string Node::getPaintedNewick (bool bl) {
     std::string ret = "";
     std::vector<int> paintedchildren;
-    for (int i=0; i < this->getChildCount(); i++) {
+    for (int i = 0; i < this->getChildCount(); i++) {
         if (this->getChild(i)->getPainted() == true) {
             paintedchildren.push_back(i);
         }
@@ -268,7 +268,7 @@ std::string Node::getPaintedNewick (bool bl) {
         }
     }
     */
-    for (unsigned int i=0; i < paintedchildren.size(); i++) {
+    for (unsigned int i = 0; i < paintedchildren.size(); i++) {
         if (i == 0) {
             ret += "(";
         }
@@ -299,7 +299,7 @@ std::string Node::getPaintedNewick (bool bl) {
  */
 std::string Node::getNewick (bool bl, std::string obj) {
     std::string ret = "";
-    for (int i=0; i < this->getChildCount(); i++) {
+    for (int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
         }
@@ -350,7 +350,7 @@ void Node::assocDoubleVector (std::string name, std::vector<Superdouble>& obj) {
         assocDV.erase(name);
     }
     std::vector<Superdouble> tvec (obj.size());
-    for (unsigned int i=0; i < obj.size(); i++) {
+    for (unsigned int i = 0; i < obj.size(); i++) {
         tvec[i] = obj[i];
     }
     assocDV[name] = tvec;
@@ -380,7 +380,7 @@ int Node::get_num_leaves () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i=0; i < nd->getChildCount(); i++) {
+            for (int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -402,7 +402,7 @@ std::vector<Node*> Node::get_leaves () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i=0; i < nd->getChildCount(); i++) {
+            for (int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -424,7 +424,7 @@ std::set<Node*> Node::get_leaves_set () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i=0; i < nd->getChildCount(); i++) {
+            for (int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -443,7 +443,7 @@ std::set<std::string> Node::get_leave_names_set () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i=0; i < nd->getChildCount(); i++) {
+            for (int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -462,7 +462,7 @@ std::vector<std::string> Node::get_leave_names () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i=0; i < nd->getChildCount(); i++) {
+            for (int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {

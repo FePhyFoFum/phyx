@@ -335,7 +335,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
                 (*retstring) = "";
             }
             if (tokens.size() != 1) { // not trailing lone semicolon
-                for (unsigned int i=0; i < tokens.size(); i++) {
+                for (unsigned int i = 0; i < tokens.size(); i++) {
                     trim_spaces(tokens[i]);
                 }
                 size_t found = tokens[1].find(",");
@@ -417,7 +417,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
     TreeReader tr;
     tree = tr.readTree(tstring);
     if (ttexists) {
-        for (int i=0; i < tree->getExternalNodeCount(); i++) {
+        for (int i = 0; i < tree->getExternalNodeCount(); i++) {
             tree->getExternalNode(i)->setName((*trans)[tree->getExternalNode(i)->getName()]);
         }
     }

@@ -32,6 +32,7 @@ void print_help() {
     std::cout << " -n, --thin=INT      interval of resampling" << std::endl;
     std::cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << std::endl;
     std::cout << " -i, --info          calculate log file attributes and exit" << std::endl;
+    std::cout << " -s, --summarize     summary statistics of samples (parameter logs only)" << std::endl;
     std::cout << " -c, --columns       print out column names (parameter logs only)" << std::endl;
     std::cout << " -d, --delete=CSL    delete columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
     std::cout << " -k, --keep=CSL      keep only columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
@@ -56,6 +57,7 @@ static struct option const long_options[] =
     {"thin", required_argument, NULL, 'n'},
     {"rand", required_argument, NULL, 'r'},
     {"info", no_argument, NULL, 'i'},
+    {"summarize", no_argument, NULL, 's'},
     {"columns", no_argument, NULL, 'c'},
     {"delete", required_argument, NULL, 'd'},
     {"keep", required_argument, NULL, 'k'},
@@ -83,6 +85,7 @@ int main(int argc, char * argv[]) {
     int seed = -1;
     bool verbose = false;
     bool count = false;
+    bool summarize = false;
     bool get_columns = false;
     bool delete_columns = false;
     bool keep_columns = false;
@@ -94,7 +97,7 @@ int main(int argc, char * argv[]) {
     while (1) {
         int oi = -1;
         int curind = optind;
-        int c = getopt_long(argc, argv, "p:t:o:b:n:r:icd:k:x:vhVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "p:t:o:b:n:r:iscd:k:x:vhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -159,6 +162,9 @@ int main(int argc, char * argv[]) {
             case 'i':
                 count = true;
                 break;
+            case 's':
+                summarize = true;
+                break;
             case 'c':
                 get_columns = true;
                 break;
@@ -217,6 +223,9 @@ int main(int argc, char * argv[]) {
         if (get_columns || delete_columns || keep_columns) {
             std::cerr << "Error: column arguments are not applicable for tree files. Exiting." << std::endl;
             exit(0);
+        } else if (summarize) {
+            std::cerr << "Error: summary is not applicable for tree files. Exiting." << std::endl;
+            exit(0);
         }
     }
     
@@ -247,6 +256,8 @@ int main(int argc, char * argv[]) {
         lm.delete_columns(col_indices);
     } else if (keep_columns) {
         lm.retain_columns(col_indices);
+    } else if (summarize) {
+        lm.summarize(burnin, nthin);
     } else {
         lm.sample(burnin, nthin, nrandom, seed);
     }

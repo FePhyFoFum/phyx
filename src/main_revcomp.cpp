@@ -63,7 +63,7 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
     int best_dis_rev = 100000000;
     std::string comp = comp_seq.get_sequence();
     std::string revcomp = comp_seq.reverse_complement();
-    for (unsigned int i=0;i<seqs.size();i++) {
+    for (unsigned int i = 0; i < seqs.size(); i++) {
         EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0) {
@@ -74,7 +74,7 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
         }
         edlibFreeAlignResult(result);
     }
-    for (unsigned int i=0;i<seqs.size();i++) {
+    for (unsigned int i = 0; i < seqs.size(); i++) {
         EdlibAlignResult result = edlibAlign(revcomp.c_str(), revcomp.length(), seqs[i].get_sequence().c_str(), 
                 seqs[i].get_length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0) {
@@ -160,7 +160,7 @@ int main(int argc, char * argv[]) {
     if (idsset == true) {
         std::vector<std::string> tokens2;
         tokenize(idssc, tokens2, ",");
-        for (unsigned int j=0; j < tokens2.size(); j++) {
+        for (unsigned int j = 0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             ids.push_back(tokens2[j]);
         }

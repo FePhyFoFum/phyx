@@ -17,8 +17,8 @@ mat * nloptfree_variables;
 
 
 double nlopt_sr (unsigned n, const double *x, double *grad, void *my_func_data) {
-    for (unsigned int i=0; i < nloptfree_variables->n_rows; i++) {
-        for (unsigned int j=0; j < nloptfree_variables->n_cols; j++) {
+    for (unsigned int i = 0; i < nloptfree_variables->n_rows; i++) {
+        for (unsigned int j = 0; j < nloptfree_variables->n_cols; j++) {
             if (i != j) {
                 nloptrm->set_Q_cell(i, j,x[int((*nloptfree_variables)(i, j))]);
                 if (nloptrm->get_Q()(i, j) < 0 || nloptrm->get_Q()(i, j) >= 1000) {
@@ -59,8 +59,8 @@ void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_ma
     opt.set_maxeval(5000);
 
     std::vector<double> x(_nfree,0);
-    for (unsigned int i=0; i < _rm->get_Q().n_rows; i++) {
-        for (unsigned int j=0; j < _rm->get_Q().n_cols; j++) {
+    for (unsigned int i = 0; i < _rm->get_Q().n_rows; i++) {
+        for (unsigned int j = 0; j < _rm->get_Q().n_cols; j++) {
             if (i != j) {
                 x[int((*_free_mask)(i, j))] = _rm->get_Q()(i, j);
                 //std::cout << x[int((*_free_mask)(i, j))] << " ";
@@ -71,8 +71,8 @@ void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_ma
 
     //double minf;
     std::vector<double> result = opt.optimize(x);
-    for (unsigned int i=0; i < _rm->get_Q().n_rows; i++) {
-        for (unsigned int j=0; j < _rm->get_Q().n_cols; j++) {
+    for (unsigned int i = 0; i < _rm->get_Q().n_rows; i++) {
+        for (unsigned int j = 0; j < _rm->get_Q().n_cols; j++) {
             if (i != j) {
                 (*_free_mask)(i, j) = result[int((*_free_mask)(i, j))];
                 //std::cout << x[int((*_free_mask)(i, j))] << " ";

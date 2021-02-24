@@ -93,6 +93,8 @@ template<typename T> std::vector<T> in_first_not_second (std::vector<T> firstv, 
     return res;
 }
 
+std::vector<double> string_v_to_double_v (const std::vector<std::string>& in);
+
 //------------------------------------------------------------------------//
 
 std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numareas);

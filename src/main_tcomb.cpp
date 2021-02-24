@@ -185,7 +185,7 @@ int main(int argc, char * argv[]) {
             //get start node on big tree by getting the mrca
             Node * connecthere = bigtree->getMRCA(diffnms);
             std::vector<Node *> childs = connecthere->getChildren();
-            for (unsigned int i=0; i < childs.size(); i++) {
+            for (unsigned int i = 0; i < childs.size(); i++) {
                 std::vector<std::string> v_int(diffnms.size());
                 std::vector<std::string>::iterator it;
                 std::set<std::string> lvsset = childs[i]->get_leave_names_set();
@@ -197,7 +197,7 @@ int main(int argc, char * argv[]) {
                     std::vector<std::string> v2(lvsset.size());
                     std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(), lvsset.end(), atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
-                    for(unsigned int j=0;j<v2.size();j++) {
+                    for(unsigned int j = 0; j < v2.size(); j++) {
                         std::cout << "to add " << v2[j]<< std::endl; 
                         diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
                     }
@@ -234,7 +234,7 @@ int main(int argc, char * argv[]) {
                                 
                             }
                             std::vector<std::string> lvsnms = prn->get_leave_names();
-                            for(unsigned int i=0; i < lvsnms.size(); i++) {
+                            for(unsigned int i = 0; i < lvsnms.size(); i++) {
                                 if (diffnds.count(lvsnms[i]) > 0) {
                                     diffnds.erase(lvsnms[i]);
                                 }

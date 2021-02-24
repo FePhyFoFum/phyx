@@ -137,7 +137,7 @@ int main(int argc, char * argv[]) {
             trim_spaces(tline);
             std::vector<std::string> tokens2;
             tokenize(tline, tokens2, "\t");
-            for (unsigned int j=0; j < tokens2.size(); j++) {
+            for (unsigned int j = 0; j < tokens2.size(); j++) {
                 trim_spaces(tokens2[j]);
             }
             if (tokens2.size() != 2)
@@ -161,13 +161,13 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                for (int i=0; i < tree->getInternalNodeCount(); i++) {
+                for (int i = 0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                for (int i=0; i < tree->getExternalNodeCount(); i++) {
+                for (int i = 0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
@@ -190,13 +190,13 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                for (int i=0; i < tree->getInternalNodeCount(); i++) {
+                for (int i = 0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                for (int i=0; i < tree->getExternalNodeCount(); i++) {
+                for (int i = 0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");

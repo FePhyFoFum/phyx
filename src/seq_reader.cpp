@@ -98,7 +98,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         std::string del(" \t");
         tokenize(tline, tokens, del);
         if (tokens.size() > 1) {
-            for (unsigned int i=0; i < tokens.size(); i++) {
+            for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
             if (tokens[0].compare(";") == 0) {
@@ -138,7 +138,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         }
         tokens.clear();
         tokenize(tline, tokens, del);
-        for (unsigned int i=0; i < tokens.size(); i++) {
+        for (unsigned int i = 0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
         if (tokens[0].size() == 0) {
@@ -238,7 +238,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
             tokenize(tline, tokens, del);
             if (tokens.size() > 1) {
                 Sequence seq;
-                for (unsigned int i=0; i < tokens.size(); i++) {
+                for (unsigned int i = 0; i < tokens.size(); i++) {
                     trim_spaces(tokens[i]);
                 }
                 if (tokens[0].compare(";") == 0) {
@@ -334,7 +334,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         }
         tokens.clear();
         tokenize(tline, tokens, del);
-        for (unsigned int i=0; i < tokens.size(); i++) {
+        for (unsigned int i = 0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
         if (tokens[0].size() == 0) {
@@ -342,7 +342,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         }
         seq.set_id(tokens[0]);
         //split the tokens by spaces
-        for (unsigned int i=1 ; i < tokens.size(); i++) {
+        for (unsigned int i = 1 ; i < tokens.size(); i++) {
             seq.add_cont_char((double)atof(tokens[i].c_str()));
         }
         return true;
@@ -361,13 +361,13 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                 if (!getline(stri, tline)) {
                     tokens.clear();
                     tokenize(curseq, tokens, del);
-                    for (unsigned int i=0; i < tokens.size(); i++) {
+                    for (unsigned int i = 0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
                     if (tokens[0].size() == 0) {
                         return false;
                     }
-                    for (unsigned int i=0 ; i < tokens.size(); i++) {
+                    for (unsigned int i = 0 ; i < tokens.size(); i++) {
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     return false;
@@ -383,7 +383,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     //split the tokens by spaces
                     tokens.clear();
                     tokenize(curseq, tokens, del);
-                    for (unsigned int i=0; i < tokens.size(); i++) {
+                    for (unsigned int i = 0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
                     if (tokens[0].size() == 0) {
@@ -1176,7 +1176,7 @@ bool read_phylip_file(string filen, vector<Sequence>& seqs) {
     while (getline(infile, tline)) {
         vector<string> searchtokens;
         tokenize(tline, searchtokens, "\t    ");
-        for (unsigned int j=0; j < searchtokens.size(); j++) {
+        for (unsigned int j = 0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         if (first == true) { //reading past the first line
@@ -1246,7 +1246,7 @@ bool read_phylip_file_strec(string filen, vector<Sequence>& seqs) {
     while (getline(infile, tline)) {
         vector<string> searchtokens;
         tokenize(tline, searchtokens, "\t");
-        for (unsigned int j=0; j < searchtokens.size(); j++) {
+        for (unsigned int j = 0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         if (first == true) { //reading past the first line
@@ -1363,7 +1363,7 @@ std::vector<Sequence> read_interleaved_nexus_file (std::string filen, int num_ta
             tokenize(tline, tokens, del);
             if (tokens.size() > 1) {
                 Sequence seq;
-                for (unsigned int i=0; i < tokens.size(); i++) {
+                for (unsigned int i = 0; i < tokens.size(); i++) {
                     trim_spaces(tokens[i]);
                 }
                 if (tokens[0].compare(";") == 0) {

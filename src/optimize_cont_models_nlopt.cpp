@@ -73,7 +73,7 @@ double nlopt_ou_sr_log (unsigned n, const double *x, double *grad, void *data) {
 
 
 double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
-    for (unsigned int i=0;i<n;i++) {
+    for (unsigned int i = 0; i < n; i++) {
         if (x[i] <= 0) {
             return LARGE;
         }   
@@ -81,7 +81,7 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
     double sigma =1;// x[0];//1;
     analysis_data_tree * d = (analysis_data_tree *) data;
     Tree * tr = d->tree;
-    for (int i=0;i<tr->getNodeCount();i++) {
+    for (int i = 0; i < tr->getNodeCount(); i++) {
         if (tr->getNode(i) != tr->getRoot()) {
             tr->getNode(i)->setBL(x[i+1]);
         }
@@ -176,7 +176,7 @@ std::vector<double> optimize_single_rate_bm_bl (Tree * tr) {
     nlopt::result result = opt.optimize(x, minf);
     std::cout << result << std::endl;
     std::vector<double> results;
-    for (int i=0;i<tr->getNodeCount();i++) {
+    for (int i = 0; i < tr->getNodeCount(); i++) {
         if (tr->getNode(i) != tr->getRoot()) {
             tr->getNode(i)->setBL(x[i+1]);
         }

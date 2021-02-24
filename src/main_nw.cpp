@@ -170,12 +170,12 @@ int main(int argc, char * argv[]) {
     std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
 
     // go all by all
-    for (unsigned int i=0; i < seqs.size(); i++) {
+    for (unsigned int i = 0; i < seqs.size(); i++) {
 #ifdef OMP
         omp_set_num_threads(num_threads);
 #endif        
         #pragma omp parallel for
-        for (unsigned int j=0; j < seqs.size(); j++) {
+        for (unsigned int j = 0; j < seqs.size(); j++) {
             if (j > i) {
                 std::string aln1;
                 std::string aln2;

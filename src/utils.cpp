@@ -202,10 +202,10 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filen
             std::string del(" ,\t");
             tokens.clear();
             tokenize(line, tokens, del);
-            for (unsigned int j=0; j < tokens.size(); j++) {
+            for (unsigned int j = 0; j < tokens.size(); j++) {
                 trim_spaces(tokens[j]);
             }
-            for (unsigned int j=0; j < tokens.size(); j++) {
+            for (unsigned int j = 0; j < tokens.size(); j++) {
                 ratematrix[fromarea][j] = atof(tokens[j].c_str());
             }
             if (fromarea < numstates-1) {
@@ -254,7 +254,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB) {
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
-    for (unsigned int i=0; i < matA.size(); i++) {
+    for (unsigned int i = 0; i < matA.size(); i++) {
         if (((matA[i] == 1) && (matB[i] == 1))) {
             match1 += 1;
         } else {
@@ -280,7 +280,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
     bool test = false;
     int match1 = 0;
     unsigned int numdiffs = 0;
-    for (unsigned int i=0; i < matA.size(); i++) {
+    for (unsigned int i = 0; i < matA.size(); i++) {
         if (((matA[i] == 1) && (matB[i] == 1))) {
             match1 += 1;
         } else {
@@ -293,7 +293,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
             if (edgewise == true) {
                 int match2 = 0;
                 unsigned int numdiffs2 = 0;
-                for (unsigned int i=0; i < matA.size(); i++) {
+                for (unsigned int i = 0; i < matA.size(); i++) {
                     if (((matA[i] == 1) && (matB[i] == 0))) {
                         match2 += 1;
                     } else {
@@ -319,7 +319,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
 
 int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
     int x=0;
-    for (unsigned int i=0; i < matrix.size(); i++) {
+    for (unsigned int i = 0; i < matrix.size(); i++) {
         x += matrix[i][col];
     }
     return x;
@@ -328,7 +328,7 @@ int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
 
 int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
     int x=0;
-    for (unsigned int i=0; i < matrix.size(); i++) {
+    for (unsigned int i = 0; i < matrix.size(); i++) {
         if (matrix[i][col] < 0) {
             x += matrix[i][col];
         }
@@ -366,10 +366,15 @@ int sum (std::vector<int>& in) {
     return std::accumulate(in.begin(), in.end(), 0);
 }
 
+std::vector<double> string_v_to_double_v (const std::vector<std::string>& in) {
+    std::vector<double> out(in.size());
+    std::transform(in.begin(), in.end(), out.begin(), [](const std::string& val) {return std::stod(val);});
+    return out;
+}
 
 int count_zeros (std::vector<int>& in) {
     int x = 0;
-    for (unsigned int i=0;i < in.size(); i++) {
+    for (unsigned int i = 0; i < in.size(); i++) {
         if (in[i] == 0) {
             x += 1;
         }
@@ -380,7 +385,7 @@ int count_zeros (std::vector<int>& in) {
 
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in) {
     Superdouble sum = 0;
-    for (unsigned int i=0; i < in.size(); i++) {
+    for (unsigned int i = 0; i < in.size(); i++) {
         sum += in[i];
         // std::cout << in[i] << " sum:" << sum << std::endl;
     }
@@ -421,7 +426,7 @@ std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std:
 
 std::string get_string_vector(std::vector<std::string>& sts) {
     std::string rets;
-    for (unsigned int i=0; i < sts.size(); i++) {
+    for (unsigned int i = 0; i < sts.size(); i++) {
         rets += sts[i]+ " ";
     }
     return rets;
@@ -430,7 +435,7 @@ std::string get_string_vector(std::vector<std::string>& sts) {
 
 std::string get_string_vector(std::vector<int>& sts) {
     std::string rets;
-    for (unsigned int i=0; i < sts.size(); i++) {
+    for (unsigned int i = 0; i < sts.size(); i++) {
         rets += std::to_string(sts[i]) + " ";
     }
     return rets;
@@ -664,7 +669,7 @@ bool check_for_input_to_stream () {
 // return elements in a *not* found in b
 std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b) {
     std::vector<std::string> comp;
-    for (unsigned int i=0; i < a.size(); i++) {
+    for (unsigned int i = 0; i < a.size(); i++) {
         if (find(b.begin(), b.end(), a[i]) == b.end()) {
             comp.push_back(a[i]);
         }

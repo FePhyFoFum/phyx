@@ -18,9 +18,9 @@ std::vector<mat> * nloptfree_variables_periods;
 
 
 double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_func_data) {
-    for (unsigned int k=0; k < nloptfree_variables_periods->size(); k++) {
-        for (unsigned int i=0; i < (*nloptfree_variables_periods)[k].n_rows; i++) {
-            for (unsigned int j=0; j < (*nloptfree_variables_periods)[k].n_cols; j++) {
+    for (unsigned int k = 0; k < nloptfree_variables_periods->size(); k++) {
+        for (unsigned int i = 0; i < (*nloptfree_variables_periods)[k].n_rows; i++) {
+            for (unsigned int j = 0; j < (*nloptfree_variables_periods)[k].n_cols; j++) {
                 if (i != j) {
                     (*nloptrm_periods)[k].set_Q_cell(i,j,x[int(nloptfree_variables_periods->at(k)(i,j))]);
                     if ((*nloptrm_periods)[k].get_Q()(i,j) < 0 || (*nloptrm_periods)[k].get_Q()(i,j) >= 1000) {
@@ -31,11 +31,11 @@ double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_fun
         }
     }
     double like;
-    for (unsigned int i=0; i < nloptrm_periods->size(); i++) {
+    for (unsigned int i = 0; i < nloptrm_periods->size(); i++) {
         nloptrm_periods->at(i).set_Q_diag();
     }
     like = nloptsr_periods->eval_likelihood();
-    for (unsigned int i=0; i < nloptrm_periods->size(); i++) {
+    for (unsigned int i = 0; i < nloptrm_periods->size(); i++) {
         if (nloptrm_periods->at(i).neg_p == true) {
             like = 10000000000000;
             break;
@@ -68,9 +68,9 @@ void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor 
     opt.set_maxeval(10000);
     
     std::vector<double> x(_nfree,0);
-    for (unsigned int k=0; k < _rm->size(); k++) {
-        for (unsigned int i=0; i < _rm->at(k).get_Q().n_rows; i++) {
-            for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
+    for (unsigned int k = 0; k < _rm->size(); k++) {
+        for (unsigned int i = 0; i < _rm->at(k).get_Q().n_rows; i++) {
+            for (unsigned int j = 0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {
                     x[int((*_free_mask)[k](i, j))] = _rm->at(k).get_Q()(i, j);
                     //std::cout << x[int((*_free_mask)[k](i,j))] << " ";
@@ -81,9 +81,9 @@ void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor 
     }
     //double minf;
     std::vector<double> result = opt.optimize(x);
-    for (unsigned int k=0; k < _rm->size(); k++) {
-        for (unsigned int i=0; i < _rm->at(k).get_Q().n_rows; i++) {
-            for (unsigned int j=0; j < _rm->at(k).get_Q().n_cols; j++) {
+    for (unsigned int k = 0; k < _rm->size(); k++) {
+        for (unsigned int i = 0; i < _rm->at(k).get_Q().n_rows; i++) {
+            for (unsigned int j = 0; j < _rm->at(k).get_Q().n_cols; j++) {
                 if (i != j) {
                     (*_free_mask)[k](i, j) = result[int((*_free_mask)[k](i, j))];
                     //std::cout << x[int((*(*_free_mask)[k])(i,j))] << " ";

@@ -74,10 +74,10 @@ bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
     std::vector<std::string> ret;
     std::set<std::string> seqnames;
     std::set<std::string> treenames;
-    for (int i=0; i < intree->getExternalNodeCount(); i++) {
+    for (int i = 0; i < intree->getExternalNodeCount(); i++) {
         treenames.insert(intree->getExternalNode(i)->getName());
     }
-    for (unsigned int i=0; i < runseqs.size(); i++) {
+    for (unsigned int i = 0; i < runseqs.size(); i++) {
         seqnames.insert(runseqs[i].get_id());
     }
     std::vector<std::string> v(treenames.size()+seqnames.size());
@@ -233,7 +233,7 @@ int main(int argc, char * argv[]) {
                 std::string del("=");
                 tokens.clear();
                 tokenize(line, tokens, del);
-                for (unsigned int j=0; j < tokens.size(); j++) {
+                for (unsigned int j = 0; j < tokens.size(); j++) {
                     trim_spaces(tokens[j]);
                 }
                 if (!strcmp(tokens[0].c_str(), "freeparams")) {
@@ -253,39 +253,39 @@ int main(int argc, char * argv[]) {
                      */
                     std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
-                    for (unsigned int j=0; j < searchtokens.size(); j++) {
+                    for (unsigned int j = 0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                     }
                     std::vector<std::string> mrc;
-                    for (unsigned int j=1; j < searchtokens.size(); j++) {
+                    for (unsigned int j = 1; j < searchtokens.size(); j++) {
                         mrc.push_back(searchtokens[j]);
                     }
                     mrcas[searchtokens[0]] = mrc;
                 } else if (!strcmp(tokens[0].c_str(), "stochtime")) {
                     std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
-                    for (unsigned int j=0; j < searchtokens.size(); j++) {
+                    for (unsigned int j = 0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         stochtime.push_back(searchtokens[j]);
                     }
                 } else if (!strcmp(tokens[0].c_str(), "stochnumber")) {
                     std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
-                    for (unsigned int j=0; j < searchtokens.size(); j++) {
+                    for (unsigned int j = 0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         stochnumber.push_back(searchtokens[j]);
                     }
                 } else if (!strcmp(tokens[0].c_str(), "stochnumber_any")) {
                     std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
-                    for (unsigned int j=0; j < searchtokens.size(); j++) {
+                    for (unsigned int j = 0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         stochnumber_any.push_back(searchtokens[j]);
                     }
                 } else if (!strcmp(tokens[0].c_str(), "ancstates")) {
                     std::vector<std::string> searchtokens;
                     tokenize(tokens[1], searchtokens, ",     ");
-                    for (unsigned int j=0; j < searchtokens.size(); j++) {
+                    for (unsigned int j = 0; j < searchtokens.size(); j++) {
                         trim_spaces(searchtokens[j]);
                         ancstates.push_back(searchtokens[j]);
                     }
@@ -360,7 +360,7 @@ int main(int argc, char * argv[]) {
         int maxstate=1;
         std::vector<std::string> searchtokens;
         tokenize(seqs[0].get_sequence(), searchtokens, " ");
-        for (unsigned int j=0; j < searchtokens.size(); j++) {
+        for (unsigned int j = 0; j < searchtokens.size(); j++) {
             trim_spaces(searchtokens[j]);
         }
         nsites = searchtokens.size();
@@ -370,7 +370,7 @@ int main(int argc, char * argv[]) {
         for (unsigned int se = 0;se<seqs.size();se++) {
             searchtokens = std::vector<std::string> ();
             tokenize(seqs[se].get_sequence(), searchtokens, "     ");
-            for (unsigned int j=0; j < searchtokens.size(); j++) {
+            for (unsigned int j = 0; j < searchtokens.size(); j++) {
                 trim_spaces(searchtokens[j]);
                 int pos = atoi(searchtokens[j].c_str());
                 if (pos > maxstate) {
@@ -396,7 +396,7 @@ int main(int argc, char * argv[]) {
     if (ancstates.size() > 0 && outancfileset == true) {
         ancout.open(outanc, std::ios::out);
         ancout << "site\ttree\tMRCA\tlnL";
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             ancout << "\tstate_" << i+1;
         }
         ancout << std::endl;
@@ -404,8 +404,8 @@ int main(int argc, char * argv[]) {
     if (stochnumber.size() > 0 && outstochnumfileset == true) {
         stnumout.open(outnum, std::ios::out);
         stnumout << "site\ttree\tMRCA\tlnL";
-        for (int i=0; i < nstates; i++) {
-            for (int j=0; j < nstates; j++) {
+        for (int i = 0; i < nstates; i++) {
+            for (int j = 0; j < nstates; j++) {
                 if (i != j) {
                     stnumout << "\tstate_" << i+1 << "->state_" << j+1;
                 }
@@ -416,7 +416,7 @@ int main(int argc, char * argv[]) {
     if (stochtime.size() > 0 && outstochtimefileset == true ) {
         sttimeout.open(outtime, std::ios::out);
         sttimeout << "site\ttree\tMRCA\tlnL";
-        for (int i=0; i < nstates; i++) {
+        for (int i = 0; i < nstates; i++) {
             sttimeout << "\tstate_" << i+1;
         }
         sttimeout << std::endl;
@@ -443,7 +443,7 @@ int main(int argc, char * argv[]) {
             for (unsigned int se = 0;se<seqs.size();se++) {
                 std::vector<std::string> searchtokens;
                 tokenize(seqs[se].get_sequence(), searchtokens, "     ");
-                for (unsigned int j=0; j < searchtokens.size(); j++) {
+                for (unsigned int j = 0; j < searchtokens.size(); j++) {
                     trim_spaces(searchtokens[j]);
                 }
                 std::string tseqs(nstates, '0');
@@ -455,7 +455,7 @@ int main(int argc, char * argv[]) {
                     int pos = atoi(searchtokens[n].c_str());
                     tseqs.replace(pos, 1, "1");
                 }
-                for (int i=0; i < nstates; i++) {
+                for (int i = 0; i < nstates; i++) {
                     if (tseqs.at(i) =='1') {
                         existing_states[i] = 1;
                     }
@@ -468,7 +468,7 @@ int main(int argc, char * argv[]) {
             runseqs = seqs;
             if (dataz == false) {
                 for (unsigned int se=0; se < seqs.size(); se++) {
-                    for (int i=0; i < nstates; i++) {
+                    for (int i = 0; i < nstates; i++) {
                         if (seqs[se].get_sequence().at(i) =='1') {
                             existing_states[i] = 1;
                         }
@@ -476,7 +476,7 @@ int main(int argc, char * argv[]) {
                 }
                 nstates_site_n = sum(existing_states);
             } else {
-                for (int i=0; i < nstates; i++) {
+                for (int i = 0; i < nstates; i++) {
                     existing_states[i] = 1;
                 }
                 nstates_site_n = nstates;
@@ -498,7 +498,7 @@ int main(int argc, char * argv[]) {
             (*loos) << "states: " << nstates_site_n << std::endl;
             (*loos) << "trees: ";
         }
-        for (unsigned int i=0; i < trees.size(); i++) {
+        for (unsigned int i = 0; i < trees.size(); i++) {
             if (verbose) {
                 (*loos) << i << std::endl;
             }
@@ -547,8 +547,8 @@ int main(int argc, char * argv[]) {
                     ct = 1;
                 } else if (freeparams == "_all_") {
                     ct = 0;
-                    for (int k=0; k < nstates_site_n; k++) {
-                        for (int j=0; j < nstates_site_n; j++) {
+                    for (int k = 0; k < nstates_site_n; k++) {
+                        for (int j = 0; j < nstates_site_n; j++) {
                             if (k != j) {
                                 free_var(k, j) = ct;
                                 ct += 1;
@@ -566,8 +566,8 @@ int main(int argc, char * argv[]) {
                 if (estimate) {//optimize
                     optimize_sr_nlopt(&rm, &sr, &free_var, ct);
                 } else { // requires that the ratematrix is available
-                    for (int i=0; i < nstates_site_n; i++) {
-                        for (int j=0; j < nstates_site_n; j++) {
+                    for (int i = 0; i < nstates_site_n; i++) {
+                        for (int j = 0; j < nstates_site_n; j++) {
                             free_var(i, j) = ratematrix[i][j];
                         }
                     }
@@ -597,8 +597,8 @@ int main(int argc, char * argv[]) {
                     for (unsigned int s=0; s < period_times.size(); s++) {
                         mat free_var(nstates_site_n, nstates_site_n);
                         free_var.fill(0);
-                        for (int k=0; k < nstates_site_n; k++) {
-                            for (int j=0; j < nstates_site_n; j++) {
+                        for (int k = 0; k < nstates_site_n; k++) {
+                            for (int j = 0; j < nstates_site_n; j++) {
                             if (k != j) {
                                 free_var(k, j) = ct;
                                 ct += 1;
@@ -639,10 +639,10 @@ int main(int argc, char * argv[]) {
                 (*loos) << "ancestral states" << std::endl;
             }
             sr.prepare_ancstate_reverse();
-            for (unsigned int j=0; j < ancstates.size(); j++) {
+            for (unsigned int j = 0; j < ancstates.size(); j++) {
             if (ancstates[j] == "_all_") {
                 std::vector<Superdouble> lhoods;
-                for (int l=0; l < tree->getInternalNodeCount(); l++) {
+                for (int l = 0; l < tree->getInternalNodeCount(); l++) {
                     lhoods = sr.calculate_ancstate_reverse_sd(*tree->getInternalNode(l));
                     totlike_sd = calculate_vector_Superdouble_sum(lhoods);
 
@@ -650,7 +650,7 @@ int main(int argc, char * argv[]) {
                     int excount = 0;
                     double highest = 0;
                     int high = 0;
-                    for (int k=0; k < nstates; k++) {
+                    for (int k = 0; k < nstates; k++) {
                         if (existing_states[k] == 1) {
                             if (double(lhoods[excount]/totlike_sd) > highest) {
                                 highest= double(lhoods[excount]/totlike_sd);
@@ -675,7 +675,7 @@ int main(int argc, char * argv[]) {
                 totlike_sd = calculate_vector_Superdouble_sum(lhoods);
                 bool neg = false;
                 int excount = 0;
-                for (int k=0; k < nstates; k++) {
+                for (int k = 0; k < nstates; k++) {
                     if (existing_states[k] == 1) {
                         if (verbose) {
                             (*loos) << double(lhoods[excount]/totlike_sd) << " ";//"(" << lhoods[excount] << ") ";
@@ -705,7 +705,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << "stochastic time" << std::endl;
             }
 
-            for (unsigned int j=0; j < stochtime.size(); j++) {
+            for (unsigned int j = 0; j < stochtime.size(); j++) {
             if (tree->getMRCA(mrcas[stochtime[j]])->isRoot() == false) {
                 std::vector<double> lhoods;
                 if (verbose) {
@@ -714,7 +714,7 @@ int main(int argc, char * argv[]) {
                 sttimeout << n+1 << "\t" << i+1 << "\t" << stochtime[j]<< "\t" << finallike;
                 bool neg = false;
                 int excount = 0;
-                for (int k=0; k < nstates; k++) {
+                for (int k = 0; k < nstates; k++) {
                     if (existing_states[k]==1) {
                         sr.prepare_stochmap_reverse_all_nodes(excount, excount);
                         sr.prepare_ancstate_reverse();
@@ -750,7 +750,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << std::endl;
                 (*loos) << "stochastic number" << std::endl;
             }
-            for (unsigned int j=0; j < stochnumber.size(); j++) {
+            for (unsigned int j = 0; j < stochnumber.size(); j++) {
                 if (tree->getMRCA(mrcas[stochnumber[j]])->isRoot() == false) {
                     std::vector<double> lhoods;
                     if (verbose) {
@@ -759,10 +759,10 @@ int main(int argc, char * argv[]) {
                     stnumout << n+1 << "\t" << i+1 << "\t" << stochnumber[j]<< "\t" << finallike;
                     bool neg = false;
                     int excount = 0;
-                    for (int k=0; k < nstates; k++) {
+                    for (int k = 0; k < nstates; k++) {
                         if (existing_states[k]==1) {
                             int excount2 = 0;
-                            for (int l=0; l < nstates; l++) {
+                            for (int l = 0; l < nstates; l++) {
                                 if (existing_states[l] == 1) {
                                     if (k == l) {
                                         if (verbose) {
@@ -794,7 +794,7 @@ int main(int argc, char * argv[]) {
                             }
                             excount += 1;
                         } else {
-                            for (int l=0; l < nstates; l++) {
+                            for (int l = 0; l < nstates; l++) {
                                 if (k == l) {
                                     if (verbose) {
                                         (*loos) << " - ";
@@ -830,7 +830,7 @@ int main(int argc, char * argv[]) {
                 sr.prepare_stochmap_reverse_all_nodes_all_matrices();
                 sr.prepare_ancstate_reverse();
             }
-            for (unsigned int j=0; j < stochnumber_any.size(); j++) {
+            for (unsigned int j = 0; j < stochnumber_any.size(); j++) {
                 if (tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot() == false) {
                     std::vector<double> lhoods;
                     if (verbose) {

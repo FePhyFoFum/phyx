@@ -100,7 +100,7 @@ void Sequence::infer_alpha () {
     std::string uniqueChars = get_alphabet_from_sequence(str);
     
     // if the above fails (e.g., RNA), do the former check
-    for (size_t i=0; i < uniqueChars.length(); ++i) {
+    for (size_t i = 0; i < uniqueChars.length(); ++i) {
         int num = std::count(str.begin(), str.end(), uniqueChars[i]);
         if (is_prot_char(uniqueChars[i])) {
             proteinHit += num;
@@ -211,7 +211,7 @@ void Sequence::set_aligned (bool _aligned) {
 
 std::string Sequence::reverse_complement () {
     std::string rcomp = seq_;
-    for (unsigned int i=0; i < rcomp.size(); i++) {
+    for (unsigned int i = 0; i < rcomp.size(); i++) {
         rcomp.replace(i, 1, 1, single_dna_complement(seq_[seq_.size()-i-1]));
     }
     return rcomp;
@@ -220,7 +220,7 @@ std::string Sequence::reverse_complement () {
 
 void Sequence::perm_reverse_complement () {
     std::string rcomp = seq_;
-    for (unsigned int i=0; i < rcomp.size(); i++) {
+    for (unsigned int i = 0; i < rcomp.size(); i++) {
         rcomp.replace(i, 1, 1, single_dna_complement(seq_[seq_.size()-i-1]));
     }
     seq_ = rcomp;
@@ -230,7 +230,7 @@ void Sequence::perm_reverse_complement () {
 void Sequence::set_qualstr (std::string& stri, int offset) {
     qualarr_.clear();
     qualstr_ = stri;
-    for (unsigned int i=0; i < stri.size(); i++) {
+    for (unsigned int i = 0; i < stri.size(); i++) {
         qualarr_.push_back(((int)stri[i])-offset);
     }
 }

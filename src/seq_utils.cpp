@@ -163,19 +163,19 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
     int seqlength = seqs[0].get_length();
     std::string retstring;
     if (alpha == "DNA") {
-        for (int i=0; i < seqlength; i++) {
+        for (int i = 0; i < seqlength; i++) {
             std::set<int> fullset;
-            for (unsigned int j=0; j < seqs.size(); j++) {
+            for (unsigned int j = 0; j < seqs.size(); j++) {
                 std::set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
                 fullset.insert(tset.begin(), tset.end());
             }
             retstring += get_dna_from_pos(fullset);
         }
     } else if (alpha == "AA") {
-        for (int i=0; i < seqlength; i++) {
+        for (int i = 0; i < seqlength; i++) {
             std::set<char> fullset;
             //bool ambig = false; // doesn't do anything
-            for (unsigned int j=0; j < seqs.size(); j++) {
+            for (unsigned int j = 0; j < seqs.size(); j++) {
                 fullset.insert(seqs[j].get_sequence()[i]);
                 // break early if any ambiguous code is encountered
                 if (seqs[j].get_sequence()[i] == 'X' || seqs[j].get_sequence()[i] == '-') {
@@ -246,7 +246,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
     // header: num_taxa, num_char
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
     
-    for (unsigned int i=0; i < seqs.size(); i++) {
+    for (unsigned int i = 0; i < seqs.size(); i++) {
         if (uppercase) {
             std::string terp = seqs[i].seq_to_upper();
             (*ostr) << seqs[i].get_id() << "\t" << terp << std::endl;
@@ -278,7 +278,7 @@ void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, s
         datatype = "STANDARD";
         //std::cout << "assembling symbols now" << std::endl;
         std::string combined;
-        for (unsigned int i=0; i < seqs.size(); i++) {
+        for (unsigned int i = 0; i < seqs.size(); i++) {
             if (uppercase) {
                 combined += seqs[i].seq_to_upper();
             } else {
@@ -305,7 +305,7 @@ void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, s
     }
     (*ostr) << " INTERLEAVE=NO GAP=- MISSING=?;" << std::endl;
     (*ostr) << "\tMATRIX\n" << std::endl;
-    for (unsigned int i=0; i < seqs.size(); i++) {
+    for (unsigned int i = 0; i < seqs.size(); i++) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
         if (uppercase) {
             std::string terp = seqs[i].seq_to_upper();
@@ -327,13 +327,13 @@ void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, s
 void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
     int start = site*3;
-    for (unsigned int i=0; i < origseqs.size(); i++) {
+    for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq = "";
-        for (int j=0; j < 61; j++) {
+        for (int j = 0; j < 61; j++) {
             setsq += "0";
         }
-        for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
+        for (unsigned int j = 0; j < codon_pos[codon].size(); j++) {
             setsq.replace(codon_pos[codon][j], 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
@@ -349,11 +349,11 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
 void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
     int start = site * 3;
-    for (unsigned int i=0; i < origseqs.size(); i++) {
+    for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq(61, '0');
         
-        for (unsigned int j=0; j < codon_pos[codon].size(); j++) {
+        for (unsigned int j = 0; j < codon_pos[codon].size(); j++) {
             setsq.replace(codon_pos[codon][j], 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
@@ -609,7 +609,7 @@ bool is_prot_char (char& residue) {
 int count_dna_chars (const std::string& str) {
     int ndna = 0;
     std::string dnaChars = "ACGT";
-    for (size_t i=0; i < dnaChars.length(); ++i) {
+    for (size_t i = 0; i < dnaChars.length(); ++i) {
         ndna += std::count(str.begin(), str.end(), dnaChars[i]);
     }
     return ndna;

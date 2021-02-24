@@ -91,7 +91,7 @@ void BDFit::fit_yule () {
 
 void BDFit::fit_bd() {
     branching_times_.resize(nintnodes_);
-    for (int i=0; i < nintnodes_; i++) {
+    for (int i = 0; i < nintnodes_; i++) {
         branching_times_[i] = tree_->getInternalNode(i)->getHeight();
     }
     
