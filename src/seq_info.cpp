@@ -176,8 +176,9 @@ void SeqInfo::calculate_freqs () {
 
 // alt to print_summary_table_whole_alignment. essential difference is transposed results
 void SeqInfo::return_freq_table () {
-    const char separator = ' ';
     const int colWidth = 10;
+    std::cout.precision(6);
+    (*poos_) << std::fixed;
     if (output_indiv_) {
         // need to take into account longest_tax_label_
         longest_tax_label_ = get_longest_label(taxon_labels_);
@@ -185,11 +186,10 @@ void SeqInfo::return_freq_table () {
         // header
         (*poos_) << pad << " ";
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
-                << seq_chars_[i] << " ";
+            (*poos_) << std::right << std::setw(colWidth) << seq_chars_[i] << " ";
         }
         // return nchar for individual seqs
-        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
+        (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
         for (int i = 0; i < num_taxa_; i++) {
             int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
@@ -199,16 +199,15 @@ void SeqInfo::return_freq_table () {
             }
             (*poos_) << " ";
             for (unsigned int j = 0; j < seq_chars_.length(); j++) {
-                (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
+                (*poos_) << std::right << std::setw(colWidth)
                     << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i] << " ";
             }
-            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << seq_lengths_[i] << std::endl;
+            (*poos_) << std::right << std::setw(colWidth) << seq_lengths_[i] << std::endl;
         }
     } else {
         // header
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
-                << seq_chars_[i];
+            (*poos_) << std::right << std::setw(colWidth) << seq_chars_[i];
             if (i != seq_chars_.length() - 1) {
                 (*poos_) << " ";
             }
@@ -216,8 +215,7 @@ void SeqInfo::return_freq_table () {
         (*poos_) << std::endl;
         // counts
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
-                << char_counts_[i];
+            (*poos_) << std::right << std::setw(colWidth) << char_counts_[i];
             if (i != seq_chars_.length() - 1) {
                 (*poos_) << " ";
             }
@@ -226,7 +224,7 @@ void SeqInfo::return_freq_table () {
         // freqs
         int total_num_chars = sum(char_counts_);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos_) << std::fixed << std::right << std::setw(colWidth) << std::setfill(separator)
+            (*poos_) << std::fixed << std::right << std::setw(colWidth)
                 << (double)char_counts_[i] / (double)total_num_chars;
             if (i != seq_chars_.length() - 1) {
                 (*poos_) << " ";
@@ -238,8 +236,9 @@ void SeqInfo::return_freq_table () {
 
 
 void SeqInfo::print_summary_table_whole_alignment () {
-    const char separator = ' ';
     const int colWidth = 10;
+    std::cout.precision(6);
+    (*poos_) << std::fixed;
     double total_num_chars = 0.0;
     
     //(*poos) << "General Stats For All Sequences" << std::endl;
@@ -259,21 +258,21 @@ void SeqInfo::print_summary_table_whole_alignment () {
         total_num_chars = (double)sum(seq_lengths_);
     }
     
-    (*poos_) << "--------" << seq_type_ << " TABLE---------" << std::endl;
-    (*poos_) << std::left << std::setw(6) << std::setfill(separator) << seq_type_ << " "
-        << std::setw(colWidth) << std::setfill(separator) << "Total" << " "
-        << std::setw(colWidth) << std::setfill(separator) << "Proportion" << std::endl;
+    (*poos_) << "---------" << seq_type_ << " TABLE----------" << std::endl;
+    (*poos_) << std::left << std::setw(6) << seq_type_ << " "
+        << std::setw(colWidth) << "Total" << " "
+        << std::setw(colWidth) << "Proportion" << std::endl;
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos_) << std::left << std::setw(6) << std::setfill(separator) << seq_chars_[i] << " "
-            << std::setw(colWidth) << std::setfill(separator) << total_[seq_chars_[i]] << " "
+        (*poos_) << std::left << std::setw(6) << seq_chars_[i] << " "
+            << std::setw(colWidth) << (int)total_[seq_chars_[i]] << " "
             << ((total_[seq_chars_[i]] / total_num_chars)) << std::endl;
     }
     if (is_dna_) {
-        (*poos_) << std::left << std::setw(6) << std::setfill(separator) << "G+C" << " "
-            << std::setw(colWidth) << std::setfill(separator) << (total_['G'] + total_['C']) << " "
+        (*poos_) << std::left << std::setw(6) << "G+C" << " "
+            << std::setw(colWidth) << (int)(total_['G'] + total_['C']) << " "
             << (((total_['G'] + total_['C']) / total_num_chars)) << std::endl;
     }
-    (*poos_) << "--------" << seq_type_ << " TABLE---------" << std::endl;
+    (*poos_) << "---------" << seq_type_ << " TABLE----------" << std::endl;
 }
 
 

@@ -21,7 +21,7 @@ def test_program(name):
         t = 'tree #: 0\nrooted: true\nbinary: true\nnterminal: 5\nninternal: 4\nbranch lengths: true\nrttipvar: 0.004634\ntreelength: 1.595\nultrametric: false\nrootheight: NA\n'
     elif name == "pxlssq":
         cm = "./pxlssq -s TEST/test.fa"
-        t = 'File type: fasta\nNumber of sequences: 5\nIs aligned: true\nSequence length: 20\n--------Nucl TABLE---------\nNucl   Total      Proportion\nA      20         0.2\nC      37         0.37\nG      18         0.18\nT      25         0.25\n-      0          0\n?      0          0\nG+C    55         0.55\n--------Nucl TABLE---------\n'
+        t = 'File type: fasta\nNumber of sequences: 5\nIs aligned: true\nSequence length: 20\n---------Nucl TABLE----------\nNucl   Total      Proportion\nA      20         0.200000\nC      37         0.370000\nG      18         0.180000\nT      25         0.250000\n-      0          0.000000\n?      0          0.000000\nG+C    55         0.550000\n---------Nucl TABLE----------\n'
     elif name == "pxbp":
         cm = "./pxbp -t TEST/test.tre"
         t = '1 trees \n3 unique clades found\nCLADE: TaxonA TaxonB 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1.\nCLADE: TaxonA TaxonB TaxonC 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1.\nCLADE: TaxonD TaxonE 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1.\nTSCA: 3\n'
