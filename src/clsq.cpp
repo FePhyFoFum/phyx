@@ -101,8 +101,7 @@ void SequenceCleaner::write_seqs (std::ostream* poos) {
 
 // TODO: divide by 3 if codons
 void SequenceCleaner::write_stats (std::ostream* poos) {
-    const char separator = ' ';
-    const int colWidth = 10;
+    const int colWidth = 12;
     if (by_taxon_) {
         if (!by_codon_) {
             (*poos) << "Length of sequences: " << num_char_ << " characters" << std::endl;
@@ -115,10 +114,10 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
         int longest = get_longest_taxon_label();
         // header
         (*poos) << "Taxon" << std::string((longest - 5), ' ');
-        (*poos) << " " << std::right << std::setw(colWidth) << std::setfill(separator)
+        (*poos) << " " << std::right << std::setw(colWidth)
                 << "Missing" << " " << std::right << std::setw(colWidth)
-                << std::setfill(separator) << "Prop." << std::endl;
-        (*poos) << std::string((longest + 22), '-') << std::endl;
+                << "Prop." << std::endl;
+        (*poos) << std::string((longest + 26), '-') << std::endl;
         for (int i = 0; i < num_taxa_; i++) {
             (*poos) << seqs_[i].get_id();
             diff = longest - seqs_[i].get_id().size();
@@ -127,42 +126,40 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
                 (*poos) << pad;
             }
             if (!by_codon_) {
-                (*poos) << " " << std::right << std::setw(colWidth) << std::setfill(separator)
+                (*poos) << " " << std::right << std::setw(colWidth)
                     << missing_per_taxon_[i] << " " << std::right << std::setw(colWidth)
-                    << std::setfill(separator) << missing_per_taxon_proportion_[i] << std::endl;
+                    << missing_per_taxon_proportion_[i] << std::endl;
             } else {
-                (*poos) << " " << std::right << std::setw(colWidth) << std::setfill(separator)
+                (*poos) << " " << std::right << std::setw(colWidth)
                     << missing_per_taxon_[i]/3 << " " << std::right << std::setw(colWidth)
-                    << std::setfill(separator) << missing_per_taxon_proportion_[i] << std::endl;
+                    << missing_per_taxon_proportion_[i] << std::endl;
             }
             
         }
     } else {
         (*poos) << "Number of sequences: " << num_taxa_ << std::endl;
         if (!by_codon_) {
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << "Character" << " "
-                    << std::right << std::setw(colWidth) << std::setfill(separator) << "Missing" << " "
-                    << std::right << std::setw(colWidth) << std::setfill(separator) << "Prop."
-                    << std::endl;
-            (*poos) << std::string(32, '-') << std::endl;
+            (*poos) << std::right << std::setw(9) << "Character" << " "
+                    << std::right << std::setw(colWidth) << "Missing" << " "
+                    << std::right << std::setw(colWidth) << "Prop." << std::endl;
+            (*poos) << std::string(35, '-') << std::endl;
             for (int i = 0; i < num_char_; i++) {
-                (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << i
-                        << std::right << std::setw(colWidth) << std::setfill(separator) << missing_per_site_counts_[i]
-                        << std::right << std::setw(colWidth) << std::setfill(separator) << missing_per_site_proportion_[i]
+                (*poos) << std::right << std::setw(9) << i << " "
+                        << std::right << std::setw(colWidth) << missing_per_site_counts_[i] << " "
+                        << std::right << std::setw(colWidth) << missing_per_site_proportion_[i] << " "
                         << std::endl;
             }
         } else {
-            (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << "Codon" << " "
-                    << std::right << std::setw(colWidth) << std::setfill(separator) << "Missing" << " "
-                    << std::right << std::setw(colWidth) << std::setfill(separator) << "Prop."
-                    << std::endl;
-            (*poos) << std::string(32, '-') << std::endl;
+            (*poos) << std::right << std::setw(5) << "Codon" << " "
+                    << std::right << std::setw(colWidth) << "Missing" << " "
+                    << std::right << std::setw(colWidth) << "Prop." << std::endl;
+            (*poos) << std::string(34, '-') << std::endl;
             int pos = 0;
             for (int i = 0; i < (num_char_/3); i++) {
                 pos = i * 3;
-                (*poos) << std::right << std::setw(colWidth) << std::setfill(separator) << i
-                        << std::right << std::setw(colWidth) << std::setfill(separator) << missing_per_site_counts_[pos]
-                        << std::right << std::setw(colWidth) << std::setfill(separator) << missing_per_site_proportion_[pos]
+                (*poos) << std::right << std::setw(5) << i << " "
+                        << std::right << std::setw(colWidth) << missing_per_site_counts_[pos] << " "
+                        << std::right << std::setw(colWidth) << missing_per_site_proportion_[pos] << " "
                         << std::endl;
             }
         }

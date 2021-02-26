@@ -169,8 +169,7 @@ void CompTest::get_longest_taxon_label () {
 
 
 void CompTest::return_freq_table () {
-    const char separator = ' ';
-    const int colWidth = 8;
+    const int colWidth = 12;
     // need to take into account longest_tax_label_
     get_longest_taxon_label();
     std::string pad = std::string(longest_tax_label_, ' ');
@@ -178,10 +177,9 @@ void CompTest::return_freq_table () {
     (*poos_) << "Observed character counts:" << std::endl;
     (*poos_) << pad << " ";
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
-            << seq_chars_[i] << " ";
+        (*poos_) << std::right << std::setw(colWidth) << seq_chars_[i] << " ";
     }
-    (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << "Nchar" << std::endl;
+    (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
     for (int i = 0; i < num_taxa_; i++) {
         int diff = longest_tax_label_ - taxon_labels_[i].size();
         (*poos_) << taxon_labels_[i];
@@ -191,19 +189,17 @@ void CompTest::return_freq_table () {
         }
         (*poos_) << " ";
         for (unsigned int j = 0; j < seq_chars_.length(); j++) {
-            (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
-                << indiv_char_counts_[i][j] << " ";
+            (*poos_) << std::right << std::setw(colWidth) << indiv_char_counts_[i][j] << " ";
         }
-        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << row_totals_[i] << std::endl;
+        (*poos_) << std::right << std::setw(colWidth) << row_totals_[i] << std::endl;
     }
     int diff = longest_tax_label_ - 5;
     pad = std::string(diff, ' ');
     (*poos_) << "Total" << pad << " ";
     for (unsigned int i = 0; i < col_totals_.size(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator)
-            << col_totals_[i] << " ";
+        (*poos_) << std::right << std::setw(colWidth) << col_totals_[i] << " ";
     }
-    (*poos_) << std::right << std::setw(colWidth) << std::setfill(separator) << total_ << std::endl;
+    (*poos_) << std::right << std::setw(colWidth) << total_ << std::endl;
 } 
 
 
