@@ -257,7 +257,7 @@ int main(int argc, char * argv[]) {
     } else if (keep_columns) {
         lm.retain_columns(col_indices);
     } else if (summarize) {
-        //lm.summarize(burnin, nthin);
+        lm.summarize(burnin, nthin);
     } else {
         lm.sample(burnin, nthin, nrandom, seed);
     }
