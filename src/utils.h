@@ -60,7 +60,10 @@ int sum (std::vector<int>& in);
 
 int count_zeros (std::vector<int>& in);
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in);
+
+double v_median (std::vector<double>& in);
 double v_mean (std::vector<double>& in);
+void v_mean_variance (std::vector<double>& in, double& mn, double& varr);
 double v_variance (std::vector<double>& in);
 std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2);
 

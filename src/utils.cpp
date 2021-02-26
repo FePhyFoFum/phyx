@@ -349,22 +349,46 @@ int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
 }
 
 
+// NOTE: this partially rearranges elements, so make a copy if order is important
+double v_median (std::vector<double>& in) {
+    int n = in.size() / 2;
+    std::nth_element(in.begin(), in.begin()+n, in.end());
+    double median = in[n];
+    
+    if (n % 2 == 0) { // if the length is even
+      auto max_it = std::max_element(in.begin(), in.begin()+n);
+      median = (*max_it + median) / 2.0;
+    }
+    return median;    
+}
+
+
 // should make this a templated function
 double v_mean (std::vector<double>& in) {
-    return sum (in) / (double)in.size();
+    return sum(in) / (double)in.size();
+}
+
+
+// if you want one, prolly want the other too
+void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
+    double n = (double)in.size();
+    mn = sum(in) / n;
+    std::vector<double> diff(in.size());
+    std::transform(in.begin(), in.end(), diff.begin(),
+        std::bind2nd(std::minus<double>(), mn));
+    double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+    varr = sq_sum / n;
 }
 
 
 double v_variance (std::vector<double>& in) {
-    double meann = v_mean(in);
-    
-    std::vector<double> diff(in.size());
+    double n = (double)in.size();
+    double meann = sum(in) / n;
+    std::vector<double> diff((int)n);
     std::transform(in.begin(), in.end(), diff.begin(),
         std::bind2nd(std::minus<double>(), meann));
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-    
-    double var = sq_sum / (double)in.size();
-    
+    double var = sq_sum / n;
     return var;
 }
 

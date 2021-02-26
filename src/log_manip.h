@@ -33,7 +33,9 @@ private:
     std::istream* pios_;
     std::ostream* poos_;
     std::ifstream infilestr_;
-    std::vector<std::string> parm_columns_;
+    std::vector<std::string> parm_names_;
+    
+    std::vector< std::vector<double> > parm_samples_;
     
     void count_parameter_samples ();
     void count_tree_samples ();
@@ -41,7 +43,14 @@ private:
     void sample_trees ();
     void write_reformatted_sample (std::string& sample, int& sample_num);
     void get_tree_name_prefix (std::string& sample);
-    
+    void collect_parameter_samples ();
+    void store_sample (std::string const& line);
+    void return_statistics_table ();
+    void calculate_summary_statistics (std::vector<double> vals, double& mean,
+        double& variance, double& ESS, double& ACT, int& n_samples, const int& step_size);
+    void calculate_summary_statistics (std::vector<double>& vals, double& mean,
+        double& variance, double& median, double& ESS, double& ACT, const int& n_samples,
+        const int& step_size);
 public:
     // not using this one
     LogManipulator (const std::string& logtype, const std::vector<std::string>& input_files,
@@ -55,6 +64,7 @@ public:
         const int& seed);
     void delete_columns (const std::vector<int>& col_ids);
     void retain_columns (const std::vector<int>& col_ids);
+    void summarize (const int& burnin, const int& nthin); // calculate summary statistics over samples
 };
 
 #endif /* _LOG_MANIP_H_ */
