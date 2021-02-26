@@ -176,9 +176,7 @@ void SeqInfo::calculate_freqs () {
 
 // alt to print_summary_table_whole_alignment. essential difference is transposed results
 void SeqInfo::return_freq_table () {
-    const int colWidth = 10;
-    std::cout.precision(6);
-    (*poos_) << std::fixed;
+    const int colWidth = 12;
     if (output_indiv_) {
         // need to take into account longest_tax_label_
         longest_tax_label_ = get_longest_label(taxon_labels_);
@@ -236,9 +234,7 @@ void SeqInfo::return_freq_table () {
 
 
 void SeqInfo::print_summary_table_whole_alignment () {
-    const int colWidth = 10;
-    std::cout.precision(6);
-    (*poos_) << std::fixed;
+    const int colWidth = 12;
     double total_num_chars = 0.0;
     
     //(*poos) << "General Stats For All Sequences" << std::endl;
@@ -258,21 +254,21 @@ void SeqInfo::print_summary_table_whole_alignment () {
         total_num_chars = (double)sum(seq_lengths_);
     }
     
-    (*poos_) << "---------" << seq_type_ << " TABLE----------" << std::endl;
-    (*poos_) << std::left << std::setw(6) << seq_type_ << " "
+    (*poos_) << "--------- " << seq_type_ << " TABLE ----------" << std::endl;
+    (*poos_) << std::right << std::setw(4) << seq_type_ << " "
         << std::setw(colWidth) << "Total" << " "
         << std::setw(colWidth) << "Proportion" << std::endl;
     for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos_) << std::left << std::setw(6) << seq_chars_[i] << " "
+        (*poos_) << std::right << std::setw(4) << seq_chars_[i] << " "
             << std::setw(colWidth) << (int)total_[seq_chars_[i]] << " "
-            << ((total_[seq_chars_[i]] / total_num_chars)) << std::endl;
+            << std::setw(colWidth) << ((total_[seq_chars_[i]] / total_num_chars)) << std::endl;
     }
     if (is_dna_) {
-        (*poos_) << std::left << std::setw(6) << "G+C" << " "
+        (*poos_) << std::right << std::setw(4) << "G+C" << " "
             << std::setw(colWidth) << (int)(total_['G'] + total_['C']) << " "
-            << (((total_['G'] + total_['C']) / total_num_chars)) << std::endl;
+            << std::setw(colWidth) << (((total_['G'] + total_['C']) / total_num_chars)) << std::endl;
     }
-    (*poos_) << "---------" << seq_type_ << " TABLE----------" << std::endl;
+    (*poos_) << "--------- " << seq_type_ << " TABLE ----------" << std::endl;
 }
 
 
