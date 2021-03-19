@@ -27,13 +27,13 @@ void Collapser::collapse_edges (Tree * tr) {
     has_labels_ = tr->hasNodeNames();
     has_annotations_ = tr->hasNodeAnnotations();
     //bool isRooted = is_rooted(tr); // should be useful
-    // cout << "isRooted: " << isRooted << endl;
+    // cout << "isRooted: " << isRooted << std::endl;
     
     if (!tr->hasNodeAnnotations()) {
-        //cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << endl;
+        //std::cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << std::endl;
     }
     if (!tr->hasNodeNames()) {
-        //cout << "Dude. No node names found in this tree. What are you even _doing_?!?" << endl;
+        //std::cout << "Dude. No node names found in this tree. What are you even _doing_?!?" << std::endl;
     } else {
         // if a node is removed, start over anew since root is reprocessed
         // should check if this is necessary, since could be expensive for large trees
@@ -41,23 +41,23 @@ void Collapser::collapse_edges (Tree * tr) {
         int loop_count = 0;
         while (!done) {
             loop_count++;
-            //cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " nodes to deal with." << endl;
+            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " nodes to deal with." << std::endl;
             for (int i = 0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
                 std::string str = m->getName();
                 if (str == "") {
-                    //cout << "Whoops. This node has no support value." << endl;
+                    //std::cout << "Whoops. This node has no support value." << std::endl;
                 } else {
                     float cursup = std::stof(str);
                     if (!scale_set_) {
                         guess_scale(cursup);
                     }
                     if (cursup < threshold_) {
-                        //cout << "Welp. This one has got to go (" << cursup << ")." << endl;
+                        //std::cout << "Welp. This one has got to go (" << cursup << ")." << std::endl;
                         tr->pruneInternalNode(m);
                         break;
                     } else {
-                        //cout << "This one is cool: " << cursup << endl;
+                        //std::cout << "This one is cool: " << cursup << std::endl;
                     }
                 }
                 if (i == (tr->getInternalNodeCount() - 1)) {
@@ -65,7 +65,7 @@ void Collapser::collapse_edges (Tree * tr) {
                 }
             }
         }
-        //cout << "Went through loop " << loop_count << " times." << endl;
+        //std::cout << "Went through loop " << loop_count << " times." << std::endl;
     }
 }
 
@@ -74,20 +74,21 @@ void Collapser::collapse_edges (Tree * tr) {
 need to consider ranges:
 1) 0-100 (e.g., bootstraps)
 2) 0.0-1.0 (probs)
-- use rint to find out if what is passed in is an integer or float:
-- rintf(f)==f
+- hrm: currently take the 'first' support value encountered.
+  - could a tree have both support values above and below 1?
+  - e.g. 74.3 and 0.9
+  - let us assume: no!
+  - therefore, no need for rintf
 */
 // using a support value (the first encountered), determine whether scale is proportions or percentages
 // if appropriate will reset threshold (e.g. from 0.5 to 50)
 void Collapser::guess_scale (const float& sup) {
-    float f = sup;
-    if (rintf(f) == f) {
-        //cout << "Support is an integer" << endl;
-        if (f > 1.0) { // overkill
-            //cout << "Ok, looks like a percentage here guys." << endl;
-            threshold_ *= 100;
-            //cout << "New threshold set to " << threshold_ << endl;
-            scale_set_ = true;
-        }
+    if (sup > 1.0) { // overkill
+        //std::cout << "Ok, looks like a percentage here guys." << std::endl;
+        threshold_ *= 100;
+        //std::cout << "New threshold set to " << threshold_ << std::endl;
+    } else {
+        //std::cout << "Ok, looks like a proportion (probability?)." << std::endl;
     }
+    scale_set_ = true;
 }
