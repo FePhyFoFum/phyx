@@ -42,7 +42,7 @@ def which(program):
 # feel free to edit the command below to add extras (e.g., citations for specific methods)
 def make_manpage(pname):
     cmd = "help2man --output=man/" + pname + ".1.in --include=man/citation.h2m --no-info ./" + pname
-    print ("Making manpage for " + pname)
+    print ("Writing manpage for " + pname)
     os.system(cmd)
     return None
 
