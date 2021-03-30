@@ -232,6 +232,8 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filen
 }
 
 
+// NOTE: this assumes that srand have been seeded previously
+// e.g., srand(get_clock_seed());
 int random_int_range (int min, int max) {
     return min + (rand() % (int)(max - min + 1));
 }

@@ -27,7 +27,10 @@ void print_help() {
     std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
     std::cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << std::endl;
-    std::cout << " -s, --sup=STRING    string identifying support values (if default fails)" << std::endl;
+// Welp this was forgotten :( comment out until actually implemented
+//    std::cout << " -s, --sup=STRING    string identifying support values (if default fails) NOT IMPLEMENTED!" << std::endl;
+// don't expose this until it is working
+//    std::cout << " -p, --polytomy      randomly sample lineages from each polytomy to generate a binary tree" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -44,6 +47,7 @@ static struct option const long_options[] =
     {"treef", required_argument, NULL, 't'},
     {"limit", required_argument, NULL, 'l'},
     {"sup", required_argument, NULL, 's'},
+    {"polytomy", no_argument, NULL, 'p'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -58,6 +62,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool tfileset = false;
     bool supset = false;
+    bool sample_polytomy = false;
     
     double threshold = 0.5;
     std::string supstring = "";
@@ -67,7 +72,7 @@ int main(int argc, char * argv[]) {
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:l:s:o:hVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:l:s:po:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -87,6 +92,9 @@ int main(int argc, char * argv[]) {
             case 's':
                 supset = true;
                 supstring = strdup(optarg);
+                break;
+            case 'p':
+                sample_polytomy = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -133,7 +141,7 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    Collapser tc (threshold);
+    Collapser tc (threshold, sample_polytomy);
     
     if (supset) {
         tc.set_sup_string(supstring);
@@ -165,6 +173,8 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
+                // this currently only works with the vailla-est of trees
+                tc.collapse_edges(tree);
                 /*
                 if (!tree->hasNodeAnnotations()) {
                     std::cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << std::endl;

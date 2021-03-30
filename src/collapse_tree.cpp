@@ -1,14 +1,20 @@
 #include <string>
 #include <iostream>
-#include <cmath>       /* rint */
+#include <cmath>  /* rint */
+#include <random>
 
 #include "tree.h"
 #include "tree_utils.h"
 #include "collapse_tree.h"
+#include "utils.h"
 
 
-Collapser::Collapser (const double& threshold):scale_set_(false) {
+Collapser::Collapser (const double& threshold, const bool& sample_polytomy):scale_set_(false) {
     threshold_ = threshold;
+    sample_polytomy_ = sample_polytomy;
+    if (sample_polytomy_) {
+        srand(get_clock_seed());
+    }
 }
 
 
@@ -91,4 +97,22 @@ void Collapser::guess_scale (const float& sup) {
         //std::cout << "Ok, looks like a proportion (probability?)." << std::endl;
     }
     scale_set_ = true;
+}
+
+
+// for each polytomy, sample 2 descendant lineages
+// equivalently, for each internal node, sample 3 lineages
+// hrm, maybe trace tree and extract induced subtree would be efficient?
+// rootedness state likely factors in here
+void Collapser::sample_polytomies (Tree * tr) {
+    int terp = 3;
+    
+    int random_integer = random_int_range(0, terp);
+    
+    std::cout << "random int = " << random_integer << std::endl;
+    
+    bool rooted = is_rooted(tr);
+    while (!is_binary(tr)) {
+        
+    }
 }
