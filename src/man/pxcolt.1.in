@@ -18,9 +18,6 @@ input tree file, STDIN otherwise
 \fB\-l\fR, \fB\-\-limit\fR=\fI\,DOUBLE\/\fR
 minimum support threshold as proportion (default = 0.5)
 .TP
-\fB\-s\fR, \fB\-\-sup\fR=\fI\,STRING\/\fR
-string identifying support values (if default fails)
-.TP
 \fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
 output file, STOUT otherwise
 .TP
