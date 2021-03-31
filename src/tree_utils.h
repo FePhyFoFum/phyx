@@ -49,4 +49,8 @@ std::string getNewickString (Tree * tree, std::string object);
 std::string double_to_str (double d);
 
 unsigned long int get_num_possible_trees (const int& n, const bool& rooted);
+
+void get_terminal_children (Node * node, std::vector<Node *>& children);
+void get_terminal_children (Node * node, std::vector<std::string>& children);
+void get_all_descendant_nodes (Node * node, std::vector<Node *>& children);
 #endif /* _TREE_UTILS_H_ */

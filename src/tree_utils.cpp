@@ -102,6 +102,8 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
             }
         }
         //std::cout << "After pruning, tree rootedness: " << std::boolalpha << is_rooted(tree) << std::endl;
+        
+        // hrm does this need to be done after _every_ pruning?!?
         if (rs != is_rooted(tree)) {
             //std::cout << "Unrooting tree..." << std::endl;
             // it is possible to go from unrooted to rooted on pruning, but not the other way (i think)
@@ -714,4 +716,51 @@ std::string double_to_str (double d) {
 
 unsigned long int get_num_possible_trees (const int& n, const bool& rooted) {
     return doublefactorial(2 * (n + rooted) - 5);
+}
+
+
+// get all terminal descendants from some node (i.e., does not need to be root)
+// uses postorder traversal
+void get_terminal_children (Node * node, std::vector<Node *>& children) {
+    if (node == NULL) {
+        return;
+    }
+    if (node->getChildCount() > 0) {
+        for (int i = 0; i < node->getChildCount(); i++) {
+            get_terminal_children(node->getChild(i), children);
+        }
+    }
+    if (node->isExternal()) {
+        children.push_back(node);
+    }
+}
+
+
+// same as above, but names rather than nodes
+void get_terminal_children (Node * node, std::vector<std::string>& children) {
+    if (node == NULL) {
+        return;
+    }
+    if (node->getChildCount() > 0) {
+        for (int i = 0; i < node->getChildCount(); i++) {
+            get_terminal_children(node->getChild(i), children);
+        }
+    }
+    if (node->isExternal()) {
+        children.push_back(node->getName());
+    }
+}
+
+
+// like above, but all descendants (not just terminals)
+void get_all_descendant_nodes (Node * node, std::vector<Node *>& children) {
+    if (node == NULL) {
+        return;
+    }
+    if (node->getChildCount() > 0) {
+        for (int i = 0; i < node->getChildCount(); i++) {
+            get_terminal_children(node->getChild(i), children);
+        }
+    }
+    children.push_back(node);
 }
