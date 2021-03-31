@@ -81,6 +81,14 @@ template<typename T> std::vector<T> sum_vectors_elementwise (std::vector<T>& vec
 
 std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std::vector<double>& vec2);
 
+// get rid of any duplicate elements
+// assumes number of elements is not huge (otherwise a set might be better)
+template<typename T> std::vector<T> get_unique_elements (std::vector<T> vec) {
+    sort(vec.begin(), vec.end());
+    vec.erase(unique(vec.begin(), vec.end()), vec.end());
+    return vec;
+}
+
 // find elements present in the first vector but not the second. does not do symmetric search
 template<typename T> std::vector<T> in_first_not_second (std::vector<T> firstv, std::vector<T> secondv) {
     std::vector<T> res(firstv.size());

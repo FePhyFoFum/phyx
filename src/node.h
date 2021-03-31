@@ -17,6 +17,7 @@ private:
     int number;
     std::string name;
     Node * parent;
+    // children are _immediate_ children, not all descendants
     std::vector<Node *> children;
     std::map<std::string, NodeObject *> assoc;
     std::map<std::string, std::vector<Superdouble> > assocDV;
