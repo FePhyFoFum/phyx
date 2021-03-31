@@ -139,6 +139,9 @@ def test_program(name):
     elif name == "pxcolt":
         cm = "./pxcolt -t TEST/collapse.tre -l 0.7"
         t = '((TaxonC:0.25,TaxonA:0.225,TaxonB:0.155)1.0:0.4,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\n'
+    elif name == "pxpoly":
+        cm = "./pxpoly -t TEST/polytomy.tre -x 13"
+        t = '(((TaxonC:0.25,(TaxonA2:0.08,TaxonA3:0.07)1.0:0.235)1.0:0.5,TaxonW:0.36)0.99:0.39,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\n'
     elif name == "pxtgen":
         cm = "./pxtgen -n 5"
         t = '(t2,t3,(t4,(t1,t5)));\n(t3,(t1,t4),(t2,t5));\n(t2,(t1,t4),(t3,t5));\n(t2,t3,(t1,(t4,t5)));\n(t2,t3,((t1,t4),t5));\n(t3,(t2,t4),(t1,t5));\n(t1,t3,(t4,(t2,t5)));\n(t1,(t2,t4),(t3,t5));\n(t1,t3,(t2,(t4,t5)));\n(t1,t3,((t2,t4),t5));\n(t2,(t3,t4),(t1,t5));\n(t1,(t3,t4),(t2,t5));\n(t1,t2,(t4,(t3,t5)));\n(t1,t2,(t3,(t4,t5)));\n(t1,t2,((t3,t4),t5));\n'

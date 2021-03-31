@@ -28,10 +28,10 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -p, --partf=FILE    file listing empirical partitions: NAME = START-STOP[\\INTERVAL]" << std::endl;
     std::cout << " -f, --frac=DOUBLE   jackknife percentage, default bootstrap (i.e. -f 1.0)" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output sequence file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

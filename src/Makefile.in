@@ -247,6 +247,10 @@ SSORT_SRC = main_ssort.cpp
 SSORT_OBJ = main_ssort.o
 SSORT_DEP = main_ssort.d
 
+POLY_SRC = polytomy.cpp main_poly.cpp
+POLY_OBJ = polytomy.o main_poly.o
+POLY_DEP = polytomy.d main_poly.d
+
 COLLAPSE_TREE_SRC = collapse_tree.cpp main_colt.cpp
 COLLAPSE_TREE_OBJ = collapse_tree.o main_colt.o
 COLLAPSE_TREE_DEP = collapse_tree.d main_colt.d
@@ -337,7 +341,7 @@ RATE_DEPS += \
 %.o: ./%.cpp
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
-PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxt2nex pxrr pxmono pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxtgen pxssort pxcolt pxcomp $(NLOPT_PROGRAMS)
+PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxt2nex pxrr pxmono pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxtgen pxssort pxpoly pxcolt pxcomp $(NLOPT_PROGRAMS)
 
 # default all target
 all: $(PROGS)
@@ -589,6 +593,11 @@ pxtgen: $(CPP_OBJS) $(TGEN_OBJ)
 pxssort: $(CPP_OBJS) $(SSORT_OBJ)
 	@echo 'building pxssort'
 	$(CXX) -o "pxssort" $(OPT_FLAGS) $(SSORT_OBJ) $(CPP_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxpoly: $(CPP_OBJS) $(POLY_OBJ)
+	@echo 'building pxpoly'
+	$(CXX) -o "pxpoly" $(OPT_FLAGS) $(POLY_OBJ) $(CPP_OBJS)
 	cat man/$@.1.in > man/$@.1
 
 pxcolt: $(CPP_OBJS) $(COLLAPSE_TREE_OBJ)

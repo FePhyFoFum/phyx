@@ -24,15 +24,13 @@ private:
     bool scale_set_;
     bool has_labels_;
     bool has_annotations_;
-    bool sample_polytomy_;
     
     void guess_scale (const float& sup);
     
 public:
-    Collapser (const double& threshold, const bool& sample_polytomy);
+    Collapser (const double& threshold);
     void set_sup_string (const std::string& str);
     void collapse_edges (Tree * tr);
-    void sample_polytomies (Tree * tr);
 };
 
 #endif /* _COLLAPSE_TREE_H_ */

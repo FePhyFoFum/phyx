@@ -9,7 +9,7 @@
 #include "utils.h"
 #include "tree_reader.h"
 #include "tree_utils.h"
-#include "collapse_tree.h"
+#include "polytomy.h"
 #include "log.h"
 #include "constants.h"
 
@@ -17,18 +17,15 @@ extern std::string PHYX_CITATION;
 
 
 void print_help() {
-    std::cout << "Collapse edges with support below some threshold." << std::endl;
-    std::cout << "If annotated Nexus, may require passing in the support identifier (-s)." << std::endl;
-    std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
+    std::cout << "Randomly sample polytomies to generate a binary tree." << std::endl;
+    std::cout << "Currently only works with rooted trees (checked)" << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
-    std::cout << "Usage: pxcolt [OPTIONS]..." << std::endl;
+    std::cout << "Usage: pxpoly [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
-    std::cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << std::endl;
-// Welp this was forgotten :( comment out until actually implemented
-//    std::cout << " -s, --sup=STRING    string identifying support values (if default fails) NOT IMPLEMENTED!" << std::endl;
+    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -38,13 +35,12 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxcolt 1.1\nCopyright (C) 2018-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
+std::string versionline("pxpoly 1.1\nCopyright (C) 2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
     {"treef", required_argument, NULL, 't'},
-    {"limit", required_argument, NULL, 'l'},
-    {"sup", required_argument, NULL, 's'},
+    {"seed", required_argument, NULL, 'x'},
     {"outf", required_argument, NULL, 'o'},
     {"help", no_argument, NULL, 'h'},
     {"version", no_argument, NULL, 'V'},
@@ -58,17 +54,14 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    bool supset = false;
-    
-    double threshold = 0.5;
-    std::string supstring = "";
+    int seed = -1;
     
     char * outf = NULL;
     char * treef = NULL;
     
     while (1) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:l:s:o:hVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:x:o:hVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -78,16 +71,8 @@ int main(int argc, char * argv[]) {
                 treef = strdup(optarg);
                 check_file_exists(treef);
                 break;
-            case 'l':
-                threshold = string_to_float(optarg, "-l");
-                if (threshold <= 0 || threshold > 1) {
-                    std::cerr << "Error: specify proportional threshold: (0,1). Exiting." << std::endl;
-                    exit(0);
-                }
-                break;
-            case 's':
-                supset = true;
-                supstring = strdup(optarg);
+            case 'x':
+                seed = string_to_int(optarg, "-x");
                 break;
             case 'o':
                 outfileset = true;
@@ -134,11 +119,7 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    Collapser tc(threshold);
-    
-    if (supset) {
-        tc.set_sup_string(supstring);
-    }
+    Polytomy pol(seed);
     
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
@@ -152,7 +133,11 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                tc.collapse_edges(tree);
+                if (!is_rooted(tree)) {
+                    std::cerr << "Error: this currently only works for rooted trees. Exiting." << std::endl;
+                    exit(0);
+                }
+                pol.sample_polytomies(tree);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
@@ -166,8 +151,11 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != NULL) {
-                // this currently only works with the vanilla-est of trees
-                tc.collapse_edges(tree);
+                if (!is_rooted(tree)) {
+                    std::cerr << "Error: this currently only works for rooted trees. Exiting." << std::endl;
+                    exit(0);
+                }
+                pol.sample_polytomies(tree);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }

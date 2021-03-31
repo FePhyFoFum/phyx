@@ -1,20 +1,16 @@
 #include <string>
 #include <iostream>
 #include <cmath>  /* rint */
-#include <random>
 
 #include "tree.h"
 #include "tree_utils.h"
 #include "collapse_tree.h"
 #include "utils.h"
+#include "node.h"
 
 
-Collapser::Collapser (const double& threshold, const bool& sample_polytomy):scale_set_(false) {
+Collapser::Collapser (const double& threshold):scale_set_(false) {
     threshold_ = threshold;
-    sample_polytomy_ = sample_polytomy;
-    if (sample_polytomy_) {
-        srand(get_clock_seed());
-    }
 }
 
 
@@ -34,7 +30,6 @@ void Collapser::collapse_edges (Tree * tr) {
     has_annotations_ = tr->hasNodeAnnotations();
     //bool isRooted = is_rooted(tr); // should be useful
     // cout << "isRooted: " << isRooted << std::endl;
-    
     if (!tr->hasNodeAnnotations()) {
         //std::cout << "Dude. No annotations found in this tree. What are you even _doing_?!?" << std::endl;
     }
@@ -47,7 +42,7 @@ void Collapser::collapse_edges (Tree * tr) {
         int loop_count = 0;
         while (!done) {
             loop_count++;
-            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " nodes to deal with." << std::endl;
+            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " internal nodes to consider." << std::endl;
             for (int i = 0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
                 std::string str = m->getName();
@@ -59,15 +54,15 @@ void Collapser::collapse_edges (Tree * tr) {
                         guess_scale(cursup);
                     }
                     if (cursup < threshold_) {
-                        //std::cout << "Welp. This one has got to go (" << cursup << ")." << std::endl;
+                        //std::cout << "Welp. This one has got to go (" << cursup << "); el = " << m->getBL() << std::endl;
                         tr->pruneInternalNode(m);
                         break;
                     } else {
-                        //std::cout << "This one is cool: " << cursup << std::endl;
+                        //std::cout << "This one is cool: " << cursup << "; el = " << m->getBL() << std::endl;
                     }
                 }
                 if (i == (tr->getInternalNodeCount() - 1)) {
-                    done = true;
+                    done = true; // exit loop, no more polytomies remain
                 }
             }
         }
@@ -97,22 +92,4 @@ void Collapser::guess_scale (const float& sup) {
         //std::cout << "Ok, looks like a proportion (probability?)." << std::endl;
     }
     scale_set_ = true;
-}
-
-
-// for each polytomy, sample 2 descendant lineages
-// equivalently, for each internal node, sample 3 lineages
-// hrm, maybe trace tree and extract induced subtree would be efficient?
-// rootedness state likely factors in here
-void Collapser::sample_polytomies (Tree * tr) {
-    int terp = 3;
-    
-    int random_integer = random_int_range(0, terp);
-    
-    std::cout << "random int = " << random_integer << std::endl;
-    
-    bool rooted = is_rooted(tr);
-    while (!is_binary(tr)) {
-        
-    }
 }
