@@ -27,14 +27,14 @@ list of input sequence files (space delimited)
 \fB\-f\fR, \fB\-\-flistFILE\fR
 file listing input files (one per line)
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output sequence file, STOUT otherwise
-.TP
 \fB\-p\fR, \fB\-\-partf\fR=\fI\,FILE\/\fR
 output partition file, none otherwise
 .TP
 \fB\-u\fR, \fB\-\-uppercase\fR
 export characters in uppercase
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output sequence file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

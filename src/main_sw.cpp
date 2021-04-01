@@ -30,12 +30,12 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output score/distance file, STOUT otherwise" << std::endl;
     std::cout << " -a, --outalnf=FILE  output sequence file, won't output otherwise" << std::endl;
     std::cout << " -t, --seqtype=INT   sequence type, default=DNA (DNA=0,AA=1)" << std::endl;
     std::cout << " -m, --matrix=FILE   scoring matrix, default DNA=EDNAFULL, AA=BLOSUM62" << std::endl;
     std::cout << " -n, --nthreads=INT  number of threads (open mp), default=2" << std::endl;
     std::cout << " -v, --verbose       make the output more verbose, turns off parallel" << std::endl;
+    std::cout << " -o, --outf=FILE     output score/distance file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

@@ -23,9 +23,6 @@ input tree file
 .TP
 \fB\-c\fR, \fB\-\-conf\fR=\fI\,FILE\/\fR
 configuration file
-.TP
-\fB\-o\fR, \fB\-\-outanc\fR=\fI\,FILE\/\fR
-output file for ancestral calc
 .HP
 \fB\-n\fR, \fB\-\-outstnum\fR=\fI\,FILE\/\fR output file for stochastic mapping number
 .HP
@@ -38,6 +35,9 @@ comma separated times
 .TP
 \fB\-l\fR, \fB\-\-logf\fR=\fI\,FILE\/\fR
 log file, STOUT otherwise
+.TP
+\fB\-o\fR, \fB\-\-outanc\fR=\fI\,FILE\/\fR
+output file for ancestral calc
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

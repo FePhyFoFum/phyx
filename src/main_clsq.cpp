@@ -25,7 +25,6 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE     output fasta file, STOUT otherwise" << std::endl;
     std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
     std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
     std::cout << " -c, --codon         examine sequences by codon rather than site" << std::endl;
@@ -34,6 +33,7 @@ void print_help() {
     std::cout << "                       - combine with -t to get report by taxon (rather than site)" << std::endl;
     std::cout << "                       - combine with -c to use codons as units" << std::endl;
     std::cout << " -v, --verbose       more verbose output (i.e. if entire seqs are removed)" << std::endl;
+    std::cout << " -o, --outf=FILE     output fasta file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

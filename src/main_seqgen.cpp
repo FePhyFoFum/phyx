@@ -22,7 +22,6 @@ void print_help() {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE       input treefile, STDIN otherwise" << std::endl;
-    std::cout << " -o, --outf=FILE        output seq file, STOUT otherwise" << std::endl;
     std::cout << " -l, --length=INT       length of sequences to generate. default is 1000" << std::endl;
     std::cout << " -b, --basef=Input      comma-delimited base freqs in order: A,C,G,T. default is equal" << std::endl;
     std::cout << " -g, --gamma=INT        gamma shape value. default is no rate variation" << std::endl;
@@ -43,6 +42,7 @@ void print_help() {
     std::cout << "                            A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T" << std::endl;
     std::cout << "                            EX:.3,.3,.3,.3,.3,1,.3,.3,.2,.5,.4" << std::endl;
     std::cout << " -k, --rootseq=STRING   set root sequence. default is random (from basefreqs)" << std::endl;
+    std::cout << " -o, --outf=FILE        output seq file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help             display this help and exit" << std::endl;
     std::cout << " -V, --version          display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

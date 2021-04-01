@@ -28,8 +28,8 @@ void print_help() {
     std::cout << " -n, --names=CSL     names separated by commas (NO SPACES!)" << std::endl;
     std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
     std::cout << " -c, --comp          take the complement (i.e. check monophyly of taxa not in list)" << std::endl;
-    std::cout << " -o, --outf=FILE     output tree file, STOUT otherwise" << std::endl;
     std::cout << " -i, --ignore        ignore missing (default: exit if names are not in the tree)" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

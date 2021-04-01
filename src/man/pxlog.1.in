@@ -20,9 +20,6 @@ input parameter log file(s)
 \fB\-t\fR, \fB\-\-treef\fR=\fI\,FILE\/\fR
 input tree log file(s)
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output file, STOUT otherwise
-.TP
 \fB\-b\fR, \fB\-\-burnin\fR=\fI\,INT\/\fR
 number of samples to exclude at the beginning of a file
 .TP
@@ -52,6 +49,9 @@ random number seed, clock otherwise
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 make the output more verbose
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

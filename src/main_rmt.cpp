@@ -30,8 +30,8 @@ void print_help() {
     std::cout << " -f, --namesf=FILE   names in a file (each on a line)" << std::endl;
     std::cout << " -r, --regex=STRING  match tip labels by a regular expression" << std::endl;
     std::cout << " -c, --comp          take the complement (i.e. remove any taxa not in list)" << std::endl;
-    std::cout << " -o, --outf=FILE     output tree file, STOUT otherwise" << std::endl;
     std::cout << " -s, --silent        suppress warnings of missing tips" << std::endl;
+    std::cout << " -o, --outf=FILE     output tree file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

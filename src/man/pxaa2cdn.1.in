@@ -17,11 +17,11 @@ input sequence file, STDIN otherwise
 \fB\-n\fR, \fB\-\-nucseqf\fR=\fI\,FILE\/\fR
 input sequence file, STDIN otherwise
 .TP
+\fB\-r\fR, \fB\-\-rmlastcdn\fR
+remove last codon (default: false)
+.TP
 \fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
 output fasta file, STOUT otherwise
-.TP
-\fB\-r\fR, \fB\-\-rmlastcdn\fR
-removes last codon (default: false)
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

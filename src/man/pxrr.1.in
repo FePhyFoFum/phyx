@@ -26,11 +26,11 @@ turn on ordering of outgroups. will root on first one present
 \fB\-u\fR, \fB\-\-unroot\fR
 unroot the tree
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output tree file, STOUT otherwise
-.TP
 \fB\-s\fR, \fB\-\-silent\fR
 do not error if outgroup(s) not found
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output tree file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

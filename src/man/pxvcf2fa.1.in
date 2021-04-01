@@ -14,11 +14,11 @@ Data can be read from a file or STDIN.
 \fB\-s\fR, \fB\-\-seqf\fR=\fI\,FILE\/\fR
 input vcf file, STDIN otherwise
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output fasta sequence file, STOUT otherwise
-.TP
 \fB\-u\fR, \fB\-\-uppercase\fR
 export characters in uppercase
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output fasta sequence file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

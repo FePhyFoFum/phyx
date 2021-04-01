@@ -14,11 +14,11 @@ Output is written in newick format.
 \fB\-t\fR, \fB\-\-treef\fR=\fI\,FILE\/\fR
 input tree file, STDIN otherwise
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output tree file, STOUT otherwise
-.TP
 \fB\-x\fR, \fB\-\-seed\fR=\fI\,INT\/\fR
 random number seed, clock otherwise
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output tree file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

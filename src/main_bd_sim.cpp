@@ -29,9 +29,9 @@ void print_help () {
     std::cout << " -b, --birth=DOUBLE  birth rate, default=1" << std::endl;
     std::cout << " -d, --death=DOUBLE  death rate, default=0" << std::endl;
     std::cout << " -n, --nreps=INT     number of replicates, default=1" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -s, --showextinct   show lineages that went extinct, default=false" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
     std::cout << " -C, --citation      display phyx citation and exit" << std::endl;

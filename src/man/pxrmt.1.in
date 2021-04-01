@@ -26,11 +26,11 @@ match tip labels by a regular expression
 \fB\-c\fR, \fB\-\-comp\fR
 take the complement (i.e. remove any taxa not in list)
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output tree file, STOUT otherwise
-.TP
 \fB\-s\fR, \fB\-\-silent\fR
 suppress warnings of missing tips
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output tree file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit

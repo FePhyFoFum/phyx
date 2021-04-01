@@ -13,11 +13,11 @@ This will take fasta, fastq, phylip, and nexus inputs from a file or STDIN.
 \fB\-s\fR, \fB\-\-seqf\fR=\fI\,FILE\/\fR
 input sequence file, STDIN otherwise
 .TP
-\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
-output newick file, STOUT otherwise
-.TP
 \fB\-n\fR, \fB\-\-nthreads\fR=\fI\,INT\/\fR
 number of threads, default=1
+.TP
+\fB\-o\fR, \fB\-\-outf\fR=\fI\,FILE\/\fR
+output newick file, STOUT otherwise
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit
