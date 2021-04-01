@@ -24,6 +24,9 @@ void Polytomy::sample_polytomies (Tree * tr) {
     std::vector<std::string> tchildren;
     int numChildren = 0;
     
+    // welp with multiple trees do not want to keep this
+    terminals_to_prune_.clear();
+    
     // currently works up through the tree
     // hrm maybe go from root down? would save on duplicates
     for (int i = 0; i < tr->getInternalNodeCount(); i++) {
