@@ -341,8 +341,7 @@ RATE_DEPS += \
 %.o: ./%.cpp
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
-PROGS := pxmrca pxmrcacut pxmrcaname pxconsq pxbdsim pxlstr pxlssq pxupgma pxclsq pxcltr pxs2fa pxs2phy pxs2nex pxfqfilt pxrevcomp pxnw pxsw pxboot pxcat pxsstat pxrecode pxbp pxt2new pxt2nex pxrr pxmono pxaa2cdn pxtlate pxrms pxrmt pxtrt pxrmk pxnj pxlog pxvcf2fa pxrlt pxrls pxtscale pxstrec pxseqgen pxssort pxcontrates pxtcol pxtcomb pxtgen pxssort pxpoly pxcolt pxcomp $(NLOPT_PROGRAMS)
-
+PROGS := pxaa2cdn pxbdsim pxboot pxbp pxcat pxclsq pxcltr pxcolt pxcomp pxconsq pxcontrates pxfqfilt pxlog pxlssq pxlstr pxmono pxmrca pxmrcacut pxmrcaname pxnj pxnni pxnw pxpoly pxrecode pxrevcomp pxrls pxrlt pxrmk pxrms pxrmt pxrr pxs2fa pxs2nex pxs2phy pxseqgen pxssort pxssort pxsstat pxstrec pxsw pxt2new pxt2nex pxtcol pxtcomb pxtgen pxtlate pxtrt pxtscale pxupgma pxvcf2fa $(NLOPT_PROGRAMS)
 # default all target
 all: $(PROGS)
 
