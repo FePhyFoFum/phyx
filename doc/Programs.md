@@ -1,98 +1,107 @@
 # Current programs
 Here is a list of the current programs in phyx. If you have suggestions for new programs, please let us know by submitting an [issue](https://github.com/FePhyFoFum/phyx/issues).
 
-By default, all programs are compiled with `make`. An individual program can be compiled with the command `make <name>`.
+By default, all programs are compiled with `make`. An individual program can be compiled with the command `make <nprogram ame>`.
 
-As with typical Unix programs, help is displayed with the `-h` flag, printing out a menu with the options and their types. Not all of the program options are described below, so make sure to check the help to see what is available. Program version information can be obtained by using the `-V` flag (note uppercase; lowercase `-v` is typically reserved for more verbose output).
+As with typical Unix programs, help is displayed with the `-h` flag, printing out a menu with the options and their types. Alternatively, help information can be displayed in individual man pages `man <program name>`. Not all of the program options are described below, so make sure to check the help to see what is available. Program version information can be obtained by using the `-V` flag (note uppercase; lowercase `-v` is typically reserved for more verbose output).
 
-A few notes on default behaviour. First, as with standard Unix programs, output files are overwritten without warning, so it is important to be aware of this. Second, most programs that produce output do so to a default format: newick for trees, and fasta for sequences. However, these can always be piped to a subsequent program to change the format (see below).
+A few notes on default behaviour. First, as with standard Unix programs, output files are overwritten without warning, so it is important to be aware of this. Second, most programs that produce output do so to a default format: newick for trees, and fasta for sequences. However, these can always be piped to a subsequent program to change the format (see below). By default, all results are written to standard output (i.e., the terminal screen), as this is what allows the programs to be piped together. However, all programs have the option of writing to a file with the `-o` option. 
 
 If you would like to process a large number of files at once a simple command line for loop will let you do that. An example would be if you have a few thousand fasta files that you would like to remove all ambiguous data from, you can run a line of code such as this:
 ```
 for x in *.fa; do pxclsq -s $x -o $x-cln -p 1.0; done
 ```
-The programs can also automatically pipe the output of one into another the input of another. An example of this could be to take the aligned amino acid sequences and guide that to align nucleotide sequences, then clean the file, then create a quick neighbor-joining tree:
+The programs can also automatically pipe the output of one into another the input of another. An example of this could be to take the aligned amino acid sequences and guide that to align nucleotide sequences, then clean the file, then create a quick neighbour-joining tree:
 ```
 pxaa2cdn -a amino_acid_alignment -n nucleotide_alignment || pxclsq -p 1.0 || pxnj -o output_tree_file
 ```
 
-* **pxaa2cdn**: converts AA alignment and unaligned nucleotide to codon alignment
+* **pxaa2cdn**: produce a codon alignment from and AA alignment and unaligned nucleotides
 
 This is a program that lets you change an unaligned nucleotide sequence into its corresponding codon alignment. This is useful for calculating Ka/Ks values and any other analyses that require the nucleotides be aligned by codon. The program requires an aligned amino acid file and the corresponding unaligned nucleotide file. Any sequences that are found in one file and not the other are removed. In addition, the last codon can be removed with the `-r` option.
 ```
-pxaa2cdn -a AA_Alignment.fa -n Unaligned_Nucleotide.fa -o CDN_aln.fa
+pxaa2cdn -a aa_alignment_file -n nucleotide_alignment_file
 ```
 
 * **pxbdfit**: diversification model inference
 
 Fit a diversification model to an ultrametric tree. Model is controlled by the `-m` flag, which has the options `bd` (default), `yule`, or `best` (the optimal model as determined by AIC). Returns model parameters (b, d, r, e), likelihood, aic, and tree statistics.
 ```
-pxbdfit -t bd.tre -m yule
+pxbdfit -t tree_file -m yule
 ```
 
 * **pxbdsim**: a birth death simulator
 
 This program is a birth death simulator that allows the user to either specify the number of extant species (`-e`) or the simulation can be run for a given amount of time (`-t`). The simulator also allows for the incorporation of the taxa that have gone extinct (via the `-s` flag).
 ```
-pxbdsim -e 100 -s -b 1 -d 0.5 -o output_tree_file
+pxbdsim -e 100 -s -b 1 -d 0.5
 ```
 
 * **pxboot**: sequence alignment resampling (bootstrap or jackknife)
 
-This program is designed to either run a bootstrap or a jackknife on the data. If a bootstrap is run then there is no need to specify an amount but for a jackknife the jackknife percentage must be specified with (`-f`) 
+This program is designed to either run a bootstrap (sampling with replacement; default) or a jackknife (sampling without replacement) on an alignment. To perform a jackknife a percentage must be specified with the `-f` argument.
 
 Example jackknife:
 ```
-pxboot -s Alignment -x 112233 -f 0.50 -o output_of_50_jackknife
+pxboot -s alignment_file -x 112233 -f 0.50
 ```
 Example bootstrap:
 ```
-pxboot -s Alignment -p parts -o output_of_bootstrap
+pxboot -s alignment_file -p partition_file
 ```
-where 'parts' above is a RAxML-style partition file so that conserved-partition bootstrapping can be accomplished.
+where 'partition_file' above is a RAxML-style partition file so that conserved-partition bootstrapping can be accomplished.
 
 * **pxbp**: prints out bipartitions that make up the tree
 
-This program takes in a tree file and prints out all the bipartitions that compose the tree.
+This program takes in a tree file and prints out all the bipartitions that compose the tree. See the help for all program options.
 ```
-pxbp -t tree_file -o bp_output
+pxbp -t tree_file
 ```
-
-* **pxbpsq**: prints out bipartions from a sequence file
 
 * **pxcat**: an alignment concatenator
 
-This program is designed to concatenate sequence files and produce a partition file in RAxML/IQtree format. The sequences can be in any format (fasta, phylip, nexus). You can list all the sequences or use a wild card ex ```*.fasta``` which would then concatenate everything that ends in fasta. At times the list of files may be too long and reach the shell limit, in which case you can create a file with all the sequences you could like to be concatenated. An example of this would be if you have a large number of files that end in .fa and you reach a limit from concatenating using *.fa, then you can do ```for x in *.fa;do echo $x >> file.txt;done```. 
-
+Concatenates sequence files and produces a partition file in RAxML/IQtree format. The sequences can be in any format (fasta, phylip, nexus). You can list all the sequences or use a wild card ex `*.fasta` which would then concatenate everything that ends in fasta. At times the list of files may be too long and reach the shell limit, in which case you can create a file with all the sequences you could like to be concatenated. An example of this would be if you have a large number of files that end in .fa and you reach a limit from concatenating using *.fa, then you can do:
 ```
--s list of sequences, space delimited. Alternatively, a wildcard such as *.fa
--p The name of the parts file to be output
--f a file of all the sequences you'd like concatenated
--u export all characters to uppercase
--o output file (alternatively will output to screen)
+for x in *.fa;do echo $x >> file.txt;done
 ```
 
-Concatenating from shell example: ```pxcat -s *.fa *.phy *.nexus -p Parts.model -o Supermatrix.fa```
-Concatenating using a file: ```pxcat -f file.txt -p Parts.model -o Supermatrix.fa```
 
-* **pxclsq**: cleanseqs (clean sites based on missing or ambiguous data)
-
-This is a sequence alignment cleaning program, designed to clean based on column occupancy. The proportion you specify with ```-p``` will be the minimum proportion required to be in the column. So if you specify 0.1, then the column will have to have at least 10% occupancy. Assuming a sequence has not more characters, phyx will remove that sequence from the cleaned alignment.
-
+Concatenating from shell:
 ```
--s The name of your sequence file
--o The name of the output file
--p The proportion column occupancy required
--a Specify if your data is amino acids
+pxcat -s *.fa *.phy *.nexus -p output_partition_file -o concatenated_alignment
+```
+Concatenating using a file:
+```
+pxcat -f file.txt -p output_partition_file -o concatenated_alignment
 ```
 
-Example where an amino acid alignment needs a minimum of 10% occupancy: ```pxclsq -s Alignment -p 0.1 -a```
+* **pxclsq**: clean sites based on missing or ambiguous data
+
+Remove alignment sites based on proportion of missing data (`-p`). By default, removes individual sites from all sequences. Alternatively, missing data can be considered by codon (`-c`) or by taxa (`-t`, where entire sequences with missing data > p are removed).
+
+```
+pxclsq -s alignment_file -p 0.1
+```
+
+* **pxcltr**: general tree cleaner
+
+Removes annotations (node labels, `-l`), 'knuckles' (2-degree nodes; `-k`), and root edges (`-r`) to generate a 'vanilla' newick representation. By default removes all properties. Alternatively choose 1 property.
+```
+pxcltr -t tree_file
+```
 
 * **pxcolt**: collapse poorly-supported edges
 
 This program collapses edges below some support threshold `-l`. This threshold given as a proportion, even if support values are not; e.g., if all edges below a support value of 70 are to be collapsed, specify `-l 0.7`.
 ```
 pxcolt -t tree_file -l threshold
+```
+
+* **pxcomp**: compositional homogeneity test
+
+Chi-square test for equivalent character state counts across lineages.
+```
+pxcomp -s alignment_file
 ```
 
 * **pxconsq**: a consensus sequence constructor for an alignment
@@ -106,29 +115,28 @@ pxcontrates -c contrates_file.txt -t contrates_tree.tre -a 1
 ```
 
 * **pxfqfilt**: a fastq filter given a mean quality
-```
 
-pxfqfilt -s fqfilt_test.fastq -m 10
+```
+pxfqfilt -s fastq_file -m 10
 ```
 
 * **pxlog**: a MCMC log manipulator/concatenator
 
-Resamples parameter or tree MCMC samples using some burnin and thinning across an arbitrary number of log files. NOTE: resampling parameters are in terms of number of samples, _not_ number of generations. To determine the attributes of the log files, you can first use the `-i` (`--info`) flag:
+Resamples parameter or tree MCMC samples using some burnin and thinning across an arbitrary number of log files. NOTE: resampling parameters are in terms of number of samples, _not_ number of generations. Can combine burnin (`-b`) and thinning (`-n`). To determine the attributes of the log files, you can first use the `-i` (`--info`) flag:
 ```
-pxlog -t tree_files -i
+pxlog -t tree_log_file -i
 ```
 and then sample accordingly:
 ```
-pxlog -t tree_files -b some_burnin -n some_thinning
+pxlog -t tree_log_file -b 10000 -n 100
 ```
 
-* **pxlssq**: information about seqs in a file (like ls but for a seq file)
+* **pxlssq**: information about seqs in a file (like ls but for an alignment file)
 
-Prints summary information about a sequence alignment, including number of taxa/characters, character frequencies, etc.
+Prints summary information about a sequence alignment, including number of taxa/characters, character frequencies, etc. Get statistics for each taxon (rather than the alignment as a whole) by supplying the `-i` argument.
 ```
-pxlssq -s Alignment
+pxlssq -s alignment_file
 ```
-Get statistics for each taxon (rather than the alignment as a whole) by supplying the `-i` argument.
 
 * **pxlstr**: information about trees in a file (like ls but for a tree file)
 
@@ -148,170 +156,201 @@ pxmono -t tree_file -n taxon_1,taxon_2,taxon_3
 
 This program will provide the information regarding the most recent common ancestor, giving number of tips in the tree and number of tips for each clade specified. The clade that will be analyzed is the smallest clade containing the tips specified.
 ```
-pxmrca -t mrca_test.tre -m mrca.txt
+pxmrca -t tree_file -m mrca.txt
 ```
 
 * **pxmrcacut**: a mrca cutter
+
+Extract a subclade from a tree through specification of an MRCA.
 ```
-pxmrcacut -t tree -m mrca_file
+pxmrcacut -t tree_file -m mrca_file
 ```
 
 * **pxmrcaname**: a mrca label maker
-```
-pxmrcaname -t tree -m mrca_file
-```
 
-* **pxnj**: Basic neighbor joining program
-
-This is a basic neighbor joining program that will produce trees with the cannonical branch lengths, # of substitutions instead of substitutions per base pair. It allows for parallel processing and is designed to be extremely rapid to give a rough idea of what the final tree will come out to be before doing an ML or Bayesian analysis. For teaching purposes; definitely not for making publishable trees.
+Label internal nodes (specified by MRCA statements) with clade names from a file (`-m`).
 ```
-pxnj -s Alignment.aln
+pxmrcaname -t tree_file -m mrca_file
 ```
 
-* **pxnni**: a nni changer (being trouble shot)
+* **pxnj**: neighbour-joining tree inference
 
-This is a basic nearest neighbor interchange program. Takes in a newick or nexus file with one or more trees and performs a nearest neighbor interchange.
+A basic neighbour-joining program that will produce trees with the 'canonical' branch lengths (# of substitutions instead of average # of substitutions per site). For teaching purposes; definitely not for making publishable trees.
 ```
-pxnni -t tree_file -o output_tree_file
-```
-
-* **pxnw**: simple needleman-wunsch
-
-This is a simple alignment program that performs an analysis of pairwise alignments using the Needleman Wunch algorithm for all sequences in the file. It has the options of outputting the scores (`-o`) and the alignment (`-a`). The program also allows the user to input a matrix or uses EDNA for DNA and Blossum62 for AA as defaults.
-```
-pxnw -s Alignment.aln
+pxnj -s alignment_file
 ```
 
-* **pxpoly**: a polytomy sampler that generates a binary tree.
+* **pxnni**: a nni changer
 
-This program randomly samples 2 descendant lineages from each polytomy in a tree to generate a fully binary tree. Currently restricted to rooted trees.
+Performs a nearest neighboor interchange (NNI) on a tree.
+```
+pxnni -t tree_file
+```
+
+* **pxnw**: needleman-wunsch alignment
+
+An alignment program that performs an analysis of pairwise alignments using the Needleman Wunch algorithm for all sequences in the file. It has the options of outputting the scores (`-o`) and the alignment (`-a`). The program also allows the user to input a matrix or uses EDNA for DNA and Blossum62 for AA as defaults.
+```
+pxnw -s alignment_file
+```
+
+* **pxpoly**: a polytomy sampler that generates a binary tree
+
+Randomly samples 2 descendant lineages from each polytomy in a tree to generate a fully binary tree. Currently restricted to rooted trees.
 ```
 pxpoly -t tree_file
 ```
 
-* **pxrecode**: a sequence alignment recoder. Currently only to RY-coding, but more coming.
+* **pxrecode**: a sequence alignment recoder
 
-This program will recode a nucleotide alignment using any combination of the recognized recoding schemes: R (A|G), Y (C|T), S (C|G), W (A|T), M (A|C), K (G|T), B (C|G|T), D (A|G|T), H (A|C|T), V (A|C|G). Recoding schemes (e.g., `RY', `SW', `MK', etc.) are specified with the \texttt{-r} argument. If no scheme is provided, RY-coding is used by default.
+Recodes a nucleotide alignment using any combination of the recognized recoding schemes: R (A|G), Y (C|T), S (C|G), W (A|T), M (A|C), K (G|T), B (C|G|T), D (A|G|T), H (A|C|T), V (A|C|G). Recoding schemes (e.g., `RY`, `SW`, `MK`, etc.) are specified with the `-r` argument. If no scheme is provided, RY-coding is used by default.
 ```
-pxrecode -r ry -s Nucleotide.fa
+pxrecode -r ry -s alignment_file
 ```
 
 * **pxrevcomp**: a reverse complementor
+
+Replace sequences with their reverse complement. By default this is applied to all sequences; individual sequences can be specified with the `-i` argument.
 ```
-pxrevcomp -s Nucleotide.fa
+pxrevcomp -s alignment_file
 ```
 
-* **pxrls**: Taxon relabelling for sequences
+* **pxrls**: taxon relabelling for sequences
 
 Takes two ordered lists of taxon labels, `-c` (current) and `-n` (new), with one label per line. Substitutes the former for the latter in an alignment passed in by `-s` (or stdin). This is convenient for switching between lab codes for analysis and taxon names for data archiving.
 ```
-pxrls -s SeqFile -c CurrentNames -n NewNames
+pxrls -s alignment_file -c curren_name_file -n new_name_file
 ```
 
-* **pxrlt**: Taxon relabelling for trees
+* **pxrlt**: taxon relabelling for trees
 
 Takes two ordered lists of taxon labels, `-c` (current) and `-n` (new), with one label per line. Substitutes the former for the latter in trees passed in by `-t` (or stdin). This is convenient for switching between lab codes for analysis and taxon names for figure preparation.
 ```
-pxrlt -t kingdoms.tre -c kingdoms.oldnames.txt -n kingdoms.newnames.txt
+pxrlt -t tree_file -c curren_name_file -n new_name_file
+```
+
+* **pxrmk**: remove two-degree nodes from a tree
+
+Removes two-degree internal nodes ('knuckles') from a tree.
+```
+pxrmk -t tree_file
 ```
 
 * **pxrms**: pruning seqs (like rm but for seqs)
 
-This program is designed to delete sequences from a file, through the input of a file with the sequences you wish to delete that are all on a separate line. Use the `-c` flag to remove the complementary taxa.
+Delete all sequences specified by a comma-deleimted list (`-n`) or a file (`-f`; one per line) from an alignment. Use the `-c` flag to remove the complementary taxa.
 ```
-pxrms -s Nucleotide.fa -f List.txt
+pxrms -s alignment_file -f taxon_name_file
 ```
 
 * **pxrmt**: pruning trees (like rm but for trees)
- 
-This program is designed to take in a tree and prune tips from the tree that are not wanted, tips can be given either as a comma separated list or can be given in a file. Use the `-c` flag to remove the complementary taxa.
+
+Prune all taxa specified by a comma-deleimted list (`-n`) or a file (`-f`; one per line) from a tree. Use the `-c` flag to remove the complementary taxa.
 ```
-pxrmt -t rmt_test.tre -n s1
+pxrmt -t tree_file -n s1
 ```
 
 * **pxrr**: rerooting and unrooting trees
 
-This program will re-root trees based off of given outgroup(s) (`-g`) or the program can unroot a tree (`-u`). Outgroups are specified  If not all the outgroups are found in the tree the program will print an error. However, the program can re-root the tree based on the outgroups that _are_ available by using the silent option (`-s`). Alternatively, if the outgroups are ranked in preference but not all necessarily present in a given tree the program can root on the first outgroup present by using the `-r` option. It provides a useful tool for re-rooting thousands of trees which can then be used for analyzing gene discordance across phylogenies.
+Re-root trees based off of given outgroup(s) (`-g`) or unroot (`-u`). Outgroups are specified  If not all the outgroups are found in the tree the program will print an error. However, the program can re-root the tree based on the outgroups that _are_ available by using the silent option (`-s`). Alternatively, if the outgroups are ranked in preference but not all necessarily present in a given tree the program can root on the first outgroup present by using the `-r` option.
 ```
-pxrr -t rr_test.tre -g s1,s2
-```
-
-* **pxs2fa**: a seq file converter to fasta (force to uppercase with `-u` argument)
-```
-pxs2fa -s Alignment
+pxrr -t tree_file -g s1,s2
 ```
 
-* **pxs2phy**: a seq file converter to phylip (force to uppercase with `-u` argument)
+* **pxs2fa**: convert an alignment to fasta format
+
+Convert characters to uppercase with the `-u` argument.
 ```
-pxs2phy -s Alignment
+pxs2fa -s alignment_file
 ```
 
-* **pxs2nex**: a seq file converter to nexus (force to uppercase with `-u` argument)
+* **pxs2nex**: convert an alignment to nexus format
+
+Convert characters to uppercase with the `-u` argument.
 ```
-pxs2nex -s Alignment
+pxs2nex -s alignment_file
+```
+
+* **pxs2phy**: convert an alignment to phylip format
+
+Convert characters to uppercase with the `-u` argument.
+```
+pxs2phy -s alignment_file
 ```
 
 * **pxseqgen**: Sequence simulation program
 
-This is a sequence simulator that allows the user to give a tree and specify a model of evolution and sequences will be generated for that tree under the model. Some features are that it allows for the model of evolution to change at nodes along the tree using the (`-m`) option. The program also allows the user to specify rate variation through a value for the shape of the gamma distribution with the (`-g`) option and the user is able to specify the proportion of invariable sites the would like to include using the (`-i`) option. Other options can be found from the help menu by typing (`-h`) after the program.
+This is a sequence simulator that allows the user to give a tree and specify a model of evolution and sequences will be generated for that tree under the model. Some features are that it allows for the model of evolution to change at nodes along the tree using the (`-m`) option. The program also allows the user to specify rate variation through a value for the shape of the gamma distribution with the (`-g`) option and the user is able to specify the proportion of invariable sites the would like to include using the (`-i`) option. A rate matrix can be specified with the `-r` option () in the order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T). Other options can be found from the help menu by typing (`-h`) after the program.
 
-For multimodel simulations it is easiest to print out the node labels on your tree originally using the (`-p`) option.
-Once you know the nodes that you would like the model to change at you can specify these nodes on the input using the (`-m`) option. An example if you wanted two models of evolution on your tree one for the tree and one where it changes at node two, you would enter the command as follows.
-
-if the model you want for the tree is: (.33,.33,.33,.33,.33) where values correspond to (A<->C,A<->G,A<->T,C<->G,C<->T,G<->T)
-
-and the model you want to change to at node two is: (.30,.30,.20,.50,.40) where values correspond to (A<->C,A<->G,A<->T,C<->G,C<->T,G<->T)
-
-The command would be as follows
+For multimodel simulations it is easiest to print out the node labels on your tree originally using the (`-p`) option. Once you know the nodes that you would like the model to change at you can specify these nodes on the input using the (`-m`) option with the format: rates1,node#,rates2. For example, if the model you want for the tree is (.33,.33,.33,.33,.33,.33) and the model you want to change to at node two is (.3,.3,.2,.5,.4,.2):
 ```
-pxseqgen -t tree_file -o output_alignment -m A<->C,A<->G,A<->T,C<->G,C<->T,G<->T,Node#,A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
+pxseqgen -t tree_file -m .33,.33,.33,.33,.33,.33,2,.3,.3,.2,.5,.4,.2
+```
 
-pxseqgen -t tree_file -o output_alignment -m .33,.33,.33,.33,.33,.33,2,.3,.3,.2,.5,.4,.2
+* **pxssort**: sequence sorter
+
+Sort sequences by id (`-b 1`; default), reverse id (`-b 2`), length (`-b 3`), or reverse length (`-b 4`).
+```
+pxssort -s alignment_file -b 3
 ```
 
 * **pxsstat**: multinomial alignment test statistics
 
 This program calculates multinomial alignment test statistics that can be used for assessing model adequacy. Currently limited to the test statistic of Bollback (2002) MBE, but more are coming.
 ```
-pxsstat -s Sequence.fa
+pxsstat -s alignment_file
 ```
 
 * **pxstrec**: a state reconstructor
 
-This is a program that does some ancestral state reconstruction and stochastic mapping of categorical characters. There are a number of options and the requirement for a control file. The control file can be as simple as `ancstates = _all_` which designates that you want ancestral states calculated for each node. The can then be output on a tree in a file given by an `-o FILE` option. If you only want to look at particular nodes, these can be designated in the control with the `mrca = MRCANAME tipid1 tipid2`. Then the MRCANAME can be given at the `ancstates = MRCANAME`. If you would like stochastic mapping with the time in the state mapped you can use the same format but instead of `ancstates` you would put `stochtime`. For stochastic number of events `stochnumber` or ``stochnumber_any`. For the stochastic mapping, you will need to designate an MRCA or MRCAs (not _all_). Multiple can be separated by commas or spaces. You can output these to a file with `-n` for number of events, `-a` for the total number of events, and `-m` for the duration. 
+Ancestral state reconstruction and stochastic mapping of categorical characters. There are a number of options and the requirement for a control file. The control file can be as simple as `ancstates = _all_` which designates that you want ancestral states calculated for each node. The can then be output on a tree in a file given by an `-o FILE` option. If you only want to look at particular nodes, these can be designated in the control with the `mrca = MRCANAME tipid1 tipid2`. Then the MRCANAME can be given at the `ancstates = MRCANAME`. If you would like stochastic mapping with the time in the state mapped you can use the same format but instead of `ancstates` you would put `stochtime`. For stochastic number of events `stochnumber` or ``stochnumber_any`. For the stochastic mapping, you will need to designate an MRCA or MRCAs (not _all_). Multiple can be separated by commas or spaces. You can output these to a file with `-n` for number of events, `-a` for the total number of events, and `-m` for the duration. 
 ```
-pxstrec -d test.data.narrow -t test.tre -c config_stmap
-```
-
-* **pxsw**: simple smith waterman
-
-This is a simple alignment program that performs an analysis of pairwise alignments using the Smith Waterman algorithm for all sequences in the file. It has the options of outputting the scores (`-o`) and the alignment (`-a`). The program also allows the user to input a matrix or uses EDNA for DNA and Blossum62 for AA as defaults.
-```
-pxsw -s Alignment.fa
+pxstrec -d test.data.narrow -t tree_file -c config_stmap
 ```
 
-* **pxt2new**: a tree file converter to newick
+* **pxsw**: smith waterman alignment
+
+An alignment program that performs an analysis of pairwise alignments using the Smith Waterman algorithm for all sequences in the file. It has the options of outputting the scores (`-o`) and the alignment (`-a`). The program also allows the user to input a matrix or uses EDNA for DNA and Blossum62 for AA as defaults.
 ```
-pxt2new -t Tree.nex
+pxsw -s alignment_file
 ```
 
-* **pxt2nex**: a tree file converter to vanilla Nexus
+* **pxt2new**: convert a tree to newick format
 ```
-pxt2nex -t Tree.new
+pxt2new -t tree_file
+```
+
+* **pxt2nex**: convert a tree to vanilla Nexus format
+```
+pxt2nex -t tree_file
+```
+
+* **pxtcol**: annotate tree to colour edges
+
+Uses tab-delimited files of mrcas (`-m`) or nodeids (`-d`) to annotate a tree string with colouring information. Output is a Nexus-formatted tree file which can be read by FigTree.
+```
+pxtol -t tree_file -d node_annotation_file.tsv
+```
+
+* **pxtcomb**: tree combiner
+
+Combine a set of trees from one file (`-a`) into a tree from another (`-t`).
+```
+pxtcomb -t tree_file -a alternate_tree_file
 ```
 
 * **pxtgen**: exhaustive tree topology generator
 
-This program generates all possible (unrooted or rooted) topologies for `-n` taxa. Limited to <= 10 taxa.
+Generate all possible unrooted (default) or rooted (`-r`) topologies for `-n` taxa. Limited to <= 10 taxa. Report just the number of possible trees with the `-c` option.
 ```
-pxtgen -n 8
+pxtgen -n 8 -r
 ```
 
 * **pxtlate**: Translate nucleotide sequences into amino acids
 
-This program translates nucleotide sequences to their corresponding amino acid sequences. By default it uses the standard translation table, but this can be changed with the `-t` argument (use `-h` to which tables are currently available).
+Translates nucleotide sequences to their corresponding amino acid sequences. By default it uses the standard translation table, but this can be changed with the `-t` argument (use `-h` to which tables are currently available).
 ```
-pxtlate -s Sequence.fa
+pxtlate -s alignment_file
 ```
 
 * **pxtrt**: extract an induced subtree from a larger tree
@@ -322,21 +361,22 @@ pxtrt -t tree_file -n taxon_1,taxon_2,taxon_3,taxon_5,taxon_8,taxon_13,taxon_21,
 ```
 
 * **pxtscale**: Tree rescaling.
- 
-Tree rescaling by providing either scaling factor (`-s`) or root height (`-r`) (not both); the latter requires an
-ultrametric tree.
+
+Tree rescaling by providing either scaling factor (`-s`) or root height (`-r`) (not both); the latter requires an ultrametric tree.
 ```
-pxtscale -t ultra.tre -s 2.0
+pxtscale -t tree_file -s 2.0
 ```
 
-* **pxupgma**: builds a basic upgma tree
+* **pxupgma**: upgma tree inference
 
-This is a basic upgma tree builder, definitely not for making publishable trees, it's here because there are not many out there and it's useful if you're teaching a phylogenetics class and need an example of one of the earliest ways trees were made. It also prints the distance matrix to the screen.
+This is a basic upgma tree builder based on uncorrected p-distances. Definitely not for making publishable trees; it's here because there are not many out there and it's useful if you're teaching a phylogenetics class and need an example of one of the earliest ways trees were made.
 ```
-pxupgma -s drosophila.aln
+pxupgma -s alignment_file
 ```
 
-* **pxvcf2fa**: convert vcf file to fasta alignment (force to uppercase with `-u` argument)
+* **pxvcf2fa**: convert vcf file to fasta alignment
+
+Convert characters to uppercase with the `-u` argument.
 ```
 pxvcf2fa -s vcf_file
 ```
