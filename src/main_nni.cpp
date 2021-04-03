@@ -144,7 +144,7 @@ int main(int argc, char * argv[]) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree, tree_map);
-                std::cout << std:: endl << "hey mutherfuker" << std::endl;
+                std::cout << std:: endl << "hello fellow" << std::endl;
                 nni_from_tree_map(tree, tree_map);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
