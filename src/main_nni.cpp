@@ -139,7 +139,7 @@ int main(int argc, char * argv[]) {
     if (ft == 1) { // newick. easy
         Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
                 if (!is_binary(tree)) {
                     std::cerr << "Error: this only works for binary trees. Exiting." << std::endl;

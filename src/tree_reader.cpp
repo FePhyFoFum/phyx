@@ -429,6 +429,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
  * this is simple as each line is a tree
  */
 // adding a simple check: if line is empty, assume we're done
+// TODO: deal with trees with internal line breaks (phylip does this?)
 Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring, bool * going) {
     std::string tline;
     if (retstring.size() > 0) {
@@ -438,11 +439,30 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         (*going) = false;
         return NULL;
     }
+    trim_spaces(tline);
     if (tline.size() == 0) {
         //std::cout << "You've got yerself an empty line, there." << std::endl;
         (*going) = false;
         return NULL;
     }
+    
+    if (tline.back() != ';') {
+        bool done = false;
+        std::string terp = "";
+        while (!done) {
+            if (!getline(stri, terp)) {
+                std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting." << std::endl;
+                exit(1);
+            } else {
+                trim_spaces(terp);
+                tline += terp;
+                if (tline.back() == ';') {
+                    done = true;
+                }
+            }
+        }
+    }
+    
     Tree * tree;
     TreeReader tr;
     tree = tr.readTree(tline);
