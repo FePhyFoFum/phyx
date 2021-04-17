@@ -11,19 +11,19 @@
 
 class Node {
 private:
-    double BL; // branch length, points to parent
-    double height; // could be from tip or from root
-    double depth; // not being used
-    int number;
-    std::string name;
-    Node * parent;
+    double BL_; // branch length, points to parent
+    double height_; // could be from tip or from root. need to be consistent
+    double depth_; // not being used
+    int number_;
+    std::string name_;
+    Node * parent_;
     // children are _immediate_ children, not all descendants
-    std::vector<Node *> children;
-    std::map<std::string, NodeObject *> assoc;
-    std::map<std::string, std::vector<Superdouble> > assocDV;
-    std::vector<BranchSegment> * segs;
-    std::string comment;
-    bool painted;
+    std::vector<Node *> children_;
+    std::map<std::string, NodeObject *> assoc_;
+    std::map<std::string, std::vector<Superdouble> > assocDV_;
+    std::vector<BranchSegment> * segs_;
+    std::string comment_;
+    bool painted_;
 
 public:
     Node ();

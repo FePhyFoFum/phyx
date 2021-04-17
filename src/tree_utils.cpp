@@ -212,6 +212,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);
     if (debug) std::cout << "tree is rooted: " << std::boolalpha << rooted << std::endl;
+    // internal nodes
     for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         Node * tnd = tr->getInternalNode(i);
         if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
@@ -239,6 +240,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
         }
         tree_map[tnd] = nds;
     }
+    // terminal nodes
     for (int i = 0; i < tr->getExternalNodeCount(); i++) {
         std::vector<Node *> nds;
         Node * tnd = tr->getExternalNode(i);
@@ -256,7 +258,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
         }
         tree_map[tnd] = nds;
     }
-    // print map<Node*, vector<Node*> >
+    // print map<Node*, std::vector<Node*> >
     if (debug) {
         std::cout << std::endl << "TREE MAP:" << std::endl;
         for (std::map<Node*, std::vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); it++) {
@@ -271,19 +273,32 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
 }
 
 
+// hrm i believe this is fundamentally flawed. start from scratch
 void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
     bool debug = true;
     bool success = false;
+    if (debug) std::cout << "treemap is of size: " << tree_map.size() << std::endl;
     while (!success) {
         std::map<Node*, std::vector<Node*> >::iterator item = tree_map.begin();
+        // this is dumb. instead use: sample_without_replacement(numTotal, numSample)
         int r = random_int_range(0, tree_map.size());
+        if (debug) {
+            std::cout << "r1: tree_map.size() = " << tree_map.size() << std::endl;
+            std::cout << "r1 = " << r << std::endl;
+        }
         
         std::advance( item, r );
         Node * first = (*item).first;
-        if (debug) std::cout << std::endl << "Node first (" << r << "): " << first->getName() << std::endl;
         
         // ack. 'middle' is not necessarily in the middle at all
         int r2 = random_int_range(0,(*item).second.size());
+        
+        if (debug) {
+            std::cout << std::endl << "Node first (" << r << "): " << first->getName() << std::endl;
+            std::cout << "  r2: (*item).second.size() = " << (*item).second.size() << std::endl;
+            std::cout << "  r2 = " << r2 << std::endl;
+        }
+        
         item = tree_map.begin();
         std::advance( item, r2 );
         Node * middle = (*item).first;
@@ -291,17 +306,24 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
             if (debug) std::cout << "Bailing because first == middle..." << std::endl;
             continue;
         }
-        if (debug) std::cout << "Node middle (" << r2 << "): " << middle->getName() << std::endl;
         
         // furthermore, 'second' need not be anywhere near 'first' or 'middle
         int r3 = random_int_range(0,(*item).second.size());
+        
+        if (debug) {
+            std::cout << "Node middle (" << r2 << "): " << middle->getName() << std::endl;
+            std::cout << "  r3: (*item).second.size() = " << (*item).second.size() << std::endl;
+            std::cout << "  r3 = " << r2 << std::endl;
+        }
+        
         item = tree_map.begin();
         std::advance( item, r3 );
         Node * second = (*item).first;
         
         if (debug) std::cout << "Node second (" << r3 << "): " << second->getName() << std::endl;
         
-        //TODO: need to fix what happens when the parent is the root, seems to break down
+        // TODO: need to fix what happens when the parent is the root, seems to break down
+        // could also check this above instead of all at once
         if (first == second || second == middle || first == tr->getRoot()
             || second == tr->getRoot() || first->getParent() == tr->getRoot()
             || second->getParent() == tr->getRoot()) {
@@ -641,7 +663,7 @@ std::vector<std::string> get_tip_labels (Tree * tr) {
 }
 
 
-// remove all knuckles in a tree
+// remove all knuckles (2-degree nodes) in a tree
 void deknuckle_tree (Tree * tree) {
     for (int i = 0; i < tree->getInternalNodeCount(); i++) {
         Node * tnd = tree->getInternalNode(i);

@@ -141,10 +141,17 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (tree != NULL) {
+                if (!is_binary(tree)) {
+                    std::cerr << "Error: this only works for binary trees. Exiting." << std::endl;
+                    exit(0);
+                }
+                if (is_rooted(tree)) {
+                    std::cerr << "Error: this only works for unrooted trees. Exiting." << std::endl;
+                    exit(0);
+                }
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree, tree_map);
-                std::cout << std:: endl << "hello fellow" << std::endl;
                 nni_from_tree_map(tree, tree_map);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;

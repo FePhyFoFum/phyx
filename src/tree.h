@@ -10,16 +10,16 @@
 
 class Tree {
 private:
-    Node * root;
-    std::vector<Node *> nodes;
-    std::vector<Node *> internalNodes;
-    std::vector<Node *> externalNodes;
-    std::map<std::string, Node*> name_node_map;
-    int internalNodeCount;
-    int externalNodeCount;
-    bool edgeLengths;
-    bool nodeAnnotations;
-    bool internalNodeNames;
+    Node * root_;
+    std::vector<Node *> nodes_;
+    std::vector<Node *> internal_nodes_;
+    std::vector<Node *> external_nodes_;
+    std::map<std::string, Node*> name_node_map_;
+    int internal_node_count_;
+    int external_node_count_;
+    bool edge_lengths_;
+    bool node_annotations_;
+    bool internal_node_names_;
     
     void processReRoot (Node * node);
     void exchangeInfo (Node * node1, Node * node2);

@@ -52,6 +52,7 @@ void check_inout_streams_identical (char * in, char * out) {
 
 
 // catch exception (atoi does not do this)
+// arg is passed for error messages only
 int string_to_int (const std::string& in, const std::string& arg) {
     int res = 0;
     try {

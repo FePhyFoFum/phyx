@@ -10,33 +10,33 @@
 
 
 Tree::Tree () {
-    root = NULL;
+    root_ = NULL;
     processRoot();
 }
 
 
 Tree::Tree (Node * inroot) {
-    root = inroot;
+    root_ = inroot;
     processRoot();
 }
 
 
 void Tree::addExternalNode (Node * tn) {
-    externalNodes.push_back(tn);
-    externalNodeCount++;
-    nodes.push_back(tn);
+    external_nodes_.push_back(tn);
+    external_node_count_++;
+    nodes_.push_back(tn);
 }
 
 
 void Tree::addInternalNode (Node * tn) {
-    internalNodes.push_back(tn);
-    internalNodeCount++;
-    nodes.push_back(tn);
+    internal_nodes_.push_back(tn);
+    internal_node_count_++;
+    nodes_.push_back(tn);
 }
 
 
 Node * Tree::getExternalNode (int num) {
-    return externalNodes.at(num);
+    return external_nodes_.at(num);
 }
 
 
@@ -45,9 +45,9 @@ Node * Tree::getExternalNode (int num) {
  */
 Node * Tree::getExternalNode (std::string name) {
     Node * ret = NULL;
-    for (int i = 0; i < externalNodeCount; i++) {
-        if (externalNodes.at(i)->getName() == name) {
-            ret = externalNodes.at(i);
+    for (int i = 0; i < external_node_count_; i++) {
+        if (external_nodes_.at(i)->getName() == name) {
+            ret = external_nodes_.at(i);
         }
     }
     return ret;
@@ -55,7 +55,7 @@ Node * Tree::getExternalNode (std::string name) {
 
 
 Node * Tree::getInternalNode (int num) {
-    return internalNodes.at(num);
+    return internal_nodes_.at(num);
 }
 
 
@@ -64,9 +64,9 @@ Node * Tree::getInternalNode (int num) {
  */
 Node * Tree::getInternalNode (std::string& name) {
     Node * ret = NULL;
-    for (int i = 0; i < internalNodeCount; i++) {
-        if (internalNodes.at(i)->getName() == name) {
-            ret = internalNodes.at(i);
+    for (int i = 0; i < internal_node_count_; i++) {
+        if (internal_nodes_.at(i)->getName() == name) {
+            ret = internal_nodes_.at(i);
         }
     }
     return ret;
@@ -74,21 +74,21 @@ Node * Tree::getInternalNode (std::string& name) {
 
 
 int Tree::getExternalNodeCount () {
-    return externalNodeCount;
+    return external_node_count_;
 }
 
 
 int Tree::getExtantNodeCount () {
     setHeightFromRootToNodes();
     double largest = 0;
-    for (int i = 0; i < externalNodeCount; i++) {
+    for (int i = 0; i < external_node_count_; i++) {
         double th = getExternalNode(i)->getHeight();
         if (th > largest) {
             largest = th;
         }
     }
     int count = 0;
-    for (int i = 0; i < externalNodeCount; i++) {
+    for (int i = 0; i < external_node_count_; i++) {
         double th = getExternalNode(i)->getHeight();
         if (fabs(th-largest) < 0.00001) {
             count += 1;
@@ -100,71 +100,71 @@ int Tree::getExtantNodeCount () {
 
 // NOTE: this includes the root
 int Tree::getInternalNodeCount () {
-    return internalNodeCount;
+    return internal_node_count_;
 }
 
 
 Node * Tree::getNode (int num) {
-    return nodes.at(num);
+    return nodes_.at(num);
 }
 
 
 Node * Tree::getNode (std::string& name) {
     Node * ret = NULL;
-    if (name_node_map.size() == 0) {
-        for (unsigned int i = 0; i < nodes.size(); i++) {
-            if (nodes.at(i)->getName().size() > 0)
-                name_node_map[nodes.at(i)->getName()] = nodes.at(i);
+    if (name_node_map_.size() == 0) {
+        for (unsigned int i = 0; i < nodes_.size(); i++) {
+            if (nodes_.at(i)->getName().size() > 0)
+                name_node_map_[nodes_.at(i)->getName()] = nodes_.at(i);
         }
     }
-    if (name_node_map.count(name) != 0)
-        ret = name_node_map[name];
+    if (name_node_map_.count(name) != 0)
+        ret = name_node_map_[name];
     return ret;
 }
 
 
 int Tree::getNodeCount () {
-    return nodes.size();
+    return nodes_.size();
 }
 
 
 Node * Tree::getRoot () {
-    return root;
+    return root_;
 }
 
 
 void Tree::setRoot (Node * inroot) {
-    root = inroot;
+    root_ = inroot;
 }
 
 
 void Tree::setEdgeLengthsPresent (bool res) {
-    edgeLengths = res;
+    edge_lengths_ = res;
 }
 
 
 void Tree::setNodeAnnotationsPresent (bool res) {
-    nodeAnnotations = res;
+    node_annotations_ = res;
 }
 
 
 bool Tree::hasNodeAnnotations () {
-    return nodeAnnotations;
+    return node_annotations_;
 }
 
 
 void Tree::setNodeNamesPresent (bool res) {
-    internalNodeNames = res;
+    internal_node_names_ = res;
 }
 
 
 bool Tree::hasNodeNames () {
-    return internalNodeNames;
+    return internal_node_names_;
 }
 
 
 bool Tree::hasEdgeLengths () {
-    return edgeLengths;
+    return edge_lengths_;
 }
 
 
@@ -186,7 +186,7 @@ bool Tree::reRoot (Node * inroot) {
         tritomyRoot(NULL); // not sure if this should actually be the inroot instead of NULL
     }
     //std::cout << this->root->getNewick(false) << std::endl;
-    if (root == inroot) {
+    if (root_ == inroot) {
         std::cerr << "you asked to root at the current root" << std::endl;
         return false;
     } else {
@@ -212,15 +212,15 @@ bool Tree::reRoot (Node * inroot) {
 void Tree::removeRootEdge () {
     bool going = true; // multiple stems? nefarious...
     while (going) {
-        if (root->getChildCount() == 1) {
+        if (root_->getChildCount() == 1) {
             /*
             1. grab child
             2. set child as new root
             3. delete old root
             4. reprocess tree?
             */
-            Node * curr = root->getChild(0);
-            delete root;
+            Node * curr = root_->getChild(0);
+            delete root_;
             setRoot(curr);
             processRoot();
         } else {
@@ -232,7 +232,7 @@ void Tree::removeRootEdge () {
 
 
 void Tree::duplicateRootSupport () {
-    std::vector<Node*> kids = root->getChildren();
+    std::vector<Node*> kids = root_->getChildren();
     bool supfound = false;
     std::vector<std::string> sups;
     unsigned int numnodes = 0; // want to guard against when only 1 outgroup
@@ -387,7 +387,7 @@ Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
 
 
 void Tree::setHeightFromRootToNodes () {
-    setHeightFromRootToNode(*this->root, this->root->getBL());
+    setHeightFromRootToNode(*this->root_, this->root_->getBL());
 }
 
 
@@ -409,7 +409,7 @@ void Tree::setHeightFromRootToNode (Node& inNode, double newHeight) {
  * only makes sense for ultrametric trees
  */
 void Tree::setHeightFromTipToNodes () {
-    for (int i = 0; i < externalNodeCount; i++) {
+    for (int i = 0; i < external_node_count_; i++) {
         double curh = 0.0;
         Node * cur = this->getExternalNode(i);
         cur->setHeight(curh);
@@ -428,15 +428,15 @@ void Tree::setHeightFromTipToNodes () {
  * private
  */
 void Tree::processRoot () {
-    nodes.clear();
-    internalNodes.clear();
-    externalNodes.clear();
-    internalNodeCount = 0;
-    externalNodeCount = 0;
-    if (&root == NULL) {
+    nodes_.clear();
+    internal_nodes_.clear();
+    external_nodes_.clear();
+    internal_node_count_ = 0;
+    external_node_count_ = 0;
+    if (&root_ == NULL) {
         return;
     }
-    postOrderProcessRoot(root);
+    postOrderProcessRoot(root_);
 }
 
 
@@ -493,10 +493,10 @@ void Tree::postOrderProcessRoot (Node * node) {
     }
     if (node->isExternal()) {
         addExternalNode(node);
-        node->setNumber(externalNodeCount);
+        node->setNumber(external_node_count_);
     } else {
         addInternalNode(node);
-        node->setNumber(internalNodeCount);
+        node->setNumber(internal_node_count_);
     }
 }
 
@@ -537,7 +537,7 @@ void Tree::pruneExternalNode (Node * node) {
                 }
             }
         } else {
-            root = other;
+            root_ = other;
             //std::cout << "i am here apparently..." << std::endl;
         }
     } else {
@@ -618,10 +618,10 @@ Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
  */
 
 Tree::~Tree () {
-    for (int i = 0; i < internalNodeCount; i++) {
+    for (int i = 0; i < internal_node_count_; i++) {
         delete getInternalNode(i);
     }
-    for (int i = 0; i < externalNodeCount; i++) {
+    for (int i = 0; i < external_node_count_; i++) {
         delete getExternalNode(i);
     }
 }
