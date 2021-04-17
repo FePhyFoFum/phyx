@@ -385,7 +385,6 @@ pxvcf2fa -s vcf_file
 * **pxnprs**: calculate a time calibrated tree with NPRS
 * **pxtrsq**: tree-seq; remove from tree and alignment taxa not found in both (JWB)
 * **pxgbdb**: a basic genbank database creator
-* **pxcomp**: a composition homogeneity test (JWB)
 * **pxtdist**: tree distance calculator (JWB)
 
 # Programs in planning
