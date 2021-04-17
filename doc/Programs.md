@@ -346,7 +346,7 @@ Generate all possible unrooted (default) or rooted (`-r`) topologies for `-n` ta
 pxtgen -n 8 -r
 ```
 
-* **pxtlate**: Translate nucleotide sequences into amino acids
+* **pxtlate**: translate nucleotide sequences into amino acids
 
 Translates nucleotide sequences to their corresponding amino acid sequences. By default it uses the standard translation table, but this can be changed with the `-t` argument (use `-h` to which tables are currently available).
 ```
@@ -360,7 +360,7 @@ By specifying a list of taxa, extract the induced subtree from a more comprehens
 pxtrt -t tree_file -n taxon_1,taxon_2,taxon_3,taxon_5,taxon_8,taxon_13,taxon_21,taxon_34,taxon_55,taxon_89
 ```
 
-* **pxtscale**: Tree rescaling.
+* **pxtscale**: tree rescaling
 
 Tree rescaling by providing either scaling factor (`-s`) or root height (`-r`) (not both); the latter requires an ultrametric tree.
 ```

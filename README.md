@@ -15,6 +15,62 @@ Some of the sequence comparison operations use the very nice [edlib library](htt
 ## Documentation
 Documentation resides in several locations (all slightly out of date, alas). A [pdf manual](https://github.com/FePhyFoFum/phyx/tree/master/doc) is available in the `doc/` directory. A slightly-less-out-of-date list of the current programs with examples can be found [on the wiki](https://github.com/FePhyFoFum/phyx/wiki/Program-list). Help for individual programs can be obtained with either `PROGRAM -h` or (if installed, see below) `man PROGRAM`. See a brief overview [here](https://twitter.com/i/moments/1067839564927008769).
 
+Still, there are a whack of programs, so it can be difficult to remember the name of which program does what. Here is a quick reference:
+
+Program | Short description
+:--- | :---
+pxaa2cdn | produce a codon alignment from and AA alignment and unaligned nucleotides
+pxbdfit | diversification model inference
+pxbdsim | a birth death simulator
+pxboot | sequence alignment resampling (bootstrap or jackknife)
+pxbp | prints out bipartitions that make up the tree
+pxcat | an alignment concatenator
+pxclsq | clean sites based on missing or ambiguous data
+pxcltr | general tree cleaner
+pxcolt | collapse poorly-supported edges
+pxcomp | a composition homogeneity test
+pxcomp | compositional homogeneity test
+pxconsq | a consensus sequence constructor for an alignment
+pxcontrates | a brownian and ou estimator
+pxfqfilt | a fastq filter given a mean quality
+pxlog | a MCMC log manipulator/concatenator
+pxlssq | information about seqs in a file (like ls but for an alignment file)
+pxlstr | information about trees in a file (like ls but for a tree file)
+pxmono | monophyly tester
+pxmrca | information about an mrca
+pxmrcacut | a mrca cutter
+pxmrcaname | a mrca label maker
+pxnj | neighbour-joining tree inference
+pxnni | a nni changer
+pxnw | needleman-wunsch alignment
+pxpoly | a polytomy sampler that generates a binary tree
+pxrecode | a sequence alignment recoder
+pxrevcomp | a reverse complementor
+pxrls | taxon relabelling for sequences
+pxrlt | taxon relabelling for trees
+pxrmk | remove two-degree nodes from a tree
+pxrms | pruning seqs (like rm but for seqs)
+pxrmt | pruning trees (like rm but for trees)
+pxrr | rerooting and unrooting trees
+pxs2fa | convert an alignment to fasta format
+pxs2nex | convert an alignment to nexus format
+pxs2phy | convert an alignment to phylip format
+pxseqgen | Sequence simulation program
+pxssort | sequence sorter
+pxsstat | multinomial alignment test statistics
+pxstrec | a state reconstructor
+pxsw | smith waterman alignment
+pxt2new | convert a tree to newick format
+pxt2nex | convert a tree to vanilla Nexus format
+pxtcol | annotate tree to colour edges
+pxtcomb | tree combiner
+pxtgen | exhaustive tree topology generator
+pxtlate | translate nucleotide sequences into amino acids
+pxtrt | extract an induced subtree from a larger tree
+pxtscale | tree rescaling
+pxupgma | upgma tree inference
+pxvcf2fa | convert vcf file to fasta alignment
+
 ## Problems after updating (git pull)
 If you have been using phyx and things are not working after a recent pull, this is because of a change in configuration. Please do the following in the `src` directory to remedy the situation:
 
