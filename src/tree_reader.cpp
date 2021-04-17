@@ -440,10 +440,22 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         return NULL;
     }
     trim_spaces(tline);
+    
+    // hrm do we want to allow empty lines in between trees? i think so?
     if (tline.size() == 0) {
         //std::cout << "You've got yerself an empty line, there." << std::endl;
-        (*going) = false;
-        return NULL;
+        bool done = false;
+        while (!done) {
+            if (!getline(stri, tline)) {
+                (*going) = false;
+                return NULL;
+            } else {
+                trim_spaces(tline);
+                 if (tline.size() != 0) {
+                     done = true;
+                 }
+            }
+        }
     }
     
     if (tline.back() != ';') {
