@@ -275,7 +275,7 @@ int test_tree_filetype (std::string filen) {
  * returns in the order above, 0, 1, 666 --- no filetype recognized
  */
 int test_tree_filetype_stream (std::istream& stri, std::string& retstring) {
-    if (!getline(stri, retstring)) {
+    if (!getline_safe(stri, retstring)) {
         std::cout << "ERROR: end of file too soon" << std::endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
@@ -435,7 +435,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
     if (retstring.size() > 0) {
         tline = retstring;
         retstring = "";
-    } else if (!getline(stri, tline)) {
+    } else if (!getline_safe(stri, tline)) {
         (*going) = false;
         return NULL;
     }
@@ -446,7 +446,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         //std::cout << "You've got yerself an empty line, there." << std::endl;
         bool done = false;
         while (!done) {
-            if (!getline(stri, tline)) {
+            if (!getline_safe(stri, tline)) {
                 (*going) = false;
                 return NULL;
             } else {
@@ -462,7 +462,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         bool done = false;
         std::string terp = "";
         while (!done) {
-            if (!getline(stri, terp)) {
+            if (!getline_safe(stri, terp)) {
                 std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting." << std::endl;
                 exit(1);
             } else {

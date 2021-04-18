@@ -30,6 +30,8 @@ bool check_comment_line (const std::string& line);
 bool is_number (const std::string&);
 int get_longest_label (std::vector<std::string>& labels);
 
+std::istream& getline_safe(std::istream& is, std::string& t);
+
 int factorial (int n);
 int doublefactorial (int n);
 
