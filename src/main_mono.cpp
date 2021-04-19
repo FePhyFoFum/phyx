@@ -13,6 +13,7 @@
 #include "tree_utils.h"
 #include "log.h"
 #include "constants.h"
+#include "aa2cdn.h"
 
 extern std::string PHYX_CITATION;
 
@@ -39,7 +40,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxmono 1.1\nCopyright (C) 2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
+std::string versionline("pxmono 1.1\nCopyright (C) 2019-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -134,7 +135,9 @@ int main(int argc, char * argv[]) {
         std::string tline;
         while (getline(nfstr, tline)) {
             trim_spaces(tline);
-            names.push_back(tline);
+            if (!tline.empty()) {
+                names.push_back(tline);
+            }
         }
         nfstr.close();
     } else {
