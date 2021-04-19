@@ -152,44 +152,58 @@ int main(int argc, char * argv[]) {
     }
     inmrca.close();
     
-    
-    
-    
-    // this does not use the conventional tree reader functions
-    // update this
-    
-    
-    
-    
-    
-    
-    // collect tree(s)
-    std::vector<std::string> lines;
-    std::string line;
-    while (getline_safe(*pios, line)) {
-        if (line.empty()) {
-            continue;
-        }
-        lines.push_back(line);
+    std::string retstring;
+    int ft = test_tree_filetype_stream(*pios, retstring);
+    if (ft != 0 && ft != 1) {
+        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
+        exit(0);
     }
     
-    for (unsigned int i = 0; i < lines.size(); i++) {
-        Tree * tree = tr.readTree(lines[i]);
-        //std::cout << tree->getExternalNodeCount() << std::endl;
-
-        std::map<std::string, std::vector<std::string> >::iterator it;
-        for (it = mrcas.begin(); it != mrcas.end(); it++) {
-            //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
-            if (!check_names_against_tree(tree, (*it).second)) {
-                // allow more flexibility here
-                std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
-                exit(0);
+    bool going = true;
+    std::map<std::string, std::vector<std::string> >::iterator it;
+    
+    if (ft == 1) {
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (tree != NULL) {
+                for (it=mrcas.begin(); it != mrcas.end(); it++) {
+                    //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
+                    if (!check_names_against_tree(tree, (*it).second)) {
+                        // allow more flexibility here
+                        std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    Node * nd = tree->getMRCA((*it).second);
+                    bool bl = has_branchlengths(tree);
+                    (*poos) << nd->getNewick(bl) << ";" << std::endl;
+                }
+                delete tree;
             }
-            Node * nd = tree->getMRCA((*it).second);
-            bool bl = has_branchlengths(tree);
-            (*poos) << nd->getNewick(bl) << ";" << std::endl;
         }
-        delete tree;
+    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+        std::map<std::string, std::string> translation_table;
+        bool ttexists;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+        Tree * tree;
+        while (going) {
+            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                &translation_table, &going);
+            if (tree != NULL) {
+                for (it=mrcas.begin(); it != mrcas.end(); it++) {
+                    //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
+                    if (!check_names_against_tree(tree, (*it).second)) {
+                        // allow more flexibility here
+                        std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
+                        exit(0);
+                    }
+                    Node * nd = tree->getMRCA((*it).second);
+                    bool bl = has_branchlengths(tree);
+                    (*poos) << nd->getNewick(bl) << ";" << std::endl;
+                }
+                delete tree;
+            }
+        }
     }
     
     if (fileset) {
