@@ -11,6 +11,7 @@
 #include "vector_node_object.h"
 #include "tree.h"
 #include "utils.h"
+#include "tree_utils.h"
 #include "log.h"
 #include "constants.h"
 
@@ -159,6 +160,12 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != NULL) {
                 for (it=mrcas.begin(); it != mrcas.end(); it++) {
+                    //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
+                    if (!check_names_against_tree(tree, (*it).second)) {
+                        // allow more flexibility here
+                        std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
+                        exit(0);
+                    }
                     Node * nd = tree->getMRCA((*it).second);
                     (*poos) << (*it).first << " " << nd->get_num_leaves() << " "
                         << nd->getName() << std::endl;
@@ -176,6 +183,12 @@ int main(int argc, char * argv[]) {
                 &translation_table, &going);
             if (tree != NULL) {
                 for (it=mrcas.begin(); it != mrcas.end(); it++) {
+                    //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
+                    if (!check_names_against_tree(tree, (*it).second)) {
+                        // allow more flexibility here
+                        std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
+                        exit(0);
+                    }
                     Node * nd = tree->getMRCA((*it).second);
                     (*poos) << (*it).first << " " << nd->get_num_leaves() << " "
                         << nd->getName() << std::endl;
