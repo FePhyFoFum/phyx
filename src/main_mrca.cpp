@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
     std::ifstream inmrca(mrcaf);
     std::string mrcaline;
     std::map<std::string, std::vector<std::string> > mrcas;
-    while (getline(inmrca, mrcaline)) {
+    while (getline_safe(inmrca, mrcaline)) {
         if (mrcaline.empty()) {
             continue;
         }

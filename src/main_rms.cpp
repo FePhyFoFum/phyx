@@ -144,8 +144,11 @@ int main(int argc, char * argv[]) {
     } else if (namefileset == true) {
         std::ifstream nfstr(namesfc);
         std::string tline;
-        while (getline(nfstr, tline)) {
+        while (getline_safe(nfstr, tline)) {
             trim_spaces(tline);
+            if (tline.empty()) {
+                continue;
+            }
             names.push_back(tline);
         }
         nfstr.close();

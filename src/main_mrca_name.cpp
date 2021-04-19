@@ -146,7 +146,7 @@ int main(int argc, char * argv[]) {
     if (mrcaset) {
         std::ifstream inmrca(mrcaf);
         std::string mrcaline;
-        while (getline(inmrca, mrcaline)) {
+        while (getline_safe(inmrca, mrcaline)) {
             if (mrcaline.empty()) {
                 continue;
             }

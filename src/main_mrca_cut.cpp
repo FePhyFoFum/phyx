@@ -138,7 +138,7 @@ int main(int argc, char * argv[]) {
     std::ifstream inmrca(mrcaf);
     std::string mrcaline;
     std::map<std::string, std::vector<std::string> > mrcas;
-    while (getline(inmrca, mrcaline)) {
+    while (getline_safe(inmrca, mrcaline)) {
         if (mrcaline.empty()) {
             continue;
         }
@@ -166,7 +166,10 @@ int main(int argc, char * argv[]) {
     // collect tree(s)
     std::vector<std::string> lines;
     std::string line;
-    while (getline(*pios, line)) {
+    while (getline_safe(*pios, line)) {
+        if (line.empty()) {
+            continue;
+        }
         lines.push_back(line);
     }
     
