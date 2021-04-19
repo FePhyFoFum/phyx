@@ -140,7 +140,7 @@ void SequenceSampler::parse_partitions (std::string& partf) {
     std::string line;
     std::ifstream infile(partf.c_str());
     
-    while (getline(infile, line)) {
+    while (getline_safe(infile, line)) {
         if (line.size() < 1) {
             continue;
         } else {
@@ -152,6 +152,7 @@ void SequenceSampler::parse_partitions (std::string& partf) {
     infile.close();
     
     num_partitions_ = (int)partitions_.size();
+    //std::cout << "Found " << num_partitions_ << " partitions." << std::endl;
     calculate_num_partitioned_sites();
     
     // do error-checking here:

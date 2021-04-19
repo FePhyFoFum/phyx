@@ -13,7 +13,7 @@
 #include "utils.h"
 
 
-// for printing purposes
+// for printing purposes (and to remind programmers what ints refer to)
 std::map<int, std::string> filetype_map = {
    {0, "nexus"},
    {1, "phylip"},
@@ -31,9 +31,9 @@ std::string get_filetype_string (const int& ft) {
  * tests the filetype by checking the first string and guessing based on
  * # (nexus), num (phylip), > (fasta), @ (fastq)
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
- */
+*/
 int test_seq_filetype_stream(std::istream& stri, std::string& retstring) {
-    if (!getline(stri, retstring)) {
+    if (!getline_safe(stri, retstring)) {
         std::cout << "ERROR: end of file too soon" << std::endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
@@ -62,7 +62,7 @@ int test_seq_filetype_stream(std::istream& stri, std::string& retstring) {
  * returns the next string in the getline if there is one
  * TODO: nexus interleaved is not going to work here
  * TODO: skip Nexus comment lines
- */
+*/
 bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& retstring, Sequence& seq) {
     std::string tline;
     if (ftype == 0) { // nexus
@@ -72,7 +72,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         //checks for beginning of char by MATRIX
         if (retstring.size() > 0 && retstring[0] == '#') {
             bool found = false;
-            while (getline(stri, tline)) {
+            while (getline_safe(stri, tline)) {
                 trim_spaces(tline);
                 tline = string_to_upper(tline);
                 if (tline.compare("MATRIX") == 0) {
@@ -85,10 +85,10 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             }
             retstring = "";
         }
-        getline(stri, tline);
+        getline_safe(stri, tline);
         trim_spaces(tline);
         while (tline.size() == 0  || check_comment_line(tline)) {
-            if (getline(stri, tline)) {
+            if (getline_safe(stri, tline)) {
                 trim_spaces(tline);
             } else {
                 return false;
@@ -111,7 +111,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         } else {
             return false;
         }
-    } else if (ftype == 1) {
+    } else if (ftype == 1) { // phylip
         std::vector<std::string> tokens;
         std::string del(" \t");
         std::string tline;
@@ -121,7 +121,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
                 if (is_number(tokens[0])) {
-                    getline(stri, tline);
+                    getline_safe(stri, tline);
                 } else {
                     tline = retstring;
                 }
@@ -129,7 +129,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             retstring = "";
         }
         if (tline.size() == 0) {
-            if (!getline(stri, tline)) {
+            if (!getline_safe(stri, tline)) {
                 return false;
             }
             if (tline.size() == 0) {
@@ -169,7 +169,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 tline = retstring;
                 retstring = "";
             } else {
-                if (!getline(stri, tline)) {
+                if (!getline_safe(stri, tline)) {
                     trim_spaces(curseq);
                     seq.set_sequence(curseq);
                     return false;
@@ -191,21 +191,21 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 curseq.append(tline);
             }
         }
-    } else if (ftype == 3) {//fastq assumes a 33 offset for now
+    } else if (ftype == 3) { // fastq assumes a 33 offset for now
         std::string line1, line2, line3, line4;
         if (retstring.size() > 0) {
             line1 = retstring;
             retstring = "";
-        } else if (!getline(stri, line1)) {
+        } else if (!getline_safe(stri, line1)) {
             return false;
         }
-        if (!getline(stri, line2)) {
+        if (!getline_safe(stri, line2)) {
             return false;
         }
-        if (!getline(stri, line3)) {
+        if (!getline_safe(stri, line3)) {
             return false;
         }
-        if (!getline(stri, line4)) {
+        if (!getline_safe(stri, line4)) {
             return false;
         }
         seq.set_id(line1.substr(1, line1.size()-1));
@@ -227,7 +227,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
     int totcount = 0;
     int loopcount = 0;
     std::string del(" \t");
-    while (getline(stri, tline)) {
+    while (getline_safe(stri, tline)) {
         trim_spaces(tline);
         if (tline.size() != 0) {
             if (check_nexus_comment(tline)) {
@@ -276,9 +276,10 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
  * # (nexus), num (phylip), > (fasta)
  * TODO: need to add csv
  * returns in the order above, 0, 1, 2, 3, 666 -- no filetype recognized
- */
+*/
+// *** this is only used by pxconrates ***
 int test_char_filetype_stream(std::istream& stri, std::string& retstring) {
-    if (!getline(stri, retstring)) {
+    if (!getline_safe(stri, retstring)) {
         std::cout << "ERROR: end of file too soon" << std::endl;
     }
     int ret = 666; // if you get 666, there is no filetype set
@@ -306,7 +307,8 @@ int test_char_filetype_stream(std::istream& stri, std::string& retstring) {
  * returns the next string in the getline if there is one
  * TODO: nexus 
  * TODO: decide if this should just be merged with the above reader
- */
+*/
+// *** this is only used by pxconrates ***
 bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string& retstring, Sequence& seq) {
     std::string tline;
     if (ftype == 1) { // phylip
@@ -320,7 +322,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
                 if (is_number(tokens[0])) {
-                    getline(stri, tline);
+                    getline_safe(stri, tline);
                 } else {
                     tline = retstring;
                 }
@@ -328,7 +330,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             retstring = "";
         }
         if (tline.size() == 0) {
-            if (!getline(stri, tline)) {
+            if (!getline_safe(stri, tline)) {
                 return false;
             }
         }
@@ -358,7 +360,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                 tline = retstring;
                 retstring = "";
             } else {
-                if (!getline(stri, tline)) {
+                if (!getline_safe(stri, tline)) {
                     tokens.clear();
                     tokenize(curseq, tokens, del);
                     for (unsigned int i = 0; i < tokens.size(); i++) {
@@ -405,10 +407,10 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
 
 
 // overloaded stream version
-void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool& interleave) {
-    num_taxa = numChar = 0;
+void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, bool& interleave) {
+    num_taxa = num_char = 0;
     std::string tline;
-    while (getline(stri, tline)) {
+    while (getline_safe(stri, tline)) {
         if (!tline.empty()) {
             // check for comments. could be anywhere
             if (check_nexus_comment(tline)) {
@@ -429,7 +431,7 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool
                         num_taxa = stoi(searchtokens[i]);
                     } else if (searchtokens[i].substr(0, 4) == "NCHA") {
                         i++;
-                        numChar = stoi(searchtokens[i]);
+                        num_char = stoi(searchtokens[i]);
                     }
                 }
             } else if (searchtokens[0] == "FORMAT") {
@@ -466,16 +468,16 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& numChar, bool
 // same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
-void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& numChar,
+void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num_char,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing) {
-    num_taxa = numChar = 0;
+    num_taxa = num_char = 0;
     alpha_name = symbols = "";
     // set defaults, in case not explicitly stated
     gap = '-';
     missing = '?';
     
     std::string tline;
-    while (getline(stri, tline)) {
+    while (getline_safe(stri, tline)) {
         if (!tline.empty()) {
             // check for comments. could be anywhere
             if (check_nexus_comment(tline)) {
@@ -496,7 +498,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
                         num_taxa = stoi(searchtokens[i]);
                     } else if (searchtokens[i].substr(0, 4) == "NCHA") {
                         i++;
-                        numChar = stoi(searchtokens[i]);
+                        num_char = stoi(searchtokens[i]);
                     }
                 }
             } else if (searchtokens[0] == "FORMAT") {
@@ -587,10 +589,10 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
 }
 
 
-void get_phylip_dimensions (std::string head, int& num_taxa, int& numChar) {
+void get_phylip_dimensions (std::string head, int& num_taxa, int& num_char) {
     std::vector<std::string> header = tokenize(head);
     num_taxa = stoi(header[0]);
-    numChar = stoi(header[1]);
+    num_char = stoi(header[1]);
 }
 
 
@@ -610,7 +612,6 @@ bool is_complicated_phylip (std::istream& pios, const int& num_char) {
             complicated = true;
         }
     }
-    
     return complicated;
 }
 
@@ -656,7 +657,7 @@ bool is_complicated_phylip (std::istream& pios, const int& num_char) {
   - this includes not allowing internal spaces in taxon labels
 - also assuming that there is not a combination of multiline _and_ interleaved
 */
-void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& numChar,
+void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& num_char,
         bool& interleaved, bool& spaces, bool& multiline) {
     // store current position of the stream so we can rewind after determining format
     std::streampos spt = pios.tellg();
@@ -672,20 +673,20 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
     //int lcnt = 0; // line counter for multiline seqs
     
     // first line
-    getline(pios, line);
+    getline_safe(pios, line);
     tokens = tokenize(line);
     name = tokens[0];
     num_elem = (int)tokens.size();
     if (num_elem == 2) {
         // could be: 1) simple, 2) multiline, or interleaved
         seq = tokens[1];
-        if (seq.length() == numChar) {
+        if (seq.length() == num_char) {
             // return to the original position in the stream
             pios.seekg(spt, std::ios_base::beg);
             return; // simple single line //
         } else {
             // read in next line
-            getline(pios, line);
+            getline_safe(pios, line);
             tokens = tokenize(line);
             if (tokens.size() == 1) {
                 // simple multiline format
@@ -695,10 +696,10 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
                 done = false;
                 while (!done) {
                     seq += tokens[0];
-                    if (seq.length() == numChar) {
+                    if (seq.length() == num_char) {
                         done = true;
                     } else {
-                        getline(pios, line);
+                        getline_safe(pios, line);
                         tokens = tokenize(line);
                     }
                 }
@@ -717,7 +718,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
                 int tcnt = 2; // we've read in two already
                 lcnt = 1;
                 while (!done) {
-                    getline(pios, line);
+                    getline_safe(pios, line);
                     tcnt++;
                     //std::cout << "tcnt = " << tcnt << std::endl;
                     if (tcnt == num_taxa) {
@@ -728,14 +729,14 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
                         if (line.empty()) {
                             // there may be an empty line between blocks
                             //std::cout << "skipping an empty line." << std::endl;
-                            getline(pios, line);
+                            getline_safe(pios, line);
                         }
                         tokens = tokenize(line);
                         if (tokens.size() > 1) {
                             std::cout << "Um, I'm not sure what is happening..." << std::endl;
                         } else {
                             seq += tokens[0];
-                            if (seq.length() == numChar) {
+                            if (seq.length() == num_char) {
                                 done = true;
                             }
                         }
@@ -762,7 +763,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
             seq += tokens[i];
         }
         // check if that is all that is going on
-        if (seq.length() == numChar) {
+        if (seq.length() == num_char) {
             //std::cout << "Successfully read in spaces-only sequence ;)" << std::endl;
             //std::cout << seq << std::endl;
             // return to the original position in the stream
@@ -772,7 +773,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
             // now, determine if multiline or interleaved
             // if multiline, 2nd line will have (at maximum) 1 fewer element
             // if interleaved, 2nd line will have the same number of elements
-            getline(pios, line);
+            getline_safe(pios, line);
             tokens = tokenize(line);
             if ((int)tokens.size() == num_elem) {
                 interleaved = true;
@@ -782,7 +783,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
                 int tcnt = 2; // we've read in two already
                 lcnt = 1;
                 while (!done) {
-                    getline(pios, line);
+                    getline_safe(pios, line);
                     tcnt++;
                     //std::cout << "tcnt = " << tcnt << std::endl;
                     if (tcnt == num_taxa) {
@@ -793,13 +794,13 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
                         if (line.empty()) {
                             // there may be an empty line between blocks
                             //std::cout << "skipping an empty line." << std::endl;
-                            getline(pios, line);
+                            getline_safe(pios, line);
                         }
                         tokens = tokenize(line);
                         for (unsigned int i = 0; i < tokens.size(); i++) {
                             seq += tokens[i];
                         }
-                        if (seq.length() == numChar) {
+                        if (seq.length() == num_char) {
                             done = true;
                         }
                     } else {
@@ -824,7 +825,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
                         seq += tokens[i];
                         lcnt++;
                     }
-                    if (seq.length() == numChar) {
+                    if (seq.length() == num_char) {
                         done = true;
                     }
                 }
@@ -845,7 +846,8 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
 
 
 // read in various phylip formats
-std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& numChar) {
+// do you _see_ how needlessly complicated this is JF?!?
+std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& num_char) {
     
     std::vector<Sequence> seqs;
     Sequence seq;
@@ -861,7 +863,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     std::string residues = "";
     std::string name = "";
     
-    get_phylip_format (pios, num_taxa, numChar, interleaved, spaces, multiline);
+    get_phylip_format(pios, num_taxa, num_char, interleaved, spaces, multiline);
     
     //std::cout << "interleaved = " << interleaved << "; spaces = "
     //        << spaces << "; multiline = " << multiline<< std::endl;
@@ -874,7 +876,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     } else if (multiline) {
         if (spaces) {
             //std::cout << std::endl << "processing multiline sequences with spaces" << std::endl;
-            while (getline(pios, line)) {
+            while (getline_safe(pios, line)) {
                 if (line.empty()) {
                     continue;
                 }
@@ -891,7 +893,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                         residues += tokens[i];
                     }
                 }
-                if ((int)residues.size() == numChar) {
+                if ((int)residues.size() == num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -902,7 +904,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             }
         } else {
             //std::cout << std::endl << "processing multiline sequences" << std::endl;
-            while (getline(pios, line)) {
+            while (getline_safe(pios, line)) {
                 if (line.empty()) {
                     continue;
                 }
@@ -915,7 +917,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                 } else {
                     residues += tokens[0];
                 }
-                if ((int)residues.size() == numChar) {
+                if ((int)residues.size() == num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -930,7 +932,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             //std::cout << std::endl << "processing interleaved sequences with spaces" << std::endl;
             int taxcnt = 0;
             lineCount = 0;
-            while (getline(pios, line)) {
+            while (getline_safe(pios, line)) {
                 if (line.empty()) {
                     continue;
                 }
@@ -962,7 +964,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             //std::cout << std::endl << "processing interleaved sequences" << std::endl;
             int taxcnt = 0;
             lineCount = 0;
-            while (getline(pios, line)) {
+            while (getline_safe(pios, line)) {
                 if (line.empty()) {
                     continue;
                 }
@@ -989,7 +991,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
         int bad_len = 0;
         for (unsigned int i = 0; i < seqs.size(); i++) {
             residues = seqs[i].get_sequence();
-            if ((int)residues.size() != numChar) {
+            if ((int)residues.size() != num_char) {
                 bad_idx = i;
                 bad_len = (int)residues.size();
                 good = false;
@@ -998,13 +1000,13 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
         }
         if (!good) {
             std::cerr << "Error: bad phylip file. Taxon '" << seqs[bad_idx].get_id()
-                << "' had " << bad_len << " characters, but " << numChar
+                << "' had " << bad_len << " characters, but " << num_char
                 << " were expected. Exiting." << std::endl;
             exit(1);
         }
     } else if (spaces) {
         //std::cout << std::endl << "processing sequences with spaces" << std::endl;
-        while (getline(pios, line)) {
+        while (getline_safe(pios, line)) {
             if (line.empty()) {
                 continue;
             }
@@ -1013,9 +1015,9 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             for (unsigned int i = 1; i < tokens.size(); i++) {
                 residues += tokens[i];
             }
-            if ((int)residues.size() != numChar) {
+            if ((int)residues.size() != num_char) {
                 std::cerr << "Error: bad phylip file. Taxon '" << name
-                    << "' had " << residues.size() << " characters, but " << numChar
+                    << "' had " << residues.size() << " characters, but " << num_char
                     << " were expected. Exiting." << std::endl;
                     exit(1);
             }
@@ -1041,6 +1043,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
 
 // general reader that is used by a bunch of stuff (i.e., avoid code duplication)
 // returns vector of sequences and (by reference) alphabet name
+// used by programs that need the entire alignment in memory at once
 // all other properties are determined elsewhere
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName) {
     std::vector<Sequence> seqs;
@@ -1057,7 +1060,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
         // a bunch of required variables, not used here:
         char gap, missing;
         std::string symbols = "";
-        get_nexus_alignment_properties (*pios, file_num_taxa, file_num_char,
+        get_nexus_alignment_properties(*pios, file_num_taxa, file_num_char,
                 is_interleaved, alphaName, symbols, gap, missing);
         //std::cout << "alphaName = " << alphaName << std::endl;
         retstring = ""; // have to set so seq_reader knows we are mid-file

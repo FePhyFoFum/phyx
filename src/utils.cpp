@@ -588,7 +588,7 @@ void process_nexus_comment (std::istream& stri, std::string& tline) {
     }
     // if not, dealing with a multi-line comment
     while (!done) {
-        getline(stri, terp);
+        getline_safe(stri, terp);
         trim_spaces(terp);
         if (!terp.empty()) {
             if (terp.back() == ']') {

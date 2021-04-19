@@ -93,6 +93,7 @@ void SeqInfo::read_in_alignment () {
     
     // if nexus, grab metadata
     if (file_type_.compare("nexus") == 0) {
+        std::cout << "Trying to read in a Nexus alignment..." << std::endl;
         bool is_interleaved = false;
         get_nexus_alignment_properties(*pios_, file_ntax, seq_length_,
                 is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
