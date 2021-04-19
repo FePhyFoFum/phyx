@@ -22,7 +22,10 @@ void VcfReader::read_vcf (std::istream* pios) {
     int ncols = 0;
     
     std::string line;
-    while (getline(*pios, line)) {
+    while (getline_safe(*pios, line)) {
+        if (line.empty()) {
+            continue;
+        }
         std::vector<std::string> temp = tokenize(line);
         if (started) {
             // every line below the bottom header line should be site data
