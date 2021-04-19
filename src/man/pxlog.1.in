@@ -26,9 +26,6 @@ number of samples to exclude at the beginning of a file
 \fB\-n\fR, \fB\-\-thin\fR=\fI\,INT\/\fR
 interval of resampling
 .TP
-\fB\-r\fR, \fB\-\-rand\fR=\fI\,INT\/\fR
-number of random samples (without replacement) not yet implemented!
-.TP
 \fB\-i\fR, \fB\-\-info\fR
 calculate log file attributes and exit
 .TP
@@ -43,9 +40,6 @@ delete columns by 1\-index sep by commas (NO SPACES!) (parameter logs only)
 .TP
 \fB\-k\fR, \fB\-\-keep\fR=\fI\,CSL\/\fR
 keep only columns by 1\-index sep by commas (NO SPACES!) (parameter logs only)
-.TP
-\fB\-x\fR, \fB\-\-seed\fR=\fI\,INT\/\fR
-random number seed, clock otherwise
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 make the output more verbose
