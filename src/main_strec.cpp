@@ -225,11 +225,11 @@ int main(int argc, char * argv[]) {
      **************/
     std::ifstream ifs(conff);
     std::string line;
-    while (getline(ifs, line)) {
+    std::vector<std::string> tokens;
+    while (getline_safe(ifs, line)) {
         if (line.size() > 1) {
             if (strcmp( (&line[0]), "#") != 0) {
             //if ((&line[0]) != "#") {
-                std::vector<std::string> tokens;
                 std::string del("=");
                 tokens.clear();
                 tokenize(line, tokens, del);
@@ -329,7 +329,7 @@ int main(int argc, char * argv[]) {
         exit(1);
     }
     line = "";
-    while (getline(infile2, line)) {
+    while (getline_safe(infile2, line)) {
         if (line.length() > 5) {
             trees.push_back(tr.readTree(line));
         }

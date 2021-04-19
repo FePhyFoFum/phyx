@@ -129,7 +129,6 @@ int main(int argc, char * argv[]) {
         exit(1);
     }
 
-    //out file
     if (outfileset == true) {
         ofstr = new std::ofstream(outf);
         poouts = ofstr;
@@ -155,20 +154,23 @@ int main(int argc, char * argv[]) {
         seq.clear_cont_char();
         y++;
     }
-    
     if (ft == 2) {
         seqs.push_back(seq);
         seq_map[seq.get_id()] = y;
         seq.clear_cont_char();
     }
-    //read trees
+    
+    // read trees
     TreeReader tr;
     std::vector<Tree *> trees;
-    while (getline(*poos, retstring)) {
+    while (getline_safe(*poos, retstring)) {
+        if (retstring.empty()) {
+            continue;
+        }
         trees.push_back(tr.readTree(retstring));
     }
     
-    //conduct analyses for each character
+    // conduct analyses for each character
     for (int c=0; c < num_chars; c++) {
         std::cerr << "character: " << c << std::endl;
         if (analysis == 0) {

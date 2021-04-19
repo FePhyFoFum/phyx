@@ -16,8 +16,8 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
     std::vector<char> order;
     bool first = true;
     std::string line;
-    while (getline(fstr, line)) {
-        if (line[0] == '#') {
+    while (getline_safe(fstr, line)) {
+        if (line[0] == '#' || line.empty()) {
             continue;
         } else {
             std::vector<std::string> tokens;

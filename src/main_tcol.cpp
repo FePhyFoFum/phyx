@@ -11,6 +11,7 @@
 #include "tree_utils.h"
 #include "log.h"
 #include "constants.h"
+#include "aa2cdn.h"
 
 extern std::string PHYX_CITATION;
 
@@ -133,15 +134,19 @@ int main(int argc, char * argv[]) {
     if (nodeidfset == true) {
         std::ifstream nfstr(nodeidf);
         std::string tline;
-        while (getline(nfstr, tline)) {
+        while (getline_safe(nfstr, tline)) {
             trim_spaces(tline);
+            if (tline.empty()) {
+                continue;
+            }
             std::vector<std::string> tokens2;
             tokenize(tline, tokens2, "\t");
             for (unsigned int j = 0; j < tokens2.size(); j++) {
                 trim_spaces(tokens2[j]);
             }
-            if (tokens2.size() != 2)
+            if (tokens2.size() != 2) {
                 continue;
+            }
             nodeid_map[tokens2[0]] = tokens2[1];
         }
         nfstr.close();

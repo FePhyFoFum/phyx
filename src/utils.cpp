@@ -237,6 +237,7 @@ bool check_comment_line (const std::string& line) {
 }
 
 
+// used by pxstrec
 std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numstates) {
     std::vector<double> cols(numstates, 1);
     std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (numstates, cols);
@@ -244,7 +245,7 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filen
     std::ifstream ifs(filename.c_str());
     std::string line;
     int fromarea = 0;
-    while (getline(ifs, line)) {
+    while (getline_safe(ifs, line)) {
         if (line.size() > 3) {
             std::vector<std::string> tokens;
             std::string del(" ,\t");
@@ -760,7 +761,7 @@ std::string peek_line (std::istream& pios) {
     // get current position
     std::streampos spt = pios.tellg();
     // read in next line
-    getline(pios, nextLine);
+    getline_safe(pios, nextLine);
     // return to the original position in the stream
     pios.seekg(spt, std::ios_base::beg);
     return nextLine;
@@ -775,7 +776,7 @@ std::vector<std::string> peek_lines (std::istream& pios, const int& n) {
     std::streampos spt = pios.tellg();
     // read in the lines
     for (int i = 0; i < n; i++) {
-        getline(pios, nextLine);
+        getline_safe(pios, nextLine);
         peekedLines.push_back(nextLine);
     }
     // return to the original position in the stream

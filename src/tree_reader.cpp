@@ -245,11 +245,12 @@ Tree * read_tree_string (std::string trees) {
  *  if it is nexus, then the nexus reader will need 
  *  to deal with translate or not
  */
+// hrm this does not seem to be used anymore
 int test_tree_filetype (std::string filen) {
     std::string tline;
     std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
-    while (getline(infile, tline)) {
+    while (getline_safe(infile, tline)) {
         if (tline.size() < 1) {
             continue;
         }
@@ -301,7 +302,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
     bool begintrees = false;
     bool tgoing = false;
     while (going) {
-        if (!getline(stri, line1)) {
+        if (!getline_safe(stri, line1)) {
             break;
         }
         trim_spaces(line1);
@@ -372,10 +373,10 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
             if (check_nexus_comment(tline)) {
                 //std::cout << "yikes a comment!" << std::endl;
                 process_nexus_comment(stri, tline);
-                getline(stri, tline);
+                getline_safe(stri, tline);
             } else if (tline.empty()) {
                 //std::cout << "empty line. keep reading!" << std::endl;
-                getline(stri, tline);
+                getline_safe(stri, tline);
             } else {
                 done = true;
             }
@@ -383,7 +384,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
     } else {
         bool reading = true; // continue reading if lines are empty or comments
         while (reading) {
-            if (!getline(stri, tline)) {
+            if (!getline_safe(stri, tline)) {
                 (*going) = false;
                 return NULL;
             }
