@@ -26,9 +26,9 @@ void LogManipulator::sample (const int& burnin, const int& nthin, const int& nra
     nrandom_ = nrandom;
     seed_ = seed;
     if (logtype_ == "parameter") {
-        sample_parameters ();
+        sample_parameters();
     } else {
-        sample_trees ();
+        sample_trees();
     }
 }
 
@@ -194,7 +194,7 @@ void LogManipulator::collect_parameter_samples () {
             bool first_line = true;
             int par_counter = 0; // this is the raw number of parameter lines in a file
             int sample_counter = 0;
-            while (getline(infilestr_, line)) {
+            while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
                 } else if (first_line) {
@@ -287,14 +287,14 @@ void LogManipulator::store_sample (std::string const& line) {
 
 void LogManipulator::count () {
     if (logtype_ == "parameter") {
-        count_parameter_samples ();
+        count_parameter_samples();
     } else {
-        count_tree_samples ();
+        count_tree_samples();
     }
 }
 
 
-// TODO: should counting allow burnin/thinning?
+// TODO: should counting allow burnin/thinning? nah.
 void LogManipulator::count_parameter_samples () {
     num_cols_ = 0;
     if (!files_.empty()) {
@@ -304,7 +304,7 @@ void LogManipulator::count_parameter_samples () {
             std::string line;
             bool first_line = true;
             int num_samps = 0;
-            while (getline(infilestr_, line)) {
+            while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
                 } else if (first_line) {
@@ -356,7 +356,7 @@ void LogManipulator::count_tree_samples () {
             infilestr_.open(curfile.c_str());
             std::string line;
             int num_samps = 0;
-            while (getline(infilestr_, line)) {
+            while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
                 } else {
@@ -412,7 +412,7 @@ void LogManipulator::get_column_names () {
             infilestr_.open(curfile.c_str());
             std::string line;
             bool first_line = true;
-            while (getline(infilestr_, line)) {
+            while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
                 } else if (first_line) {
@@ -448,7 +448,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
         int sample_counter = 0;
         std::vector<int> cols_to_retain;
         
-        while (getline(infilestr_, line)) {
+        while (getline_safe(infilestr_, line)) {
             if (line.empty() || check_comment_line(line)) {
                 continue;
             } else if (first_line) {
@@ -521,7 +521,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         }
         num_cols_retain_ = cols_to_retain.size();
         
-        while (getline(infilestr_, line)) {
+        while (getline_safe(infilestr_, line)) {
             if (line.empty() || check_comment_line(line)) {
                 continue;
             } else if (first_line) {
@@ -577,7 +577,7 @@ void LogManipulator::sample_parameters () {
             bool first_line = true;
             int par_counter = 0; // this is the raw number of parameter lines in a file
             int sample_counter = 0;
-            while (getline(infilestr_, line)) {
+            while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
                 } else if (first_line) {
@@ -660,11 +660,13 @@ void LogManipulator::sample_trees () {
             int tree_counter = 0; // this is the raw number of tree lines in a file
             int sample_counter = 0;
             bool trees_encountered = false;
-            while (getline(infilestr_, line)) {
+            while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     if (i == 0) {
-                        // keep comment information from top of first file
-                        (*poos_) << line << std::endl;
+                        // keep comment information from _top_ of first file
+                        if (!trees_encountered) {
+                            (*poos_) << line << std::endl;
+                        }
                     }
                     continue;
                 } else {
@@ -717,11 +719,11 @@ void LogManipulator::sample_trees () {
         
         if (verbose_) {
             for (int i = 0; i < num_files_; i++) {
-                std::cout << files_[i] << ": " << indiv_sample_totals_[i]
+                std::cerr << files_[i] << ": " << indiv_sample_totals_[i]
                     << " tree samples retained (from original " << indiv_raw_counts_[i]
                     << " samples)." << std::endl;
             }
-            (*poos_) << "Retained " << ntotal_samples_ << " total tree samples across "
+            std::cerr << "Retained " << ntotal_samples_ << " total tree samples across "
                 << num_files_ << " input files." << std::endl;
         }
     }
