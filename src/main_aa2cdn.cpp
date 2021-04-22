@@ -177,7 +177,7 @@ int main(int argc, char * argv[]) {
         }
     }
     if (!inFrame) {
-        std::cerr << "Error: nucleotide alignment does not appear to be in frame. Exiting" << std::endl;
+        std::cerr << "Error: nucleotide alignment does not appear to be in frame. Exiting." << std::endl;
         exit(0);
     }
     
