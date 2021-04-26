@@ -152,7 +152,6 @@ int main(int argc, char * argv[]) {
     Sequence aa_seq, nuc_seq;
     std::string retstring;
     
-    
     // use general purpose reader
     std::vector<Sequence> nuc_seqs;
     std::vector<Sequence> aa_seqs;
@@ -191,8 +190,6 @@ int main(int argc, char * argv[]) {
     
     AAtoCDN A2C(nuc_seqs, aa_seqs, rm_last);
     A2C.write_codon_alignment(poos);
-    
-    
     
     if (fileset) {
         fstr->close();

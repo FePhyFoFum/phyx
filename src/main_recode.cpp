@@ -162,8 +162,8 @@ int main(int argc, char * argv[]) {
                     }
                     first = false;
                 }
-                (*poos) << ">" << seq.get_id() << std::endl;
-                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl
+                        << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
@@ -177,8 +177,8 @@ int main(int argc, char * argv[]) {
                     }
                     first = false;
                 }
-                (*poos) << ">" << seq.get_id() << std::endl;
-                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl
+                        << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
         }
     } else {
@@ -200,8 +200,8 @@ int main(int argc, char * argv[]) {
                     }
                     first = false;
                 }
-                (*poos) << ">" << seq.get_id() << std::endl;
-                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl
+                        << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
         } else {
             // fasta, fastq, or simple phylip
@@ -214,17 +214,16 @@ int main(int argc, char * argv[]) {
                     }
                     first = false;
                 }
-                (*poos) << ">" << seq.get_id() << std::endl;
-                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl
+                        << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
             // fasta has a trailing one
             if (ft == 2) {
-                (*poos) << ">" << seq.get_id() << std::endl;
-                (*poos) << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl
+                        << sr.get_recoded_seq(seq.get_sequence()) << std::endl;
             }
         }
     }
-    
     
     if (fileset) {
         fstr->close();

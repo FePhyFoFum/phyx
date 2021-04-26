@@ -217,6 +217,7 @@ std::map<std::string, std::string> yeast_mtdna_ = {
 };
 
 
+// https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi?chapter=cgencodes#SG5
 std::map<std::string, std::string> invert_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},

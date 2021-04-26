@@ -152,7 +152,7 @@ int main(int argc, char * argv[]) {
                 }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
-                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl << aa_seq << std::endl;
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
@@ -169,7 +169,7 @@ int main(int argc, char * argv[]) {
                 }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
-                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl << aa_seq << std::endl;
             }
         }
     } else {
@@ -194,7 +194,7 @@ int main(int argc, char * argv[]) {
                 }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
-                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl << aa_seq << std::endl;
             }
         } else {
             // fasta, fastq, or simple phylip
@@ -210,13 +210,13 @@ int main(int argc, char * argv[]) {
                 }
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
-                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl << aa_seq << std::endl;
             }
             // fasta has a trailing one
             if (ft == 2) {
                 nuc_seq = seq.get_sequence();
                 aa_seq = tl.translate(nuc_seq);
-                (*poos) << ">" << seq.get_id() << "\n" << aa_seq << std::endl;
+                (*poos) << ">" << seq.get_id() << std::endl << aa_seq << std::endl;
             }
         }
     }

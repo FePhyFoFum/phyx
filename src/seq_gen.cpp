@@ -90,7 +90,7 @@ SequenceGenerator::SequenceGenerator (const int&seqlength, const std::vector<dou
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
             std::cout << rmatrix[i][j] << " ";
         }
-        std::cout << "\n";
+        std::cout << std::endl;
     }*/
     initialize();
     if (is_dna_) {
@@ -327,9 +327,9 @@ void SequenceGenerator::preorder_tree_traversal () {
             for (unsigned int j = 0; j < QMatrix.size(); j++) {
                 std::cout << QMatrix[i][j] << " ";
             }
-            std::cout << "\n";
+            std::cout << st::endl;
         }
-        std::cout << "\n";
+        std::cout << std::endl;
         */
         if (multi_model_) {
             check = (int)round(multi_rates_[0]);
