@@ -314,19 +314,74 @@ void SeqInfo::get_num_chars () {
 // does not currently do per-individual...
 // assumes gap=- and missing=?
 void SeqInfo::calc_missing () {
-    calculate_freqs();
     // missing data are the last two characters (-N for DNA, -X for protein)
-    int total_num_chars = sum(char_counts_);
-    
     int miss = 0;
     double temp = 0.0;
-    for (unsigned int i = seq_chars_.length()-2; i < seq_chars_.length(); i++) {
-        temp += (double)char_counts_[i] / (double)total_num_chars;
-        miss += char_counts_[i];
+    
+    calculate_freqs();
+    
+    if (!output_indiv_) {
+        // proportion for alignment as a whole
+        int total_num_chars = sum(char_counts_);
+        for (unsigned int i = seq_chars_.length()-2; i < seq_chars_.length(); i++) {
+            temp += (double)char_counts_[i] / (double)total_num_chars;
+            miss += char_counts_[i];
+        }
+        percent_missing_ = temp;
+        //std::cout << "total_num_chars = " << total_num_chars << std::endl;
+        //std::cout << "total missing = " << miss << std::endl;
+    } else {
+        // per individual sequence
+        // should we require seqs be aligned? stats would make more sense
+        Sequence seq;
+        std::string name = "";
+        for (unsigned int i = 0; i < seqs_.size(); i++) {
+            seq = seqs_[i];
+            temp_seq_ = seq.get_sequence();
+            name = seq.get_id();
+            taxon_labels_.push_back(name);
+            seq_lengths_.push_back(temp_seq_.length());
+            count_chars(temp_seq_);
+            miss = 0;
+            for (unsigned int j = seq_chars_.length()-2; j < seq_chars_.length(); j++) {
+                miss += indiv_char_counts_[i][j];
+            }
+            missing_counts_.push_back(miss);
+        }
     }
-    percent_missing_ = temp;
-    //std::cout << "total_num_chars = " << total_num_chars << std::endl;
-    //std::cout << "total missing = " << miss << std::endl;
+}
+
+
+void SeqInfo::return_missing () {
+    if (!output_indiv_) {
+        (*poos_) << percent_missing_ << std::endl;
+    } else {
+        const int colWidth = 12;
+        // need to take into account longest_tax_label_
+        longest_tax_label_ = get_longest_label(taxon_labels_);
+        std::string pad = std::string(longest_tax_label_, ' ');
+        // header
+        (*poos_) << pad << " ";
+        (*poos_) << std::right << std::setw(colWidth) << "Nchar" << " ";
+        (*poos_) << std::right << std::setw(colWidth) << "Missing" << " ";
+        (*poos_) << std::right << std::setw(colWidth) << "Proportion" << std::endl;
+        
+        // return nchar for individual seqs
+        for (int i = 0; i < num_taxa_; i++) {
+            int diff = longest_tax_label_ - taxon_labels_[i].size();
+            (*poos_) << taxon_labels_[i];
+            if (diff > 0) {
+                pad = std::string(diff, ' ');
+                (*poos_) << pad;
+            }
+            (*poos_) << " ";
+            (*poos_) << std::right << std::setw(colWidth) << seq_lengths_[i] << " ";
+            (*poos_) << std::right << std::setw(colWidth) << missing_counts_[i] << " ";
+            (*poos_) << std::right << std::setw(colWidth)
+                    << (double)missing_counts_[i] / (double)seq_lengths_[i] << std::endl;
+        }
+    }
+    
 }
 
 
@@ -350,7 +405,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         return_freq_table();
     } else if (get_missing) {
         calc_missing();
-        (*poos_) << percent_missing_ << std::endl;
+        return_missing();
     } else if (get_nchar) {
         get_num_chars ();
         if (!output_indiv_) { // single return value

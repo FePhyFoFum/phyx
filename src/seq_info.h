@@ -36,6 +36,7 @@ private:
     std::vector<std::string> taxon_labels_;
     std::vector<int> seq_lengths_;
     std::vector<int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
+    std::vector<int> missing_counts_; // for individual seqs
     std::vector< std::vector<int> > indiv_char_counts_;
     bool is_aligned_;
     int seq_length_;
@@ -57,7 +58,8 @@ private:
     void calc_missing ();
     void set_datatype ();
     void set_alphabet_from_sampled_seqs (const std::string& seq);
-
+    void return_missing ();
+    
 public:
     SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv, const bool& force_protein);
     void summarize ();
