@@ -147,6 +147,7 @@ double logn (double x, double base);
 
 bool essentially_equal (double a, double b);
 bool all_equal (std::vector<double> vals);
+bool all_equal (std::vector<int> vals);
 
 // a basic poll checker for stream inputs
 bool check_for_input_to_stream ();
