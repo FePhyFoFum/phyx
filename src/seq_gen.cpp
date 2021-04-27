@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <nlopt.hpp>
 #include <armadillo>
 #include <random>
 #include <numeric>
