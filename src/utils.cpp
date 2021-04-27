@@ -730,6 +730,16 @@ bool all_equal (std::vector<double> vals) {
 }
 
 
+bool all_equal (std::vector<int> vals) {
+    bool equal = false;
+    if (std::all_of(vals.begin(), vals.end(), [&] (int i) {return i == vals[0];})) {
+        equal = true;
+    }
+    
+    return equal;
+}
+
+
 bool check_for_input_to_stream () {
     struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
     int ret = 0;

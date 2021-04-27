@@ -23,60 +23,7 @@ CompTest::CompTest (std::istream* pios, std::ostream* poos):num_taxa_(0), seq_le
 
 
 void CompTest::read_in_alignment () {
-    Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios_, retstring);
-    int file_ntax = 0; // ntax declared in the file itself (nexus or phylip)
-    std::string file_type_ = get_filetype_string(ft);
-    
-    // if nexus, grab metadata
-    if (file_type_.compare("nexus") == 0) {
-        bool is_interleaved = false;
-        get_nexus_alignment_properties(*pios_, file_ntax, seq_length_,
-                is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
-        // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
-        set_datatype();
-        if (is_multi_ && seq_chars_.compare("") != 0) {
-            seq_chars_ += gap_;
-            seq_chars_ += missing_;
-            alpha_set_ = true;
-        }
-        retstring = ""; // have to set so seq_reader knows we are mid-file
-        if (!is_interleaved) {
-            while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-                seqs_.push_back(seq);
-            }
-        } else {
-            // need to read in everything at once
-            seqs_ = read_interleaved_nexus(*pios_, file_ntax, seq_length_);
-        }
-    } else {
-        bool complicated_phylip = false;
-        // check if we are dealing with a complicated phylip format
-        if (file_type_.compare("phylip") == 0) {
-            get_phylip_dimensions(retstring, file_ntax, seq_length_);
-            complicated_phylip = is_complicated_phylip(*pios_, seq_length_);
-        }
-        if (complicated_phylip) {
-            seqs_ = read_phylip(*pios_, file_ntax, seq_length_);
-            if (!datatype_set_) {
-                alpha_name_ = seqs_[0].get_alpha_name();
-                set_datatype();
-            }
-        } else {
-            while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
-                seqs_.push_back(seq);
-                if (!datatype_set_) {
-                    alpha_name_ = seq.get_alpha_name();
-                    //std::cout << "Setting alpha to: " << alpha_name_ << std::endl;
-                    set_datatype();
-                }
-            }
-            if (ft == 2) { // fasta has an trailing one
-                seqs_.push_back(seq);
-            }
-        }
-    }
+    seqs_ = ingest_alignment(pios_, alpha_name_);
     
     if (!is_aligned(seqs_)) {
         std::cerr << "Error: sequences must be aligned. Exiting." << std::endl;
@@ -84,6 +31,8 @@ void CompTest::read_in_alignment () {
     }
     
     num_taxa_ = (int)seqs_.size();
+    seq_length_ = (int)seqs_[0].get_length();
+    set_datatype();
     
     // if datatype is multi, but alphabet not set, get from entire concatenated sequence
     if (is_multi_ && !alpha_set_) {
@@ -99,15 +48,7 @@ void CompTest::read_in_alignment () {
         seq_chars_.erase(std::remove(seq_chars_.begin(), seq_chars_.end(), missing_), seq_chars_.end());
         alpha_set_ = true;
     }
-    // some error checking
-    if (file_ntax != 0) {
-        if (file_ntax != (int)seqs_.size()) {
-            std::cerr << "Error: number of taxa declared in the file ("
-                << ") does not match the number read (" << seqs_.size()
-                << "). Exiting." << std::endl;
-            exit(1);
-        }
-    }
+    
     // resize
     col_totals_.resize(seq_chars_.size(), 0);
     taxon_labels_ = collect_names(seqs_);
@@ -151,8 +92,17 @@ void CompTest::count_chars () {
             col_totals_[i] += num;
         }
         indiv_char_counts_.push_back(icounts);
+        // row totals need to be all the same. if not, could be:
+        // 1. if not aligned - this is checked
+        // 2. missing chars (-, ?, ambig) which are not yet supported here
         row_totals_.push_back(sum);
         total_ += sum;
+    }
+    // checking row totals
+    if (!all_equal(row_totals_)) {
+        std::cerr << "Error: missing/ambiguous characters not currently supported. Exiting."
+            << std::endl;
+        exit(0);
     }
 }
 
@@ -271,7 +221,6 @@ double CompTest::lower_incomplete_gamma_function (double s, double t) {
     	denominator *= s;
     	curr = (numerator / denominator);
     	sum += curr;
-    	//std::cout << counter << ". Adding (Nom / Denom) = " << terp << "; Sum = " << Sum << std::endl;
         if (curr < stop) { // get a better stop criterion
             done = true;
         }
