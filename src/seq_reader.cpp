@@ -420,6 +420,14 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, boo
             // convert to uppercase
             tline = string_to_upper(tline);
             std::vector<std::string> searchtokens = tokenize(tline);
+            if (searchtokens.size() == 0) {
+                // this will be the case if only whitespace (essentially an empty line)
+                continue;
+            }
+            
+            // if we have separate TAXA and CHARACTER blocks, intervening ';' and 'END;' are ignored
+            // important thing is to stop when we hit 'MATRIX'
+            
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
                 std::replace(tline.begin(), tline.end(), '=', ' ');
@@ -468,6 +476,18 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, boo
 // same as above, but grabs datatype and (possibly) 'symbols' (for morphology)
 // should remove global to_upper as morphology can be coded arbitrarily
 // - this is _low_ priority
+// need to deal with files that have a separate taxa block:
+// BEGIN TAXA;
+//   DIMENSIONS NTAX=1215;
+//   TAXLABELS
+//     ...
+//   ;
+// END;
+// BEGIN CHARACTERS;
+//   DIMENSIONS NCHAR=11395;
+//   FORMAT MISSING=? GAP=- DATATYPE=DNA INTERLEAVE=NO;
+//   MATRIX
+          
 void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num_char,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing) {
     num_taxa = num_char = 0;
@@ -487,6 +507,14 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
             // convert to uppercase
             tline = string_to_upper(tline);
             std::vector<std::string> searchtokens = tokenize(tline);
+            if (searchtokens.size() == 0) {
+                // this will be the case if only whitespace (essentially an empty line)
+                continue;
+            }
+            
+            // if we have separate TAXA and CHARACTER blocks, intervening ';' and 'END;' are ignored
+            // important thing is to stop when we hit 'MATRIX'
+            
             if (searchtokens[0] == "DIMENSIONS") {
             // get rid of '=' and ';'. tokens then easy to deal with.
                 std::replace(tline.begin(), tline.end(), '=', ' ');

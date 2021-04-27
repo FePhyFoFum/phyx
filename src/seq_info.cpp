@@ -283,6 +283,7 @@ void SeqInfo::make_concatenated_sequence () {
 
 
 // just grab labels, disregard the rest
+// hrm do we want these sorted, or as they appear? probably latter (for indexing)
 void SeqInfo::collect_taxon_labels () {
     taxon_labels_ = collect_names(seqs_);
     sort(taxon_labels_.begin(), taxon_labels_.end());
@@ -425,7 +426,6 @@ void SeqInfo::summarize () {
     calculate_freqs();
     
     if (output_indiv_) {
-        // new one
         return_freq_table();
     } else {
         // pass the seq concatenated across all individuals
