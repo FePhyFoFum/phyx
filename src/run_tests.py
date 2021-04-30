@@ -179,15 +179,19 @@ def test_program(name):
 notest = ["pxbpsq","pxnni"]
 
 if __name__ == "__main__":
-    if len(sys.argv) != 1:
-        print ("python run_tests.py")
+    dir = "." # by default test non-installed programs
+    if len(sys.argv) == 2:
+        dir = sys.argv[1]
+        print ("guess you want to test in: "+dir)
+    elif len(sys.argv) > 2:
+        print ("python run_tests.py [program directory]")
         sys.exit(0)
     
     passed = 0
     failed = 0
     failedl = []
     print ("=================")
-    for i in os.listdir("."):
+    for i in os.listdir(dir):
         if i[:2] == "px":
             if i in notest:
                 print (bcolors.WARNING+"skipping "+i+bcolors.ENDC)
