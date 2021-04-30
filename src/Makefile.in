@@ -624,3 +624,6 @@ check:
 
 test:
 	python3 run_tests.py
+
+installcheck:
+	python3 run_tests.py $(PREFIX)/bin
