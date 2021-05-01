@@ -261,7 +261,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * this is not for concatenation. only single gene regions
  * another one needs to be written for concatenation
  */
-void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
+void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
     int seqlength = seqs[0].get_length();
     std::string datatype = seqs[0].get_alpha_name();
     std::string symbols = ""; // not required for binary (default), protein, DNA
@@ -309,9 +309,9 @@ void write_nexus_alignment(std::vector<Sequence>& seqs, const bool& uppercase, s
         // MrBayes is not Nexus-compliant, so using a "safe" version
         if (uppercase) {
             std::string terp = seqs[i].seq_to_upper();
-            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << terp << std::endl;
+            (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << terp << std::endl;
         } else {
-            (*ostr) << get_safe_taxon_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << std::endl;
+            (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << std::endl;
         }
         //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
     }

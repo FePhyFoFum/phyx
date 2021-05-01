@@ -246,7 +246,7 @@ double Sequence::get_qualarr_mean () {
 }
 
 
-std::string Sequence::get_fasta() {
+std::string Sequence::get_fasta () {
     std::string retstr;
     retstr.append(">");
     retstr.append(id_);
