@@ -245,10 +245,11 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
 
 // don't search for MATRIX; if we know it is interleaved, MATRIX has already been read
 // need to check for internal comments
+// TODO: need to be able to handle quoted strings (specifically, labels that contain spaces)
+//       - see function above to see how to do this
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char) {
     std::vector<Sequence> seqs;
     std::string tline;
-    //bool done = false; // not used
     
     int totcount = 0;
     int loopcount = 0;
@@ -270,6 +271,41 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
                 if (tokens[0].compare(";") == 0) {
                     std::cout << "Huh?" << std::endl;
                     exit(0);
+                } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
+                    std::string::size_type start = tline.find_first_of("\'");
+                    std::string::size_type stop  = tline.find_last_of("\'");
+                    std::string label = tline.substr(start, stop - start + 1);
+                    std::string seqstr = tline.erase(start, stop - start + 1);
+                    trim_spaces(seqstr);
+
+                    seq.set_id(label);
+                    seq.set_sequence(seqstr);
+                    
+                    if (totcount < num_taxa) {
+                        seqs.push_back(seq);
+                    } else {
+                        // finished with first block. match and concatenate with existing seq
+                        // as first pass, assume same ordering (demonic if it isn't)
+                        seqs[loopcount].set_sequence(seqs[loopcount].get_sequence() + seq.get_sequence());
+                    }
+                } else if (tokens[0][0] == '\"') {
+                    std::string::size_type start = tline.find_first_of("\"");
+                    std::string::size_type stop  = tline.find_last_of("\"");
+                    std::string label = tline.substr(start, stop - start + 1);
+                    std::string seqstr = tline.erase(start, stop - start + 1);
+                    trim_spaces(seqstr);
+
+                    seq.set_id(label);
+                    seq.set_sequence(seqstr);
+                    
+                    if (totcount < num_taxa) {
+                        seqs.push_back(seq);
+                    } else {
+                        // finished with first block. match and concatenate with existing seq
+                        // as first pass, assume same ordering (demonic if it isn't)
+                        seqs[loopcount].set_sequence(seqs[loopcount].get_sequence() + seq.get_sequence());
+                    }
+                    
                 } else {
                     seq.set_id(tokens[0]);
                     seq.set_sequence(tokens[1]);
