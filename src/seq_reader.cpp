@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <map>
+#include <iomanip>
+#include <sstream>
 
 #include "sequence.h"
 #include "seq_reader.h"
@@ -60,16 +62,17 @@ int test_seq_filetype_stream(std::istream& stri, std::string& retstring) {
 
 /*
  * returns the next string in the getline if there is one
- * TODO: nexus interleaved is not going to work here
- * TODO: skip Nexus comment lines
+ * TODO: nexus interleaved is not going to work here (read_interleaved_nexus does this)
+ * TODO: - skip Nexus comment lines - done
+ *       - check if label is quoted. if so, need to skip any whitespace that might be present
 */
 bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& retstring, Sequence& seq) {
     std::string tline;
     if (ftype == 0) { // nexus
         std::string tline;
-        //are we at the beginning of the file?
-        //TODO: add check for interleave and kick out to do a different reader
-        //checks for beginning of char by MATRIX
+        // are we at the beginning of the file?
+        // TODO: add check for interleave and kick out to do a different reader
+        // checks for beginning of char by MATRIX
         if (retstring.size() > 0 && retstring[0] == '#') {
             bool found = false;
             while (getline_safe(stri, tline)) {
@@ -97,12 +100,35 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         std::vector<std::string> tokens;
         std::string del(" \t");
         tokenize(tline, tokens, del);
+        
+        // need to check for quoted labels here
+        
         if (tokens.size() > 1) {
             for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
             if (tokens[0].compare(";") == 0) {
                 return false;
+            } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
+                std::string::size_type start = tline.find_first_of("\'");
+                std::string::size_type stop  = tline.find_last_of("\'");
+                std::string label = tline.substr(start, stop - start + 1);
+                std::string seqstr = tline.erase(start, stop - start + 1);
+                trim_spaces(seqstr);
+                
+                seq.set_id(label);
+                seq.set_sequence(seqstr);
+                return true;
+            } else if (tokens[0][0] == '\"') {
+                std::string::size_type start = tline.find_first_of("\"");
+                std::string::size_type stop  = tline.find_last_of("\"");
+                std::string label = tline.substr(start, stop - start + 1);
+                std::string seqstr = tline.erase(start, stop - start + 1);
+                trim_spaces(seqstr);
+                
+                seq.set_id(label);
+                seq.set_sequence(seqstr);
+                return true;
             } else {
                 seq.set_id(tokens[0]);
                 seq.set_sequence(tokens[1]);
