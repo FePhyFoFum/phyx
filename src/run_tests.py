@@ -42,7 +42,7 @@ def test_program(name):
         t = "3872\n"
     elif name == "pxs2nex":
         cm = "./pxs2nex -s TEST/test.fa"
-        t = '#NEXUS\nBEGIN DATA;\n\tDIMENSIONS NTAX=5 NCHAR=20;\n\tFORMAT DATATYPE=DNA INTERLEAVE=NO GAP=- MISSING=?;\n\tMATRIX\n\nTaxonA\tAAATTTCCCTGTCCCTTTAA\nTaxonB\tGCTCGAGGGGCCCCAAGACC\nTaxonC\tACGCTCCCCCTTAAAAATGA\nTaxonD\tTCCTTGTTCAACTCCGGTGG\nTaxonE\tTTACTATTCCCCCCCGCCGG\n;\nend;\n\n'
+        t = '#NEXUS\nBEGIN DATA;\n\tDIMENSIONS NTAX=5 NCHAR=20;\n\tFORMAT DATATYPE=DNA GAP=- MISSING=?;\n\tMATRIX\n\nTaxonA\tAAATTTCCCTGTCCCTTTAA\nTaxonB\tGCTCGAGGGGCCCCAAGACC\nTaxonC\tACGCTCCCCCTTAAAAATGA\nTaxonD\tTCCTTGTTCAACTCCGGTGG\nTaxonE\tTTACTATTCCCCCCCGCCGG\n;\nend;\n\n'
     elif name == "pxnw":
         cm = "./pxnw -s TEST/test.fa | grep TaxonA | grep TaxonB"
         t = 'TaxonA\tTaxonB\t40\n'

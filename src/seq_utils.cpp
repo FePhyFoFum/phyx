@@ -303,7 +303,8 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
     if (!symbols.empty()) {
         (*ostr) << " SYMBOLS=\"" << symbols << "\"";
     }
-    (*ostr) << " INTERLEAVE=NO GAP=- MISSING=?;" << std::endl;
+    // removing 'INTERLEAVE=NO` as it appears to not be NCL-compliant
+    (*ostr) << " GAP=- MISSING=?;" << std::endl;
     (*ostr) << "\tMATRIX\n" << std::endl;
     for (unsigned int i = 0; i < seqs.size(); i++) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
