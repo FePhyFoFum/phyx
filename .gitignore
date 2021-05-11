@@ -38,3 +38,8 @@ compile_JWB.sh
 # do not exclude manpage sources
 !px*.1.in
 
+# softwipe
+softwipe_*
+*.tmp
+compile_commands.json
+
