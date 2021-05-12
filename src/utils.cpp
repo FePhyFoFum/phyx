@@ -193,7 +193,7 @@ int doublefactorial(int n) {
 } 
 
 
-// higher resolution than time( NULL );
+// higher resolution than time( nullptr );
 unsigned int get_clock_seed () {
     return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
 }

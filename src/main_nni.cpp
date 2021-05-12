@@ -38,13 +38,13 @@ std::string versionline("pxnni 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense 
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"seed", required_argument, NULL, 'x'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -53,8 +53,8 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
-    char * outf = NULL;
-    char * seqf = NULL;
+    char * outf = nullptr;
+    char * seqf = nullptr;
     int seed = -1;
     
     while(true) {
@@ -95,10 +95,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf);
@@ -138,7 +138,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 if (!is_binary(tree)) {
                     std::cerr << "Error: this only works for binary trees. Exiting." << std::endl;
                     exit(0);
@@ -164,7 +164,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree, tree_map);

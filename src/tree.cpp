@@ -10,7 +10,7 @@
 
 
 Tree::Tree () {
-    root_ = NULL;
+    root_ = nullptr;
     processRoot();
 }
 
@@ -44,7 +44,7 @@ Node * Tree::getExternalNode (int num) {
  * could precompute this, check for run time differences
  */
 Node * Tree::getExternalNode (std::string name) {
-    Node * ret = NULL;
+    Node * ret = nullptr;
     for (int i = 0; i < external_node_count_; i++) {
         if (external_nodes_.at(i)->getName() == name) {
             ret = external_nodes_.at(i);
@@ -63,7 +63,7 @@ Node * Tree::getInternalNode (int num) {
  * could precompute this, check for run time differences
  */
 Node * Tree::getInternalNode (std::string& name) {
-    Node * ret = NULL;
+    Node * ret = nullptr;
     for (int i = 0; i < internal_node_count_; i++) {
         if (internal_nodes_.at(i)->getName() == name) {
             ret = internal_nodes_.at(i);
@@ -110,7 +110,7 @@ Node * Tree::getNode (int num) {
 
 
 Node * Tree::getNode (std::string& name) {
-    Node * ret = NULL;
+    Node * ret = nullptr;
     if (name_node_map_.size() == 0) {
         for (unsigned int i = 0; i < nodes_.size(); i++) {
             if (nodes_.at(i)->getName().size() > 0)
@@ -171,7 +171,7 @@ bool Tree::hasEdgeLengths () {
 void Tree::unRoot () {
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
-        tritomyRoot(NULL);
+        tritomyRoot(nullptr);
         processRoot();
     }
 }
@@ -183,7 +183,7 @@ void Tree::unRoot () {
 bool Tree::reRoot (Node * inroot) {
     processRoot();
     if (this->getRoot()->getChildCount() < 3) {
-        tritomyRoot(NULL); // not sure if this should actually be the inroot instead of NULL
+        tritomyRoot(nullptr); // not sure if this should actually be the inroot instead of nullptr
     }
     //std::cout << this->root->getNewick(false) << std::endl;
     if (root_ == inroot) {
@@ -270,7 +270,7 @@ void Tree::duplicateRootSupport () {
  */
 void Tree::tritomyRoot (Node * toberoot) {
     Node * curroot = this->getRoot();
-    if (toberoot == NULL) {
+    if (toberoot == nullptr) {
         if (curroot->getChild(0)->isInternal()) {
             Node * currootCH = curroot->getChild(0);
             double nbl = currootCH->getBL();
@@ -315,7 +315,7 @@ void Tree::tritomyRoot (Node * toberoot) {
 
 
 Node * Tree::getMRCA (std::vector<std::string> innodes) {
-    Node * mrca = NULL;
+    Node * mrca = nullptr;
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
     } else {
@@ -325,8 +325,8 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
         }
         Node * cur1 = this->getExternalNode(outgroup.at(0));
         outgroup.erase(outgroup.begin());
-        Node * cur2 = NULL;
-        Node * tempmrca = NULL;
+        Node * cur2 = nullptr;
+        Node * tempmrca = nullptr;
         while (outgroup.size() > 0) {
             cur2 = this->getExternalNode(outgroup.at(0));
             outgroup.erase(outgroup.begin());
@@ -340,14 +340,14 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
 
 
 Node * Tree::getMRCA (std::vector<Node *> innodes) {
-    Node * mrca = NULL;
+    Node * mrca = nullptr;
     if (innodes.size() == 1) {
         return innodes[0];
     } else {
         Node * cur1 = innodes.at(0);
         innodes.erase(innodes.begin());
-        Node * cur2 = NULL;
-        Node * tempmrca = NULL;
+        Node * cur2 = nullptr;
+        Node * tempmrca = nullptr;
         while (innodes.size() > 0) {
             cur2 = innodes.at(0);
             innodes.erase(innodes.begin());
@@ -365,7 +365,7 @@ Node * Tree::getMRCA (std::vector<Node *> innodes) {
  * the other node, internal that can serve as another root
  */
 Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
-    Node * mrca = NULL;
+    Node * mrca = nullptr;
     std::set<Node *> original; // original set of nodes
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
@@ -413,7 +413,7 @@ void Tree::setHeightFromTipToNodes () {
         double curh = 0.0;
         Node * cur = this->getExternalNode(i);
         cur->setHeight(curh);
-        while (cur->getParent() != NULL) {
+        while (cur->getParent() != nullptr) {
             curh += cur->getBL();
             cur = cur->getParent();
             if (cur->getHeight()<curh) {
@@ -433,7 +433,7 @@ void Tree::processRoot () {
     external_nodes_.clear();
     internal_node_count_ = 0;
     external_node_count_ = 0;
-    if (&root_ == NULL) {
+    if (&root_ == nullptr) {
         return;
     }
     postOrderProcessRoot(root_);
@@ -444,7 +444,7 @@ void Tree::processReRoot (Node * node) {
     if (node->isRoot() || node->isExternal()) {
         return;
     }
-    if (node->getParent() != NULL) {
+    if (node->getParent() != nullptr) {
         processReRoot(node->getParent());
     }
     // Exchange branch label, length et cetera
@@ -483,7 +483,7 @@ void Tree::exchangeNodes (Node * node1, Node * node2) {
 
 
 void Tree::postOrderProcessRoot (Node * node) {
-    if (node == NULL) {
+    if (node == nullptr) {
         return;
     }
     if (node->getChildCount() > 0) {
@@ -519,7 +519,7 @@ void Tree::pruneExternalNode (Node * node) {
     double bl = 0;
     Node * parent = node->getParent();
     if (parent->getChildCount() == 2) {
-        Node * other = NULL;
+        Node * other = nullptr;
         for (int i = 0; i < parent->getChildCount(); i++) {
             if (parent->getChild(i) != node) {
                 other = parent->getChild(i);
@@ -527,7 +527,7 @@ void Tree::pruneExternalNode (Node * node) {
         }
         bl = other->getBL()+parent->getBL();
         Node * mparent = parent->getParent();
-        if (mparent != NULL) {
+        if (mparent != nullptr) {
             mparent->addChild(*other);
             other->setBL(bl);
             for (int i = 0; i < mparent->getChildCount(); i++) {
@@ -583,14 +583,14 @@ void Tree::pruneInternalNode (Node * node) {
 
 
 Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
-    Node * mrca = NULL;
+    Node * mrca = nullptr;
     //get path to root for first node
     std::vector<Node *> path1;
     Node * parent = curn1;
     path1.push_back(parent);
-    while (parent != NULL) {
+    while (parent != nullptr) {
         path1.push_back(parent);
-        if (parent->getParent() != NULL) {
+        if (parent->getParent() != nullptr) {
             parent = parent->getParent();
         } else {
             break;

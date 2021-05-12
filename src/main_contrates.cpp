@@ -43,14 +43,14 @@ std::string versionline("pxcontrates 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLi
 
 static struct option const long_options[] =
 {
-    {"char", required_argument, NULL, 'c'},
-    {"tree", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"analysis", required_argument, NULL, 'a'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"char", required_argument, nullptr, 'c'},
+    {"tree", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"analysis", required_argument, nullptr, 'a'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -61,9 +61,9 @@ int main(int argc, char * argv[]) {
     bool tfileset = false;
     bool outfileset = false;
     
-    char * treef = NULL;
-    char * charf = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * charf = nullptr;
+    char * outf = nullptr;
     int analysis = 0;
     while(true) {
         int oi = -1;
@@ -106,13 +106,13 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    std::istream * pios = NULL;
-    std::istream * poos = NULL;
-    std::ifstream * cfstr = NULL;
-    std::ifstream * tfstr = NULL;
+    std::istream * pios = nullptr;
+    std::istream * poos = nullptr;
+    std::ifstream * cfstr = nullptr;
+    std::ifstream * tfstr = nullptr;
 
-    std::ostream * poouts = NULL;
-    std::ofstream * ofstr = NULL;
+    std::ostream * poouts = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (tfileset) {
         tfstr = new std::ifstream(treef);

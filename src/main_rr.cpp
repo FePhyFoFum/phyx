@@ -43,17 +43,17 @@ std::string versionline("pxrr 1.2\nCopyright (C) 2014-2021 FePhyFoFum\nLicense G
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outgroups", required_argument, NULL, 'g'},
-    {"namesf", required_argument, NULL, 'f'},
-    {"ranked", no_argument, NULL, 'r'},
-    {"unroot", no_argument, NULL, 'u'},
-    {"outf", required_argument, NULL, 'o'},
-    {"silent", no_argument, NULL, 's'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outgroups", required_argument, nullptr, 'g'},
+    {"namesf", required_argument, nullptr, 'f'},
+    {"ranked", no_argument, nullptr, 'r'},
+    {"unroot", no_argument, nullptr, 'u'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"silent", no_argument, nullptr, 's'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -69,10 +69,10 @@ int main(int argc, char * argv[]) {
     bool ranked = false;
     std::vector<std::string> outgroups;
 
-    char * treef = NULL;
-    char * outf = NULL;
-    char * outgroupsc = NULL;
-    char * namesfc = NULL;
+    char * treef = nullptr;
+    char * outf = nullptr;
+    char * outgroupsc = nullptr;
+    char * namesfc = nullptr;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:g:f:ruo:shVC", long_options, &oi);
@@ -156,10 +156,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(treef);
@@ -196,7 +196,7 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
-                if (tree != NULL) {
+                if (tree != nullptr) {
                     if (has_root_edge(tree)) {
                         std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
                         std::cerr << "The root edge can be removed with the -r option of pxcltr" << std::endl;
@@ -281,7 +281,7 @@ int main(int argc, char * argv[]) {
             while (going) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
-                if (tree != NULL) {
+                if (tree != nullptr) {
                     if (has_root_edge(tree)) {
                         std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
                         std::cerr << "The root edge can be removed with the -r option of pxcltr" << std::endl;

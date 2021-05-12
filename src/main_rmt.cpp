@@ -42,17 +42,17 @@ std::string versionline("pxrmt 1.2\nCopyright (C) 2014-2021 FePhyFoFum\nLicense 
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"names", required_argument, NULL, 'n'},
-    {"namesf", required_argument, NULL, 'f'},
-    {"regex", required_argument, NULL, 'r'},
-    {"outf", required_argument, NULL, 'o'},
-    {"comp", no_argument, NULL, 'c'},
-    {"silent", required_argument, NULL, 's'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"names", required_argument, nullptr, 'n'},
+    {"namesf", required_argument, nullptr, 'f'},
+    {"regex", required_argument, nullptr, 'r'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"comp", no_argument, nullptr, 'c'},
+    {"silent", required_argument, nullptr, 's'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -69,10 +69,10 @@ int main(int argc, char * argv[]) {
     bool regex = false;
     std::string regex_pattern = "";
 
-    char * treef = NULL;
-    char * outf = NULL;
-    char * namesc = NULL;
-    char * namesfc = NULL;
+    char * treef = nullptr;
+    char * outf = nullptr;
+    char * namesc = nullptr;
+    char * namesfc = nullptr;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:n:f:r:co:shVC", long_options, &oi);
@@ -151,10 +151,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(treef);

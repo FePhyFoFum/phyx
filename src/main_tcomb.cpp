@@ -44,13 +44,13 @@ std::string versionline("pxtcomb 1.2\nCopyright (C) 2017-2021 FePhyFoFum\nLicens
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"addtree", required_argument, NULL, 'a'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"addtree", required_argument, nullptr, 'a'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -61,9 +61,9 @@ int main(int argc, char * argv[]) {
     bool tfileset = false;
     bool addfileset = false;
     
-    char * treef = NULL;
-    char * addtreef = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * addtreef = nullptr;
+    char * outf = nullptr;
     
     while(true) {
         int oi = -1;
@@ -108,12 +108,12 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(addtreef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::istream * apios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ifstream * afstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::istream * apios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ifstream * afstr = nullptr;
+    std::ofstream * ofstr = nullptr;
 
     if (outfileset) {
         ofstr = new std::ofstream(outf);
@@ -149,7 +149,7 @@ int main(int argc, char * argv[]) {
     }
     
     bool going = true;
-    Tree * bigtree = NULL;
+    Tree * bigtree = nullptr;
     while (going) {
         if (retstring.size() > 1) {
             bigtree = read_next_tree_from_stream_newick (*pios, retstring, &going);

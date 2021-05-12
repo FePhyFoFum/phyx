@@ -210,7 +210,7 @@ void BirthDeathSimulator::set_distance_to_tip () {
 void BirthDeathSimulator::delete_a_node (Node * innode) {
     Node * tparent = innode->getParent();
     if (tparent != root_) {
-        Node * child = NULL;
+        Node * child = nullptr;
         for (int i = 0; i < tparent->getChildCount(); i++)
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
@@ -223,7 +223,7 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
         child->setParent(*pparent);
         child->setBL(child->getBL()+tparent->getBL());
     } else {
-        Node * child = NULL;
+        Node * child = nullptr;
         for (int i = 0; i < tparent->getChildCount(); i++)
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);

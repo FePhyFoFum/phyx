@@ -39,22 +39,22 @@ std::string versionline("pxmrca 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"mrca", required_argument, NULL, 'm'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"mrca", required_argument, nullptr, 'm'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
-    char * outf = NULL;
-    char * treef = NULL;
-    char * mrcaf = NULL;
+    char * outf = nullptr;
+    char * treef = nullptr;
+    char * mrcaf = nullptr;
     bool outfileset = false;
     bool fileset = false;
     bool mrcaset = false;
@@ -103,10 +103,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf, std::ios::app);
@@ -156,7 +156,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 for (it=mrcas.begin(); it != mrcas.end(); it++) {
                     //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                     if (!check_names_against_tree(tree, (*it).second)) {
@@ -179,7 +179,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 for (it=mrcas.begin(); it != mrcas.end(); it++) {
                     //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                     if (!check_names_against_tree(tree, (*it).second)) {

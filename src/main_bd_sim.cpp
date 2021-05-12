@@ -42,18 +42,18 @@ void print_help () {
 
 static struct option const long_options[] =
 {
-    {"extant", required_argument, NULL, 'e'},
-    {"time", required_argument, NULL, 't'},
-    {"birth", required_argument, NULL, 'b'},
-    {"death", required_argument, NULL, 'd'},
-    {"nreps", required_argument, NULL, 'n'},
-    {"outf", required_argument, NULL, 'o'},
-    {"showextinct", no_argument, NULL, 's'},
-    {"seed", required_argument, NULL, 'x'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"extant", required_argument, nullptr, 'e'},
+    {"time", required_argument, nullptr, 't'},
+    {"birth", required_argument, nullptr, 'b'},
+    {"death", required_argument, nullptr, 'd'},
+    {"nreps", required_argument, nullptr, 'n'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"showextinct", no_argument, nullptr, 's'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool timeset = false;
     bool extantset = false;
-    char * outf = NULL;
+    char * outf = nullptr;
     int ext = 0;
     int nreps = 1;
     double time = 0.0;
@@ -138,8 +138,8 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-     std::ostream * poos = NULL;
-     std::ofstream * ofstr = NULL;
+     std::ostream * poos = nullptr;
+     std::ofstream * ofstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf);

@@ -37,16 +37,16 @@ std::string versionline("pxtgen 1.2\nCopyright (C) 2021 FePhyFoFum\nLicense GPLv
 
 static struct option const long_options[] =
 {
-    {"ntax", required_argument, NULL, 'n'},
-    {"rooted", no_argument, NULL, 'r'},
-    {"count", no_argument, NULL, 'r'},
-    {"label", required_argument, NULL, 'l'},
-    {"outf", required_argument, NULL, 'o'},
-//    {"seed", required_argument, NULL, 'x'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"ntax", required_argument, nullptr, 'n'},
+    {"rooted", no_argument, nullptr, 'r'},
+    {"count", no_argument, nullptr, 'r'},
+    {"label", required_argument, nullptr, 'l'},
+    {"outf", required_argument, nullptr, 'o'},
+//    {"seed", required_argument, nullptr, 'x'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -58,7 +58,7 @@ int main(int argc, char * argv[]) {
     bool count = false;
     bool outfileset = false;
     std::string lprefix = "t";
-    char * outf = NULL;
+    char * outf = nullptr;
     
     // limit on number of terminals supported (exhaustive)
     int sim_limit_exh = 10;
@@ -130,8 +130,8 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf);

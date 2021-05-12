@@ -34,12 +34,12 @@ std::string versionline("pxupgma 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicens
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -48,8 +48,8 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    char * seqf = NULL;
-    char * outf = NULL;
+    char * seqf = nullptr;
+    char * outf = nullptr;
     
     while(true) {
         int oi = -1;
@@ -86,10 +86,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::ifstream * fstr = NULL;
-    std::istream * pios = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::istream * pios = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(seqf);

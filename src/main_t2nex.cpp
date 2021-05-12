@@ -35,12 +35,12 @@ std::string versionline("pxt2nex 1.2\nCopyright (C) 2021 FePhyFoFum\nLicense GPL
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -49,8 +49,8 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    char * treef = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * outf = nullptr;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:hVC", long_options, &oi);
@@ -87,10 +87,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset ) {
         fstr = new std::ifstream(treef);
@@ -120,7 +120,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 if (treeCounter == 0) {
                     (*poos) << "#NEXUS" << std::endl << "Begin trees;" << std::endl;
                 }
@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 if (treeCounter == 0) {
                     (*poos) << "#NEXUS" << std::endl << "Begin trees;" << std::endl;
                 }

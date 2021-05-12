@@ -45,20 +45,20 @@ std::string versionline("pxlssq 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicense
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"indiv", no_argument, NULL, 'i'},
-    {"nseq", no_argument, NULL, 'n'},
-    {"nchar", no_argument, NULL, 'c'},
-    {"labels", no_argument, NULL, 'l'},
-    {"prot", no_argument, NULL, 'p'},
-    {"aligned", no_argument, NULL, 'a'},
-    {"freqs", no_argument, NULL, 'f'},
-    {"missing", no_argument, NULL, 'm'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"indiv", no_argument, nullptr, 'i'},
+    {"nseq", no_argument, nullptr, 'n'},
+    {"nchar", no_argument, nullptr, 'c'},
+    {"labels", no_argument, nullptr, 'l'},
+    {"prot", no_argument, nullptr, 'p'},
+    {"aligned", no_argument, nullptr, 'a'},
+    {"freqs", no_argument, nullptr, 'f'},
+    {"missing", no_argument, nullptr, 'm'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -76,8 +76,8 @@ int main(int argc, char * argv[]) {
     bool get_nchar = false;
     bool get_freqs = false;
     bool get_missing = false;
-    char * outf = NULL;
-    char * seqf = NULL;
+    char * outf = nullptr;
+    char * seqf = nullptr;
     
     while(true) {
         int oi = -1;
@@ -144,10 +144,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::ifstream * fstr = NULL;
-    std::istream * pios = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::istream * pios = nullptr;
     
     if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;

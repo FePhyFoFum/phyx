@@ -5,8 +5,8 @@
 
 
 BranchSegment::BranchSegment(double dur, int per):duration(dur), period(per),
-        model(NULL), fossilareaindices(std::vector<int>()), startdistint(-666),
-        distconds(NULL), ancdistconds(NULL) {}
+        model(nullptr), fossilareaindices(std::vector<int>()), startdistint(-666),
+        distconds(nullptr), ancdistconds(nullptr) {}
 
 
 void BranchSegment::setModel (RateModel * mod) {

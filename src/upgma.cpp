@@ -97,9 +97,9 @@ void UPGMA::construct_tree () {
     std::vector< std::vector<double> > dMatrix = full_distmatrix_;
     double newHeight = 0.0;
     int numClusters = num_taxa_;
-    Node * anc = NULL; // new node, ancestor of 2 clusters
-    Node * left = NULL;
-    Node * right = NULL;
+    Node * anc = nullptr; // new node, ancestor of 2 clusters
+    Node * left = nullptr;
+    Node * right = nullptr;
     
     // keep list of nodes left to be clustered. initially all terminal nodes
     std::vector<Node *> nodes(num_taxa_);

@@ -51,13 +51,13 @@ std::string versionline("pxrecode 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicen
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"recode", required_argument, NULL, 'r'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"recode", required_argument, nullptr, 'r'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -67,8 +67,8 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
     std::string recodescheme = "";
-    char * outf = NULL;
-    char * seqf = NULL;
+    char * outf = nullptr;
+    char * seqf = nullptr;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:r:o:hVC", long_options, &oi);
@@ -112,10 +112,10 @@ int main(int argc, char * argv[]) {
         recodescheme = "RY";
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf);

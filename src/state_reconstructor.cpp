@@ -16,7 +16,7 @@
 #define MINBL 0.000000001
 
 
-StateReconstructor::StateReconstructor (RateModel& _rm, std::vector<RateModel>& _vrm):tree(NULL),
+StateReconstructor::StateReconstructor (RateModel& _rm, std::vector<RateModel>& _vrm):tree(nullptr),
     use_periods(false), nstates(_rm.nstates), rm(_rm), rm_periods(_vrm), dc("dist_conditionals"),
     andc("anc_dist_conditionals"), store_p_matrices(false), use_stored_matrices(false), revB("revB"),
     rev(false), rev_exp_number("rev_exp_number"), rev_exp_time("rev_exp_time"),
@@ -386,8 +386,8 @@ void StateReconstructor::reverse (Node * node) {
         }
         //RateModel * rm = tsegs->at(ts).getModel();
         cx_mat * p = &rm.stored_p_matrices[node->getBL()];
-        mat * EN = NULL;
-        mat * ER = NULL;
+        mat * EN = nullptr;
+        mat * ER = nullptr;
         VectorNodeObject<Superdouble> tempmoveAer(tempA);
         VectorNodeObject<Superdouble> tempmoveAen(tempA);
         if (stochastic) {

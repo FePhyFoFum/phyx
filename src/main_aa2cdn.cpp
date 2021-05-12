@@ -36,14 +36,14 @@ std::string versionline("pxaa2cdn 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicen
 
 static struct option const long_options[] =
 {
-    {"aaseqf", required_argument, NULL, 'a'},
-    {"nucseqf", required_argument, NULL, 'n'},
-    {"outf", required_argument, NULL, 'o'},
-    {"rmlastcdn", no_argument, NULL, 'r'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"aaseqf", required_argument, nullptr, 'a'},
+    {"nucseqf", required_argument, nullptr, 'n'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"rmlastcdn", no_argument, nullptr, 'r'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -54,9 +54,9 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool nucfileset = false;
     bool rm_last = false;
-    char * aaseqf = NULL;
-    char * nucseqf = NULL;
-    char * outf = NULL;
+    char * aaseqf = nullptr;
+    char * nucseqf = nullptr;
+    char * outf = nullptr;
 
     while (true) {
         int oi = -1;
@@ -113,12 +113,12 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::ifstream * fstr = NULL;
-    std::istream * pios = NULL;
-    std::ifstream * nucfstr = NULL;
-    std::istream * nucpios = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::istream * pios = nullptr;
+    std::ifstream * nucfstr = nullptr;
+    std::istream * nucpios = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(aaseqf);

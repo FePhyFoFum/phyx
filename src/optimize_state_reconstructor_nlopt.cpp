@@ -54,7 +54,7 @@ void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_ma
 
     opt.set_lower_bounds(0.0000);
     opt.set_upper_bounds(100000);
-    opt.set_min_objective(nlopt_sr, NULL);
+    opt.set_min_objective(nlopt_sr, nullptr);
     opt.set_xtol_rel(0.001);
     opt.set_maxeval(5000);
 

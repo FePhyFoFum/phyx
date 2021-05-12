@@ -37,13 +37,13 @@ std::string versionline("pxpoly 1.2\nCopyright (C) 2021 FePhyFoFum\nLicense GPLv
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"seed", required_argument, NULL, 'x'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -54,8 +54,8 @@ int main(int argc, char * argv[]) {
     bool tfileset = false;
     int seed = -1;
     
-    char * outf = NULL;
-    char * treef = NULL;
+    char * outf = nullptr;
+    char * treef = nullptr;
     
     while(true) {
         int oi = -1;
@@ -95,10 +95,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (tfileset) {
         fstr = new std::ifstream(treef);
@@ -148,7 +148,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 if (!is_rooted(tree)) {
                     std::cerr << "Error: this currently only works for rooted trees. Exiting." << std::endl;
                     exit(0);

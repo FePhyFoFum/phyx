@@ -111,9 +111,9 @@ EdlibAlignResult edlibAlign (const char* const queryOriginal, const int queryLen
                             const EdlibAlignConfig config) {
     EdlibAlignResult result;
     result.editDistance = -1;
-    result.endLocations = result.startLocations = NULL;
+    result.endLocations = result.startLocations = nullptr;
     result.numLocations = 0;
-    result.alignment = NULL;
+    result.alignment = nullptr;
     result.alignmentLength = 0;
     result.alphabetLength = 0;
 
@@ -137,7 +137,7 @@ EdlibAlignResult edlibAlign (const char* const queryOriginal, const int queryLen
     /*------------------ MAIN CALCULATION -------------------*/
     // TODO: Store alignment data only after k is determined? That could make things faster.
     int positionNW; // Used only when mode is NW.
-    AlignmentData* alignData = NULL;
+    AlignmentData* alignData = nullptr;
     bool dynamicK = false;
     int k = config.k;
     if (k < 0) { // If valid k is not given, auto-adjust k until solution is found.
@@ -489,7 +489,7 @@ static int myersCalcEditDistanceSemiGlobal (
         const unsigned char* const target, const int targetLength,
         const int alphabetLength, int k, const EdlibAlignMode mode,
         int* const bestScore_, int** const positions_, int* const numPositions_) {
-    *positions_ = NULL;
+    *positions_ = nullptr;
     *numPositions_ = 0;
 
     // firstBlock is 0-based index of first block in Ukkonen band.
@@ -658,7 +658,7 @@ static int myersCalcEditDistanceSemiGlobal (
  * @param [in] findAlignment  If true, whole matrix is remembered and alignment data is returned.
  *                            Quadratic amount of memory is consumed.
  * @param [out] alignData  Data needed for alignment traceback (for reconstruction of alignment).
- *                         Set only if findAlignment is set to true, otherwise it is NULL.
+ *                         Set only if findAlignment is set to true, otherwise it is nullptr.
  *                         Make sure to free this array using delete[].
  * @param [out] targetStopPosition  If set to -1, whole calculation is performed normally, as expected.
  *         If set to p, calculation is performed up to position p in target (inclusive)
@@ -710,7 +710,7 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
     else if (targetStopPosition > -1)
         *alignData = new AlignmentData(maxNumBlocks, 1);
     else
-        *alignData = NULL;
+        *alignData = nullptr;
 
     const unsigned char* targetChar = target;
     for (int c = 0; c < targetLength; c++) { // for each column
@@ -1129,7 +1129,7 @@ static int obtainAlignment (
         + (long long) 2 * sizeof(int) * targetLength;
     if (alignmentDataSize < 1024 * 1024) {
         int score_, endLocation_;  // Used only to call function.
-        AlignmentData* alignData = NULL;
+        AlignmentData* alignData = nullptr;
         Word* Peq = buildPeq(alphabetLength, query, queryLength);
         myersCalcEditDistanceNW(Peq, W, maxNumBlocks,
                                 query, queryLength,
@@ -1189,7 +1189,7 @@ static int obtainAlignmentHirschberg (
     const int rightHalfWidth = targetLength - leftHalfWidth;
 
     // Calculate left half.
-    AlignmentData* alignDataLeftHalf = NULL;
+    AlignmentData* alignDataLeftHalf = nullptr;
     int leftHalfCalcStatus = myersCalcEditDistanceNW(
             Peq, W, maxNumBlocks,
             query, queryLength,
@@ -1198,7 +1198,7 @@ static int obtainAlignmentHirschberg (
             &score_, &endLocation_, false, &alignDataLeftHalf, leftHalfWidth - 1);
 
     // Calculate right half.
-    AlignmentData* alignDataRightHalf = NULL;
+    AlignmentData* alignDataRightHalf = nullptr;
     int rightHalfCalcStatus = myersCalcEditDistanceNW(
             rPeq, W, maxNumBlocks,
             rQuery, queryLength,
@@ -1315,11 +1315,11 @@ static int obtainAlignmentHirschberg (
     const int lrHeight = queryLength - ulHeight;
     const int ulWidth = leftHalfWidth;
     const int lrWidth = rightHalfWidth;
-    unsigned char* ulAlignment = NULL; int ulAlignmentLength;
+    unsigned char* ulAlignment = nullptr; int ulAlignmentLength;
     int ulStatusCode = obtainAlignment(query, rQuery + lrHeight, ulHeight,
                                        target, rTarget + lrWidth, ulWidth,
                                        alphabetLength, leftScore, &ulAlignment, &ulAlignmentLength);
-    unsigned char* lrAlignment = NULL; int lrAlignmentLength;
+    unsigned char* lrAlignment = nullptr; int lrAlignmentLength;
     int lrStatusCode = obtainAlignment(query + ulHeight, rQuery, lrHeight,
                                        target + ulWidth, rTarget, lrWidth,
                                        alphabetLength, rightScore, &lrAlignment, &lrAlignmentLength);

@@ -37,14 +37,14 @@ std::string versionline("pxtscale 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicen
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"scale", required_argument, NULL, 's'},
-    {"rootheight", required_argument, NULL, 'r'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"scale", required_argument, nullptr, 's'},
+    {"rootheight", required_argument, nullptr, 'r'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -57,8 +57,8 @@ int main(int argc, char * argv[]) {
     double scalef = 1.0;
     bool heightset = false;
     bool scaleset = false;
-    char * outf = NULL;
-    char * treef = NULL;
+    char * outf = nullptr;
+    char * treef = nullptr;
     std::string cnamef = "";
     std::string nnamef = "";
     while(true) {
@@ -104,10 +104,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (heightset && scaleset) {
         std::cerr << "Error: supply only rootheight (-r) or scale (-s), not both. Exiting." << std::endl;
@@ -172,7 +172,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 if (heightset) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);

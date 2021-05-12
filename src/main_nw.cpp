@@ -47,17 +47,17 @@ std::string versionline("pxnw 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense G
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"outalnf", required_argument, NULL, 'a'},
-    {"seqtype", required_argument, NULL, 't'},
-    {"matrix", required_argument, NULL, 'm'},
-    {"nthreads", required_argument, NULL, 'n'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"outalnf", required_argument, nullptr, 'a'},
+    {"seqtype", required_argument, nullptr, 't'},
+    {"matrix", required_argument, nullptr, 'm'},
+    {"nthreads", required_argument, nullptr, 'n'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -68,10 +68,10 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     //bool outalnfileset = false; // not used
     bool matrixfileset = false;
-    char * seqf = NULL;
-    char * outf = NULL;
-    //char * outaf = NULL; not used
-    char * matf = NULL;
+    char * seqf = nullptr;
+    char * outf = nullptr;
+    //char * outaf = nullptr; not used
+    char * matf = nullptr;
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
     bool verbose = false;
@@ -142,10 +142,10 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(seqf);

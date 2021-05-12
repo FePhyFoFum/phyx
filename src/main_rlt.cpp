@@ -40,15 +40,15 @@ std::string versionline("pxrlt 1.2\nCopyright (C) 2018-2021 FePhyFoFum\nLicense 
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"cnames", required_argument, NULL, 'c'},
-    {"nnames", required_argument, NULL, 'n'},
-    {"outf", required_argument, NULL, 'o'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"cnames", required_argument, nullptr, 'c'},
+    {"nnames", required_argument, nullptr, 'n'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -60,8 +60,8 @@ int main(int argc, char * argv[]) {
     bool cfileset = false;
     bool nfileset = false;
     bool verbose = false;
-    char * outf = NULL;
-    char * treef = NULL;
+    char * outf = nullptr;
+    char * treef = nullptr;
     std::string cnamef = "";
     std::string nnamef = "";
     while(true) {
@@ -112,10 +112,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (!nfileset | !cfileset) {
         std::cerr << "Error: must supply both name files (-c for current, -n for new). Exiting." << std::endl;
@@ -166,7 +166,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 rl.relabel_tree(tree);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;

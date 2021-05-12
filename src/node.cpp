@@ -17,7 +17,7 @@
 #include "utils.h"
 
 
-Node::Node ():BL_(0.0), height_(0.0), number_(0), name_(""), parent_(NULL),
+Node::Node ():BL_(0.0), height_(0.0), number_(0), name_(""), parent_(nullptr),
     children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
     assocDV_(std::map<std::string, std::vector<Superdouble> >()), comment_(""), painted_(false) {
 
@@ -64,7 +64,7 @@ bool Node::isInternal () {
 
 bool Node::isRoot () {
     bool ret = false;
-    if (parent_ == NULL) {
+    if (parent_ == nullptr) {
         ret = true;
     }
     return ret;
@@ -86,7 +86,7 @@ bool Node::isKnuckle () {
 
 bool Node::hasParent () {
     bool ret = true;
-    if (parent_ == NULL) {
+    if (parent_ == nullptr) {
         ret = false;
     }
     return ret;
@@ -319,7 +319,7 @@ std::string Node::getNewick (bool bl, std::string obj) {
     if (!this->name_.empty()) {
         ret = ret + this->name_;
     }
-    if (this->getObject(obj) != NULL) {
+    if (this->getObject(obj) != nullptr) {
         std::ostringstream o;
         o << (*((StringNodeObject*) (this->getObject(obj))));
         ret += "[&"+obj+"="+o.str()+"]";

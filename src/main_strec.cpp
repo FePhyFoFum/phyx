@@ -52,21 +52,21 @@ std::string versionline("pxstrec 1.2\nCopyright (C) 2017-2021 FePhyFoFum\nLicens
 
 static struct option const long_options[] =
 {
-    {"dataf", required_argument, NULL, 'd'},
-    {"datawide", no_argument, NULL, 'w'},
-    {"dataz", no_argument,  NULL, 'z'},
-    {"treef", required_argument, NULL, 't'},
-    {"conf", required_argument, NULL, 'c'},
-    {"outanc", required_argument, NULL, 'o'},
-    {"outstnum", required_argument, NULL, 'n'},
-    {"outsttim", required_argument, NULL, 'm'},
-    {"outstnumany", required_argument, NULL, 'a'},
-    {"periods", required_argument, NULL, 'p'},
-    {"logf", required_argument, NULL, 'l'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"dataf", required_argument, nullptr, 'd'},
+    {"datawide", no_argument, nullptr, 'w'},
+    {"dataz", no_argument,  nullptr, 'z'},
+    {"treef", required_argument, nullptr, 't'},
+    {"conf", required_argument, nullptr, 'c'},
+    {"outanc", required_argument, nullptr, 'o'},
+    {"outstnum", required_argument, nullptr, 'n'},
+    {"outsttim", required_argument, nullptr, 'm'},
+    {"outstnumany", required_argument, nullptr, 'a'},
+    {"periods", required_argument, nullptr, 'p'},
+    {"logf", required_argument, nullptr, 'l'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 bool checkdata(Tree * intree, std::vector<Sequence> runseqs);
@@ -111,14 +111,14 @@ int main(int argc, char * argv[]) {
     bool datawide = false;
     bool periodsset = false;
     bool dataz = false; //the datafile will have probabilities
-    char * conff = NULL;
-    char * treef = NULL;
-    char * dataf = NULL;
-    char * logf = NULL;
-    char * outanc = NULL;
-    char * outnum = NULL;
-    char * outnumany = NULL;
-    char * outtime = NULL;
+    char * conff = nullptr;
+    char * treef = nullptr;
+    char * dataf = nullptr;
+    char * logf = nullptr;
+    char * outanc = nullptr;
+    char * outnum = nullptr;
+    char * outnumany = nullptr;
+    char * outtime = nullptr;
     std::string periodstring;
     std::vector<std::string> ptokens;
     std::vector<double> period_times;
@@ -192,8 +192,8 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    std::ofstream * logout = NULL;
-    std::ostream * loos = NULL;
+    std::ofstream * logout = nullptr;
+    std::ostream * loos = nullptr;
     
     if (logfileset) {
         logout = new std::ofstream(logf);

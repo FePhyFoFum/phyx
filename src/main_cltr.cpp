@@ -44,16 +44,16 @@ std::string versionline("pxcltr 1.2\nCopyright (C) 2017-2021 FePhyFoFum\nLicense
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"root", no_argument, NULL, 'r'},
-    {"labels", no_argument, NULL, 'l'},
-    {"knuckles", no_argument, NULL, 'k'},
-    {"outf", required_argument, NULL, 'o'},
-    {"showd", no_argument, NULL, 's'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"root", no_argument, nullptr, 'r'},
+    {"labels", no_argument, nullptr, 'l'},
+    {"knuckles", no_argument, nullptr, 'k'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"showd", no_argument, nullptr, 's'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -69,8 +69,8 @@ int main(int argc, char * argv[]) {
     
     // need option to write nexus
     
-    char * treef = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * outf = nullptr;
     
     while(true) {
         int oi = -1;
@@ -130,10 +130,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     */
-    std::istream* pios = NULL;
-    std::ostream* poos = NULL;
-    std::ifstream* fstr = NULL;
-    std::ofstream* ofstr = NULL;
+    std::istream* pios = nullptr;
+    std::ostream* poos = nullptr;
+    std::ifstream* fstr = nullptr;
+    std::ofstream* ofstr = nullptr;
 
     if (outfileset) {
         ofstr = new std::ofstream(outf);
@@ -164,7 +164,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 CleanTree ct(tree, removerootedge, removelabels, removeknuckles);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
@@ -178,7 +178,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 CleanTree ct(tree, removerootedge, removelabels, removeknuckles);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;

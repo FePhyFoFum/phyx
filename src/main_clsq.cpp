@@ -44,17 +44,17 @@ std::string versionline("pxclsq 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"prop", required_argument, NULL, 'p'},
-    {"taxa", required_argument, NULL, 't'},
-    {"codon", required_argument, NULL, 'c'},
-    {"info", required_argument, NULL, 'i'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"prop", required_argument, nullptr, 'p'},
+    {"taxa", required_argument, nullptr, 't'},
+    {"codon", required_argument, nullptr, 'c'},
+    {"info", required_argument, nullptr, 'i'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -63,8 +63,8 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    char * seqf = NULL;
-    char * outf = NULL;
+    char * seqf = nullptr;
+    char * outf = nullptr;
     double prop_required = 0.5;
     bool verbose = false;
     bool by_taxon = false;
@@ -125,10 +125,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::istream * pios = NULL;
-    std::ifstream * fstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::istream * pios = nullptr;
+    std::ifstream * fstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf);

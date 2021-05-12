@@ -39,14 +39,14 @@ std::string versionline("pxbdfit 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicens
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"model", required_argument, NULL, 'm'},
-    {"outf", required_argument, NULL, 'o'},
-    {"showd", no_argument, NULL, 's'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"model", required_argument, nullptr, 'm'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"showd", no_argument, nullptr, 's'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -56,8 +56,8 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool tfileset = false;
     
-    char * treef = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * outf = nullptr;
     
     std::string model = "bd";
     std::set<std::string> avail_models{"bd", "yule", "best"};
@@ -106,10 +106,10 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
 
     if (outfileset) {
         ofstr = new std::ofstream(outf);
@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 // in addition to checking ultramtericity, the following sets node heights
                 if (is_ultrametric_paths(tree)) {
                     BDFit bd(tree, model);

@@ -55,26 +55,26 @@ std::string versionline("pxseqgen 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicen
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"length", required_argument, NULL, 'l'},
-    {"basef", required_argument, NULL, 'b'},
-    {"gamma", required_argument, NULL, 'g'},
-    {"pinvar", required_argument, NULL, 'i'},
-    {"ratemat", required_argument, NULL, 'r'},
-    {"aaratemat", required_argument, NULL, 'w'},
-    {"aabasef", required_argument, NULL, 'q'},
-    {"nreps", required_argument, NULL, 'n'},
-    {"seed", required_argument, NULL, 'x'},
-    {"ancestors", no_argument, NULL, 'a'},
-    {"printnodelabels", no_argument, NULL, 'p'},
-    {"protein", no_argument, NULL, 'c'},
-    {"multimodel", required_argument, NULL, 'm'},
-    {"rootseq", required_argument, NULL, 'k'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"length", required_argument, nullptr, 'l'},
+    {"basef", required_argument, nullptr, 'b'},
+    {"gamma", required_argument, nullptr, 'g'},
+    {"pinvar", required_argument, nullptr, 'i'},
+    {"ratemat", required_argument, nullptr, 'r'},
+    {"aaratemat", required_argument, nullptr, 'w'},
+    {"aabasef", required_argument, nullptr, 'q'},
+    {"nreps", required_argument, nullptr, 'n'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"ancestors", no_argument, nullptr, 'a'},
+    {"printnodelabels", no_argument, nullptr, 'p'},
+    {"protein", no_argument, nullptr, 'c'},
+    {"multimodel", required_argument, nullptr, 'm'},
+    {"rootseq", required_argument, nullptr, 'k'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -96,8 +96,8 @@ int main(int argc, char * argv[]) {
     std::string inrates;
     std::string holdrates;
     std::string ancseq;
-    char * outf = NULL;
-    char * treef = NULL;
+    char * outf = nullptr;
+    char * treef = nullptr;
     std::vector<double> diag(20, 0.0);
     std::vector<double> basefreq(4, 0.25);
     std::vector<double> aabasefreq(20, 0.05);
@@ -315,10 +315,10 @@ int main(int argc, char * argv[]) {
         dmatrix = aa_rmatrix;
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (outfileset) {
         ofstr = new std::ofstream(outf);
@@ -371,7 +371,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);

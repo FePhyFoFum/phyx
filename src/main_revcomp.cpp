@@ -44,16 +44,16 @@ std::string versionline("pxrevcomp 1.2\nCopyright (C) 2017-2021 FePhyFoFum\nLice
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"ids", required_argument, NULL, 'i'},
-    {"guess", no_argument, NULL, 'g'},
-    {"pguess", no_argument, NULL, 'p'},
-    {"sguess", no_argument, NULL, 'm'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"ids", required_argument, nullptr, 'i'},
+    {"guess", no_argument, nullptr, 'g'},
+    {"pguess", no_argument, nullptr, 'p'},
+    {"sguess", no_argument, nullptr, 'm'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
@@ -90,7 +90,7 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
 }
 
 int main(int argc, char * argv[]) {
-    srand (time(NULL));
+    srand (time(nullptr));
     log_call(argc, argv);
     
     bool fileset = false;
@@ -102,9 +102,9 @@ int main(int argc, char * argv[]) {
     bool pguess = false;
     bool sguess = false;
     double sguess_samplenum = 0.2; // 10% of them will be used for revcomp
-    char * seqf = NULL;
-    char * outf = NULL;
-    char * idssc = NULL;
+    char * seqf = nullptr;
+    char * outf = nullptr;
+    char * idssc = nullptr;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:i:o:mgphVC", long_options, &oi);
@@ -164,10 +164,10 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(seqf);

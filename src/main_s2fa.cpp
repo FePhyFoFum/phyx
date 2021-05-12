@@ -34,13 +34,13 @@ std::string versionline("pxs2fa 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"uppercase", no_argument, NULL, 'u'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"uppercase", no_argument, nullptr, 'u'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -50,8 +50,8 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     bool toupcase = false;
-    char * seqf = NULL;
-    char * outf = NULL;
+    char * seqf = nullptr;
+    char * outf = nullptr;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:uhVC", long_options, &oi);
@@ -95,10 +95,10 @@ int main(int argc, char * argv[]) {
     int num_taxa = 0;
     int num_char = 0;
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(seqf);

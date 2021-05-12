@@ -32,7 +32,7 @@ Tree * TreeReader::readTree (std::string trees) {
     bool hasAnnotations = false;
     bool hasInternalNodeNames = false;
     char quoteType;
-    Node * currNode = NULL;
+    Node * currNode = nullptr;
     double sumEL = 0.0;
     while (keepGoing) {
         //std::cout << "Working on: " << nextChar << std::endl;
@@ -43,7 +43,7 @@ Tree * TreeReader::readTree (std::string trees) {
                 currNode = root;
                 start = false;
             } else {
-                if (currNode == NULL) {
+                if (currNode == nullptr) {
                     std::cerr << "Malformed newick string. Can read until char " << x << "." << std::endl;
                     exit(1);
                 }
@@ -134,7 +134,7 @@ Tree * TreeReader::readTree (std::string trees) {
                     break;
                 }
             } // work on edge
-            double edd = strtod(edgeL.c_str(), NULL);
+            double edd = strtod(edgeL.c_str(), nullptr);
             currNode->setBL(edd);
             sumEL += edd;
             x--;
@@ -386,7 +386,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
         while (reading) {
             if (!getline_safe(stri, tline)) {
                 (*going) = false;
-                return NULL;
+                return nullptr;
             }
             trim_spaces(tline); // important!
             if (!tline.empty()) {
@@ -404,7 +404,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
     std::string uc = string_to_upper(tline);
     if (uc.find("END;") != std::string::npos) {
         (*going) = false;
-        return NULL;
+        return nullptr;
     }
     //vector<string> tokens;
     //string del(" \t");
@@ -438,7 +438,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         retstring = "";
     } else if (!getline_safe(stri, tline)) {
         (*going) = false;
-        return NULL;
+        return nullptr;
     }
     trim_spaces(tline);
     
@@ -449,7 +449,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         while (!done) {
             if (!getline_safe(stri, tline)) {
                 (*going) = false;
-                return NULL;
+                return nullptr;
             } else {
                 trim_spaces(tline);
                  if (tline.size() != 0) {

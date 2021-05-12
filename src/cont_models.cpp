@@ -40,14 +40,14 @@ void calc_vcv (Tree * tree, mat& vcv) {
  * getMRCAFromPath_forVCV
  */
 Node * getMRCA_forVCV (Node * curn1, Node * curn2) {
-    Node * mrca = NULL;
+    Node * mrca = nullptr;
     //get path to root for first node
     std::vector<Node *> path1;
     Node * parent = curn1;
     path1.push_back(parent);
-    while (parent != NULL) {
+    while (parent != nullptr) {
         path1.push_back(parent);
-        if (parent->getParent() != NULL) {
+        if (parent->getParent() != nullptr) {
             parent = parent->getParent();
         } else {
             break;
@@ -76,7 +76,7 @@ Node * getMRCA_forVCV (Node * curn1, Node * curn2) {
  * obtained path and finds the match with the second node
  */
 Node * getMRCAFromPath_forVCV (std::vector<Node *> * path1, Node * curn2) {
-    Node * mrca = NULL;
+    Node * mrca = nullptr;
     Node * parent = curn2;
     bool x = true;
     while (x) {

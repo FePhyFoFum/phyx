@@ -44,15 +44,15 @@ std::string versionline("pxcat 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense 
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"flist", required_argument, NULL, 'f'},
-    {"outf", required_argument, NULL, 'o'},
-    {"partf", required_argument, NULL, 'p'},
-    {"uppercase", no_argument, NULL, 'u'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"flist", required_argument, nullptr, 'f'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"partf", required_argument, nullptr, 'p'},
+    {"uppercase", no_argument, nullptr, 'u'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
     bool logparts = false;
     bool toupcase = false;
     std::vector<std::string> inputFiles;
-    char * outf = NULL;
+    char * outf = nullptr;
     std::string partf = "";
     std::string listf = "";
 
@@ -142,8 +142,8 @@ int main(int argc, char * argv[]) {
         ifs.close();
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
 
     if (outfileset) {
         ofstr = new std::ofstream(outf);

@@ -48,23 +48,23 @@ std::string versionline("pxlog 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicense 
 
 static struct option const long_options[] =
 {
-    {"parmf", required_argument, NULL, 'p'},
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"burnin", required_argument, NULL, 'b'},
-    {"thin", required_argument, NULL, 'n'},
-    {"rand", required_argument, NULL, 'r'},
-    {"info", no_argument, NULL, 'i'},
-    {"summarize", no_argument, NULL, 's'},
-    {"columns", no_argument, NULL, 'c'},
-    {"delete", required_argument, NULL, 'd'},
-    {"keep", required_argument, NULL, 'k'},
-    {"seed", required_argument, NULL, 'x'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"parmf", required_argument, nullptr, 'p'},
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"burnin", required_argument, nullptr, 'b'},
+    {"thin", required_argument, nullptr, 'n'},
+    {"rand", required_argument, nullptr, 'r'},
+    {"info", no_argument, nullptr, 'i'},
+    {"summarize", no_argument, nullptr, 's'},
+    {"columns", no_argument, nullptr, 'c'},
+    {"delete", required_argument, nullptr, 'd'},
+    {"keep", required_argument, nullptr, 'k'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -90,7 +90,7 @@ int main(int argc, char * argv[]) {
     std::string incolids;
     std::string logtype;
     
-    char * outf = NULL;
+    char * outf = nullptr;
     
     while(true) {
         int oi = -1;
@@ -199,12 +199,12 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     // not used at the moment: assumed that all input comes from files
-    //istream * pios = NULL;
-    //ifstream * fstr = NULL;
+    //istream * pios = nullptr;
+    //ifstream * fstr = nullptr;
     
     if (!tfileset && !pfileset) {
         std::cerr << "Error: must specify a tree file or parameter file. Exiting." << std::endl;

@@ -45,19 +45,19 @@ std::string versionline("pxbp 1.2\nCopyright (C) 2017-2021 FePhyFoFum\nLicense G
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"edgeall", no_argument, NULL, 'e'},
-    {"uniquetree", no_argument, NULL, 'u'},
-    {"maptree", required_argument, NULL, 'm'},
-    {"cutoff", required_argument, NULL, 'c'},
-    {"suppress", no_argument, NULL, 's'},
-    {"first", no_argument, NULL, 'f'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"edgeall", no_argument, nullptr, 'e'},
+    {"uniquetree", no_argument, nullptr, 'u'},
+    {"maptree", required_argument, nullptr, 'm'},
+    {"cutoff", required_argument, nullptr, 'c'},
+    {"suppress", no_argument, nullptr, 's'},
+    {"first", no_argument, nullptr, 'f'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -73,9 +73,9 @@ int main(int argc, char * argv[]) {
     bool suppress = false;
     bool cutoff = false;
     bool firsttree = false;
-    char * treef = NULL;
-    char * mtreef = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * mtreef = nullptr;
+    char * outf = nullptr;
     double cutnum = 0;
     while(true) {
         int oi = -1;
@@ -136,12 +136,12 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::istream * mpios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ifstream * mfstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::istream * mpios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ifstream * mfstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     if (fileset) {
         fstr = new std::ifstream(treef);
@@ -184,7 +184,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 trees.push_back(tree);
             }
         }
@@ -199,7 +199,7 @@ int main(int argc, char * argv[]) {
     }
     //-----END READ TREES
     //-----READ MAP TREE
-    Tree * maptree = NULL;
+    Tree * maptree = nullptr;
     if (mapfileset) {
         ft = test_tree_filetype_stream(*mpios, retstring);
         if (ft != 0 && ft != 1) {
@@ -215,7 +215,7 @@ int main(int argc, char * argv[]) {
             while (going) {
                 maptree = read_next_tree_from_stream_nexus(*mpios, retstring, ttexists,
                     &translation_table, &going);
-                if (maptree != NULL) {
+                if (maptree != nullptr) {
                     going = false;
                     break;
                 }
