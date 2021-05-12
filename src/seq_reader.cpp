@@ -83,7 +83,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                     break;
                 }
             }
-            if (found == false) {
+            if (!found) {
                 std::cout << "badly formatted nexus file, missing 'MATRIX' in data/character block" << std::endl;
             }
             retstring = "";

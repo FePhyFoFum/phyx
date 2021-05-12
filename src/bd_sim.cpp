@@ -101,7 +101,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
     int count = 1;
     tree_ = new Tree(root_);
     tree_->processRoot();
-    if (show_dead == false) {
+    if (!show_dead) {
         delete_dead_nodes();
     }
 

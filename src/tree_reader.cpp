@@ -317,7 +317,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
             exists = true;
             //std::cout << "Found translation table!" << std::endl;
             continue;
-        } else if (begintrees && tgoing == false) {
+        } else if (begintrees && !tgoing) {
             //std::cout << "No translation table present!" << std::endl;
                 return false;
         }

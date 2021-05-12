@@ -127,7 +127,7 @@ bool StateReconstructor::set_tip_conditionals (std::vector<Sequence>& data) {
         if (verbose) {
             std::cout << nd->getName() << " ";
             }
-        if (use_periods == false) {
+        if (!use_periods) {
             for (int j = 0; j < nstates; j++) {
             if (seq.get_sequence().at(j) == '1') {
                 (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = 1.0;
@@ -178,7 +178,7 @@ bool StateReconstructor::set_tip_conditionals_already_given (std::vector<Sequenc
     if (verbose) {
         std::cout << nd->getName() << " ";
     }
-    if (use_periods == false) {
+    if (!use_periods) {
         for (int j = 0; j < nstates; j++) {
             (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = atof(searchtokens[j].c_str());
             if (verbose) {
@@ -206,7 +206,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals (Node& node) {
     VectorNodeObject<Superdouble> distconds = *((VectorNodeObject<Superdouble>*) node.getObject(dc));
     VectorNodeObject<Superdouble> * v = new VectorNodeObject<Superdouble> (nstates, 0);
     cx_mat p;
-    if (use_stored_matrices == false) {
+    if (!use_stored_matrices) {
         p= rm.setup_P(node.getBL(), store_p_matrices);
     } else {
         p = rm.stored_p_matrices[node.getBL()];
@@ -240,7 +240,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
         std::vector<Superdouble> * v = new std::vector<Superdouble> (nstates, 0);
         //vector<vector<double > > p;
         cx_mat p;
-        if (use_stored_matrices == false) {
+        if (!use_stored_matrices) {
             //p= trm->setup_fortran_P(tsegs->at(i).getPeriod(), tsegs->at(i).getDuration(), store_p_matrices);
             p = trm->setup_P(tsegs->at(i).getDuration(), store_p_matrices);
         } else {
@@ -278,14 +278,14 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
 
 void StateReconstructor::ancdist_conditional_lh (Node& node) {
     VectorNodeObject<Superdouble> distconds(nstates, 0);
-    if (node.isExternal() == false) { // is not a tip
+    if (!node.isExternal()) { // is not a tip
         Node * c1 = node.getChild(0);
         Node * c2 = node.getChild(1);
         ancdist_conditional_lh(*c1);
         ancdist_conditional_lh(*c2);
         VectorNodeObject<Superdouble> v1;
         VectorNodeObject<Superdouble> v2;
-        if (use_periods == false) {
+        if (!use_periods) {
             v1 =conditionals(*c1);
             v2 =conditionals(*c2);
         } else {
@@ -302,7 +302,7 @@ void StateReconstructor::ancdist_conditional_lh (Node& node) {
     //        }
         //}
     } else {
-        if (use_periods == false) {
+        if (!use_periods) {
             distconds = *((VectorNodeObject<Superdouble>*)node.getObject(dc));
         } else {
             std::vector<BranchSegment> * tsegs = node.getSegVector();
@@ -312,7 +312,7 @@ void StateReconstructor::ancdist_conditional_lh (Node& node) {
             }
         }
     }
-    if (use_periods == false) {
+    if (!use_periods) {
         for (unsigned int i = 0; i < distconds.size(); i++) {
             ((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
         }
@@ -357,7 +357,7 @@ void StateReconstructor::reverse (Node * node) {
             reverse(node->getChild(i));
         }
     } else {
-        //else if (node.isExternal() == false) {
+        //else if (!node.isExternal()) {
         //calculate A i
         //sum over all alpha k of sister node of the parent times the priors of the speciations
         //(weights) times B of parent j
@@ -426,7 +426,7 @@ void StateReconstructor::reverse (Node * node) {
 
 std::vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node& node) {
     std::vector<Superdouble> LHOODS(nstates, 0);
-    if (node.isExternal() == false) {//is not a tip
+    if (!node.isExternal()) { // is not a tip
         VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
         Node * c1 = node.getChild(0);
         Node * c2 = node.getChild(1);
@@ -446,7 +446,7 @@ std::vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node
 
 std::vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) {
     std::vector<double> LHOODS(nstates, 0);
-    if (node.isExternal() == false) {//is not a tip
+    if (!node.isExternal()) { // is not a tip
         VectorNodeObject<Superdouble> * Bs = (VectorNodeObject<Superdouble> *) node.getObject(revB);
         Node * c1 = node.getChild(0);
         Node * c2 = node.getChild(1);

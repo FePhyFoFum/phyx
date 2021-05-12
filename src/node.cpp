@@ -160,7 +160,7 @@ bool Node::hasChild (Node& test) {
 
 
 bool Node::addChild (Node& c) {
-    if (hasChild(c) == false) {
+    if (!hasChild(c)) {
         children_.push_back(&c);
         c.setParent(*this);
         return true;
@@ -376,7 +376,7 @@ int Node::get_num_leaves () {
     int retnum = 0;
     std::stack<Node*> nodes;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
@@ -398,7 +398,7 @@ std::vector<Node*> Node::get_leaves () {
     std::vector<Node*> retnodes;
     std::stack<Node*> nodes;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
@@ -420,7 +420,7 @@ std::set<Node*> Node::get_leaves_set () {
     std::set<Node*> retnodes;
     std::stack<Node*> nodes;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
@@ -439,7 +439,7 @@ std::set<std::string> Node::get_leave_names_set () {
     std::stack<Node*> nodes;
     std::set<std::string> names;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
@@ -458,7 +458,7 @@ std::vector<std::string> Node::get_leave_names () {
     std::stack<Node*> nodes;
     std::vector<std::string> names;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {

@@ -220,7 +220,7 @@ double calc_bm_node_postorder (Node * node, int nch, double sigma) {
         double bl = bl1 + bl2;
         double cur_like = ((-0.5)* ((log(2*M_PI*sigma))+(log(bl))+(pow(ch, 2)/(sigma*bl))));
         node_like += cur_like;
-        if (node->isRoot() == false) {
+        if (!node->isRoot()) {
             (*node->getDoubleVector("val"))[nch] = ((bl2*ch1)+(bl1*ch2))/(bl);
             node->setBL(node->getBL()+((bl1*bl2)/(bl1+bl2)));
         }
