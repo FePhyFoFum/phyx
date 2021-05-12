@@ -574,7 +574,8 @@ void replace_each (std::string& str, const std::string& badChars, const std::str
  Where they diverge (punctuation in Nexus but not newick):  
  
 /-----------------------------------------------------------------------*/
-const std::string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>";
+//const std::string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>"; // escaped string literal
+const std::string nexus_punct  = R"(()[]{}/\,;:=*'"`+-<>)"; // raw string literal
 const std::string newick_punct = "()[]\':;,";
 
 // given a line that begins with [, keep reading until a line where last char is ] (i.e., end of comment)
