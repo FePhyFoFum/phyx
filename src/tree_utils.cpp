@@ -188,7 +188,7 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
             while (cur != tree->getRoot()) {
                 cur = cur->getParent();
                 // break early if encountering an existing painted path
-                if (cur->getPainted() == true) {
+                if (cur->getPainted()) {
                     break;
                 } else {
                     cur->setPainted(true);
@@ -216,7 +216,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
     for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         Node * tnd = tr->getInternalNode(i);
         if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
-        if (tnd->getParent() == NULL && rooted == true) { // root on rooted tree
+        if (tnd->getParent() == NULL && rooted) { // root on rooted tree
             if (debug) std::cout << "  Node has no parent, as it is the root" << std::endl;
             continue;
         }
@@ -225,7 +225,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
             nds.push_back(tnd->getChild(j));
             if (debug) std::cout << "  Adding child node: " << tnd->getChild(j)->getName() << std::endl;
         }
-        if (tnd->getParent() == tr->getRoot() && rooted == true) {
+        if (tnd->getParent() == tr->getRoot() && rooted) {
             for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
@@ -245,7 +245,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
         std::vector<Node *> nds;
         Node * tnd = tr->getExternalNode(i);
         if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
-        if (tnd->getParent() == tr->getRoot() && rooted == true) {
+        if (tnd->getParent() == tr->getRoot() && rooted) {
             for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));

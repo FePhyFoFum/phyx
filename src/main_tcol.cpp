@@ -110,7 +110,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
     
     //for node ids
     std::map<std::string, std::string> nodeid_map;
-    if (nodeidfset == true) {
+    if (nodeidfset) {
         std::ifstream nfstr(nodeidf);
         std::string tline;
         while (getline_safe(nfstr, tline)) {

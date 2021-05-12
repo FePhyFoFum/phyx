@@ -130,7 +130,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (namesset == true) {
+    if (namesset) {
         std::vector<std::string> tokens2;
         std::string del2(",");
         tokens2.clear();
@@ -139,7 +139,7 @@ int main(int argc, char * argv[]) {
             trim_spaces(tokens2[j]);
             names.push_back(tokens2[j]);
         }
-    } else if (namefileset == true) {
+    } else if (namefileset) {
         std::ifstream nfstr(namesfc);
         std::string tline;
         while (getline_safe(nfstr, tline)) {

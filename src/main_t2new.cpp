@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (fileset == true ) {
+    if (fileset ) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (going == true) {
+            if (going) {
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }
@@ -133,7 +133,7 @@ int main(int argc, char * argv[]) {
         bool going = true;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going == true) {
+            if (going) {
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;
             }

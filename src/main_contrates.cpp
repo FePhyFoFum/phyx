@@ -114,14 +114,14 @@ int main(int argc, char * argv[]) {
     std::ostream * poouts = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (tfileset == true) {
+    if (tfileset) {
         tfstr = new std::ifstream(treef);
         poos = tfstr;
     } else {
         poos = &std::cin;
     }
 
-    if (cfileset == true) {
+    if (cfileset) {
         cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {

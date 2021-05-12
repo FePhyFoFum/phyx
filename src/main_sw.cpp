@@ -128,7 +128,7 @@ int main(int argc, char * argv[]) {
         }
     }
     std::map<char, std::map<char, int> > sc_mat;
-    if (matrixfileset == true) {
+    if (matrixfileset) {
         read_scoring_matrix(matf, sc_mat);
     } else {
         if (seqtype == 0) {

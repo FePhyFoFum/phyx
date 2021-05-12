@@ -171,7 +171,7 @@ bool Node::addChild (Node& c) {
 
 
 bool Node::removeChild (Node& c) {
-    if (hasChild(c) == true) {
+    if (hasChild(c)) {
         for (unsigned int i = 0; i < children_.size(); i++) {
             if (children_.at(i) == &c) {
                 children_.erase(children_.begin()+i);
@@ -217,7 +217,7 @@ std::string Node::getNewick (bool bl) {
             ret += "(";
         }
         ret = ret+this->getChild(i)->getNewick(bl);
-        if (bl == true) {
+        if (bl) {
             //std::ostringstream o;
             ////20 is what you get from raxml
             //o.setf(ios::fixed, std::ios::floatfield);
@@ -248,7 +248,7 @@ std::string Node::getPaintedNewick (bool bl) {
     std::string ret = "";
     std::vector<int> paintedchildren;
     for (int i = 0; i < this->getChildCount(); i++) {
-        if (this->getChild(i)->getPainted() == true) {
+        if (this->getChild(i)->getPainted()) {
             paintedchildren.push_back(i);
         }
     }
@@ -273,7 +273,7 @@ std::string Node::getPaintedNewick (bool bl) {
             ret += "(";
         }
         ret += this->getChild(paintedchildren[i])->getPaintedNewick(bl);
-        if (bl == true) {
+        if (bl) {
             std::ostringstream o;
             // 20 is what you get from raxml
             o << std::setprecision(20) << this->getChild(paintedchildren[i])->getBL();
@@ -304,7 +304,7 @@ std::string Node::getNewick (bool bl, std::string obj) {
             ret += "(";
         }
         ret = ret+this->getChild(i)->getNewick(bl, obj);
-        if (bl == true) {
+        if (bl) {
             std::ostringstream o;
             o << this->getChild(i)->getBL();
             ret += ":" + o.str();

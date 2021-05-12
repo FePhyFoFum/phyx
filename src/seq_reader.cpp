@@ -191,7 +191,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         bool going = true;
         std::string curseq = "";
         while (going) {
-            if (first == true && retstring.size() > 0) {
+            if (first && retstring.size() > 0) {
                 tline = retstring;
                 retstring = "";
             } else {
@@ -202,7 +202,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 }
             }
             if (tline.substr(0, 1) == ">") {
-                if (first == true) {
+                if (first) {
                     std::string id_ = tline.substr(1, tline.size()-1);
                     first = false;
                     seq.set_id(id_);
@@ -418,7 +418,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         std::string tline;
         std::string curseq = "";
         while (going) {
-            if (first == true && retstring.size() > 0) {
+            if (first && retstring.size() > 0) {
                 tline = retstring;
                 retstring = "";
             } else {
@@ -438,7 +438,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                 }
             }
             if (tline.substr(0, 1) == ">") {
-                if (first == true) {
+                if (first) {
                     std::string id_ = tline.substr(1, tline.size()-1);
                     first = false;
                     seq.set_id(id_);

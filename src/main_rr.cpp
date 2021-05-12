@@ -126,14 +126,14 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    if (outgroupsset == true) {
+    if (outgroupsset) {
         std::vector<std::string> tokens2;
         tokenize(outgroupsc, tokens2, ",");
         for (unsigned int j = 0; j < tokens2.size(); j++) {
             trim_spaces(tokens2[j]);
             outgroups.push_back(tokens2[j]);
         }
-    } else if (namefileset == true) {
+    } else if (namefileset) {
         std::ifstream nfstr(namesfc);
         std::string tline;
         while (getline_safe(nfstr, tline)) {

@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (fileset == true ) {
+    if (fileset ) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {

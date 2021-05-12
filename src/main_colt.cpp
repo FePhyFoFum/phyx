@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {

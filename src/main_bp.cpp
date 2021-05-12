@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
     }
 
     //map file
-    if (mapfileset == true) {
+    if (mapfileset) {
         mfstr = new std::ifstream(mtreef);
         mpios = mfstr;
     }
@@ -200,7 +200,7 @@ int main(int argc, char * argv[]) {
     //-----END READ TREES
     //-----READ MAP TREE
     Tree * maptree = NULL;
-    if (mapfileset == true) {
+    if (mapfileset) {
         ft = test_tree_filetype_stream(*mpios, retstring);
         if (ft != 0 && ft != 1) {
             std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
@@ -296,7 +296,7 @@ int main(int argc, char * argv[]) {
                 continue;
             }
             //if we are using a cutoff, skip the edge that is below the num
-            if (cutoff == true) {
+            if (cutoff) {
                 if (trees[i]->getInternalNode(j)->getName().length() < 1) {
                     continue;
                 }
@@ -394,7 +394,7 @@ int main(int argc, char * argv[]) {
         //the matrix will have each i as a tree and 
         //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
         int colsize = biparts.size()+1;
-        if (edgewisealltaxa == true) {
+        if (edgewisealltaxa) {
             colsize = biparts.size(); //no root for edgewise
         }
         std::vector<int> cols(colsize, 0);
@@ -407,7 +407,7 @@ int main(int argc, char * argv[]) {
             }
             for (int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
                 //if we are using a cutoff, skip the edge that is below the num
-                if (cutoff == true) {
+                if (cutoff) {
                     if (trees[i]->getInternalNode(j)->getName().length() < 1) {
                         continue;
                     }
@@ -419,7 +419,7 @@ int main(int argc, char * argv[]) {
                 }
                 //end using cutoffs
                 //should this do the root? I don't think so
-                if (edgewisealltaxa == true && trees[i]->getInternalNode(j)==trees[i]->getRoot()) {
+                if (edgewisealltaxa && trees[i]->getInternalNode(j)==trees[i]->getRoot()) {
                     continue;
                 }
 
@@ -430,7 +430,7 @@ int main(int argc, char * argv[]) {
                 }
                 sort(nms_i.begin(), nms_i.end());
                 size_t index;
-                if (edgewisealltaxa == true) {
+                if (edgewisealltaxa) {
                     if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 1) {
                         index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     } else {
@@ -471,7 +471,7 @@ int main(int argc, char * argv[]) {
         /*
          * print the unique trees
          */
-        if (uniquetree == true) {
+        if (uniquetree) {
             std::cout << "====UNIQUE TREES====" << std::endl;
             std::set<std::string> un_trees;
             for (int i = 0; i <numtrees; i++) {
@@ -505,7 +505,7 @@ int main(int argc, char * argv[]) {
         //get the conflicting bipartitions
         //initialize results vectors
         for (unsigned int i = 0; i < biparts.size(); i++) {
-            if (firsttree == true) {
+            if (firsttree) {
                 if (matrix[0][i] != 1) {
                     continue;
                 }
@@ -517,7 +517,7 @@ int main(int argc, char * argv[]) {
                     nms.push_back(name_st_index[biparts[i][k]]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
-                if (edgewisealltaxa == true) {
+                if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (unsigned int k = 0; k < biparts2[i].size(); k++) {
                         nms_o.push_back(name_st_index[biparts2[i][k]]);
@@ -543,7 +543,7 @@ int main(int argc, char * argv[]) {
                             conflict_nums.push_back(bp_count[j]);
                             if (verbose) {
                                 (*poos) << " \t " << get_string_vector(nms2);
-                                if (edgewisealltaxa == true) {
+                                if (edgewisealltaxa) {
                                     std::vector<std::string> nms_o;
                                     for (unsigned int k = 0; k < biparts2[j].size(); k++) {
                                         nms_o.push_back(name_st_index[biparts2[j][k]]);
@@ -585,7 +585,7 @@ int main(int argc, char * argv[]) {
                     nms.push_back(name_st_index[biparts[i][k]]);
                 }
                 (*poos) << "CLADE: " <<  get_string_vector(nms);
-                if (edgewisealltaxa == true) {
+                if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (unsigned int k = 0; k < biparts2[i].size(); k++) {
                         nms_o.push_back(name_st_index[biparts2[i][k]]);
@@ -624,7 +624,7 @@ int main(int argc, char * argv[]) {
             sort(nms_i.begin(), nms_i.end());
             size_t index;
             bool found = false;
-            if (edgewisealltaxa == true) {
+            if (edgewisealltaxa) {
                 if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 1) {
                     index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     found = true;

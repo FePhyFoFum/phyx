@@ -56,7 +56,7 @@ Node * getMRCA_forVCV (Node * curn1, Node * curn2) {
     //find first match between this node and the first one
     parent = curn2;
     bool x = true;
-    while (x == true) {
+    while (x) {
         int psize = path1.size();
         for (int i = 0; i < psize; i++) {
             if (parent == path1.at(i)) {
@@ -79,7 +79,7 @@ Node * getMRCAFromPath_forVCV (std::vector<Node *> * path1, Node * curn2) {
     Node * mrca = NULL;
     Node * parent = curn2;
     bool x = true;
-    while (x == true) {
+    while (x) {
         int psize = path1->size();
         for (int i = 0; i < psize; i++) {
             if (parent == path1->at(i)) {

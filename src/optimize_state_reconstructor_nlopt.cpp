@@ -30,7 +30,7 @@ double nlopt_sr (unsigned n, const double *x, double *grad, void *my_func_data) 
     double like;
     nloptrm->set_Q_diag();
     like = nloptsr->eval_likelihood();
-    if (nloptrm->neg_p == true) {
+    if (nloptrm->neg_p) {
         like = 10000000000000;
     }
     //std::cout << like << std::endl;

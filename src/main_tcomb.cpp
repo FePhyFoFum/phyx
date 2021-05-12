@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    if (addfileset == true) {
+    if (addfileset) {
         afstr = new std::ifstream(addtreef);
         apios = afstr;
     } else {
@@ -130,7 +130,7 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
@@ -213,7 +213,7 @@ int main(int argc, char * argv[]) {
                     std::cout << it->first << std::endl;
                     Node * cn = it->second;
                     bool goi = true;
-                    while (goi == true) {
+                    while (goi) {
                         Node * prn = cn->getParent();
                         std::set<std::string> cs = cn->get_leave_names_set();
                         std::vector<std::string> v_int;
@@ -243,7 +243,7 @@ int main(int argc, char * argv[]) {
                         }
                         cn = prn;
                     }
-                    if (didit == true) {
+                    if (didit) {
                         break;
                     }
                 }

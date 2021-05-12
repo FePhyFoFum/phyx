@@ -211,7 +211,7 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    if (tfileset == true && pfileset == true) {
+    if (tfileset && pfileset) {
         std::cerr << "Error: set tree file *or* parameter file, not both. Exiting." << std::endl;
         exit(0);
     }

@@ -150,7 +150,7 @@ cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
             neg_p = true;
         }
     }
-    if (store_p_matrices == true) {
+    if (store_p_matrices) {
         stored_p_matrices[bl] = P;    
     }
     return P;
@@ -168,14 +168,14 @@ void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
     }
     mat C_inv = inv(eigvec_simple);
     p = eigvec_simple * eigval_simple * C_inv;
-/*    if (store_p_matrices == true) {
+/*    if (store_p_matrices) {
     stored_p_matrices[bl] = P;    
     }*/
     //return P;
 }
 
 void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) {
-    if (sameQ == true) {
+    if (sameQ) {
         for (unsigned int i = 0; i < Q.n_rows; i++) {
             for (unsigned int j = 0; j < Q.n_cols; j++) {
                 (*eigval)(i, j) = lasteigval_simple(i, j);
@@ -218,7 +218,7 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
  * this should use the armadillo library
  */
 bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
-    if (sameQ == true) {
+    if (sameQ) {
         for (unsigned int i = 0; i < Q.n_rows; i++) {
             for (unsigned int j = 0; j < Q.n_cols; j++) {
                 (*eigval)(i, j) = lasteigval(i, j);

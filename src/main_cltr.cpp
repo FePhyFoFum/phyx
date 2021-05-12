@@ -141,7 +141,7 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &std::cout;
     }
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {

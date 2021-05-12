@@ -123,7 +123,7 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    if (sfileset == true) {
+    if (sfileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {

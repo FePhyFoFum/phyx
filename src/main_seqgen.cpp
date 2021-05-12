@@ -394,7 +394,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (going == true) {
+            if (going) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);

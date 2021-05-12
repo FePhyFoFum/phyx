@@ -34,10 +34,10 @@ Tree * TreeReader::readTree (std::string trees) {
     char quoteType;
     Node * currNode = NULL;
     double sumEL = 0.0;
-    while (keepGoing == true) {
+    while (keepGoing) {
         //std::cout << "Working on: " << nextChar << std::endl;
         if (nextChar == '(') {
-            if (start == true) {
+            if (start) {
                 Node * root = new Node();
                 tree->setRoot(root);
                 currNode = root;
@@ -124,7 +124,7 @@ Tree * TreeReader::readTree (std::string trees) {
             nextChar = pb.c_str()[x];
             std::string edgeL = "";
             bool goingName = true;
-            while (goingName == true) {
+            while (goingName) {
                 edgeL = edgeL + nextChar;
                 x++;
                 nextChar = pb.c_str()[x];
@@ -146,7 +146,7 @@ Tree * TreeReader::readTree (std::string trees) {
             nextChar = pb.c_str()[x];
             std::string note = "";
             bool goingNote = true;
-            while (goingNote == true) {
+            while (goingNote) {
                 note = note + nextChar;
                 x++;
                 nextChar = pb.c_str()[x];
@@ -317,7 +317,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
             exists = true;
             //std::cout << "Found translation table!" << std::endl;
             continue;
-        } else if (begintrees == true && tgoing == false) {
+        } else if (begintrees && tgoing == false) {
             //std::cout << "No translation table present!" << std::endl;
                 return false;
         }
@@ -325,7 +325,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
             begintrees = true;
            //std::cout << "Found Begin trees!" << std::endl;
         }
-        if (tgoing == true) {
+        if (tgoing) {
             //trimspaces and split up strings
             tokens.clear();
             tokenize(line1, tokens, del);

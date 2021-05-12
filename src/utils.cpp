@@ -341,7 +341,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
     //had to change because of negatives
     if ((match1 != sum(matA)) && (match1 != sum(matB))) {
         if (numdiffs != matA.size()) {
-            if (edgewise == true) {
+            if (edgewise) {
                 int match2 = 0;
                 unsigned int numdiffs2 = 0;
                 for (unsigned int i = 0; i < matA.size(); i++) {

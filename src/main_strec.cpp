@@ -195,7 +195,7 @@ int main(int argc, char * argv[]) {
     std::ofstream * logout = NULL;
     std::ostream * loos = NULL;
     
-    if (logfileset == true) {
+    if (logfileset) {
         logout = new std::ofstream(logf);
         loos = logout;
     } else {
@@ -393,7 +393,7 @@ int main(int argc, char * argv[]) {
     std::ofstream sttimeout;
     std::ofstream sttnumout_any;
     
-    if (ancstates.size() > 0 && outancfileset == true) {
+    if (ancstates.size() > 0 && outancfileset) {
         ancout.open(outanc, std::ios::out);
         ancout << "site\ttree\tMRCA\tlnL";
         for (int i = 0; i < nstates; i++) {
@@ -401,7 +401,7 @@ int main(int argc, char * argv[]) {
         }
         ancout << std::endl;
     }
-    if (stochnumber.size() > 0 && outstochnumfileset == true) {
+    if (stochnumber.size() > 0 && outstochnumfileset) {
         stnumout.open(outnum, std::ios::out);
         stnumout << "site\ttree\tMRCA\tlnL";
         for (int i = 0; i < nstates; i++) {
@@ -413,7 +413,7 @@ int main(int argc, char * argv[]) {
         }
         stnumout << std::endl;
     }
-    if (stochtime.size() > 0 && outstochtimefileset == true ) {
+    if (stochtime.size() > 0 && outstochtimefileset ) {
         sttimeout.open(outtime, std::ios::out);
         sttimeout << "site\ttree\tMRCA\tlnL";
         for (int i = 0; i < nstates; i++) {
@@ -421,7 +421,7 @@ int main(int argc, char * argv[]) {
         }
         sttimeout << std::endl;
     }
-    if (stochnumber_any.size() > 0 && outstochnumanyfileset == true) {
+    if (stochnumber_any.size() > 0 && outstochnumanyfileset) {
         sttnumout_any.open(outnumany, std::ios::out);
         sttnumout_any << "site\ttree\tMRCA\tlnL";
         sttnumout_any << "\tanystate";
@@ -506,7 +506,7 @@ int main(int argc, char * argv[]) {
             RateModel rm(nstates_site_n);
             StateReconstructor sr(rm, rms);
             rm.setup_P(0.1, false);
-            if (periodsset == true) {
+            if (periodsset) {
                 rms.push_back(rm);
                 for (unsigned int p=1; p < period_times.size(); p++) {
                     RateModel rm2(nstates_site_n);
@@ -521,7 +521,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << "tips: " << tree->getExternalNodeCount() << std::endl;
             }
             sr.set_tree(tree);
-            if (periodsset == true) {
+            if (periodsset) {
                 sr.set_periods_model();
             }
             //checking that the data and the tree have the same names
@@ -534,7 +534,7 @@ int main(int argc, char * argv[]) {
             } else {
                 same = sr.set_tip_conditionals_already_given(runseqs);
             }
-            if (same == true) {
+            if (same) {
                 (*loos) << "skipping calculation" << std::endl;
                 continue;
             }
@@ -691,7 +691,7 @@ int main(int argc, char * argv[]) {
                         }
                     }
                 }
-                if (neg == true) {
+                if (neg) {
                     exit(0);
                 }
                 ancout << std::endl;
@@ -741,7 +741,7 @@ int main(int argc, char * argv[]) {
                 if (verbose) {
                     (*loos) << std::endl;
                 }
-                if (neg == true) {
+                if (neg) {
                     exit(0);
                 }
             }
@@ -815,7 +815,7 @@ int main(int argc, char * argv[]) {
                     if (verbose) {
                         (*loos) << std::endl;
                     }
-                    if (neg == true) {
+                    if (neg) {
                         exit(0);
                     }
                 }
@@ -854,7 +854,7 @@ int main(int argc, char * argv[]) {
             //delete tree;
         }
     }
-    if (ancstates.size() > 0  && outancfileset == true) {
+    if (ancstates.size() > 0  && outancfileset) {
         ancout.close();
     }
     if (stochnumber.size() > 0) {

@@ -155,7 +155,7 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    if (idsset == true) {
+    if (idsset) {
         std::vector<std::string> tokens2;
         tokenize(idssc, tokens2, ",");
         for (unsigned int j = 0; j < tokens2.size(); j++) {
@@ -206,7 +206,7 @@ int main(int argc, char * argv[]) {
        bool first = true;
        std::vector<Sequence> done; //for pguess
        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-           if (first == true) {
+           if (first) {
                done.push_back(seq);
                (*poos) << seq.get_fasta();
                first = false;

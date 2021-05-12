@@ -333,7 +333,7 @@ void SequenceGenerator::preorder_tree_traversal () {
         if (multi_model_) {
             check = (int)round(multi_rates_[0]);
             //std::cout << check << " " << rate_count << std::endl;
-            if (tree_->getNode(k)->isInternal() == true && multi_rates_.size() != 0) {
+            if (tree_->getNode(k)->isInternal() && multi_rates_.size() != 0) {
                 if (check == rate_count) {
                     rmatrix_[0][2] = multi_rates_[1];
                     rmatrix_[2][0] = multi_rates_[1];
@@ -384,7 +384,7 @@ void SequenceGenerator::preorder_tree_traversal () {
         
         seqs_[dec] = decSeq;
         ancq_[dec] = QMatrix; // why store this?
-        if (show_ancs_ && tree_->getNode(k)->isInternal() == true) {
+        if (show_ancs_ && tree_->getNode(k)->isInternal()) {
             std::string tname = tree_->getNode(k)->getName();
             Sequence seq(tname, decSeq);
             res.push_back(seq);
@@ -413,7 +413,7 @@ void SequenceGenerator::label_internal_nodes() {
     Node * root = tree_->getRoot();
     root->setName("Node_0");
     for (int k = (tree_->getNodeCount() - 2); k >= 0; k--) {
-        if (tree_->getNode(k)->isInternal() == true) {
+        if (tree_->getNode(k)->isInternal()) {
             //std::cout << k << std::endl;
             str = std::to_string(count);
             nlabel = "Node_" + str;

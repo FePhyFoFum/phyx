@@ -55,7 +55,7 @@ std::ostream& operator << (std::ostream& os, const Superdouble& x) {
 
 Superdouble Superdouble::operator * (Superdouble x) {
     Superdouble result(mantissa * x.mantissa, exponent + x.exponent);
-    if (result.stilldouble == true) {
+    if (result.stilldouble) {
         if (fabs(result.mantissa) > upperlimit || fabs(result.mantissa) < lowerlimit) {
             result.adjustDecimal();
         }
@@ -68,7 +68,7 @@ Superdouble Superdouble::operator * (Superdouble x) {
 
 Superdouble Superdouble::operator * (double x) {
     Superdouble result(mantissa * x, exponent);
-    if (result.stilldouble == true) {
+    if (result.stilldouble) {
         if (fabs(result.mantissa) > upperlimit || fabs(result.mantissa) < lowerlimit) {
             result.adjustDecimal();
         }
@@ -153,7 +153,7 @@ void Superdouble::operator /= (Superdouble x) {
 void Superdouble::operator += (Superdouble x) {
     //only tricky thing is converting them to same exponent
     if (mantissa != 0) {
-        if (stilldouble == true && x.stilldouble == true) {
+        if (stilldouble && x.stilldouble) {
             mantissa += x.mantissa;
             if (fabs(mantissa) > upperlimit || fabs(mantissa) < lowerlimit) {
                 adjustDecimal();
@@ -164,7 +164,7 @@ void Superdouble::operator += (Superdouble x) {
             adjustDecimal();
         }
     } else {
-        if (stilldouble == true && x.stilldouble == true) {
+        if (stilldouble && x.stilldouble) {
             mantissa = x.mantissa;
             exponent=x.exponent;
         } else {

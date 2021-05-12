@@ -26,7 +26,7 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
             for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
-            if (first == true) {
+            if (first) {
                 first = false;
                 for (unsigned int i = 0; i < tokens.size(); i++) {
                     order.push_back(tokens[i][0]);
@@ -60,7 +60,7 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
             for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
-            if (first == true) {
+            if (first) {
                 first = false;
                 for (unsigned int i = 0; i < tokens.size(); i++) {
                     order.push_back(tokens[i][0]);

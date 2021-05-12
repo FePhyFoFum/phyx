@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {

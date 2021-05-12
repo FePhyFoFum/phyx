@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    if (namesset == true) {
+    if (namesset) {
         std::vector<std::string> tokens2;
         std::string del2(",");
         tokens2.clear();
@@ -136,7 +136,7 @@ int main(int argc, char * argv[]) {
             trim_spaces(tokens2[j]);
             names.push_back(tokens2[j]);
         }
-    } else if (namefileset == true) {
+    } else if (namefileset) {
         std::ifstream nfstr(namesfc);
         std::string tline;
         while (getline_safe(nfstr, tline)) {
@@ -200,7 +200,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (going == true) {
+            if (going) {
                 numLeaves = tree->getExternalNodeCount();
                 currNames = names; 
                 
@@ -242,7 +242,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going == true) {
+            if (going) {
                 numLeaves = tree->getExternalNodeCount();
                 currNames = names; 
                 

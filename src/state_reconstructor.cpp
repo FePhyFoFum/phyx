@@ -46,7 +46,7 @@ void StateReconstructor::set_tree (Tree * tr) {
         if (tree->getNode(i)->getBL()<MINBL) {
             tree->getNode(i)->setBL(MINBL * 100);
         }
-        if (use_periods == true) {
+        if (use_periods) {
             tree->getNode(i)->initSegVector();
         }
         VectorNodeObject<Superdouble> * dcs = new VectorNodeObject<Superdouble>(nstates);
@@ -56,7 +56,7 @@ void StateReconstructor::set_tree (Tree * tr) {
     /*
      * initialize the actual branch segments for each node
      */
-    if (use_periods == true) {
+    if (use_periods) {
         std::cout << "initializing branch segments..." << std::endl;
         tree->setHeightFromTipToNodes();
         for (int i = 0; i < tree->getNodeCount(); i++) {
@@ -158,7 +158,7 @@ bool StateReconstructor::set_tip_conditionals (std::vector<Sequence>& data) {
             allsame = false;
         }
     }
-    if (allsame == true && verbose == true) {
+    if (allsame && verbose) {
         std::cerr << "all the tips have the same characters" << std::endl;
     }
     return allsame;
@@ -219,7 +219,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals (Node& node) {
     for (unsigned int j = 0; j < distconds.size(); j++) {
         distconds[j] = v->at(j);
     }
-    if (store_p_matrices == true) {
+    if (store_p_matrices) {
         node.assocObject(sp_alphas, distconds);
         node.assocObject(alphas, distconds);
     }
@@ -256,7 +256,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
         for (int j = 0; j < nstates; j++) {
             distconds[j] = v->at(j);
         }
-        if (store_p_matrices == true) {
+        if (store_p_matrices) {
             tsegs->at(i).seg_sp_alphas = distconds;
         }
         delete v;
@@ -265,7 +265,7 @@ VectorNodeObject<Superdouble> StateReconstructor::conditionals_periods (Node& no
      * if store is true we want to store the conditionals for each node
      * for possible use in ancestral state reconstruction
      */
-    if (store_p_matrices == true) {
+    if (store_p_matrices) {
         tsegs->at(0).alphas = distconds;
     }
     VectorNodeObject<Superdouble> rdistconds(distconds.size());
@@ -317,7 +317,7 @@ void StateReconstructor::ancdist_conditional_lh (Node& node) {
             ((VectorNodeObject<Superdouble>*)node.getObject(dc))->at(i) = distconds.at(i);
         }
     } else {
-        if (node.hasParent() == true) {
+        if (node.hasParent()) {
             std::vector<BranchSegment> * tsegs = node.getSegVector();
             for (unsigned int i = 0; i < distconds.size(); i++) {
                 tsegs->at(0).distconds->at(i) = distconds.at(i);
@@ -390,7 +390,7 @@ void StateReconstructor::reverse (Node * node) {
         mat * ER = NULL;
         VectorNodeObject<Superdouble> tempmoveAer(tempA);
         VectorNodeObject<Superdouble> tempmoveAen(tempA);
-        if (stochastic == true) {
+        if (stochastic) {
             //initialize the segment B's
             for (int j = 0; j < nstates; j++) {
                 tempmoveAer[j] = 0;
@@ -402,7 +402,7 @@ void StateReconstructor::reverse (Node * node) {
         for (int j = 0; j < nstates; j++) {
             for (int i = 0; i < nstates; i++) {
                 revconds->at(j) += tempA[i]*real((*p)(i, j));//tempA needs to change each time
-                if (stochastic == true) {
+                if (stochastic) {
                     tempmoveAer[j] += tempA[i]*(((*ER)(i, j)));
                     tempmoveAen[j] += tempA[i]*(((*EN)(i, j)));
                 }
@@ -411,7 +411,7 @@ void StateReconstructor::reverse (Node * node) {
         for (int j = 0; j < nstates; j++) {
             tempA[j] = revconds->at(j);
         }
-        if (stochastic == true) {
+        if (stochastic) {
             node->seg_sp_stoch_map_revB_time = tempmoveAer;
             node->seg_sp_stoch_map_revB_number = tempmoveAen;
         }

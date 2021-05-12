@@ -599,7 +599,7 @@ Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
     //find first match between this node and the first one
     parent = curn2;
     bool x = true;
-    while (x == true) {
+    while (x) {
         for (unsigned int i = 0; i < path1.size(); i++) {
             if (parent == path1.at(i)) {
                 mrca = parent;
