@@ -45,50 +45,51 @@ std::vector<Node*> Node::getChildren () {
 
 
 bool Node::isExternal () {
-    if (children_.size() < 1) {
-        return true;
-    } else {
-        return false;
+    bool ret = false;
+    if (children_.empty()) {
+        ret = true;
     }
+    return ret;
 }
 
 
 bool Node::isInternal () {
-    if (children_.size() > 0) {
-        return true;
-    } else {
-        return false;
+    bool ret = false;
+    if (!children_.empty()) {
+        ret = true;
     }
+    return ret;
 }
 
 
 bool Node::isRoot () {
+    bool ret = false;
     if (parent_ == NULL) {
-        return true;
-    } else {
-        return false;
+        ret = true;
     }
+    return ret;
 }
 
 
 // is the internal node of two degree (one parent and one child?)
+// neither tips nor the root can be a knuckle
 bool Node::isKnuckle () {
-    // neither tips nor the root can be a knuckle
-    if (isRoot() || isExternal()) {
-        return false;
-    } else if (children_.size() == 1) {
-        return true;
+    bool ret = false;
+    if (!isRoot() && !isExternal()) {
+        if (children_.size() == 1) {
+            ret = true;
+        }
     }
-    return false;
+    return ret;
 }
 
 
 bool Node::hasParent () {
+    bool ret = true;
     if (parent_ == NULL) {
-        return false;
-    } else {
-        return true;
+        ret = false;
     }
+    return ret;
 }
 
 
@@ -160,17 +161,18 @@ bool Node::hasChild (Node& test) {
 
 
 bool Node::addChild (Node& c) {
+    bool ret = false;
     if (!hasChild(c)) {
         children_.push_back(&c);
         c.setParent(*this);
-        return true;
-    } else {
-        return false;
+        ret = true;
     }
+    return ret;
 }
 
 
 bool Node::removeChild (Node& c) {
+    bool ret = false;
     if (hasChild(c)) {
         for (unsigned int i = 0; i < children_.size(); i++) {
             if (children_.at(i) == &c) {
@@ -178,10 +180,9 @@ bool Node::removeChild (Node& c) {
                 break;
             }
         }
-        return true;
-    } else {
-        return false;
+        ret = true;
     }
+    return ret;
 }
 
 
@@ -231,7 +232,7 @@ std::string Node::getNewick (bool bl) {
             ret += ",";
         }
     }
-    if (name_.size() > 0) {
+    if (!name_.empty()) {
         // newick punct is a subset of Nexus, so labels will be safe
         std::string compliantName = get_valid_nexus_label(name_);
         ret += compliantName;
@@ -285,7 +286,7 @@ std::string Node::getPaintedNewick (bool bl) {
             ret += ",";
         }
     }
-    if (this->getName().size() > 0) {
+    if (!this->getName().empty()) {
         ret += this->getName();
     }
     return ret;
@@ -315,7 +316,7 @@ std::string Node::getNewick (bool bl, std::string obj) {
             ret += ",";
         }
     }
-    if (this->name_.size() > 0) {
+    if (!this->name_.empty()) {
         ret = ret + this->name_;
     }
     if (this->getObject(obj) != NULL) {

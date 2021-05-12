@@ -27,8 +27,8 @@ private:
 
 public:
     Node ();
-    Node (Node * parent);
-    Node (double bl, int number, std::string name, Node * parent);
+    Node (Node * inparent);
+    Node (double bl, int innumber, std::string inname, Node * inparent);
     
     int get_num_leaves ();
     std::vector<Node*> get_leaves ();

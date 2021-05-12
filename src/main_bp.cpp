@@ -326,7 +326,7 @@ int main(int argc, char * argv[]) {
             }
             sort(nms_i2.begin(), nms_i2.end());
             //check to see if the bipart is new
-            if (edgewisealltaxa == false) {
+            if (!edgewisealltaxa) {
                 //this is nodewise and we dont' assume we have all the taxa
                 if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 0 && 
                 (int)std::count(biparts2.begin(), biparts2.end(), nms_i2) == 0) {
@@ -387,7 +387,7 @@ int main(int argc, char * argv[]) {
             }
         }
     }
-    if (suppress == false) {
+    if (!suppress) {
         (*poos) << numtrees << " trees " <<  std::endl;
         (*poos) << biparts.size() << " unique clades found" << std::endl;
         //calculate the logical matrix of biparts for each tree
@@ -636,7 +636,7 @@ int main(int argc, char * argv[]) {
                 index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
                 found = true;
             }
-            if (found == false) {
+            if (!found) {
                 maptree->getInternalNode(i)->setName("0.0");
             } else {
                 maptree->getInternalNode(i)->setName(std::to_string(bp_count[index]/trees.size()));

@@ -1302,7 +1302,7 @@ static int obtainAlignmentHirschberg (
     delete[] scoresLeft;
     delete[] scoresRightOriginalStart;
 
-    if (queryIdxLeftAlignmentFound == false) {
+    if (!queryIdxLeftAlignmentFound) {
         // If there was no move that is part of optimal alignment, then there is no such alignment
         // or given bestScore is not correct!
         return EDLIB_STATUS_ERROR;

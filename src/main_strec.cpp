@@ -202,7 +202,7 @@ int main(int argc, char * argv[]) {
         loos = &cout;
     }
 
-    if (conffileset == false) {
+    if (!conffileset) {
         std::cerr << "Error: you need to have a conf file. May change soon. Exiting." << std::endl;
         print_help();
         exit(0);
@@ -348,7 +348,7 @@ int main(int argc, char * argv[]) {
     int nstates;
     int nsites;
     if (datawide) {
-        if (dataz == false) {
+        if (!dataz) {
             nstates = seqs[0].get_length();
         } else {
             std::vector<std::string> searchtokens;
@@ -439,7 +439,7 @@ int main(int argc, char * argv[]) {
         std::vector<Sequence> runseqs;
         int nstates_site_n;
         std::vector<int> existing_states(nstates, 0);
-        if (datawide == false) {
+        if (!datawide) {
             for (unsigned int se = 0;se<seqs.size();se++) {
                 std::vector<std::string> searchtokens;
                 tokenize(seqs[se].get_sequence(), searchtokens, "     ");
@@ -466,7 +466,7 @@ int main(int argc, char * argv[]) {
             nstates_site_n = sum(existing_states);
         } else {
             runseqs = seqs;
-            if (dataz == false) {
+            if (!dataz) {
                 for (unsigned int se=0; se < seqs.size(); se++) {
                     for (int i = 0; i < nstates; i++) {
                         if (seqs[se].get_sequence().at(i) =='1') {
@@ -529,7 +529,7 @@ int main(int argc, char * argv[]) {
                 exit(0);
             }
             bool same;
-            if (dataz == false) {
+            if (!dataz) {
                 same = sr.set_tip_conditionals(runseqs);
             } else {
                 same = sr.set_tip_conditionals_already_given(runseqs);
@@ -539,7 +539,7 @@ int main(int argc, char * argv[]) {
                 continue;
             }
             double finallike; Superdouble totlike_sd;
-            if (periodsset == false) {
+            if (!periodsset) {
                 mat free_var(nstates_site_n, nstates_site_n);
                 free_var.fill(0);
                 int ct = 0;
@@ -706,7 +706,7 @@ int main(int argc, char * argv[]) {
             }
 
             for (unsigned int j = 0; j < stochtime.size(); j++) {
-            if (tree->getMRCA(mrcas[stochtime[j]])->isRoot() == false) {
+            if (!tree->getMRCA(mrcas[stochtime[j]])->isRoot()) {
                 std::vector<double> lhoods;
                 if (verbose) {
                     (*loos)  << "mrca: " << stochtime[j] <<  std::endl;
@@ -751,7 +751,7 @@ int main(int argc, char * argv[]) {
                 (*loos) << "stochastic number" << std::endl;
             }
             for (unsigned int j = 0; j < stochnumber.size(); j++) {
-                if (tree->getMRCA(mrcas[stochnumber[j]])->isRoot() == false) {
+                if (!tree->getMRCA(mrcas[stochnumber[j]])->isRoot()) {
                     std::vector<double> lhoods;
                     if (verbose) {
                         (*loos) << "mrca: " << stochnumber[j] <<  std::endl;
@@ -831,7 +831,7 @@ int main(int argc, char * argv[]) {
                 sr.prepare_ancstate_reverse();
             }
             for (unsigned int j = 0; j < stochnumber_any.size(); j++) {
-                if (tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot() == false) {
+                if (!tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot()) {
                     std::vector<double> lhoods;
                     if (verbose) {
                         (*loos) << "node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  std::endl;

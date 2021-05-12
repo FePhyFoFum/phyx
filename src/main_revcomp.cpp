@@ -189,15 +189,15 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
-    if (guess == false) {
+    if (!guess) {
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            if (idsset == false || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
+            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
         }
         if (ft == 2) {
-            if (idsset == false || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
+            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
