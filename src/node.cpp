@@ -298,7 +298,7 @@ std::string Node::getPaintedNewick (bool bl) {
  * nodes with the [&obj=string]
  * needs to be a string in setObject
  */
-std::string Node::getNewick (bool bl, std::string obj) {
+std::string Node::getNewick (bool bl, const std::string& obj) {
     std::string ret = "";
     for (int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
@@ -338,7 +338,7 @@ int Node::getChildCount () {
 }
 
 
-void Node::assocObject (std::string name, NodeObject& obj) {
+void Node::assocObject (const std::string& name, NodeObject& obj) {
     if (assoc_.count(name) > 0) {
         delete assoc_[name];
     }
@@ -346,7 +346,7 @@ void Node::assocObject (std::string name, NodeObject& obj) {
 }
 
 
-void Node::assocDoubleVector (std::string name, std::vector<Superdouble>& obj) {
+void Node::assocDoubleVector (const std::string& name, std::vector<Superdouble>& obj) {
     if (assocDV_.count(name) > 0) {
         assocDV_.erase(name);
     }
@@ -358,12 +358,12 @@ void Node::assocDoubleVector (std::string name, std::vector<Superdouble>& obj) {
 }
 
 
-std::vector<Superdouble> * Node::getDoubleVector (std::string name) {
+std::vector<Superdouble> * Node::getDoubleVector (const std::string& name) {
     return &assocDV_[name];
 }
 
 
-void Node::deleteDoubleVector (std::string name) {
+void Node::deleteDoubleVector (const std::string& name) {
     if (assocDV_.count(name) > 0) {
         assocDV_.erase(name);
     }
@@ -486,7 +486,7 @@ std::vector<std::string> Node::get_leave_names () {
  * tree.getRoot()->assocObject("testvno", vno);
  * std::cout << ((VectorNodeObject<int> *) (tree.getRoot()->getObject("testvno")))->at(0) << std::endl;
  */
-NodeObject  * Node::getObject (std::string name) {
+NodeObject  * Node::getObject (const std::string& name) {
     return assoc_[name];
 }
 

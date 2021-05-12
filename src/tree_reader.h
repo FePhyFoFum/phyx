@@ -14,8 +14,10 @@ public:
     Tree * readTree (std::string trees);
 };
 
+
+// hrm why are these not member functions?
 Tree * read_tree_string (std::string trees);
-int test_tree_filetype (std::string filen);
+int test_tree_filetype (const std::string&);
 int test_tree_filetype_stream (std::istream& stri, std::string& retstring);
 bool get_nexus_translation_table (std::istream& stri,
         std::map<std::string, std::string> * trans, std::string * retstring);

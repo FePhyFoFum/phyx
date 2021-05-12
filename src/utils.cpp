@@ -167,13 +167,15 @@ std::istream& getline_safe(std::istream& is, std::string& t) {
         case '\n':
             return is;
         case '\r':
-            if(sb->sgetc() == '\n')
+            if (sb->sgetc() == '\n') {
                 sb->sbumpc();
+            }
             return is;
         case std::streambuf::traits_type::eof():
             // Also handle the case when the last line has no line ending
-            if(t.empty())
+            if (t.empty()) {
                 is.setstate(std::ios::eofbit);
+            }
             return is;
         default:
             t += (char)c;
@@ -238,7 +240,7 @@ bool check_comment_line (const std::string& line) {
 
 
 // used by pxstrec
-std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numstates) {
+std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates) {
     std::vector<double> cols(numstates, 1);
     std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (numstates, cols);
     //read file
@@ -621,7 +623,7 @@ std::string get_valid_newick_label (const std::string& inLabel) {
     // does the label require quotes?
     if (outLabel.find_first_of(newick_punct) != std::string::npos) {
         quotify_label(outLabel);
-    } else if (outLabel.find_first_of(" ") != std::string::npos) {
+    } else if (outLabel.find_first_of(' ') != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
     }
     return outLabel;
@@ -639,7 +641,7 @@ std::string get_valid_nexus_label (const std::string& inLabel) {
     // does the label require quotes?
     if (outLabel.find_first_of(nexus_punct) != std::string::npos) {
         quotify_label(outLabel);
-    } else if (outLabel.find_first_of(" ") != std::string::npos) {
+    } else if (outLabel.find_first_of(' ') != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
     }
     return outLabel;
@@ -741,14 +743,14 @@ bool all_equal (std::vector<int> vals) {
 
 
 bool check_for_input_to_stream () {
+    bool ret = true;
     struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
-    int ret = 0;
-    ret = poll(&pfd, 1, 500);
-    if (ret == 0) {
-        return false;
-    } else {
-        return true;
+    int ret_poll = 0;
+    ret_poll = poll(&pfd, 1, 500);
+    if (ret_poll == 0) {
+        ret = false;
     }
+    return ret;
 }
 
 

@@ -156,7 +156,7 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
                     good_names.emplace_back(names[i]);
                 }
             }
-            if (good_names.size() == 0) {
+            if (good_names.empty()) {
                 std::cerr << "Error: no names are present in the tree. Exiting." << std::endl;
                 exit(1);
             }
@@ -211,31 +211,43 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
     
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);
-    if (debug) std::cout << "tree is rooted: " << std::boolalpha << rooted << std::endl;
+    if (debug) {
+        std::cout << "tree is rooted: " << std::boolalpha << rooted << std::endl;
+    }
     // internal nodes
     for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         Node * tnd = tr->getInternalNode(i);
-        if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
+        if (debug) {
+            std::cout << "Focal node: " << tnd->getName() << std::endl;
+        }
         if (tnd->getParent() == nullptr && rooted) { // root on rooted tree
-            if (debug) std::cout << "  Node has no parent, as it is the root" << std::endl;
+            if (debug) {
+                std::cout << "  Node has no parent, as it is the root" << std::endl;
+            }
             continue;
         }
         std::vector<Node *> nds;
         for (int j = 0; j < tnd->getChildCount(); j++) {
             nds.push_back(tnd->getChild(j));
-            if (debug) std::cout << "  Adding child node: " << tnd->getChild(j)->getName() << std::endl;
+            if (debug) {
+                std::cout << "  Adding child node: " << tnd->getChild(j)->getName() << std::endl;
+            }
         }
         if (tnd->getParent() == tr->getRoot() && rooted) {
             for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
-                    if (debug) std::cout << "  Adding sibling node: " << tnd->getChild(j)->getName() << std::endl;
+                    if (debug) {
+                        std::cout << "  Adding sibling node: " << tnd->getChild(j)->getName() << std::endl;
+                    }
                 }
             }
         } else {
             if (tnd->getParent() != nullptr) {
                 nds.push_back(tnd->getParent());
-                if (debug) std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+                if (debug) {
+                    std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+                }
             }
         }
         tree_map[tnd] = nds;
@@ -244,17 +256,23 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
     for (int i = 0; i < tr->getExternalNodeCount(); i++) {
         std::vector<Node *> nds;
         Node * tnd = tr->getExternalNode(i);
-        if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
+        if (debug) {
+            std::cout << "Focal node: " << tnd->getName() << std::endl;
+        }
         if (tnd->getParent() == tr->getRoot() && rooted) {
             for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
-                    if (debug) std::cout << "  Adding sibling node: " << tnd->getParent()->getChild(j)->getName() << std::endl;
+                    if (debug) {
+                        std::cout << "  Adding sibling node: " << tnd->getParent()->getChild(j)->getName() << std::endl;
+                    }
                 }
             }
         } else {
             nds.push_back(tnd->getParent());
-            if (debug) std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+            if (debug) {
+                std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+            }
         }
         tree_map[tnd] = nds;
     }
@@ -277,7 +295,9 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
 void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
     bool debug = true;
     bool success = false;
-    if (debug) std::cout << "treemap is of size: " << tree_map.size() << std::endl;
+    if (debug) {
+        std::cout << "treemap is of size: " << tree_map.size() << std::endl;
+    }
     while (!success) {
         std::map<Node*, std::vector<Node*> >::iterator item = tree_map.begin();
         // this is dumb. instead use: sample_without_replacement(numTotal, numSample)
@@ -335,8 +355,7 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         tr->processRoot();
 
         success = true;
-    }
-    return;
+    };
 }
 
 

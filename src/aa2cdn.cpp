@@ -33,7 +33,7 @@ AAtoCDN::AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Seque
 void AAtoCDN::check_names () {    
     std::vector<std::string> diff;
     diff = in_first_not_second(nuc_names_, aa_names_);
-    if (diff.size() > 0) {
+    if (!diff.empty()) {
         std::cerr << "The following names are present in the nucleotide alignment, but not the protein alignment:"
                 << std::endl;
         for (unsigned int i = 0; i < diff.size(); i++) {
@@ -47,7 +47,7 @@ void AAtoCDN::check_names () {
             }
         }
     }
-    if (nuc_seqs_.size() == 0) {
+    if (nuc_seqs_.empty()) {
         std::cerr << "Error: no names are present in both the nucleotide and protein alignments. Exiting."
                 << std::endl;
         exit(1);
@@ -55,7 +55,7 @@ void AAtoCDN::check_names () {
     
     // now the other direction
     diff = in_first_not_second(aa_names_, nuc_names_);
-    if (diff.size() > 0) {
+    if (!diff.empty()) {
         std::cerr << "The following names are present in the protein alignment, but not the nucleotide alignment:"
                 << std::endl;
         for (unsigned int i = 0; i < diff.size(); i++) {

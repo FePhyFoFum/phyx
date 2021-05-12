@@ -18,7 +18,7 @@ void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);
 int string_to_int (const std::string& in, const std::string& arg);
 
-std::string string_to_upper (const std::string& str);
+std::string string_to_upper (const std::string& instr);
 std::string string_to_lower (const std::string& instr);
 float string_to_float (const std::string& in, const std::string& arg);
 
@@ -110,7 +110,7 @@ std::vector<double> string_v_to_double_v (const std::vector<std::string>& in);
 
 //------------------------------------------------------------------------//
 
-std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numareas);
+std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates);
 int random_int_range (int min, int max);
 
 std::vector<int> sample_without_replacement( const int& numTotal,const int& numSample);

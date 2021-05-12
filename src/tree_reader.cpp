@@ -246,12 +246,12 @@ Tree * read_tree_string (std::string trees) {
  *  to deal with translate or not
  */
 // hrm this does not seem to be used anymore
-int test_tree_filetype (std::string filen) {
+int test_tree_filetype (const std::string& filen) {
     std::string tline;
     std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
     while (getline_safe(infile, tline)) {
-        if (tline.size() < 1) {
+        if (tline.empty()) {
             continue;
         }
     //nexus
@@ -329,7 +329,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
             //trimspaces and split up strings
             tokens.clear();
             tokenize(line1, tokens, del);
-            size_t endcheck = line1.find(";");
+            size_t endcheck = line1.find(';');
             if (endcheck != std::string::npos) { // semicolon present. this is the last line.
                 //std::cout << "Ending translation table!" << std::endl;
                 going = false;
@@ -339,12 +339,12 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
                 for (unsigned int i = 0; i < tokens.size(); i++) {
                     trim_spaces(tokens[i]);
                 }
-                size_t found = tokens[1].find(",");
+                size_t found = tokens[1].find(',');
                 if (found != std::string::npos) {
                     tokens[1].erase(found, 1);
                 }
                 if (!going) {
-                    size_t found2 = tokens[1].find(";");
+                    size_t found2 = tokens[1].find(';');
                     if (found2 != std::string::npos) {
                         tokens[1].erase(found2, 1);
                     }
@@ -365,7 +365,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
 Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstring,
     bool ttexists, std::map<std::string, std::string> * trans, bool * going) {
     std::string tline;
-    if (retstring.size() > 0) {
+    if (!retstring.empty()) {
         tline = retstring;
         retstring = "";
         bool done = false;
@@ -411,7 +411,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
     //tokenize(tline, tokens, del);
     //string tstring(tokens[tokens.size()-1]);
     
-    size_t startpos = tline.find_first_of("(");
+    size_t startpos = tline.find_first_of('(');
     std::string tstring = tline.substr(startpos);
     Tree * tree;
     //std::cout << tstring << std::endl;
@@ -433,7 +433,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
 // TODO: deal with trees with internal line breaks (phylip does this?)
 Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring, bool * going) {
     std::string tline;
-    if (retstring.size() > 0) {
+    if (!retstring.empty()) {
         tline = retstring;
         retstring = "";
     } else if (!getline_safe(stri, tline)) {
@@ -443,7 +443,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
     trim_spaces(tline);
     
     // hrm do we want to allow empty lines in between trees? i think so?
-    if (tline.size() == 0) {
+    if (tline.empty()) {
         //std::cout << "You've got yerself an empty line, there." << std::endl;
         bool done = false;
         while (!done) {
@@ -452,7 +452,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
                 return nullptr;
             } else {
                 trim_spaces(tline);
-                 if (tline.size() != 0) {
+                 if (!tline.empty()) {
                      done = true;
                  }
             }
