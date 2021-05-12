@@ -10,9 +10,7 @@
 #include "seq_utils.h"
 #include "utils.h"
 #include "log.h"
-#include "constants.h"
-
-extern std::string PHYX_CITATION;
+#include "constants.h" // contains PHYX_CITATION
 
 
 void print_help() {

@@ -14,9 +14,7 @@
 #include "utils.h"
 #include "bd_fit.h"
 #include "log.h"
-#include "constants.h"
-
-extern std::string PHYX_CITATION;
+#include "constants.h" // contains PHYX_CITATION
 
 
 void print_help () {
