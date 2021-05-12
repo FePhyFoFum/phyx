@@ -13,7 +13,7 @@
 #include "node.h"
 #include "superdouble.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h" // contains PHYX_CITATION
 
 
 void print_help() {

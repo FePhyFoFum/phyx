@@ -19,8 +19,7 @@
 #include "optimize_state_reconstructor_periods_nlopt.h"
 #include "tree_utils.h"
 #include "log.h"
-
-extern std::string PHYX_CITATION;
+#include "citations.h" // contains PHYX_CITATION
 
 
 void print_help() {

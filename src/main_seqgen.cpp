@@ -10,8 +10,7 @@
 #include "tree.h"
 #include "tree_reader.h"
 #include "log.h"
-
-extern std::string PHYX_CITATION;
+#include "citations.h" // contains PHYX_CITATION
 
 
 void print_help() {

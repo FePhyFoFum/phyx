@@ -16,8 +16,7 @@
 #include "cont_models.h"
 #include "optimize_cont_models_nlopt.h"
 #include "log.h"
-
-extern std::string PHYX_CITATION;
+#include "citations.h" // contains PHYX_CITATION
 
 
 void print_help() {

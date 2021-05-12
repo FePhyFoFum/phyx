@@ -16,7 +16,7 @@
 #include "seq_reader.h"
 #include "recode.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h" // contains PHYX_CITATION
 
 void print_help() {
     std::cout << "Nucleotide sequence recoding." << std::endl;

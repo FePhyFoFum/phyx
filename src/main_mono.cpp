@@ -13,7 +13,7 @@
 #include "tree_utils.h"
 #include "log.h"
 #include "aa2cdn.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h" // contains PHYX_CITATION
 
 
 void print_help() {

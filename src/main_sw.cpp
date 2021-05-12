@@ -16,7 +16,7 @@
 #include "seq_models.h"
 #include "pairwise_alignment.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h" // contains PHYX_CITATION
 
 
 void print_help() {
