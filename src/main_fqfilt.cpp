@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     char * seqf = NULL;
     char * outf = NULL;
-    while (1) {
+    while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "m:s:o:hVC", long_options, &oi);
         if (c == -1) {

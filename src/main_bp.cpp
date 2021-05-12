@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
     char * mtreef = NULL;
     char * outf = NULL;
     double cutnum = 0;
-    while (1) {
+    while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:m:c:vseufhVC", long_options, &oi);
         if (c == -1) {

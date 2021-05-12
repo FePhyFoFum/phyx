@@ -123,7 +123,7 @@ int main(int argc, char * argv[]) {
     std::vector<std::string> ptokens;
     std::vector<double> period_times;
     
-    while (1) {
+    while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "d:t:c:o:n:m:a:l:p:hVwzC", long_options, &oi);
         if (c == -1) {

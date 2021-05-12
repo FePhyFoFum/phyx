@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
     char * charf = NULL;
     char * outf = NULL;
     int analysis = 0;
-    while (1) {
+    while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "c:t:o:a:hVC", long_options, &oi);
         if (c == -1) {

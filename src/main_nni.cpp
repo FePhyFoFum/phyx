@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
     char * seqf = NULL;
     int seed = -1;
     
-    while (1) {
+    while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:x:hVC", long_options, &oi);
         if (c == -1) {

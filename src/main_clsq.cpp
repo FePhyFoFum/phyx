@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
     bool by_codon = false;
     bool count_only = false;
 
-    while (1) {
+    while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:p:atcivhVC", long_options, &oi);
         if (c == -1) {

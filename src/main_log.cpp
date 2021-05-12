@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
     
     char * outf = NULL;
     
-    while (1) {
+    while(true) {
         int oi = -1;
         int curind = optind;
         int c = getopt_long(argc, argv, "p:t:o:b:n:r:iscd:k:x:vhVC", long_options, &oi);
