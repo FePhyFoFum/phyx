@@ -135,7 +135,7 @@ int main(int argc, char * argv[]) {
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             std::cerr << "Error: you need to set an tfile (-t). Exiting." << std::endl;
             exit(1);
         }
