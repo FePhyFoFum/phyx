@@ -120,7 +120,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * nucfstr = NULL;
     std::istream * nucpios = NULL;
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(aaseqf);
         pios = fstr;
     } else {
@@ -130,7 +130,7 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
     }
-    if (nucfileset == true) {
+    if (nucfileset) {
         nucfstr = new std::ifstream(nucseqf);
         nucpios = nucfstr;
     } else {
@@ -140,7 +140,7 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {

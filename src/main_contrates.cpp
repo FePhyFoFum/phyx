@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
         exit(1);
     }
 
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poouts = ofstr;
     } else {

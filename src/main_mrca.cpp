@@ -108,13 +108,13 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = NULL;
     std::ofstream * ofstr = NULL;
     
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf, std::ios::app);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {

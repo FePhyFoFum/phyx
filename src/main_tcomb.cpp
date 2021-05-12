@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * afstr = NULL;
     std::ofstream * ofstr = NULL;
 
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
