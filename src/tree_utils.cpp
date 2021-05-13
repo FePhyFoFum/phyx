@@ -323,7 +323,9 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         std::advance( item, r2 );
         Node * middle = (*item).first;
         if (first == middle) {
-            if (debug) std::cout << "Bailing because first == middle..." << std::endl;
+            if (debug) {
+                std::cout << "Bailing because first == middle..." << std::endl;
+            }
             continue;
         }
         
@@ -340,14 +342,18 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         std::advance( item, r3 );
         Node * second = (*item).first;
         
-        if (debug) std::cout << "Node second (" << r3 << "): " << second->getName() << std::endl;
+        if (debug) {
+            std::cout << "Node second (" << r3 << "): " << second->getName() << std::endl;
+        }
         
         // TODO: need to fix what happens when the parent is the root, seems to break down
         // could also check this above instead of all at once
         if (first == second || second == middle || first == tr->getRoot()
             || second == tr->getRoot() || first->getParent() == tr->getRoot()
             || second->getParent() == tr->getRoot()) {
-            if (debug) std::cout << "Bailing on this combination..." << std::endl;
+            if (debug) {
+                std::cout << "Bailing on this combination..." << std::endl;
+            }
             continue;
         }
 
