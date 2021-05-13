@@ -258,17 +258,21 @@ COLLAPSE_TREE_DEP = collapse_tree.d main_colt.d
 CPP_SRCS += \
 ./utils.cpp \
 ./log.cpp \
+./superdouble.cpp \
+./timer.cpp
+
+TREE_SRCS += \
 ./node.cpp \
 ./tree.cpp \
 ./tree_reader.cpp \
-./tree_utils.cpp \
+./tree_utils.cpp
+
+SEQ_SRCS += \
 ./sequence.cpp \
 ./seq_reader.cpp \
 ./seq_utils.cpp \
 ./seq_models.cpp \
-./pairwise_alignment.cpp \
-./superdouble.cpp \
-./timer.cpp
+./pairwise_alignment.cpp
 
 RATE_SRCS += \
 ./rate_model.cpp \
@@ -285,17 +289,21 @@ RATE_SRCS += \
 CPP_OBJS += \
 ./utils.o \
 ./log.o \
+./superdouble.o \
+./timer.o
+
+TREE_OBJS += \
 ./node.o \
 ./tree.o \
 ./tree_reader.o \
-./tree_utils.o \
+./tree_utils.o
+
+SEQ_OBJS += \
 ./sequence.o \
 ./seq_reader.o \
 ./seq_utils.o \
 ./seq_models.o \
-./pairwise_alignment.o \
-./superdouble.o \
-./timer.o
+./pairwise_alignment.o
 
 RATE_OBJS += \
 ./rate_model.o \
@@ -312,17 +320,21 @@ RATE_OBJS += \
 CPP_DEPS += \
 ./utils.d \
 ./log.d \
+./superdouble.d \
+./timer.d
+
+TREE_DEPS += \
 ./node.d \
 ./tree.d \
 ./tree_reader.d \
-./tree_utils.d \
+./tree_utils.d
+
+SEQ_DEPS += \
 ./sequence.d \
 ./seq_reader.d \
 ./seq_utils.d \
 ./seq_models.d \
-./pairwise_alignment.d \
-./superdouble.d \
-./timer.d
+./pairwise_alignment.d
 
 RATE_DEPS += \
 ./rate_model.d \
@@ -342,208 +354,274 @@ RATE_DEPS += \
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
 PROGS := pxaa2cdn pxbdsim pxboot pxbp pxcat pxclsq pxcltr pxcolt pxcomp pxconsq pxcontrates pxfqfilt pxlog pxlssq pxlstr pxmono pxmrca pxmrcacut pxmrcaname pxnj pxnw pxpoly pxrecode pxrevcomp pxrls pxrlt pxrmk pxrms pxrmt pxrr pxs2fa pxs2nex pxs2phy pxseqgen pxssort pxssort pxsstat pxstrec pxsw pxt2new pxt2nex pxtcol pxtcomb pxtgen pxtlate pxtrt pxtscale pxupgma pxvcf2fa $(NLOPT_PROGRAMS)
+
+
 # default all target
 all: $(PROGS)
 
-pxstrec: $(CPP_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
-	@echo 'building pxstrec'
-	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
-	cat man/$@.1.in > man/$@.1
 
-pxmrca: $(CPP_OBJS) $(MRCA_OBJ)
-	@echo 'building pxmrca'
-	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
+## Sequence-oriented programs ##
 
-pxmrcacut: $(CPP_OBJS) $(MRCACUT_OBJ)
-	@echo 'building pxmrcacut'
-	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxmrcaname: $(CPP_OBJS) $(MRCANAME_OBJ)
-	@echo 'building pxmrcaname'
-	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxconsq: $(CPP_OBJS) $(CONSEQ_OBJ)
-	@echo 'building pxconsq'
-	$(CXX) -o "pxconsq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxbdsim: $(CPP_OBJS) $(BD_SIM_OBJ)
-	@echo 'building pxbdsim'
-	$(CXX) -o "pxbdsim" $(OPT_FLAGS) $(BD_SIM_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxbdfit: $(CPP_OBJS) $(BD_FIT_OBJ)
-	@echo 'building pxbdfit'
-	$(CXX) -o "pxbdfit" $(OPT_FLAGS) $(BD_FIT_OBJ) $(CPP_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
-	cat man/$@.1.in > man/$@.1
-
-pxnni: $(CPP_OBJS) $(NNI_OBJ)
-	@echo 'building pxnni'
-	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
-	cat man/$@.1.in > man/$@.1
-
-pxlstr: $(CPP_OBJS) $(LS_TR_OBJ)
-	@echo 'building pxlstr'
-	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxlssq: $(CPP_OBJS) $(LS_SQ_OBJ)
+pxlssq: $(CPP_OBJS) $(SEQ_OBJS) $(LS_SQ_OBJ)
 	@echo 'bulding pxlssq'
-	$(CXX) -o "pxlssq" $(OPT_FLAGS) $(LS_SQ_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxlssq" $(OPT_FLAGS) $(LS_SQ_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxupgma: $(CPP_OBJS) $(UPGMA_OBJ)
-	@echo 'building pxupgma'
-	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS)
+pxconsq: $(CPP_OBJS) $(SEQ_OBJS) $(CONSEQ_OBJ)
+	@echo 'building pxconsq'
+	$(CXX) -o "pxconsq" $(OPT_FLAGS) $(CONSEQ_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxnj: $(CPP_OBJS) $(NJ_OBJ)
-	@echo 'building pxnj'
-	$(CXX) -o "pxnj" $(OPT_FLAGS) $(NJ_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxclsq: $(CPP_OBJS) $(CLSQ_OBJ)
+pxclsq: $(CPP_OBJS) $(SEQ_OBJS) $(CLSQ_OBJ)
 	@echo 'building pxclsq'
-	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxclsq" $(OPT_FLAGS) $(CLSQ_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxcltr: $(CPP_OBJS) $(CLTR_OBJ)
-	@echo 'building pxcltr'
-	$(CXX) -o "pxcltr" $(OPT_FLAGS) $(CLTR_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxrms: $(CPP_OBJS) $(RMS_OBJ)
+pxrms: $(CPP_OBJS) $(SEQ_OBJS) $(RMS_OBJ)
 	@echo 'building pxrms'
-	$(CXX) -o "pxrms" $(OPT_FLAGS) $(RMS_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxrms" $(OPT_FLAGS) $(RMS_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxtlate: $(CPP_OBJS) $(TLATE_OBJ)
-	@echo 'building pxtlate'
-	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxaa2cdn: $(CPP_OBJS) $(AA2C_OBJ)
+pxaa2cdn: $(CPP_OBJS) $(SEQ_OBJS) $(AA2C_OBJ)
 	@echo 'building pxaa2cdn'
-	$(CXX) -o "pxaa2cdn" $(OPT_FLAGS) $(AA2C_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxaa2cdn" $(OPT_FLAGS) $(AA2C_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxs2fa: $(CPP_OBJS) $(2FA_OBJ)
+pxs2fa: $(CPP_OBJS) $(SEQ_OBJS) $(2FA_OBJ)
 	@echo 'building pxs2fa'
-	$(CXX) -o "pxs2fa" $(OPT_FLAGS) $(2FA_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxs2fa" $(OPT_FLAGS) $(2FA_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxs2phy: $(CPP_OBJS) $(2PHY_OBJ)
+pxs2phy: $(CPP_OBJS) $(SEQ_OBJS) $(2PHY_OBJ)
 	@echo 'building pxs2phy'
-	$(CXX) -o "pxs2phy" $(OPT_FLAGS) $(2PHY_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxs2phy" $(OPT_FLAGS) $(2PHY_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxs2nex: $(CPP_OBJS) $(2NEX_OBJ)
+pxs2nex: $(CPP_OBJS) $(SEQ_OBJS) $(2NEX_OBJ)
 	@echo 'building pxs2nex'
-	$(CXX) -o "pxs2nex" $(OPT_FLAGS) $(2NEX_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxs2nex" $(OPT_FLAGS) $(2NEX_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxfqfilt: $(CPP_OBJS) $(FQFILT_OBJ)
+pxfqfilt: $(CPP_OBJS) $(SEQ_OBJS) $(FQFILT_OBJ)
 	@echo 'building pxfqfilt'
-	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxfqfilt" $(OPT_FLAGS) $(FQFILT_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxrevcomp: $(CPP_OBJS) $(REVCOMP_OBJ)
+pxrevcomp: $(CPP_OBJS) $(SEQ_OBJS) $(REVCOMP_OBJ)
 	@echo 'building pxrevcomp'
-	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxrevcomp" $(OPT_FLAGS) $(REVCOMP_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxnw: $(CPP_OBJS) $(NW_OBJ)
+pxnw: $(CPP_OBJS) $(SEQ_OBJS) $(NW_OBJ)
 	@echo 'building pxnw'
-	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxnw" $(OPT_FLAGS) $(NW_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxsw: $(CPP_OBJS) $(SW_OBJ)
+pxsw: $(CPP_OBJS) $(SEQ_OBJS) $(SW_OBJ)
 	@echo 'building pxsw'
-	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxsw" $(OPT_FLAGS) $(SW_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxboot: $(CPP_OBJS) $(SEQSAMP_OBJ)
+pxboot: $(CPP_OBJS) $(SEQ_OBJS) $(SEQSAMP_OBJ)
 	@echo 'building pxboot'
-	$(CXX) -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxboot" $(OPT_FLAGS) $(SEQSAMP_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxseqgen: $(CPP_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
-	@echo 'building pxseqgen'
-	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
+pxtlate: $(CPP_OBJS) $(SEQ_OBJS) $(TLATE_OBJ)
+	@echo 'building pxtlate'
+	$(CXX) -o "pxtlate" $(OPT_FLAGS) $(TLATE_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxcat: $(CPP_OBJS) $(CONCAT_OBJ)
+pxcat: $(CPP_OBJS) $(SEQ_OBJS) $(CONCAT_OBJ)
 	@echo 'building pxcat'
-	$(CXX) -o "pxcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxcat" $(OPT_FLAGS) $(CONCAT_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxsstat: $(CPP_OBJS) $(SSTAT_OBJ)
+pxsstat: $(CPP_OBJS) $(SEQ_OBJS) $(SSTAT_OBJ)
 	@echo 'building pxsstat'
-	$(CXX) -o "pxsstat" $(OPT_FLAGS) $(SSTAT_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxsstat" $(OPT_FLAGS) $(SSTAT_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxlog: $(CPP_OBJS) $(LOGMANIP_OBJ)
-	@echo 'building pxlog'
-	$(CXX) -o "pxlog" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxvcf2fa: $(CPP_OBJS) $(VCF2FA_OBJ)
-	@echo 'building pxvcf2fa'
-	$(CXX) -o "pxvcf2fa" $(OPT_FLAGS) $(VCF2FA_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxcontrates: $(CPP_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS)
-	@echo 'building pxcontrates'
-	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(CPP_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
-	cat man/$@.1.in > man/$@.1
-
-pxrecode: $(CPP_OBJS) $(SEQRECODE_OBJ)
+pxrecode: $(CPP_OBJS) $(SEQ_OBJS) $(SEQRECODE_OBJ)
 	@echo 'building pxrecode'
-	$(CXX) -o "pxrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxrecode" $(OPT_FLAGS) $(SEQRECODE_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxbp: $(CPP_OBJS) $(BP_OBJ)
-	@echo 'building pxbp'
-	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS)
+pxssort: $(CPP_OBJS) $(SEQ_OBJS) $(SSORT_OBJ)
+	@echo 'building pxssort'
+	$(CXX) -o "pxssort" $(OPT_FLAGS) $(SSORT_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxt2new: $(CPP_OBJS) $(T2NEW_OBJ)
+pxcomp: $(CPP_OBJS) $(SEQ_OBJS) $(COMPTEST_OBJ)
+	@echo 'building pxcomp'
+	$(CXX) -o "pxcomp" $(OPT_FLAGS) $(COMPTEST_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxvcf2fa: $(CPP_OBJS) $(SEQ_OBJS) $(VCF2FA_OBJ)
+	@echo 'building pxvcf2fa'
+	$(CXX) -o "pxvcf2fa" $(OPT_FLAGS) $(VCF2FA_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+
+## Tree-oriented programs ##
+
+pxbdsim: $(CPP_OBJS) $(TREE_OBJS) $(BD_SIM_OBJ)
+	@echo 'building pxbdsim'
+	$(CXX) -o "pxbdsim" $(OPT_FLAGS) $(BD_SIM_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxbdfit: $(CPP_OBJS) $(TREE_OBJS) $(BD_FIT_OBJ)
+	@echo 'building pxbdfit'
+	$(CXX) -o "pxbdfit" $(OPT_FLAGS) $(BD_FIT_OBJ) $(CPP_OBJS) $(TREE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
+	cat man/$@.1.in > man/$@.1
+
+pxnni: $(CPP_OBJS) $(TREE_OBJS) $(NNI_OBJ)
+	@echo 'building pxnni'
+	$(CXX) -o "pxnni" $(OPT_FLAGS) $(NNI_OBJ) $(CPP_OBJS) $(TREE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
+	cat man/$@.1.in > man/$@.1
+
+pxlstr: $(CPP_OBJS) $(TREE_OBJS) $(LS_TR_OBJ)
+	@echo 'building pxlstr'
+	$(CXX) -o "pxlstr" $(OPT_FLAGS) $(LS_TR_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxmrca: $(CPP_OBJS) $(TREE_OBJS) $(MRCA_OBJ)
+	@echo 'building pxmrca'
+	$(CXX) -o "pxmrca" $(OPT_FLAGS) $(MRCA_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxmrcacut: $(CPP_OBJS) $(TREE_OBJS) $(MRCACUT_OBJ)
+	@echo 'building pxmrcacut'
+	$(CXX) -o "pxmrcacut" $(OPT_FLAGS) $(MRCACUT_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxmrcaname: $(CPP_OBJS) $(TREE_OBJS) $(MRCANAME_OBJ)
+	@echo 'building pxmrcaname'
+	$(CXX) -o "pxmrcaname" $(OPT_FLAGS) $(MRCANAME_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxcltr: $(CPP_OBJS) $(TREE_OBJS) $(CLTR_OBJ)
+	@echo 'building pxcltr'
+	$(CXX) -o "pxcltr" $(OPT_FLAGS) $(CLTR_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxt2new: $(CPP_OBJS) $(TREE_OBJS) $(T2NEW_OBJ)
 	@echo 'building pxt2new'
-	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(T2NEW_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxt2new" $(OPT_FLAGS) $(T2NEW_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxt2nex: $(CPP_OBJS) $(T2NEX_OBJ)
+pxt2nex: $(CPP_OBJS) $(TREE_OBJS) $(T2NEX_OBJ)
 	@echo 'building pxt2nex'
-	$(CXX) -o "pxt2nex" $(OPT_FLAGS) $(T2NEX_OBJ) $(CPP_OBJS)
+	$(CXX) -o "pxt2nex" $(OPT_FLAGS) $(T2NEX_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxrr: $(CPP_OBJS) $(TREE_OBJS) $(RR_OBJ)
+	@echo 'building pxrr'
+	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxmono: $(CPP_OBJS) $(TREE_OBJS) $(MONO_OBJ)
+	@echo 'building pxmono'
+	$(CXX) -o "pxmono" $(OPT_FLAGS) $(MONO_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxrmt: $(CPP_OBJS) $(TREE_OBJS) $(RMT_OBJ)
+	@echo 'building pxrmt'
+	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxtrt: $(CPP_OBJS) $(TREE_OBJS) $(TRT_OBJ)
+	@echo 'building pxtrt'
+	$(CXX) -o "pxtrt" $(OPT_FLAGS) $(TRT_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxrmk: $(CPP_OBJS) $(TREE_OBJS) $(RMK_OBJ)
+	@echo 'building pxrmk'
+	$(CXX) -o "pxrmk" $(OPT_FLAGS) $(RMK_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxlog: $(CPP_OBJS) $(TREE_OBJS) $(LOGMANIP_OBJ)
+	@echo 'building pxlog'
+	$(CXX) -o "pxlog" $(OPT_FLAGS) $(LOGMANIP_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxtscale: $(CPP_OBJS) $(TREE_OBJS) $(RESCALE_TREE_OBJ)
+	@echo 'building pxtscale'
+	$(CXX) -o "pxtscale" $(OPT_FLAGS) $(RESCALE_TREE_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
 	
-pxrr: $(CPP_OBJS) $(RR_OBJ)
-	@echo 'building pxrr'
-	$(CXX) -o "pxrr" $(OPT_FLAGS) $(RR_OBJ) $(CPP_OBJS)
+pxtcol: $(CPP_OBJS) $(TREE_OBJS) $(TCOL_OBJ)
+	@echo 'building pxtcol'
+	$(CXX) -o "pxtcol" $(OPT_FLAGS) $(TCOL_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxmono: $(CPP_OBJS) $(MONO_OBJ)
-	@echo 'building pxmono'
-	$(CXX) -o "pxmono" $(OPT_FLAGS) $(MONO_OBJ) $(CPP_OBJS)
+pxtcomb: $(CPP_OBJS) $(TREE_OBJS) $(TCOMB_OBJ)
+	@echo 'building pxtcomb'
+	$(CXX) -o "pxtcomb" $(OPT_FLAGS) $(TCOMB_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxrmt: $(CPP_OBJS) $(RMT_OBJ)
-	@echo 'building pxrmt'
-	$(CXX) -o "pxrmt" $(OPT_FLAGS) $(RMT_OBJ) $(CPP_OBJS)
+pxtgen: $(CPP_OBJS) $(TREE_OBJS) $(TGEN_OBJ)
+	@echo 'building pxtgen'
+	$(CXX) -o "pxtgen" $(OPT_FLAGS) $(TGEN_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxtrt: $(CPP_OBJS) $(TRT_OBJ)
-	@echo 'building pxtrt'
-	$(CXX) -o "pxtrt" $(OPT_FLAGS) $(TRT_OBJ) $(CPP_OBJS)
+pxpoly: $(CPP_OBJS) $(TREE_OBJS) $(POLY_OBJ)
+	@echo 'building pxpoly'
+	$(CXX) -o "pxpoly" $(OPT_FLAGS) $(POLY_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
 
-pxrmk: $(CPP_OBJS) $(RMK_OBJ)
-	@echo 'building pxrmk'
-	$(CXX) -o "pxrmk" $(OPT_FLAGS) $(RMK_OBJ) $(CPP_OBJS)
+pxcolt: $(CPP_OBJS) $(TREE_OBJS) $(COLLAPSE_TREE_OBJ)
+	@echo 'building pxcolt'
+	$(CXX) -o "pxcolt" $(OPT_FLAGS) $(COLLAPSE_TREE_OBJ) $(CPP_OBJS) $(TREE_OBJS)
 	cat man/$@.1.in > man/$@.1
+
+pxbp: $(CPP_OBJS) $(TREE_OBJS) $(BP_OBJ)
+	@echo 'building pxbp'
+	$(CXX) -o "pxbp" $(OPT_FLAGS) $(BP_OBJ) $(CPP_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+
+## Mixed tree + sequences ##
+
+pxrls: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(RELABEL_SEQ_OBJ)
+	@echo 'building pxrls'
+	$(CXX) -o "pxrls" $(OPT_FLAGS) $(RELABEL_SEQ_OBJ) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxrlt: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(RELABEL_TREE_OBJ)
+	@echo 'building pxrlt'
+	$(CXX) -o "pxrlt" $(OPT_FLAGS) $(RELABEL_TREE_OBJ) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxupgma: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(UPGMA_OBJ)
+	@echo 'building pxupgma'
+	$(CXX) -o "pxupgma" $(OPT_FLAGS) $(UPGMA_OBJ) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxnj: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(NJ_OBJ)
+	@echo 'building pxnj'
+	$(CXX) -o "pxnj" $(OPT_FLAGS) $(NJ_OBJ) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+
+## ... + rates ##
+
+pxseqgen: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(RATE_OBJS) $(SEQGEN_OBJ) $(FORT_OBJS)
+	@echo 'building pxseqgen'
+	$(CXX) -o "pxseqgen" $(OPT_FLAGS) $(SEQGEN_OBJ) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(RATE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
+	cat man/$@.1.in > man/$@.1
+
+pxcontrates: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(CONTRATES_OBJ) $(RATE_OBJS)
+	@echo 'building pxcontrates'
+	$(CXX) -o "pxcontrates" $(OPT_FLAGS) $(CONTRATES_OBJ) $(RATE_OBJS) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS)
+	cat man/$@.1.in > man/$@.1
+
+pxstrec: $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(RATE_OBJS) $(STREC_OBJ) #$(FORT_OBJS)
+	@echo 'building pxstrec'
+	$(CXX) -o "pxstrec" $(OPT_FLAGS) $(STREC_OBJ) $(CPP_OBJS) $(SEQ_OBJS) $(TREE_OBJS) $(RATE_OBJS) $(CPPFLAGS) $(LDFLAGS) $(CPP_LIBS) #$(FORT_OBJS) -lgfortran
+	cat man/$@.1.in > man/$@.1
+
+
 
 #removing until fortran update
 #pxsm0: $(CPP_OBJS) $(RATE_OBJS) $(SM0_OBJ) $(FORT_OBJS)
@@ -554,55 +632,7 @@ pxrmk: $(CPP_OBJS) $(RMK_OBJ)
 #	@echo 'building pxsm2a'
 #	$(CXX) -o "pxsm2a" $(OPT_FLAGS) $(SM2A_OBJ) $(CPP_OBJS) $(RATE_OBJS) $(FORT_OBJS) $(CPP_LIBS) -lgfortran
 
-pxcomp: $(CPP_OBJS) $(COMPTEST_OBJ)
-	@echo 'building pxcomp'
-	$(CXX) -o "pxcomp" $(OPT_FLAGS) $(COMPTEST_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
 
-pxrlt: $(CPP_OBJS) $(RELABEL_TREE_OBJ)
-	@echo 'building pxrlt'
-	$(CXX) -o "pxrlt" $(OPT_FLAGS) $(RELABEL_TREE_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxrls: $(CPP_OBJS) $(RELABEL_SEQ_OBJ)
-	@echo 'building pxrls'
-	$(CXX) -o "pxrls" $(OPT_FLAGS) $(RELABEL_SEQ_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxtscale: $(CPP_OBJS) $(RESCALE_TREE_OBJ)
-	@echo 'building pxtscale'
-	$(CXX) -o "pxtscale" $(OPT_FLAGS) $(RESCALE_TREE_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-	
-pxtcol: $(CPP_OBJS) $(TCOL_OBJ)
-	@echo 'building pxtcol'
-	$(CXX) -o "pxtcol" $(OPT_FLAGS) $(TCOL_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxtcomb: $(CPP_OBJS) $(TCOMB_OBJ)
-	@echo 'building pxtcomb'
-	$(CXX) -o "pxtcomb" $(OPT_FLAGS) $(TCOMB_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxtgen: $(CPP_OBJS) $(TGEN_OBJ)
-	@echo 'building pxtgen'
-	$(CXX) -o "pxtgen" $(OPT_FLAGS) $(TGEN_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxssort: $(CPP_OBJS) $(SSORT_OBJ)
-	@echo 'building pxssort'
-	$(CXX) -o "pxssort" $(OPT_FLAGS) $(SSORT_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxpoly: $(CPP_OBJS) $(POLY_OBJ)
-	@echo 'building pxpoly'
-	$(CXX) -o "pxpoly" $(OPT_FLAGS) $(POLY_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
-
-pxcolt: $(CPP_OBJS) $(COLLAPSE_TREE_OBJ)
-	@echo 'building pxcolt'
-	$(CXX) -o "pxcolt" $(OPT_FLAGS) $(COLLAPSE_TREE_OBJ) $(CPP_OBJS)
-	cat man/$@.1.in > man/$@.1
 
 install:
 	mkdir -p $(PREFIX)/bin && install -m 0755 px* $(PREFIX)/bin
