@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <assert.h>
+//#include <assert.h>
+#include <cassert>
 
 #include "node.h"
 #include "tree.h"

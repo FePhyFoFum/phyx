@@ -2,7 +2,8 @@
 #include <vector>
 #include <set>
 #include <map>
-#include <assert.h>
+//#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <algorithm>
 
