@@ -1,4 +1,5 @@
-#include <stdlib.h>
+//#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <vector>

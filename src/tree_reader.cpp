@@ -1,7 +1,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <stdlib.h>
+//#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <map>
