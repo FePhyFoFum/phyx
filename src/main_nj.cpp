@@ -1,9 +1,11 @@
+/*
 #ifdef _OPENMP
     #include <omp.h>
 #else
     #define omp_get_num_procs() 1
     #define omp_get_max_threads() 1
 #endif
+*/
 
 #include <iostream>
 #include <string>
@@ -51,11 +53,13 @@ static struct option const long_options[] =
 };
 
 // temp function to play around with multithreading
+/*
 void printInfo () {
     int foo = omp_get_num_procs();
     int bar = omp_get_max_threads();
     std::cout << "numprocs = " << foo << "; threads = " << bar << std::endl;
 }
+*/
 
 int main(int argc, char * argv[]) {
     
