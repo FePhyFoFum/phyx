@@ -211,7 +211,7 @@ int main(int argc, char * argv[]) {
                     //trees[x]->getExternalNode(i)->setName(s.str());
                 }
                 (*poouts) << "tree tree" << c << " = ";
-                (*poouts) << getNewickString(trees[x],"value") << std::endl;
+                (*poouts) << getNewickString(trees[x], static_cast<std::string>("value")) << std::endl;
             }
             if (c == (num_chars - 1)) {
                 (*poouts) << "end;\n" << std::endl;

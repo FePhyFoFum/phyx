@@ -44,7 +44,7 @@ std::vector<std::string> get_tip_labels (Tree * tr);
 void deknuckle_tree (Tree * tree);
 void remove_knuckle (Node * node);
 std::string getNewickString (Tree * tree);
-std::string getNewickString (Tree * tree, std::string obj);
+std::string getNewickString (Tree * tree, const std::string& obj);
 
 std::string double_to_str (double d);
 

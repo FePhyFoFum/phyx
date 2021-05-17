@@ -16,7 +16,7 @@ private:
     std::map<std::string, std::string> name_map_;
     bool verbose_;
     
-    void store_name_lists (std::string& cnamesf, std::string nnamesf);
+    void store_name_lists (const std::string& cnamesf, const std::string& nnamesf);
     
 public:
     Relabel (std::string& cnamesf, std::string nnamesf, const bool& verbose);
