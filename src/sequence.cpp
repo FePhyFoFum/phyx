@@ -16,7 +16,7 @@
 
 
 // this is the constructor almost always used
-Sequence::Sequence ():id_(), seq_(), length_(0), aligned_(), alphabet_(NA) {}
+Sequence::Sequence ():length_(0), aligned_(), alphabet_(NA) {}
 
 
 Sequence::Sequence (std::string _id, std::string _seq, bool _aligned) {
