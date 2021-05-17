@@ -8,10 +8,12 @@ class CleanTree {
 private:
     Tree* tree_;
     Node * root_;
-    bool rooted_tree_;
-    bool ultrametric_tree_;
-    bool binary_tree_;
-    bool has_branchlengths_;
+    
+    // the following are not currently being used
+    //bool rooted_tree_;
+    //bool ultrametric_tree_;
+    //bool binary_tree_;
+    //bool has_branchlengths_;
     bool remove_root_edge_;
     bool remove_labels_;
     bool remove_knuckles_;
