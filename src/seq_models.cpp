@@ -80,31 +80,31 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
 
 void get_ednafull(std::map<char, std::map<char, int> >& sc_mat) {
     std::vector<std::string> sts;
-    sts.push_back("#");
-    sts.push_back("# This matrix was created by Todd Lowe   12/10/92");
-    sts.push_back("#");
-    sts.push_back("# Uses ambiguous nucleotide codes, probabilities rounded to");
-    sts.push_back("#  nearest integer");
-    sts.push_back("#");
-    sts.push_back("# Lowest score = -4, Highest score = 5");
-    sts.push_back("#");
-    sts.push_back("    A   T   G   C   S   W   R   Y   K   M   B   V   H   D   N   U");
-    sts.push_back("A   5  -4  -4  -4  -4   1   1  -4  -4   1  -4  -1  -1  -1  -2  -4");
-    sts.push_back("T  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2   5");
-    sts.push_back("G  -4  -4   5  -4   1  -4   1  -4   1  -4  -1  -1  -4  -1  -2  -4");
-    sts.push_back("C  -4  -4  -4   5   1  -4  -4   1  -4   1  -1  -1  -1  -4  -2  -4");
-    sts.push_back("S  -4  -4   1   1  -1  -4  -2  -2  -2  -2  -1  -1  -3  -3  -1  -4");
-    sts.push_back("W   1   1  -4  -4  -4  -1  -2  -2  -2  -2  -3  -3  -1  -1  -1   1");
-    sts.push_back("R   1  -4   1  -4  -2  -2  -1  -4  -2  -2  -3  -1  -3  -1  -1  -4");
-    sts.push_back("Y  -4   1  -4   1  -2  -2  -4  -1  -2  -2  -1  -3  -1  -3  -1   1");
-    sts.push_back("K  -4   1   1  -4  -2  -2  -2  -2  -1  -4  -1  -3  -3  -1  -1   1");
-    sts.push_back("M   1  -4  -4   1  -2  -2  -2  -2  -4  -1  -3  -1  -1  -3  -1  -4");
-    sts.push_back("B  -4  -1  -1  -1  -1  -3  -3  -1  -1  -3  -1  -2  -2  -2  -1  -1");
-    sts.push_back("V  -1  -4  -1  -1  -1  -3  -1  -3  -3  -1  -2  -1  -2  -2  -1  -4");
-    sts.push_back("H  -1  -1  -4  -1  -3  -1  -3  -1  -3  -1  -2  -2  -1  -2  -1  -1");
-    sts.push_back("D  -1  -1  -1  -4  -3  -1  -1  -3  -1  -3  -2  -2  -2  -1  -1  -1");
-    sts.push_back("N  -2  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2");
-    sts.push_back("U  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2   5");
+    sts.emplace_back("#");
+    sts.emplace_back("# This matrix was created by Todd Lowe   12/10/92");
+    sts.emplace_back("#");
+    sts.emplace_back("# Uses ambiguous nucleotide codes, probabilities rounded to");
+    sts.emplace_back("#  nearest integer");
+    sts.emplace_back("#");
+    sts.emplace_back("# Lowest score = -4, Highest score = 5");
+    sts.emplace_back("#");
+    sts.emplace_back("    A   T   G   C   S   W   R   Y   K   M   B   V   H   D   N   U");
+    sts.emplace_back("A   5  -4  -4  -4  -4   1   1  -4  -4   1  -4  -1  -1  -1  -2  -4");
+    sts.emplace_back("T  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2   5");
+    sts.emplace_back("G  -4  -4   5  -4   1  -4   1  -4   1  -4  -1  -1  -4  -1  -2  -4");
+    sts.emplace_back("C  -4  -4  -4   5   1  -4  -4   1  -4   1  -1  -1  -1  -4  -2  -4");
+    sts.emplace_back("S  -4  -4   1   1  -1  -4  -2  -2  -2  -2  -1  -1  -3  -3  -1  -4");
+    sts.emplace_back("W   1   1  -4  -4  -4  -1  -2  -2  -2  -2  -3  -3  -1  -1  -1   1");
+    sts.emplace_back("R   1  -4   1  -4  -2  -2  -1  -4  -2  -2  -3  -1  -3  -1  -1  -4");
+    sts.emplace_back("Y  -4   1  -4   1  -2  -2  -4  -1  -2  -2  -1  -3  -1  -3  -1   1");
+    sts.emplace_back("K  -4   1   1  -4  -2  -2  -2  -2  -1  -4  -1  -3  -3  -1  -1   1");
+    sts.emplace_back("M   1  -4  -4   1  -2  -2  -2  -2  -4  -1  -3  -1  -1  -3  -1  -4");
+    sts.emplace_back("B  -4  -1  -1  -1  -1  -3  -3  -1  -1  -3  -1  -2  -2  -2  -1  -1");
+    sts.emplace_back("V  -1  -4  -1  -1  -1  -3  -1  -3  -3  -1  -2  -1  -2  -2  -1  -4");
+    sts.emplace_back("H  -1  -1  -4  -1  -3  -1  -3  -1  -3  -1  -2  -2  -1  -2  -1  -1");
+    sts.emplace_back("D  -1  -1  -1  -4  -3  -1  -1  -3  -1  -3  -2  -2  -2  -1  -1  -1");
+    sts.emplace_back("N  -2  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -2");
+    sts.emplace_back("U  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2   5");
     read_scoring_matrix_from_lines(sts, sc_mat);
 }
 

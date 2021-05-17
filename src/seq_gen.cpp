@@ -19,6 +19,10 @@ using arma::expmat;
 #include "tree_utils.h"
 
 
+std::string SequenceGenerator::nucleotides_ = "ACGT";
+std::string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
+
+
 // TODO: do we want this order?
 /*Default Rate Matrix looks like this, I don't know why but I always go A,T,C,G
  *
@@ -29,8 +33,8 @@ using arma::expmat;
  * G .33 .33 .33  -1
  */
 
-// this should enable easy changing of order, if desired
 
+// this should enable easy changing of order, if desired
 std::map<char, int> SequenceGenerator::nuc_map_ = {
    {'A', 0},
    {'C', 1},
@@ -38,11 +42,8 @@ std::map<char, int> SequenceGenerator::nuc_map_ = {
    {'T', 3}
 };
 
-std::string SequenceGenerator::nucleotides_ = "ACGT";
-std::string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
 
 std::map<char, int> SequenceGenerator::aa_map_ = {
-
    {'A', 0},
    {'R', 1},
    {'N', 2},
@@ -65,6 +66,7 @@ std::map<char, int> SequenceGenerator::aa_map_ = {
    {'V', 19}
 };
 
+
 /*
 std::map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
@@ -74,7 +76,8 @@ std::map <char, int> SequenceGenerator::nucMap = {
 };
 string SequenceGenerator::nucleotides = "ATCG";
 */
- 
+
+
 SequenceGenerator::SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
     std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
     const int& nreps, const int& seed, const float& alpha, const float& pinvar,
