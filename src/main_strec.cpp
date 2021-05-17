@@ -208,8 +208,8 @@ int main(int argc, char * argv[]) {
     }
 
     bool verbose = true;
-    std::string outfile_stochnum_any ="";
-    std::string ratematrixfile = "";
+    std::string outfile_stochnum_any;
+    std::string ratematrixfile;
     std::vector<std::vector<double> > ratematrix;
     bool estimate = true;
     std::map<std::string, std::vector<std::string> > mrcas;

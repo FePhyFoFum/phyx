@@ -38,7 +38,7 @@ void CompTest::read_in_alignment () {
     if (is_multi_ && !alpha_set_) {
         // grab all unique characters from the input string
         // here, seqs from all individuals are concatenated, so represents all sampled characters
-        std::string concatenated = "";
+        std::string concatenated;
         for (int i = 0; i < num_taxa_; i++) {
             concatenated += seqs_[i].get_sequence();
         }
@@ -79,7 +79,7 @@ void CompTest::set_datatype () {
 // get counts of all valid character states per taxon
 void CompTest::count_chars () {
     int sum = 0;
-    std::string seq = "";
+    std::string seq;
     for (int i = 0; i < num_taxa_; i++) {
         sum = 0;
         seq = string_to_upper(seqs_[i].get_sequence());

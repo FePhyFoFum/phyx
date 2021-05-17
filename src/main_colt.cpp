@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
     bool supset = false;
     
     double threshold = 0.5;
-    std::string supstring = "";
+    std::string supstring;
     
     char * outf = nullptr;
     char * treef = nullptr;

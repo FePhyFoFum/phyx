@@ -26,7 +26,7 @@ SequenceConcatenater::SequenceConcatenater (std::string& seqf, const bool& toupc
 void SequenceConcatenater::read_sequences () {
     std::istream * pios = new std::ifstream(filename_);
     
-    std::string alphaName = "";
+    std::string alphaName;
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = (int)seqs_.size();
     
@@ -127,7 +127,7 @@ void SequenceConcatenater::write_partition_information (const std::vector<std::s
     for (unsigned int i = 0; i < partition_sizes_.size(); i++) {
         stopIndex = charIndex + partition_sizes_[i] - 1;
         bool going = true;
-        std::string alpha = "";
+        std::string alpha;
         int j = 0;
         while (going) {
             Sequence terp = seqs_[j];

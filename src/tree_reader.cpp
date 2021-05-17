@@ -59,7 +59,7 @@ Tree * TreeReader::readTree (std::string trees) {
             x++;
             nextChar = pb.c_str()[x];
             //std::cout << "Working on: " << nextChar << std::endl;
-            std::string nodeName = "";
+            std::string nodeName;
             bool goingName = true;
             in_quote = false;
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
@@ -122,7 +122,7 @@ Tree * TreeReader::readTree (std::string trees) {
             // edge length
             x++;
             nextChar = pb.c_str()[x];
-            std::string edgeL = "";
+            std::string edgeL;
             bool goingName = true;
             while (goingName) {
                 edgeL = edgeL + nextChar;
@@ -144,7 +144,7 @@ Tree * TreeReader::readTree (std::string trees) {
             hasAnnotations = true;
             x++;
             nextChar = pb.c_str()[x];
-            std::string note = "";
+            std::string note;
             bool goingNote = true;
             while (goingNote) {
                 note = note + nextChar;
@@ -164,7 +164,7 @@ Tree * TreeReader::readTree (std::string trees) {
             Node * newNode = new Node(currNode);
             currNode->addChild(*newNode);
             currNode = newNode;
-            std::string nodeName = "";
+            std::string nodeName;
             bool goingName = true;
             in_quote = false;
             if (nextChar == '"' || nextChar == '\'') {
@@ -461,7 +461,7 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
     
     if (tline.back() != ';') {
         bool done = false;
-        std::string terp = "";
+        std::string terp;
         while (!done) {
             if (!getline_safe(stri, terp)) {
                 std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting." << std::endl;

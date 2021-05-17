@@ -290,8 +290,8 @@ std::map<std::string, std::string> invert_mtdna_ = {
 
 
 std::string TLATE::translate (std::string& dna) {
-    std::string codon = "";
-    std::string AminoAcid = "";
+    std::string codon;
+    std::string AminoAcid;
     std::string residue;
     std::string AA;
     

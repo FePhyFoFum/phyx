@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
-    std::string recodescheme = "";
+    std::string recodescheme;
     char * outf = nullptr;
     char * seqf = nullptr;
     while(true) {
@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
     int ft = test_seq_filetype_stream(*pios, retstring);
     int num_taxa, num_char; // not used, but required by some reader functions
     bool first = true; // check first seq alphabet to make sure DNA. exit otherwise
-    std::string alpha = "";
+    std::string alpha;
     
     // extra stuff to deal with possible interleaved nexus
     if (ft == 0) {

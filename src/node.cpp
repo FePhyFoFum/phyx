@@ -212,7 +212,7 @@ void Node::setComment (std::string s) {
 
 // since nexus writer uses this, using stricter nexus punctuation
 std::string Node::getNewick (bool bl) {
-    std::string ret = "";
+    std::string ret;
     for (int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
@@ -246,7 +246,7 @@ std::string Node::getNewick (bool bl) {
 // root edge could be solved by passing in the correct node initially, but MRCA is expensive
 // recursive
 std::string Node::getPaintedNewick (bool bl) {
-    std::string ret = "";
+    std::string ret;
     std::vector<int> paintedchildren;
     for (int i = 0; i < this->getChildCount(); i++) {
         if (this->getChild(i)->getPainted()) {
@@ -299,7 +299,7 @@ std::string Node::getPaintedNewick (bool bl) {
  * needs to be a string in setObject
  */
 std::string Node::getNewick (bool bl, const std::string& obj) {
-    std::string ret = "";
+    std::string ret;
     for (int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";

@@ -59,6 +59,7 @@ int main(int argc, char * argv[]) {
     bool scaleset = false;
     char * outf = nullptr;
     char * treef = nullptr;
+    
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:s:r:o:hVC", long_options, &oi);

@@ -189,7 +189,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
     } else if (ftype == 2) { // fasta
         bool first = true;
         bool going = true;
-        std::string curseq = "";
+        std::string curseq;
         while (going) {
             if (first && retstring.size() > 0) {
                 tline = retstring;
@@ -416,7 +416,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         std::vector<std::string> tokens;
         std::string del(" \t");
         std::string tline;
-        std::string curseq = "";
+        std::string curseq;
         while (going) {
             if (first && retstring.size() > 0) {
                 tline = retstring;
@@ -638,7 +638,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
                         // just need to make sure both " are captured, and we should be cool
                         bool done = false;
                         bool first = true;
-                        std::string terp = "";
+                        std::string terp;
                         while (!done) {
                             i++;
                             if (first) {
@@ -752,9 +752,9 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const 
     // store current position of the stream so we can rewind after determining format
     std::streampos spt = pios.tellg();
     
-    std::string line = "";
-    std::string name = "";
-    std::string seq = "";
+    std::string line;
+    std::string name;
+    std::string seq;
     int num_elem = 0; // count chunks when spaces present
     std::vector<std::string> tokens;
     
@@ -941,7 +941,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     
     std::vector<Sequence> seqs;
     Sequence seq;
-    std::string line = "";
+    std::string line;
     bool spaces = false;
     bool multiline = false;
     bool interleaved = false;
@@ -950,8 +950,8 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     //int charCount = 0;
     std::vector<std::string> tokens;
     std::vector<std::string> names;
-    std::string residues = "";
-    std::string name = "";
+    std::string residues;
+    std::string name;
     
     get_phylip_format(pios, num_taxa, num_char, interleaved, spaces, multiline);
     
@@ -1149,7 +1149,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
         bool is_interleaved = false;
         // a bunch of required variables, not used here:
         char gap, missing;
-        std::string symbols = "";
+        std::string symbols;
         get_nexus_alignment_properties(*pios, file_num_taxa, file_num_char,
                 is_interleaved, alphaName, symbols, gap, missing);
         //std::cout << "alphaName = " << alphaName << std::endl;

@@ -163,7 +163,7 @@ void SeqInfo::read_in_alignment () {
 // calculate character state frequencies
 void SeqInfo::calculate_freqs () {
     Sequence seq;
-    std::string name = "";
+    std::string name;
     for (unsigned int i = 0; i < seqs_.size(); i++) {
         seq = seqs_[i];
         temp_seq_ = seq.get_sequence();
@@ -332,7 +332,7 @@ void SeqInfo::calc_missing () {
         // per individual sequence
         // should we require seqs be aligned? stats would make more sense
         Sequence seq;
-        std::string name = "";
+        std::string name;
         for (unsigned int i = 0; i < seqs_.size(); i++) {
             seq = seqs_[i];
             temp_seq_ = seq.get_sequence();

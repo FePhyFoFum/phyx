@@ -32,7 +32,7 @@ SequenceSampler::SequenceSampler (std::istream* pios, const int& seed, const flo
 
 
 void SequenceSampler::read_in_sequences (std::istream* pios) {
-    std::string alphaName = ""; // not used, but required by reader
+    std::string alphaName; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = (int)seqs_.size();
     num_char_ = (int)seqs_[0].get_length();

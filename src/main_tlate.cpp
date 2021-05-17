@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
     
     int ft = test_seq_filetype_stream(*pios, retstring);
     int num_taxa, num_char; // not used, but required by some readers
-    std::string alphaName = ""; // will check first sequence type
+    std::string alphaName; // will check first sequence type
     bool first = true;
     
     // extra stuff to deal with possible interleaved nexus

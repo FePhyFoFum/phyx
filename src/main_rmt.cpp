@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
     std::vector<std::string> names;
     bool complement = false;
     bool regex = false;
-    std::string regex_pattern = "";
+    std::string regex_pattern;
 
     char * treef = nullptr;
     char * outf = nullptr;

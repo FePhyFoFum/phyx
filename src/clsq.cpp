@@ -109,7 +109,7 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
             (*poos) << "Length of sequences: " << num_char_/3 << " codons" << std::endl;
         }
         
-        std::string pad = "";
+        std::string pad;
         int diff = 0;
         int longest = get_longest_taxon_label();
         // header
@@ -183,8 +183,8 @@ int SequenceCleaner::get_longest_taxon_label () {
 
 // hrm should we create a new set of seqs, or just edit existing one?
 void SequenceCleaner::generate_cleaned_sequences () {
-    std::string name = "";
-    std::string seq_string = "";
+    std::string name;
+    std::string seq_string;
     Sequence orig_seq;
     for (int i = 0; i < num_taxa_; i++) {
         Sequence new_seq;
@@ -210,7 +210,7 @@ void SequenceCleaner::count_missing () {
     missing_per_taxon_ = std::vector<int>(num_taxa_, 0);
     missing_per_taxon_proportion_ = std::vector<double>(num_taxa_, 0.0);
     
-    std::string seq_string = "";
+    std::string seq_string;
     
     if (!by_codon_) {
         for (int i = 0; i < num_taxa_; i++) {
@@ -225,7 +225,7 @@ void SequenceCleaner::count_missing () {
             missing_per_taxon_proportion_[i] = (double)missing_per_taxon_[i] / (double)num_char_;
         }
     } else {
-        std::string codon = "";
+        std::string codon;
         for (int i = 0; i < num_taxa_; i++) {
             seq_string = string_to_upper(seqs_[i].get_sequence());
             for (int j = 0; j < num_char_; j += 3) {
@@ -259,7 +259,7 @@ void SequenceCleaner::count_missing () {
 
 
 std::string SequenceCleaner::get_cleaned_seq (const std::string& origseq) {
-    std::string seq = "";
+    std::string seq;
     for (int i = 0; i < num_retained_; i++) {
         seq += origseq[retained_sites_[i]];
     }

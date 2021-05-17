@@ -168,7 +168,7 @@ void TopologyGenerator::generate_trees () {
 
 
 std::string TopologyGenerator::edge_matrix_to_newick (const std::vector< std::vector<int> >& edges) {
-    std::string tree = "";
+    std::string tree;
     //int num_edges = (int)edges.size();
     //int num_taxa = (int)((num_edges + 3)/2);
     int min_node = num_taxa_ + 1;

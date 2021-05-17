@@ -168,7 +168,7 @@ int main(int argc, char * argv[]) {
         afstr = new std::ofstream(outaf);
     }
 
-    std::string alphaName = "";
+    std::string alphaName;
     std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
 
     // go all by all

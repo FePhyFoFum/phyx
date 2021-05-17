@@ -54,14 +54,16 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
+    
+    // hrm add this back in?
     //bool mrcafset = false; not used
-    bool nodeidfset = false;
     //char * mrcaf = nullptr;
+    
+    bool nodeidfset = false;
     char * nodeidf = nullptr;
     char * outf = nullptr;
     char * treef = nullptr;
-    std::string cnamef = "";
-    std::string nnamef = "";
+
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:m:d:o:hVC", long_options, &oi);

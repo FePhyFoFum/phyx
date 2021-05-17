@@ -62,8 +62,8 @@ int main(int argc, char * argv[]) {
     bool verbose = false;
     char * outf = nullptr;
     char * treef = nullptr;
-    std::string cnamef = "";
-    std::string nnamef = "";
+    std::string cnamef;
+    std::string nnamef;
     while(true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:c:n:o:vhVC", long_options, &oi);

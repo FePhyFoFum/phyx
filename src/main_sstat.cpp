@@ -110,7 +110,7 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    std::string alphaName = "";
+    std::string alphaName;
     std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
     
     MultinomialSeqStat mm(seqs);

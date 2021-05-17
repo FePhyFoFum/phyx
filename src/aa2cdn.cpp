@@ -74,9 +74,9 @@ void AAtoCDN::check_names () {
 
 // at this point, alignments should be of the same size and order
 void AAtoCDN::generate_codon_alignment () {
-    std::string aaseq = "";
-    std::string nucseq = "";
-    std::string codonseq = "";
+    std::string aaseq;
+    std::string nucseq;
+    std::string codonseq;
     int aalen = 0;
     int naachars = 0;
     int ncodons = 0;

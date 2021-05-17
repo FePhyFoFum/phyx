@@ -412,7 +412,7 @@ void SequenceGenerator::print_node_labels() {
 void SequenceGenerator::label_internal_nodes() {
     int count = 1;
     std::string str = "Node";
-    std::string nlabel = "";
+    std::string nlabel;
     Node * root = tree_->getRoot();
     root->setName("Node_0");
     for (int k = (tree_->getNodeCount() - 2); k >= 0; k--) {

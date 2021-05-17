@@ -15,7 +15,7 @@
 
 
 UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_("") {
-    std::string alphaName = ""; // not used, but required by reader
+    std::string alphaName; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = (int)seqs_.size();
     num_char_ = (int)seqs_[0].get_length();

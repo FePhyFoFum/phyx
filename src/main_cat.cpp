@@ -65,8 +65,8 @@ int main(int argc, char * argv[]) {
     bool toupcase = false;
     std::vector<std::string> inputFiles;
     char * outf = nullptr;
-    std::string partf = "";
-    std::string listf = "";
+    std::string partf;
+    std::string listf;
 
     while(true) {
         int oi = -1;

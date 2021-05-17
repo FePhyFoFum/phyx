@@ -63,14 +63,14 @@ int main(int argc, char * argv[]) {
     bool complement = false;
     bool regex = false;
     std::regex regexp;
-    std::string regex_pattern = "";
+    std::string regex_pattern;
     bool match = false; // for regex searches
     
     char * namesc = nullptr;
     char * namesfc = nullptr;
     char * seqf = nullptr;
     char * outf = nullptr;
-    std::string rmf = "";
+    std::string rmf;
     std::vector<std::string> names;
 
     while(true) {

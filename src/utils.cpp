@@ -770,7 +770,7 @@ std::vector<std::string> get_complement (std::vector<std::string>& a, std::vecto
 
 // peek at the next line in the stream
 std::string peek_line (std::istream& pios) {
-    std::string nextLine = "";
+    std::string nextLine;
     // get current position
     std::streampos spt = pios.tellg();
     // read in next line
@@ -784,7 +784,7 @@ std::string peek_line (std::istream& pios) {
 // same as above, except read in the next n lines
 std::vector<std::string> peek_lines (std::istream& pios, const int& n) {
     std::vector<std::string> peekedLines;
-    std::string nextLine = "";
+    std::string nextLine;
     // get current position
     std::streampos spt = pios.tellg();
     // read in the lines

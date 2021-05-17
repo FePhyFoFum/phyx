@@ -264,7 +264,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
 void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
     int seqlength = seqs[0].get_length();
     std::string datatype = seqs[0].get_alpha_name();
-    std::string symbols = ""; // not required for binary (default), protein, DNA
+    std::string symbols; // not required for binary (default), protein, DNA
     //std::cout << std::endl << "datatype = " << datatype << std::endl << std::endl;
     
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
@@ -330,7 +330,7 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
     int start = site*3;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
-        std::string setsq = "";
+        std::string setsq;
         for (int j = 0; j < 61; j++) {
             setsq += "0";
         }

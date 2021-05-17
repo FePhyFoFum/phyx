@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
     float jackfract = 0.0;
     char * outf = nullptr;
     char * seqf = nullptr;
-    std::string partf = "";
+    std::string partf;
     int seed = -1;
     while(true) {
         int oi = -1;
