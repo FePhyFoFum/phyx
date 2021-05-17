@@ -190,7 +190,7 @@ int main(int argc, char * argv[]) {
                 it = set_intersection(lvsset.begin(), lvsset.end(),
                                 atns.begin(), atns.end(), v_int.begin());
                 v_int.resize(it-v_int.begin());
-                if (v_int.size() > 0) {
+                if (!v_int.empty()) {
                     //need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
                     std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(), lvsset.end(), atns.begin(), atns.end(), v2.begin());
@@ -207,7 +207,7 @@ int main(int argc, char * argv[]) {
             connecthere->addChild(*oldroot);
             addtree->setRoot(connecthere);
             bool didit = false;
-            while (diffnds.size() > 0) {
+            while (!diffnds.empty()) {
                 std::cout << "diffnds.size() = " << diffnds.size() << std::endl;
                 for (std::map<std::string, Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
                     std::cout << it->first << std::endl;
@@ -218,7 +218,7 @@ int main(int argc, char * argv[]) {
                         std::set<std::string> cs = cn->get_leave_names_set();
                         std::vector<std::string> v_int;
                         set_intersection(cs.begin(), cs.end(), atns.begin(), atns.end(), back_inserter(v_int));
-                        if (v_int.size() > 0) {
+                        if (!v_int.empty()) {
                             std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
                             //get nodes
                             //get mrca

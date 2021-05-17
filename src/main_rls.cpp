@@ -222,7 +222,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (orig.size() > 0) {
+    if (!orig.empty()) {
         if (verbose) {
             std::cerr << "The following names to match were not found in the alignment:" << std::endl;
             for (auto elem : orig) {

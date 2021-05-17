@@ -141,7 +141,7 @@ void SequenceSampler::parse_partitions (std::string& partf) {
     std::ifstream infile(partf.c_str());
     
     while (getline_safe(infile, line)) {
-        if (line.size() < 1) {
+        if (line.empty()) {
             continue;
         } else {
             temp = get_partition_sites(line);
@@ -290,14 +290,14 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
         }
     }
     
-    if (duplicates.size() != 0) {
+    if (!duplicates.empty()) {
         std::cerr << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
         for (unsigned int i = 0; i < duplicates.size(); i++) {
             std::cerr << duplicates[i] << " ";
         }
         std::cerr << std::endl;
     }
-    if (missing.size() != 0) {
+    if (!missing.empty()) {
         std::cerr << "Error: the following " << missing.size() << " sites are not found in any partition: ";
         for (unsigned int i = 0; i < missing.size(); i++) {
             std::cerr << missing[i] << " ";

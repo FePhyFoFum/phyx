@@ -65,7 +65,7 @@ void StateReconstructor::set_tree (Tree * tr) {
                 double anc = tree->getNode(i)->getParent()->getHeight();
                 double des = tree->getNode(i)->getHeight();
                 double t = des;
-                if (pers.size() > 0) {
+                if (!pers.empty()) {
                     for (unsigned int j = 0; j < pers.size(); j++) {
                         double s = 0;
                         if (pers.size() == 1)

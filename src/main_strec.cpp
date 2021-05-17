@@ -392,7 +392,7 @@ int main(int argc, char * argv[]) {
     std::ofstream sttimeout;
     std::ofstream sttnumout_any;
     
-    if (ancstates.size() > 0 && outancfileset) {
+    if (!ancstates.empty() && outancfileset) {
         ancout.open(outanc, std::ios::out);
         ancout << "site\ttree\tMRCA\tlnL";
         for (int i = 0; i < nstates; i++) {
@@ -400,7 +400,7 @@ int main(int argc, char * argv[]) {
         }
         ancout << std::endl;
     }
-    if (stochnumber.size() > 0 && outstochnumfileset) {
+    if (!stochnumber.empty() && outstochnumfileset) {
         stnumout.open(outnum, std::ios::out);
         stnumout << "site\ttree\tMRCA\tlnL";
         for (int i = 0; i < nstates; i++) {
@@ -412,7 +412,7 @@ int main(int argc, char * argv[]) {
         }
         stnumout << std::endl;
     }
-    if (stochtime.size() > 0 && outstochtimefileset ) {
+    if (!stochtime.empty() && outstochtimefileset ) {
         sttimeout.open(outtime, std::ios::out);
         sttimeout << "site\ttree\tMRCA\tlnL";
         for (int i = 0; i < nstates; i++) {
@@ -420,7 +420,7 @@ int main(int argc, char * argv[]) {
         }
         sttimeout << std::endl;
     }
-    if (stochnumber_any.size() > 0 && outstochnumanyfileset) {
+    if (!stochnumber_any.empty() && outstochnumanyfileset) {
         sttnumout_any.open(outnumany, std::ios::out);
         sttnumout_any << "site\ttree\tMRCA\tlnL";
         sttnumout_any << "\tanystate";
@@ -825,7 +825,7 @@ int main(int argc, char * argv[]) {
             if (verbose) {
                 (*loos) << "stochastic number (any)" << std::endl;
             }
-            if (stochnumber_any.size() > 0) {
+            if (!stochnumber_any.empty()) {
                 sr.prepare_stochmap_reverse_all_nodes_all_matrices();
                 sr.prepare_ancstate_reverse();
             }
@@ -853,13 +853,13 @@ int main(int argc, char * argv[]) {
             //delete tree;
         }
     }
-    if (ancstates.size() > 0  && outancfileset) {
+    if (!ancstates.empty() && outancfileset) {
         ancout.close();
     }
-    if (stochnumber.size() > 0) {
+    if (!stochnumber.empty()) {
         stnumout.close();
     }
-    if (stochtime.size() > 0) {
+    if (!stochtime.empty()) {
         sttimeout.close();
     }
     

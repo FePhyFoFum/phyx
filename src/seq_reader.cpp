@@ -73,7 +73,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         // are we at the beginning of the file?
         // TODO: add check for interleave and kick out to do a different reader
         // checks for beginning of char by MATRIX
-        if (retstring.size() > 0 && retstring[0] == '#') {
+        if (!retstring.empty() && retstring[0] == '#') {
             bool found = false;
             while (getline_safe(stri, tline)) {
                 trim_spaces(tline);
@@ -90,7 +90,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         }
         getline_safe(stri, tline);
         trim_spaces(tline);
-        while (tline.size() == 0  || check_comment_line(tline)) {
+        while (tline.empty() || check_comment_line(tline)) {
             if (getline_safe(stri, tline)) {
                 trim_spaces(tline);
             } else {
@@ -142,7 +142,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         std::string del(" \t");
         std::string tline;
         // check to see if we are at the beginning of the file
-        if (retstring.size() > 0) {
+        if (!retstring.empty()) {
             tokenize(retstring, tokens, del);
             if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
@@ -154,11 +154,11 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             }
             retstring = "";
         }
-        if (tline.size() == 0) {
+        if (tline.empty()) {
             if (!getline_safe(stri, tline)) {
                 return false;
             }
-            if (tline.size() == 0) {
+            if (tline.empty()) {
                 return false;
             }
         }
@@ -167,7 +167,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         for (unsigned int i = 0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
-        if (tokens[0].size() == 0) {
+        if (tokens[0].empty()) {
             return false;
         }
         seq.set_id(tokens[0]);
@@ -191,7 +191,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         bool going = true;
         std::string curseq;
         while (going) {
-            if (first && retstring.size() > 0) {
+            if (first && !retstring.empty()) {
                 tline = retstring;
                 retstring = "";
             } else {
@@ -219,7 +219,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         }
     } else if (ftype == 3) { // fastq assumes a 33 offset for now
         std::string line1, line2, line3, line4;
-        if (retstring.size() > 0) {
+        if (!retstring.empty()) {
             line1 = retstring;
             retstring = "";
         } else if (!getline_safe(stri, line1)) {
@@ -256,7 +256,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
     std::string del(" \t");
     while (getline_safe(stri, tline)) {
         trim_spaces(tline);
-        if (tline.size() != 0) {
+        if (!tline.empty()) {
             if (check_nexus_comment(tline)) {
                 process_nexus_comment(stri, tline);
                 continue;
@@ -379,7 +379,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         std::string del(" \t");
         std::string tline;
         //check to see if we are at the beginning of the file
-        if (retstring.size() > 0) {
+        if (!retstring.empty()) {
             tokenize(retstring, tokens, del);
             if (tokens.size() > 1) {
                 trim_spaces(tokens[0]);
@@ -391,7 +391,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             }
             retstring = "";
         }
-        if (tline.size() == 0) {
+        if (tline.empty()) {
             if (!getline_safe(stri, tline)) {
                 return false;
             }
@@ -401,7 +401,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         for (unsigned int i = 0; i < tokens.size(); i++) {
             trim_spaces(tokens[i]);
         }
-        if (tokens[0].size() == 0) {
+        if (tokens[0].empty()) {
             return false;
         }
         seq.set_id(tokens[0]);
@@ -418,7 +418,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         std::string tline;
         std::string curseq;
         while (going) {
-            if (first && retstring.size() > 0) {
+            if (first && !retstring.empty()) {
                 tline = retstring;
                 retstring = "";
             } else {
@@ -428,7 +428,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     for (unsigned int i = 0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
-                    if (tokens[0].size() == 0) {
+                    if (tokens[0].empty()) {
                         return false;
                     }
                     for (unsigned int i = 0 ; i < tokens.size(); i++) {
@@ -450,7 +450,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     for (unsigned int i = 0; i < tokens.size(); i++) {
                         trim_spaces(tokens[i]);
                     }
-                    if (tokens[0].size() == 0) {
+                    if (tokens[0].empty()) {
                         return false;
                     }
                     for (unsigned int i =0 ; i < tokens.size(); i++) {
@@ -482,7 +482,7 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, boo
             // convert to uppercase
             tline = string_to_upper(tline);
             std::vector<std::string> searchtokens = tokenize(tline);
-            if (searchtokens.size() == 0) {
+            if (searchtokens.empty()) {
                 // this will be the case if only whitespace (essentially an empty line)
                 continue;
             }
@@ -569,7 +569,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
             // convert to uppercase
             tline = string_to_upper(tline);
             std::vector<std::string> searchtokens = tokenize(tline);
-            if (searchtokens.size() == 0) {
+            if (searchtokens.empty()) {
                 // this will be the case if only whitespace (essentially an empty line)
                 continue;
             }
@@ -1170,13 +1170,13 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
         }
         if (complicated_phylip) {
             seqs = read_phylip(*pios, file_num_taxa, file_num_char);
-            if (alphaName == "") {
+            if (alphaName.empty()) {
                 alphaName = seqs[0].get_alpha_name();
             }
         } else {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 seqs.push_back(seq);
-                if (alphaName == "") {
+                if (alphaName.empty()) {
                     alphaName = seq.get_alpha_name();
                 }
             }

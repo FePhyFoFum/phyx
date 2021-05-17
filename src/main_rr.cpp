@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
             }
         }
         nfstr.close();
-        if (outgroups.size() > 0) {
+        if (!outgroups.empty()) {
             outgroupsset = true;
         } else {
             // empty file

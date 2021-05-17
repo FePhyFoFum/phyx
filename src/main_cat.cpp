@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
         std::cerr << "Error: must specify 1 or more files to concatenate. Exiting." << std::endl;
         exit(0);
     }
-    if (listf != "") {
+    if (!listf.empty()) {
         std::string line;
         std::ifstream ifs(listf.c_str());
         while (getline (ifs, line)) {

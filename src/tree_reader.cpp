@@ -110,7 +110,7 @@ Tree * TreeReader::readTree (std::string trees) {
             }// work on edge
             currNode->setName(nodeName);
             //std::cout << nodeName << std::endl;
-            if (nodeName.size() > 0) {
+            if (!nodeName.empty()) {
                 hasInternalNodeNames = true;
             }
             if (!in_quote) {

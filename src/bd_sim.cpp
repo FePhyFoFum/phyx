@@ -68,7 +68,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
         going = check_stop_conditions();
         if (going) {
             event();
-            if (extantnodes_.size() < 1) {
+            if (extantnodes_.empty()) {
                 failures_ += 1;
                 //std::cout << "failed!" << std::endl;
                 if (failures_ >= maxfailures_) {

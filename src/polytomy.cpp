@@ -68,7 +68,7 @@ void Polytomy::sample_polytomies (Tree * tr) {
             }
         }
     }
-    if (terminals_to_prune_.size() > 0) {
+    if (!terminals_to_prune_.empty()) {
         // get rid of any duplicates (can happen with nested polytomies)
         terminals_to_prune_ = get_unique_elements(terminals_to_prune_);
         if (verbose) {

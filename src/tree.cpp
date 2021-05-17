@@ -243,7 +243,7 @@ void Tree::duplicateRootSupport () {
         if (kids[i]->isInternal()) {
             numnodes++;
             std::string x = kids[i]->getName(); // support stored in name property
-            if (x != "") {
+            if (!x.empty()) {
                 supfound = true;
                 sups.push_back(x);
             }

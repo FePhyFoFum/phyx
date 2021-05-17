@@ -108,7 +108,7 @@ int main(int argc, char * argv[]) {
     }
     
     // set default if arg not provided
-    if (recodescheme == "") {
+    if (recodescheme.empty()) {
         recodescheme = "RY";
     }
     

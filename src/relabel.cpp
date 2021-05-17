@@ -95,7 +95,7 @@ void Relabel::relabel_tree (Tree * tr) {
     // do internal labels as well. be quieter here (don't expect internal nodes to have labels)
     for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         std::string str = tr->getInternalNode(i)->getName();
-        if (str == "") {
+        if (str.empty()) {
             continue;
         }
         if (name_map_.find(str) != name_map_.end()) {
@@ -113,7 +113,7 @@ void Relabel::relabel_tree (Tree * tr) {
     }
     
     // report failed matches (if present)
-    if (orig.size() > 0) {
+    if (!orig.empty()) {
         if (verbose_) {
             std::cerr << "The following names to match were not found in the tree:" << std::endl;
             for (auto elem : orig) {

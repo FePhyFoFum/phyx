@@ -46,7 +46,7 @@ void Collapser::collapse_edges (Tree * tr) {
             for (int i = 0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
                 std::string str = m->getName();
-                if (str == "") {
+                if (str.empty()) {
                     //std::cout << "Whoops. This node has no support value." << std::endl;
                 } else {
                     float cursup = std::stof(str);
