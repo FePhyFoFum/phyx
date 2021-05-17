@@ -29,7 +29,7 @@ private:
     int fortran_m;
     
 public:
-    RateModel(int nstates);
+    RateModel(int _nstates);
     /*
       storing once optimization has occurred
       map of bl and p matrix
@@ -57,8 +57,8 @@ public:
      * get things from stmap
      */
     //this should be used for getting the eigenvectors and eigenvalues
-    bool get_eigenvec_eigenval_from_Q(cx_mat * eigenvalues, cx_mat * eigenvectors);
-    void get_eigenvec_eigenval_from_Q_simple(mat * eigenvalues, mat * eigenvectors);
+    bool get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec);
+    void get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec);
     
 };
 void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf, mat& bigpiK, mat& bigpiw);

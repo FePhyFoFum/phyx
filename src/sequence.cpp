@@ -204,8 +204,8 @@ void Sequence::set_id (std::string _id) {
 
 
 // not used
-void Sequence::set_aligned (bool _aligned) {
-    aligned_ = _aligned;
+void Sequence::set_aligned (bool _align) {
+    aligned_ = _align;
 }
 
 

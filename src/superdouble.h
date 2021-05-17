@@ -40,7 +40,7 @@ private:
     friend std::ostream& operator<<(std::ostream& os, const Superdouble& x);
     
 public:
-    Superdouble(long double mantissa=1.0, int exponent=0);
+    Superdouble(long double m=1.0, int e=0);
     ~Superdouble();
     Superdouble operator* ( Superdouble x);
     Superdouble operator* ( double x);

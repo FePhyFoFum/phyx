@@ -44,7 +44,7 @@ private:
     void get_longest_taxon_label ();
     double get_cell_value (const double& observed, const double& expected);
     void calc_chi_square ();
-    double calc_chi_square_prob (const double& s, const double& t);
+    double calc_chi_square_prob (const double& df, const double& xstat);
     double lower_incomplete_gamma_function (double s, double t);
     
 public:
