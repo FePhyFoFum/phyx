@@ -1,9 +1,7 @@
-//#include <stdlib.h>
 #include <cstdlib>
 #include <string>
 #include <vector>
 #include <map>
-//#include <assert.h>
 #include <cassert>
 #include <fstream>
 

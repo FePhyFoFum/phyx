@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-//#include <assert.h>
 #include <cassert>
 
 #include "node.h"
@@ -44,7 +43,7 @@ Node * Tree::getExternalNode (int num) {
 /*
  * could precompute this, check for run time differences
  */
-Node * Tree::getExternalNode (std::string name) {
+Node * Tree::getExternalNode (const std::string& name) {
     Node * ret = nullptr;
     for (int i = 0; i < external_node_count_; i++) {
         if (external_nodes_.at(i)->getName() == name) {
@@ -112,14 +111,16 @@ Node * Tree::getNode (int num) {
 
 Node * Tree::getNode (std::string& name) {
     Node * ret = nullptr;
-    if (name_node_map_.size() == 0) {
+    if (name_node_map_.empty()) {
         for (unsigned int i = 0; i < nodes_.size(); i++) {
-            if (nodes_.at(i)->getName().size() > 0)
+            if (!nodes_.at(i)->getName().empty()) {
                 name_node_map_[nodes_.at(i)->getName()] = nodes_.at(i);
+            }
         }
     }
-    if (name_node_map_.count(name) != 0)
+    if (name_node_map_.count(name) != 0) {
         ret = name_node_map_[name];
+    }
     return ret;
 }
 
@@ -183,13 +184,14 @@ void Tree::unRoot () {
  */
 bool Tree::reRoot (Node * inroot) {
     processRoot();
+    bool ret = true;
     if (this->getRoot()->getChildCount() < 3) {
         tritomyRoot(nullptr); // not sure if this should actually be the inroot instead of nullptr
     }
     //std::cout << this->root->getNewick(false) << std::endl;
     if (root_ == inroot) {
         std::cerr << "you asked to root at the current root" << std::endl;
-        return false;
+        ret = false;
     } else {
         Node * tempParent = inroot->getParent();
         Node * newRoot = new Node(tempParent);
@@ -205,8 +207,8 @@ bool Tree::reRoot (Node * inroot) {
         processRoot();
         // duplicate support information (if present) for display purposes
         duplicateRootSupport();
-        return true;
     }
+    return ret;
 }
 
 
@@ -253,7 +255,7 @@ void Tree::duplicateRootSupport () {
                 for (unsigned int i = 0; i < kids.size(); i++) {
                     if (kids[i]->isInternal()) {
                         std::string x = kids[i]->getName();
-                        if (x == "") {
+                        if (x.empty()) {
                             kids[i]->setName(sups[0]);
                         }
                     }
@@ -328,7 +330,7 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
         outgroup.erase(outgroup.begin());
         Node * cur2 = nullptr;
         Node * tempmrca = nullptr;
-        while (outgroup.size() > 0) {
+        while (!outgroup.empty()) {
             cur2 = this->getExternalNode(outgroup.at(0));
             outgroup.erase(outgroup.begin());
             tempmrca = getMRCATraverse(cur1, cur2);
@@ -349,7 +351,7 @@ Node * Tree::getMRCA (std::vector<Node *> innodes) {
         innodes.erase(innodes.begin());
         Node * cur2 = nullptr;
         Node * tempmrca = nullptr;
-        while (innodes.size() > 0) {
+        while (!innodes.empty()) {
             cur2 = innodes.at(0);
             innodes.erase(innodes.begin());
             tempmrca = getMRCATraverse(cur1, cur2);

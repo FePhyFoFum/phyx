@@ -43,6 +43,7 @@ void RateModel::set_Q_cell(int from, int to, double num) {
     sameQ = false;
 }
 
+
 void RateModel::set_Q_diag() {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         double su = 0;
@@ -55,6 +56,7 @@ void RateModel::set_Q_diag() {
     }
     sameQ = false;
 }
+
 
 void RateModel::setup_Q() {
     Q.fill(0);
@@ -70,6 +72,7 @@ void RateModel::setup_Q() {
     sameQ = false;
 }
 
+
 void RateModel::setup_Q(std::vector< std::vector<double> >& inQ) {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
@@ -83,6 +86,7 @@ void RateModel::setup_Q(std::vector< std::vector<double> >& inQ) {
     sameQ = false;
 }
 
+
 void RateModel::setup_Q(mat& inQ) {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
@@ -93,12 +97,14 @@ void RateModel::setup_Q(mat& inQ) {
     sameQ = false;
 }
 
+
 void RateModel::set_n_qs(int number) {
     for (int i = 0; i < number; i++) {
         mat tm(nstates, nstates);
         Qs.push_back(tm);
     }
 }
+
 
 void RateModel::set_Q_which(mat& inQ, int which) {
     for (unsigned int i = 0; i < Qs[which].n_rows; i++) {
@@ -118,6 +124,7 @@ void RateModel::set_Q_which(mat& inQ, int which) {
     sameQ = false;
 }
 
+
 void RateModel::set_Q(mat& inQ) {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
@@ -127,9 +134,11 @@ void RateModel::set_Q(mat& inQ) {
     sameQ = false;
 }
 
+
 mat& RateModel::get_Q() {
     return Q;
 }
+
 
 cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
     //sameQ = false;
@@ -156,6 +165,7 @@ cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
     return P;
 }
 
+
 void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
 //    sameQ = false;
     eigvec_simple.fill(0);
@@ -173,6 +183,7 @@ void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
     }*/
     //return P;
 }
+
 
 void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) {
     if (sameQ) {
@@ -259,6 +270,7 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     return isImag;
 }
 
+
 //taking out fortran
 //
 /*
@@ -316,9 +328,12 @@ void RateModel::setup_fortran_P(mat& P, double t, bool store_p_matrices) {
     
 }
 */
+
+
 void RateModel::set_sameQ(bool s) {
     sameQ = s;
 }
+
 
 void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
         mat& bigpiK, mat& bigpiw) {
@@ -356,6 +371,7 @@ void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
     //(*inm) = trans((*inm));
 }
 
+
 bool test_transition(char a, char b) {
     bool ret = false;
     if ((a == 'A' &&  b == 'G') || (a == 'C' &&  b == 'T') || (a == 'G' &&  b == 'A') || (a == 'T' &&  b == 'C')) {
@@ -363,6 +379,7 @@ bool test_transition(char a, char b) {
     }
     return ret;
 }
+
 
 void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string>& codon_dict, 
     std::map<std::string, std::vector<int> >& codon_index, std::vector<std::string>& codon_list) {

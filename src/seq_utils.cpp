@@ -2,7 +2,6 @@
 #include <vector>
 #include <set>
 #include <map>
-//#include <assert.h>
 #include <cassert>
 #include <iostream>
 #include <algorithm>
@@ -24,7 +23,7 @@ std::string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
  * An empty set contains only gaps. An N has a count for all nucleotides.
  * When a site has valid nucleotides and gaps, the gaps are ignored.
  */
-char get_dna_from_pos (std::set<int> ins) {
+char get_dna_from_pos (const std::set<int>& ins) {
     if (ins.count(0) == 1) {
         if (ins.count(1) == 1) {
             if (ins.count(2) == 1) {
@@ -126,7 +125,7 @@ std::set<int> get_dna_pos (char inc) {
 }
 
 
-char get_prot_char (std::set<char> inc) {
+char get_prot_char (const std::set<char>& inc) {
     // if any is missing, consensus is missing
     if (inc.count('X') == 1 || inc.count('-') == 1) {
         return 'X';
@@ -373,6 +372,7 @@ std::vector<std::string> collect_names (const std::vector<Sequence>& algnmnt) {
 }
 
 
+// hrm not used
 void populate_codon_list(std::vector<std::string> * codon_list) {
     (*codon_list).push_back("TTT");
     (*codon_list).push_back("TTC");

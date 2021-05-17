@@ -1,4 +1,3 @@
-//#include <stdlib.h>
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -680,7 +679,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
 }
 
 
-void get_phylip_dimensions (std::string head, int& num_taxa, int& num_char) {
+void get_phylip_dimensions (const std::string& head, int& num_taxa, int& num_char) {
     std::vector<std::string> header = tokenize(head);
     num_taxa = stoi(header[0]);
     num_char = stoi(header[1]);

@@ -11,7 +11,8 @@ class Sequence; // forward declarations
 
 
 std::string guess_alignment_type (std::string& sequence);
-char get_dna_from_pos (std::set<int> ins);
+char get_dna_from_pos (const std::set<int>& ins);
+char get_prot_char (const std::set<char>& inc);
 std::set<int> get_dna_pos (char);
 std::string consensus_seq (std::vector<Sequence>&, std::string& alpha);
 char single_dna_complement (char inc);

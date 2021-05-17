@@ -38,7 +38,7 @@ public:
     void pruneExternalNode (Node * node);
     void pruneInternalNode (Node * node);
     Node * getExternalNode (int num);
-    Node * getExternalNode (std::string name);
+    Node * getExternalNode (const std::string& name);
     Node * getInternalNode (int num);
     Node * getInternalNode (std::string& name);
     Node * getNode (int num);
