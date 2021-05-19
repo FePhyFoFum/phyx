@@ -258,7 +258,8 @@ void SequenceSampler::check_valid_partitions () {
     int diff = max - count + 1;
     
     if (diff != 0) { // sites are duplicated
-        //std::cerr << "Error in partitioning: maximum site value " << max << " does not equal site count " << count << "." << std::endl;
+        //std::cerr << "Error in partitioning: maximum site value " << max
+        //  << " does not equal site count " << count << "." << std::endl;
         find_duplicates_missing(allSites);
     }
 }

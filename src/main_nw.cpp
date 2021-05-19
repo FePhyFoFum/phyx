@@ -75,7 +75,8 @@ int main(int argc, char * argv[]) {
     int seqtype = 0;//DNA default, 1 = aa
     int num_threads = 2;//DNA default, 1 = aa
     bool verbose = false;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:a:t:m:n:vhVC", long_options, &oi);
         if (c == -1) {

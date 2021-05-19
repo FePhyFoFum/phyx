@@ -64,7 +64,8 @@ int main(int argc, char * argv[]) {
     char * treef = nullptr;
     std::string cnamef;
     std::string nnamef;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:c:n:o:vhVC", long_options, &oi);
         if (c == -1) {

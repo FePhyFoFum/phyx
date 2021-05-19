@@ -275,9 +275,14 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
 //
 /*
 extern"C" {
-    void wrapalldmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
-    void wrapsingledmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
-    void wrapdgpadm_(int * ideg,int * m,double * t,double * H,int * ldh,double * wsp,int * lwsp,int * ipiv,int * iexph,int *ns,int *iflag );
+    void wrapalldmexpv_(int * n, int* m, double * t, double* v, double * w, double* tol,
+        double* anorm, double* wsp, int * lwsp, int* iwsp, int *liwsp, int * itrace,
+        int *iflag, int *ia, int *ja, double *a, int *nz, double * res);
+    void wrapsingledmexpv_(int * n, int* m, double * t, double* v, double * w, double* tol,
+        double* anorm, double* wsp, int * lwsp, int* iwsp, int *liwsp, int * itrace,
+        int *iflag, int *ia, int *ja, double *a, int *nz, double * res);
+    void wrapdgpadm_(int * ideg, int * m, double * t, double * H, int * ldh, double * wsp,
+        int * lwsp, int * ipiv, int * iexph, int *ns, int *iflag );
 }
 
 void RateModel::setup_fortran_P_whichQ(int which, mat& P, double t) {

@@ -346,7 +346,8 @@ void StateReconstructor::prepare_ancstate_reverse () {
 
 void StateReconstructor::reverse (Node * node) {
     rev = true;
-    VectorNodeObject<Superdouble> * revconds = new VectorNodeObject<Superdouble> (nstates, 0);//need to delete this at some point
+    // need to delete this at some point
+    VectorNodeObject<Superdouble> * revconds = new VectorNodeObject<Superdouble> (nstates, 0);
     if (node == tree->getRoot()) {
         for (int i = 0; i < nstates; i++) {
             revconds->at(i) = 1.0;//prior
@@ -580,15 +581,15 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
         }
         //std::cout << isImag << std::endl;
         //std::cout << summed << std::endl;
-        //seems like when these are IMAG, there can sometimes be negative with very small values
-        stored_EN_matrices[dur] = abs(real(summed));//(real(summed));
-        stored_ER_matrices[dur] = abs(real(summedR));;//(real(summedR));
+        // seems like when these are IMAG, there can sometimes be negative with very small values
+        stored_EN_matrices[dur] = abs(real(summed)); // (real(summed));
+        stored_ER_matrices[dur] = abs(real(summedR)); // (real(summedR));
     }
 }
 
 
 std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, bool tm) {
-    if (node.isExternal()==false) {//is not a tip
+    if (node.isExternal() == false) { // is not a tip
         std::vector<double> totalExp(nstates, 0);
         std::vector<Superdouble> Bs;
         if (tm) {

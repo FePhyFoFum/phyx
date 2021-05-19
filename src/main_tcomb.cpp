@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
     char * addtreef = nullptr;
     char * outf = nullptr;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:a:o:x:hVC", long_options, &oi);
         if (c == -1) {
@@ -171,12 +171,13 @@ int main(int argc, char * argv[]) {
             Tree * addtree = read_next_tree_from_stream_newick (*apios, retstring, &going);
             std::set<std::string> atns = addtree->getRoot()->get_leave_names_set();
             std::vector<std::string> v(btns.size());
-            std::vector<std::string>::iterator it = set_difference(btns.begin(), btns.end(), atns.begin(), atns.end(), v.begin());
+            std::vector<std::string>::iterator it = set_difference(btns.begin(),
+                    btns.end(), atns.begin(), atns.end(), v.begin());
             v.resize(it-v.begin());
             std::map<std::string, Node *> diffnds;
             std::vector<std::string> diffnms; 
             for (int i = 0; i <bigtree->getExtantNodeCount(); i++) {
-                if (std::count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName())==1) {
+                if (std::count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName()) == 1) {
                     diffnms.push_back(bigtree->getExternalNode(i)->getName());
                 }
             } 
@@ -193,7 +194,8 @@ int main(int argc, char * argv[]) {
                 if (!v_int.empty()) {
                     //need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
-                    std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(), lvsset.end(), atns.begin(), atns.end(), v2.begin());
+                    std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(),
+                            lvsset.end(), atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
                     for(unsigned int j = 0; j < v2.size(); j++) {
                         std::cout << "to add " << v2[j]<< std::endl; 

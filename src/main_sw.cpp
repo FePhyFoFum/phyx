@@ -71,10 +71,11 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * outaf = nullptr;
     char * matf = nullptr;
-    int seqtype = 0; //DNA default, 1 = aa
-    int num_threads = 2; //DNA default, 1 = aa
+    int seqtype = 0; // DNA default, 1 = aa
+    int num_threads = 2; // DNA default, 1 = aa
     bool verbose = false;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:a:t:m:n:vhVC", long_options, &oi);
         if (c == -1) {
@@ -184,12 +185,15 @@ int main(int argc, char * argv[]) {
                 double sc = sw(seqs[i], seqs[j], sc_mat, 0, aln1, aln2);
                 #pragma omp critical
                 {
-                    (*poos) << seqs[i].get_id() << "\t" << seqs[j].get_id()  << "\t" << sc << std::endl;
+                    (*poos) << seqs[i].get_id() << "\t" << seqs[j].get_id()
+                            << "\t" << sc << std::endl;
                     if (verbose) {
-                        std::cout << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << std::endl;
+                        std::cout << seqs[i].get_id() << "\t" << aln1 << "\n"
+                                << seqs[j].get_id() << "\t" << aln2 << std::endl;
                     }
                     if (outalnfileset) {
-                        (*afstr) << seqs[i].get_id() <<  "\t" << aln1 << "\n" << seqs[j].get_id()  << "\t" << aln2 << std::endl;
+                        (*afstr) << seqs[i].get_id() << "\t" << aln1 << "\n"
+                                << seqs[j].get_id() << "\t" << aln2 << std::endl;
                     }
                 }
             }

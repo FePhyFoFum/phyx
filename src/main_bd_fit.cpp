@@ -62,7 +62,7 @@ int main(int argc, char * argv[]) {
     std::string model = "bd";
     std::set<std::string> avail_models{"bd", "yule", "best"};
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:m:o:x:hVC", long_options, &oi);
         if (c == -1) {

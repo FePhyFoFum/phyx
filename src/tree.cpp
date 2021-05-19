@@ -534,7 +534,7 @@ void Tree::pruneExternalNode (Node * node) {
             mparent->addChild(*other);
             other->setBL(bl);
             for (int i = 0; i < mparent->getChildCount(); i++) {
-                if (mparent->getChild(i)==parent) {
+                if (mparent->getChild(i) == parent) {
                     mparent->removeChild(*parent);
                     break;
                 }

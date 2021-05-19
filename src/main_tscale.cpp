@@ -60,7 +60,7 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * treef = nullptr;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:s:r:o:hVC", long_options, &oi);
         if (c == -1) {
@@ -154,7 +154,8 @@ int main(int argc, char * argv[]) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);
                     if (!isultra) {
-                        std::cerr << "Error: setting root height only works for ultrametric trees. Exiting." << std::endl;
+                        std::cerr << "Error: setting root height only works for ultrametric trees. Exiting."
+                                << std::endl;
                         exit(0);
                     }
                 }
@@ -176,7 +177,8 @@ int main(int argc, char * argv[]) {
                     // have to check ultrametricity
                     bool isultra = is_ultrametric_paths(tree);
                     if (!isultra) {
-                        std::cerr << "Error: setting root height only works for ultrametric trees. Exiting." << std::endl;
+                        std::cerr << "Error: setting root height only works for ultrametric trees. Exiting."
+                                << std::endl;
                         exit(0);
                     }
                 }

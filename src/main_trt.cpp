@@ -67,7 +67,8 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * namesc = nullptr;
     char * namesfc = nullptr;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:n:cf:o:shVC", long_options, &oi);
         if (c == -1) {

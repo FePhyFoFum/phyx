@@ -31,7 +31,7 @@ double Superdouble::getMantissa() {
 
 void Superdouble::adjustDecimal() {
     stilldouble = false;
-    if (std::isnormal(mantissa)==false) {
+    if (std::isnormal(mantissa) == false) {
         exponent = 0;
         stilldouble = true;
     } else {

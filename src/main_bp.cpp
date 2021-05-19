@@ -77,7 +77,8 @@ int main(int argc, char * argv[]) {
     char * mtreef = nullptr;
     char * outf = nullptr;
     double cutnum = 0;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:m:c:vseufhVC", long_options, &oi);
         if (c == -1) {
@@ -179,7 +180,7 @@ int main(int argc, char * argv[]) {
     if (ft == 0) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
+        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
@@ -211,7 +212,7 @@ int main(int argc, char * argv[]) {
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
-            ttexists = get_nexus_translation_table(*mpios, &translation_table, &retstring);;
+            ttexists = get_nexus_translation_table(*mpios, &translation_table, &retstring);
             while (going) {
                 maptree = read_next_tree_from_stream_nexus(*mpios, retstring, ttexists,
                     &translation_table, &going);
@@ -301,7 +302,7 @@ int main(int argc, char * argv[]) {
                     continue;
                 }
                 char* pEnd;
-                double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd) ;
+                double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd);
                 if (td < cutnum) {
                     continue;
                 }
@@ -342,7 +343,7 @@ int main(int argc, char * argv[]) {
                 /*
                  * do the otherside for unrooted
                  */
-                if (unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()) {
+                if (unrooted && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
                     if ((int)std::count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
                         (int)std::count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
                         biparts.push_back(nms_i2);
@@ -412,14 +413,14 @@ int main(int argc, char * argv[]) {
                         continue;
                     }
                     char* pEnd;
-                    double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd) ;
+                    double td = strtod(trees[i]->getInternalNode(j)->getName().c_str(),&pEnd);
                     if (td < cutnum) {
                         continue;
                     }
                 }
                 //end using cutoffs
                 //should this do the root? I don't think so
-                if (edgewisealltaxa && trees[i]->getInternalNode(j)==trees[i]->getRoot()) {
+                if (edgewisealltaxa && trees[i]->getInternalNode(j) == trees[i]->getRoot()) {
                     continue;
                 }
 
@@ -440,7 +441,7 @@ int main(int argc, char * argv[]) {
                     index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
                 }
                 matrix[i][index] = 1;
-                if (unrooted==true && trees[i]->getInternalNode(j)->getParent()==trees[i]->getRoot()) {
+                if (unrooted==true && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
                     std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
                     std::set<std::string> rt_nms_set;
                     copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
@@ -450,7 +451,8 @@ int main(int argc, char * argv[]) {
                     std::vector<int> nms_i2;
                     std::vector<std::string> nms_s2(rt_nms.size());
                     std::vector<std::string>::iterator it;
-                    it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(), nms_s.end(), nms_s2.begin());
+                    it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
+                            nms_s.end(), nms_s2.begin());
                     nms_s2.resize(it-nms_s2.begin());
                     for (unsigned int k = 0; k < nms_s2.size(); k++) {
                         nms_i2.push_back(name_index[nms_s2[k]]);
@@ -476,7 +478,7 @@ int main(int argc, char * argv[]) {
             std::set<std::string> un_trees;
             for (int i = 0; i <numtrees; i++) {
                 std::string sv = get_string_vector(matrix[i]);
-                if (count(un_trees.begin(), un_trees.end(), sv)==0) {
+                if (count(un_trees.begin(), un_trees.end(), sv) == 0) {
                     std::cout << trees[i]->getRoot()->getNewick(false) << ";" << std::endl;
                     un_trees.insert(sv);
                 }
@@ -550,7 +552,8 @@ int main(int argc, char * argv[]) {
                                     }
                                     (*poos) << "| " << get_string_vector(nms_o);
                                 }
-                                (*poos) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t" << bp_count[j]/trees.size() <<  std::endl;
+                                (*poos) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t"
+                                        << bp_count[j]/trees.size() <<  std::endl;
                             }
                         }
                     }
@@ -569,7 +572,8 @@ int main(int argc, char * argv[]) {
                 }
                 TSCA += ICA;
                 ICA *= sign;
-                (*poos) << "\tFREQ:\t" << conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t" << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  std::endl;
+                (*poos) << "\tFREQ:\t" << conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t"
+                        << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  std::endl;
                 if (verbose) {
                     (*poos) << "\tTREES:\t";
                     for (unsigned int j = 0; j < matrix.size(); j++) {

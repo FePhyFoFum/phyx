@@ -72,7 +72,7 @@ int main(int argc, char * argv[]) {
     char * treef = nullptr;
     char * outf = nullptr;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:rlko:x:hVC", long_options, &oi);
         if (c == -1) {

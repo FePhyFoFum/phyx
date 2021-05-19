@@ -73,7 +73,8 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * namesc = nullptr;
     char * namesfc = nullptr;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:n:f:r:co:shVC", long_options, &oi);
         if (c == -1) {
@@ -146,7 +147,8 @@ int main(int argc, char * argv[]) {
         nfstr.close();
     } else if (!regex) {
         std::cerr << "Error: you must specify which tips to remove." << std::endl;
-        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)." << std::endl;
+        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)."
+                << std::endl;
         std::cerr << "Exiting." << std::endl;
         exit(0);
     }

@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool mrcaset = false;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:m:hVC", long_options, &oi);
         if (c == -1) {

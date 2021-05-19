@@ -78,10 +78,10 @@ int main(int argc, char * argv[]) {
     bool fileset = false;
     bool outfileset = false;
     int sortby = 1;
-    
     char * seqf = nullptr;
     char * outf = nullptr;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:b:o:hgVC", long_options,&oi);
         if (c == -1) {

@@ -81,13 +81,13 @@ bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
     }
     std::vector<std::string> v(treenames.size()+seqnames.size());
     std::vector<std::string>::iterator it;
-    it=set_difference (seqnames.begin(), seqnames.end(), treenames.begin(), treenames.end(), v.begin());
+    it = set_difference (seqnames.begin(), seqnames.end(), treenames.begin(), treenames.end(), v.begin());
     if (int(it-v.begin()) > 0) {
         std::cerr << "Error: there are " << int(it - v.begin())
                 << " taxa that have the wrong names. Exiting." << std::endl;
         exit(1);
     }
-    for (it=v.begin() ; it != v.end(); it++) {
+    for (it = v.begin(); it != v.end(); it++) {
         if ((*it).size() > 1) {
             std::cout << *it << std::endl;
         }
@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
     std::vector<std::string> ptokens;
     std::vector<double> period_times;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "d:t:c:o:n:m:a:l:p:hVwzC", long_options, &oi);
         if (c == -1) {
@@ -455,7 +455,7 @@ int main(int argc, char * argv[]) {
                     tseqs.replace(pos, 1, "1");
                 }
                 for (int i = 0; i < nstates; i++) {
-                    if (tseqs.at(i) =='1') {
+                    if (tseqs.at(i) == '1') {
                         existing_states[i] = 1;
                     }
                 }
@@ -468,7 +468,7 @@ int main(int argc, char * argv[]) {
             if (!dataz) {
                 for (unsigned int se=0; se < seqs.size(); se++) {
                     for (int i = 0; i < nstates; i++) {
-                        if (seqs[se].get_sequence().at(i) =='1') {
+                        if (seqs[se].get_sequence().at(i) == '1') {
                             existing_states[i] = 1;
                         }
                     }
@@ -667,7 +667,8 @@ int main(int argc, char * argv[]) {
             } else {
                 std::vector<Superdouble> lhoods;
                 if (verbose) {
-                    (*loos) << "node: " << tree->getMRCA(mrcas[ancstates[j]])->getName() << "\tmrca: " << ancstates[j] <<  std::endl;
+                    (*loos) << "node: " << tree->getMRCA(mrcas[ancstates[j]])->getName()
+                            << "\tmrca: " << ancstates[j] <<  std::endl;
                 }
                 ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
                 lhoods = sr.calculate_ancstate_reverse_sd(*tree->getMRCA(mrcas[ancstates[j]]));
@@ -833,14 +834,15 @@ int main(int argc, char * argv[]) {
                 if (!tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot()) {
                     std::vector<double> lhoods;
                     if (verbose) {
-                        (*loos) << "node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName() << " mrca: " << stochnumber_any[j] <<  std::endl;
+                        (*loos) << "node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName()
+                                << " mrca: " << stochnumber_any[j] <<  std::endl;
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
                     std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]), false);
                     double tnum = sum(stoch)/totlike_sd;
                     //(*loos) << sum(stoch) << " " << totlike << std::endl;
                     if (verbose) {
-                        (*loos) << tnum << " " ;
+                        (*loos) << tnum << " ";
                     }
                     sttnumout_any << "\t" << tnum;
                     sttnumout_any << std::endl;

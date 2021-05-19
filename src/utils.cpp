@@ -203,8 +203,10 @@ unsigned int get_clock_seed () {
 
 void trim_spaces (std::string& str) {
     // Trim Both leading and trailing spaces
-    size_t startpos = str.find_first_not_of(" \t\r\n"); // Find the first character position after excluding leading blank spaces
-    size_t endpos = str.find_last_not_of(" \t\r\n"); // Find the first character position from reverse af
+    // Find the first character position after excluding leading blank spaces
+    size_t startpos = str.find_first_not_of(" \t\r\n");
+    // Find the first character position from reverse af
+    size_t endpos = str.find_last_not_of(" \t\r\n");
 
     // if all spaces or empty return an empty string
     if (std::string::npos == startpos || std::string::npos == endpos) {
@@ -214,7 +216,8 @@ void trim_spaces (std::string& str) {
     }
     /*
     // Code for Trim Leading Spaces only
-    size_t startpos = str.find_first_not_of(\t); // Find the first character position after excluding leading blank spaces
+    // Find the first character position after excluding leading blank spaces
+    size_t startpos = str.find_first_not_of(\t);
     if (string::npos != startpos)
     str = str.substr( startpos );
     */
@@ -708,8 +711,10 @@ bool essentially_equal (double a, double b) {
     
     /*
     std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
-    std::cout << "ApproximatelyEqual: " <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
-    std::cout << "EssentiallyEqual: " <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "ApproximatelyEqual: "
+        <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "EssentiallyEqual: "
+        <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     */
     
     if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(abs(a), abs(b)))) {

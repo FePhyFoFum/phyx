@@ -105,7 +105,8 @@ int main(int argc, char * argv[]) {
     char * seqf = nullptr;
     char * outf = nullptr;
     char * idssc = nullptr;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:i:o:mgphVC", long_options, &oi);
         if (c == -1) {
@@ -191,13 +192,13 @@ int main(int argc, char * argv[]) {
     int ft = test_seq_filetype_stream(*pios, retstring);
     if (!guess) {
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
+            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id()) == 1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
         }
         if (ft == 2) {
-            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
+            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id()) == 1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();

@@ -21,9 +21,9 @@ TreeReader::TreeReader() {}
  * we should take this out as soon as we are ready to repoint
  * the existing code to the right bits
 */
-Tree * TreeReader::readTree (std::string trees) {
+Tree * TreeReader::readTree (std::string pb) {
     Tree * tree = new Tree();
-    std::string pb = trees;
+    //std::string pb = trees;
     unsigned int x = 0;
     char nextChar = pb.c_str()[x];
     bool start = true;

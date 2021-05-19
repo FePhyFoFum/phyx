@@ -89,10 +89,9 @@ int main(int argc, char * argv[]) {
     bool keep_columns = false;
     std::string incolids;
     std::string logtype;
-    
     char * outf = nullptr;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int curind = optind;
         int c = getopt_long(argc, argv, "p:t:o:b:n:r:iscd:k:x:vhVC", long_options, &oi);

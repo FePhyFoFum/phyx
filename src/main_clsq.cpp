@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
     bool by_codon = false;
     bool count_only = false;
 
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:p:atcivhVC", long_options, &oi);
         if (c == -1) {
@@ -90,7 +90,8 @@ int main(int argc, char * argv[]) {
             case 'p':
                 prop_required = string_to_float(optarg, "-p");
                 if (prop_required > 1.0 || prop_required < 0.0) {
-                    std::cerr << "Error: proportion of required data present (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
+                    std::cerr << "Error: proportion of required data present (-p) must be 0 <= p <= 1.0. Exiting."
+                            << std::endl;
                     exit(0);
                 }
                 break;

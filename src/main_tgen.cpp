@@ -33,7 +33,7 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtgen 1.2\nCopyright (C) 2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
+std::string versionline("pxtgen 1.2\nCopyright (C) 2021-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
 
 static struct option const long_options[] =
 {
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
     
 //    int seed = -1;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "n:rcl:o:hVC", long_options, &oi);
         if (c == -1) {

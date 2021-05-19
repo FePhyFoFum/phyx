@@ -73,7 +73,8 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * outgroupsc = nullptr;
     char * namesfc = nullptr;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:g:f:ruo:shVC", long_options, &oi);
         if (c == -1) {
@@ -191,7 +192,7 @@ int main(int argc, char * argv[]) {
         if (ft == 0) { // Nexus
             std::map<std::string, std::string> translation_table;
             bool ttexists;
-            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
             Tree * tree;
             while (going) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
@@ -276,7 +277,7 @@ int main(int argc, char * argv[]) {
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
-            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
             Tree * tree;
             while (going) {
                 tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,

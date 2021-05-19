@@ -131,7 +131,7 @@ int main(int argc, char * argv[]) {
         std::cout << "\n";
     }*/
 
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apcm:k:hVC", long_options, &oi);
         if (c == -1) {

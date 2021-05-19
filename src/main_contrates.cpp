@@ -64,7 +64,8 @@ int main(int argc, char * argv[]) {
     char * charf = nullptr;
     char * outf = nullptr;
     int analysis = 0;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "c:t:o:a:hVC", long_options, &oi);
         if (c == -1) {
@@ -145,7 +146,7 @@ int main(int argc, char * argv[]) {
     std::vector<Sequence> seqs;
     std::map<std::string, int> seq_map;
     int y = 0;
-    int num_chars = 0 ;
+    int num_chars = 0;
     while (read_next_seq_char_from_stream(*pios, ft, retstring, seq)) {
         seqs.push_back(seq);
         num_chars = seq.get_num_cont_char();

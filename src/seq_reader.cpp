@@ -110,8 +110,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             if (tokens[0].compare(";") == 0) {
                 return false;
             } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
-                std::string::size_type start = tline.find_first_of("\'");
-                std::string::size_type stop  = tline.find_last_of("\'");
+                std::string::size_type start = tline.find_first_of('\'');
+                std::string::size_type stop  = tline.find_last_of('\'');
                 std::string label = tline.substr(start, stop - start + 1);
                 std::string seqstr = tline.erase(start, stop - start + 1);
                 trim_spaces(seqstr);
@@ -120,8 +120,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 seq.set_sequence(seqstr);
                 return true;
             } else if (tokens[0][0] == '\"') {
-                std::string::size_type start = tline.find_first_of("\"");
-                std::string::size_type stop  = tline.find_last_of("\"");
+                std::string::size_type start = tline.find_first_of('\"');
+                std::string::size_type stop  = tline.find_last_of('\"');
                 std::string label = tline.substr(start, stop - start + 1);
                 std::string seqstr = tline.erase(start, stop - start + 1);
                 trim_spaces(seqstr);
@@ -272,8 +272,8 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
                     std::cout << "Huh?" << std::endl;
                     exit(0);
                 } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
-                    std::string::size_type start = tline.find_first_of("\'");
-                    std::string::size_type stop  = tline.find_last_of("\'");
+                    std::string::size_type start = tline.find_first_of('\'');
+                    std::string::size_type stop  = tline.find_last_of('\'');
                     std::string label = tline.substr(start, stop - start + 1);
                     std::string seqstr = tline.erase(start, stop - start + 1);
                     trim_spaces(seqstr);
@@ -289,8 +289,8 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
                         seqs[loopcount].set_sequence(seqs[loopcount].get_sequence() + seq.get_sequence());
                     }
                 } else if (tokens[0][0] == '\"') {
-                    std::string::size_type start = tline.find_first_of("\"");
-                    std::string::size_type stop  = tline.find_last_of("\"");
+                    std::string::size_type start = tline.find_first_of('\"');
+                    std::string::size_type stop  = tline.find_last_of('\"');
                     std::string label = tline.substr(start, stop - start + 1);
                     std::string seqstr = tline.erase(start, stop - start + 1);
                     trim_spaces(seqstr);
@@ -378,7 +378,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         tokens.clear();
         std::string del(" \t");
         std::string tline;
-        //check to see if we are at the beginning of the file
+        // check to see if we are at the beginning of the file
         if (!retstring.empty()) {
             tokenize(retstring, tokens, del);
             if (tokens.size() > 1) {
@@ -405,8 +405,8 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             return false;
         }
         seq.set_id(tokens[0]);
-        //split the tokens by spaces
-        for (unsigned int i = 1 ; i < tokens.size(); i++) {
+        // split the tokens by spaces
+        for (unsigned int i = 1; i < tokens.size(); i++) {
             seq.add_cont_char((double)atof(tokens[i].c_str()));
         }
         return true;
@@ -431,7 +431,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     if (tokens[0].empty()) {
                         return false;
                     }
-                    for (unsigned int i = 0 ; i < tokens.size(); i++) {
+                    for (unsigned int i = 0; i < tokens.size(); i++) {
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     return false;
@@ -444,7 +444,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     seq.set_id(id_);
                     curseq = "";
                 } else {
-                    //split the tokens by spaces
+                    // split the tokens by spaces
                     tokens.clear();
                     tokenize(curseq, tokens, del);
                     for (unsigned int i = 0; i < tokens.size(); i++) {
@@ -453,7 +453,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     if (tokens[0].empty()) {
                         return false;
                     }
-                    for (unsigned int i =0 ; i < tokens.size(); i++) {
+                    for (unsigned int i = 0; i < tokens.size(); i++) {
                         seq.add_cont_char((double)atof(tokens[i].c_str()));
                     }
                     retstring = tline;

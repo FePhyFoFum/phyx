@@ -42,7 +42,8 @@ void Collapser::collapse_edges (Tree * tr) {
         int loop_count = 0;
         while (!done) {
             loop_count++;
-            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " internal nodes to consider." << std::endl;
+            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount()
+            //  << " internal nodes to consider." << std::endl;
             for (int i = 0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
                 std::string str = m->getName();
@@ -54,7 +55,8 @@ void Collapser::collapse_edges (Tree * tr) {
                         guess_scale(cursup);
                     }
                     if (cursup < threshold_) {
-                        //std::cout << "Welp. This one has got to go (" << cursup << "); el = " << m->getBL() << std::endl;
+                        //std::cout << "Welp. This one has got to go (" << cursup << "); el = "
+                        //  << m->getBL() << std::endl;
                         tr->pruneInternalNode(m);
                         break;
                     } else {

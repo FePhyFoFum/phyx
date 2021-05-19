@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * seqf = nullptr;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:hVC", long_options, &oi);
         if (c == -1) {

@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
     std::string partf;
     std::string listf;
 
-    while(true) {
+    while (true) {
         int oi = -1;
         int curind = optind;
         int c = getopt_long(argc, argv, "s:f:o:p:uhVC", long_options, &oi);

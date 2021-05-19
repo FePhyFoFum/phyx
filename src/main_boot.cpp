@@ -65,7 +65,8 @@ int main(int argc, char * argv[]) {
     char * seqf = nullptr;
     std::string partf;
     int seed = -1;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:p:f:x:hVC", long_options, &oi);
         if (c == -1) {
