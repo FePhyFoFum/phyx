@@ -472,7 +472,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 std::iota(cols_to_retain.begin(), cols_to_retain.end(), 0);
                 
                 // remove unwanted column indices (reverse order)
-                for (std::vector<int>::const_reverse_iterator i = col_ids.rbegin(); i < col_ids.rend(); i++) {
+                for (auto i = col_ids.rbegin(); i < col_ids.rend(); i++) {
                     // subtract 1 because input is 1-indexed
                     cols_to_retain.erase(cols_to_retain.begin()+(*i)-1);
                 }

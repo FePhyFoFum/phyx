@@ -171,8 +171,8 @@ int main(int argc, char * argv[]) {
             Tree * addtree = read_next_tree_from_stream_newick (*apios, retstring, &going);
             std::set<std::string> atns = addtree->getRoot()->get_leave_names_set();
             std::vector<std::string> v(btns.size());
-            std::vector<std::string>::iterator it = set_difference(btns.begin(),
-                    btns.end(), atns.begin(), atns.end(), v.begin());
+            auto it = set_difference(btns.begin(), btns.end(), atns.begin(),
+                    atns.end(), v.begin());
             v.resize(it-v.begin());
             std::map<std::string, Node *> diffnds;
             std::vector<std::string> diffnms; 
@@ -194,8 +194,8 @@ int main(int argc, char * argv[]) {
                 if (!v_int.empty()) {
                     //need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
-                    std::vector<std::string>::iterator it2 = set_difference(lvsset.begin(),
-                            lvsset.end(), atns.begin(), atns.end(), v2.begin());
+                    auto it2 = set_difference(lvsset.begin(), lvsset.end(),
+                            atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
                     for(unsigned int j = 0; j < v2.size(); j++) {
                         std::cout << "to add " << v2[j]<< std::endl; 
@@ -211,7 +211,7 @@ int main(int argc, char * argv[]) {
             bool didit = false;
             while (!diffnds.empty()) {
                 std::cout << "diffnds.size() = " << diffnds.size() << std::endl;
-                for (std::map<std::string, Node*>::iterator it = diffnds.begin(); it != diffnds.end(); ++it) {
+                for (auto it = diffnds.begin(); it != diffnds.end(); ++it) {
                     std::cout << it->first << std::endl;
                     Node * cn = it->second;
                     bool goi = true;
