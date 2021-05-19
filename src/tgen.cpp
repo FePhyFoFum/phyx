@@ -12,7 +12,8 @@
 
 
 TopologyGenerator::TopologyGenerator(const int& num_taxa, const bool& rooted,
-        const std::string& lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(lprefix) {
+        std::string lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(std::move(lprefix)),
+        ntopos_(0), nedges_(0), curtax_(0), curnode_(0) {
     initialize();
 }
 
@@ -21,7 +22,7 @@ TopologyGenerator::TopologyGenerator(const int& num_taxa, const bool& rooted,
 void TopologyGenerator::initialize () {
     std::vector< std::vector<int> > init_edges_;
     ntopos_ = get_num_possible_trees(num_taxa_, rooted_);
-    nedges_ = get_num_edges(num_taxa_, rooted_);
+    nedges_ = get_num_edges(num_taxa_, static_cast<const int>(rooted_));
     if (!rooted_) {
         init_edges_ = initialize_edge_matrix_unrooted(num_taxa_);
         curtax_ = 4;
@@ -37,7 +38,7 @@ void TopologyGenerator::initialize () {
 // the number of edges in the final trees
 // 2n-3 for unrooted, 2n-2 for rooted
 int TopologyGenerator::get_num_edges (const int& num_taxa, const int& rooted) {
-    int nedges = 2 * num_taxa - 3 + (int)rooted;
+    int nedges = 2 * num_taxa - 3 + rooted;
     return nedges;
 }
 
@@ -202,7 +203,7 @@ void TopologyGenerator::newick_from_tree_map (int node, std::map<int, std::vecto
         int curnode = decnodes[i];
         // is curnode a clade (i.e., needs to be further processed)?
         // could also use number of tips if things are labelled reasonably
-        if (m.count(curnode)) {
+        if (m.count(curnode)!= 0u) {
             newick_from_tree_map(curnode, m, tree); // recursion, baby
         } else {
             // terminal
