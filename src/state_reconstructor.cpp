@@ -609,7 +609,7 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
             //LHOODS[i] += (v1.at(ind1)*v2.at(ind2)*weight);
             //}
             LHOODS[i] = double(v1->at(i) * v2->at(i) * Bs.at(i));
-            //std::cout << v1->at(i) << " " <<  v2->at(i)<< " " << Bs.at(i) << std::endl;
+            //std::cout << v1->at(i) << " " << v2->at(i)<< " " << Bs.at(i) << std::endl;
         }
         for (int i = 0; i < nstates; i++) {
             totalExp[i] = LHOODS[i];

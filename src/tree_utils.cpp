@@ -98,7 +98,7 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
             counter++;
         } else {
             if (!silent) {
-                std::cerr << names[i] << " not in tree"  << std::endl;
+                std::cerr << names[i] << " not in tree" << std::endl;
             }
         }
         //std::cout << "After pruning, tree rootedness: " << std::boolalpha << is_rooted(tree) << std::endl;
@@ -196,7 +196,7 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
             }
         } else {
             if (!silent) {
-                std::cerr << names[i] << " not in tree"  << std::endl;
+                std::cerr << names[i] << " not in tree" << std::endl;
             }
         }
     }

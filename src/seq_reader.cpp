@@ -78,7 +78,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             while (getline_safe(stri, tline)) {
                 trim_spaces(tline);
                 tline = string_to_upper(tline);
-                if (tline.compare("MATRIX") == 0) {
+                if (tline == "MATRIX") {
                     found = true;
                     break;
                 }
@@ -107,7 +107,7 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             for (unsigned int i = 0; i < tokens.size(); i++) {
                 trim_spaces(tokens[i]);
             }
-            if (tokens[0].compare(";") == 0) {
+            if (tokens[0] == ";") {
                 return false;
             } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
                 std::string::size_type start = tline.find_first_of('\'');
@@ -268,7 +268,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
                 for (unsigned int i = 0; i < tokens.size(); i++) {
                     trim_spaces(tokens[i]);
                 }
-                if (tokens[0].compare(";") == 0) {
+                if (tokens[0] == ";") {
                     std::cout << "Huh?" << std::endl;
                     exit(0);
                 } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
@@ -1145,7 +1145,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
     int file_num_char = 0; // likewise for num_char
     std::string file_type = get_filetype_string(ft);
     
-    if (file_type.compare("nexus") == 0) {
+    if (file_type == "nexus") {
         bool is_interleaved = false;
         // a bunch of required variables, not used here:
         char gap, missing;
@@ -1164,7 +1164,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
     } else {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
-        if (file_type.compare("phylip") == 0) {
+        if (file_type == "phylip") {
             get_phylip_dimensions(retstring, file_num_taxa, file_num_char);
             complicated_phylip = is_complicated_phylip(*pios, file_num_char);
         }

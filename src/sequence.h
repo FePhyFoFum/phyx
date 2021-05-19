@@ -48,7 +48,7 @@ public:
     int get_num_multistate_char ();
     void set_sequence (std::string _seq);
     void set_id (std::string _id);
-    void set_aligned (bool al);
+    void set_aligned (bool _align);
     void set_qualstr (std::string&, int);
     std::vector<double> get_qualarr ();
     double get_qualarr_mean ();

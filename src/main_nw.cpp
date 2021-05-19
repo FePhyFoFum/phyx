@@ -184,8 +184,8 @@ int main(int argc, char * argv[]) {
                     std::cout << seqs[i].get_id() << "\t" << seqs[j].get_id()
                         << "\t" << sc << std::endl;
                     if (verbose) {
-                        std::cout << seqs[i].get_id() <<  "\t" << aln1 << "\n"
-                            << seqs[j].get_id()  << "\t" << aln2 << std::endl;
+                        std::cout << seqs[i].get_id() << "\t" << aln1 << "\n"
+                            << seqs[j].get_id() << "\t" << aln2 << std::endl;
                     }
                 }
             }

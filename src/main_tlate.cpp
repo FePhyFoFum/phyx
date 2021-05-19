@@ -141,7 +141,7 @@ int main(int argc, char * argv[]) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 if (first) {
                     alphaName = seq.get_alpha_name();
-                    if (alphaName.compare("DNA") != 0) {
+                    if (alphaName != "DNA") {
                         std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
                             << alphaName << " detected. Exiting." << std::endl;
                         exit(0);
@@ -158,7 +158,7 @@ int main(int argc, char * argv[]) {
                 seq = seqs[i];
                 if (first) {
                     alphaName = seq.get_alpha_name();
-                    if (alphaName.compare("DNA") != 0) {
+                    if (alphaName != "DNA") {
                         std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
                             << alphaName << " detected. Exiting." << std::endl;
                         exit(0);
@@ -183,7 +183,7 @@ int main(int argc, char * argv[]) {
                 seq = seqs[i];
                 if (first) {
                     alphaName = seq.get_alpha_name();
-                    if (alphaName.compare("DNA") != 0) {
+                    if (alphaName != "DNA") {
                         std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
                             << alphaName << " detected. Exiting." << std::endl;
                         exit(0);
@@ -199,7 +199,7 @@ int main(int argc, char * argv[]) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 if (first) {
                     alphaName = seq.get_alpha_name();
-                    if (alphaName.compare("DNA") != 0) {
+                    if (alphaName != "DNA") {
                         std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
                             << alphaName << " detected. Exiting." << std::endl;
                         exit(0);

@@ -155,7 +155,7 @@ int main(int argc, char * argv[]) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 if (first) {
                     alpha = seq.get_alpha_name();
-                    if (alpha.compare("DNA") != 0) {
+                    if (alpha != "DNA") {
                         std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
@@ -170,7 +170,7 @@ int main(int argc, char * argv[]) {
                 seq = seqs[i];
                 if (first) {
                     alpha = seq.get_alpha_name();
-                    if (alpha.compare("DNA") != 0) {
+                    if (alpha != "DNA") {
                         std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
@@ -193,7 +193,7 @@ int main(int argc, char * argv[]) {
                 seq = seqs[i];
                 if (first) {
                     alpha = seq.get_alpha_name();
-                    if (alpha.compare("DNA") != 0) {
+                    if (alpha != "DNA") {
                         std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }
@@ -207,7 +207,7 @@ int main(int argc, char * argv[]) {
             while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
                 if (first) {
                     alpha = seq.get_alpha_name();
-                    if (alpha.compare("DNA") != 0) {
+                    if (alpha != "DNA") {
                         std::cerr << "Error: this only works for DNA. Exiting." << std::endl;
                         exit(0);
                     }

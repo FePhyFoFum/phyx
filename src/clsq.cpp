@@ -41,7 +41,7 @@ void SequenceCleaner::read_in_sequences (std::istream* pios) {
                 << std::endl;
             exit(1);
         }
-        if (alpha_name_.compare("DNA") != 0) {
+        if (alpha_name_ != "DNA") {
             std::cerr << "Error: codon alignments require DNA data type, but '"
                 << alpha_name_ << "' detected. Exiting." << std::endl;
             exit(1);

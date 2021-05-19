@@ -92,14 +92,14 @@ void SeqInfo::read_in_alignment () {
     file_type_ = get_filetype_string(ft);
     
     // if nexus, grab metadata
-    if (file_type_.compare("nexus") == 0) {
+    if (file_type_ == "nexus") {
         //std::cout << "Trying to read in a Nexus alignment..." << std::endl;
         bool is_interleaved = false;
         get_nexus_alignment_properties(*pios_, file_ntax, seq_length_,
                 is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
         // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
         set_datatype();
-        if (is_multi_ && seq_chars_.compare("") != 0) {
+        if (is_multi_ && seq_chars_ != "") {
             seq_chars_ += gap_;
             seq_chars_ += missing_;
             char_counts_.resize(seq_chars_.size(), 0);
@@ -117,7 +117,7 @@ void SeqInfo::read_in_alignment () {
     } else {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
-        if (file_type_.compare("phylip") == 0) {
+        if (file_type_ == "phylip") {
             get_phylip_dimensions(retstring, file_ntax, seq_length_);
             complicated_phylip = is_complicated_phylip(*pios_, seq_length_);
         }

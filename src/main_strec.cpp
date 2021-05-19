@@ -668,7 +668,7 @@ int main(int argc, char * argv[]) {
                 std::vector<Superdouble> lhoods;
                 if (verbose) {
                     (*loos) << "node: " << tree->getMRCA(mrcas[ancstates[j]])->getName()
-                            << "\tmrca: " << ancstates[j] <<  std::endl;
+                            << "\tmrca: " << ancstates[j] << std::endl;
                 }
                 ancout << n+1 << "\t" << i+1 << "\t" << ancstates[j] << "\t" << finallike;
                 lhoods = sr.calculate_ancstate_reverse_sd(*tree->getMRCA(mrcas[ancstates[j]]));
@@ -709,7 +709,7 @@ int main(int argc, char * argv[]) {
             if (!tree->getMRCA(mrcas[stochtime[j]])->isRoot()) {
                 std::vector<double> lhoods;
                 if (verbose) {
-                    (*loos)  << "mrca: " << stochtime[j] <<  std::endl;
+                    (*loos)  << "mrca: " << stochtime[j] << std::endl;
                 }
                 sttimeout << n+1 << "\t" << i+1 << "\t" << stochtime[j]<< "\t" << finallike;
                 bool neg = false;
@@ -754,7 +754,7 @@ int main(int argc, char * argv[]) {
                 if (!tree->getMRCA(mrcas[stochnumber[j]])->isRoot()) {
                     std::vector<double> lhoods;
                     if (verbose) {
-                        (*loos) << "mrca: " << stochnumber[j] <<  std::endl;
+                        (*loos) << "mrca: " << stochnumber[j] << std::endl;
                     }
                     stnumout << n+1 << "\t" << i+1 << "\t" << stochnumber[j]<< "\t" << finallike;
                     bool neg = false;
@@ -835,7 +835,7 @@ int main(int argc, char * argv[]) {
                     std::vector<double> lhoods;
                     if (verbose) {
                         (*loos) << "node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName()
-                                << " mrca: " << stochnumber_any[j] <<  std::endl;
+                                << " mrca: " << stochnumber_any[j] << std::endl;
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
                     std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]), false);

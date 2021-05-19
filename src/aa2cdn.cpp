@@ -41,7 +41,7 @@ void AAtoCDN::check_names () {
             std::cerr << diff[i] << std::endl;
             // remove from alignment
             for (unsigned int j = 0; j < nuc_seqs_.size(); j++) {
-                if (nuc_seqs_[j].get_id().compare(diff[i]) == 0) {
+                if (nuc_seqs_[j].get_id() == diff[i]) {
                     nuc_seqs_.erase(nuc_seqs_.begin()+j);
                     break;
                 }
@@ -63,7 +63,7 @@ void AAtoCDN::check_names () {
             std::cerr << diff[i] << std::endl;
             // remove from alignment
             for (unsigned int j = 0; j < aa_seqs_.size(); j++) {
-                if (aa_seqs_[j].get_id().compare(diff[i]) == 0) {
+                if (aa_seqs_[j].get_id() == diff[i]) {
                     aa_seqs_.erase(aa_seqs_.begin()+j);
                     break;
                 }

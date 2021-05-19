@@ -712,9 +712,9 @@ bool essentially_equal (double a, double b) {
     /*
     std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
     std::cout << "ApproximatelyEqual: "
-        <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+        << (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     std::cout << "EssentiallyEqual: "
-        <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+        << (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     */
     
     if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(abs(a), abs(b)))) {

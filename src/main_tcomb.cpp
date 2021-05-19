@@ -221,11 +221,11 @@ int main(int argc, char * argv[]) {
                         std::vector<std::string> v_int;
                         set_intersection(cs.begin(), cs.end(), atns.begin(), atns.end(), back_inserter(v_int));
                         if (!v_int.empty()) {
-                            std::cout <<  "this is what we need to add " << prn->getNewick(false) << std::endl;
+                            std::cout << "this is what we need to add " << prn->getNewick(false) << std::endl;
                             //get nodes
                             //get mrca
                             Node * nd = addtree->getMRCA(v_int);
-                            std::cout << "would add to " <<  nd->getNewick(false) << std::endl;
+                            std::cout << "would add to " << nd->getNewick(false) << std::endl;
                             //START HERE
                             std::cout << "v_int.size() = " << v_int.size() << std::endl;
                             if (v_int.size() == 1) {

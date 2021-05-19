@@ -157,7 +157,7 @@ int main(int argc, char * argv[]) {
     
     // read in nucleotide seqs
     nuc_seqs = ingest_alignment(nucpios, alphaName);
-    if (alphaName.compare("DNA") != 0) {
+    if (alphaName != "DNA") {
         std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
             << alphaName << " detected. Exiting." << std::endl;
         exit(0);
@@ -180,7 +180,7 @@ int main(int argc, char * argv[]) {
     
     // and amino acid alignment
     aa_seqs = ingest_alignment(pios, alphaName);
-    if (alphaName.compare("AA") != 0) {
+    if (alphaName != "AA") {
         std::cerr << "Error: incorrect alignment type provided. Amino acids was expected, but "
             << alphaName << " detected. Exiting." << std::endl;
         exit(0);

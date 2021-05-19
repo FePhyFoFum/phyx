@@ -286,7 +286,7 @@ int main(int argc, char * argv[]) {
                 rt_nms_set.end(), not_included_nms.begin());
         not_included_nms.resize(it2-not_included_nms.begin());
         for (unsigned int j = 0; j < not_included_nms.size(); j++) {
-            std::cerr << " not included: "  << not_included_nms[j]<< std::endl;
+            std::cerr << " not included: " << not_included_nms[j]<< std::endl;
             not_included_i.push_back(name_index[not_included_nms[j]]);
         }
         std::vector<int> bp_count_tree; // for edgewise to make sure we don't double count
@@ -389,7 +389,7 @@ int main(int argc, char * argv[]) {
         }
     }
     if (!suppress) {
-        (*poos) << numtrees << " trees " <<  std::endl;
+        (*poos) << numtrees << " trees " << std::endl;
         (*poos) << biparts.size() << " unique clades found" << std::endl;
         //calculate the logical matrix of biparts for each tree
         //the matrix will have each i as a tree and 
@@ -553,7 +553,7 @@ int main(int argc, char * argv[]) {
                                     (*poos) << "| " << get_string_vector(nms_o);
                                 }
                                 (*poos) << "\tCOUNT:\t" << bp_count[j] << "\tTREEFREQ:\t"
-                                        << bp_count[j]/trees.size() <<  std::endl;
+                                        << bp_count[j]/trees.size() << std::endl;
                             }
                         }
                     }
@@ -573,7 +573,7 @@ int main(int argc, char * argv[]) {
                 TSCA += ICA;
                 ICA *= sign;
                 (*poos) << "\tFREQ:\t" << conflict_nums[0] << "\tICA:\t" << ICA << "\tCOUNT:\t"
-                        << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() <<  std::endl;
+                        << bp_count[i] << "\tTREEFREQ:\t" << bp_count[i]/trees.size() << std::endl;
                 if (verbose) {
                     (*poos) << "\tTREES:\t";
                     for (unsigned int j = 0; j < matrix.size(); j++) {
@@ -588,7 +588,7 @@ int main(int argc, char * argv[]) {
                 for (unsigned int k = 0; k < biparts[i].size(); k++) {
                     nms.push_back(name_st_index[biparts[i][k]]);
                 }
-                (*poos) << "CLADE: " <<  get_string_vector(nms);
+                (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (unsigned int k = 0; k < biparts2[i].size(); k++) {

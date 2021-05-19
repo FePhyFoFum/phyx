@@ -19,7 +19,7 @@
 Sequence::Sequence ():length_(0), aligned_(), alphabet_(NA) {}
 
 
-Sequence::Sequence (std::string _id, std::string _seq, bool _aligned) {
+Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):alphabet_(NA) {
     id_ = std::move(_id);
     seq_ = std::move(_seq);
     length_ = seq_.size();
