@@ -8,7 +8,7 @@
 #include "sequence.h"
 
 
-Relabel::Relabel (std::string& cnamesf, std::string nnamesf, const bool& verbose) {
+Relabel::Relabel (const std::string& cnamesf, const std::string nnamesf, const bool& verbose):num_taxa_(0) {
     store_name_lists (cnamesf, nnamesf);
     verbose_ = verbose;
 }

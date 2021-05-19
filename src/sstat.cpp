@@ -8,7 +8,8 @@
 #include "sstat.h"
 
 
-MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs) {
+MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0),
+    test_statistic_(0.0) {
     seqs_ = seqs;
     num_taxa_ = seqs.size();
     

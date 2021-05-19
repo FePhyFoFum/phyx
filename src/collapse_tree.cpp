@@ -9,7 +9,8 @@
 #include "node.h"
 
 
-Collapser::Collapser (const double& threshold):scale_set_(false) {
+Collapser::Collapser (const double& threshold):scale_set_(false),has_labels_(false),
+    has_annotations_(false) {
     threshold_ = threshold;
 }
 

@@ -12,10 +12,11 @@
 
 
 SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
-        const bool& force_protein):concatenated_(""), seq_chars_(""), output_indiv_(indiv), datatype_set_(false),
-        is_dna_(false), is_protein_(false), is_multi_(false), is_binary_(false),
-        alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'), missing_('?'),
-        num_taxa_(0) {
+        const bool& force_protein):concatenated_(""), seq_chars_(""), output_indiv_(indiv),
+        datatype_set_(false), is_dna_(false), is_protein_(false), is_multi_(false),
+        is_binary_(false), alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'),
+        missing_('?'), num_taxa_(0), percent_missing_(0.0), is_aligned_(false),
+        seq_length_(0), longest_tax_label_(0) {
     // maybe get rid of this? how often is inference wrong?
     if (force_protein) {
         is_protein_ = true;

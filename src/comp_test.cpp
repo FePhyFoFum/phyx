@@ -15,7 +15,7 @@
 CompTest::CompTest (std::istream* pios, std::ostream* poos):num_taxa_(0), seq_length_(0),
         total_(0), df_(0), test_stat_(0.0), prob_(0.0), seq_chars_(""), alpha_name_(""),
         alpha_set_(false), datatype_set_(false), is_multi_(false), gap_('-'), missing_('?'),
-        pios_(pios), poos_(poos) {
+        pios_(pios), poos_(poos), longest_tax_label_(0) {
     read_in_alignment();
     count_chars();
     calc_chi_square();

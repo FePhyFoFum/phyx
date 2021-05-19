@@ -30,7 +30,7 @@ private:
     std::string tree_name_prefix_;
     
     std::vector<std::string> files_;
-    std::istream* pios_;
+    //std::istream* pios_;
     std::ostream* poos_;
     std::ifstream infilestr_;
     std::vector<std::string> parm_names_;

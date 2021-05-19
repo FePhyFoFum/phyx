@@ -10,7 +10,9 @@
 #include "tree_utils.h"
 
 
-TreeInfo::TreeInfo (Tree * intree) {
+TreeInfo::TreeInfo (Tree * intree):rooted_tree_(false), ultrametric_tree_(false),
+        binary_tree_(false), has_branchlengths_(false), treelength_(0.0),
+        nintnodes_(0.0), ntips_(0.0), rootheight_(0.0), rtvar_(0.0) {
     tree_ = intree;
     calc_stats();
 }
@@ -19,7 +21,7 @@ TreeInfo::TreeInfo (Tree * intree) {
 TreeInfo::TreeInfo (Tree * intree, const bool& ultracheck, const bool& binarycheck,
         const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
         const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,
-        std::ostream* poos) {
+        std::ostream* poos):nintnodes_(0.0) {
     tree_ = intree;
     if (ultracheck) {
         ultrametric_tree_ = is_ultrametric_paths(tree_);

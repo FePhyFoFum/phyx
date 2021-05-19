@@ -4,7 +4,7 @@
 #include "tree_utils.h"
 
 
-TScale::TScale () {
+TScale::TScale ():scalef_(0.0), rootheight_(0.0), rootset_(false) {
 }
 
 
@@ -12,7 +12,7 @@ void TScale::set_scalef (const double& scalef) {
     scalef_ = scalef;
     rootset_ = false;
 }
-
+ 
 
 void TScale::set_rootheight (const double& rootheight) {
     rootheight_ = rootheight;
