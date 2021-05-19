@@ -32,7 +32,7 @@ Node::Node (Node * inparent):BL_(0.0), height_(0.0), number_(0), name_(""), pare
 
 
 Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl), height_(0.0),
-    number_(innumber), name_(inname), parent_(inparent), children_(std::vector<Node *> ()),
+    number_(innumber), name_(std::move(inname)), parent_(inparent), children_(std::vector<Node *> ()),
     assoc_(std::map<std::string, NodeObject *>()), assocDV_(std::map<std::string, std::vector<Superdouble> >()), 
     comment_(""), painted_(false) {
 
@@ -197,7 +197,7 @@ std::string Node::getName () {
 
 
 void Node::setName (std::string s) {
-    name_ = s;
+    name_ = std::move(s);
 }
 
 
@@ -206,7 +206,7 @@ std::string Node::getComment () {
 }
 
 void Node::setComment (std::string s) {
-    comment_ = s;
+    comment_ = std::move(s);
 }
 
 

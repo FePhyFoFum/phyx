@@ -232,7 +232,7 @@ Tree * TreeReader::readTree (std::string pb) {
 // for processing strings we know are valid tree strings
 Tree * read_tree_string (std::string trees) {
     TreeReader tr;
-    Tree * tree = tr.readTree(trees);
+    Tree * tree = tr.readTree(std::move(trees));
     return tree;
 }
 
