@@ -100,13 +100,13 @@ void Sequence::infer_alpha () {
     std::string uniqueChars = get_alphabet_from_sequence(str);
     
     // if the above fails (e.g., RNA), do the former check
-    for (size_t i = 0; i < uniqueChars.length(); ++i) {
-        int num = std::count(str.begin(), str.end(), uniqueChars[i]);
-        if (is_prot_char(uniqueChars[i])) {
+    for (char & uniqueChar : uniqueChars) {
+        int num = std::count(str.begin(), str.end(), uniqueChar);
+        if (is_prot_char(uniqueChar)) {
             proteinHit += num;
             validChars += num;
             // DNA chars are a subset of protein chars
-            if (is_dna_char(uniqueChars[i])) {
+            if (is_dna_char(uniqueChar)) {
                 dnaHit += num;
             }
         }
@@ -230,8 +230,8 @@ void Sequence::perm_reverse_complement () {
 void Sequence::set_qualstr (std::string& stri, int offset) {
     qualarr_.clear();
     qualstr_ = stri;
-    for (unsigned int i = 0; i < stri.size(); i++) {
-        qualarr_.push_back(((int)stri[i])-offset);
+    for (char c : stri) {
+        qualarr_.push_back(((int)c)-offset);
     }
 }
 

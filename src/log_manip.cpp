@@ -63,8 +63,6 @@ void LogManipulator::return_statistics_table () {
     // could only possibly be a problem when combining logs from analyses with different sampling settings
     int step_size = (int)(parm_samples_[0][1] - parm_samples_[0][0]);
     
-    
-    
     // need to find the longest parameter name to set width of first column
     const int colWidth = 12; // this value works nice with decimal and sci. notation
     std::cout.precision(6);
@@ -73,8 +71,8 @@ void LogManipulator::return_statistics_table () {
     std::string pad = std::string(longest_label, ' ');
     // header
     (*poos_) << pad << " ";
-    for (unsigned int i = 0; i < stat_names.size(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << stat_names[i] << " ";
+    for (const auto & stat_name : stat_names) {
+        (*poos_) << std::right << std::setw(colWidth) << stat_name << " ";
     }
     (*poos_) << std::endl;
     for (int i = 1; i < num_cols_; i++) {
@@ -518,9 +516,9 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         bool first_line = true;
         int sample_counter = 0;
         std::vector<int> cols_to_retain;
-        for (unsigned int i = 0; i < col_ids.size(); i++) {
+        for (int col_id : col_ids) {
             // subtract 1 because input is 1-indexed
-            cols_to_retain.push_back(col_ids[i] - 1);
+            cols_to_retain.push_back(col_id - 1);
         }
         num_cols_retain_ = cols_to_retain.size();
         

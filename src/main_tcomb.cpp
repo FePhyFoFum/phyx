@@ -181,7 +181,7 @@ int main(int argc, char * argv[]) {
                     diffnms.push_back(bigtree->getExternalNode(i)->getName());
                 }
             } 
-            //get start node on big tree by getting the mrca
+            // get start node on big tree by getting the mrca
             Node * connecthere = bigtree->getMRCA(diffnms);
             std::vector<Node *> childs = connecthere->getChildren();
             for (unsigned int i = 0; i < childs.size(); i++) {
@@ -192,12 +192,12 @@ int main(int argc, char * argv[]) {
                                 atns.begin(), atns.end(), v_int.begin());
                 v_int.resize(it-v_int.begin());
                 if (!v_int.empty()) {
-                    //need to add those missing not the overlapping
+                    // need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
                     auto it2 = set_difference(lvsset.begin(), lvsset.end(),
                             atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
-                    for(unsigned int j = 0; j < v2.size(); j++) {
+                    for (unsigned int j = 0; j < v2.size(); j++) {
                         std::cout << "to add " << v2[j]<< std::endl; 
                         diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
                     }
@@ -222,11 +222,11 @@ int main(int argc, char * argv[]) {
                         set_intersection(cs.begin(), cs.end(), atns.begin(), atns.end(), back_inserter(v_int));
                         if (!v_int.empty()) {
                             std::cout << "this is what we need to add " << prn->getNewick(false) << std::endl;
-                            //get nodes
-                            //get mrca
+                            // get nodes
+                            // get mrca
                             Node * nd = addtree->getMRCA(v_int);
                             std::cout << "would add to " << nd->getNewick(false) << std::endl;
-                            //START HERE
+                            // START HERE
                             std::cout << "v_int.size() = " << v_int.size() << std::endl;
                             if (v_int.size() == 1) {
                                 
@@ -234,7 +234,7 @@ int main(int argc, char * argv[]) {
                                 
                             }
                             std::vector<std::string> lvsnms = prn->get_leave_names();
-                            for(unsigned int i = 0; i < lvsnms.size(); i++) {
+                            for (unsigned int i = 0; i < lvsnms.size(); i++) {
                                 if (diffnds.count(lvsnms[i]) > 0) {
                                     diffnds.erase(lvsnms[i]);
                                 }

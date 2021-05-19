@@ -114,9 +114,9 @@ Node * Tree::getNode (int num) {
 Node * Tree::getNode (std::string& name) {
     Node * ret = nullptr;
     if (name_node_map_.empty()) {
-        for (unsigned int i = 0; i < nodes_.size(); i++) {
-            if (!nodes_.at(i)->getName().empty()) {
-                name_node_map_[nodes_.at(i)->getName()] = nodes_.at(i);
+        for (auto & node : nodes_) {
+            if (!node->getName().empty()) {
+                name_node_map_[node->getName()] = node;
             }
         }
     }
@@ -241,10 +241,10 @@ void Tree::duplicateRootSupport () {
     bool supfound = false;
     std::vector<std::string> sups;
     unsigned int numnodes = 0; // want to guard against when only 1 outgroup
-    for (unsigned int i = 0; i < kids.size(); i++) {
-        if (kids[i]->isInternal()) {
+    for (auto & kid : kids) {
+        if (kid->isInternal()) {
             numnodes++;
-            std::string x = kids[i]->getName(); // support stored in name property
+            std::string x = kid->getName(); // support stored in name property
             if (!x.empty()) {
                 supfound = true;
                 sups.push_back(x);
@@ -254,11 +254,11 @@ void Tree::duplicateRootSupport () {
     if (supfound) {
         if (numnodes > sups.size()) {
             if (sups.size() == 1) {
-                for (unsigned int i = 0; i < kids.size(); i++) {
-                    if (kids[i]->isInternal()) {
-                        std::string x = kids[i]->getName();
+                for (auto & kid : kids) {
+                    if (kid->isInternal()) {
+                        std::string x = kid->getName();
                         if (x.empty()) {
-                            kids[i]->setName(sups[0]);
+                            kid->setName(sups[0]);
                         }
                     }
                 }
@@ -325,8 +325,8 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
         return this->getExternalNode(innodes[0]);
     } else {
         std::vector<std::string> outgroup;
-        for (unsigned int i = 0; i < innodes.size(); i++) {
-            outgroup.push_back(innodes.at(i));
+        for (const auto & innode : innodes) {
+            outgroup.push_back(innode);
         }
         Node * cur1 = this->getExternalNode(outgroup.at(0));
         outgroup.erase(outgroup.begin());
@@ -605,8 +605,8 @@ Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
     parent = curn2;
     bool x = true;
     while (x) {
-        for (unsigned int i = 0; i < path1.size(); i++) {
-            if (parent == path1.at(i)) {
+        for (auto & i : path1) {
+            if (parent == i) {
                 mrca = parent;
                 x = false;
                 break;

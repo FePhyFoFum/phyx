@@ -138,9 +138,9 @@ bool is_number (const std::string& s) {
 // get the longest label. for printing/formatting purposes
 int get_longest_label (std::vector<std::string>& labels) {
     int longest_label_ = 0;
-    for (unsigned int i = 0; i < labels.size(); i++) {
-        if ((int)labels[i].size() > longest_label_) {
-            longest_label_ = labels[i].size();
+    for (auto & label : labels) {
+        if ((int)label.size() > longest_label_) {
+            longest_label_ = label.size();
         }
     }
     return longest_label_;
@@ -161,7 +161,7 @@ std::istream& getline_safe(std::istream& is, std::string& t) {
     std::istream::sentry se(is, true);
     std::streambuf* sb = is.rdbuf();
 
-    for(;;) {
+    for (;;) {
         int c = sb->sbumpc();
         switch (c) {
         case '\n':
@@ -256,8 +256,8 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string
             std::string del(" ,\t");
             tokens.clear();
             tokenize(line, tokens, del);
-            for (unsigned int j = 0; j < tokens.size(); j++) {
-                trim_spaces(tokens[j]);
+            for (auto & tk : tokens) {
+                trim_spaces(tk);
             }
             for (unsigned int j = 0; j < tokens.size(); j++) {
                 ratematrix[fromarea][j] = atof(tokens[j].c_str());
@@ -456,8 +456,8 @@ std::vector<double> string_v_to_double_v (const std::vector<std::string>& in) {
 
 int count_zeros (std::vector<int>& in) {
     int x = 0;
-    for (unsigned int i = 0; i < in.size(); i++) {
-        if (in[i] == 0) {
+    for (int i : in) {
+        if (i == 0) {
             x += 1;
         }
     }
@@ -467,9 +467,9 @@ int count_zeros (std::vector<int>& in) {
 
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in) {
     Superdouble sum = 0;
-    for (unsigned int i = 0; i < in.size(); i++) {
-        sum += in[i];
-        // std::cout << in[i] << " sum:" << sum << std::endl;
+    for (const auto & i : in) {
+        sum += i;
+        // std::cout << i << " sum:" << sum << std::endl;
     }
     // std::cout << "endsum:" << sum << std::endl;
     return sum;
@@ -508,8 +508,8 @@ std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std:
 
 std::string get_string_vector(std::vector<std::string>& sts) {
     std::string rets;
-    for (unsigned int i = 0; i < sts.size(); i++) {
-        rets += sts[i]+ " ";
+    for (const auto & st : sts) {
+        rets += st + " ";
     }
     return rets;
 }
@@ -729,7 +729,7 @@ bool essentially_equal (double a, double b) {
 
 bool all_equal (std::vector<double> vals) {
     bool equal = false;
-    std::vector<double>::iterator it = std::find_if_not(vals.begin()+1, vals.end(),
+    auto it = std::find_if_not(vals.begin()+1, vals.end(),
             std::bind(essentially_equal, std::placeholders::_1, vals[0]));
     if (it == end(vals)) {
         equal = true;
@@ -764,9 +764,9 @@ bool check_for_input_to_stream () {
 // return elements in a *not* found in b
 std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b) {
     std::vector<std::string> comp;
-    for (unsigned int i = 0; i < a.size(); i++) {
-        if (find(b.begin(), b.end(), a[i]) == b.end()) {
-            comp.push_back(a[i]);
+    for (const auto & i : a) {
+        if (find(b.begin(), b.end(), i) == b.end()) {
+            comp.push_back(i);
         }
     }
     return comp;
@@ -808,10 +808,10 @@ std::vector<std::string> regex_search_labels (const std::vector<std::string>& na
         const std::string& pattern) {
     std::vector<std::string> results;
     const std::regex regexp(pattern);
-    for (int i = 0; i < (int)names.size(); i++) {
-        //std::cout << names[i] << ": " << std::regex_search(names[i], regexp) << std::endl;
-        if (std::regex_search(names[i], regexp)) {
-            results.push_back(names[i]);
+    for (const auto & name : names) {
+        //std::cout << name << ": " << std::regex_search(name, regexp) << std::endl;
+        if (std::regex_search(name, regexp)) {
+            results.push_back(name);
         }
     }
     return results;

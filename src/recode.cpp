@@ -36,8 +36,7 @@ SequenceRecoder::SequenceRecoder (std::string& recodescheme):R_(false), Y_(false
 
 
 void SequenceRecoder::parse_scheme () {
-    for (unsigned int i = 0; i < recodescheme_.size(); i++) {
-        char terp = recodescheme_[i];
+    for (char terp : recodescheme_) {
         if (recognized_.find(terp) == recognized_.end()) {
             std::cerr << "Error: recoding scheme '" << terp << "' not recognized. Exiting." << std::endl;
             exit(0);

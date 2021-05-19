@@ -166,8 +166,8 @@ int main(int argc, char * argv[]) {
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 if (first) {
                     alpha = seq.get_alpha_name();
                     if (alpha != "DNA") {
@@ -189,8 +189,8 @@ int main(int argc, char * argv[]) {
         }
         if (complicated_phylip) {
             std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 if (first) {
                     alpha = seq.get_alpha_name();
                     if (alpha != "DNA") {

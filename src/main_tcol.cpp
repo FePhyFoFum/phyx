@@ -141,8 +141,8 @@ int main(int argc, char * argv[]) {
             }
             std::vector<std::string> tokens2;
             tokenize(tline, tokens2, "\t");
-            for (unsigned int j = 0; j < tokens2.size(); j++) {
-                trim_spaces(tokens2[j]);
+            for (auto & tk : tokens2) {
+                trim_spaces(tk);
             }
             if (tokens2.size() != 2) {
                 continue;

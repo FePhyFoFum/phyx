@@ -155,8 +155,8 @@ int main(int argc, char * argv[]) {
     SequenceConcatenater result(toupcase);
     bool first = true;
 
-    for (unsigned int i = 0; i < inputFiles.size(); i++) {
-        SequenceConcatenater curr(inputFiles[i], toupcase);
+    for (auto & inputFile : inputFiles) {
+        SequenceConcatenater curr(inputFile, toupcase);
         if (!first) {
             result.concatenate(curr);
         } else {

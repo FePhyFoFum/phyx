@@ -104,8 +104,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         // need to check for quoted labels here
         
         if (tokens.size() > 1) {
-            for (unsigned int i = 0; i < tokens.size(); i++) {
-                trim_spaces(tokens[i]);
+            for (auto & tk : tokens) {
+                trim_spaces(tk);
             }
             if (tokens[0] == ";") {
                 return false;
@@ -164,8 +164,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         }
         tokens.clear();
         tokenize(tline, tokens, del);
-        for (unsigned int i = 0; i < tokens.size(); i++) {
-            trim_spaces(tokens[i]);
+        for (auto & tk : tokens) {
+            trim_spaces(tk);
         }
         if (tokens[0].empty()) {
             return false;
@@ -265,8 +265,8 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
             tokenize(tline, tokens, del);
             if (tokens.size() > 1) {
                 Sequence seq;
-                for (unsigned int i = 0; i < tokens.size(); i++) {
-                    trim_spaces(tokens[i]);
+                for (auto & tk : tokens) {
+                    trim_spaces(tk);
                 }
                 if (tokens[0] == ";") {
                     std::cout << "Huh?" << std::endl;
@@ -398,8 +398,8 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         }
         tokens.clear();
         tokenize(tline, tokens, del);
-        for (unsigned int i = 0; i < tokens.size(); i++) {
-            trim_spaces(tokens[i]);
+        for (auto & tk : tokens) {
+            trim_spaces(tk);
         }
         if (tokens[0].empty()) {
             return false;
@@ -425,14 +425,14 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                 if (!getline_safe(stri, tline)) {
                     tokens.clear();
                     tokenize(curseq, tokens, del);
-                    for (unsigned int i = 0; i < tokens.size(); i++) {
-                        trim_spaces(tokens[i]);
+                    for (auto & tk : tokens) {
+                        trim_spaces(tk);
                     }
                     if (tokens[0].empty()) {
                         return false;
                     }
-                    for (unsigned int i = 0; i < tokens.size(); i++) {
-                        seq.add_cont_char((double)atof(tokens[i].c_str()));
+                    for (auto & tk : tokens) {
+                        seq.add_cont_char((double)atof(tk.c_str()));
                     }
                     return false;
                 }
@@ -447,14 +447,14 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                     // split the tokens by spaces
                     tokens.clear();
                     tokenize(curseq, tokens, del);
-                    for (unsigned int i = 0; i < tokens.size(); i++) {
-                        trim_spaces(tokens[i]);
+                    for (auto & tk : tokens) {
+                        trim_spaces(tk);
                     }
                     if (tokens[0].empty()) {
                         return false;
                     }
-                    for (unsigned int i = 0; i < tokens.size(); i++) {
-                        seq.add_cont_char((double)atof(tokens[i].c_str()));
+                    for (auto & token : tokens) {
+                        seq.add_cont_char((double)atof(token.c_str()));
                     }
                     retstring = tline;
                     return true;
@@ -747,7 +747,7 @@ bool is_complicated_phylip (std::istream& pios, const int& num_char) {
   - this includes not allowing internal spaces in taxon labels
 - also assuming that there is not a combination of multiline _and_ interleaved
 */
-void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& num_char,
+void get_phylip_format (std::istream& pios, const unsigned int& num_char,
         bool& interleaved, bool& spaces, bool& multiline) {
     // store current position of the stream so we can rewind after determining format
     std::streampos spt = pios.tellg();
@@ -953,7 +953,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     std::string residues;
     std::string name;
     
-    get_phylip_format(pios, num_taxa, num_char, interleaved, spaces, multiline);
+    get_phylip_format(pios, num_char, interleaved, spaces, multiline);
     
     //std::cout << "interleaved = " << interleaved << "; spaces = "
     //        << spaces << "; multiline = " << multiline<< std::endl;
@@ -979,8 +979,8 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                     }
                     first = false;
                 } else {
-                    for (unsigned int i = 0; i < tokens.size(); i++) {
-                        residues += tokens[i];
+                    for (const auto & token : tokens) {
+                        residues += token;
                     }
                 }
                 if ((int)residues.size() == num_char) {
@@ -1038,8 +1038,8 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                     residues = "";
                     name = "";
                 } else {
-                    for (unsigned int i = 0; i < tokens.size(); i++) {
-                        residues += tokens[i];
+                    for (const auto & token : tokens) {
+                        residues += token;
                     }
                     seqs[taxcnt].set_sequence(seqs[taxcnt].get_sequence() + residues);
                     taxcnt++;

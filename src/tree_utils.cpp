@@ -151,9 +151,9 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
         } else {
             std::vector<std::string> good_names;
             std::vector<std::string>::iterator it;
-            for (unsigned int i = 0; i < names.size(); i++) {
-                if (check_name_against_tree(tree, names[i])) {
-                    good_names.emplace_back(names[i]);
+            for (auto & name : names) {
+                if (check_name_against_tree(tree, name)) {
+                    good_names.emplace_back(name);
                 }
             }
             if (good_names.empty()) {
@@ -282,8 +282,8 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
         for (auto it = tree_map.begin(); it != tree_map.end(); it++) {
             std::cout << "Node: " << it->first->getName() << std::endl;
             std::vector<Node*> terp = it->second;
-            for (unsigned int i = 0; i < terp.size(); i++) {
-                std::cout << "  " << terp[i]->getName() << " ";
+            for (auto & t : terp) {
+                std::cout << "  " << t->getName() << " ";
             }
             std::cout << std::endl;
         }
@@ -553,11 +553,11 @@ bool postorder_ultrametricity_check (Node * node, bool& ultrametric) {
 
 bool check_names_against_tree (Tree * tr, std::vector<std::string> names) {
     bool allgood = true;
-    for (unsigned int i = 0; i < names.size(); i++) {
-    //std::cout << "Checking name '" << names[i] << "'." << std::endl;
-        Node * nd = tr->getExternalNode(names[i]);
+    for (const auto & name : names) {
+    //std::cout << "Checking name '" << name << "'." << std::endl;
+        Node * nd = tr->getExternalNode(name);
         if (nd == nullptr) {
-            std::cerr << "Taxon '" << names[i] << "' not found in tree." << std::endl;
+            std::cerr << "Taxon '" << name << "' not found in tree." << std::endl;
             allgood = false;
         }
     }
@@ -645,11 +645,11 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
 // return all names that are found in tree
 std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::string>& names) {
     std::vector<std::string> matched;
-    for (unsigned int i = 0; i < names.size(); i++) {
+    for (const auto & name : names) {
     //std::cout << "Checking name '" << names[i] << "'." << std::endl;
-        Node * nd = tr->getExternalNode(names[i]);
+        Node * nd = tr->getExternalNode(name);
         if (nd != nullptr) {
-            matched.push_back(names[i]);
+            matched.push_back(name);
         }
     }
     return matched;
@@ -659,9 +659,9 @@ std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::st
 std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<std::string>& orig_names) {
     std::vector<std::string> comp = get_tip_labels(tr);
     std::vector<std::string>::iterator it;
-    for (unsigned int i = 0; i < orig_names.size(); i++) {
+    for (const auto & orig_name : orig_names) {
         // remove bad names
-        it = std::find(comp.begin(), comp.end(), orig_names[i]);
+        it = std::find(comp.begin(), comp.end(), orig_name);
         if (it != comp.end()) {
             comp.erase(it);
         }
@@ -749,7 +749,7 @@ bool has_root_edge (Tree * tr) {
 
 
 std::string double_to_str (double d) {
-    size_t len = snprintf(0, 0, "%.16f", d);
+    size_t len = snprintf(nullptr, 0, "%.16f", d);
     std::string s(len+1, 0);
     snprintf(&s[0], len+1, "%.16f", d);
     s.pop_back();
@@ -762,7 +762,7 @@ std::string double_to_str (double d) {
 
 
 unsigned long int get_num_possible_trees (const int& n, const bool& rooted) {
-    return doublefactorial(2 * (n + rooted) - 5);
+    return doublefactorial(2 * (n + static_cast<int>(rooted)) - 5);
 }
 
 

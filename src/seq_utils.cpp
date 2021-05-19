@@ -165,8 +165,8 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
     if (alpha == "DNA") {
         for (int i = 0; i < seqlength; i++) {
             std::set<int> fullset;
-            for (unsigned int j = 0; j < seqs.size(); j++) {
-                std::set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
+            for (auto & seq : seqs) {
+                std::set<int> tset = get_dna_pos(seq.get_sequence()[i]);
                 fullset.insert(tset.begin(), tset.end());
             }
             retstring += get_dna_from_pos(fullset);
@@ -175,10 +175,10 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
         for (int i = 0; i < seqlength; i++) {
             std::set<char> fullset;
             //bool ambig = false; // doesn't do anything
-            for (unsigned int j = 0; j < seqs.size(); j++) {
-                fullset.insert(seqs[j].get_sequence()[i]);
+            for (auto & seq : seqs) {
+                fullset.insert(seq.get_sequence()[i]);
                 // break early if any ambiguous code is encountered
-                if (seqs[j].get_sequence()[i] == 'X' || seqs[j].get_sequence()[i] == '-') {
+                if (seq.get_sequence()[i] == 'X' || seq.get_sequence()[i] == '-') {
                     //ambig = true;
                     break;
                 }
@@ -200,35 +200,35 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
  */
 char single_dna_complement (char inc) {
     inc = toupper(inc);
-    if (inc=='A') {
+    if (inc == 'A') {
         return 'T';
-    } else if (inc=='T') {
+    } else if (inc == 'T') {
         return 'A';
-    } else if (inc=='U') {
+    } else if (inc == 'U') {
         return 'A';
-    } else if (inc=='G') {
+    } else if (inc == 'G') {
         return 'C';
-    } else if (inc=='C') {
+    } else if (inc == 'C') {
         return 'G';
-    } else if (inc=='Y') {
+    } else if (inc == 'Y') {
         return 'R';
-    } else if (inc=='R') {
+    } else if (inc == 'R') {
         return 'Y';
-    } else if (inc=='S') {
+    } else if (inc == 'S') {
         return 'S';
-    } else if (inc=='W') {
+    } else if (inc == 'W') {
         return 'W';
-    } else if (inc=='K') {
+    } else if (inc == 'K') {
         return 'M';
-    } else if (inc=='M') {
+    } else if (inc == 'M') {
         return 'K';
-    } else if (inc=='B') {
+    } else if (inc == 'B') {
         return 'V';
-    } else if (inc=='D') {
+    } else if (inc == 'D') {
         return 'H';
-    } else if (inc=='H') {
+    } else if (inc == 'H') {
         return 'D';
-    } else if (inc=='V') {
+    } else if (inc == 'V') {
         return 'B';
     } else {
         return 'N';
@@ -246,12 +246,12 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
     // header: num_taxa, num_char
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
     
-    for (unsigned int i = 0; i < seqs.size(); i++) {
+    for (auto & seq : seqs) {
         if (uppercase) {
-            std::string terp = seqs[i].seq_to_upper();
-            (*ostr) << seqs[i].get_id() << "\t" << terp << std::endl;
+            std::string terp = seq.seq_to_upper();
+            (*ostr) << seq.get_id() << "\t" << terp << std::endl;
         } else {
-            (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
+            (*ostr) << seq.get_id() << "\t" << seq.get_sequence() << std::endl;
         }
     }
 }
@@ -278,11 +278,11 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
         datatype = "STANDARD";
         //std::cout << "assembling symbols now" << std::endl;
         std::string combined;
-        for (unsigned int i = 0; i < seqs.size(); i++) {
+        for (auto & seq : seqs) {
             if (uppercase) {
-                combined += seqs[i].seq_to_upper();
+                combined += seq.seq_to_upper();
             } else {
-                combined += seqs[i].get_sequence();
+                combined += seq.get_sequence();
             }
         }
         symbols = get_alphabet_from_sequence(combined);
@@ -306,15 +306,15 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
     // removing 'INTERLEAVE=NO` as it appears to not be NCL-compliant
     (*ostr) << " GAP=- MISSING=?;" << std::endl;
     (*ostr) << "\tMATRIX\n" << std::endl;
-    for (unsigned int i = 0; i < seqs.size(); i++) {
+    for (auto & seq : seqs) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
         if (uppercase) {
-            std::string terp = seqs[i].seq_to_upper();
-            (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << terp << std::endl;
+            std::string terp = seq.seq_to_upper();
+            (*ostr) << get_valid_nexus_label(seq.get_id()) << "\t" << terp << std::endl;
         } else {
-            (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << std::endl;
+            (*ostr) << get_valid_nexus_label(seq.get_id()) << "\t" << seq.get_sequence() << std::endl;
         }
-        //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
+        //(*ostr) << seq.get_id() << "\t" << seq.get_sequence() << std::endl;
     }
     (*ostr) << ";\nend;\n" << std::endl;
 }
@@ -611,8 +611,8 @@ bool is_prot_char (char& residue) {
 int count_dna_chars (const std::string& str) {
     int ndna = 0;
     std::string dnaChars = "ACGT";
-    for (size_t i = 0; i < dnaChars.length(); ++i) {
-        ndna += std::count(str.begin(), str.end(), dnaChars[i]);
+    for (char dnaChar : dnaChars) {
+        ndna += std::count(str.begin(), str.end(), dnaChar);
     }
     return ndna;
 }
@@ -623,8 +623,8 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
     bool first = true;
     Sequence seq;
     int num_char = 0;
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        seq = seqs[i];
+    for (const auto & sq : seqs) {
+        seq = sq;
         if (!first) {
             if ((int)seq.get_length() != num_char) {
                 aligned = false;
@@ -641,8 +641,8 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
 bool is_codon_alignment (const std::vector<Sequence>& seqs) {
     bool codons = true;
     Sequence seq;
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        seq = seqs[i];
+    for (const auto & sq : seqs) {
+        seq = sq;
         if ((int)seq.get_length() % 3 != 0) {
             codons = false;
         }

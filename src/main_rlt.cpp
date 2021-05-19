@@ -80,12 +80,12 @@ int main(int argc, char * argv[]) {
             case 'c':
                 cfileset = true;
                 cnamef = strdup(optarg);
-                check_file_exists(cnamef.c_str());
+                check_file_exists(cnamef);
                 break;
             case 'n':
                 nfileset = true;
                 nnamef = strdup(optarg);
-                check_file_exists(nnamef.c_str());
+                check_file_exists(nnamef);
                 break;
             case 'o':
                 outfileset = true;

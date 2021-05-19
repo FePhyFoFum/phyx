@@ -20,7 +20,7 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char);
 void get_phylip_dimensions (const std::string& head, int& num_taxa, int& num_char);
 bool is_complicated_phylip (std::istream& pios, const int& num_char);
-void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& num_char,
+void get_phylip_format (std::istream& pios, const unsigned int& num_char,
         bool& interleaved, bool& spaces, bool& multiline);
 std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& num_char);
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);

@@ -135,9 +135,9 @@ int main(int argc, char * argv[]) {
         std::string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
-        for (unsigned int j = 0; j < tokens2.size(); j++) {
-            trim_spaces(tokens2[j]);
-            names.push_back(tokens2[j]);
+        for (auto & tk : tokens2) {
+            trim_spaces(tk);
+            names.push_back(tk);
         }
     } else if (namefileset) {
         std::ifstream nfstr(namesfc);
@@ -205,8 +205,8 @@ int main(int argc, char * argv[]) {
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 seq_name = seq.get_id();
                 if (regex) {
                     match = std::regex_search(seq_name, regexp);
@@ -230,8 +230,8 @@ int main(int argc, char * argv[]) {
         }
         if (complicated_phylip) {
             std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 seq_name = seq.get_id();
                 if (regex) {
                     match = std::regex_search(seq_name, regexp);

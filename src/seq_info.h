@@ -65,7 +65,7 @@ public:
     void summarize ();
     void get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
-        const double& get_missing);
+        const bool& get_missing);
 };
 
 #endif /* _LS_SEQ_H_ */

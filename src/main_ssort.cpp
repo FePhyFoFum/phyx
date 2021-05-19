@@ -153,8 +153,8 @@ int main(int argc, char * argv[]) {
     } else if (sortby == 4) {
         sort(seqs.begin(), seqs.end(), SequenceRevLengthListCompare);
     }
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        (*poos) << seqs[i].get_fasta();
+    for (auto & seq : seqs) {
+        (*poos) << seq.get_fasta();
     }
 
     if (fileset) {

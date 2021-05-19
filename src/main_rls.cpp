@@ -80,12 +80,12 @@ int main(int argc, char * argv[]) {
             case 'c':
                 cfileset = true;
                 cnamef = strdup(optarg);
-                check_file_exists(cnamef.c_str());
+                check_file_exists(cnamef);
                 break;
             case 'n':
                 nfileset = true;
                 nnamef = strdup(optarg);
-                check_file_exists(nnamef.c_str());
+                check_file_exists(nnamef);
                 break;
             case 'o':
                 outfileset = true;
@@ -168,8 +168,8 @@ int main(int argc, char * argv[]) {
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 std::string terp = seq.get_id();
                 success = rl.relabel_sequence(seq);
                 if (success) {
@@ -188,8 +188,8 @@ int main(int argc, char * argv[]) {
         }
         if (complicated_phylip) {
             std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 std::string terp = seq.get_id();
                 success = rl.relabel_sequence(seq);
                 if (success) {

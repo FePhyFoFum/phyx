@@ -65,7 +65,7 @@ void Relabel::store_name_lists (const std::string& cnamesf, const std::string& n
         }
     }
     /*
-    for(map<string, string>::const_iterator it = name_map_.begin(); it != name_map_.end(); ++it) {
+    for (map<string, string>::const_iterator it = name_map_.begin(); it != name_map_.end(); ++it) {
         std::cout << it->first << " " << it->second << std::endl;
     }
     */

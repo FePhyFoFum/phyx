@@ -274,8 +274,8 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
     int maxVal = allSites.back();
     
     std::vector<int> counts(maxVal, 0);
-    for (unsigned int i = 0; i < allSites.size(); i++) {
-        counts[allSites[i]]++;
+    for (int allSite : allSites) {
+        counts[allSite]++;
     }
     
     for (int i = 0; i < maxVal; i++) {
@@ -293,15 +293,15 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
     
     if (!duplicates.empty()) {
         std::cerr << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
-        for (unsigned int i = 0; i < duplicates.size(); i++) {
-            std::cerr << duplicates[i] << " ";
+        for (int duplicate : duplicates) {
+            std::cerr << duplicate << " ";
         }
         std::cerr << std::endl;
     }
     if (!missing.empty()) {
         std::cerr << "Error: the following " << missing.size() << " sites are not found in any partition: ";
-        for (unsigned int i = 0; i < missing.size(); i++) {
-            std::cerr << missing[i] << " ";
+        for (int ms : missing) {
+            std::cerr << ms << " ";
         }
         std::cerr << std::endl;
     }

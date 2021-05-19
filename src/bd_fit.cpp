@@ -158,8 +158,8 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
     lik += (x[0] * std::accumulate(bt.begin()+1, bt.end(), 0.0));
     
     double tempsum = 0.0;
-    for (unsigned int i = 0; i < bt.size(); i++) {
-        tempsum += log(exp(bt[i] * x[0]) - x[1]);
+    for (double i : bt) {
+        tempsum += log(exp(i * x[0]) - x[1]);
     }
     
     lik += tempsum * (-2);

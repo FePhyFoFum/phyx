@@ -61,8 +61,8 @@ TreeInfo::TreeInfo (Tree * intree, const bool& ultracheck, const bool& binaryche
         }
     } else if (namecheck) {
         tip_labels_ = get_tip_labels(tree_);
-        for (unsigned int i = 0; i < tip_labels_.size(); i++) {
-            (*poos) << tip_labels_[i] << std::endl;
+        for (const auto & tip_label : tip_labels_) {
+            (*poos) << tip_label << std::endl;
         }
     }
 }

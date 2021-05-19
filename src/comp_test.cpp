@@ -126,8 +126,8 @@ void CompTest::return_freq_table () {
     // header
     (*poos_) << "Observed character counts:" << std::endl;
     (*poos_) << pad << " ";
-    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << seq_chars_[i] << " ";
+    for (char seq_char : seq_chars_) {
+        (*poos_) << std::right << std::setw(colWidth) << seq_char << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
     for (int i = 0; i < num_taxa_; i++) {
@@ -146,8 +146,8 @@ void CompTest::return_freq_table () {
     int diff = longest_tax_label_ - 5;
     pad = std::string(diff, ' ');
     (*poos_) << "Total" << pad << " ";
-    for (unsigned int i = 0; i < col_totals_.size(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << col_totals_[i] << " ";
+    for (int col_total : col_totals_) {
+        (*poos_) << std::right << std::setw(colWidth) << col_total << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << total_ << std::endl;
 } 

@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
 
-    //map file
+    // map file
     if (mapfileset) {
         mfstr = new std::ifstream(mtreef);
         mpios = mfstr;
@@ -246,15 +246,15 @@ int main(int argc, char * argv[]) {
         std::cerr << "there are no trees;" << std::endl;
     }
     
-    //get the biparts for the trees
+    // get the biparts for the trees
     std::vector<std::string> names;
     std::set<std::string> names_s;
     std::map<std::string, int> name_index;
     std::map<int, std::string> name_st_index;
-    //added to make sure we have all the names if it is partially overlapping
-    for (unsigned int t = 0; t < trees.size(); t++) {
-        for (int i = 0; i < trees[t]->getExternalNodeCount(); i++) {
-            std::string tname = trees[t]->getExternalNode(i)->getName();
+    // added to make sure we have all the names if it is partially overlapping
+    for (auto & tree : trees) {
+        for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+            std::string tname = tree->getExternalNode(i)->getName();
             if (find(names.begin(), names.end(), tname) == names.end()) {
                 name_index[tname] = i;
                 names.push_back(tname);
@@ -269,7 +269,7 @@ int main(int argc, char * argv[]) {
     std::vector<std::vector<int> > not_included; // the names that aren't in the tree
     std::vector<double> bp_count;
     for (int i = 0; i < numtrees; i++) {
-        //get the biparts
+        // get the biparts
         bool unrooted = false;
         int numch = trees[i]->getRoot()->getChildCount();
         if (numch > 2) {
@@ -278,25 +278,25 @@ int main(int argc, char * argv[]) {
         std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
         std::set<std::string> rt_nms_set;
         copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
-        //get the ones that aren't in the tree at all
+        // get the ones that aren't in the tree at all
         std::vector<std::string> not_included_nms(rt_nms_set.size());
         std::vector<int> not_included_i;
         std::vector<std::string>::iterator it2;
         it2 = std::set_difference(names_s.begin(), names_s.end(), rt_nms_set.begin(),
                 rt_nms_set.end(), not_included_nms.begin());
         not_included_nms.resize(it2-not_included_nms.begin());
-        for (unsigned int j = 0; j < not_included_nms.size(); j++) {
-            std::cerr << " not included: " << not_included_nms[j]<< std::endl;
-            not_included_i.push_back(name_index[not_included_nms[j]]);
+        for (const auto & not_included_nm : not_included_nms) {
+            std::cerr << " not included: " << not_included_nm << std::endl;
+            not_included_i.push_back(name_index[not_included_nm]);
         }
         std::vector<int> bp_count_tree; // for edgewise to make sure we don't double count
         for (int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
             std::vector<std::string> nms = trees[i]->getInternalNode(j)->get_leave_names();
-            //skip the root
+            // skip the root
             if (nms.size() == rt_nms.size()) {
                 continue;
             }
-            //if we are using a cutoff, skip the edge that is below the num
+            // if we are using a cutoff, skip the edge that is below the num
             if (cutoff) {
                 if (trees[i]->getInternalNode(j)->getName().length() < 1) {
                     continue;
@@ -307,28 +307,28 @@ int main(int argc, char * argv[]) {
                     continue;
                 }
             }
-            //end using cutoffs
+            // end using cutoffs
             std::vector<int> nms_i;
             std::set<std::string> nms_s;
             copy(nms.begin(), nms.end(), inserter(nms_s, nms_s.begin()));
-            for (unsigned int k = 0; k < nms.size(); k++) {
-                nms_i.push_back(name_index[nms[k]]);
+            for (const auto & nm : nms) {
+                nms_i.push_back(name_index[nm]);
             }
             sort(nms_i.begin(), nms_i.end());
-            //get the other side of the bipart
+            // get the other side of the bipart
             std::vector<int> nms_i2;
             std::vector<std::string> nms_s2(rt_nms.size());
             std::vector<std::string>::iterator it;
             it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                 nms_s.end(), nms_s2.begin());
             nms_s2.resize(it-nms_s2.begin());
-            for (unsigned int k = 0; k < nms_s2.size(); k++) {
-                nms_i2.push_back(name_index[nms_s2[k]]);
+            for (const auto & k : nms_s2) {
+                nms_i2.push_back(name_index[k]);
             }
             sort(nms_i2.begin(), nms_i2.end());
-            //check to see if the bipart is new
+            // check to see if the bipart is new
             if (!edgewisealltaxa) {
-                //this is nodewise and we dont' assume we have all the taxa
+                // this is nodewise and we dont' assume we have all the taxa
                 if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 0 && 
                 (int)std::count(biparts2.begin(), biparts2.end(), nms_i2) == 0) {
                     biparts.push_back(nms_i);
@@ -336,13 +336,11 @@ int main(int argc, char * argv[]) {
                     not_included.push_back(not_included_i);
                     bp_count.push_back(1);
                 } else {
-                    //get index 
+                    // get index 
                     size_t index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     bp_count[index] += 1;
                 }
-                /*
-                 * do the otherside for unrooted
-                 */
+                // do the otherside for unrooted
                 if (unrooted && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
                     if ((int)std::count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
                         (int)std::count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
@@ -356,10 +354,10 @@ int main(int argc, char * argv[]) {
                     }
                 }
             } else {
-                //this is edgewise and we assume all the taxa 
-                //this is for reporting a b | c d instead of a b and c d separately
+                // this is edgewise and we assume all the taxa 
+                // this is for reporting a b | c d instead of a b and c d separately
                 
-                //first check to make sure that both sides at least have two taxa
+                // first check to make sure that both sides at least have two taxa
                 if (nms_i.size() < 2 || nms_i2.size() < 2) {
                     continue;
                 }
@@ -371,14 +369,14 @@ int main(int argc, char * argv[]) {
                     bp_count.push_back(1);
                     bp_count_tree.push_back(bp_count.size()-1);
                 } else {
-                    //get index 
+                    // get index 
                     size_t index;
                     if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 1) {
                         index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     } else {
                         index = find(biparts.begin(), biparts.end(), nms_i2)-biparts.begin();
                     }
-                    //need to accommodate that it can be reflected in the edgewise case
+                    // need to accommodate that it can be reflected in the edgewise case
                     if ((int)std::count(bp_count_tree.begin(), bp_count_tree.end(), index) == 0) {
                         bp_count[index] += 1;
                         bp_count_tree.push_back(index);
@@ -391,8 +389,8 @@ int main(int argc, char * argv[]) {
     if (!suppress) {
         (*poos) << numtrees << " trees " << std::endl;
         (*poos) << biparts.size() << " unique clades found" << std::endl;
-        //calculate the logical matrix of biparts for each tree
-        //the matrix will have each i as a tree and 
+        // calculate the logical matrix of biparts for each tree
+        // the matrix will have each i as a tree and 
         //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
         int colsize = biparts.size()+1;
         if (edgewisealltaxa) {
@@ -407,7 +405,7 @@ int main(int argc, char * argv[]) {
                 unrooted = true;
             }
             for (int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
-                //if we are using a cutoff, skip the edge that is below the num
+                // if we are using a cutoff, skip the edge that is below the num
                 if (cutoff) {
                     if (trees[i]->getInternalNode(j)->getName().length() < 1) {
                         continue;
@@ -418,16 +416,16 @@ int main(int argc, char * argv[]) {
                         continue;
                     }
                 }
-                //end using cutoffs
-                //should this do the root? I don't think so
+                // end using cutoffs
+                // should this do the root? I don't think so
                 if (edgewisealltaxa && trees[i]->getInternalNode(j) == trees[i]->getRoot()) {
                     continue;
                 }
 
                 std::vector<std::string> nms = trees[i]->getInternalNode(j)->get_leave_names();
                 std::vector<int> nms_i;
-                for (unsigned int k = 0; k < nms.size(); k++) {
-                    nms_i.push_back(name_index[nms[k]]);
+                for (const auto & nm : nms) {
+                    nms_i.push_back(name_index[nm]);
                 }
                 sort(nms_i.begin(), nms_i.end());
                 size_t index;
@@ -441,7 +439,7 @@ int main(int argc, char * argv[]) {
                     index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
                 }
                 matrix[i][index] = 1;
-                if (unrooted==true && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
+                if (unrooted && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
                     std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
                     std::set<std::string> rt_nms_set;
                     copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
@@ -454,8 +452,8 @@ int main(int argc, char * argv[]) {
                     it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                             nms_s.end(), nms_s2.begin());
                     nms_s2.resize(it-nms_s2.begin());
-                    for (unsigned int k = 0; k < nms_s2.size(); k++) {
-                        nms_i2.push_back(name_index[nms_s2[k]]);
+                    for (const auto & k : nms_s2) {
+                        nms_i2.push_back(name_index[k]);
                     }
                     for (auto it : nms_s) {
                         nms_i.push_back(name_index[it]);
@@ -470,9 +468,7 @@ int main(int argc, char * argv[]) {
                 }
             }
         }
-        /*
-         * print the unique trees
-         */
+        // print the unique trees
         if (uniquetree) {
             std::cout << "====UNIQUE TREES====" << std::endl;
             std::set<std::string> un_trees;
@@ -487,10 +483,10 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
 
-        //constructing the logical matrix
-        //the logical matrix has each row as a bipart1 and each col as a name
-        //there is a one if the bipart has the name
-        //need to add the -1 for bipart2
+        // constructing the logical matrix
+        // the logical matrix has each row as a bipart1 and each col as a name
+        // there is a one if the bipart has the name
+        // need to add the -1 for bipart2
         std::vector<int> cols2(names.size(), 0);
         std::vector<std::vector<int> > logical_matrix (biparts.size(), cols2);
         for (unsigned int i = 0; i < biparts.size(); i++) {
@@ -504,8 +500,8 @@ int main(int argc, char * argv[]) {
         
         double smallest_proportion = 0.0;
         double TSCA = 0;
-        //get the conflicting bipartitions
-        //initialize results vectors
+        // get the conflicting bipartitions
+        // initialize results vectors
         for (unsigned int i = 0; i < biparts.size(); i++) {
             if (firsttree) {
                 if (matrix[0][i] != 1) {
@@ -558,7 +554,7 @@ int main(int argc, char * argv[]) {
                         }
                     }
                 }
-                //calculate ICA
+                // calculate ICA
                 double sign = 1;
                 for (unsigned int j = 0; j < conflict_nums.size(); j++) {
                     conflict_nums[j] /= totalcount;
@@ -566,7 +562,7 @@ int main(int argc, char * argv[]) {
                         sign = -1;
                     }
                 }
-                double ICA = 1;//same as logn(conflict_nums.size(), conflict_nums.size());
+                double ICA = 1; // same as logn(conflict_nums.size(), conflict_nums.size());
                 for (unsigned int j = 0; j < conflict_nums.size(); j++) {
                     ICA += (conflict_nums[j] * logn(conflict_nums[j], conflict_nums.size()));
                 }
@@ -610,20 +606,20 @@ int main(int argc, char * argv[]) {
             }
         }
         (*poos) << "TSCA: " << TSCA << std::endl;
-    }//end suppress if
+    } // end suppress if
     if (mapfileset) {
         std::string mot(mtreef);
         mot = mot +".pxbpmapped.tre";
         std::ofstream * mofstr = new std::ofstream(mot);
         std::ostream * mpoos = mofstr;
-        for(int i = 0; i < maptree->getInternalNodeCount(); i++) {
+        for (int i = 0; i < maptree->getInternalNodeCount(); i++) {
             if (maptree->getInternalNode(i) == maptree->getRoot()) {
                 continue;
             }
             std::vector<std::string> nms = maptree->getInternalNode(i)->get_leave_names();
             std::vector<int> nms_i;
-            for (unsigned int k = 0; k < nms.size(); k++) {
-                nms_i.push_back(name_index[nms[k]]);
+            for (const auto & nm : nms) {
+                nms_i.push_back(name_index[nm]);
             }
             sort(nms_i.begin(), nms_i.end());
             size_t index;
@@ -651,7 +647,7 @@ int main(int argc, char * argv[]) {
         delete mpoos;
     }
 
-    //shut things down
+    // shut things down
     if (fileset) {
         fstr->close();
         delete pios;

@@ -23,16 +23,16 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
             std::vector<std::string> tokens;
             std::string del(" \t");
             tokenize(line, tokens, del);
-            for (unsigned int i = 0; i < tokens.size(); i++) {
-                trim_spaces(tokens[i]);
+            for (auto & tk : tokens) {
+                trim_spaces(tk);
             }
             if (first) {
                 first = false;
-                for (unsigned int i = 0; i < tokens.size(); i++) {
-                    order.push_back(tokens[i][0]);
+                for (auto & tk : tokens) {
+                    order.push_back(tk[0]);
                 }
-                for (unsigned int j = 0; j < order.size(); j++) {
-                    sc_mat[order[j]] = std::map<char, int>();
+                for (char j : order) {
+                    sc_mat[j] = std::map<char, int>();
                 }
                 continue;
             }
@@ -49,24 +49,23 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
     sc_mat.clear();
     std::vector<char> order;
     bool first = true;
-    for (unsigned int i = 0; i < lines.size(); i++) {
-        std::string line = lines[i];
+    for (auto line : lines) {
         if (line[0] == '#') {
             continue;
         } else {
             std::vector<std::string> tokens;
             std::string del(" \t");
             tokenize(line, tokens, del);
-            for (unsigned int i = 0; i < tokens.size(); i++) {
-                trim_spaces(tokens[i]);
+            for (auto & tk : tokens) {
+                trim_spaces(tk);
             }
             if (first) {
                 first = false;
-                for (unsigned int i = 0; i < tokens.size(); i++) {
-                    order.push_back(tokens[i][0]);
+                for (auto & tk : tokens) {
+                    order.push_back(tk[0]);
                 }
-                for (unsigned int j = 0; j < order.size(); j++) {
-                    sc_mat[order[j]] = std::map<char, int>();
+                for (char j : order) {
+                    sc_mat[j] = std::map<char, int>();
                 }
                 continue;
             }

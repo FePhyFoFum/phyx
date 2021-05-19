@@ -130,9 +130,9 @@ int main(int argc, char * argv[]) {
     if (outgroupsset) {
         std::vector<std::string> tokens2;
         tokenize(outgroupsc, tokens2, ",");
-        for (unsigned int j = 0; j < tokens2.size(); j++) {
-            trim_spaces(tokens2[j]);
-            outgroups.push_back(tokens2[j]);
+        for (auto & tk : tokens2) {
+            trim_spaces(tk);
+            outgroups.push_back(tk);
         }
     } else if (namefileset) {
         std::ifstream nfstr(namesfc);
@@ -207,8 +207,7 @@ int main(int argc, char * argv[]) {
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
-                        for (unsigned int i = 0; i < outgroups.size(); i++) {
-                            std::string name = outgroups[i];
+                        for (auto name : outgroups) {
                             if (check_name_against_tree(tree, name)) {
                                 std::vector<std::string> og;
                                 og.push_back(name);
@@ -246,8 +245,7 @@ int main(int argc, char * argv[]) {
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
-                        for (unsigned int i = 0; i < outgroups.size(); i++) {
-                            std::string name = outgroups[i];
+                        for (auto name : outgroups) {
                             if (check_name_against_tree(tree, name)) {
                                 std::vector<std::string> og;
                                 og.push_back(name);

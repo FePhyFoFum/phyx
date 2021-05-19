@@ -85,13 +85,13 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
     }
     
     std::vector<Node*> temp_extant_nodes(extantnodes_);
-    for (unsigned int i = 0; i < temp_extant_nodes.size(); i++) {
+    for (auto & temp_extant_node : temp_extant_nodes) {
         try {
-            DEATHTIME_[temp_extant_nodes[i]];
-            node_death(temp_extant_nodes[i]);
+            DEATHTIME_[temp_extant_node];
+            node_death(temp_extant_node);
         } catch( char * str ) {
             std::cout << "catch" << std::endl;
-            node_death(temp_extant_nodes[i]);
+            node_death(temp_extant_node);
             //temp_extant_nodes[i]->istip = 1
         }
     }
@@ -181,8 +181,8 @@ void BirthDeathSimulator::node_birth (Node *innode) {
 
 
 void BirthDeathSimulator::delete_dead_nodes () {
-    for (unsigned int i = 0; i < dead_nodes_.size(); i++) {
-        delete_a_node(dead_nodes_[i]);
+    for (auto & dead_node : dead_nodes_) {
+        delete_a_node(dead_node);
     }
 }
 

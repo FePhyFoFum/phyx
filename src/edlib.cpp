@@ -222,7 +222,9 @@ EdlibAlignResult edlibAlign (const char* const queryOriginal, const int queryLen
     delete[] Peq;
     free(query);
     free(target);
-    if (alignData) delete alignData;
+    if (alignData != nullptr) {
+        delete alignData;
+    }
     //-------------------//
 
     return result;

@@ -218,7 +218,8 @@ Tree * TreeReader::readTree (std::string pb) {
         }
         nextChar = pb.c_str()[x];
     }
-    bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
+    //bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
+    bool hasEdgeLengths = sumEL > 0.0;
     tree->setEdgeLengthsPresent(hasEdgeLengths);
     //std::cout << "hasAnnotations = " << hasAnnotations << std::endl;
     tree->setNodeAnnotationsPresent(hasAnnotations);
@@ -336,8 +337,8 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
                 (*retstring) = "";
             }
             if (tokens.size() != 1) { // not trailing lone semicolon
-                for (unsigned int i = 0; i < tokens.size(); i++) {
-                    trim_spaces(tokens[i]);
+                for (auto & tk : tokens) {
+                    trim_spaces(tk);
                 }
                 size_t found = tokens[1].find(',');
                 if (found != std::string::npos) {

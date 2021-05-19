@@ -131,8 +131,8 @@ int main(int argc, char * argv[]) {
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                (*poos) << seqs[i].get_fasta(toupcase);
+            for (auto & seq : seqs) {
+                (*poos) << seq.get_fasta(toupcase);
             }
         }
     } else {
@@ -144,8 +144,8 @@ int main(int argc, char * argv[]) {
         }
         if (complicated_phylip) {
             std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                (*poos) << seqs[i].get_fasta(toupcase);
+            for (auto & seq : seqs) {
+                (*poos) << seq.get_fasta(toupcase);
             }
         } else {
             // fasta, fastq, or simple phylip

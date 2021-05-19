@@ -33,15 +33,15 @@ SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
 void SeqInfo::count_chars_indiv_seq (std::string& seq) {
     seq = string_to_upper(seq);
     total_.clear(); // probably unnecessary
-    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        total_[seq_chars_[i]] = 0.0;
+    for (char seq_char : seq_chars_) {
+        total_[seq_char] = 0.0;
     }
-    for (unsigned int i = 0; i < seq.length(); i++) {
+    for (char c : seq) {
         // Ensure there is no weird J or whatever characters (includes '?')
-        if (total_.find(seq[i]) == total_.end()) {
+        if (total_.find(c) == total_.end()) {
             total_[missing_]++;
         } else {
-            total_[seq[i]]++;
+            total_[c]++;
         }
     }
 }
@@ -165,8 +165,8 @@ void SeqInfo::read_in_alignment () {
 void SeqInfo::calculate_freqs () {
     Sequence seq;
     std::string name;
-    for (unsigned int i = 0; i < seqs_.size(); i++) {
-        seq = seqs_[i];
+    for (const auto & sq : seqs_) {
+        seq = sq;
         temp_seq_ = seq.get_sequence();
         name = seq.get_id();
         seq_lengths_.push_back(temp_seq_.length());
@@ -185,8 +185,8 @@ void SeqInfo::return_freq_table () {
         std::string pad = std::string(longest_tax_label_, ' ');
         // header
         (*poos_) << pad << " ";
-        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            (*poos_) << std::right << std::setw(colWidth) << seq_chars_[i] << " ";
+        for (char seq_char : seq_chars_) {
+            (*poos_) << std::right << std::setw(colWidth) << seq_char << " ";
         }
         // return nchar for individual seqs
         (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
@@ -260,10 +260,10 @@ void SeqInfo::print_summary_table_whole_alignment () {
     (*poos_) << std::right << std::setw(4) << seq_type_ << " "
         << std::setw(colWidth) << "Total" << " "
         << std::setw(colWidth) << "Proportion" << std::endl;
-    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos_) << std::right << std::setw(4) << seq_chars_[i] << " "
-            << std::setw(colWidth) << (int)total_[seq_chars_[i]] << " "
-            << std::setw(colWidth) << ((total_[seq_chars_[i]] / total_num_chars)) << std::endl;
+    for (char seq_char : seq_chars_) {
+        (*poos_) << std::right << std::setw(4) << seq_char << " "
+            << std::setw(colWidth) << (int)total_[seq_char] << " "
+            << std::setw(colWidth) << ((total_[seq_char] / total_num_chars)) << std::endl;
     }
     if (is_dna_) {
         (*poos_) << std::right << std::setw(4) << "G+C" << " "
@@ -276,8 +276,8 @@ void SeqInfo::print_summary_table_whole_alignment () {
 
 void SeqInfo::make_concatenated_sequence () {
     if (concatenated_.length() == 0) {
-        for (unsigned int i = 0; i < seqs_.size(); i++) {
-            concatenated_ += seqs_[i].get_sequence();
+        for (auto & seq : seqs_) {
+            concatenated_ += seq.get_sequence();
         }
     }
 }
@@ -296,8 +296,8 @@ void SeqInfo::check_is_aligned () {
 
 
 void SeqInfo::get_num_chars () {
-    for (unsigned int i = 0; i < seqs_.size(); i++) {
-        seq_lengths_.push_back(seqs_[i].get_length());
+    for (auto & seq : seqs_) {
+        seq_lengths_.push_back(seq.get_length());
     }
     // check if all seqs are the same length
     if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
@@ -387,12 +387,12 @@ void SeqInfo::return_missing () {
 // return whichever property set to true
 void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
-        const double& get_missing) {
+        const bool& get_missing) {
     
     if (get_labels) {
         collect_taxon_labels();
-        for (unsigned int i = 0; i < taxon_labels_.size(); i++) {
-            (*poos_) << taxon_labels_[i] << std::endl;
+        for (const auto & taxon_label : taxon_labels_) {
+            (*poos_) << taxon_label << std::endl;
         }
     } else if (check_aligned) {
         check_is_aligned();

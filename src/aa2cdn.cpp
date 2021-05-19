@@ -37,11 +37,11 @@ void AAtoCDN::check_names () {
     if (!diff.empty()) {
         std::cerr << "The following names are present in the nucleotide alignment, but not the protein alignment:"
                 << std::endl;
-        for (unsigned int i = 0; i < diff.size(); i++) {
-            std::cerr << diff[i] << std::endl;
+        for (auto & d : diff) {
+            std::cerr << d << std::endl;
             // remove from alignment
             for (unsigned int j = 0; j < nuc_seqs_.size(); j++) {
-                if (nuc_seqs_[j].get_id() == diff[i]) {
+                if (nuc_seqs_[j].get_id() == d) {
                     nuc_seqs_.erase(nuc_seqs_.begin()+j);
                     break;
                 }
@@ -121,9 +121,9 @@ void AAtoCDN::generate_codon_alignment () {
 
 
 void AAtoCDN::write_codon_alignment (std::ostream* poos) {
-    for (unsigned int i = 0; i < codon_seqs_.size(); i++) {
-        (*poos) << ">" << codon_seqs_[i].get_id() << std::endl;
-        (*poos) << codon_seqs_[i].get_sequence() << std::endl;
+    for (auto & codon_seq : codon_seqs_) {
+        (*poos) << ">" << codon_seq.get_id() << std::endl;
+        (*poos) << codon_seq.get_sequence() << std::endl;
     }
 }
 

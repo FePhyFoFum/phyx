@@ -89,7 +89,7 @@ void VcfReader::read_vcf (std::istream* pios) {
 std::vector<std::string> VcfReader::get_alts (const std::string& str) {
     std::vector<std::string> res;
     std::stringstream ss(str);
-    while(ss.good()) {
+    while (ss.good()) {
         std::string substr;
         getline(ss, substr, ',');
         res.push_back(substr);
