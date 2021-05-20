@@ -115,7 +115,7 @@ int random_int_range (int min, int max);
 
 std::vector<int> sample_without_replacement( const int& numTotal,const int& numSample);
 
-void print_error (char * pname, char arg);
+void print_error (char * pname);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise);
 

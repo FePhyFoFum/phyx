@@ -300,7 +300,7 @@ std::vector<int> sample_without_replacement (const int& numTotal, const int& num
 
 
 // arg below is always '?'. besides, getopt prints errors to sterr
-void print_error (char * pname, char arg) {
+void print_error (char * pname) {
     // std::cout << pname <<": invalid option -- '" << arg << "'" << std::endl;
     std::cout << "Try `" << pname << " --help' for more information." << std::endl;
 }

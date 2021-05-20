@@ -111,7 +111,7 @@ int main(int argc, char * argv[]) {
                 std::cout << PHYX_CITATION << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(argv[0]);
                 exit(0);
         }
     }
