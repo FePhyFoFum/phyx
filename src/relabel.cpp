@@ -116,7 +116,7 @@ void Relabel::relabel_tree (Tree * tr) {
     if (!orig.empty()) {
         if (verbose_) {
             std::cerr << "The following names to match were not found in the tree:" << std::endl;
-            for (auto elem : orig) {
+            for (const auto & elem : orig) {
                 std::cerr << elem << std::endl;
             }
         }

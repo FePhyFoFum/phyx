@@ -207,7 +207,7 @@ int main(int argc, char * argv[]) {
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
-                        for (auto name : outgroups) {
+                        for (const auto & name : outgroups) {
                             if (check_name_against_tree(tree, name)) {
                                 std::vector<std::string> og;
                                 og.push_back(name);
@@ -245,7 +245,7 @@ int main(int argc, char * argv[]) {
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
-                        for (auto name : outgroups) {
+                        for (const auto & name : outgroups) {
                             if (check_name_against_tree(tree, name)) {
                                 std::vector<std::string> og;
                                 og.push_back(name);

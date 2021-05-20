@@ -455,7 +455,7 @@ int main(int argc, char * argv[]) {
                     for (const auto & k : nms_s2) {
                         nms_i2.push_back(name_index[k]);
                     }
-                    for (auto it : nms_s) {
+                    for (const auto & it : nms_s) {
                         nms_i.push_back(name_index[it]);
                     }
                     sort(nms_i2.begin(), nms_i2.end());

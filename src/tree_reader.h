@@ -11,7 +11,7 @@
 class TreeReader {
 public:
     TreeReader ();
-    Tree * readTree (std::string trees);
+    Tree * readTree (const std::string& trees);
 };
 
 

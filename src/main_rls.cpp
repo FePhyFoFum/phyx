@@ -225,7 +225,7 @@ int main(int argc, char * argv[]) {
     if (!orig.empty()) {
         if (verbose) {
             std::cerr << "The following names to match were not found in the alignment:" << std::endl;
-            for (auto elem : orig) {
+            for (const auto & elem : orig) {
                 std::cerr << elem << std::endl;
             }
         }
