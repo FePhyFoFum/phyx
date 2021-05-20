@@ -118,7 +118,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = nullptr;
     std::ofstream * ofstr = nullptr;
     
-    if (!nfileset | !cfileset) {
+    if (!nfileset || !cfileset) {
         std::cerr << "Error: must supply both name files (-c for current, -n for new). Exiting." << std::endl;
         exit(0);
     }

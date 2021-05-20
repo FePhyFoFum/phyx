@@ -203,7 +203,7 @@ void TopologyGenerator::newick_from_tree_map (int node, std::map<int, std::vecto
         int curnode = decnodes[i];
         // is curnode a clade (i.e., needs to be further processed)?
         // could also use number of tips if things are labelled reasonably
-        if (m.count(curnode)!= 0u) {
+        if (m.count(curnode) != 0u) {
             newick_from_tree_map(curnode, m, tree); // recursion, baby
         } else {
             // terminal
