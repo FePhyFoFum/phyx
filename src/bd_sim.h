@@ -19,7 +19,7 @@ private:
     double timestop_;
     int numbirth_;
     int numdeath_;
-    int seed_;
+    long int seed_;
     double currenttime_;
     std::vector<Node*> extantnodes_;
     std::vector<Node*> dead_nodes_;
@@ -48,7 +48,7 @@ private:
 public:
     BirthDeathSimulator ();
     BirthDeathSimulator (const double& estop, const double& tstop, const double& brate,
-        const double& drate, const int& seed);
+        const double& drate, const long int& seed);
     Tree * make_tree (const bool& show_dead);
     std::string get_sim_summary ();
     //~BirthDeathSimulator();

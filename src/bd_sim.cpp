@@ -15,9 +15,10 @@
 
 
 BirthDeathSimulator::BirthDeathSimulator (const double& estop, const double& tstop,
-    const double& brate, const double& drate, const int& seed):numfailures_(0), maxfailures_(1000),
-    birthrate_(brate), deathrate_(drate), sumrate_(brate+drate), relative_birth_rate_(brate/(brate+drate)),
-    extantstop_(estop), timestop_(tstop), numbirth_(0), numdeath_(0), seed_(seed), currenttime_(0.0),
+    const double& brate, const double& drate, const long int& seed):numfailures_(0),
+    maxfailures_(1000), birthrate_(brate), deathrate_(drate), sumrate_(brate+drate),
+    relative_birth_rate_(brate/(brate+drate)), extantstop_(estop), timestop_(tstop),
+    numbirth_(0), numdeath_(0), seed_(seed), currenttime_(0.0),
     extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
     DEATHTIME_(std::map<Node*, double>()) {
     if (seed_ == -1) {

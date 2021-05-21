@@ -38,7 +38,7 @@ private:
     void find_duplicates_missing (const std::vector<int>& allSites);
 
 public:
-    SequenceSampler (std::istream* pios, const int& seed, const float& jackfract, std::string& partf);
+    SequenceSampler (std::istream* pios, const long int& seed, const float& jackfract, std::string& partf);
     std::vector<int> get_sampled_sites ();
     void sample_sites (const int& numchar);
     std::string get_resampled_seq (const std::string& origseq);

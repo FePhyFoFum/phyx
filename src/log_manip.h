@@ -15,7 +15,7 @@ private:
     int nthin_;
     
     int nrandom_;
-    int seed_;
+    long int seed_;
     
     bool count_; // just count (i.e. do not edit)
     bool verbose_;
@@ -61,7 +61,7 @@ public:
     void get_sample_counts ();
     void get_column_names ();
     void sample (const int& burnin, const int& nthin, const int& nrandom,
-        const int& seed);
+        const long int& seed);
     void delete_columns (const std::vector<int>& col_ids);
     void retain_columns (const std::vector<int>& col_ids);
     void summarize (const int& burnin, const int& nthin); // calculate summary statistics over samples

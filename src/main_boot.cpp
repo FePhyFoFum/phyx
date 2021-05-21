@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     char * seqf = nullptr;
     std::string partf;
-    int seed = -1;
+    long int seed = -1;
     
     while (true) {
         int oi = -1;
@@ -94,7 +94,7 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 'h':
                 print_help();

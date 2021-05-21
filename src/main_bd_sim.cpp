@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
     double death = 0.0;
     bool showd = false;
     bool verbose = false;
-    int seed = -1;
+    long int seed = -1;
     
     while (true) {
         int oi = -1;
@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 's':
                 showd = true;

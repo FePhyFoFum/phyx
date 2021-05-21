@@ -12,7 +12,7 @@
 #include "utils.h"
 
 
-SequenceSampler::SequenceSampler (std::istream* pios, const int& seed, const float& jackfract,
+SequenceSampler::SequenceSampler (std::istream* pios, const long int& seed, const float& jackfract,
         std::string& partf):num_taxa_(0), num_char_(0), jkfract_(jackfract), jackknife_(false),
         partitioned_(false), num_partitioned_sites_(0), num_partitions_(0) {
     if (seed == -1) {

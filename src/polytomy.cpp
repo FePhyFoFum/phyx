@@ -9,7 +9,7 @@
 #include "node.h"
 
 
-Polytomy::Polytomy (const int& seed) {
+Polytomy::Polytomy (const long int& seed) {
     if (seed == -1) {
         srand(get_clock_seed());
     } else {

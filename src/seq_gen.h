@@ -19,7 +19,7 @@ private:
     
     int seqlen_;
     int nreps_;
-    int seed_;
+    long int seed_;
     int nstates_; // number of character states
     
     float alpha_;
@@ -79,7 +79,7 @@ private:
 public:
     SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
         std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
-        const int& nreps, const int& seed, const float& alpha, const float& pinvar,
+        const int& nreps, const long int& seed, const float& alpha, const float& pinvar,
         const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
         const std::vector<double>& aabasefreq, const bool& is_dna);
     

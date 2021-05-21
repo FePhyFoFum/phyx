@@ -17,6 +17,7 @@
 void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);
 int string_to_int (const std::string& in, const std::string& arg);
+long int string_to_long_int (const std::string& in, const std::string& arg);
 
 std::string string_to_upper (const std::string& instr);
 std::string string_to_lower (const std::string& instr);
@@ -35,7 +36,7 @@ std::istream& getline_safe(std::istream& is, std::string& t);
 int factorial (int n);
 int doublefactorial (int n);
 
-unsigned int get_clock_seed ();
+long int get_clock_seed ();
 
 // template version. pass result vector as arg; will delete anything already in res
 template<typename T> void parse_comma_list (std::string& str, std::vector<T>& res) {

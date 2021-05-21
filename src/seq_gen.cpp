@@ -80,7 +80,7 @@ string SequenceGenerator::nucleotides = "ATCG";
 
 SequenceGenerator::SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
     std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
-    const int& nreps, const int& seed, const float& alpha, const float& pinvar,
+    const int& nreps, const long int& seed, const float& alpha, const float& pinvar,
     const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
     const std::vector<double>& aabasefreq, const bool& is_dna):tree_(tree),
     seqlen_(seqlength), nreps_(nreps), seed_(seed), alpha_(alpha), pinvar_(pinvar),

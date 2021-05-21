@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
-    int seed = -1;
+    long int seed = -1;
     
     char * outf = nullptr;
     char * treef = nullptr;
@@ -70,7 +70,7 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 'o':
                 outfileset = true;

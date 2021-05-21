@@ -65,6 +65,18 @@ int string_to_int (const std::string& in, const std::string& arg) {
 }
 
 
+long int string_to_long_int (const std::string& in, const std::string& arg) {
+    long int res = 0;
+    try {
+            res = stol(in);
+    } catch (const std::invalid_argument& ia) {
+        std::cerr << "Error: invalid argument for " << arg << " (expecting long int). Exiting." << std::endl;
+        exit(0);
+    }
+    return res;
+}
+
+
 // catch exception (atof does not do this)
 float string_to_float (const std::string& in, const std::string& arg) {
     float res = 0;
@@ -194,7 +206,7 @@ int doublefactorial(int n) {
 
 
 // higher resolution than time( nullptr );
-unsigned int get_clock_seed () {
+long int get_clock_seed () {
     return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
 }
 

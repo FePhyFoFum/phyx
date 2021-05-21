@@ -80,7 +80,7 @@ int main(int argc, char * argv[]) {
     int burnin = 0;
     int nthin = 1;
     int nrandom = -1;
-    int seed = -1;
+    long int seed = -1;
     bool verbose = false;
     bool count = false;
     bool summarize = false;
@@ -178,7 +178,7 @@ int main(int argc, char * argv[]) {
                 sort(col_indices.begin(), col_indices.end());
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 'v':
                 verbose = true;

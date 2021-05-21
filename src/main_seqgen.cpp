@@ -103,7 +103,7 @@ int main(int argc, char * argv[]) {
     std::vector<double> userrates;
     std::vector<double> multirates;
     int nreps = 1; // not implemented at the moment
-    int seed = -1;
+    long int seed = -1;
     int numpars = 0;
     float alpha = -1.0;
     std::vector< std::vector<double>> dmatrix;
@@ -247,7 +247,7 @@ int main(int argc, char * argv[]) {
                 nreps = string_to_int(optarg, "-n");
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 'q':
                 is_dna = false;
