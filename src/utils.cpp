@@ -57,8 +57,7 @@ int string_to_int (const std::string& in, const std::string& arg) {
     int res = 0;
     try {
             res = stoi(in);
-        }
-    catch (const std::invalid_argument& ia) {
+    } catch (const std::invalid_argument& ia) {
         std::cerr << "Error: invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
         exit(0);
     }
@@ -71,11 +70,10 @@ float string_to_float (const std::string& in, const std::string& arg) {
     float res = 0;
     try {
             res = stof(in);
-        }
-        catch (const std::invalid_argument& ia) {
+    } catch (const std::invalid_argument& ia) {
             std::cerr << "Error: invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
             exit(0);
-        }
+    }
     return res;
 }
 
@@ -197,7 +195,7 @@ int doublefactorial(int n) {
 
 // higher resolution than time( nullptr );
 unsigned int get_clock_seed () {
-    return (std::chrono::high_resolution_clock::now().time_since_epoch().count);
+    return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
 }
 
 
