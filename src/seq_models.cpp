@@ -24,7 +24,7 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
             std::string del(" \t");
             tokenize(line, tokens, del);
             for (auto & tk : tokens) {
-                trim_spaces(tk);
+                trim_spaces(tk); // this will never be used, as it was split on whitespace
             }
             if (first) {
                 first = false;
@@ -57,7 +57,7 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
             std::string del(" \t");
             tokenize(line, tokens, del);
             for (auto & tk : tokens) {
-                trim_spaces(tk);
+                trim_spaces(tk); // this will never be used, as it was split on whitespace
             }
             if (first) {
                 first = false;

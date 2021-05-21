@@ -126,7 +126,7 @@ int main(int argc, char * argv[]) {
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
         for (auto & tk : tokens2) {
-            trim_spaces(tk);
+            trim_spaces(tk); // this will never have to be used, as spaces would break cmd line call
             names.push_back(tk);
         }
     } else if (namefileset) {

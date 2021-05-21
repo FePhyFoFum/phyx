@@ -160,7 +160,7 @@ int main(int argc, char * argv[]) {
         std::vector<std::string> tokens2;
         tokenize(idssc, tokens2, ",");
         for (auto & tk : tokens2) {
-            trim_spaces(tk);
+            trim_spaces(tk); // this will never have to be used, as spaces would break cmd line call
             ids.push_back(tk);
         }
     }

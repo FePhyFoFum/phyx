@@ -257,7 +257,7 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string
             tokens.clear();
             tokenize(line, tokens, del);
             for (auto & tk : tokens) {
-                trim_spaces(tk);
+                trim_spaces(tk); // this will never be used, as it was split on whitespace
             }
             for (unsigned int j = 0; j < tokens.size(); j++) {
                 ratematrix[fromarea][j] = atof(tokens[j].c_str());
