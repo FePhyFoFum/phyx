@@ -29,6 +29,7 @@ void print_help () {
     std::cout << " -n, --nreps=INT     number of replicates, default=1" << std::endl;
     std::cout << " -s, --showextinct   show lineages that went extinct, default=false" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -v, --verbose       print per-tree simulation summary (to cerr)" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -50,6 +51,7 @@ static struct option const long_options[] =
     {"outf", required_argument, nullptr, 'o'},
     {"showextinct", no_argument, nullptr, 's'},
     {"seed", required_argument, nullptr, 'x'},
+    {"verbose", no_argument, nullptr, 'v'},
     {"help", no_argument, nullptr, 'h'},
     {"version", no_argument, nullptr, 'V'},
     {"citation", no_argument, nullptr, 'C'},
@@ -70,11 +72,12 @@ int main(int argc, char * argv[]) {
     double birth = 1.0;
     double death = 0.0;
     bool showd = false;
+    bool verbose = false;
     int seed = -1;
     
     while (true) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:shVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:vshVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -103,6 +106,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'n':
                 nreps = string_to_int(optarg, "-n");
+                break;
+            case 'v':
+                verbose = true;
                 break;
             case 'o':
                 outfileset = true;
@@ -151,10 +157,17 @@ int main(int argc, char * argv[]) {
     BirthDeathSimulator bd(ext, time, birth, death, seed);
     for (int i = 0; i < nreps; i++) {
         Tree * bdtr = bd.make_tree(showd);
-        if (bdtr->getExtantNodeCount() > 1) {
-            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << std::endl;
-        } else {
+        
+        // only extinct-pruned scenarios can produce a single terminal tree
+        // tree writer has a problem with this, so need to manually fix
+        if (!showd && bdtr->getExtantNodeCount() == 1) {
             (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << std::endl;
+        } else {
+            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << std::endl;
+        }
+        // print simulation summary
+        if (verbose) {
+            std::cerr << bd.get_sim_summary() << std::endl;
         }
     }
     if (outfileset) {

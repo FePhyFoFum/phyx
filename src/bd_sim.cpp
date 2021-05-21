@@ -15,24 +15,23 @@
 
 
 BirthDeathSimulator::BirthDeathSimulator (const double& estop, const double& tstop,
-    const double& brate, const double& drate, const int& seed):failures_(0), maxfailures_(1000), birthrate_(brate),
-    deathrate_(drate), sumrate_(brate+drate), relative_birth_rate_(brate/(brate+drate)),
-    extantstop_(estop), timestop_(tstop), numofchanges_(0), currenttime_(0.0),
+    const double& brate, const double& drate, const int& seed):numfailures_(0), maxfailures_(1000),
+    birthrate_(brate), deathrate_(drate), sumrate_(brate+drate), relative_birth_rate_(brate/(brate+drate)),
+    extantstop_(estop), timestop_(tstop), numbirth_(0), numdeath_(0), seed_(seed), currenttime_(0.0),
     extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
     DEATHTIME_(std::map<Node*, double>()) {
-    if (seed == -1) {
-        generator_ =  std::mt19937(get_clock_seed());
-    } else {
-        generator_ =  std::mt19937(seed);
+    if (seed_ == -1) {
+        seed_ = get_clock_seed();
     }
+    generator_ =  std::mt19937(seed_);
     uniformDistrib_ =  std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 
 // not currently used
-BirthDeathSimulator::BirthDeathSimulator ():failures_(0), maxfailures_(1000),
+BirthDeathSimulator::BirthDeathSimulator ():numfailures_(0), maxfailures_(1000),
     birthrate_(0.1), deathrate_(0.05), sumrate_(0.1+0.05),
-    relative_birth_rate_(0.1/(0.1+0.05)), extantstop_(10), timestop_(0), numofchanges_(0),
+    relative_birth_rate_(0.1/(0.1+0.05)), extantstop_(10), timestop_(0), numbirth_(0), numdeath_(0),
     currenttime_(0.0), extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
     DEATHTIME_(std::map<Node*, double>()) {
         generator_ =  std::mt19937(get_clock_seed());
@@ -41,7 +40,8 @@ BirthDeathSimulator::BirthDeathSimulator ():failures_(0), maxfailures_(1000),
 
 
 void BirthDeathSimulator::setup_parameters () {
-    numofchanges_ = 0;
+    numbirth_ = 0;
+    numdeath_ = 0;
     currenttime_ = 0.0;
     extantnodes_ = std::vector<Node*>();
     dead_nodes_ = std::vector<Node*>();
@@ -60,7 +60,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
     node_birth(extantnodes_[0]);
     
     // reset failures to zero. don't want to accumulate errors across replicates
-    failures_ = 0;
+    numfailures_ = 0;
     bool going = true;
     while (going) {
         double dt = time_to_next_event();
@@ -69,17 +69,19 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
         if (going) {
             event();
             if (extantnodes_.empty()) {
-                failures_ += 1;
+                numfailures_ += 1;
                 //std::cout << "failed!" << std::endl;
-                if (failures_ >= maxfailures_) {
-                    std::cout << "Reached maximum number of failures (" << failures_
+                if (numfailures_ >= maxfailures_) {
+                    std::cout << "Reached maximum number of failures (" << numfailures_
                         << "). Quitting." << std::endl;
                     exit(0);
                 }
                 setup_parameters();
-                root_ = new Node();//need to clean
-                BIRTHTIME_[root_] = currenttime_;//need to clean
-                extantnodes_.push_back(root_);//empty
+                root_ = new Node(); // need to clean
+                BIRTHTIME_[root_] = currenttime_; // need to clean
+                extantnodes_.push_back(root_); // empty
+                numbirth_ = 0; // reset
+                numdeath_ = 0; // reset
             }
         }
     }
@@ -113,6 +115,22 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
         count += 1;
     }
     return tree_;
+}
+
+
+// verbose summary:
+// birth & death rate, numbirths, numdeaths, numfailures, seed
+std::string BirthDeathSimulator::get_sim_summary () {
+    std::string res;
+    
+    res += "birth rate = " + std::to_string(birthrate_);
+    res += "; death rate = " + std::to_string(deathrate_);
+    res += "; num births = " + std::to_string(numbirth_);
+    res += "; num deaths = " + std::to_string(numdeath_);
+    res += "; num failures = " + std::to_string(numfailures_);
+    res += "; seed = " + std::to_string(seed_);
+    
+    return res;
 }
 
 
@@ -151,10 +169,12 @@ void BirthDeathSimulator::event () {
     //    << random_integer << std::endl;
     Node * extant = extantnodes_[random_integer];
     if (event_is_birth()) {
-        node_birth(extant); // real speciation
+        node_birth(extant); // speciation
+        numbirth_++;
     } else {
-        node_death(extant);
+        node_death(extant); // extinction
         dead_nodes_.push_back(extant);
+        numdeath_++;
     }
 }
 
@@ -183,26 +203,6 @@ void BirthDeathSimulator::node_birth (Node *innode) {
 void BirthDeathSimulator::delete_dead_nodes () {
     for (auto & dead_node : dead_nodes_) {
         delete_a_node(dead_node);
-    }
-}
-
-
-void BirthDeathSimulator::set_distance_to_tip () {
-    for (int i = 0; i < tree_->getExternalNodeCount(); i++) {
-        double curh = 0.0;
-        tree_->getExternalNode(i)->setHeight(curh);
-        Node * tnode = tree_->getExternalNode(i);
-        while (tnode->hasParent()) {
-            curh += tnode->getBL();
-            if (tnode->getHeight() < curh) {
-                tnode->setHeight(curh);
-            }
-            tnode = tnode->getParent();
-        }
-        curh += tnode->getBL();
-        if (tnode->getHeight()<curh) {
-            tnode->setHeight(curh);
-        }
     }
 }
 
@@ -245,6 +245,28 @@ bool BirthDeathSimulator::event_is_birth () {
 }
 
 
+// hrm not used
+void BirthDeathSimulator::set_distance_to_tip () {
+    for (int i = 0; i < tree_->getExternalNodeCount(); i++) {
+        double curh = 0.0;
+        tree_->getExternalNode(i)->setHeight(curh);
+        Node * tnode = tree_->getExternalNode(i);
+        while (tnode->hasParent()) {
+            curh += tnode->getBL();
+            if (tnode->getHeight() < curh) {
+                tnode->setHeight(curh);
+            }
+            tnode = tnode->getParent();
+        }
+        curh += tnode->getBL();
+        if (tnode->getHeight() < curh) {
+            tnode->setHeight(curh);
+        }
+    }
+}
+
+
+// also not used
 double BirthDeathSimulator::get_distance_from_tip (Node *innode) {
     Node * cur = innode;
     double curh = 0.0;

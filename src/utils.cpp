@@ -58,10 +58,10 @@ int string_to_int (const std::string& in, const std::string& arg) {
     try {
             res = stoi(in);
         }
-        catch (const std::invalid_argument& ia) {
-            std::cerr << "Error: invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
-            exit(0);
-        }
+    catch (const std::invalid_argument& ia) {
+        std::cerr << "Error: invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
+        exit(0);
+    }
     return res;
 }
 
@@ -197,7 +197,7 @@ int doublefactorial(int n) {
 
 // higher resolution than time( nullptr );
 unsigned int get_clock_seed () {
-    return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    return (std::chrono::high_resolution_clock::now().time_since_epoch().count);
 }
 
 
@@ -717,7 +717,7 @@ bool essentially_equal (double a, double b) {
         << (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     */
     
-    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(abs(a), abs(b)))) {
+    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(std::abs(a), std::abs(b)))) {
         equal = true;
     }
     
