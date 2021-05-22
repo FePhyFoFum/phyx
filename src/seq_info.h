@@ -1,5 +1,5 @@
-#ifndef _LS_SEQ_H_
-#define _LS_SEQ_H_
+#ifndef PX__LS_SEQ_H
+#define PX__LS_SEQ_H
 
 #include <string>
 #include <map>
@@ -68,4 +68,4 @@ public:
         const bool& get_missing);
 };
 
-#endif /* _LS_SEQ_H_ */
+#endif /* PX__LS_SEQ_H */

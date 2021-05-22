@@ -1,5 +1,5 @@
-#ifndef _CL_TR_H_
-#define _CL_TR_H_
+#ifndef PX__CL_TR_H
+#define PX__CL_TR_H
 
 class Tree; // forward declaration
 class Node; // forward declaration
@@ -24,4 +24,4 @@ public:
             bool remove_knuckles);
 };
 
-#endif /* _CL_TR_H_ */
+#endif /* PX__CL_TR_H */

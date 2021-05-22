@@ -1,5 +1,5 @@
-#ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_
-#define _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_
+#ifndef PX__OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H
+#define PX__OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H
 
 #include <vector>
 #include <nlopt.h>
@@ -13,4 +13,4 @@ using namespace arma;
 void optimize_sr_periods_nlopt(std::vector<RateModel> * _rm,StateReconstructor * _sr,
     std::vector<mat> * _free_mask, int _nfree);
 
-#endif /* _OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H_ */
+#endif /* PX__OPTIMIZE_STATE_RECONSTRUCTOR_PERIODS_NLOPT_H */

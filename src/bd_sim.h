@@ -1,5 +1,5 @@
-#ifndef _BD_SIM_H_
-#define _BD_SIM_H_
+#ifndef PX__BD_SIM_H
+#define PX__BD_SIM_H
 
 #include <vector>
 #include <random>
@@ -54,4 +54,4 @@ public:
     //~BirthDeathSimulator();
 };
 
-#endif /* _BD_SIM_H_ */
+#endif /* PX__BD_SIM_H */

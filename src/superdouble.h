@@ -23,8 +23,8 @@
  more development by Stephen A. Smith
  */
 
-#ifndef _SUPERDOUBLE_H_
-#define _SUPERDOUBLE_H_
+#ifndef PX__SUPERDOUBLE_H
+#define PX__SUPERDOUBLE_H
 
 #include <cmath>
 #include <iostream>
@@ -65,4 +65,4 @@ public:
     
     operator double() {return mantissa*pow(10.,exponent);};
 };
-#endif /* _SUPERDOUBLE_H_ */
+#endif /* PX__SUPERDOUBLE_H */

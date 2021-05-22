@@ -1,5 +1,5 @@
-#ifndef _TREE_H_
-#define _TREE_H_
+#ifndef PX__TREE_H
+#define PX__TREE_H
 
 #include <string>
 #include <vector>
@@ -71,4 +71,4 @@ public:
     ~Tree ();
 };
 
-#endif /* _TREE_H_ */
+#endif /* PX__TREE_H */

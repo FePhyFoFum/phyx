@@ -1,5 +1,5 @@
-#ifndef _SEQ_UTILS_H_
-#define _SEQ_UTILS_H_
+#ifndef PX__SEQ_UTILS_H
+#define PX__SEQ_UTILS_H
 
 #include <string>
 #include <vector>
@@ -32,4 +32,4 @@ int count_dna_chars (const std::string& str);
 bool is_aligned (const std::vector<Sequence>& seqs);
 bool is_codon_alignment (const std::vector<Sequence>& seqs);
 
-#endif /* _SEQ_UTILS_H_ */
+#endif /* PX__SEQ_UTILS_H */

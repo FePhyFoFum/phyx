@@ -1,5 +1,5 @@
-#ifndef _NJ_H_
-#define _NJ_H_
+#ifndef PX__NJ_H
+#define PX__NJ_H
 
 #include <map>
 #include <vector>
@@ -42,4 +42,4 @@ public:
     std::string get_newick ();
 };
 
-#endif /* _NJ_H_ */
+#endif /* PX__NJ_H */

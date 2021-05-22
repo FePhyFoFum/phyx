@@ -1,5 +1,5 @@
-#ifndef _AA_TO_CDN_H_
-#define _AA_TO_CDN_H_
+#ifndef PX__AA_TO_CDN_H
+#define PX__AA_TO_CDN_H
 
 #include <string>
 
@@ -26,4 +26,4 @@ public:
     std::vector<Sequence> get_codon_alignment ();
 };
 
-#endif /* _AA_TO_CDN_H_ */
+#endif /* PX__AA_TO_CDN_H */

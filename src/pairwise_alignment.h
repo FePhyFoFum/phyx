@@ -1,5 +1,5 @@
-#ifndef _PAIRWISE_ALIGNMENT_H_
-#define _PAIRWISE_ALIGNMENT_H_
+#ifndef PX__PAIRWISE_ALIGNMENT_H
+#define PX__PAIRWISE_ALIGNMENT_H
 
 #include <string>
 #include <map>
@@ -11,4 +11,4 @@ double nw(Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> >
 double sw(Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> >& scoringmatrix,
     double gap_penalty, std::string& aln1, std::string& aln2);
 
-#endif /* _PAIRWISE_ALIGNMENT_H_ */
+#endif /* PX__PAIRWISE_ALIGNMENT_H */

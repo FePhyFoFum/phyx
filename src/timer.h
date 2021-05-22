@@ -1,5 +1,5 @@
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#ifndef PX__TIMER_H
+#define PX__TIMER_H
 
 #include <chrono>
 
@@ -17,4 +17,4 @@ public:
     ~Timer ();  
 };
 
-#endif /* _TIMER_H_ */
+#endif /* PX__TIMER_H */

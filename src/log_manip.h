@@ -1,5 +1,5 @@
-#ifndef _LOG_MANIP_H_
-#define _LOG_MANIP_H_
+#ifndef PX__LOG_MANIP_H
+#define PX__LOG_MANIP_H
 
 #include <string>
 #include <vector>
@@ -67,4 +67,4 @@ public:
     void summarize (const int& burnin, const int& nthin); // calculate summary statistics over samples
 };
 
-#endif /* _LOG_MANIP_H_ */
+#endif /* PX__LOG_MANIP_H */

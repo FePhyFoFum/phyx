@@ -1,5 +1,5 @@
-#ifndef _TSCALE_H_
-#define _TSCALE_H_
+#ifndef PX__TSCALE_H
+#define PX__TSCALE_H
 
 class Tree; // forward declaration
 
@@ -16,4 +16,4 @@ public:
     void rescale (Tree * tr);
 };
 
-#endif /* _TSCALE_H_ */
+#endif /* PX__TSCALE_H */

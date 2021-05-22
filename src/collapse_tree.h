@@ -1,5 +1,5 @@
-#ifndef _COLLAPSE_TREE_H_
-#define _COLLAPSE_TREE_H_
+#ifndef PX__COLLAPSE_TREE_H
+#define PX__COLLAPSE_TREE_H
 
 #include <string>
 
@@ -33,4 +33,4 @@ public:
     void collapse_edges (Tree * tr);
 };
 
-#endif /* _COLLAPSE_TREE_H_ */
+#endif /* PX__COLLAPSE_TREE_H */

@@ -1,5 +1,5 @@
-#ifndef _STATE_RECONSTRUCTOR_H_
-#define _STATE_RECONSTRUCTOR_H_
+#ifndef PX__STATE_RECONSTRUCTOR_H
+#define PX__STATE_RECONSTRUCTOR_H
 
 #include <vector>
 #include <string>
@@ -68,4 +68,4 @@ public:
     ~StateReconstructor ();
 };
 
-#endif /* _STATE_RECONSTRUCTOR_H_ */
+#endif /* PX__STATE_RECONSTRUCTOR_H */

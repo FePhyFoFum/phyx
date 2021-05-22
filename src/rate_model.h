@@ -1,5 +1,5 @@
-#ifndef _RATE_MODEL_H_
-#define _RATE_MODEL_H_
+#ifndef PX__RATE_MODEL_H
+#define PX__RATE_MODEL_H
 
 #include <armadillo>
 #include <string>
@@ -68,4 +68,4 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string,
         std::vector<std::string>& codon_list);
 void convert_matrix_to_single_row_for_fortran(mat& inmatrix, double t, double * H);
 
-#endif /* _RATE_MODEL_H_ */
+#endif /* PX__RATE_MODEL_H */

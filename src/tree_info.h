@@ -1,5 +1,5 @@
-#ifndef _LS_TR_H_
-#define _LS_TR_H_
+#ifndef PX__LS_TR_H
+#define PX__LS_TR_H
 
 #include <string>
 #include <vector>
@@ -32,4 +32,4 @@ public:
     void get_stats (std::ostream* poos);
 };
 
-#endif /* _LS_TR_H_ */
+#endif /* PX__LS_TR_H */

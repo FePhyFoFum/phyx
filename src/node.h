@@ -1,5 +1,5 @@
-#ifndef _NODE_H_
-#define _NODE_H_
+#ifndef PX__NODE_H
+#define PX__NODE_H
 
 #include <map>
 #include <set>
@@ -80,4 +80,4 @@ public:
     ~Node ();
 };
 
-#endif /* _NODE_H_ */
+#endif /* PX__NODE_H */

@@ -1,5 +1,5 @@
-#ifndef _TREE_UTILS_H_
-#define _TREE_UTILS_H_
+#ifndef PX__TREE_UTILS_H
+#define PX__TREE_UTILS_H
 
 #include <string>
 #include <vector>
@@ -53,4 +53,4 @@ unsigned long int get_num_possible_trees (const int& n, const bool& rooted);
 void get_terminal_children (Node * node, std::vector<Node *>& children);
 void get_terminal_children (Node * node, std::vector<std::string>& children);
 void get_all_descendant_nodes (Node * node, std::vector<Node *>& children);
-#endif /* _TREE_UTILS_H_ */
+#endif /* PX__TREE_UTILS_H */

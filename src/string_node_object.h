@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef _STRING_NODE_OBJECT_H_
-#define _STRING_NODE_OBJECT_H_
+#ifndef PX__STRING_NODE_OBJECT_H
+#define PX__STRING_NODE_OBJECT_H
 
 #include <string>
 
@@ -22,4 +22,4 @@ public:
     StringNodeObject * clone() const { return new StringNodeObject(*this); }
 };
 
-#endif /* _STRING_NODE_OBJECT_H_ */
+#endif /* PX__STRING_NODE_OBJECT_H */
