@@ -27,7 +27,7 @@ private:
     void FetchLengths (const int& NumbOfSequences, const std::vector< std::vector<double> >& NewMatrix,
         std::vector< std::vector<double> >& LengthMatrix, const int& mini1, const int& mini2,
         double& brlength1, double& brlength2);
-    void Tree_Update (std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
+    void Tree_Update (std::string& newname, std::vector<std::string>& names,
         int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2,
         double& brlength1, double& brlength2);
     void Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector<double> >& Matrix,

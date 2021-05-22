@@ -55,7 +55,7 @@ void NJOI::FetchLengths (const int& NumbOfSequences, const std::vector< std::vec
  *Updates the Tree info and bypasses using a tree structure by storing parts in an array
  *NewMatrix: Has the adjusted values from the QMatrix calculation
 */
-void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
+void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2,
     double& brlength1, double& brlength2) {
     
@@ -75,12 +75,12 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names, s
     names.erase(names.begin()+mini1);
     names.insert(names.begin(), newname);
     
-    //Make Smaller Matrix
+    // Make Smaller Matrix
     std::vector< std::vector<double> > temp_matrix(NumbOfSequences,
             std::vector<double>(NumbOfSequences, 0.0));
     
     int count = 0;
-    //Make a new First Row and Column
+    // Make a new First Row and Column
     for (int i = 0; i < msize; i++) {
         if (i != mini1 && i != mini2) {
             ColRow = (col_hits[i] + row_hits[i] - small_length) * 0.5;
@@ -90,7 +90,7 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names, s
         }
     }
     
-    //Need to fill the rest of the matrix up again
+    // Need to fill the rest of the matrix up again
     int icount = 1;
     int jcount = 0;
     for (int i = 0; i < msize; i++) {
@@ -130,9 +130,9 @@ void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector
 }
 
 
-//NumbKeys Contains the names and their matching number
-//Matrix Contains The original matrix
-//Main Tree Making Matrix
+// NumbKeys Contains the names and their matching number
+// Matrix Contains The original matrix
+// Main Tree Making Matrix
 void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
     std::vector< std::vector<double> >& Matrix) {
 
@@ -149,7 +149,7 @@ void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>
         FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2,
             brlength1, brlength2);
         
-        Tree_Update(newname, names, NumbKeys, NumbOfSequences, Matrix, mini1,
+        Tree_Update(newname, names, NumbOfSequences, Matrix, mini1,
             mini2, brlength1, brlength2);
     }
     //double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
