@@ -81,9 +81,21 @@ long int string_to_long_int (const std::string& in, const std::string& arg) {
 float string_to_float (const std::string& in, const std::string& arg) {
     float res = 0;
     try {
-            res = stof(in);
+            res = std::stof(in);
     } catch (const std::invalid_argument& ia) {
             std::cerr << "Error: invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
+            exit(0);
+    }
+    return res;
+}
+
+
+double string_to_double (const std::string& in, const std::string& arg) {
+    double res = 0;
+    try {
+            res = std::stod(in);
+    } catch (const std::invalid_argument& ia) {
+            std::cerr << "Error: invalid argument for " << arg << " (expecting double). Exiting." << std::endl;
             exit(0);
     }
     return res;

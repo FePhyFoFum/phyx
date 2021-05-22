@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 'l':
-                threshold = string_to_float(optarg, "-l");
+                threshold = string_to_double(optarg, "-l");
                 if (threshold <= 0 || threshold > 1) {
                     std::cerr << "Error: specify proportional threshold: (0,1). Exiting." << std::endl;
                     exit(0);

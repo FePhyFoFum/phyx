@@ -75,11 +75,11 @@ int main(int argc, char * argv[]) {
                 check_file_exists(treef);
                 break;
             case 's':
-                scalef = string_to_float(optarg, "-s");
+                scalef = string_to_double(optarg, "-s");
                 scaleset = true;
                 break;
             case 'r':
-                rootheight = string_to_float(optarg, "-r");
+                rootheight = string_to_double(optarg, "-r");
                 heightset = true;
                 break;
             case 'o':

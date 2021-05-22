@@ -22,6 +22,7 @@ long int string_to_long_int (const std::string& in, const std::string& arg);
 std::string string_to_upper (const std::string& instr);
 std::string string_to_lower (const std::string& instr);
 float string_to_float (const std::string& in, const std::string& arg);
+double string_to_double (const std::string& in, const std::string& arg);
 
 void tokenize (const std::string& str, std::vector<std::string>& tokens,
         const std::string& delimiters = " ");

@@ -87,18 +87,18 @@ int main(int argc, char * argv[]) {
                 extantset = true;
                 break;
             case 't':
-                time = string_to_float(optarg, "-t");
+                time = string_to_double(optarg, "-t");
                 timeset = true;
                 break;
             case 'b':
-                birth = string_to_float(optarg, "-b");
+                birth = string_to_double(optarg, "-b");
                 if (birth <= 0) {
                     std::cerr << "Error: birth rate must be > 0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
             case 'd':
-                death = string_to_float(optarg, "-d");
+                death = string_to_double(optarg, "-d");
                 if (death < 0) {
                     std::cerr << "Error: death rate must be >= 0. Exiting." << std::endl;
                     exit(0);

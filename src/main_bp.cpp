@@ -112,7 +112,7 @@ int main(int argc, char * argv[]) {
                 firsttree = true;
                 break;
             case 'c':
-                cutnum = string_to_float(optarg, "-c");
+                cutnum = string_to_double(optarg, "-c");
                 cutoff = true;
                 break;
             case 'm':
