@@ -13,7 +13,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Compute a consensus sequence from an alignment." << std::endl;

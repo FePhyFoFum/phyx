@@ -22,7 +22,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "This will conduct state reconstruction analyses." << std::endl;

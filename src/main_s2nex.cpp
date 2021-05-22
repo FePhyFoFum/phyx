@@ -13,7 +13,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Convert seqfiles from nexus, phylip, or fastq to nexus." << std::endl;

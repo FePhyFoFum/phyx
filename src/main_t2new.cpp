@@ -14,7 +14,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "This will convert a tree file to newick." << std::endl;

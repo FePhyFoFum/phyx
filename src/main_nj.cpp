@@ -21,7 +21,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Basic neighbour-joining tree maker." << std::endl;

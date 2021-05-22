@@ -15,7 +15,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Generate a Nearest Neighbor Interchange (NNI) tree." << std::endl;

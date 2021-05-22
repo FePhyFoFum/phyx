@@ -16,7 +16,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Reroot (or unroot) a tree file and produce a newick." << std::endl;

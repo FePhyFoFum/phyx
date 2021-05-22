@@ -16,7 +16,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Extract subclade(s) from tree(s)." << std::endl;

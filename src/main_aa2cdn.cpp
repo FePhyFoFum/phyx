@@ -12,7 +12,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Generate a codon alignment from aligned amino acids and unaligned nucleotides." << std::endl;

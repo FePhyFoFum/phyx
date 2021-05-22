@@ -19,7 +19,7 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void_print_help (void);
+void print_help (void);
 
 void print_help () {
     std::cout << "Continuous character rate estimation with Brownian and OU." << std::endl;
