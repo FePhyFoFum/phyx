@@ -13,7 +13,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Tree rescaling by providing either scaling factor or root height." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;

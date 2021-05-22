@@ -14,7 +14,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "This will print out bipartitions found in treefile." << std::endl;
     std::cout << "Trees are assumed rooted unless the -e argument is provided." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;

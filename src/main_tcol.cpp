@@ -14,7 +14,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Add information to a tree so that you can color the edges." << std::endl;
     std::cout << "This will take nexus and newick inputs from a file or STDIN." << std::endl;
     std::cout << "Results are written in nexus format so that it can be read by figtree." << std::endl;

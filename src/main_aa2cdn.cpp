@@ -12,7 +12,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Generate a codon alignment from aligned amino acids and unaligned nucleotides." << std::endl;
     std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;

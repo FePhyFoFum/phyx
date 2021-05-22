@@ -14,7 +14,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Collapse edges with support below some threshold." << std::endl;
     std::cout << "If annotated Nexus, may require passing in the support identifier (-s)." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;

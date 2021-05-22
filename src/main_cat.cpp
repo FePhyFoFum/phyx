@@ -13,7 +13,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Sequence file concatenation." << std::endl;
     std::cout << "Can use wildcards e.g.:" << std::endl;
     std::cout << "  pxcat -s *.phy -o my_cat_file.fa" << std::endl;

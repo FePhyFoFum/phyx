@@ -22,7 +22,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "This will conduct state reconstruction analyses." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxstrec [OPTIONS]... FILES" << std::endl;

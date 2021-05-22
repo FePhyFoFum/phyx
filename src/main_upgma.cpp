@@ -12,7 +12,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Bare bones UPGMA tree generator" << std::endl;
     std::cout << "Currently only uses uncorrected p-distances." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;

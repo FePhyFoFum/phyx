@@ -20,7 +20,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Conduct Needleman-Wunsch analysis for all the seqs in a file." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Output is a list of the scores and distances (and the alignments if asked)." << std::endl;

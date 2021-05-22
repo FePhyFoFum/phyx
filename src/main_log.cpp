@@ -12,7 +12,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "MCMC log file manipulator." << std::endl;
     std::cout << "Can combine and resample parameters or trees across files." << std::endl;
     std::cout << "Log files need not contain the same number of samples." << std::endl;

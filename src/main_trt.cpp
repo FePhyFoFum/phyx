@@ -15,7 +15,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "This will trace a big tree given a taxon list and and produce newick." << std::endl;
     std::cout << "Data can be read from a file or STDIN." << std::endl;
     std::cout << std::endl;

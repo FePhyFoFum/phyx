@@ -16,7 +16,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Get the number of descendant tips of internal nodes specified by mrca statements." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN," << std::endl;
     std::cout << "and an MRCA file with format:" << std::endl;

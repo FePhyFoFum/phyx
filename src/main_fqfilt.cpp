@@ -11,7 +11,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Filter fastq files by mean quality." << std::endl;
     std::cout << "Data can be read from a file or STDIN." << std::endl;
     std::cout << std::endl;

@@ -12,7 +12,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Generate all tree topologies for n (<= 10) taxa." << std::endl;
     std::cout << "Random tree samples are a-coming." << std::endl;
     std::cout << std::endl;

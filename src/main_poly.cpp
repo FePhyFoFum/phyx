@@ -14,7 +14,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Randomly sample polytomies to generate a binary tree." << std::endl;
     std::cout << "Currently only works with rooted trees (checked)" << std::endl;
     std::cout << "Output is written in newick format." << std::endl;

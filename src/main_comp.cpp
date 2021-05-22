@@ -12,7 +12,9 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Sequence compositional homogeneity test." << std::endl;
     std::cout << "Chi-square test for equivalent character state counts across lineages." << std::endl;
     std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;

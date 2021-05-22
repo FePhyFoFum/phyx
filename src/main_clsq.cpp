@@ -14,7 +14,9 @@
 
 // TODO: throw out stop_codons: "TAG", "TAA", "TGA"
 
-void print_help() {
+void_print_help (void);
+
+void print_help () {
     std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;
