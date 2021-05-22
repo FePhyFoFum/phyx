@@ -150,7 +150,6 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
             exit(0);
         } else {
             std::vector<std::string> good_names;
-            std::vector<std::string>::iterator it;
             for (auto & name : names) {
                 if (check_name_against_tree(tree, name)) {
                     good_names.emplace_back(name);

@@ -12,7 +12,7 @@
 #include "utils.h"
 
 
-SequenceSampler::SequenceSampler (std::istream* pios, const long int& seed, const float& jackfract,
+SequenceSampler::SequenceSampler (std::istream* pios, const long int& seed, const double& jackfract,
         std::string& partf):num_taxa_(0), num_char_(0), jkfract_(jackfract), jackknife_(false),
         partitioned_(false), num_partitioned_sites_(0), num_partitions_(0) {
     if (seed == -1) {
@@ -120,7 +120,7 @@ std::vector<int> SequenceSampler::get_partitioned_bootstrap_sites () {
 
 // sample WITHOUT replacement. not with partitioned models
 std::vector<int> SequenceSampler::get_jackknife_sites (const int& numchar) {
-    int numsample = numchar * jkfract_ + 0.5;
+    int numsample = (int)(numchar * jkfract_ + 0.5);
     std::vector<int> randsites = sample_without_replacement(numchar, numsample);
     return randsites;
 }

@@ -62,7 +62,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
     bool partitioned = false;
-    float jackfract = 0.0;
+    double jackfract = 0.0;
     char * outf = nullptr;
     char * seqf = nullptr;
     std::string partf;
@@ -89,7 +89,7 @@ int main(int argc, char * argv[]) {
                 partf = strdup(optarg);
                 break;
             case 'f':
-                jackfract = string_to_float(optarg, "-f");
+                jackfract = string_to_double(optarg, "-f");
                 if (jackfract < 0 || jackfract > 1) {
                     std::cerr << "Error: jackknife fraction must be 0 < x < 1. Exiting." << std::endl;
                     exit(0);

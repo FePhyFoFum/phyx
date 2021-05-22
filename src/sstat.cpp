@@ -101,18 +101,18 @@ void MultinomialSeqStat::calculateTestStatistic () {
 | 2) Sum values above
 | 3) Subtract N*ln(N) from sum
 */
-    long double tempResult = 0.0;
-    long double finalResult = 0.0;
+    long double tempResult = 0.0L;
+    long double finalResult = 0.0L;
     int numPatterns = patterns_and_counts_.size();
 
     for (int iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
         if (patterns_and_counts_[iterStoredPat].second != 0) {
             tempResult = (patterns_and_counts_[iterStoredPat].second)*(log(patterns_and_counts_[iterStoredPat].second));
             finalResult += tempResult;
-            tempResult = 0.0;
+            tempResult = 0.0L;
         }
     }
-    tempResult = (double)num_char_*(log(num_char_));
+    tempResult = (long double)num_char_*(log(num_char_));
     /*
         std::cout << "'numIncludedChar*log(numIncludedChar)' calculated as: " << tempResult << std::endl;
         std::cout << "'final sum' is: " << finalResult << std::endl;

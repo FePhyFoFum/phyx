@@ -87,7 +87,7 @@ need to consider ranges:
 // using a support value (the first encountered), determine whether scale is proportions or percentages
 // if appropriate will reset threshold (e.g. from 0.5 to 50)
 void Collapser::guess_scale (const float& sup) {
-    if (sup > 1.0) { // overkill
+    if (sup > 1.0f) { // overkill
         //std::cout << "Ok, looks like a percentage here guys." << std::endl;
         threshold_ *= 100;
         //std::cout << "New threshold set to " << threshold_ << std::endl;
