@@ -226,8 +226,8 @@ NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthre
     }
     num_taxa_ = seqcount;
     set_name_key ();
-    Matrix = BuildMatrix(sequences_);
-    TREEMAKE(names_, name_key_, Matrix);
+    Matrix_ = BuildMatrix(sequences_);
+    TREEMAKE(names_, name_key_, Matrix_);
 }
 
 

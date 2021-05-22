@@ -210,7 +210,7 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
 
-        bool going = true;
+        going = true;
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
@@ -447,7 +447,7 @@ int main(int argc, char * argv[]) {
                     copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
                     std::set<std::string> nms_s;
                     copy(nms.begin(), nms.end(), inserter(nms_s, nms_s.begin()));
-                    std::vector<int> nms_i;
+                    nms_i.clear();
                     std::vector<int> nms_i2;
                     std::vector<std::string> nms_s2(rt_nms.size());
                     std::vector<std::string>::iterator it;
@@ -457,8 +457,8 @@ int main(int argc, char * argv[]) {
                     for (const auto & k : nms_s2) {
                         nms_i2.push_back(name_index[k]);
                     }
-                    for (const auto & it : nms_s) {
-                        nms_i.push_back(name_index[it]);
+                    for (const auto & ii : nms_s) {
+                        nms_i.push_back(name_index[ii]);
                     }
                     sort(nms_i2.begin(), nms_i2.end());
                     sort(nms_i.begin(), nms_i.end());

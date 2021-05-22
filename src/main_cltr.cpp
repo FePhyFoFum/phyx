@@ -16,6 +16,8 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
+void print_help (void);
+
 void print_help () {
     std::cout << "General tree cleaner." << std::endl;
     std::cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << std::endl;

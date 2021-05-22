@@ -207,9 +207,9 @@ void LogManipulator::collect_parameter_samples () {
                         if (first_entry) {
                             // let us initialize the sample collector
                             int n_expected = 10000000; // purposely an overestimate to avoid reallocation
-                            for (int i = 0; i < num_cols_; i++) {
+                            for (int j = 0; j < num_cols_; j++) {
                                 parm_samples_.push_back(terp);
-                                parm_samples_[i].reserve(n_expected);
+                                parm_samples_[j].reserve(n_expected);
                             }
                             first_entry = false;
                         }

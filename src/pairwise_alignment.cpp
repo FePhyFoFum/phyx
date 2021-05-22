@@ -84,12 +84,12 @@ double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     }
     std::reverse(aln1.begin(), aln1.end());
     std::reverse(aln2.begin(), aln2.end());
-    double score=0;
-    for (unsigned int i = 0; i < aln1.length(); i++) {
-        if (aln1[i]!='-' && aln2[i]!='-') {
-            score=score+scoringmatrix[aln1[i]][aln2[i]];
+    double score = 0;
+    for (unsigned int k = 0; k < aln1.length(); k++) {
+        if (aln1[k] != '-' && aln2[k] != '-') {
+            score = score + scoringmatrix[aln1[k]][aln2[k]];
         } else {
-            score=score+gap_penalty;
+            score = score + gap_penalty;
         }
     }
     return score;
@@ -153,7 +153,7 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     while (i > 0 && j > 0) {
         double score = F[j][i];
         if (score == 0) {
-                break;
+            break;
         }
         double scorediag = -999;
         if ( j > 0 && i > 0) {
@@ -184,12 +184,12 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     }
     std::reverse(aln1.begin(), aln1.end());
     std::reverse(aln2.begin(), aln2.end());
-    double score=0;
-    for (unsigned int i = 0; i < aln1.length(); i++) {
-        if (aln1[i]!='-' && aln2[i]!='-') {
-            score=score+scoringmatrix[aln1[i]][aln2[i]];
+    double score = 0;
+    for (unsigned int k = 0; k < aln1.length(); k++) {
+        if (aln1[k] != '-' && aln2[k] != '-') {
+            score = score + scoringmatrix[aln1[k]][aln2[k]];
         } else {
-            score=score+gap_penalty;
+            score = score + gap_penalty;
         }
     }
     return score;

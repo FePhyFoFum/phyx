@@ -12,7 +12,7 @@ private:
     std::map<std::string, std::string>::iterator iter_;
     std::vector<std::string> names_;
     //std::string fasta;
-    std::vector< std::vector<double> > Matrix;
+    std::vector< std::vector<double> > Matrix_;
     void set_name_key ();
 
     // additions:

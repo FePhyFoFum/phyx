@@ -22,6 +22,8 @@ Give two options:
 2. pass in 1 distribution of trees
 */
 
+void print_help (void);
+
 void print_help () {
     std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;
     std::cout << "Pass in 2 trees with `t` and `a`." << std::endl;
@@ -186,11 +188,10 @@ int main(int argc, char * argv[]) {
             std::vector<Node *> childs = connecthere->getChildren();
             for (unsigned int i = 0; i < childs.size(); i++) {
                 std::vector<std::string> v_int(diffnms.size());
-                std::vector<std::string>::iterator it;
                 std::set<std::string> lvsset = childs[i]->get_leave_names_set();
-                it = set_intersection(lvsset.begin(), lvsset.end(),
+                auto it1 = set_intersection(lvsset.begin(), lvsset.end(),
                                 atns.begin(), atns.end(), v_int.begin());
-                v_int.resize(it-v_int.begin());
+                v_int.resize(it1-v_int.begin());
                 if (!v_int.empty()) {
                     // need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
@@ -211,9 +212,9 @@ int main(int argc, char * argv[]) {
             bool didit = false;
             while (!diffnds.empty()) {
                 std::cout << "diffnds.size() = " << diffnds.size() << std::endl;
-                for (auto it = diffnds.begin(); it != diffnds.end(); ++it) {
-                    std::cout << it->first << std::endl;
-                    Node * cn = it->second;
+                for (auto iter = diffnds.begin(); iter != diffnds.end(); ++it) {
+                    std::cout << iter->first << std::endl;
+                    Node * cn = iter->second;
                     bool goi = true;
                     while (goi) {
                         Node * prn = cn->getParent();

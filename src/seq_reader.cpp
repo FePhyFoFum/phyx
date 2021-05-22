@@ -69,7 +69,6 @@ int test_seq_filetype_stream(std::istream& stri, std::string& retstring) {
 bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& retstring, Sequence& seq) {
     std::string tline;
     if (ftype == 0) { // nexus
-        std::string tline;
         // are we at the beginning of the file?
         // TODO: add check for interleave and kick out to do a different reader
         // checks for beginning of char by MATRIX
@@ -140,7 +139,6 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
     } else if (ftype == 1) { // phylip
         std::vector<std::string> tokens;
         std::string del(" \t");
-        std::string tline;
         // check to see if we are at the beginning of the file
         if (!retstring.empty()) {
             tokenize(retstring, tokens, del);
@@ -250,7 +248,6 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char) {
     std::vector<Sequence> seqs;
     std::string tline;
-    
     int totcount = 0;
     int loopcount = 0;
     std::string del(" \t");
@@ -377,7 +374,6 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         std::vector<std::string> tokens;
         tokens.clear();
         std::string del(" \t");
-        std::string tline;
         // check to see if we are at the beginning of the file
         if (!retstring.empty()) {
             tokenize(retstring, tokens, del);
@@ -415,7 +411,6 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         bool going = true;
         std::vector<std::string> tokens;
         std::string del(" \t");
-        std::string tline;
         std::string curseq;
         while (going) {
             if (first && !retstring.empty()) {

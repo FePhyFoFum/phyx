@@ -16,6 +16,8 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
+void print_help (void);
+
 void print_help () {
     std::cout << "Birth-death tree simulator." << std::endl;
     std::cout << std::endl;

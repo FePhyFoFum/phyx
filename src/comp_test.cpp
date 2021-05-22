@@ -85,11 +85,11 @@ void CompTest::count_chars () {
         seq = string_to_upper(seqs_[i].get_sequence());
         std::vector<int> icounts(seq_chars_.length(), 0);
         
-        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
-            icounts[i] += num;
+        for (unsigned int j = 0; j < seq_chars_.length(); j++) {
+            int num = std::count(seq.begin(), seq.end(), seq_chars_[j]);
+            icounts[j] += num;
             sum += num;
-            col_totals_[i] += num;
+            col_totals_[j] += num;
         }
         indiv_char_counts_.push_back(icounts);
         // row totals need to be all the same. if not, could be:

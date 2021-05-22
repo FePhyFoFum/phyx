@@ -149,9 +149,6 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    Sequence aa_seq, nuc_seq;
-    std::string retstring;
-    
     // use general purpose reader
     std::vector<Sequence> nuc_seqs;
     std::vector<Sequence> aa_seqs;

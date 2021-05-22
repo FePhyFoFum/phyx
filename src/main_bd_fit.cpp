@@ -17,6 +17,8 @@
 #include "citations.h" // contains PHYX_CITATION
 
 
+void print_help (void);
+
 void print_help () {
     std::cout << "Fit a lineage diversification model to a tree." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;

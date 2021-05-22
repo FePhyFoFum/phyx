@@ -12,7 +12,7 @@
 #include "superdouble.h"
 
 
-// TODO organize this stuff
+// TODO organize this stuff!
 
 void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);
@@ -153,6 +153,8 @@ bool all_equal (std::vector<int> vals);
 
 // a basic poll checker for stream inputs
 bool check_for_input_to_stream ();
+
+std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b);
 
 std::string peek_line (std::istream& pios);
 std::vector<std::string> peek_lines (std::istream& pios, const int& n);
