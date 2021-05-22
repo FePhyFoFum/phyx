@@ -1,5 +1,5 @@
-#ifndef PX__POLYTOMY_TREE_H
-#define PX__POLYTOMY_TREE_H
+#ifndef PX_POLYTOMY_TREE_H
+#define PX_POLYTOMY_TREE_H
 
 class Tree; // forward declaration
 
@@ -16,4 +16,4 @@ public:
     void sample_polytomies (Tree * tr);
 };
 
-#endif /* PX__POLYTOMY_TREE_H */
+#endif /* PX_POLYTOMY_TREE_H */

@@ -1,5 +1,5 @@
-#ifndef PX__BD_FIT_H
-#define PX__BD_FIT_H
+#ifndef PX_BD_FIT_H
+#define PX_BD_FIT_H
 
 #include <vector>
 #include <string>
@@ -48,4 +48,4 @@ public:
 double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad,
     void *data);
 
-#endif /* PX__BD_FIT_H */
+#endif /* PX_BD_FIT_H */

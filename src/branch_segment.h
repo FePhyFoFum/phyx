@@ -1,5 +1,5 @@
-#ifndef PX__BRANCH_SEGMENT_H
-#define PX__BRANCH_SEGMENT_H
+#ifndef PX_BRANCH_SEGMENT_H
+#define PX_BRANCH_SEGMENT_H
 
 #include <vector>
 
@@ -38,4 +38,4 @@ public:
     std::vector<Superdouble> * ancdistconds;//for ancestral state reconstructions
 };
 
-#endif /* PX__BRANCH_SEGMENT_H */
+#endif /* PX_BRANCH_SEGMENT_H */

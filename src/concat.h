@@ -1,5 +1,5 @@
-#ifndef PX__CONCAT_H
-#define PX__CONCAT_H
+#ifndef PX_CONCAT_H
+#define PX_CONCAT_H
 
 #include <string>
 #include <vector>
@@ -32,4 +32,4 @@ public:
     //~SequenceConcatenater ();
 };
 
-#endif /* PX__CONCAT_H */
+#endif /* PX_CONCAT_H */

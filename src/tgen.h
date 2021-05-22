@@ -1,5 +1,5 @@
-#ifndef PX__TGEN_H
-#define PX__TGEN_H
+#ifndef PX_TGEN_H
+#define PX_TGEN_H
 
 #include <string>
 #include <vector>
@@ -39,4 +39,4 @@ public:
     //~TopologyGenerator();
 };
 
-#endif /* PX__TGEN_H */
+#endif /* PX_TGEN_H */

@@ -1,5 +1,5 @@
-#ifndef PX__UPGMA_H
-#define PX__UPGMA_H
+#ifndef PX_UPGMA_H
+#define PX_UPGMA_H
 
 #include <string>
 #include <vector>
@@ -33,4 +33,4 @@ public:
     std::string get_newick ();
 };
 
-#endif /* PX__UPGMA_H */
+#endif /* PX_UPGMA_H */

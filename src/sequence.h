@@ -1,5 +1,5 @@
-#ifndef PX__SEQUENCE_H
-#define PX__SEQUENCE_H
+#ifndef PX_SEQUENCE_H
+#define PX_SEQUENCE_H
 
 #include <vector>
 #include <string>
@@ -60,4 +60,4 @@ public:
     std::string seq_to_upper ();
 
 };
-#endif /* PX__SEQUENCE_H */
+#endif /* PX_SEQUENCE_H */

@@ -1,5 +1,5 @@
-#ifndef PX__UTILS_H
-#define PX__UTILS_H
+#ifndef PX_UTILS_H
+#define PX_UTILS_H
 
 #include <string>
 #include <vector>
@@ -159,4 +159,4 @@ std::vector<std::string> peek_lines (std::istream& pios, const int& n);
 std::vector<std::string> regex_search_labels (const std::vector<std::string>& names,
         const std::string& pattern);
 
-#endif /* PX__UTILS_H */
+#endif /* PX_UTILS_H */

@@ -1,5 +1,5 @@
-#ifndef PX__NODE_OBJECT_H
-#define PX__NODE_OBJECT_H
+#ifndef PX_NODE_OBJECT_H
+#define PX_NODE_OBJECT_H
 
 
 class NodeObject {
@@ -13,4 +13,4 @@ public:
     virtual NodeObject * clone() const = 0;
 };
 
-#endif /* PX__NODE_OBJECT_H */
+#endif /* PX_NODE_OBJECT_H */

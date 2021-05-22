@@ -1,5 +1,5 @@
-#ifndef PX__TREE_READER_H
-#define PX__TREE_READER_H
+#ifndef PX_TREE_READER_H
+#define PX_TREE_READER_H
 
 #include <string>
 #include <map>
@@ -26,4 +26,4 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
 Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring,
         bool * going);
 
-#endif /* PX__TREE_READER_H */
+#endif /* PX_TREE_READER_H */

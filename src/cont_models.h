@@ -1,5 +1,5 @@
-#ifndef PX__CONT_MODELS_H
-#define PX__CONT_MODELS_H
+#ifndef PX_CONT_MODELS_H
+#define PX_CONT_MODELS_H
 
 #include <vector>
 #include <map>
@@ -24,4 +24,4 @@ void calc_postorder_square_change (Node * node, std::map<Node *, int>& nodenum,
 double calc_bm_node_postorder (Node * node, int nch, double sigma);
 double calc_bm_prune (Tree * tr, double sigma);
 
-#endif /* PX__CONT_MODELS_H */
+#endif /* PX_CONT_MODELS_H */

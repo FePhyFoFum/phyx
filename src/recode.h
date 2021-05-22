@@ -1,5 +1,5 @@
-#ifndef PX__RECODE_H
-#define PX__RECODE_H
+#ifndef PX_RECODE_H
+#define PX_RECODE_H
 
 #include <string>
 #include <set>
@@ -48,4 +48,4 @@ public:
     //~SequenceRecoder();
 };
 
-#endif /* PX__RECODE_H */
+#endif /* PX_RECODE_H */

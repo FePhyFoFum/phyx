@@ -1,5 +1,5 @@
-#ifndef PX__SEQSAMP_H
-#define PX__SEQSAMP_H
+#ifndef PX_SEQSAMP_H
+#define PX_SEQSAMP_H
 
 #include <string>
 #include <vector>
@@ -47,4 +47,4 @@ public:
     //~SequenceResampler();
 };
 
-#endif /* PX__SEQSAMP_H */
+#endif /* PX_SEQSAMP_H */

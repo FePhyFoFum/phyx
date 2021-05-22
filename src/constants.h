@@ -1,5 +1,5 @@
-#ifndef PX__CONSTANTS_H
-#define PX__CONSTANTS_H
+#ifndef PX_CONSTANTS_H
+#define PX_CONSTANTS_H
 
 #include <string>
 
@@ -8,4 +8,4 @@
 const long double PI = 3.1415926535897932384626433832795L;
 const long double E = 2.718281828459045;
 
-#endif /* PX__CONSTANTS_H */
+#endif /* PX_CONSTANTS_H */

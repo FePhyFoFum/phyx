@@ -1,5 +1,5 @@
-#ifndef PX__CLSQ_H
-#define PX__CLSQ_H
+#ifndef PX_CLSQ_H
+#define PX_CLSQ_H
 
 #include <string>
 #include <vector>
@@ -48,4 +48,4 @@ public:
     virtual ~SequenceCleaner ();
 };
 
-#endif /* PX__CLSQ_H */
+#endif /* PX_CLSQ_H */

@@ -1,5 +1,5 @@
-#ifndef PX__SEQ_GEN_H
-#define PX__SEQ_GEN_H
+#ifndef PX_SEQ_GEN_H
+#define PX_SEQ_GEN_H
 
 #include <string>
 #include <vector>
@@ -87,4 +87,4 @@ public:
     std::vector<Sequence> get_sequences ();
 };
 
-#endif /* PX__SEQ_GEN_H */
+#endif /* PX_SEQ_GEN_H */

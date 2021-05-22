@@ -1,5 +1,5 @@
-#ifndef PX__VCF_READER_H
-#define PX__VCF_READER_H
+#ifndef PX_VCF_READER_H
+#define PX_VCF_READER_H
 
 #include <vector>
 #include <string>
@@ -19,4 +19,4 @@ public:
     void write_seqs (const bool& uppercase, std::ostream* poos);
 };
 
-#endif /* PX__VCF_READER_H */
+#endif /* PX_VCF_READER_H */

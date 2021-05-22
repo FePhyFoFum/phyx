@@ -1,5 +1,5 @@
-#ifndef PX__RELABEL_TREE_H
-#define PX__RELABEL_TREE_H
+#ifndef PX_RELABEL_TREE_H
+#define PX_RELABEL_TREE_H
 
 #include <map>
 #include <vector>
@@ -25,4 +25,4 @@ public:
     std::set<std::string> get_names_to_replace ();
 };
 
-#endif /* PX__RELABEL_TREE_H */
+#endif /* PX_RELABEL_TREE_H */

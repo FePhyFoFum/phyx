@@ -1,5 +1,5 @@
-#ifndef PX__SEQ_MODELS_H
-#define PX__SEQ_MODELS_H
+#ifndef PX_SEQ_MODELS_H
+#define PX_SEQ_MODELS_H
 
 #include <string>
 #include <vector>
@@ -14,4 +14,4 @@ void read_scoring_matrix_from_lines (std::vector<std::string>& lines,
 void get_ednafull (std::map<char, std::map<char, int> >& sc_mat);
 void get_blosum62 (std::map<char, std::map<char, int> >& sc_mat);
 
-#endif /* PX__SEQ_MODELS_H */
+#endif /* PX_SEQ_MODELS_H */

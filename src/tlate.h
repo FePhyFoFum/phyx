@@ -1,5 +1,5 @@
-#ifndef PX__TLATE_H
-#define PX__TLATE_H
+#ifndef PX_TLATE_H
+#define PX_TLATE_H
 
 #include <string>
 #include <map>
@@ -14,4 +14,4 @@ public:
     //virtual ~tlate();
 };
 
-#endif /* PX__TLATE_H */
+#endif /* PX_TLATE_H */

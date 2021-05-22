@@ -1,5 +1,5 @@
-#ifndef PX__COMP_TEST_H
-#define PX__COMP_TEST_H
+#ifndef PX_COMP_TEST_H
+#define PX_COMP_TEST_H
 
 #include <string>
 #include <vector>
@@ -52,4 +52,4 @@ public:
     void print_results ();
 };
 
-#endif /* PX__COMP_TEST_H */
+#endif /* PX_COMP_TEST_H */

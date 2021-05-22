@@ -1,5 +1,5 @@
-#ifndef PX__SEQ_READER_H
-#define PX__SEQ_READER_H
+#ifndef PX_SEQ_READER_H
+#define PX_SEQ_READER_H
 
 #include <string>
 #include <vector>
@@ -25,4 +25,4 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
 std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& num_char);
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);
 
-#endif /* PX__SEQ_READER_H */
+#endif /* PX_SEQ_READER_H */

@@ -1,5 +1,5 @@
-#ifndef PX__SSTAT_H
-#define PX__SSTAT_H
+#ifndef PX_SSTAT_H
+#define PX_SSTAT_H
 
 #include <string>
 #include <vector>
@@ -27,4 +27,4 @@ public:
     //~MultinomialSeqStat();
 };
 
-#endif /* PX__SSTAT_H */
+#endif /* PX_SSTAT_H */
