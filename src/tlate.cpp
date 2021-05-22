@@ -13,7 +13,7 @@
 // hard-coded translation tables //
 
 // uses standard code (https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG1)
-std::map<std::string, std::string> standard_ = {
+static std::map<std::string, std::string> standard_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -82,7 +82,7 @@ std::map<std::string, std::string> standard_ = {
 
 
 // https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG2
-std::map<std::string, std::string> vert_mtdna_ = {
+static std::map<std::string, std::string> vert_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -151,7 +151,7 @@ std::map<std::string, std::string> vert_mtdna_ = {
 
 
 // https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi#SG3
-std::map<std::string, std::string> yeast_mtdna_ = {
+static std::map<std::string, std::string> yeast_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},
@@ -218,7 +218,7 @@ std::map<std::string, std::string> yeast_mtdna_ = {
 
 
 // https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi?chapter=cgencodes#SG5
-std::map<std::string, std::string> invert_mtdna_ = {
+static std::map<std::string, std::string> invert_mtdna_ = {
     {"TTT", "F"},
     {"TTC", "F"},
     {"TTA", "L"},

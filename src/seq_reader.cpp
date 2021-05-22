@@ -16,7 +16,7 @@
 
 
 // for printing purposes (and to remind programmers what ints refer to)
-std::map<int, std::string> filetype_map = {
+static std::map<int, std::string> filetype_map = {
    {0, "nexus"},
    {1, "phylip"},
    {2, "fasta"},
