@@ -220,7 +220,7 @@ void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens
         stop = std::atoi(tokens[3].c_str()) - 1;
         //std::cout << "; stop = " << stop;
     }
-    if (((int)tokens.size() == 5) && is_number(tokens[4])) {
+    if ((static_cast<int>(tokens.size()) == 5) && is_number(tokens[4])) {
         interval = std::atoi(tokens[4].c_str());
         //std::cout << "; interval = " << interval;
     }

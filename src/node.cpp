@@ -321,7 +321,7 @@ std::string Node::getNewick (bool bl, const std::string& obj) {
     }
     if (this->getObject(obj) != nullptr) {
         std::ostringstream o;
-        o << (*((StringNodeObject*) (this->getObject(obj))));
+        o << (*(static_cast<StringNodeObject*>(this->getObject(obj))));
         ret += "[&"+obj+"="+o.str()+"]";
     }
     return ret;

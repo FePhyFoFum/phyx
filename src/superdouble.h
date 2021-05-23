@@ -21,6 +21,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  more development by Stephen A. Smith
+ modernizing by Joseph W. Brown (2021)
  */
 
 #ifndef PX_SUPERDOUBLE_H
@@ -63,6 +64,8 @@ public:
     Superdouble abs();
     void switch_sign();
     
-    operator double() {return mantissa*pow(10.,exponent);};
+    operator double() {
+        return mantissa*pow(10.,exponent);
+    };
 };
 #endif /* PX_SUPERDOUBLE_H */

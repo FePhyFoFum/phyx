@@ -168,7 +168,7 @@ int get_longest_label (std::vector<std::string>& labels) {
     for (auto & label : labels) {
         cur_len = static_cast<int>(label.size());
         if (cur_len > longest_label_) {
-            longest_label_ = label.size();
+            longest_label_ = cur_len;
         }
     }
     return longest_label_;
