@@ -120,7 +120,7 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
         (*poos) << std::string((longest + 26), '-') << std::endl;
         for (int i = 0; i < num_taxa_; i++) {
             (*poos) << seqs_[i].get_id();
-            diff = longest - seqs_[i].get_id().size();
+            diff = longest - static_cast<int>(seqs_[i].get_id().size());
             if (diff > 0) {
                 pad = std::string(diff, ' ');
                 (*poos) << pad;

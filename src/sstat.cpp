@@ -11,7 +11,7 @@
 MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0),
     test_statistic_(0.0) {
     seqs_ = seqs;
-    num_taxa_ = seqs.size();
+    num_taxa_ = static_cast<int>(seqs.size());
     
     //std::cout << "Read in " << num_taxa_ << " sequences!" << std::endl;
     
@@ -103,7 +103,7 @@ void MultinomialSeqStat::calculateTestStatistic () {
 */
     long double tempResult = 0.0L;
     long double finalResult = 0.0L;
-    int numPatterns = patterns_and_counts_.size();
+    int numPatterns = static_cast<int>(patterns_and_counts_.size());
 
     for (int iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
         if (patterns_and_counts_[iterStoredPat].second != 0) {

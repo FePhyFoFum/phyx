@@ -191,7 +191,7 @@ void SeqInfo::return_freq_table () {
         // return nchar for individual seqs
         (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
         for (int i = 0; i < num_taxa_; i++) {
-            int diff = longest_tax_label_ - taxon_labels_[i].size();
+            int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
             (*poos_) << taxon_labels_[i];
             if (diff > 0) {
                 pad = std::string(diff, ' ');
@@ -367,7 +367,7 @@ void SeqInfo::return_missing () {
         
         // return nchar for individual seqs
         for (int i = 0; i < num_taxa_; i++) {
-            int diff = longest_tax_label_ - taxon_labels_[i].size();
+            int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
             (*poos_) << taxon_labels_[i];
             if (diff > 0) {
                 pad = std::string(diff, ' ');
@@ -418,7 +418,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
             collect_taxon_labels();
             longest_tax_label_ = get_longest_label(taxon_labels_);
             for (int i = 0; i < num_taxa_; i++) {
-                int diff = longest_tax_label_ - taxon_labels_[i].size();
+                int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
                 (*poos_) << taxon_labels_[i];
                 if (diff > 0) {
                     std::string pad = std::string(diff, ' ');

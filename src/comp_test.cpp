@@ -133,7 +133,7 @@ void CompTest::return_freq_table () {
     }
     (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
     for (int i = 0; i < num_taxa_; i++) {
-        int diff = longest_tax_label_ - taxon_labels_[i].size();
+        int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
         (*poos_) << taxon_labels_[i];
         if (diff > 0) {
             pad = std::string(diff, ' ');

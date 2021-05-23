@@ -189,7 +189,7 @@ std::vector<int> SequenceSampler::get_partition_sites (const std::string& part) 
 void SequenceSampler::get_site_partitions () {
     std::vector<int> sites(num_partitioned_sites_, 0);
     for (int i = 0; i < num_partitions_; i++) {
-        for (unsigned int j = 0; j < partitions_[i].size(); j++) {
+        for (int j = 0; j < static_cast<int>(partitions_[i].size()); j++) {
             sites[partitions_[i][j]] = i;
         }
     }

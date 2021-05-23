@@ -54,8 +54,8 @@ void VcfReader::read_vcf (std::istream* pios) {
             // skip preceeding lines
             if (temp[0] == "#CHROM") {
                 bool read_taxa = false;
-                ncols = temp.size();
-                for (unsigned int i = 1; i < temp.size(); i++) {
+                ncols = static_cast<int>(temp.size());
+                for (int i = 1; i < ncols; i++) {
                     if (read_taxa) {
                         taxa_.push_back(temp[i]);    
                         //std::cout << " " << temp[i];

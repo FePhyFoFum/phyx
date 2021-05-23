@@ -334,7 +334,7 @@ Node * Node::getParent () {
 
 
 int Node::getChildCount () {
-    return children_.size();
+    return static_cast<int>(children_.size());
 }
 
 

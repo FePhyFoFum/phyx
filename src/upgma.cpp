@@ -74,7 +74,7 @@ std::vector< std::vector<double> > UPGMA::build_matrix () {
 double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& dmatrix, int& mini1, int& mini2) {
     // super large value
     double minD = 99999999999.99;
-    int numseqs = dmatrix.size();
+    int numseqs = static_cast<int>(dmatrix.size());
     for (int i = 0; i < (numseqs - 1); i++) {
         int idx = std::min_element(dmatrix[i].begin() + (i + 1), dmatrix[i].end()) - dmatrix[i].begin();
         if (dmatrix[i][idx] < minD) {

@@ -31,7 +31,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
     bool in_quote = false;
     bool hasAnnotations = false;
     bool hasInternalNodeNames = false;
-    char quoteType;
+    char quoteType = '\0';
     Node * currNode = nullptr;
     double sumEL = 0.0;
     while (keepGoing) {

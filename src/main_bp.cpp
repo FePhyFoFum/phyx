@@ -235,7 +235,7 @@ int main(int argc, char * argv[]) {
     }
     //----END READ MAP TREE
 
-    int numtrees = trees.size();
+    int numtrees = static_cast<int>(trees.size());
     if (numtrees == 0) {
         if (fileset) {
             fstr->close();
@@ -394,9 +394,9 @@ int main(int argc, char * argv[]) {
         // calculate the logical matrix of biparts for each tree
         // the matrix will have each i as a tree and 
         //   each matrix[i] will represent a 1 if the tree has the bipart and 0 if not
-        int colsize = biparts.size()+1;
+        int colsize = static_cast<int>(biparts.size()) + 1;
         if (edgewisealltaxa) {
-            colsize = biparts.size(); //no root for edgewise
+            colsize--; // no root for edgewise
         }
         std::vector<int> cols(colsize, 0);
         std::vector<std::vector<int> > matrix (numtrees, cols);

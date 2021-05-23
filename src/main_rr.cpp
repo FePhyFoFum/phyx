@@ -189,7 +189,7 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     bool going = true;
-    bool exists;
+    bool exists = false;
     if (!unroot) {
         if (ft == 0) { // Nexus
             std::map<std::string, std::string> translation_table;

@@ -584,7 +584,7 @@ static int myersCalcEditDistanceSemiGlobal (
             *bestScore_ = bestScore;
             if (bestScore != -1) {
                 *positions_ = static_cast<int *>(malloc(sizeof(int) * positions.size()));
-                *numPositions_ = positions.size();
+                *numPositions_ = static_cast<int>(positions.size());
                 copy(positions.begin(), positions.end(), *positions_);
             }
             delete[] blocks;
@@ -633,7 +633,7 @@ static int myersCalcEditDistanceSemiGlobal (
     *bestScore_ = bestScore;
     if (bestScore != -1) {
         *positions_ = static_cast<int *>(malloc(sizeof(int) * positions.size()));
-        *numPositions_ = positions.size();
+        *numPositions_ = static_cast<int>(positions.size());
         copy(positions.begin(), positions.end(), *positions_);
     }
 
@@ -1270,8 +1270,9 @@ static int obtainAlignmentHirschberg (
     int queryIdxLeftStart = max(scoresLeftStartIdx, scoresRightStartIdx - 1);
     int queryIdxLeftEnd = min(scoresLeftStartIdx + scoresLeftLength - 1,
                           scoresRightStartIdx + scoresRightLength - 2);
-    int leftScore, rightScore;
-    int queryIdxLeftAlignment;  // Query/row index of cell in left column where alignment is passing through.
+    int leftScore = 0;
+    int rightScore = 0;
+    int queryIdxLeftAlignment = 0;  // Query/row index of cell in left column where alignment is passing through.
     bool queryIdxLeftAlignmentFound = false;
     for (int queryIdx = queryIdxLeftStart; queryIdx <= queryIdxLeftEnd; queryIdx++) {
         leftScore = scoresLeft[queryIdx - scoresLeftStartIdx];

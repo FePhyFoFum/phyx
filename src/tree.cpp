@@ -128,7 +128,7 @@ Node * Tree::getNode (std::string& name) {
 
 
 int Tree::getNodeCount () {
-    return nodes_.size();
+    return static_cast<int>(nodes_.size());
 }
 
 

@@ -219,7 +219,7 @@ int main(int argc, char * argv[]) {
                     currNames = get_names_in_tree(tree, currNames);
                 }
                 
-                num_names = currNames.size();
+                num_names = static_cast<int>(currNames.size());
                 
                 if (num_names == 0) {
                     if (!silent) {
@@ -261,7 +261,7 @@ int main(int argc, char * argv[]) {
                     currNames = get_names_in_tree(tree, currNames);
                 }
                 
-                num_names = currNames.size();
+                num_names = static_cast<int>(currNames.size());
                 
                 if (num_names == 0) {
                     if (!silent) {

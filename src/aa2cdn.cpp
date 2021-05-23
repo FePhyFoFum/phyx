@@ -87,7 +87,7 @@ void AAtoCDN::generate_codon_alignment () {
         aaseq = aa_seqs_[i].get_sequence();
         nucseq = nuc_seqs_[i].get_sequence();
         codonseq = "";
-        aalen = aaseq.size();
+        aalen = static_cast<int>(aaseq.size());
         
         // check that seq lengths correspond
         ncodons = nucseq.length() / 3;

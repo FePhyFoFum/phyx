@@ -22,7 +22,7 @@ Sequence::Sequence ():length_(0), aligned_(), alphabet_(NA) {}
 Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):alphabet_(NA) {
     id_ = std::move(_id);
     seq_ = std::move(_seq);
-    length_ = seq_.size();
+    length_ = static_cast<unsigned int>(seq_.size());
     aligned_ = _aligned;
     infer_alpha();
 }
@@ -32,7 +32,7 @@ Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):alphabet_(
 Sequence::Sequence (std::string _id, std::string _seq) {
     id_ = std::move(_id);
     seq_ = std::move(_seq);
-    length_ = seq_.size();
+    length_ = static_cast<unsigned int>(seq_.size());
     aligned_ = false;
     infer_alpha();
 }
@@ -151,7 +151,7 @@ std::string Sequence::get_id () const {
 
 unsigned int Sequence::get_length () {
     if (length_ == 0) {
-        length_ = seq_.size();
+        length_ = static_cast<unsigned int>(seq_.size());
     }
     return length_;
 }
@@ -168,7 +168,7 @@ double Sequence::get_cont_char (int _index) {
 
 
 int Sequence::get_num_cont_char () {
-    return cont_chars_.size();
+    return static_cast<int>(cont_chars_.size());
 }
 
 
@@ -188,13 +188,13 @@ int Sequence::get_multistate_char (int _index) {
 
 
 int Sequence::get_num_multistate_char () {
-    return multistate_chars_.size();
+    return static_cast<int>(multistate_chars_.size());
 }
 
 
 void Sequence::set_sequence (std::string _seq) {
     seq_ = std::move(_seq);
-    length_ = seq_.size();
+    length_ = static_cast<unsigned int>(seq_.size());
 }
 
 
