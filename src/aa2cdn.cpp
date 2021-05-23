@@ -15,7 +15,7 @@ struct SequenceIDListCompare {
 } SequenceIDListCompare;
 
 
-AAtoCDN::AAtoCDN (std::vector<Sequence> nuc_seqs, std::vector<Sequence> aa_seqs,
+AAtoCDN::AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Sequence>& aa_seqs,
         const bool& remove_last):remove_last_(remove_last), nuc_seqs_(std::move(nuc_seqs)),
         aa_seqs_(std::move(aa_seqs)) {
     // set up names

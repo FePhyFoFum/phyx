@@ -12,7 +12,7 @@
 
 
 TopologyGenerator::TopologyGenerator(const int& num_taxa, const bool& rooted,
-        std::string lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(std::move(lprefix)),
+        const std::string& lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(std::move(lprefix)),
         ntopos_(0), nedges_(0), curtax_(0), curnode_(0) {
     initialize();
 }

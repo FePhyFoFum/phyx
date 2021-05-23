@@ -34,7 +34,7 @@ private:
     void generate_trees ();
     
 public:
-    TopologyGenerator (const int& num_taxa, const bool& rooted, std::string lprefix);
+    TopologyGenerator (const int& num_taxa, const bool& rooted, const std::string& lprefix);
     void get_newicks (std::ostream* poos);
     //~TopologyGenerator();
 };

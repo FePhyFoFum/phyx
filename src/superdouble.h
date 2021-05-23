@@ -65,7 +65,7 @@ public:
     void switch_sign();
     
     operator double() {
-        return mantissa*pow(10.,exponent);
-    };
+        return mantissa * pow(10., exponent);
+    }
 };
 #endif /* PX_SUPERDOUBLE_H */

@@ -20,7 +20,7 @@ private:
 
 public:
     AAtoCDN ();
-    AAtoCDN (std::vector<Sequence> nuc_seqs, std::vector<Sequence> aa_seqs,
+    AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Sequence>& aa_seqs,
         const bool& remove_last);
     void write_codon_alignment (std::ostream* poos);
     std::vector<Sequence> get_codon_alignment ();

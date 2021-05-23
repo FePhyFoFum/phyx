@@ -234,7 +234,7 @@ EdlibAlignResult edlibAlign (const char* const queryOriginal, const int queryLen
 char* edlibAlignmentToCigar (const unsigned char* const alignment, const int alignmentLength,
                             const EdlibCigarFormat cigarFormat) {
     if (cigarFormat != EDLIB_CIGAR_EXTENDED && cigarFormat != EDLIB_CIGAR_STANDARD) {
-        return 0;
+        return nullptr;
     }
 
     // Maps move code from alignment to char in cigar.
@@ -264,7 +264,7 @@ char* edlibAlignmentToCigar (const unsigned char* const alignment, const int ali
                 // Check if alignment has valid values.
                 if (alignment[i] > 3) {
                     delete cigar;
-                    return 0;
+                    return nullptr;
                 }
                 numOfSameMoves = 0;
             }
@@ -401,7 +401,7 @@ static inline int max(const int x, const int y) {
  * @param [in] block
  * @return Values of cells in block, starting with bottom cell in block.
  */
-static inline std::vector<int> getBlockCellValues (const Block block) {
+static inline std::vector<int> getBlockCellValues (const Block& block) {
     std::vector<int> scores(WORD_SIZE);
     int score = block.score;
     Word mask = HIGH_BIT_MASK;
@@ -421,7 +421,7 @@ static inline std::vector<int> getBlockCellValues (const Block block) {
  * @param [in] block
  * @param [out] dest  Array into which cell values are written. Must have size of at least WORD_SIZE.
  */
-static inline void readBlock (const Block block, int* const dest) {
+static inline void readBlock (const Block& block, int* const dest) {
     int score = block.score;
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
@@ -439,7 +439,7 @@ static inline void readBlock (const Block block, int* const dest) {
  * @param [in] block
  * @param [out] dest  Array into which cell values are written. Must have size of at least WORD_SIZE.
  */
-static inline void readBlockReverse (const Block block, int* const dest) {
+static inline void readBlockReverse (const Block& block, int* const dest) {
     int score = block.score;
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
@@ -456,7 +456,7 @@ static inline void readBlockReverse (const Block block, int* const dest) {
  * @param [in] k
  * @return True if all cells in block have value larger than k, otherwise false.
  */
-static inline bool allBlockCellsLarger (const Block block, const int k) {
+static inline bool allBlockCellsLarger (const Block& block, const int k) {
     std::vector<int> scores = getBlockCellValues(block);
     for (int i = 0; i < WORD_SIZE; i++) {
         if (scores[i] <= k) return false;
