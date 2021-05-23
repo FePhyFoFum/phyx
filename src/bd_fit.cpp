@@ -25,7 +25,7 @@ typedef struct {
 BDFit::BDFit (Tree * intree, std::string modelflavour):model_(std::move(modelflavour)),
     lambda_bd_(0.0), lambda_yule_(0.0), mu_(0.0), r_(0.0), epsilon_(0.0), likelihood_bd_(0.0),
     likelihood_yule_(0.0), aic_bd_(0.0), aicc_bd_(0.0), aic_yule_(0.0), aicc_yule_(0.0),
-    treelength_(0.0), nintnodes_(0.0), nspeciation_(0.0), ntips_(0.0), rootheight_(0.0){
+    treelength_(0.0), nintnodes_(0.0), nspeciation_(0.0), ntips_(0.0), rootheight_(0.0) {
     tree_ = intree;
     fit_model();
 }
@@ -148,7 +148,7 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
     // count iterations for optimization of algorithm
     counter++;
     
-    analysis_data * d = (analysis_data *) data;
+    analysis_data * d = static_cast<analysis_data *>(data);
     
     int N = d->N;
     std::vector<double> bt = d->bt;

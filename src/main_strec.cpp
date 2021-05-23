@@ -373,7 +373,7 @@ int main(int argc, char * argv[]) {
             tokenize(seqs[se].get_sequence(), searchtokens, "     ");
             for (unsigned int j = 0; j < searchtokens.size(); j++) {
                 trim_spaces(searchtokens[j]);
-                int pos = atoi(searchtokens[j].c_str());
+                int pos = std::atoi(searchtokens[j].c_str());
                 if (pos > maxstate) {
                     maxstate = pos;
                 }
@@ -453,7 +453,7 @@ int main(int argc, char * argv[]) {
                         tseqs.replace(mse, 1, "1");
                     }
                 } else {
-                    int pos = atoi(searchtokens[n].c_str());
+                    int pos = std::atoi(searchtokens[n].c_str());
                     tseqs.replace(pos, 1, "1");
                 }
                 for (int i = 0; i < nstates; i++) {

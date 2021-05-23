@@ -93,7 +93,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
             DEATHTIME_[temp_extant_node];
             node_death(temp_extant_node);
         } catch( char * str ) {
-            std::cout << "catch" << std::endl;
+            std::cerr << "catch (" << str << ")" << std::endl;
             node_death(temp_extant_node);
             //temp_extant_nodes[i]->istip = 1
         }
@@ -138,7 +138,7 @@ std::string BirthDeathSimulator::get_sim_summary () {
 bool BirthDeathSimulator::check_stop_conditions () {
     bool keepgoing = true;
     if (extantstop_ > 0) {
-        if ((int)extantnodes_.size() >= extantstop_) {
+        if (static_cast<int>(extantnodes_.size()) >= extantstop_) {
             // this ensures tips do not have 0 edge lengths
             currenttime_ += time_to_next_event();
             keepgoing = false;

@@ -17,8 +17,8 @@
 UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_("") {
     std::string alphaName; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
-    num_taxa_ = (int)seqs_.size();
-    num_char_ = (int)seqs_[0].get_length();
+    num_taxa_ = static_cast<int>(seqs_.size());
+    num_char_ = static_cast<int>(seqs_[0].get_length());
     
     // check that it is aligned (doesn't make sense otherwise)
     if (!is_aligned(seqs_)) {
@@ -41,9 +41,9 @@ std::vector< std::vector<double> > UPGMA::build_matrix () {
         for (int j = (i + 1); j < num_taxa_; j++) {
             std::string seq2 = seqs_[j].get_sequence();
             // get distance
-            tempScore = (double)calc_hamming_dist(seq1, seq2);
+            tempScore = static_cast<double>(calc_hamming_dist(seq1, seq2));
             // put scale in terms of number of sites. original version did not do this
-            tempScore /= (double)num_char_;
+            tempScore /= static_cast<double>(num_char_);
             // put in both top and bottom of matrix, even though only top is used
             distances[i][j] = distances[j][i] = tempScore;
         }
@@ -136,8 +136,8 @@ void UPGMA::construct_tree () {
         // new distances are proportional averages (size of clusters)
         // new cluster is placed first (row & column)
         std::vector<double> avdists(numClusters, 0.0);
-        double Lweight = left->isExternal() ? 1.0 : (double)left->getChildCount();
-        double Rweight = right->isExternal() ? 1.0 : (double)right->getChildCount();
+        double Lweight = left->isExternal() ? 1.0 : static_cast<double>(left->getChildCount());
+        double Rweight = right->isExternal() ? 1.0 : static_cast<double>(right->getChildCount());
         for (int i = 0; i < numClusters; i++) {
             avdists[i] = ((dMatrix[ind1][i] * Lweight) + (dMatrix[ind2][i] * Rweight)) / (Lweight + Rweight);
         }
@@ -148,7 +148,7 @@ void UPGMA::construct_tree () {
         // put in distances to new clusters first
         double tempDist = 0.0;
         int count = 0;
-        for (int i = 0; i < (int)nodes.size(); i++) {
+        for (int i = 0; i < static_cast<int>(nodes.size()); i++) {
             if (i != ind1 && i != ind2) {
                 count++;
                 tempDist = avdists[i];
@@ -160,10 +160,11 @@ void UPGMA::construct_tree () {
         // now, fill in remaining
         int icount = 1;
         int jcount = 1;
-        for (int i = 0; i < (int)nodes.size(); i++) {
+        int ndsize = static_cast<int>(nodes.size());
+        for (int i = 0; i < ndsize; i++) {
             jcount = 1;
             if (i != ind1 && i != ind2) {
-                for (int j = 0; j < (int)nodes.size(); j++) {
+                for (int j = 0; j < ndsize; j++) {
                     if (j != ind1 && j != ind2) {
                         newDistances[icount][jcount] = dMatrix[i][j];
                         newDistances[jcount][icount] = dMatrix[i][j];
@@ -181,7 +182,7 @@ void UPGMA::construct_tree () {
         std::vector<Node *> newNodes(numClusters);
         newNodes[0] = anc;
         int counter = 1;
-        for (int i = 0; i < (int)nodes.size(); i++) {
+        for (int i = 0; i < ndsize; i++) {
             if (i != ind1 && i != ind2) {
                 newNodes[counter] = nodes[i];
                 counter++;

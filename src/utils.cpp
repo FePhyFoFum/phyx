@@ -44,8 +44,8 @@ void check_file_exists (const std::string& filename) {
 
 
 void check_inout_streams_identical (char * in, char * out) {
-    if ((std::string)in == (std::string)out) {
-        std::cerr << "Error: input and output file names must differ (streams!). Exiting." << std::endl;
+    if (in == out) {
+        std::cerr << "Error: input and output streams (files) must differ. Exiting." << std::endl;
         exit(0);
     }
 }
@@ -58,7 +58,8 @@ int string_to_int (const std::string& in, const std::string& arg) {
     try {
             res = stoi(in);
     } catch (const std::invalid_argument& ia) {
-        std::cerr << "Error: invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
+        std::cerr << "Error: invalid argument for " << arg
+                << "; expecting int (" << ia.what() << "). Exiting." << std::endl;
         exit(0);
     }
     return res;
@@ -70,7 +71,8 @@ long int string_to_long_int (const std::string& in, const std::string& arg) {
     try {
             res = stol(in);
     } catch (const std::invalid_argument& ia) {
-        std::cerr << "Error: invalid argument for " << arg << " (expecting long int). Exiting." << std::endl;
+        std::cerr << "Error: invalid argument for " << arg
+                << "; expecting long int (" << ia.what() << "). Exiting." << std::endl;
         exit(0);
     }
     return res;
@@ -83,7 +85,8 @@ float string_to_float (const std::string& in, const std::string& arg) {
     try {
             res = std::stof(in);
     } catch (const std::invalid_argument& ia) {
-            std::cerr << "Error: invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
+            std::cerr << "Error: invalid argument for " << arg
+                    << "; expecting float (" << ia.what() << "). Exiting." << std::endl;
             exit(0);
     }
     return res;
@@ -95,7 +98,8 @@ double string_to_double (const std::string& in, const std::string& arg) {
     try {
             res = std::stod(in);
     } catch (const std::invalid_argument& ia) {
-            std::cerr << "Error: invalid argument for " << arg << " (expecting double). Exiting." << std::endl;
+            std::cerr << "Error: invalid argument for " << arg
+                    << "; expecting double (" << ia.what() << "). Exiting." << std::endl;
             exit(0);
     }
     return res;
@@ -160,8 +164,10 @@ bool is_number (const std::string& s) {
 // get the longest label. for printing/formatting purposes
 int get_longest_label (std::vector<std::string>& labels) {
     int longest_label_ = 0;
+    int cur_len = 0;
     for (auto & label : labels) {
-        if ((int)label.size() > longest_label_) {
+        cur_len = static_cast<int>(label.size());
+        if (cur_len > longest_label_) {
             longest_label_ = label.size();
         }
     }
@@ -200,7 +206,7 @@ std::istream& getline_safe(std::istream& is, std::string& t) {
             }
             return is;
         default:
-            t += (char)c;
+            t += static_cast<char>(c);
         }
     }
 }
@@ -282,7 +288,7 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string
                 trim_spaces(tk); // this will never be used, as it was split on whitespace
             }
             for (unsigned int j = 0; j < tokens.size(); j++) {
-                ratematrix[fromarea][j] = atof(tokens[j].c_str());
+                ratematrix[fromarea][j] = std::atof(tokens[j].c_str());
             }
             if (fromarea < numstates-1) {
                 fromarea += 1;
@@ -299,7 +305,7 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string
 // NOTE: this assumes that srand have been seeded previously
 // e.g., srand(get_clock_seed());
 int random_int_range (int min, int max) {
-    return min + (rand() % (int)(max - min + 1));
+    return min + (rand() % static_cast<int>(max - min + 1));
 }
 
 
@@ -431,13 +437,13 @@ double v_median (std::vector<double>& in) {
 
 // should make this a templated function
 double v_mean (std::vector<double>& in) {
-    return sum(in) / (double)in.size();
+    return sum(in) / static_cast<double>(in.size());
 }
 
 
 // if you want one, prolly want the other too
 void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
-    double n = (double)in.size();
+    double n = static_cast<double>(in.size());
     mn = sum(in) / n;
     std::vector<double> diff(in.size());
     std::transform(in.begin(), in.end(), diff.begin(),
@@ -448,9 +454,9 @@ void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
 
 
 double v_variance (std::vector<double>& in) {
-    double n = (double)in.size();
+    double n = static_cast<double>(in.size());
     double meann = sum(in) / n;
-    std::vector<double> diff((int)n);
+    std::vector<double> diff(static_cast<int>(n));
     std::transform(in.begin(), in.end(), diff.begin(),
         std::bind2nd(std::minus<double>(), meann));
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);

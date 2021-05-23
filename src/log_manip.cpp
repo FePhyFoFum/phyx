@@ -61,7 +61,7 @@ void LogManipulator::return_statistics_table () {
     // converted to int since all read in as doubles
     // note this assumes constant thinning. should be safe
     // could only possibly be a problem when combining logs from analyses with different sampling settings
-    int step_size = (int)(parm_samples_[0][1] - parm_samples_[0][0]);
+    int step_size = static_cast<int>(parm_samples_[0][1] - parm_samples_[0][0]);
     
     // need to find the longest parameter name to set width of first column
     const int colWidth = 12; // this value works nice with decimal and sci. notation
@@ -148,7 +148,7 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
             gamma_stat[i] += (del1 * del2);
         }
 
-        gamma_stat[i] /= ((double)(n_samples - i));
+        gamma_stat[i] /= static_cast<double>(n_samples - i);
 
         if (i == 0) {
             var_stat = gamma_stat[0];

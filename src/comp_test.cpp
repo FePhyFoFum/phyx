@@ -30,8 +30,8 @@ void CompTest::read_in_alignment () {
         exit(0);
     }
     
-    num_taxa_ = (int)seqs_.size();
-    seq_length_ = (int)seqs_[0].get_length();
+    num_taxa_ = static_cast<int>(seqs_.size());
+    seq_length_ = static_cast<int>(seqs_[0].get_length());
     set_datatype();
     
     // if datatype is multi, but alphabet not set, get from entire concatenated sequence
@@ -110,9 +110,11 @@ void CompTest::count_chars () {
 // get the longest label. for printing purposes
 void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
+    int cur_len = 0;
     for (int i = 0; i < num_taxa_; i++) {
-        if ((int)taxon_labels_[i].size() > longest_tax_label_) {
-            longest_tax_label_ = taxon_labels_[i].size();
+        cur_len = static_cast<int>(taxon_labels_[i].size());
+        if (cur_len > longest_tax_label_) {
+            longest_tax_label_ = cur_len;
         }
     }
 }
@@ -156,12 +158,15 @@ void CompTest::return_freq_table () {
 void CompTest::calc_chi_square () {
     test_stat_ = 0.0;
     df_ = (num_taxa_ - 1) * (col_totals_.size() - 1);
+    double observed = 0.0;
+    double expected = 0.0;
+    double cellv = 0.0;
     for (int i = 0; i < num_taxa_; i++) {
         for (unsigned int j = 0; j < col_totals_.size(); j++) {
-            double observed = (double)indiv_char_counts_[i][j];
-            double expected = (double)col_totals_[j] * (double)row_totals_[i]
-                / (double) total_;
-            double cellv = get_cell_value(observed, expected);
+            observed = static_cast<double>(indiv_char_counts_[i][j]);
+            expected = static_cast<double>(col_totals_[j]) * static_cast<double>(row_totals_[i])
+                    / static_cast<double>(total_);
+            cellv = get_cell_value(observed, expected);
             test_stat_ += cellv;
         }
     }

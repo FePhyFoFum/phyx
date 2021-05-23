@@ -34,8 +34,8 @@ SequenceSampler::SequenceSampler (std::istream* pios, const long int& seed, cons
 void SequenceSampler::read_in_sequences (std::istream* pios) {
     std::string alphaName; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
-    num_taxa_ = (int)seqs_.size();
-    num_char_ = (int)seqs_[0].get_length();
+    num_taxa_ = static_cast<int>(seqs_.size());
+    num_char_ = static_cast<int>(seqs_[0].get_length());
     
     // check that it is aligned (doesn't make sense otherwise)
     if (!is_aligned(seqs_)) {
@@ -107,7 +107,7 @@ std::vector<int> SequenceSampler::get_bootstrap_sites (const int& numchar) {
 std::vector<int> SequenceSampler::get_partitioned_bootstrap_sites () {
     std::vector<int> master(num_partitioned_sites_, 0);
     for (int i = 0; i < num_partitions_; i++) {
-        int curNum = (int)partitions_[i].size();
+        int curNum = static_cast<int>(partitions_[i].size());
         //std::cout << "Partition #" << i << " contains " << curNum << " sites." << std::endl;
         std::vector<int> randsites = get_bootstrap_sites(curNum);
         for (int j = 0; j < curNum; j ++) {
@@ -120,7 +120,7 @@ std::vector<int> SequenceSampler::get_partitioned_bootstrap_sites () {
 
 // sample WITHOUT replacement. not with partitioned models
 std::vector<int> SequenceSampler::get_jackknife_sites (const int& numchar) {
-    int numsample = (int)(numchar * jkfract_ + 0.5);
+    int numsample = static_cast<int>(numchar * jkfract_ + 0.5);
     std::vector<int> randsites = sample_without_replacement(numchar, numsample);
     return randsites;
 }
@@ -151,7 +151,7 @@ void SequenceSampler::parse_partitions (std::string& partf) {
     }
     infile.close();
     
-    num_partitions_ = (int)partitions_.size();
+    num_partitions_ = static_cast<int>(partitions_.size());
     //std::cout << "Found " << num_partitions_ << " partitions." << std::endl;
     calculate_num_partitioned_sites();
     
@@ -202,7 +202,8 @@ void SequenceSampler::get_site_partitions () {
 // convert from 1-start to 0-start
 void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens,
         int& start, int& stop, int& interval) {
-    if ((int)tokens.size() < 4 || (int)tokens.size() > 5) {
+    int tsize = static_cast<int>(tokens.size());
+    if (tsize < 4 || tsize > 5) {
         std::cerr << "Error: invalid/unsupported partition specification. Exiting." << std::endl;
         exit(0);
     }
@@ -212,15 +213,15 @@ void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens
     //std::cout << "Processing partition '" << tokens[1] << "': ";
     
     if (is_number(tokens[2])) {
-        start = atoi(tokens[2].c_str()) - 1;
+        start = std::atoi(tokens[2].c_str()) - 1;
         //std::cout << "start = " << start;
     }
     if (is_number(tokens[3])) {
-        stop = atoi(tokens[3].c_str()) - 1;
+        stop = std::atoi(tokens[3].c_str()) - 1;
         //std::cout << "; stop = " << stop;
     }
     if (((int)tokens.size() == 5) && is_number(tokens[4])) {
-        interval = atoi(tokens[4].c_str());
+        interval = std::atoi(tokens[4].c_str());
         //std::cout << "; interval = " << interval;
     }
     //std::cout << std::endl;
@@ -230,7 +231,7 @@ void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens
 void SequenceSampler::calculate_num_partitioned_sites () {
     num_partitioned_sites_ = 0;
     for (int i = 0; i < num_partitions_; i++) {
-        num_partitioned_sites_ += (int)partitions_[i].size();
+        num_partitioned_sites_ += static_cast<int>(partitions_[i].size());
 //         std::cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << std::endl;
 //         for (unsigned int j = 0; j < partitions[i].size(); j++) {
 //             std::cout << partitions[i][j] << " ";
@@ -254,7 +255,7 @@ void SequenceSampler::check_valid_partitions () {
     sort(allSites.begin(), allSites.end());
     
     int max = allSites.back();
-    int count = (int)allSites.size();
+    int count = static_cast<int>(allSites.size());
     int diff = max - count + 1;
     
     if (diff != 0) { // sites are duplicated

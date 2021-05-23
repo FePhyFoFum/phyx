@@ -116,7 +116,7 @@ void Sequence::infer_alpha () {
         alphabet_ = DNA;
         // edge case: short protein alignment which by chance contains DNA-valid states
         int nDNA = count_dna_chars(str);
-        if ( ((double)nDNA / (double)validChars) < 0.5) {
+        if ( (static_cast<double>(nDNA) / static_cast<double>(validChars)) < 0.5) {
             alphabet_ = AA;
         }
         return;
@@ -231,7 +231,7 @@ void Sequence::set_qualstr (std::string& stri, int offset) {
     qualarr_.clear();
     qualstr_ = stri;
     for (char c : stri) {
-        qualarr_.push_back(((int)c)-offset);
+        qualarr_.push_back((static_cast<double>(c)) - offset);
     }
 }
 

@@ -180,7 +180,7 @@ bool StateReconstructor::set_tip_conditionals_already_given (std::vector<Sequenc
     }
     if (!use_periods) {
         for (int j = 0; j < nstates; j++) {
-            (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = atof(searchtokens[j].c_str());
+            (((VectorNodeObject<Superdouble>*) nd->getObject(dc)))->at(j) = std::atof(searchtokens[j].c_str());
             if (verbose) {
                 std::cout << searchtokens[j];
             }
@@ -188,7 +188,7 @@ bool StateReconstructor::set_tip_conditionals_already_given (std::vector<Sequenc
     } else {
         std::vector<BranchSegment> * tsegs = nd->getSegVector();
         for (int j = 0; j < nstates; j++) {
-        tsegs->at(0).distconds->at(j) = atof(searchtokens[j].c_str());
+        tsegs->at(0).distconds->at(j) = std::atof(searchtokens[j].c_str());
         if (verbose) {
             std::cout << searchtokens[j];
                 }

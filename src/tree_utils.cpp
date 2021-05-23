@@ -167,7 +167,7 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
     Node * nd = tree->getMRCA(names);
     int num_leaves = nd->get_num_leaves();
     
-    if (num_leaves != (int)names.size()) {
+    if (num_leaves != static_cast<int>(names.size())) {
         mono = false;
     }
     return mono;

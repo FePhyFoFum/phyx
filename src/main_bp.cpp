@@ -331,8 +331,8 @@ int main(int argc, char * argv[]) {
             // check to see if the bipart is new
             if (!edgewisealltaxa) {
                 // this is nodewise and we dont' assume we have all the taxa
-                if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 0 && 
-                (int)std::count(biparts2.begin(), biparts2.end(), nms_i2) == 0) {
+                if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 0 && 
+                    static_cast<int>(std::count(biparts2.begin(), biparts2.end(), nms_i2)) == 0) {
                     biparts.push_back(nms_i);
                     biparts2.push_back(nms_i2);
                     not_included.push_back(not_included_i);
@@ -344,8 +344,8 @@ int main(int argc, char * argv[]) {
                 }
                 // do the otherside for unrooted
                 if (unrooted && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
-                    if ((int)std::count(biparts.begin(), biparts.end(), nms_i2) == 0 && 
-                        (int)std::count(biparts2.begin(), biparts2.end(), nms_i) == 0) {
+                    if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i2)) == 0 && 
+                        static_cast<int>(std::count(biparts2.begin(), biparts2.end(), nms_i)) == 0) {
                         biparts.push_back(nms_i2);
                         biparts2.push_back(nms_i);
                         not_included.push_back(not_included_i);
@@ -363,8 +363,8 @@ int main(int argc, char * argv[]) {
                 if (nms_i.size() < 2 || nms_i2.size() < 2) {
                     continue;
                 }
-                if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 0 && 
-                    (int)std::count(biparts.begin(), biparts.end(), nms_i2) == 0) {
+                if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 0 && 
+                    static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i2)) == 0) {
                     biparts.push_back(nms_i);
                     biparts2.push_back(nms_i2);
                     not_included.push_back(not_included_i);
@@ -373,13 +373,13 @@ int main(int argc, char * argv[]) {
                 } else {
                     // get index 
                     size_t index;
-                    if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                    if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 1) {
                         index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     } else {
                         index = find(biparts.begin(), biparts.end(), nms_i2)-biparts.begin();
                     }
                     // need to accommodate that it can be reflected in the edgewise case
-                    if ((int)std::count(bp_count_tree.begin(), bp_count_tree.end(), index) == 0) {
+                    if (static_cast<int>(std::count(bp_count_tree.begin(), bp_count_tree.end(), index)) == 0) {
                         bp_count[index] += 1;
                         bp_count_tree.push_back(index);
                     }
@@ -432,7 +432,7 @@ int main(int argc, char * argv[]) {
                 sort(nms_i.begin(), nms_i.end());
                 size_t index;
                 if (edgewisealltaxa) {
-                    if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                    if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 1) {
                         index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     } else {
                         index = find(biparts2.begin(), biparts2.end(), nms_i)-biparts2.begin();
@@ -463,7 +463,7 @@ int main(int argc, char * argv[]) {
                     sort(nms_i2.begin(), nms_i2.end());
                     sort(nms_i.begin(), nms_i.end());
                     int x = find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin();
-                    if (x == (int)matrix[i].size()) {
+                    if (x == static_cast<int>(matrix[i].size())) {
                         x = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     }
                     matrix[i][x] = 1;
@@ -627,7 +627,7 @@ int main(int argc, char * argv[]) {
             size_t index;
             bool found = false;
             if (edgewisealltaxa) {
-                if ((int)std::count(biparts.begin(), biparts.end(), nms_i) == 1) {
+                if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 1) {
                     index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     found = true;
                 } else {

@@ -176,10 +176,10 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         } else {
             std::string tse = tokens[1];
             //TODO: look for decimal and add cont char if decimal present
-            //seq.add_multistate_char(atoi(tokens[1].c_str()));
+            //seq.add_multistate_char(std::atoi(tokens[1].c_str()));
             for (unsigned int j=2; j < tokens.size(); j++) {
                 tse += " " + tokens[j];
-            //seq.add_multistate_char(atoi(tokens[j].c_str()));
+            //seq.add_multistate_char(std::atoi(tokens[j].c_str()));
             }
             seq.set_sequence(tse);
         }
@@ -321,7 +321,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
                 loopcount = 0; // reset
                 // check if we're done
                 std::string terp = seqs[num_taxa - 1].get_sequence();
-                if ((int)terp.size() == num_char) {
+                if (static_cast<int>(terp.size()) == num_char) {
                     break;
                 }
             }
@@ -403,7 +403,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         seq.set_id(tokens[0]);
         // split the tokens by spaces
         for (unsigned int i = 1; i < tokens.size(); i++) {
-            seq.add_cont_char((double)atof(tokens[i].c_str()));
+            seq.add_cont_char(std::atof(tokens[i].c_str()));
         }
         return true;
     } else if (ftype == 2) { // fasta
@@ -427,7 +427,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                         return false;
                     }
                     for (auto & tk : tokens) {
-                        seq.add_cont_char((double)atof(tk.c_str()));
+                        seq.add_cont_char(std::atof(tk.c_str()));
                     }
                     return false;
                 }
@@ -449,7 +449,7 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
                         return false;
                     }
                     for (auto & token : tokens) {
-                        seq.add_cont_char((double)atof(token.c_str()));
+                        seq.add_cont_char(std::atof(token.c_str()));
                     }
                     retstring = tline;
                     return true;
@@ -693,7 +693,7 @@ bool is_complicated_phylip (std::istream& pios, const int& num_char) {
     } else {
         // if it seems good, check that length of seq equals stated value
         // if not, we are dealing with 1) interleaved or 2) multi-line
-        if ((int)tokens[1].size() != num_char) {
+        if (static_cast<int>(tokens[1].size()) != num_char) {
             complicated = true;
         }
     }
@@ -761,7 +761,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
     getline_safe(pios, line);
     tokens = tokenize(line);
     name = tokens[0];
-    num_elem = (int)tokens.size();
+    num_elem = static_cast<int>(tokens.size());
     if (num_elem == 2) {
         // could be: 1) simple, 2) multiline, or interleaved
         seq = tokens[1];
@@ -860,7 +860,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
             // if interleaved, 2nd line will have the same number of elements
             getline_safe(pios, line);
             tokens = tokenize(line);
-            if ((int)tokens.size() == num_elem) {
+            if (static_cast<int>(tokens.size()) == num_elem) {
                 interleaved = true;
                 // keep reading to check. seq continues every num_taxa lines
                 /*
@@ -978,7 +978,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                         residues += token;
                     }
                 }
-                if ((int)residues.size() == num_char) {
+                if (static_cast<int>(residues.size()) == num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -1002,7 +1002,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                 } else {
                     residues += tokens[0];
                 }
-                if ((int)residues.size() == num_char) {
+                if (static_cast<int>(residues.size()) == num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -1076,9 +1076,9 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
         int bad_len = 0;
         for (unsigned int i = 0; i < seqs.size(); i++) {
             residues = seqs[i].get_sequence();
-            if ((int)residues.size() != num_char) {
+            if (static_cast<int>(residues.size()) != num_char) {
                 bad_idx = i;
-                bad_len = (int)residues.size();
+                bad_len = static_cast<int>(residues.size());
                 good = false;
                 break; // break after first failure
             }
@@ -1100,7 +1100,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             for (unsigned int i = 1; i < tokens.size(); i++) {
                 residues += tokens[i];
             }
-            if ((int)residues.size() != num_char) {
+            if (static_cast<int>(residues.size()) != num_char) {
                 std::cerr << "Error: bad phylip file. Taxon '" << name
                     << "' had " << residues.size() << " characters, but " << num_char
                     << " were expected. Exiting." << std::endl;
@@ -1117,7 +1117,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     }
     
     //std::cout << "Read in " << seqs.size() << " sequences." << std::endl;
-    if ((int)seqs.size() != num_taxa) {
+    if (static_cast<int>(seqs.size()) != num_taxa) {
         std::cerr << "Error: bad phylip file. Read in " << seqs.size()
                 << " sequences, but expected " << num_taxa << ". Exiting." << std::endl;
         exit(1);
@@ -1183,7 +1183,7 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
     
     // some simple error-checking
     if (file_num_taxa != 0) {
-        if (file_num_taxa != (int)seqs.size()) {
+        if (file_num_taxa != static_cast<int>(seqs.size())) {
             std::cerr << "Error: number of taxa declared in the file ("
                 << ") does not match the number read (" << seqs.size()
                 << "). Exiting." << std::endl;

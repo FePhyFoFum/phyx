@@ -24,7 +24,7 @@ void NJOI::CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >
     for (int i = 0; i < NumbOfSequences; i++) {
         Sums[i] = sum(OriginalMatrix[i]);
         std::transform(ConvertedMatrix[i].begin(), ConvertedMatrix[i].end(), ConvertedMatrix[i].begin(), 
-            std::bind1st(std::multiplies<double>(), (double) (NumbOfSequences - 2)));
+            std::bind1st(std::multiplies<double>(), static_cast<double>(NumbOfSequences - 2)));
     }
     
     for (int i = 0; i < NumbOfSequences; i++) {
@@ -46,7 +46,7 @@ void NJOI::FetchLengths (const int& NumbOfSequences, const std::vector< std::vec
     std::vector< std::vector<double> >& LengthMatrix, const int& mini1, const int& mini2,
     double & brlength1, double & brlength2) {
 
-    brlength1 = (NewMatrix[mini1][mini2] + (LengthMatrix[mini1][mini2] / (double)(NumbOfSequences - 2))) * 0.5;
+    brlength1 = (NewMatrix[mini1][mini2] + (LengthMatrix[mini1][mini2] / static_cast<double>(NumbOfSequences - 2))) * 0.5;
     brlength2 = NewMatrix[mini1][mini2] - brlength1;
 }
 
@@ -59,7 +59,7 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2,
     double& brlength1, double& brlength2) {
     
-    int msize = (int)NewMatrix.size();
+    int msize = static_cast<int>(NewMatrix.size());
     
     //update the tree values, Tree Size is the node it is at
     std::vector<double> row_hits = NewMatrix[mini1];
@@ -67,8 +67,8 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     
     double ColRow = 0.0;
     double small_length = NewMatrix[mini1][mini2]; // neighbor based correction
-    newname = "(" + names[mini1] + ":" + std::to_string(brlength2 / (double)num_char_) +  ","
-        + names[mini2] + ":" + std::to_string(brlength1 / (double)num_char_) +  ")";
+    newname = "(" + names[mini1] + ":" + std::to_string(brlength2 / static_cast<double>(num_char_)) +  ","
+        + names[mini2] + ":" + std::to_string(brlength1 / static_cast<double>(num_char_)) +  ")";
     
     // erase in backwards order as it preserves the indexes
     names.erase(names.begin()+mini2);
@@ -153,7 +153,7 @@ void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>
             mini2, brlength1, brlength2);
     }
     //double adjlength = (Matrix[mini1][mini2] / 2); // The final branch length
-    double adjlength = (Matrix[mini1][mini2] / 2) / (double)num_char_;
+    double adjlength = (Matrix[mini1][mini2] / 2) / static_cast<double>(num_char_);
     newname = "(" + names[mini1] + ":" + std::to_string(adjlength) +  "," + names[mini2]
         + ":" + std::to_string(adjlength) +  ")";
     newick_string_ = newname + ";";
@@ -179,7 +179,7 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
         SequenceName.push_back(SeqName);
         int SecondCount = 0;
         for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
-            MatchScore = (double) calc_hamming_dist(fasta, iter2 -> second);
+            MatchScore = static_cast<double>(calc_hamming_dist(fasta, iter2 -> second));
             MatchName = SeqName + "," + iter2 -> first;
             Score[FirstCount][SecondCount] = MatchScore;
             SecondCount++;
@@ -201,7 +201,7 @@ NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthre
     while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
         sequences_[seq.get_id()] = seq.get_sequence();
         if (!first) {
-            if ((int)seq.get_length() != num_char_) {
+            if (static_cast<int>(seq.get_length()) != num_char_) {
                 std::cerr << "Error: sequence " << seq.get_id() << " has "
                     << seq.get_length() << " characters, was expecting " 
                     << num_char_ << "." << std::endl << "Exiting." << std::endl;
@@ -216,7 +216,7 @@ NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthre
     //fasta has a trailing one
     if (ft == 2) {
         sequences_[seq.get_id()] = seq.get_sequence();
-        if ((int)seq.get_length() != num_char_) {
+        if (static_cast<int>(seq.get_length()) != num_char_) {
             std::cerr << "Error: sequence " << seq.get_id() << " has "
                 << seq.get_length() << " characters, was expecting " 
                 << num_char_ << "." << std::endl << "Exiting." << std::endl;

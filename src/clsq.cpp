@@ -25,7 +25,7 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
 
 void SequenceCleaner::read_in_sequences (std::istream* pios) {
     seqs_ = ingest_alignment(pios, alpha_name_);
-    num_taxa_ = (int)seqs_.size();
+    num_taxa_ = static_cast<int>(seqs_.size());
     
     // check aligned. if not, BAIL
     bool aligned = is_aligned(seqs_);
@@ -48,7 +48,7 @@ void SequenceCleaner::read_in_sequences (std::istream* pios) {
         }
     }
     
-    num_char_ = (int)seqs_[0].get_length();
+    num_char_ = static_cast<int>(seqs_[0].get_length());
     set_bad_chars(); // uses alpha name
 }
 
@@ -172,7 +172,7 @@ int SequenceCleaner::get_longest_taxon_label () {
     int longest = 0;
     int curLength = 0;
     for (int i = 0; i < num_taxa_; i++) {
-        curLength = (int)seqs_[i].get_id().size();
+        curLength = static_cast<int>(seqs_[i].get_id().size());
         if (curLength > longest) {
             longest = curLength;
         }
@@ -222,7 +222,7 @@ void SequenceCleaner::count_missing () {
                     //std::cout << "  BAD CHAR (" << seq_string[j] << ")!" << std::endl;
                 }
             }
-            missing_per_taxon_proportion_[i] = (double)missing_per_taxon_[i] / (double)num_char_;
+            missing_per_taxon_proportion_[i] = static_cast<double>(missing_per_taxon_[i]) / static_cast<double>(num_char_);
         }
     } else {
         std::string codon;
@@ -240,13 +240,13 @@ void SequenceCleaner::count_missing () {
                     // std::cout << "  BAD CODON (" << codon << ")!" << std::endl;
                 }
             }
-            missing_per_taxon_proportion_[i] = (double)missing_per_taxon_[i] / (double)num_char_;
+            missing_per_taxon_proportion_[i] = static_cast<double>(missing_per_taxon_[i]) / static_cast<double>(num_char_);
         }
     }
     
     // get proportions
     for (int i = 0; i < num_char_; i++) {
-        missing_per_site_proportion_[i] = (double)missing_per_site_counts_[i] / (double)num_taxa_;
+        missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i]) / static_cast<double>(num_taxa_);
         //std::cout << i << ". missing = " << missing_per_site_counts_[i] << "("
         //        << missing_per_site_proportion_[i] << ")" << std::endl;
         if (missing_per_site_proportion_[i] <= missing_allowed_) {
@@ -254,7 +254,7 @@ void SequenceCleaner::count_missing () {
         }
     }
     
-    num_retained_ = (int)retained_sites_.size();
+    num_retained_ = static_cast<int>(retained_sites_.size());
 }
 
 

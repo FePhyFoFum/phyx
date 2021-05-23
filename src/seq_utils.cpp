@@ -140,10 +140,10 @@ char get_prot_char (const std::set<char>& inc) {
     int B = inc.count('D') + inc.count('N') + inc.count('B');
     int Z = inc.count('Q') + inc.count('E') + inc.count('Z');
     
-    if (B == (int)inc.size()) {
+    if (B == static_cast<int>(inc.size())) {
         return 'B';
     }
-    if (Z == (int)inc.size()) {
+    if (Z == static_cast<int>(inc.size())) {
         return 'Z';
     }
     
@@ -626,7 +626,7 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
     for (const auto & sq : seqs) {
         seq = sq;
         if (!first) {
-            if ((int)seq.get_length() != num_char) {
+            if (static_cast<int>(seq.get_length()) != num_char) {
                 aligned = false;
             }
         } else {
@@ -643,7 +643,7 @@ bool is_codon_alignment (const std::vector<Sequence>& seqs) {
     Sequence seq;
     for (const auto & sq : seqs) {
         seq = sq;
-        if ((int)seq.get_length() % 3 != 0) {
+        if (static_cast<int>(seq.get_length()) % 3 != 0) {
             codons = false;
         }
     }

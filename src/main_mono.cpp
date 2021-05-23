@@ -225,7 +225,7 @@ int main(int argc, char * argv[]) {
                 if (going) {
                     toKeep = get_complement_tip_set(tree, names);
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - (int)toKeep.size() > 1) {
+                    if (numLeaves - static_cast<int>(toKeep.size()) > 1) {
                         if (is_monophyletic(tree, names, ignore_missing)) {
                             (*poos) << "true" << std::endl;
                         } else {
@@ -242,7 +242,7 @@ int main(int argc, char * argv[]) {
                 if (going) {
                     toKeep = get_complement_tip_set(tree, names);
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - (int)toKeep.size() > 1) {
+                    if (numLeaves - static_cast<int>(toKeep.size()) > 1) {
                         if (is_monophyletic(tree, names, ignore_missing)) {
                             (*poos) << "true" << std::endl;
                         } else {

@@ -221,7 +221,7 @@ int main(int argc, char * argv[]) {
                if (pguess) {
                    done.push_back(seq);
                } else if (sguess) {
-                   double r = ((double) rand() / (RAND_MAX));
+                   double r = (static_cast<double>(rand()) / static_cast<double>(RAND_MAX));
                     if (r < sguess_samplenum) {
                         done.push_back(seq);
                     }

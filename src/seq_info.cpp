@@ -150,14 +150,14 @@ void SeqInfo::read_in_alignment () {
         set_alphabet_from_sampled_seqs(concatenated_);
     }
     if (file_ntax != 0) {
-        if (file_ntax != (int)seqs_.size()) {
+        if (file_ntax != static_cast<int>(seqs_.size())) {
             std::cerr << "Error: number of taxa declared in the file ("
                 << ") does not match the number read (" << seqs_.size()
                 << "). Exiting." << std::endl;
             exit(1);
         }
     }
-    num_taxa_ = (int)seqs_.size();
+    num_taxa_ = static_cast<int>(seqs_.size());
 }
 
 
@@ -200,7 +200,7 @@ void SeqInfo::return_freq_table () {
             (*poos_) << " ";
             for (unsigned int j = 0; j < seq_chars_.length(); j++) {
                 (*poos_) << std::right << std::setw(colWidth)
-                    << (double)indiv_char_counts_[i][j] / (double)seq_lengths_[i] << " ";
+                    << static_cast<double>(indiv_char_counts_[i][j]) / static_cast<double>(seq_lengths_[i]) << " ";
             }
             (*poos_) << std::right << std::setw(colWidth) << seq_lengths_[i] << std::endl;
         }
@@ -225,7 +225,7 @@ void SeqInfo::return_freq_table () {
         int total_num_chars = sum(char_counts_);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos_) << std::fixed << std::right << std::setw(colWidth)
-                << (double)char_counts_[i] / (double)total_num_chars;
+                << static_cast<double>(char_counts_[i]) / static_cast<double>(total_num_chars);
             if (i != seq_chars_.length() - 1) {
                 (*poos_) << " ";
             }
@@ -251,9 +251,9 @@ void SeqInfo::print_summary_table_whole_alignment () {
     if (is_aligned_) {
         seq_length_ = seq_lengths_[0];
         (*poos_) << "Sequence length: " << seq_length_ << std::endl;
-        total_num_chars = (double)(seq_lengths_[0] * num_taxa_);
+        total_num_chars = static_cast<double>(seq_lengths_[0] * num_taxa_);
     } else {
-        total_num_chars = (double)sum(seq_lengths_);
+        total_num_chars = static_cast<double>(sum(seq_lengths_));
     }
     
     (*poos_) << "--------- " << seq_type_ << " TABLE ----------" << std::endl;
@@ -262,12 +262,12 @@ void SeqInfo::print_summary_table_whole_alignment () {
         << std::setw(colWidth) << "Proportion" << std::endl;
     for (char seq_char : seq_chars_) {
         (*poos_) << std::right << std::setw(4) << seq_char << " "
-            << std::setw(colWidth) << (int)total_[seq_char] << " "
+            << std::setw(colWidth) << static_cast<int>(total_[seq_char]) << " "
             << std::setw(colWidth) << ((total_[seq_char] / total_num_chars)) << std::endl;
     }
     if (is_dna_) {
         (*poos_) << std::right << std::setw(4) << "G+C" << " "
-            << std::setw(colWidth) << (int)(total_['G'] + total_['C']) << " "
+            << std::setw(colWidth) << static_cast<int>(total_['G'] + total_['C']) << " "
             << std::setw(colWidth) << (((total_['G'] + total_['C']) / total_num_chars)) << std::endl;
     }
     (*poos_) << "--------- " << seq_type_ << " TABLE ----------" << std::endl;
@@ -323,7 +323,7 @@ void SeqInfo::calc_missing () {
         // proportion for alignment as a whole
         int total_num_chars = sum(char_counts_);
         for (unsigned int i = seq_chars_.length()-2; i < seq_chars_.length(); i++) {
-            temp += (double)char_counts_[i] / (double)total_num_chars;
+            temp += static_cast<double>(char_counts_[i]) / static_cast<double>(total_num_chars);
             miss += char_counts_[i];
         }
         percent_missing_ = temp;
@@ -377,7 +377,7 @@ void SeqInfo::return_missing () {
             (*poos_) << std::right << std::setw(colWidth) << seq_lengths_[i] << " ";
             (*poos_) << std::right << std::setw(colWidth) << missing_counts_[i] << " ";
             (*poos_) << std::right << std::setw(colWidth)
-                    << (double)missing_counts_[i] / (double)seq_lengths_[i] << std::endl;
+                    << static_cast<double>(missing_counts_[i]) / static_cast<double>(seq_lengths_[i]) << std::endl;
         }
     }
     

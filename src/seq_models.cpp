@@ -37,7 +37,7 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
                 continue;
             }
             for (unsigned int j = 0; j < order.size(); j++) {
-                sc_mat[tokens[0][0]][order[j]] = atoi(tokens[j+1].c_str()); //#changed from int to float
+                sc_mat[tokens[0][0]][order[j]] = std::atoi(tokens[j+1].c_str()); //#changed from int to float
             }
         }
     }
@@ -70,7 +70,7 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
                 continue;
             }
             for (unsigned int j = 0; j < order.size(); j++) {
-                sc_mat[tokens[0][0]][order[j]] = atoi(tokens[j+1].c_str()); //#changed from int to float
+                sc_mat[tokens[0][0]][order[j]] = std::atoi(tokens[j+1].c_str()); //#changed from int to float
             }
         }
     }

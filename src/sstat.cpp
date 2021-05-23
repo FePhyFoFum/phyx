@@ -31,7 +31,7 @@ bool MultinomialSeqStat::checked_aligned () {
     
     // gather all lengths
     for (int i = 0; i < num_taxa_; i++) {
-        seq_lengths[i] = (int)seqs_[i].get_length();
+        seq_lengths[i] = static_cast<int>(seqs_[i].get_length());
     }
     
     // check if all seqs are the same length
@@ -112,7 +112,7 @@ void MultinomialSeqStat::calculateTestStatistic () {
             tempResult = 0.0L;
         }
     }
-    tempResult = (long double)num_char_*(log(num_char_));
+    tempResult = static_cast<long double>(num_char_*(log(num_char_)));
     /*
         std::cout << "'numIncludedChar*log(numIncludedChar)' calculated as: " << tempResult << std::endl;
         std::cout << "'final sum' is: " << finalResult << std::endl;
