@@ -257,6 +257,7 @@ COLLAPSE_TREE_DEP = collapse_tree.d main_colt.d
 
 CPP_SRCS += \
 ./utils.cpp \
+./citations.cpp \
 ./log.cpp \
 ./superdouble.cpp \
 ./timer.cpp
@@ -288,6 +289,7 @@ RATE_SRCS += \
 
 CPP_OBJS += \
 ./utils.o \
+./citations.o \
 ./log.o \
 ./superdouble.o \
 ./timer.o
@@ -319,6 +321,7 @@ RATE_OBJS += \
 
 CPP_DEPS += \
 ./utils.d \
+./citations.d \
 ./log.d \
 ./superdouble.d \
 ./timer.d

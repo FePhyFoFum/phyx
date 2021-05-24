@@ -18,7 +18,7 @@
 #include "seq_reader.h"
 #include "utils.h"
 #include "log.h"
-#include "citations.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
 void print_help (void);
@@ -107,7 +107,7 @@ int main(int argc, char * argv[]) {
                 std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
                 print_error(argv[0]);
