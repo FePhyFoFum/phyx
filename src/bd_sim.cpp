@@ -35,7 +35,8 @@ BirthDeathSimulator::BirthDeathSimulator ():numfailures_(0), maxfailures_(1000),
     relative_birth_rate_(0.1/(0.1+0.05)), extantstop_(10), timestop_(0), numbirth_(0), numdeath_(0),
     currenttime_(0.0), extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
     DEATHTIME_(std::map<Node*, double>()) {
-        generator_ =  std::mt19937(get_clock_seed());
+        seed_ = get_clock_seed();
+        generator_ =  std::mt19937(seed_);
         uniformDistrib_ =  std::uniform_real_distribution<double>(0.0, 1.0);
 }
 

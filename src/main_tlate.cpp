@@ -13,6 +13,7 @@
 
 
 void print_help (void);
+std::string get_version_line (void);
 
 void print_help () {
     std::cout << "Translate DNA alignment to amino acids." << std::endl;
@@ -37,7 +38,13 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-static std::string versionline("pxtlate 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxtlate 1.2\n";
+    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 
 static struct option const long_options[] =
@@ -85,7 +92,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
                 std::cout << PHYX_CITATION << std::endl;

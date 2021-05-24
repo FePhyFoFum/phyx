@@ -17,6 +17,7 @@
 
 
 void print_help (void);
+std::string get_version_line (void);
 
 void print_help () {
     std::cout << "Monophyly checker." << std::endl;
@@ -40,7 +41,13 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-static std::string versionline("pxmono 1.2\nCopyright (C) 2019-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
+std::string get_version_line () {
+    std::string vl = "pxmono 1.2\n";
+    vl += "Copyright (C) 2019-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph W. Brown";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
@@ -107,7 +114,7 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
                 std::cout << PHYX_CITATION << std::endl;
