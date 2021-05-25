@@ -29,7 +29,7 @@ private:
     double treelength_;
     double nintnodes_;
     double nspeciation_;
-    double ntips_;
+    int ntips_;
     std::vector<double> branching_times_;
     double rootheight_;
     

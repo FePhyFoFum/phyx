@@ -39,7 +39,7 @@ void CompTest::read_in_alignment () {
         // grab all unique characters from the input string
         // here, seqs from all individuals are concatenated, so represents all sampled characters
         std::string concatenated;
-        for (int i = 0; i < num_taxa_; i++) {
+        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
             concatenated += seqs_[i].get_sequence();
         }
         seq_chars_ = get_alphabet_from_sequence(concatenated);
@@ -82,7 +82,7 @@ void CompTest::count_chars () {
     std::string seq;
     for (int i = 0; i < num_taxa_; i++) {
         sum = 0;
-        seq = string_to_upper(seqs_[i].get_sequence());
+        seq = string_to_upper(seqs_[static_cast<unsigned long>(i)].get_sequence());
         std::vector<int> icounts(seq_chars_.length(), 0);
         
         for (unsigned int j = 0; j < seq_chars_.length(); j++) {
@@ -112,7 +112,7 @@ void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
     int cur_len = 0;
     for (int i = 0; i < num_taxa_; i++) {
-        cur_len = static_cast<int>(taxon_labels_[i].size());
+        cur_len = static_cast<int>(taxon_labels_[static_cast<unsigned long>(i)].size());
         if (cur_len > longest_tax_label_) {
             longest_tax_label_ = cur_len;
         }
@@ -132,7 +132,7 @@ void CompTest::return_freq_table () {
         (*poos_) << std::right << std::setw(colWidth) << seq_char << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
-    for (int i = 0; i < num_taxa_; i++) {
+    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
         int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
         (*poos_) << taxon_labels_[i];
         if (diff > 0) {
@@ -161,7 +161,7 @@ void CompTest::calc_chi_square () {
     double observed = 0.0;
     double expected = 0.0;
     double cellv = 0.0;
-    for (int i = 0; i < num_taxa_; i++) {
+    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
         for (unsigned int j = 0; j < col_totals_.size(); j++) {
             observed = static_cast<double>(indiv_char_counts_[i][j]);
             expected = static_cast<double>(col_totals_[j]) * static_cast<double>(row_totals_[i])

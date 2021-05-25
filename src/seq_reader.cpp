@@ -249,7 +249,7 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
     std::vector<Sequence> seqs;
     std::string tline;
     int totcount = 0;
-    int loopcount = 0;
+    unsigned long loopcount = 0;
     std::string del(" \t");
     while (getline_safe(stri, tline)) {
         trim_spaces(tline);
@@ -317,10 +317,10 @@ std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, 
             }
             totcount++;
             loopcount++;
-            if (loopcount == num_taxa) {
+            if (loopcount == static_cast<unsigned long>(num_taxa)) {
                 loopcount = 0; // reset
                 // check if we're done
-                std::string terp = seqs[num_taxa - 1].get_sequence();
+                std::string terp = seqs[static_cast<unsigned long>(num_taxa) - 1].get_sequence();
                 if (static_cast<int>(terp.size()) == num_char) {
                     break;
                 }
@@ -1015,7 +1015,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     } else if (interleaved) {
         if (spaces) {
             //std::cout << std::endl << "processing interleaved sequences with spaces" << std::endl;
-            int taxcnt = 0;
+            unsigned long taxcnt = 0;
             lineCount = 0;
             while (getline_safe(pios, line)) {
                 if (line.empty()) {
@@ -1038,7 +1038,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                     }
                     seqs[taxcnt].set_sequence(seqs[taxcnt].get_sequence() + residues);
                     taxcnt++;
-                    if (taxcnt == num_taxa) {
+                    if (taxcnt == static_cast<unsigned long>(num_taxa)) {
                         taxcnt = 0;
                     }
                     residues = "";
@@ -1047,7 +1047,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             }
         } else {
             //std::cout << std::endl << "processing interleaved sequences" << std::endl;
-            int taxcnt = 0;
+            unsigned long taxcnt = 0;
             lineCount = 0;
             while (getline_safe(pios, line)) {
                 if (line.empty()) {
@@ -1063,7 +1063,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
                 } else {
                     seqs[taxcnt].set_sequence(seqs[taxcnt].get_sequence() + tokens[0]);
                     taxcnt++;
-                    if (taxcnt == num_taxa) {
+                    if (taxcnt == static_cast<unsigned long>(num_taxa)) {
                         taxcnt = 0;
                     }
                 }
@@ -1084,7 +1084,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             }
         }
         if (!good) {
-            std::cerr << "Error: bad phylip file. Taxon '" << seqs[bad_idx].get_id()
+            std::cerr << "Error: bad phylip file. Taxon '" << seqs[static_cast<unsigned long>(bad_idx)].get_id()
                 << "' had " << bad_len << " characters, but " << num_char
                 << " were expected. Exiting." << std::endl;
             exit(1);

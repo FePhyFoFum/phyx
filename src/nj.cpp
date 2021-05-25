@@ -19,16 +19,17 @@ void NJOI::CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >
     std::vector< std::vector<double> >& ConvertedMatrix, std::vector< std::vector<double> >& LengthMatrix) {
 
     ConvertedMatrix = OriginalMatrix;
-    std::vector<double> Sums(NumbOfSequences, 0.0);
+    unsigned long nseq = static_cast<unsigned long>(NumbOfSequences);
+    std::vector<double> Sums(nseq, 0.0);
     
-    for (int i = 0; i < NumbOfSequences; i++) {
+    for (unsigned long i = 0; i < nseq; i++) {
         Sums[i] = sum(OriginalMatrix[i]);
         std::transform(ConvertedMatrix[i].begin(), ConvertedMatrix[i].end(), ConvertedMatrix[i].begin(), 
             std::bind1st(std::multiplies<double>(), static_cast<double>(NumbOfSequences - 2)));
     }
     
-    for (int i = 0; i < NumbOfSequences; i++) {
-        for (int j = 0; j < NumbOfSequences; j++) {
+    for (unsigned long i = 0; i < nseq; i++) {
+        for (unsigned long j = 0; j < nseq; j++) {
             if (i != j) {
                 LengthMatrix[i][j] = abs(Sums[i] - Sums[j]);
                 ConvertedMatrix[i][j] -= (Sums[i] + Sums[j]);
@@ -43,8 +44,8 @@ void NJOI::CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >
  * LengthMatrix: Has adjusted lengths
  */
 void NJOI::FetchLengths (const int& NumbOfSequences, const std::vector< std::vector<double> >& NewMatrix,
-    std::vector< std::vector<double> >& LengthMatrix, const int& mini1, const int& mini2,
-    double & brlength1, double & brlength2) {
+    std::vector< std::vector<double> >& LengthMatrix, const unsigned long& mini1,
+    const unsigned long& mini2, double & brlength1, double & brlength2) {
 
     brlength1 = (NewMatrix[mini1][mini2] + (LengthMatrix[mini1][mini2] / static_cast<double>(NumbOfSequences - 2))) * 0.5;
     brlength2 = NewMatrix[mini1][mini2] - brlength1;
@@ -56,10 +57,10 @@ void NJOI::FetchLengths (const int& NumbOfSequences, const std::vector< std::vec
  *NewMatrix: Has the adjusted values from the QMatrix calculation
 */
 void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
-    int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, int& mini1, int& mini2,
-    double& brlength1, double& brlength2) {
+    int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, unsigned long& mini1,
+    unsigned long& mini2, double& brlength1, double& brlength2) {
     
-    int msize = static_cast<int>(NewMatrix.size());
+    unsigned long msize = static_cast<unsigned long>(NewMatrix.size());
     
     //update the tree values, Tree Size is the node it is at
     std::vector<double> row_hits = NewMatrix[mini1];
@@ -76,12 +77,12 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     names.insert(names.begin(), newname);
     
     // Make Smaller Matrix
-    std::vector< std::vector<double> > temp_matrix(NumbOfSequences,
-            std::vector<double>(NumbOfSequences, 0.0));
+    std::vector< std::vector<double> > temp_matrix(static_cast<unsigned long>(NumbOfSequences),
+            std::vector<double>(static_cast<unsigned long>(NumbOfSequences), 0.0));
     
-    int count = 0;
+    unsigned long count = 0;
     // Make a new First Row and Column
-    for (int i = 0; i < msize; i++) {
+    for (unsigned long i = 0; i < msize; i++) {
         if (i != mini1 && i != mini2) {
             ColRow = (col_hits[i] + row_hits[i] - small_length) * 0.5;
             count++;
@@ -91,12 +92,12 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     }
     
     // Need to fill the rest of the matrix up again
-    int icount = 1;
-    int jcount = 0;
-    for (int i = 0; i < msize; i++) {
+    unsigned long icount = 1;
+    unsigned long jcount = 0;
+    for (unsigned long i = 0; i < msize; i++) {
         jcount = 1;
         if (i != mini1 && i != mini2) {
-            for (int j = 0; j < msize; j++) {
+            for (unsigned long j = 0; j < msize; j++) {
                 if (j != mini1 && j != mini2) {
                     temp_matrix[icount][jcount] = NewMatrix[i][j];
                     jcount++;
@@ -114,12 +115,12 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
 
 // has to be a more efficient way of doing this!
 void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector<double> >& Matrix,
-    int & mini1, int & mini2) {
+    unsigned long& mini1, unsigned long& mini2) {
     //super large value
     double MIN = 99999999999.99;
-    for (int i = 0; i < (NumbOfSequences - 1); i++) {
-        
-        int idx = std::min_element(Matrix[i].begin() + (i + 1), Matrix[i].end()) - Matrix[i].begin();
+    for (unsigned long i = 0; i < (static_cast<unsigned long>(NumbOfSequences) - 1); i++) {
+        unsigned long idx = static_cast<unsigned long>(std::min_element(Matrix[i].begin() + (i + 1),
+                Matrix[i].end()) - Matrix[i].begin());
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];
             mini1 = i;
@@ -135,15 +136,16 @@ void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector
 // Main Tree Making Matrix
 void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>& NumbKeys,
     std::vector< std::vector<double> >& Matrix) {
-
-    int mini1 = 0, mini2 = 0;
+    
+    unsigned long mini1 = 0, mini2 = 0;
     int NumbOfSequences = static_cast<int>(NumbKeys.size());
+    unsigned long nseq = static_cast<unsigned long>(NumbOfSequences); // for initializing
     double brlength1 = 0.0;
     double brlength2 = 0.0;
-    std::vector< std::vector<double> > LengthMatrix(NumbOfSequences, std::vector<double>(NumbOfSequences, 0.0));
+    std::vector< std::vector<double> > LengthMatrix(nseq, std::vector<double>(nseq, 0.0));
     std::string newname;
     while (NumbOfSequences > 2) {
-        std::vector< std::vector<double> > QMatrix(NumbOfSequences, std::vector<double>(NumbOfSequences, 0.0));
+        std::vector< std::vector<double> > QMatrix(nseq, std::vector<double>(nseq, 0.0));
         CalcQ(NumbOfSequences, Matrix, QMatrix, LengthMatrix);
         Choose_Smallest(NumbOfSequences, QMatrix, mini1, mini2);
         FetchLengths((NumbOfSequences + 1), Matrix, LengthMatrix, mini1, mini2,
@@ -165,11 +167,11 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
     std::vector<std::string> SequenceName;
     std::map <std::string, std::string>::iterator iter, iter2;
     std::string fasta, SeqName, MatchName;
-    int FirstCount = 0;
+    unsigned long FirstCount = 0;
     double MatchScore;
 
     // an easier way to initialize a std::vector of std::vectors:
-    int ntax = static_cast<int>(sequences.size());
+    unsigned long ntax = static_cast<unsigned long>(sequences.size());
     std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
 
     //compare all sequences to other sequences
@@ -177,7 +179,7 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
         fasta = iter -> second;
         SeqName = iter -> first;
         SequenceName.push_back(SeqName);
-        int SecondCount = 0;
+        unsigned long SecondCount = 0;
         for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
             MatchScore = static_cast<double>(calc_hamming_dist(fasta, iter2 -> second));
             MatchName = SeqName + "," + iter2 -> first;
@@ -208,7 +210,7 @@ NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthre
                 exit(1);
             }
         } else {
-            num_char_ = seq.get_length();
+            num_char_ = static_cast<int>(seq.get_length());
             first = false;
         }
         seqcount++;

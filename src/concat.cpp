@@ -31,7 +31,7 @@ void SequenceConcatenater::read_sequences () {
     num_taxa_ = static_cast<int>(seqs_.size());
     
     if (toupcase_) {
-        for (int i = 0; i < num_taxa_; i++) {
+        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
             seqs_[i].set_sequence(string_to_upper(seqs_[i].get_sequence()));
         }
     }
@@ -55,10 +55,10 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
     int new_seq_len = newSeqs.get_sequence_length();
     std::string new_filler(new_seq_len, '-');
     num_char_ += new_seq_len;
-    for (int i = 0; i != num_taxa_; i++) {
+    for (unsigned long i = 0; i != static_cast<unsigned long>(num_taxa_); i++) {
         bool match_found = false;
         if (newSeqs.num_taxa_ > 0) {
-            for (int j = 0; j != newSeqs.num_taxa_; j++) {
+            for (unsigned long j = 0; j != static_cast<unsigned long>(newSeqs.num_taxa_); j++) {
                 if (seqs_[i].get_id() == newSeqs.seqs_[j].get_id()) {
                     seqs_[i].set_sequence(seqs_[i].get_sequence() + newSeqs.seqs_[j].get_sequence());
                     match_found = true;
@@ -76,7 +76,7 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
 
     // now, all that should be left are the novel sequences from the new file
     if (newSeqs.num_taxa_ > 0) {
-        for (int i = 0; i != newSeqs.num_taxa_; i++) {
+        for (unsigned long i = 0; i != static_cast<unsigned long>(newSeqs.num_taxa_); i++) {
             newSeqs.seqs_[i].set_sequence(old_filler + newSeqs.seqs_[i].get_sequence());
             seqs_.push_back(newSeqs.seqs_[i]);
             num_taxa_++;
@@ -104,7 +104,7 @@ void SequenceConcatenater::delete_sequence (SequenceConcatenater& newSeqs, const
 
 
 Sequence SequenceConcatenater::get_sequence (const int& index)const {
-    return seqs_[index];
+    return seqs_[static_cast<unsigned long>(index)];
 }
 
 
@@ -128,7 +128,7 @@ void SequenceConcatenater::write_partition_information (const std::vector<std::s
         stopIndex = charIndex + partition_sizes_[i] - 1;
         bool going = true;
         std::string alpha;
-        int j = 0;
+        unsigned long j = 0;
         while (going) {
             Sequence terp = seqs_[j];
             std::string subseq = terp.get_sequence().substr((charIndex - 1), partition_sizes_[i]);

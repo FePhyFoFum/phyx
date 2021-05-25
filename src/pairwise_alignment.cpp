@@ -51,8 +51,8 @@ double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     }
     aln1 = "";
     aln2 = "";
-    int i = seq1.length();
-    int j = seq2.length();
+    unsigned long i = seq1.length();
+    unsigned long j = seq2.length();
     while (i > 0 || j > 0) {
         double score = F[j][i];
         double scorediag = -999;
@@ -148,8 +148,8 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     }    
     aln1 = "";
     aln2 = "";
-    int i = besti;
-    int j = bestj;
+    unsigned long i = besti;
+    unsigned long j = bestj;
     while (i > 0 && j > 0) {
         double score = F[j][i];
         if (score == 0) {

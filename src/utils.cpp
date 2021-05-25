@@ -272,8 +272,8 @@ bool check_comment_line (const std::string& line) {
 
 // used by pxstrec
 std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates) {
-    std::vector<double> cols(numstates, 1);
-    std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (numstates, cols);
+    std::vector<double> cols(static_cast<unsigned long>(numstates), 1);
+    std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (static_cast<unsigned long>(numstates), cols);
     //read file
     std::ifstream ifs(filename.c_str());
     std::string line;
@@ -288,7 +288,7 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string
                 trim_spaces(tk); // this will never be used, as it was split on whitespace
             }
             for (unsigned int j = 0; j < tokens.size(); j++) {
-                ratematrix[fromarea][j] = std::atof(tokens[j].c_str());
+                ratematrix[static_cast<unsigned long>(fromarea)][j] = std::atof(tokens[j].c_str());
             }
             if (fromarea < numstates-1) {
                 fromarea += 1;
@@ -312,16 +312,16 @@ int random_int_range (int min, int max) {
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
 // ok, this is pretty sweet, if i do say so myself
 std::vector<int> sample_without_replacement (const int& numTotal, const int& numSample) {
-    std::vector<int> randsites (numSample); // numchar zero-initialized elements
-    std::vector<int> allsites (numTotal);
+    std::vector<int> randsites (static_cast<unsigned long>(numSample)); // numchar zero-initialized elements
+    std::vector<int> allsites (static_cast<unsigned long>(numTotal));
     std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0, 1, 2..., n-1
     
     int randNum = 0;
     for (int i = 0; i < numSample; i++) {
         randNum = random_int_range(i, (numTotal - 1));
     // swap, so don't have to worry about multiple hits
-        std::swap(allsites[i], allsites[randNum]);
-        randsites[i] = allsites[i];
+        std::swap(allsites[static_cast<unsigned long>(i)], allsites[static_cast<unsigned long>(randNum)]);
+        randsites[static_cast<unsigned long>(i)] = allsites[static_cast<unsigned long>(i)];
     }
     return randsites;
 }
@@ -402,19 +402,19 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
 // simple math on vectors
 
 int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
-    int x=0;
+    int x = 0;
     for (unsigned int i = 0; i < matrix.size(); i++) {
-        x += matrix[i][col];
+        x += matrix[i][static_cast<unsigned long>(col)];
     }
     return x;
 }
 
 
 int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
-    int x=0;
+    int x = 0;
     for (unsigned int i = 0; i < matrix.size(); i++) {
-        if (matrix[i][col] < 0) {
-            x += matrix[i][col];
+        if (matrix[i][static_cast<unsigned long>(col)] < 0) {
+            x += matrix[i][static_cast<unsigned long>(col)];
         }
     }
     return x;
@@ -425,7 +425,7 @@ int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
 double v_median (std::vector<double>& in) {
     int n = in.size() / 2;
     std::nth_element(in.begin(), in.begin()+n, in.end());
-    double median = in[n];
+    double median = in[static_cast<unsigned long>(n)];
     
     if (n % 2 == 0) { // if the length is even
       auto max_it = std::max_element(in.begin(), in.begin()+n);
@@ -456,7 +456,7 @@ void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
 double v_variance (std::vector<double>& in) {
     double n = static_cast<double>(in.size());
     double meann = sum(in) / n;
-    std::vector<double> diff(static_cast<int>(n));
+    std::vector<double> diff(static_cast<unsigned long>(n));
     std::transform(in.begin(), in.end(), diff.begin(),
         std::bind2nd(std::minus<double>(), meann));
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);

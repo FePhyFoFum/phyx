@@ -169,7 +169,7 @@ void BirthDeathSimulator::event () {
     int random_integer = intDistrib(generator_);
     //std::cout << "extantnodes.size() = " << extantnodes.size() << "; random_integer = "
     //    << random_integer << std::endl;
-    Node * extant = extantnodes_[random_integer];
+    Node * extant = extantnodes_[static_cast<unsigned long>(random_integer)];
     if (event_is_birth()) {
         node_birth(extant); // speciation
         numbirth_++;

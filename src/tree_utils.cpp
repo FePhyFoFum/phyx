@@ -83,14 +83,14 @@ void remove_internal_names(Tree * tr) {
 
 // NOTE: this is _very_ slow (for large trees) compared to painting the induced tree (pxtrt)
 void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent) {
-    int num_names = static_cast<int>(names.size());
+    unsigned long num_names = static_cast<unsigned long>(names.size());
     int counter = 0;
     
     // new: note tree rooted status. if originally unrooted, make sure it stays that way on pruning
     bool rs = is_rooted(tree);
     //std::cout << "rooted tree: " << std::boolalpha << rs << std::endl;
     
-    for (int i = 0; i < num_names; i++) {
+    for (unsigned long i = 0; i < num_names; i++) {
         //std::cout << "Attempting to remove tip '" << names[i] << "'." << std::endl;
         Node * m = tree->getExternalNode(names[i]);
         if (m != nullptr) {
@@ -176,10 +176,10 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
 
 // assumes a rooted tree
 void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& silent) {
-    int num_names = static_cast<int>(names.size());
+    unsigned long num_names = static_cast<unsigned long>(names.size());
     tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
-    for (int i = 0; i < num_names; i++) {
+    for (unsigned long i = 0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);
         if (m != nullptr) {
             m->setPainted(true);

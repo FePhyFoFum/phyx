@@ -25,7 +25,7 @@ typedef struct {
 BDFit::BDFit (Tree * intree, const std::string& modelflavour):model_(std::move(modelflavour)),
     lambda_bd_(0.0), lambda_yule_(0.0), mu_(0.0), r_(0.0), epsilon_(0.0), likelihood_bd_(0.0),
     likelihood_yule_(0.0), aic_bd_(0.0), aicc_bd_(0.0), aic_yule_(0.0), aicc_yule_(0.0),
-    treelength_(0.0), nintnodes_(0.0), nspeciation_(0.0), ntips_(0.0), rootheight_(0.0) {
+    treelength_(0.0), nintnodes_(0.0), nspeciation_(0.0), ntips_(0), rootheight_(0.0) {
     tree_ = intree;
     fit_model();
 }
@@ -93,7 +93,7 @@ void BDFit::fit_yule () {
 void BDFit::fit_bd() {
     branching_times_.resize(nintnodes_);
     for (int i = 0; i < nintnodes_; i++) {
-        branching_times_[i] = tree_->getInternalNode(i)->getHeight();
+        branching_times_[static_cast<unsigned long>(i)] = tree_->getInternalNode(i)->getHeight();
     }
     
     // sort in descending order
@@ -172,7 +172,7 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
 // 'n' here (number of data points) is taken as the number of terminals
 void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
     double K = 1.0;
-    double n = ntips_;
+    double n = static_cast<double>(ntips_);
     if (model_ == "bd") {
         K = 2.0;
     }

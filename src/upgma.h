@@ -24,7 +24,7 @@ private:
         std::vector< std::vector<double> >& newmatrix);
     std::vector< std::vector<double> > build_matrix ();
     double get_smallest_distance (const std::vector< std::vector<double> >& dmatrix,
-        int& mini1, int& mini2);
+        unsigned long& mini1, unsigned long& mini2);
     void construct_tree ();
 
 public:

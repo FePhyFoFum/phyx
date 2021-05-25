@@ -277,7 +277,7 @@ int main(int argc, char * argv[]) {
     std::vector<std::vector<int> > biparts2; // second part of the bipart
     std::vector<std::vector<int> > not_included; // the names that aren't in the tree
     std::vector<double> bp_count;
-    for (int i = 0; i < numtrees; i++) {
+    for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
         // get the biparts
         bool unrooted = false;
         int numch = trees[i]->getRoot()->getChildCount();
@@ -405,9 +405,9 @@ int main(int argc, char * argv[]) {
         if (edgewisealltaxa) {
             colsize--; // no root for edgewise
         }
-        std::vector<int> cols(colsize, 0);
-        std::vector<std::vector<int> > matrix (numtrees, cols);
-        for (int i = 0; i < numtrees; i++) {
+        std::vector<int> cols(static_cast<unsigned long>(colsize), 0);
+        std::vector<std::vector<int> > matrix(static_cast<unsigned long>(numtrees), cols);
+        for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
             bool unrooted = false;
             int numch = trees[i]->getRoot()->getChildCount();
             if (numch > 2) {
@@ -473,7 +473,7 @@ int main(int argc, char * argv[]) {
                     if (x == static_cast<int>(matrix[i].size())) {
                         x = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
                     }
-                    matrix[i][x] = 1;
+                    matrix[i][static_cast<unsigned long>(x)] = 1;
                 }
             }
         }
@@ -481,7 +481,7 @@ int main(int argc, char * argv[]) {
         if (uniquetree) {
             std::cout << "====UNIQUE TREES====" << std::endl;
             std::set<std::string> un_trees;
-            for (int i = 0; i <numtrees; i++) {
+            for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
                 std::string sv = get_string_vector(matrix[i]);
                 if (count(un_trees.begin(), un_trees.end(), sv) == 0) {
                     std::cout << trees[i]->getRoot()->getNewick(false) << ";" << std::endl;

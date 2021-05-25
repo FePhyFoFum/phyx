@@ -60,7 +60,7 @@ void Relabel::store_name_lists (const std::string& cnamesf, const std::string& n
         exit(0);
     } else {
         num_taxa_ = static_cast<int>(old_names_.size());
-        for (int i = 0; i < num_taxa_; i++) {
+        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
             name_map_[old_names_[i]] = new_names_[i];
         }
     }

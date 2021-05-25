@@ -38,7 +38,7 @@ void Tree::addInternalNode (Node * tn) {
 
 
 Node * Tree::getExternalNode (int num) {
-    return external_nodes_.at(num);
+    return external_nodes_.at(static_cast<unsigned long>(num));
 }
 
 
@@ -48,8 +48,8 @@ Node * Tree::getExternalNode (int num) {
 Node * Tree::getExternalNode (const std::string& name) {
     Node * ret = nullptr;
     for (int i = 0; i < external_node_count_; i++) {
-        if (external_nodes_.at(i)->getName() == name) {
-            ret = external_nodes_.at(i);
+        if (external_nodes_.at(static_cast<unsigned long>(i))->getName() == name) {
+            ret = external_nodes_.at(static_cast<unsigned long>(i));
         }
     }
     return ret;
@@ -57,7 +57,7 @@ Node * Tree::getExternalNode (const std::string& name) {
 
 
 Node * Tree::getInternalNode (int num) {
-    return internal_nodes_.at(num);
+    return internal_nodes_.at(static_cast<unsigned long>(num));
 }
 
 
@@ -67,8 +67,8 @@ Node * Tree::getInternalNode (int num) {
 Node * Tree::getInternalNode (std::string& name) {
     Node * ret = nullptr;
     for (int i = 0; i < internal_node_count_; i++) {
-        if (internal_nodes_.at(i)->getName() == name) {
-            ret = internal_nodes_.at(i);
+        if (internal_nodes_.at(static_cast<unsigned long>(i))->getName() == name) {
+            ret = internal_nodes_.at(static_cast<unsigned long>(i));
         }
     }
     return ret;
@@ -107,7 +107,7 @@ int Tree::getInternalNodeCount () {
 
 
 Node * Tree::getNode (int num) {
-    return nodes_.at(num);
+    return nodes_.at(static_cast<unsigned long>(num));
 }
 
 

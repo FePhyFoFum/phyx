@@ -27,10 +27,10 @@ MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0
 
 bool MultinomialSeqStat::checked_aligned () {
     bool is_aligned_ = true;
-    std::vector<int> seq_lengths(num_taxa_, 0);
+    std::vector<int> seq_lengths(static_cast<unsigned long>(num_taxa_), 0);
     
     // gather all lengths
-    for (int i = 0; i < num_taxa_; i++) {
+    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
         seq_lengths[i] = static_cast<int>(seqs_[i].get_length());
     }
     
@@ -47,10 +47,10 @@ bool MultinomialSeqStat::checked_aligned () {
 
 void MultinomialSeqStat::collect_site_patters () {
     std::vector<std::string> inputPatterns;
-    for (int i = 0; i < num_char_; i++) {
+    for (unsigned long i = 0; i < static_cast<unsigned long>(num_char_); i++) {
         char a = seqs_[0].get_sequence().at(i);
         std::string pat(1, a);
-        for (int j = 1; j < num_taxa_; j++) {
+        for (unsigned long j = 1; j < static_cast<unsigned long>(num_taxa_); j++) {
             char residue = seqs_[j].get_sequence().at(i);
             pat += residue;
         }
@@ -103,9 +103,9 @@ void MultinomialSeqStat::calculateTestStatistic () {
 */
     long double tempResult = 0.0L;
     long double finalResult = 0.0L;
-    int numPatterns = static_cast<int>(patterns_and_counts_.size());
+    unsigned long numPatterns = static_cast<unsigned long>(patterns_and_counts_.size());
 
-    for (int iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
+    for (unsigned long iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
         if (patterns_and_counts_[iterStoredPat].second != 0) {
             tempResult = (patterns_and_counts_[iterStoredPat].second)*(log(patterns_and_counts_[iterStoredPat].second));
             finalResult += tempResult;
