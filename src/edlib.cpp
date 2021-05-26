@@ -303,8 +303,9 @@ static inline Word* buildPeq (const int alphabetLength, const unsigned char* con
                 for (int r = (b+1) * WORD_SIZE - 1; r >= b * WORD_SIZE; r--) {
                     Peq[symbol * maxNumBlocks + b] <<= 1;
                     // NOTE: We pretend like query is padded at the end with W wildcard symbols
-                    if (r >= queryLength || query[r] == symbol)
+                    if (r >= queryLength || query[r] == symbol) {
                         Peq[symbol * maxNumBlocks + b] += 1;
+                    }
                 }
             } else { // Last symbol is wildcard, so it is all 1s
                 Peq[symbol * maxNumBlocks + b] = static_cast<Word>(-1);
@@ -407,8 +408,12 @@ static inline std::vector<int> getBlockCellValues (const Block& block) {
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
         scores[i] = score;
-        if (block.P & mask) score--;
-        if (block.M & mask) score++;
+        if (block.P & mask) {
+            score--;
+        }
+        if (block.M & mask) {
+            score++;
+        }
         mask >>= 1;
     }
     scores[WORD_SIZE - 1] = score;
@@ -426,8 +431,12 @@ static inline void readBlock (const Block& block, int* const dest) {
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
         dest[WORD_SIZE - 1 - i] = score;
-        if (block.P & mask) score--;
-        if (block.M & mask) score++;
+        if (block.P & mask) {
+            score--;
+        }
+        if (block.M & mask) {
+            score++;
+        }
         mask >>= 1;
     }
     dest[0] = score;
@@ -444,8 +453,12 @@ static inline void readBlockReverse (const Block& block, int* const dest) {
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
         dest[i] = score;
-        if (block.P & mask) score--;
-        if (block.M & mask) score++;
+        if (block.P & mask) {
+            score--;
+        }
+        if (block.M & mask) {
+            score++;
+        }
         mask >>= 1;
     }
     dest[WORD_SIZE - 1] = score;
@@ -459,7 +472,9 @@ static inline void readBlockReverse (const Block& block, int* const dest) {
 static inline bool allBlockCellsLarger (const Block& block, const int k) {
     std::vector<int> scores = getBlockCellValues(block);
     for (int i = 0; i < WORD_SIZE; i++) {
-        if (scores[i] <= k) return false;
+        if (scores[i] <= k) {
+            return false;
+        }
     }
     return true;
 }
@@ -707,13 +722,13 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
     }
 
     // If we want to find alignment, we have to store needed data.
-    if (findAlignment)
+    if (findAlignment) {
         *alignData = new AlignmentData(maxNumBlocks, targetLength);
-    else if (targetStopPosition > -1)
+    } else if (targetStopPosition > -1) {
         *alignData = new AlignmentData(maxNumBlocks, 1);
-    else
+    } else {
         *alignData = nullptr;
-
+    }
     const unsigned char* targetChar = target;
     for (int c = 0; c < targetLength; c++) { // for each column
         const Word* Peq_c = Peq + *targetChar * maxNumBlocks;
@@ -790,7 +805,9 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
                     }
                     r--;
                 }
-                if (!reduce) break;
+                if (!reduce) {
+                    break;
+                }
                 lastBlock--; bl--;
             }
 
@@ -807,7 +824,9 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
                     }
                     r--;
                 }
-                if (!reduce) break;
+                if (!reduce) {
+                    break;
+                }
                 firstBlock++;
             }
         }
@@ -929,8 +948,12 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
         if (lScore == -1 && thereIsLeftBlock) {
             lScore = alignData->scores[(c - 1) * maxNumBlocks + b]; // score of block to the left
             for (int i = 0; i < WORD_SIZE - blockPos - 1; i++) {
-                if (lP & HIGH_BIT_MASK) lScore--;
-                if (lM & HIGH_BIT_MASK) lScore++;
+                if (lP & HIGH_BIT_MASK) {
+                    lScore--;
+                }
+                if (lM & HIGH_BIT_MASK) {
+                    lScore++;
+                }
                 lP <<= 1;
                 lM <<= 1;
             }
@@ -949,8 +972,12 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
         }
         if (uScore == -1) {
             uScore = currScore;
-            if (currP & HIGH_BIT_MASK) uScore--;
-            if (currM & HIGH_BIT_MASK) uScore++;
+            if (currP & HIGH_BIT_MASK) {
+                uScore--;
+            }
+            if (currM & HIGH_BIT_MASK) {
+                uScore++;
+            }
             currP <<= 1;
             currM <<= 1;
         }
@@ -967,8 +994,9 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
             if (blockPos == 0) { // If entering new (upper) block
                 if (b == 0) { // If there are no cells above (only boundary cells)
                     (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_INSERT; // Move up
-                    for (int i = 0; i < c + 1; i++) // Move left until end
+                    for (int i = 0; i < c + 1; i++) { // Move left until end
                         (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_DELETE;
+                    }
                     break;
                 } else {
                     blockPos = WORD_SIZE - 1;
@@ -1002,8 +1030,9 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
             if (c == -1) { // If there are no cells to the left (only boundary cells)
                 (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_DELETE; // Move left
                 int numUp = b * WORD_SIZE + blockPos + 1;
-                for (int i = 0; i < numUp; i++) // Move up until end
+                for (int i = 0; i < numUp; i++) { // Move up until end
                     (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_INSERT;
+                }
                 break;
             }
             currP = lP;
@@ -1033,15 +1062,17 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
             if (c == -1) { // If there are no cells to the left (only boundary cells)
                 (*alignment)[(*alignmentLength)++] = moveCode; // Move left
                 int numUp = b * WORD_SIZE + blockPos;
-                for (int i = 0; i < numUp; i++) // Move up until end
+                for (int i = 0; i < numUp; i++) { // Move up until end
                     (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_INSERT;
+                }
                 break;
             }
             if (blockPos == 0) { // If entering upper left block
                 if (b == 0) { // If there are no more cells above (only boundary cells)
                     (*alignment)[(*alignmentLength)++] = moveCode; // Move up left
-                    for (int i = 0; i < c + 1; i++) // Move left until end
+                    for (int i = 0; i < c + 1; i++) { // Move left until end
                         (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_DELETE;
+                    }
                     break;
                 }
                 blockPos = WORD_SIZE - 1;
@@ -1212,8 +1243,12 @@ static int obtainAlignmentHirschberg (
     delete[] rPeq;
 
     if (leftHalfCalcStatus == EDLIB_STATUS_ERROR || rightHalfCalcStatus == EDLIB_STATUS_ERROR) {
-        if (alignDataLeftHalf) delete alignDataLeftHalf;
-        if (alignDataRightHalf) delete alignDataRightHalf;
+        if (alignDataLeftHalf) {
+            delete alignDataLeftHalf;
+        }
+        if (alignDataRightHalf) {
+            delete alignDataRightHalf;
+        }
         return EDLIB_STATUS_ERROR;
     }
 
@@ -1327,8 +1362,12 @@ static int obtainAlignmentHirschberg (
                                        target + ulWidth, rTarget, lrWidth,
                                        alphabetLength, rightScore, &lrAlignment, &lrAlignmentLength);
     if (ulStatusCode == EDLIB_STATUS_ERROR || lrStatusCode == EDLIB_STATUS_ERROR) {
-        if (ulAlignment) free(ulAlignment);
-        if (lrAlignment) free(lrAlignment);
+        if (ulAlignment) {
+            free(ulAlignment);
+        }
+        if (lrAlignment) {
+            free(lrAlignment);
+        }
         return EDLIB_STATUS_ERROR;
     }
 
@@ -1375,7 +1414,9 @@ static int transformSequences (const char* const queryOriginal, const int queryL
     // Alphabet information, it is constructed on fly while transforming sequences.
     unsigned char letterIdx[256]; //!< letterIdx[c] is index of letter c in alphabet
     bool inAlphabet[256]; // inAlphabet[c] is true if c is in alphabet
-    for (int i = 0; i < 256; i++) inAlphabet[i] = false;
+    for (int i = 0; i < 256; i++) {
+        inAlphabet[i] = false;
+    }
     int alphabetLength = 0;
 
     for (int i = 0; i < queryLength; i++) {
@@ -1416,7 +1457,13 @@ EdlibAlignConfig edlibDefaultAlignConfig (void) {
 
 
 void edlibFreeAlignResult (EdlibAlignResult result) {
-    if (result.endLocations) free(result.endLocations);
-    if (result.startLocations) free(result.startLocations);
-    if (result.alignment) free(result.alignment);
+    if (result.endLocations) {
+        free(result.endLocations);
+    }
+    if (result.startLocations) {
+        free(result.startLocations);
+    }
+    if (result.alignment) {
+        free(result.alignment);
+    }
 }

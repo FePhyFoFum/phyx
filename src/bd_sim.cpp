@@ -213,10 +213,11 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
     Node * tparent = innode->getParent();
     if (tparent != root_) {
         Node * child = nullptr;
-        for (int i = 0; i < tparent->getChildCount(); i++)
+        for (int i = 0; i < tparent->getChildCount(); i++) {
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
             }
+        }
         Node * pparent = tparent->getParent();
         tparent->removeChild(*innode);
         tparent->removeChild(*child);
@@ -226,10 +227,11 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
         child->setBL(child->getBL()+tparent->getBL());
     } else {
         Node * child = nullptr;
-        for (int i = 0; i < tparent->getChildCount(); i++)
+        for (int i = 0; i < tparent->getChildCount(); i++) {
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
             }
+        }
         tparent->removeChild(*innode);
         tree_->setRoot(child);
         root_ = child;
