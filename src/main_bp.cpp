@@ -242,7 +242,7 @@ int main(int argc, char * argv[]) {
     }
     //----END READ MAP TREE
 
-    int numtrees = static_cast<int>(trees.size());
+    unsigned long numtrees = static_cast<unsigned long>(trees.size());
     if (numtrees == 0) {
         if (fileset) {
             fstr->close();
@@ -277,7 +277,7 @@ int main(int argc, char * argv[]) {
     std::vector<std::vector<int> > biparts2; // second part of the bipart
     std::vector<std::vector<int> > not_included; // the names that aren't in the tree
     std::vector<double> bp_count;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
+    for (unsigned long i = 0; i < numtrees; i++) {
         // get the biparts
         bool unrooted = false;
         int numch = trees[i]->getRoot()->getChildCount();
@@ -406,8 +406,8 @@ int main(int argc, char * argv[]) {
             colsize--; // no root for edgewise
         }
         std::vector<int> cols(static_cast<unsigned long>(colsize), 0);
-        std::vector<std::vector<int> > matrix(static_cast<unsigned long>(numtrees), cols);
-        for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
+        std::vector<std::vector<int> > matrix(numtrees, cols);
+        for (unsigned long i = 0; i < numtrees; i++) {
             bool unrooted = false;
             int numch = trees[i]->getRoot()->getChildCount();
             if (numch > 2) {

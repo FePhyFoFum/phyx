@@ -760,7 +760,7 @@ std::string double_to_str (double d) {
 }
 
 
-unsigned long int get_num_possible_trees (const int& n, const bool& rooted) {
+unsigned long int get_num_possible_trees (const unsigned int& n, const bool& rooted) {
     return doublefactorial(2 * (n + static_cast<int>(rooted)) - 5);
 }
 

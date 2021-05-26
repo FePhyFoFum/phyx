@@ -56,7 +56,7 @@ void check_inout_streams_identical (char * in, char * out) {
 int string_to_int (const std::string& in, const std::string& arg) {
     int res = 0;
     try {
-            res = stoi(in);
+            res = std::stoi(in);
     } catch (const std::invalid_argument& ia) {
         std::cerr << "Error: invalid argument for " << arg
                 << "; expecting int (" << ia.what() << "). Exiting." << std::endl;
@@ -69,7 +69,7 @@ int string_to_int (const std::string& in, const std::string& arg) {
 long int string_to_long_int (const std::string& in, const std::string& arg) {
     long int res = 0;
     try {
-            res = stol(in);
+            res = std::stol(in);
     } catch (const std::invalid_argument& ia) {
         std::cerr << "Error: invalid argument for " << arg
                 << "; expecting long int (" << ia.what() << "). Exiting." << std::endl;

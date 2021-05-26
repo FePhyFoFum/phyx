@@ -70,7 +70,7 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     
     // limit on number of terminals supported (exhaustive)
-    int sim_limit_exh = 10;
+    unsigned int sim_limit_exh = 10;
     // bc of the way trees are simulated, cannot be arbitrarily large
     // hope to fix this soon
     
