@@ -952,7 +952,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
     
     //std::cout << "interleaved = " << interleaved << "; spaces = "
     //        << spaces << "; multiline = " << multiline<< std::endl;
-    if ((spaces + multiline + interleaved) == 0) {
+    if (!spaces && !multiline && !interleaved) {
         // simple format. standard read
         //std::cout << std::endl << "processing simple contiguous sequencess" << std::endl;
         while (read_next_seq_from_stream(pios, 1, line, seq)) {
