@@ -159,9 +159,17 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 burnin = string_to_int(optarg, "-b");
+                if (burnin < 0) {
+                    std::cerr << "Error: burnin must be a positive integer. Exiting." << std::endl;
+                    exit(0);
+                }
                 break;
             case 'n':
                 nthin = string_to_int(optarg, "-n");
+                if (nthin < 1) {
+                    std::cerr << "Error: nthin must be a >= 1. Exiting." << std::endl;
+                    exit(0);
+                }
                 break;
             case 'r':
                 nrandom = string_to_int(optarg, "-r");
