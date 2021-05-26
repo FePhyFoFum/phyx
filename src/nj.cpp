@@ -19,7 +19,7 @@ void NJOI::CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >
     std::vector< std::vector<double> >& ConvertedMatrix, std::vector< std::vector<double> >& LengthMatrix) {
 
     ConvertedMatrix = OriginalMatrix;
-    unsigned long nseq = static_cast<unsigned long>(NumbOfSequences);
+    auto nseq = static_cast<unsigned long>(NumbOfSequences);
     std::vector<double> Sums(nseq, 0.0);
     
     for (unsigned long i = 0; i < nseq; i++) {
@@ -60,7 +60,7 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, unsigned long& mini1,
     unsigned long& mini2, double& brlength1, double& brlength2) {
     
-    unsigned long msize = static_cast<unsigned long>(NewMatrix.size());
+    auto msize = static_cast<unsigned long>(NewMatrix.size());
     
     //update the tree values, Tree Size is the node it is at
     std::vector<double> row_hits = NewMatrix[mini1];
@@ -138,8 +138,8 @@ void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>
     std::vector< std::vector<double> >& Matrix) {
     
     unsigned long mini1 = 0, mini2 = 0;
-    int NumbOfSequences = static_cast<int>(NumbKeys.size());
-    unsigned long nseq = static_cast<unsigned long>(NumbOfSequences); // for initializing
+    auto NumbOfSequences = static_cast<int>(NumbKeys.size());
+    auto nseq = static_cast<unsigned long>(NumbOfSequences); // for initializing
     double brlength1 = 0.0;
     double brlength2 = 0.0;
     std::vector< std::vector<double> > LengthMatrix(nseq, std::vector<double>(nseq, 0.0));
@@ -171,7 +171,7 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
     double MatchScore;
 
     // an easier way to initialize a std::vector of std::vectors:
-    unsigned long ntax = static_cast<unsigned long>(sequences.size());
+    auto ntax = static_cast<unsigned long>(sequences.size());
     std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
 
     //compare all sequences to other sequences

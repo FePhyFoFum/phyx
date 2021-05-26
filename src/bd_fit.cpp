@@ -148,7 +148,7 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
     // count iterations for optimization of algorithm
     counter++;
     
-    analysis_data * d = static_cast<analysis_data *>(data);
+    auto d = static_cast<analysis_data *>(data);
     
     int N = d->N;
     std::vector<double> bt = d->bt;
@@ -172,7 +172,7 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
 // 'n' here (number of data points) is taken as the number of terminals
 void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
     double K = 1.0;
-    double n = static_cast<double>(ntips_);
+    auto n = static_cast<double>(ntips_);
     if (model_ == "bd") {
         K = 2.0;
     }

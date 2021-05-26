@@ -205,8 +205,8 @@ void SequenceCleaner::generate_cleaned_sequences () {
 // TODO: need to consider codon seqs
 void SequenceCleaner::count_missing () {
     // initialize empty vectors
-    unsigned long nc = static_cast<unsigned long>(num_char_);
-    unsigned long nt = static_cast<unsigned long>(num_taxa_);
+    auto nc = static_cast<unsigned long>(num_char_);
+    auto nt = static_cast<unsigned long>(num_taxa_);
     
     missing_per_site_counts_ = std::vector<int>(nc, 0);
     missing_per_site_proportion_ = std::vector<double>(nc, 0.0);

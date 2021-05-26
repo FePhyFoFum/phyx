@@ -55,13 +55,13 @@ void LogManipulator::return_statistics_table () {
     double ESS = 0.0;
     double ACT = 0.0;
     // n should be constant (i.e. a rectangular log)
-    int nsamples = static_cast<int>(parm_samples_[0].size());
+    auto nsamples = static_cast<int>(parm_samples_[0].size());
     // need interval between samples i.e. how thinned
     // first column in parm log is the state number
     // converted to int since all read in as doubles
     // note this assumes constant thinning. should be safe
     // could only possibly be a problem when combining logs from analyses with different sampling settings
-    int step_size = static_cast<int>(parm_samples_[0][1] - parm_samples_[0][0]);
+    auto step_size = static_cast<int>(parm_samples_[0][1] - parm_samples_[0][0]);
     
     // need to find the longest parameter name to set width of first column
     const int colWidth = 12; // this value works nice with decimal and sci. notation
@@ -200,7 +200,7 @@ void LogManipulator::collect_parameter_samples () {
                     continue;
                 } else if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = static_cast<int>(header.size());
+                    auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
                         num_cols_ = curpars;
                         parm_names_ = header;
@@ -310,7 +310,7 @@ void LogManipulator::count_parameter_samples () {
                     continue;
                 } else if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = static_cast<int>(header.size());
+                    auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
                         num_cols_ = curpars;
                         parm_names_ = header;
@@ -418,7 +418,7 @@ void LogManipulator::get_column_names () {
                     continue;
                 } else if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = static_cast<int>(header.size());
+                    auto curpars = static_cast<int>(header.size());
                     num_cols_ = curpars;
                     parm_names_ = header;
                     first_line = false;
@@ -454,7 +454,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 continue;
             } else if (first_line) {
                 std::vector<std::string> header = tokenize(line);
-                int curpars = static_cast<int>(header.size());
+                auto curpars = static_cast<int>(header.size());
                 num_cols_ = curpars;
                 parm_names_ = header;
                 
@@ -527,7 +527,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 continue;
             } else if (first_line) {
                 std::vector<std::string> header = tokenize(line);
-                int curpars = static_cast<int>(header.size());
+                auto curpars = static_cast<int>(header.size());
                 num_cols_ = curpars;
                 
                 // check that right end of col_ids is valid (0 already checked upstream)
@@ -583,7 +583,7 @@ void LogManipulator::sample_parameters () {
                     continue;
                 } else if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = static_cast<int>(header.size());
+                    auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
                         num_cols_ = curpars;
                         parm_names_ = header;

@@ -197,7 +197,7 @@ void TopologyGenerator::newick_from_tree_map (unsigned int node, std::map<unsign
     tree += "("; // every entrance to this function is a tree
     
     std::vector<unsigned int> decnodes = m[node];
-    unsigned int numdec = static_cast<unsigned int>(decnodes.size());
+    auto numdec = static_cast<unsigned int>(decnodes.size());
     
     for (unsigned int i = 0; i < numdec; i++) {
         unsigned int curnode = decnodes[static_cast<unsigned int>(i)];

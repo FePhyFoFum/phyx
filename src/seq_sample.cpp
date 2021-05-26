@@ -107,7 +107,7 @@ std::vector<int> SequenceSampler::get_bootstrap_sites (const int& numchar) {
 std::vector<int> SequenceSampler::get_partitioned_bootstrap_sites () {
     std::vector<int> master(static_cast<unsigned long>(num_partitioned_sites_), 0);
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_partitions_); i++) {
-        int curNum = static_cast<int>(partitions_[i].size());
+        auto curNum = static_cast<int>(partitions_[i].size());
         //std::cout << "Partition #" << i << " contains " << curNum << " sites." << std::endl;
         std::vector<int> randsites = get_bootstrap_sites(curNum);
         for (unsigned long j = 0; j < static_cast<unsigned long>(curNum); j ++) {
@@ -120,7 +120,7 @@ std::vector<int> SequenceSampler::get_partitioned_bootstrap_sites () {
 
 // sample WITHOUT replacement. not with partitioned models
 std::vector<int> SequenceSampler::get_jackknife_sites (const int& numchar) {
-    int numsample = static_cast<int>(numchar * jkfract_ + 0.5);
+    auto numsample = static_cast<int>(numchar * jkfract_ + 0.5);
     std::vector<int> randsites = sample_without_replacement(numchar, numsample);
     return randsites;
 }
@@ -202,7 +202,7 @@ void SequenceSampler::get_site_partitions () {
 // convert from 1-start to 0-start
 void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens,
         int& start, int& stop, int& interval) {
-    int tsize = static_cast<int>(tokens.size());
+    auto tsize = static_cast<int>(tokens.size());
     if (tsize < 4 || tsize > 5) {
         std::cerr << "Error: invalid/unsupported partition specification. Exiting." << std::endl;
         exit(0);
@@ -255,7 +255,7 @@ void SequenceSampler::check_valid_partitions () {
     sort(allSites.begin(), allSites.end());
     
     int max = allSites.back();
-    int count = static_cast<int>(allSites.size());
+    auto count = static_cast<int>(allSites.size());
     int diff = max - count + 1;
     
     if (diff != 0) { // sites are duplicated
@@ -272,7 +272,7 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
     std::vector<int> duplicates;
     std::vector<int> missing;
     
-    unsigned long maxVal = static_cast<unsigned long>(allSites.back());
+    auto maxVal = static_cast<unsigned long>(allSites.back());
     
     std::vector<int> counts(maxVal, 0);
     for (int allSite : allSites) {

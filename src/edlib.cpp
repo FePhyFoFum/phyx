@@ -275,7 +275,7 @@ char* edlibAlignmentToCigar (const unsigned char* const alignment, const int ali
         }
     }
     cigar->push_back(0);  // Null character termination.
-    char* cigar_ = static_cast<char*>(malloc(cigar->size() * sizeof(char)));
+    auto cigar_ = static_cast<char*>(malloc(cigar->size() * sizeof(char)));
     memcpy(cigar_, &(*cigar)[0], cigar->size() * sizeof(char));
     delete cigar;
 
@@ -1420,7 +1420,7 @@ static int transformSequences (const char* const queryOriginal, const int queryL
     int alphabetLength = 0;
 
     for (int i = 0; i < queryLength; i++) {
-        unsigned char c = static_cast<unsigned char>(queryOriginal[i]);
+        auto c = static_cast<unsigned char>(queryOriginal[i]);
         if (!inAlphabet[c]) {
             inAlphabet[c] = true;
             letterIdx[c] = alphabetLength;
@@ -1429,7 +1429,7 @@ static int transformSequences (const char* const queryOriginal, const int queryL
         (*queryTransformed)[i] = letterIdx[c];
     }
     for (int i = 0; i < targetLength; i++) {
-        unsigned char c = static_cast<unsigned char>(targetOriginal[i]);
+        auto c = static_cast<unsigned char>(targetOriginal[i]);
         if (!inAlphabet[c]) {
             inAlphabet[c] = true;
             letterIdx[c] = alphabetLength;

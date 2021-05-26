@@ -76,7 +76,7 @@ double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& d
         unsigned long& mini1, unsigned long& mini2) {
     // super large value
     double minD = 99999999999.99;
-    unsigned long numseqs = static_cast<unsigned long>(dmatrix.size());
+    auto numseqs = static_cast<unsigned long>(dmatrix.size());
     for (unsigned long i = 0; i < (numseqs - 1); i++) {
         unsigned long idx = static_cast<unsigned long>(std::min_element(dmatrix[i].begin() + (i + 1),
                 dmatrix[i].end()) - dmatrix[i].begin());
@@ -164,7 +164,7 @@ void UPGMA::construct_tree () {
         // now, fill in remaining
         unsigned long icount = 1;
         unsigned long jcount = 1;
-        unsigned long ndsize = static_cast<unsigned long>(nodes.size());
+        auto ndsize = static_cast<unsigned long>(nodes.size());
         for (unsigned long i = 0; i < ndsize; i++) {
             jcount = 1;
             if (i != ind1 && i != ind2) {

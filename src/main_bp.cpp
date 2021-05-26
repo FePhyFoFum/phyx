@@ -242,7 +242,7 @@ int main(int argc, char * argv[]) {
     }
     //----END READ MAP TREE
 
-    unsigned long numtrees = static_cast<unsigned long>(trees.size());
+    auto numtrees = static_cast<unsigned long>(trees.size());
     if (numtrees == 0) {
         if (fileset) {
             fstr->close();

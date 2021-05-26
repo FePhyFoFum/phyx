@@ -444,7 +444,7 @@ double v_mean (std::vector<double>& in) {
 
 // if you want one, prolly want the other too
 void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
-    double n = static_cast<double>(in.size());
+    auto n = static_cast<double>(in.size());
     mn = sum(in) / n;
     std::vector<double> diff(in.size());
     std::transform(in.begin(), in.end(), diff.begin(),
@@ -455,7 +455,7 @@ void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
 
 
 double v_variance (std::vector<double>& in) {
-    double n = static_cast<double>(in.size());
+    auto n = static_cast<double>(in.size());
     double meann = sum(in) / n;
     std::vector<double> diff(static_cast<unsigned long>(n));
     std::transform(in.begin(), in.end(), diff.begin(),
