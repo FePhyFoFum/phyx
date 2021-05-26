@@ -8,7 +8,6 @@ class Tree; // forward declaration
 class Polytomy {
 private:
 
-    bool sample_polytomy_;
     std::vector<std::string> terminals_to_prune_;
     
 public:

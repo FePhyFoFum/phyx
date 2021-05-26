@@ -748,7 +748,7 @@ bool has_root_edge (Tree * tr) {
 
 
 std::string double_to_str (double d) {
-    size_t len = snprintf(nullptr, 0, "%.16f", d);
+    size_t len = static_cast<size_t>(snprintf(nullptr, 0, "%.16f", d));
     std::string s(len+1, 0);
     snprintf(&s[0], len+1, "%.16f", d);
     s.pop_back();
@@ -761,7 +761,7 @@ std::string double_to_str (double d) {
 
 
 unsigned long int get_num_possible_trees (const unsigned int& n, const bool& rooted) {
-    return doublefactorial(2 * (n + static_cast<int>(rooted)) - 5);
+    return doublefactorial(2 * (n + static_cast<unsigned int>(rooted)) - 5);
 }
 
 

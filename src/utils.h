@@ -34,8 +34,8 @@ int get_longest_label (std::vector<std::string>& labels);
 
 std::istream& getline_safe(std::istream& is, std::string& t);
 
-int factorial (int n);
-int doublefactorial (int n);
+unsigned int factorial (unsigned int n);
+unsigned long int doublefactorial (unsigned int n);
 
 long int get_clock_seed ();
 

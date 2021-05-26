@@ -212,13 +212,14 @@ std::istream& getline_safe(std::istream& is, std::string& t) {
 }
 
 
-int factorial (int n) {
+// not currently used
+unsigned int factorial (unsigned int n) {
     return (n == 0 || n == 1) ? 1 : factorial(n - 1) * n;
 }
 
 
 // used for counting trees
-int doublefactorial(int n) {
+unsigned long int doublefactorial (unsigned int n) {
     return (n == 0 || n == 1) ? 1 : doublefactorial(n - 2) * n; 
 } 
 
