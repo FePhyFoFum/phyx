@@ -173,13 +173,13 @@ typedef enum {
 
 
     /**
-     * Aligns two sequences (query and target) using edit distance (levenshtein distance).
+     * Aligns two sequences (queryOriginal and target) using edit distance (levenshtein distance).
      * Through config parameter, this function supports different alignment methods (global, prefix, infix),
      * as well as different modes of search (tasks).
      * It always returns edit distance and end locations of optimal alignment in target.
      * It optionally returns start locations of optimal alignment in target and alignment path,
      * if you choose appropriate tasks.
-     * @param [in] query  First sequence.
+     * @param [in] queryOriginal  First sequence.
      * @param [in] queryLength  Number of characters in first sequence.
      * @param [in] target  Second sequence.
      * @param [in] targetLength  Number of characters in second sequence.
@@ -187,7 +187,7 @@ typedef enum {
      * @return  Result of alignment, which can contain edit distance, start and end locations and alignment path.
      *          Make sure to clean up the object using edlibFreeAlignResult() or by manually freeing needed members.
      */
-    EdlibAlignResult edlibAlign (const char* query, int queryLength,
+    EdlibAlignResult edlibAlign (const char* queryOriginal, int queryLength,
                                 const char* target, int targetLength,
                                 const EdlibAlignConfig config);
 
