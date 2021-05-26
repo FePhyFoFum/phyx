@@ -7,18 +7,18 @@
 class SequenceConcatenater {
 private:
     std::vector<Sequence> seqs_;
-    int num_partitions_;
-    int num_char_;
-    int num_taxa_;
+    unsigned int num_partitions_;
+    unsigned int num_char_;
+    unsigned int num_taxa_;
     bool toupcase_;
     std::string filename_;
-    std::vector<int> partition_sizes_;
+    std::vector<unsigned int> partition_sizes_;
     
     void read_sequences ();
     int get_sequence_length ()const;
     
-    std::vector<int> get_partition_sizes ()const;
-    void delete_sequence (SequenceConcatenater& newSeqs, const int& index);
+    std::vector<unsigned int> get_partition_sizes ()const;
+    void delete_sequence (SequenceConcatenater& newSeqs, const unsigned int& index);
 
 public:
     SequenceConcatenater (const bool& toupcase);
@@ -26,7 +26,7 @@ public:
     void concatenate (SequenceConcatenater& newSeqs);
     
     int get_num_taxa ()const;
-    Sequence get_sequence (const int& index)const;
+    Sequence get_sequence (const unsigned int& index)const;
     void write_partition_information (const std::vector<std::string>& inputFiles,
         std::string& partfile);
     //~SequenceConcatenater ();

@@ -28,10 +28,10 @@ void SequenceConcatenater::read_sequences () {
     
     std::string alphaName;
     seqs_ = ingest_alignment(pios, alphaName);
-    num_taxa_ = static_cast<int>(seqs_.size());
+    num_taxa_ = seqs_.size();
     
     if (toupcase_) {
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             seqs_[i].set_sequence(string_to_upper(seqs_[i].get_sequence()));
         }
     }
@@ -55,10 +55,10 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
     int new_seq_len = newSeqs.get_sequence_length();
     std::string new_filler(new_seq_len, '-');
     num_char_ += new_seq_len;
-    for (unsigned long i = 0; i != static_cast<unsigned long>(num_taxa_); i++) {
+    for (unsigned int i = 0; i != num_taxa_; i++) {
         bool match_found = false;
         if (newSeqs.num_taxa_ > 0) {
-            for (unsigned long j = 0; j != static_cast<unsigned long>(newSeqs.num_taxa_); j++) {
+            for (unsigned int j = 0; j != newSeqs.num_taxa_; j++) {
                 if (seqs_[i].get_id() == newSeqs.seqs_[j].get_id()) {
                     seqs_[i].set_sequence(seqs_[i].get_sequence() + newSeqs.seqs_[j].get_sequence());
                     match_found = true;
@@ -76,7 +76,7 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
 
     // now, all that should be left are the novel sequences from the new file
     if (newSeqs.num_taxa_ > 0) {
-        for (unsigned long i = 0; i != static_cast<unsigned long>(newSeqs.num_taxa_); i++) {
+        for (unsigned int i = 0; i != newSeqs.num_taxa_; i++) {
             newSeqs.seqs_[i].set_sequence(old_filler + newSeqs.seqs_[i].get_sequence());
             seqs_.push_back(newSeqs.seqs_[i]);
             num_taxa_++;
@@ -97,18 +97,19 @@ int SequenceConcatenater::get_num_taxa ()const {
 }
 
 
-void SequenceConcatenater::delete_sequence (SequenceConcatenater& newSeqs, const int& index) {
+void SequenceConcatenater::delete_sequence (SequenceConcatenater& newSeqs,
+        const unsigned int& index) {
     newSeqs.seqs_.erase(newSeqs.seqs_.begin() + index);
     newSeqs.num_taxa_--;
 }
 
 
-Sequence SequenceConcatenater::get_sequence (const int& index)const {
-    return seqs_[static_cast<unsigned long>(index)];
+Sequence SequenceConcatenater::get_sequence (const unsigned int& index)const {
+    return seqs_[index];
 }
 
 
-std::vector<int> SequenceConcatenater::get_partition_sizes ()const {
+std::vector<unsigned int> SequenceConcatenater::get_partition_sizes ()const {
     return partition_sizes_;
 }
 
@@ -116,8 +117,8 @@ std::vector<int> SequenceConcatenater::get_partition_sizes ()const {
 void SequenceConcatenater::write_partition_information (const std::vector<std::string>& inputFiles,
     std::string& partfile) {
     std::ofstream outfile(partfile.c_str());
-    int charIndex = 1;
-    int stopIndex = 1;
+    unsigned int charIndex = 1;
+    unsigned int stopIndex = 1;
     
     // need to check seq type when writing this
     // use infer_alpha / get_alpha_name

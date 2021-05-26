@@ -78,9 +78,9 @@ void AAtoCDN::generate_codon_alignment () {
     std::string aaseq;
     std::string nucseq;
     std::string codonseq;
-    int aalen = 0;
-    int naachars = 0;
-    int ncodons = 0;
+    unsigned int aalen = 0;
+    unsigned int naachars = 0;
+    unsigned int ncodons = 0;
     Sequence seq;
     for (unsigned int i = 0; i < aa_seqs_.size(); i++) {
         seq.set_id(aa_seqs_[i].get_id());
@@ -103,8 +103,8 @@ void AAtoCDN::generate_codon_alignment () {
         if (remove_last_) {
             aalen--;
         }
-        int nuccntr = 0;
-        for (int j = 0; j < aalen; j++) {
+        unsigned int nuccntr = 0;
+        for (unsigned int j = 0; j < aalen; j++) {
             if (aaseq[j] == '-') {
                 codonseq += "---";
             } else {

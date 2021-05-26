@@ -160,10 +160,10 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
-    int seqlength = seqs[0].get_length();
+    unsigned int seqlength = seqs[0].get_length();
     std::string retstring;
     if (alpha == "DNA") {
-        for (int i = 0; i < seqlength; i++) {
+        for (unsigned int i = 0; i < seqlength; i++) {
             std::set<int> fullset;
             for (auto & seq : seqs) {
                 std::set<int> tset = get_dna_pos(seq.get_sequence()[i]);
@@ -172,7 +172,7 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
             retstring += get_dna_from_pos(fullset);
         }
     } else if (alpha == "AA") {
-        for (int i = 0; i < seqlength; i++) {
+        for (unsigned int i = 0; i < seqlength; i++) {
             std::set<char> fullset;
             //bool ambig = false; // doesn't do anything
             for (auto & seq : seqs) {
@@ -262,7 +262,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * another one needs to be written for concatenation
  */
 void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
-    int seqlength = seqs[0].get_length();
+    unsigned int seqlength = seqs[0].get_length();
     std::string datatype = seqs[0].get_alpha_name();
     std::string symbols; // not required for binary (default), protein, DNA
     //std::cout << std::endl << "datatype = " << datatype << std::endl << std::endl;
@@ -327,7 +327,7 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
  */
 void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
-    int start = site*3;
+    unsigned int start = site*3;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq;
@@ -349,7 +349,7 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
  */
 void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
-    int start = site * 3;
+    unsigned int start = site * 3;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq(61, '0');
@@ -622,11 +622,11 @@ bool is_aligned (const std::vector<Sequence>& seqs) {
     bool aligned = true;
     bool first = true;
     Sequence seq;
-    int num_char = 0;
+    unsigned int num_char = 0;
     for (const auto & sq : seqs) {
         seq = sq;
         if (!first) {
-            if (static_cast<int>(seq.get_length()) != num_char) {
+            if (seq.get_length() != num_char) {
                 aligned = false;
             }
         } else {

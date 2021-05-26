@@ -30,7 +30,7 @@ std::vector<std::string> tokenize (const std::string& input);
 void trim_spaces (std::string& str);
 bool check_comment_line (const std::string& line);
 bool is_number (const std::string&);
-int get_longest_label (std::vector<std::string>& labels);
+unsigned int get_longest_label (std::vector<std::string>& labels);
 
 std::istream& getline_safe(std::istream& is, std::string& t);
 

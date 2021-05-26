@@ -1072,7 +1072,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
         }
         // check seq lengths are all good
         bool good = true;
-        int bad_idx = 0;
+        unsigned int bad_idx = 0;
         int bad_len = 0;
         for (unsigned int i = 0; i < seqs.size(); i++) {
             residues = seqs[i].get_sequence();
@@ -1084,7 +1084,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, cons
             }
         }
         if (!good) {
-            std::cerr << "Error: bad phylip file. Taxon '" << seqs[static_cast<unsigned long>(bad_idx)].get_id()
+            std::cerr << "Error: bad phylip file. Taxon '" << seqs[bad_idx].get_id()
                 << "' had " << bad_len << " characters, but " << num_char
                 << " were expected. Exiting." << std::endl;
             exit(1);

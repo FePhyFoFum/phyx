@@ -124,8 +124,8 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     for (unsigned int j = 0; j < seq2.length()+1; j++) {
         F[j][0] = d*j;
     }
-    int besti = 0;
-    int bestj = 0;
+    unsigned int besti = 0;
+    unsigned int bestj = 0;
     double bestsc = 0;
     for (unsigned int j = 1; j < seq2.length()+1; j++) {
         for (unsigned int i = 1; i < seq1.length()+1; i++) {

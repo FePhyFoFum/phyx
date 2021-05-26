@@ -162,11 +162,11 @@ bool is_number (const std::string& s) {
 
 
 // get the longest label. for printing/formatting purposes
-int get_longest_label (std::vector<std::string>& labels) {
-    int longest_label_ = 0;
-    int cur_len = 0;
+unsigned int get_longest_label (std::vector<std::string>& labels) {
+    unsigned int longest_label_ = 0;
+    unsigned int cur_len = 0;
     for (auto & label : labels) {
-        cur_len = static_cast<int>(label.size());
+        cur_len = label.size();
         if (cur_len > longest_label_) {
             longest_label_ = cur_len;
         }
@@ -720,9 +720,11 @@ unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2) {
           "Hamming distances are only defined for strings of equal length"
       );
     }
-
+    
+    unsigned int startv = 0;
+    
     return std::inner_product(
-        s1.begin(), s1.end(), s2.begin(), 0, std::plus<unsigned int>(),
+        s1.begin(), s1.end(), s2.begin(), startv, std::plus<unsigned int>(),
         std::not2(std::equal_to<std::string::value_type>())
     );
 }
