@@ -456,7 +456,8 @@ bool is_ultrametric_paths (Tree * tr) {
     */
     // this might be better, as it exits earlier on a fail.
     /*
-    vector<double>::iterator it = find_if_not(paths.begin()+1, paths.end(), bind(essentially_equal, placeholders::_1, paths[0]));
+    vector<double>::iterator it = find_if_not(paths.begin()+1, paths.end(),
+        bind(essentially_equal, placeholders::_1, paths[0]));
     if (it == end(paths)) {
         ultrametric = true;
     }
@@ -464,7 +465,8 @@ bool is_ultrametric_paths (Tree * tr) {
 
     /*
     for (unsigned int i = 1; i < paths.size(); i++) {
-        std::cout << "Comparing " << paths[0] << " to " << paths[i] << " = " << (paths[0] - paths[i]) << "." << std::endl;
+        std::cout << "Comparing " << paths[0] << " to " << paths[i] << " = "
+            << (paths[0] - paths[i]) << "." << std::endl;
         essentially_equal(paths[0], paths[i]);
     }
 

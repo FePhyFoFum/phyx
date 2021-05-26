@@ -90,7 +90,8 @@ void SequenceSampler::sample_sites (const int& numchar) {
 
 // sample with replacement.
 std::vector<int> SequenceSampler::get_bootstrap_sites (const int& numchar) {
-    std::vector<int> randsites (static_cast<unsigned long>(numchar)); // numchar zero-initialized elements
+    // numchar zero-initialized elements
+    std::vector<int> randsites (static_cast<unsigned long>(numchar));
     int randnum = 0;
     
     for (int i = 0; i < numchar; i++) {
@@ -231,7 +232,8 @@ void SequenceSampler::calculate_num_partitioned_sites () {
     num_partitioned_sites_ = 0;
     for (int i = 0; i < num_partitions_; i++) {
         num_partitioned_sites_ += static_cast<int>(partitions_[static_cast<unsigned long>(i)].size());
-//         std::cout << "Partition #" << i << " contains " << (int)partitions[i].size() << " sites:" << std::endl;
+//         std::cout << "Partition #" << i << " contains " << (int)partitions[i].size()
+//        << " sites:" << std::endl;
 //         for (unsigned int j = 0; j < partitions[i].size(); j++) {
 //             std::cout << partitions[i][j] << " ";
 //         }
@@ -292,14 +294,16 @@ void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites)
     }
     
     if (!duplicates.empty()) {
-        std::cerr << "Error: the following " << duplicates.size() << " sites are found in more than one partition: ";
+        std::cerr << "Error: the following " << duplicates.size()
+                << " sites are found in more than one partition: ";
         for (int duplicate : duplicates) {
             std::cerr << duplicate << " ";
         }
         std::cerr << std::endl;
     }
     if (!missing.empty()) {
-        std::cerr << "Error: the following " << missing.size() << " sites are not found in any partition: ";
+        std::cerr << "Error: the following " << missing.size()
+                << " sites are not found in any partition: ";
         for (int ms : missing) {
             std::cerr << ms << " ";
         }

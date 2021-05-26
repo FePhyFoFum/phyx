@@ -220,7 +220,8 @@ int main(int argc, char * argv[]) {
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 190) {
-                    std::cerr << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
+                    std::cerr << "Error: must provide 190 substitution parameters. ";
+                    std::cerr << "I know its a stupidly large amount. " <<
                         "Only " << userrates.size() << " provided. Exiting." << std::endl;
                     exit(0);
                 }

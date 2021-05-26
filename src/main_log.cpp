@@ -30,12 +30,13 @@ void print_help () {
     std::cout << " -t, --treef=FILE    input tree log file(s)" << std::endl;
     std::cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << std::endl;
     std::cout << " -n, --thin=INT      interval of resampling" << std::endl;
-//    std::cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << std::endl;
+    // not yet implemented:
+//    std::cout << " -r, --rand=INT      number of random samples (without replacement)" << std::endl;
     std::cout << " -i, --info          calculate log file attributes and exit" << std::endl;
     std::cout << " -s, --summarize     summary statistics of samples (parameter logs only)" << std::endl;
     std::cout << " -c, --columns       print out column names (parameter logs only)" << std::endl;
-    std::cout << " -d, --delete=CSL    delete columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
-    std::cout << " -k, --keep=CSL      keep only columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
+    std::cout << " -d, --delete=CSL    delete parm columns by 1-index sep by commas (NO SPACES!)" << std::endl;
+    std::cout << " -k, --keep=CSL      keep only parm columns by 1-index sep by commas (NO SPACES!)" << std::endl;
 //    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
     std::cout << " -v, --verbose       make the output more verbose" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;

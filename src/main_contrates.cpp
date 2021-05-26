@@ -134,7 +134,8 @@ int main(int argc, char * argv[]) {
         cfstr = new std::ifstream(charf);
         pios = cfstr;
     } else {
-        std::cerr << "Error: you have to set a character file. Only a tree file can be read in through the stream. Exiting." << std::endl;
+        std::cerr << "Error: you have to set a character file. ";
+        std::cerr << "Only a tree file can be read in through the stream. Exiting." << std::endl;
         exit(1);
     }
 

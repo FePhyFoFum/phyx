@@ -727,7 +727,8 @@ int main(int argc, char * argv[]) {
                     if (existing_states[k]==1) {
                         sr.prepare_stochmap_reverse_all_nodes(excount, excount);
                         sr.prepare_ancstate_reverse();
-                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]), true);
+                        std::vector<double> stoch;
+                        stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochtime[j]]), true);
                         double tnum = sum(stoch)/double(totlike_sd);
                         double bl = tree->getMRCA(mrcas[stochtime[j]])->getBL();
                         if (verbose) {
@@ -780,7 +781,8 @@ int main(int argc, char * argv[]) {
                                     } else {
                                         sr.prepare_stochmap_reverse_all_nodes(excount, excount2);
                                         sr.prepare_ancstate_reverse();
-                                        std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]), false);
+                                        std::vector<double> stoch;
+                                        stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]), false);
                                         double tnum = sum(stoch)/totlike_sd;
                                         if (verbose) {
                                             (*loos) << tnum << " ";
@@ -841,13 +843,14 @@ int main(int argc, char * argv[]) {
             }
             for (unsigned int j = 0; j < stochnumber_any.size(); j++) {
                 if (!tree->getMRCA(mrcas[stochnumber_any[j]])->isRoot()) {
-                    std::vector<double> lhoods;
+                    //std::vector<double> lhoods; // not used
+                    std::vector<double> stoch;
                     if (verbose) {
                         (*loos) << "node: " << tree->getMRCA(mrcas[stochnumber_any[j]])->getName()
                                 << " mrca: " << stochnumber_any[j] << std::endl;
                     }
                     sttnumout_any << n+1 << "\t" << i+1 << "\t" << stochnumber_any[j]<< "\t" << finallike;
-                    std::vector<double> stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]), false);
+                    stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber_any[j]]), false);
                     double tnum = sum(stoch)/totlike_sd;
                     //(*loos) << sum(stoch) << " " << totlike << std::endl;
                     if (verbose) {

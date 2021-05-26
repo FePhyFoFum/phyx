@@ -274,7 +274,8 @@ bool check_comment_line (const std::string& line) {
 // used by pxstrec
 std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates) {
     std::vector<double> cols(static_cast<unsigned long>(numstates), 1);
-    std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (static_cast<unsigned long>(numstates), cols);
+    std::vector<std::vector<double> > ratematrix;
+    ratematrix = std::vector<std::vector<double> > (static_cast<unsigned long>(numstates), cols);
     //read file
     std::ifstream ifs(filename.c_str());
     std::string line;

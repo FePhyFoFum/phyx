@@ -49,7 +49,8 @@ unsigned int TopologyGenerator::get_num_edges (const unsigned int& num_taxa, con
 // first 3 edges are initialized (i.e., star tree)
 std::vector< std::vector<unsigned int> > TopologyGenerator::initialize_edge_matrix_unrooted (const unsigned int& n) {
     unsigned int num_edges = 2 * n - 3;
-    std::vector< std::vector<unsigned int> > edges(static_cast<unsigned long>(num_edges), std::vector<unsigned int>(2, 0));
+    std::vector< std::vector<unsigned int> > edges(static_cast<unsigned long>(num_edges),
+            std::vector<unsigned int>(2, 0));
     edges[0][0] = edges[1][0] = edges[2][0] = n + 1;
     // initialize 3 taxon star tree
     for (unsigned int i = 0; i < 3; i++) {
@@ -78,7 +79,8 @@ std::vector< std::vector<unsigned int> > TopologyGenerator::initialize_edge_matr
 // add next taxon to existing edge matrices
 // for the nth taxon, there are 2(n-1)-3 possible attachment pounsigned ints
 // - i.e., the edges of the previous iteration
-std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_taxon_unrooted (std::vector< std::vector< std::vector<unsigned int> > > edges,
+std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_taxon_unrooted (
+        std::vector< std::vector< std::vector<unsigned int> > > edges,
         const unsigned int& taxon, const unsigned int& new_node) {
     std::vector< std::vector< std::vector<unsigned int> > > trees;
     unsigned int num_attach = 2 * (taxon - 1) - 3; // also the row where next edge will be added
@@ -107,7 +109,8 @@ std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_t
 // for the nth taxon, there are 2(n-1)-2 possible attachment pounsigned ints
 // - i.e., the edges of the previous iteration
 // need to keep a copy of the first matrix for flipping in the last
-std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_taxon_rooted (std::vector< std::vector< std::vector<unsigned int> > > edges,
+std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_taxon_rooted (
+        std::vector< std::vector< std::vector<unsigned int> > > edges,
         const unsigned int& taxon, const unsigned int& new_node) {
     std::vector< std::vector< std::vector<unsigned int> > > trees;
     unsigned int num_attach = 2 * (taxon) - 1 - 2; // also the row where next edge will be added
@@ -193,7 +196,8 @@ std::string TopologyGenerator::edge_matrix_to_newick (const std::vector< std::ve
 
 
 // recursive, so newick string is passed by reference
-void TopologyGenerator::newick_from_tree_map (unsigned int node, std::map<unsigned int, std::vector<unsigned int>> m, std::string& tree) {
+void TopologyGenerator::newick_from_tree_map (unsigned int node,
+        std::map<unsigned int, std::vector<unsigned int>> m, std::string& tree) {
     tree += "("; // every entrance to this function is a tree
     
     std::vector<unsigned int> decnodes = m[node];

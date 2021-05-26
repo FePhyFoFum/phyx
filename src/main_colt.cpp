@@ -29,7 +29,7 @@ void print_help () {
     std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
     std::cout << " -l, --limit=DOUBLE  minimum support threshold as proportion (default = 0.5)" << std::endl;
 // Welp this was forgotten :( comment out until actually implemented
-//    std::cout << " -s, --sup=STRING    string identifying support values (if default fails) NOT IMPLEMENTED!" << std::endl;
+//    std::cout << " -s, --sup=STRING    string identifying support values (if default fails)!" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;

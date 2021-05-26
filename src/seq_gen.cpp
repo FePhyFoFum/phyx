@@ -245,8 +245,8 @@ std::vector< std::vector<double> > SequenceGenerator::calculate_q_matrix () {
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
  */
-std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (const std::vector< std::vector<double> >& QMatrix,
-    float br) {
+std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (
+    const std::vector< std::vector<double> >& QMatrix, float br) {
 
     std::vector< std::vector<double> > Pmatrix(nstates_, std::vector<double>(nstates_, 0.0));
     mat A = randn<mat>(nstates_, nstates_);

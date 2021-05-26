@@ -47,7 +47,8 @@ void NJOI::FetchLengths (const int& NumbOfSequences, const std::vector< std::vec
     std::vector< std::vector<double> >& LengthMatrix, const unsigned long& mini1,
     const unsigned long& mini2, double & brlength1, double & brlength2) {
 
-    brlength1 = (NewMatrix[mini1][mini2] + (LengthMatrix[mini1][mini2] / static_cast<double>(NumbOfSequences - 2))) * 0.5;
+    brlength1 = (NewMatrix[mini1][mini2] + (LengthMatrix[mini1][mini2]
+            / static_cast<double>(NumbOfSequences - 2))) * 0.5;
     brlength2 = NewMatrix[mini1][mini2] - brlength1;
 }
 

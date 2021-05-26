@@ -225,7 +225,8 @@ void SequenceCleaner::count_missing () {
                     //std::cout << "  BAD CHAR (" << seq_string[j] << ")!" << std::endl;
                 }
             }
-            missing_per_taxon_proportion_[i] = static_cast<double>(missing_per_taxon_[i]) / static_cast<double>(num_char_);
+            missing_per_taxon_proportion_[i] = static_cast<double>(missing_per_taxon_[i])
+                    / static_cast<double>(num_char_);
         }
     } else {
         std::string codon;
@@ -243,13 +244,15 @@ void SequenceCleaner::count_missing () {
                     // std::cout << "  BAD CODON (" << codon << ")!" << std::endl;
                 }
             }
-            missing_per_taxon_proportion_[i] = static_cast<double>(missing_per_taxon_[i]) / static_cast<double>(num_char_);
+            missing_per_taxon_proportion_[i] = static_cast<double>(missing_per_taxon_[i])
+                    / static_cast<double>(num_char_);
         }
     }
     
     // get proportions
     for (unsigned long i = 0; i < nc; i++) {
-        missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i]) / static_cast<double>(num_taxa_);
+        missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i])
+                / static_cast<double>(num_taxa_);
         //std::cout << i << ". missing = " << missing_per_site_counts_[i] << "("
         //        << missing_per_site_proportion_[i] << ")" << std::endl;
         if (missing_per_site_proportion_[i] <= missing_allowed_) {

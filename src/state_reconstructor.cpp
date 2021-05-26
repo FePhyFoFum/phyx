@@ -350,7 +350,7 @@ void StateReconstructor::reverse (Node * node) {
     VectorNodeObject<Superdouble> * revconds = new VectorNodeObject<Superdouble> (nstates, 0);
     if (node == tree->getRoot()) {
         for (int i = 0; i < nstates; i++) {
-            revconds->at(i) = 1.0;//prior
+            revconds->at(i) = 1.0; // prior
         }
         node->assocObject(revB,*revconds);
         delete revconds;
@@ -359,28 +359,30 @@ void StateReconstructor::reverse (Node * node) {
         }
     } else {
         //else if (!node.isExternal()) {
-        //calculate A i
-        //sum over all alpha k of sister node of the parent times the priors of the speciations
-        //(weights) times B of parent j
-        VectorNodeObject<Superdouble> * parrev = ((VectorNodeObject<Superdouble>*)node->getParent()->getObject(revB));
+        // calculate A i
+        // sum over all alpha k of sister node of the parent times the priors of the speciations
+        // (weights) times B of parent j
+        VectorNodeObject<Superdouble> * parrev;
+        parrev = ((VectorNodeObject<Superdouble>*) node->getParent()->getObject(revB));
         VectorNodeObject<Superdouble> sisdistconds;
+        VectorNodeObject<Superdouble>* talph;
         if (node->getParent()->getChild(0) != node) {
-            VectorNodeObject<Superdouble>* talph = ((VectorNodeObject<Superdouble>*) node->getParent()->getChild(0)->getObject(alphas));
+            talph = ((VectorNodeObject<Superdouble>*) node->getParent()->getChild(0)->getObject(alphas));
             sisdistconds = *talph;
         } else {
-            VectorNodeObject<Superdouble>* talph = ((VectorNodeObject<Superdouble>*) node->getParent()->getChild(1)->getObject(alphas));
+            talph = ((VectorNodeObject<Superdouble>*) node->getParent()->getChild(1)->getObject(alphas));
             sisdistconds = *talph;
         }
 
         VectorNodeObject<Superdouble> tempA(nstates, 0);
-        //needs to be the same as ancdist_cond_lh
+        // needs to be the same as ancdist_cond_lh
         for (int i = 0; i < nstates; i++) {
             //root has i, curnode has left, sister of cur has right
             //for (int j = 0; j < nstates; j++) {
             tempA[i] += (sisdistconds.at(i)*parrev->at(i));
             //}
         }
-        //now calculate node B
+        // now calculate node B
         //VectorNodeObject<BranchSegment>* tsegs = ((VectorNodeObject<BranchSegment>*) node.getObject(seg));
         for (int j = 0; j < nstates; j++) {
             revconds->at(j) = 0;
@@ -392,7 +394,7 @@ void StateReconstructor::reverse (Node * node) {
         VectorNodeObject<Superdouble> tempmoveAer(tempA);
         VectorNodeObject<Superdouble> tempmoveAen(tempA);
         if (stochastic) {
-            //initialize the segment B's
+            // initialize the segment B's
             for (int j = 0; j < nstates; j++) {
                 tempmoveAer[j] = 0;
                 tempmoveAen[j] = 0;
@@ -467,7 +469,7 @@ std::vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) 
 
 void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
     stochastic = true;
-    //calculate and store local expectation matrix for each branch length
+    // calculate and store local expectation matrix for each branch length
     for (int k = 0; k < tree->getNodeCount(); k++) {
         double dur =  tree->getNode(k)->getBL();
         cx_mat eigvec(nstates, nstates); eigvec.fill(0);
@@ -514,7 +516,7 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
         }
         //std::cout << isImag << std::endl;
         //std::cout << summed << std::endl;
-        //seems like when these are IMAG, there can sometimes be negative with very small values
+        // seems like when these are IMAG, there can sometimes be negative with very small values
         stored_EN_matrices[dur] = abs(real(summed)); //(real(summed));
         stored_ER_matrices[dur] = abs(real(summedR)); //(real(summedR));
     }
@@ -526,7 +528,7 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
 */
 void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
     stochastic = true;
-    //calculate and store local expectation matrix for each branch length
+    // calculate and store local expectation matrix for each branch length
     for (int k = 0; k < tree->getNodeCount(); k++) {
         double dur =  tree->getNode(k)->getBL();
         cx_mat eigvec(nstates, nstates);eigvec.fill(0);
@@ -614,7 +616,7 @@ std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, 
         for (int i = 0; i < nstates; i++) {
             totalExp[i] = LHOODS[i];
         }
-        //not sure if this should return a Superdouble or not when doing a bigtree
+        // not sure if this should return a Superdouble or not when doing a bigtree
         return totalExp;
     } else { // hmm don't really need this else
         std::vector<double> totalExp(nstates, 0);
