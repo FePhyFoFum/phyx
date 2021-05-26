@@ -318,9 +318,10 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
             exists = true;
             //std::cout << "Found translation table!" << std::endl;
             continue;
-        } else if (begintrees && !tgoing) {
+        }
+        if (begintrees && !tgoing) {
             //std::cout << "No translation table present!" << std::endl;
-                return false;
+            return false;
         }
         if (uc.find("BEGIN TREES") != std::string::npos) {
             begintrees = true;

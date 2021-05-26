@@ -198,7 +198,8 @@ void LogManipulator::collect_parameter_samples () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
                     auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
@@ -229,29 +230,29 @@ void LogManipulator::collect_parameter_samples () {
                     }
                     first_line = false;
                     continue;
-                } else {
-                    if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
-                        // skip because does not match sampling parameters
-                        par_counter++;
-                        continue;
-                    } else if ((par_counter - burnin_) == 0) {
-                        // keep first post-burnin sample from a file
-                        par_counter++;
-                        store_sample(line);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
-                        par_counter++;
-                        store_sample(line);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else {
-                        // skip because have not yet exceeded burnin
-                        par_counter++;
-                    }
                 }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
+                    // skip because does not match sampling parameters
+                    par_counter++;
+                    continue;
+                }
+                if ((par_counter - burnin_) == 0) {
+                    // keep first post-burnin sample from a file
+                    par_counter++;
+                    store_sample(line);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
+                    par_counter++;
+                    store_sample(line);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                // skip because have not yet exceeded burnin
+                par_counter++;
             }
             indiv_raw_counts_.push_back(par_counter);
             indiv_sample_totals_.push_back(sample_counter);
@@ -308,7 +309,8 @@ void LogManipulator::count_parameter_samples () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
                     auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
@@ -330,10 +332,9 @@ void LogManipulator::count_parameter_samples () {
                     }
                     first_line = false;
                     continue;
-                } else {
-                    num_samps++;
-                    continue;
                 }
+                num_samps++;
+                continue;
             }
             indiv_sample_totals_.push_back(num_samps);
             infilestr_.close();
@@ -360,13 +361,12 @@ void LogManipulator::count_tree_samples () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else {
-                    std::vector<std::string> tokens = tokenize(line);
-                    std::string first = tokens[0];
-                    std::transform(first.begin(), first.end(), first.begin(), ::tolower);
-                    if (first == "tree") {
-                        num_samps++;
-                    }
+                }
+                std::vector<std::string> tokens = tokenize(line);
+                std::string first = tokens[0];
+                std::transform(first.begin(), first.end(), first.begin(), ::tolower);
+                if (first == "tree") {
+                    num_samps++;
                 }
             }
             indiv_sample_totals_.push_back(num_samps);
@@ -416,7 +416,8 @@ void LogManipulator::get_column_names () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
                     auto curpars = static_cast<int>(header.size());
                     num_cols_ = curpars;
@@ -452,7 +453,8 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
         while (getline_safe(infilestr_, line)) {
             if (line.empty() || check_comment_line(line)) {
                 continue;
-            } else if (first_line) {
+            }
+            if (first_line) {
                 std::vector<std::string> header = tokenize(line);
                 auto curpars = static_cast<int>(header.size());
                 num_cols_ = curpars;
@@ -485,17 +487,16 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 (*poos_) << std::endl;
                 first_line = false;
                 continue;
-            } else {
-                std::vector<std::string> samp = tokenize(line);
-                for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << samp[cols_to_retain[static_cast<unsigned long>(i)]];
-                    if (i < (num_cols_retain_ - 1)) {
-                        (*poos_) << "\t";
-                    }
-                }
-                (*poos_) << std::endl;
-                sample_counter++;
             }
+            std::vector<std::string> samp = tokenize(line);
+            for (int i = 0; i < num_cols_retain_; i++) {
+                (*poos_) << samp[cols_to_retain[static_cast<unsigned long>(i)]];
+                if (i < (num_cols_retain_ - 1)) {
+                    (*poos_) << "\t";
+                }
+            }
+            (*poos_) << std::endl;
+            sample_counter++;
         }
             
         if (verbose_) {
@@ -525,7 +526,8 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         while (getline_safe(infilestr_, line)) {
             if (line.empty() || check_comment_line(line)) {
                 continue;
-            } else if (first_line) {
+            }
+            if (first_line) {
                 std::vector<std::string> header = tokenize(line);
                 auto curpars = static_cast<int>(header.size());
                 num_cols_ = curpars;
@@ -547,17 +549,16 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 (*poos_) << std::endl;
                 first_line = false;
                 continue;
-            } else {
-                std::vector<std::string> samp = tokenize(line);
-                for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << samp[cols_to_retain[static_cast<unsigned long>(i)]];
-                    if (i < (num_cols_retain_ - 1)) {
-                        (*poos_) << "\t";
-                    }
-                }
-                (*poos_) << std::endl;
-                sample_counter++;
             }
+            std::vector<std::string> samp = tokenize(line);
+            for (int i = 0; i < num_cols_retain_; i++) {
+                (*poos_) << samp[cols_to_retain[static_cast<unsigned long>(i)]];
+                if (i < (num_cols_retain_ - 1)) {
+                    (*poos_) << "\t";
+                }
+            }
+            (*poos_) << std::endl;
+            sample_counter++;
         }
             
         if (verbose_) {
@@ -581,7 +582,8 @@ void LogManipulator::sample_parameters () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
                     auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
@@ -610,29 +612,29 @@ void LogManipulator::sample_parameters () {
                     }
                     first_line = false;
                     continue;
-                } else {
-                    if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
-                        // skip because does not match sampling parameters
-                        par_counter++;
-                        continue;
-                    } else if ((par_counter - burnin_) == 0) {
-                        // keep first post-burnin sample from a file
-                        par_counter++;
-                        write_reformatted_sample(line, ntotal_samples_);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
-                        par_counter++;
-                        write_reformatted_sample(line, ntotal_samples_);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else {
-                        // skip because have not yet exceeded burnin
-                        par_counter++;
-                    }
                 }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
+                    // skip because does not match sampling parameters
+                    par_counter++;
+                    continue;
+                }
+                if ((par_counter - burnin_) == 0) {
+                    // keep first post-burnin sample from a file
+                    par_counter++;
+                    write_reformatted_sample(line, ntotal_samples_);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
+                    par_counter++;
+                    write_reformatted_sample(line, ntotal_samples_);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                // skip because have not yet exceeded burnin
+                par_counter++;
             }
             indiv_raw_counts_.push_back(par_counter);
             indiv_sample_totals_.push_back(sample_counter);
@@ -670,45 +672,45 @@ void LogManipulator::sample_trees () {
                         }
                     }
                     continue;
-                } else {
-                    std::vector<std::string> tokens = tokenize(line);
-                    std::string first = tokens[0];
-                    std::transform(first.begin(), first.end(), first.begin(), ::tolower);
-                    if (first == "tree") {
-                        if (tree_counter == 0) {
-                            trees_encountered = true;
-                        }
-                        if (ntotal_samples_ == 0) {
-                            // grab tree naming scheme
-                            get_tree_name_prefix(line);
-                        }
-                        if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) < nthin_) {
-                            // skip because does not match sampling parameters
-                            tree_counter++;
-                            continue;
-                        } else if ((tree_counter - burnin_) == 0) {
-                            // keep first post-burnin sample from a file
-                            tree_counter++;
-                            write_reformatted_sample(line, ntotal_samples_);
-                            sample_counter++;
-                            ntotal_samples_++;
-                            continue;
-                        } else if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) % nthin_ == 0) {
-                            tree_counter++;
-                            write_reformatted_sample(line, ntotal_samples_);
-                            sample_counter++;
-                            ntotal_samples_++;
-                            continue;
-                        } else {
-                            // skip because have not yet exceeded burnin
-                            tree_counter++;
-                        }
-                    } else { // not a tree line. only care about first file here. don't want anything below trees
-                        // keep header from first file
-                        // likely includes translation table
-                        if (i == 0 && !trees_encountered) {
-                            (*poos_) << line << std::endl;
-                        }
+                }
+                std::vector<std::string> tokens = tokenize(line);
+                std::string first = tokens[0];
+                std::transform(first.begin(), first.end(), first.begin(), ::tolower);
+                if (first == "tree") {
+                    if (tree_counter == 0) {
+                        trees_encountered = true;
+                    }
+                    if (ntotal_samples_ == 0) {
+                        // grab tree naming scheme
+                        get_tree_name_prefix(line);
+                    }
+                    if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) < nthin_) {
+                        // skip because does not match sampling parameters
+                        tree_counter++;
+                        continue;
+                    }
+                    if ((tree_counter - burnin_) == 0) {
+                        // keep first post-burnin sample from a file
+                        tree_counter++;
+                        write_reformatted_sample(line, ntotal_samples_);
+                        sample_counter++;
+                        ntotal_samples_++;
+                        continue;
+                    }
+                    if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) % nthin_ == 0) {
+                        tree_counter++;
+                        write_reformatted_sample(line, ntotal_samples_);
+                        sample_counter++;
+                        ntotal_samples_++;
+                        continue;
+                    }
+                    // skip because have not yet exceeded burnin
+                    tree_counter++;
+                } else { // not a tree line. only care about first file here. don't want anything below trees
+                    // keep header from first file
+                    // likely includes translation table
+                    if (i == 0 && !trees_encountered) {
+                        (*poos_) << line << std::endl;
                     }
                 }
             }

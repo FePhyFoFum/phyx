@@ -143,11 +143,10 @@ void SequenceSampler::parse_partitions (std::string& partf) {
     while (getline_safe(infile, line)) {
         if (line.empty()) {
             continue;
-        } else {
-            temp = get_partition_sites(line);
-            partitions_.push_back(temp);
-            temp.clear();
         }
+        temp = get_partition_sites(line);
+        partitions_.push_back(temp);
+        temp.clear();
     }
     infile.close();
     

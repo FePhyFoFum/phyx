@@ -19,26 +19,25 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
     while (getline_safe(fstr, line)) {
         if (line[0] == '#' || line.empty()) {
             continue;
-        } else {
-            std::vector<std::string> tokens;
-            std::string del(" \t");
-            tokenize(line, tokens, del);
+        }
+        std::vector<std::string> tokens;
+        std::string del(" \t");
+        tokenize(line, tokens, del);
+        for (auto & tk : tokens) {
+            trim_spaces(tk); // this will never be used, as it was split on whitespace
+        }
+        if (first) {
+            first = false;
             for (auto & tk : tokens) {
-                trim_spaces(tk); // this will never be used, as it was split on whitespace
+                order.push_back(tk[0]);
             }
-            if (first) {
-                first = false;
-                for (auto & tk : tokens) {
-                    order.push_back(tk[0]);
-                }
-                for (char j : order) {
-                    sc_mat[j] = std::map<char, int>();
-                }
-                continue;
+            for (char j : order) {
+                sc_mat[j] = std::map<char, int>();
             }
-            for (unsigned int j = 0; j < order.size(); j++) {
-                sc_mat[tokens[0][0]][order[j]] = std::atoi(tokens[j+1].c_str()); //#changed from int to float
-            }
+            continue;
+        }
+        for (unsigned int j = 0; j < order.size(); j++) {
+            sc_mat[tokens[0][0]][order[j]] = std::atoi(tokens[j+1].c_str()); //#changed from int to float
         }
     }
     fstr.close();
@@ -52,26 +51,25 @@ void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<ch
     for (auto line : lines) {
         if (line[0] == '#') {
             continue;
-        } else {
-            std::vector<std::string> tokens;
-            std::string del(" \t");
-            tokenize(line, tokens, del);
+        }
+        std::vector<std::string> tokens;
+        std::string del(" \t");
+        tokenize(line, tokens, del);
+        for (auto & tk : tokens) {
+            trim_spaces(tk); // this will never be used, as it was split on whitespace
+        }
+        if (first) {
+            first = false;
             for (auto & tk : tokens) {
-                trim_spaces(tk); // this will never be used, as it was split on whitespace
+                order.push_back(tk[0]);
             }
-            if (first) {
-                first = false;
-                for (auto & tk : tokens) {
-                    order.push_back(tk[0]);
-                }
-                for (char j : order) {
-                    sc_mat[j] = std::map<char, int>();
-                }
-                continue;
+            for (char j : order) {
+                sc_mat[j] = std::map<char, int>();
             }
-            for (unsigned int j = 0; j < order.size(); j++) {
-                sc_mat[tokens[0][0]][order[j]] = std::atoi(tokens[j+1].c_str()); //#changed from int to float
-            }
+            continue;
+        }
+        for (unsigned int j = 0; j < order.size(); j++) {
+            sc_mat[tokens[0][0]][order[j]] = std::atoi(tokens[j+1].c_str()); //#changed from int to float
         }
     }
 }
