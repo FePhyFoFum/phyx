@@ -14,8 +14,8 @@
 #include "citations.h"
 
 
-void print_help (void);
-std::string get_version_line (void);
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Taxon relabelling for trees." << std::endl;

@@ -22,8 +22,8 @@ Give two options:
 2. pass in 1 distribution of trees
 */
 
-void print_help (void);
-std::string get_version_line (void);
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;

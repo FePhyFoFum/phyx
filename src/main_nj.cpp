@@ -21,8 +21,8 @@
 #include "citations.h"
 
 
-void print_help (void);
-std::string get_version_line (void);
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Basic neighbour-joining tree maker." << std::endl;

@@ -12,8 +12,8 @@
 #include "citations.h"
 
 
-void print_help (void);
-std::string get_version_line (void);
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Generate all tree topologies for n (<= 10) taxa." << std::endl;
@@ -87,7 +87,7 @@ int main(int argc, char * argv[]) {
             case 'n':
                 nt = string_to_int(optarg, "-n");
                 if (nt < 0) {
-                    std::cerr << "Error: the number of taxa -n must be >= 3. Exiting." << std::endl;
+                    std::cerr << "Error: ntax must be a positive integer. Exiting." << std::endl;
                     exit(0);
                 } else {
                     num_taxa = static_cast<unsigned int>(nt);

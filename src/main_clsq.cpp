@@ -14,8 +14,8 @@
 
 // TODO: throw out stop_codons: "TAG", "TAA", "TGA"
 
-void print_help (void);
-std::string get_version_line (void);
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
