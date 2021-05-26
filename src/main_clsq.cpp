@@ -4,7 +4,7 @@
 #include <cstring>
 #include <getopt.h>
 
-#include "clsq.h"
+#include "clean_seq.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"

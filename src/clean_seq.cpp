@@ -3,7 +3,7 @@
 #include <vector>
 #include <iomanip>
 
-#include "clsq.h"
+#include "clean_seq.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "seq_utils.h"
