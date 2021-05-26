@@ -644,6 +644,7 @@ bool check_nexus_comment (std::string line) {
     return comment;
 }
 
+
 // get a taxon label that is newick-compliant
 std::string get_valid_newick_label (const std::string& inLabel) {
     std::string outLabel = inLabel;

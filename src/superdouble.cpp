@@ -91,7 +91,7 @@ Superdouble Superdouble::operator / (Superdouble x) {
 // add stilldouble
 Superdouble Superdouble::operator + (Superdouble x) {
     // only tricky thing is converting them to same exponent
-    if (mantissa!=0) {
+    if (mantissa != 0) {
         int exponentdif = x.exponent-exponent;
         Superdouble result(mantissa + (x.mantissa * (pow(10, exponentdif))), exponent);
         result.adjustDecimal();

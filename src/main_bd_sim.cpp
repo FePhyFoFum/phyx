@@ -144,7 +144,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (ext == 0 && time == 0) {
+    if (!extantset && !timeset) {
         std::cerr << "Error: you have to set -e or -t. Exiting." << std::endl;
         exit(0);
     }

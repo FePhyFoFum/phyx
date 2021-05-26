@@ -5,6 +5,7 @@
 
 #include "sequence.h"
 #include "pairwise_alignment.h"
+#include "utils.h"
 
 
 /**
@@ -67,16 +68,16 @@ double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
         if (i > 0) {
             scoreleft = F[j][i-1];
         }
-        if (i > 0 && j > 0 && score == scorediag + scoringmatrix[seq1[i-1]][seq2[j-1]]) {
+        if (i > 0 && j > 0 && essentially_equal(score, scorediag + scoringmatrix[seq1[i-1]][seq2[j-1]])) {
             aln1.append(1, seq1[i-1]);
             aln2.append(1, seq2[j-1]);
             i = i - 1;
             j = j - 1;
-        } else if ( i > 0 && score == scoreleft + d) {
+        } else if ( i > 0 && essentially_equal(score, scoreleft + d)) {
             aln1.append(1, seq1[i-1]);
             aln2.append("-");
             i = i - 1;
-        } else if (j > 0 && score == scoreup + d) {
+        } else if (j > 0 && essentially_equal(score, scoreup + d)) {
             aln1.append("-");
             aln2.append(1, seq2[j-1]);
             j = j - 1;
@@ -152,7 +153,7 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
     unsigned long j = bestj;
     while (i > 0 && j > 0) {
         double score = F[j][i];
-        if (score == 0) {
+        if (essentially_equal(score, 0.0)) {
             break;
         }
         double scorediag = -999;
@@ -167,16 +168,16 @@ double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
         if (i > 0) {
             scoreleft = F[j][i-1];
         }
-        if (i > 0 && j > 0 && score == scorediag + scoringmatrix[seq1[i-1]][seq2[j-1]]) {
+        if (i > 0 && j > 0 && essentially_equal(score, scorediag + scoringmatrix[seq1[i-1]][seq2[j-1]])) {
             aln1.append(1, seq1[i-1]);
             aln2.append(1, seq2[j-1]);
             i = i - 1;
             j = j - 1;
-        } else if (i > 0 && score == scoreleft + d) {
+        } else if (i > 0 && essentially_equal(score, scoreleft + d)) {
             aln1.append(1, seq1[i-1]);
             aln2.append("-");
             i = i - 1;
-        } else if (j > 0 && score == scoreup + d) {
+        } else if (j > 0 && essentially_equal(score, scoreup + d)) {
             aln1.append("-");
             aln2.append(1, seq2[j-1]);
             j = j - 1;

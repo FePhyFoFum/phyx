@@ -164,14 +164,14 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     }
 
     // ACT
-    if (gamma_stat[0] == 0) {
+    if (essentially_equal(gamma_stat[0], 0.0)) {
         ACT = 0;
     } else {
         ACT = step_size * var_stat / gamma_stat[0];
     }
 
     // finally, ESS
-    if (ACT == 0) {
+    if (essentially_equal(ACT, 0.0)) {
         ESS = 1;
     } else {
         ESS = (step_size * n_samples) / ACT;

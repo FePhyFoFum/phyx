@@ -439,7 +439,7 @@ bool is_ultrametric_paths (Tree * tr) {
     if (!is_rooted(tr)) {
         return ultrametric;
     }
-    if (get_tree_length(tr) == 0) {
+    if (essentially_equal(get_tree_length(tr), 0.0)) {
         return ultrametric;
     }
 
@@ -512,7 +512,7 @@ bool is_ultrametric_postorder (Tree * tr) {
     if (!is_rooted(tr)) {
         return ultrametric;
     }
-    if (get_tree_length(tr) == 0) {
+    if (essentially_equal(get_tree_length(tr), 0.0)) {
         return ultrametric;
     }
     Node * root = tr->getRoot();
