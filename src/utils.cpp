@@ -423,7 +423,7 @@ int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
 
 // NOTE: this partially rearranges elements, so make a copy if order is important
 double v_median (std::vector<double>& in) {
-    int n = in.size() / 2;
+    int n = static_cast<int>(in.size()) / 2;
     std::nth_element(in.begin(), in.begin()+n, in.end());
     double median = in[static_cast<unsigned long>(n)];
     

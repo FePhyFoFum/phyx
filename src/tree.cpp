@@ -431,16 +431,19 @@ void Tree::setHeightFromTipToNodes () {
 
 /*
  * private
- */
+*/
 void Tree::processRoot () {
     nodes_.clear();
     internal_nodes_.clear();
     external_nodes_.clear();
     internal_node_count_ = 0;
     external_node_count_ = 0;
+    // this is always false
+    /*
     if (&root_ == nullptr) {
         return;
     }
+    */
     postOrderProcessRoot(root_);
 }
 

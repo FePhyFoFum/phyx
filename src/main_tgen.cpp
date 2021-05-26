@@ -62,7 +62,8 @@ int main(int argc, char * argv[]) {
     
     log_call(argc, argv);
     
-    int num_taxa = 0;
+    int nt = 0;
+    unsigned int num_taxa = 0;
     bool rooted = false;
     bool count = false;
     bool outfileset = false;
@@ -84,7 +85,13 @@ int main(int argc, char * argv[]) {
         }
         switch(c) {
             case 'n':
-                num_taxa = string_to_int(optarg, "-n");
+                nt = string_to_int(optarg, "-n");
+                if (nt < 0) {
+                    std::cerr << "Error: the number of taxa -n must be >= 3. Exiting." << std::endl;
+                    exit(0);
+                } else {
+                    num_taxa = static_cast<unsigned int>(nt);
+                }
                 break;
             case 'r':
                 rooted = true;

@@ -300,7 +300,7 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
     while (!success) {
         auto item = tree_map.begin();
         // this is dumb. instead use: sample_without_replacement(numTotal, numSample)
-        int r = random_int_range(0, tree_map.size());
+        int r = random_int_range(0, static_cast<int>(tree_map.size()));
         if (debug) {
             std::cout << "r1: tree_map.size() = " << tree_map.size() << std::endl;
             std::cout << "r1 = " << r << std::endl;
@@ -310,7 +310,7 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         Node * first = (*item).first;
         
         // ack. 'middle' is not necessarily in the middle at all
-        int r2 = random_int_range(0,(*item).second.size());
+        int r2 = random_int_range(0, static_cast<int>((*item).second.size()));
         
         if (debug) {
             std::cout << std::endl << "Node first (" << r << "): " << first->getName() << std::endl;
@@ -329,7 +329,7 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         }
         
         // furthermore, 'second' need not be anywhere near 'first' or 'middle
-        int r3 = random_int_range(0,(*item).second.size());
+        int r3 = random_int_range(0, static_cast<int>((*item).second.size()));
         
         if (debug) {
             std::cout << "Node middle (" << r2 << "): " << middle->getName() << std::endl;
