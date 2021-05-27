@@ -85,7 +85,7 @@ void CompTest::count_chars () {
         std::vector<int> icounts(seq_chars_.length(), 0);
         
         for (unsigned int j = 0; j < seq_chars_.length(); j++) {
-            int num = std::count(seq.begin(), seq.end(), seq_chars_[j]);
+            int num = static_cast<int>(std::count(seq.begin(), seq.end(), seq_chars_[j]));
             icounts[j] += num;
             sum += num;
             col_totals_[j] += num;
@@ -155,7 +155,7 @@ void CompTest::return_freq_table () {
 
 void CompTest::calc_chi_square () {
     test_stat_ = 0.0;
-    df_ = (num_taxa_ - 1) * (col_totals_.size() - 1);
+    df_ = static_cast<int>((num_taxa_ - 1) * (col_totals_.size() - 1));
     double observed = 0.0;
     double expected = 0.0;
     double cellv = 0.0;

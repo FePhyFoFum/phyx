@@ -165,7 +165,7 @@ double BirthDeathSimulator::time_to_next_event () {
 
 
 void BirthDeathSimulator::event () {
-    std::uniform_int_distribution<int> intDistrib(0, (extantnodes_.size()-1));
+    std::uniform_int_distribution<int> intDistrib(0, (static_cast<int>(extantnodes_.size())-1));
     int random_integer = intDistrib(generator_);
     //std::cout << "extantnodes.size() = " << extantnodes.size() << "; random_integer = "
     //    << random_integer << std::endl;

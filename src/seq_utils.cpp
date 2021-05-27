@@ -137,8 +137,8 @@ char get_prot_char (const std::set<char>& inc) {
     // there are a handful of ambiguity codes
     // B = Aspartic acid (D) or Asparagine (N)
     // Z = Glutamine (Q) or Glutamic acid (E)
-    int B = inc.count('D') + inc.count('N') + inc.count('B');
-    int Z = inc.count('Q') + inc.count('E') + inc.count('Z');
+    int B = static_cast<int>(inc.count('D') + inc.count('N') + inc.count('B'));
+    int Z = static_cast<int>(inc.count('Q') + inc.count('E') + inc.count('Z'));
     
     if (B == static_cast<int>(inc.size())) {
         return 'B';

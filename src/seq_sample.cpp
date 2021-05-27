@@ -188,8 +188,8 @@ std::vector<int> SequenceSampler::get_partition_sites (const std::string& part) 
 void SequenceSampler::get_site_partitions () {
     std::vector<int> sites(static_cast<unsigned long>(num_partitioned_sites_), 0);
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_partitions_); i++) {
-        for (unsigned long j = 0; j < static_cast<unsigned long>(partitions_[i].size()); j++) {
-            sites[partitions_[i][j]] = i;
+        for (unsigned long j = 0; j < partitions_[i].size(); j++) {
+            sites[partitions_[i][j]] = static_cast<int>(i);
         }
     }
     site_partitions_ = sites;
@@ -272,14 +272,14 @@ void SequenceSampler::check_valid_partitions () {
     std::vector<int> duplicates;
     std::vector<int> missing;
     
-    auto maxVal = static_cast<unsigned long>(allSites.back());
+    int maxVal = static_cast<int>(allSites.back());
     
-    std::vector<int> counts(maxVal, 0);
+    std::vector<int> counts(static_cast<unsigned long>(maxVal), 0);
     for (int allSite : allSites) {
         counts[static_cast<unsigned long>(allSite)]++;
     }
     
-    for (unsigned long i = 0; i < maxVal; i++) {
+    for (int i = 0; i < maxVal; i++) {
         switch (counts[static_cast<unsigned long>(i)]) {
             case 0:
                 missing.push_back(i);

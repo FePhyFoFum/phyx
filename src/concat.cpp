@@ -28,7 +28,7 @@ void SequenceConcatenater::read_sequences () {
     
     std::string alphaName;
     seqs_ = ingest_alignment(pios, alphaName);
-    num_taxa_ = seqs_.size();
+    num_taxa_ = static_cast<int>(seqs_.size());
     
     if (toupcase_) {
         for (unsigned int i = 0; i < num_taxa_; i++) {

@@ -374,7 +374,7 @@ int main(int argc, char * argv[]) {
                     biparts2.push_back(nms_i2);
                     not_included.push_back(not_included_i);
                     bp_count.push_back(1);
-                    bp_count_tree.push_back(bp_count.size()-1);
+                    bp_count_tree.push_back(static_cast<int>(bp_count.size())-1);
                 } else {
                     // get index 
                     size_t index;
@@ -386,7 +386,7 @@ int main(int argc, char * argv[]) {
                     // need to accommodate that it can be reflected in the edgewise case
                     if (static_cast<int>(std::count(bp_count_tree.begin(), bp_count_tree.end(), index)) == 0) {
                         bp_count[index] += 1;
-                        bp_count_tree.push_back(index);
+                        bp_count_tree.push_back(static_cast<int>(index));
                     }
                 }
 
@@ -467,9 +467,9 @@ int main(int argc, char * argv[]) {
                     }
                     sort(nms_i2.begin(), nms_i2.end());
                     sort(nms_i.begin(), nms_i.end());
-                    int x = find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin();
+                    int x = static_cast<int>(find(biparts.begin(), biparts.end(), nms_i2) - biparts.begin());
                     if (x == static_cast<int>(matrix[i].size())) {
-                        x = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
+                        x = static_cast<int>(find(biparts.begin(), biparts.end(), nms_i)-biparts.begin());
                     }
                     matrix[i][static_cast<unsigned long>(x)] = 1;
                 }

@@ -101,7 +101,7 @@ void Sequence::infer_alpha () {
     
     // if the above fails (e.g., RNA), do the former check
     for (char & uniqueChar : uniqueChars) {
-        int num = std::count(str.begin(), str.end(), uniqueChar);
+        int num = static_cast<int>(std::count(str.begin(), str.end(), uniqueChar));
         if (is_prot_char(uniqueChar)) {
             proteinHit += num;
             validChars += num;

@@ -84,11 +84,11 @@ void AAtoCDN::generate_codon_alignment () {
         aaseq = aa_seqs_[i].get_sequence();
         nucseq = nuc_seqs_[i].get_sequence();
         codonseq = "";
-        unsigned int aalen = aaseq.size();
+        unsigned int aalen = static_cast<unsigned int>(aaseq.size());
         
         // check that seq lengths correspond
-        unsigned int ncodons = nucseq.length() / 3;
-        unsigned int naachars = aalen - std::count(aaseq.begin(), aaseq.end(), '-');
+        unsigned int ncodons = static_cast<unsigned int>(nucseq.length()) / 3u;
+        unsigned int naachars = aalen - static_cast<unsigned int>(std::count(aaseq.begin(), aaseq.end(), '-'));
         if (ncodons != naachars) {
             std::cerr << "Error: for taxon '" << aa_seqs_[i].get_id()
                 << "' nucleotide alignment involves " << ncodons
