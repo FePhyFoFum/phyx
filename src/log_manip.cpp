@@ -11,8 +11,8 @@
 
 LogManipulator::LogManipulator (const std::string& logtype, const std::vector<std::string>& input_files,
     std::ostream* poos, const bool& verbose):burnin_(0), nthin_(0), nrandom_(0),
-    seed_(0), count_(false), ntotal_samples_(0), num_cols_(0), num_cols_retain_(0) {
-    files_ = input_files;
+    seed_(0), count_(false), ntotal_samples_(0), num_cols_(0), num_cols_retain_(0),
+    files_(input_files) {
     num_files_ = static_cast<int>(input_files.size());
     logtype_ = logtype;
     poos_ = poos;
