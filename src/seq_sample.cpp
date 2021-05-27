@@ -267,7 +267,7 @@ void SequenceSampler::check_valid_partitions () {
 
 
 // find sites 1) present in more than 1 partition or 2) not present in any
-void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites) {
+[[ noreturn ]] void SequenceSampler::find_duplicates_missing (const std::vector<int>& allSites) {
     std::vector<int> unique;
     std::vector<int> duplicates;
     std::vector<int> missing;

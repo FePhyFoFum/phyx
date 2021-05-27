@@ -35,7 +35,7 @@ private:
     int get_num_partitioned_sites ();
     void calculate_num_partitioned_sites ();
     void get_site_partitions (); // not used
-    void find_duplicates_missing (const std::vector<int>& allSites);
+    [[ noreturn ]] void find_duplicates_missing (const std::vector<int>& allSites);
 
 public:
     SequenceSampler (std::istream* pios, const long int& seed, const double& jackfract, std::string& partf);
