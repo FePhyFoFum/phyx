@@ -490,12 +490,14 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
         for (int i = 0; i < nstates; i++) {
             mat Ei(nstates, nstates);
             Ei.fill(0);
-            Ei(i, i)=1;
+            Ei(i, i) = 1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
             for (int j = 0; j < nstates; j++) {
                 cx_double dij = (eigval(i, i)-eigval(j, j)) * dur;
-                mat Ej(nstates, nstates); Ej.fill(0); Ej(j, j)=1;
+                mat Ej(nstates, nstates);
+                Ej.fill(0);
+                Ej(j, j) = 1;
                 cx_mat Sj(nstates, nstates);
                 Sj = eigvec * Ej * inv(eigvec);
                 cx_double Iijt = 0;
@@ -563,12 +565,16 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
         cx_mat summedR(nstates, nstates);
         summedR.fill(0);
         for (int i = 0; i < nstates; i++) {
-            mat Ei(nstates, nstates);Ei.fill(0);Ei(i, i)=1;
+            mat Ei(nstates, nstates);
+            Ei.fill(0);
+            Ei(i, i) = 1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
             for (int j = 0; j < nstates; j++) {
                 cx_double dij = (eigval(i, i)-eigval(j, j)) * dur;
-                mat Ej(nstates, nstates);Ej.fill(0);Ej(j, j)=1;
+                mat Ej(nstates, nstates);
+                Ej.fill(0);
+                Ej(j, j) = 1;
                 cx_mat Sj(nstates, nstates);
                 Sj = eigvec * Ej * inv(eigvec);
                 cx_double Iijt = 0;

@@ -28,7 +28,7 @@ private:
     void guess_scale (const float& sup);
     
 public:
-    Collapser (const double& threshold);
+    explicit Collapser (const double& threshold);
     void set_sup_string (const std::string& str);
     void collapse_edges (Tree * tr);
 };

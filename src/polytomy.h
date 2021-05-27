@@ -11,7 +11,7 @@ private:
     std::vector<std::string> terminals_to_prune_;
     
 public:
-    Polytomy (const long int& seed);
+    explicit Polytomy (const long int& seed);
     void sample_polytomies (Tree * tr);
 };
 

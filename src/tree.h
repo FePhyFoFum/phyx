@@ -30,7 +30,7 @@ private:
     
 public:
     Tree ();
-    Tree (Node * inroot);
+    explicit Tree (Node * inroot);
     Tree * clone () { return new Tree(*this); }
     
     void addExternalNode (Node * tn);

@@ -14,8 +14,8 @@
 
 class StringNodeObject: public std::string, public NodeObject {
 public:
-    StringNodeObject(const char * value): std::string(value) {}
-    StringNodeObject(const std::string& value): std::string(value) {}
+    explicit StringNodeObject(const char * value): std::string(value) {}
+    explicit StringNodeObject(const std::string& value): std::string(value) {}
     virtual ~StringNodeObject() {}
 
 public:

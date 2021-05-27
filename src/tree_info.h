@@ -24,7 +24,7 @@ private:
     void calc_stats ();
 
 public:
-    TreeInfo (Tree * intree);
+    explicit TreeInfo (Tree * intree);
     TreeInfo (Tree * intree, const bool& ultracheck, const bool& binarycheck,
         const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
         const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,

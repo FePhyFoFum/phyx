@@ -29,7 +29,7 @@ private:
     int fortran_m;
     
 public:
-    RateModel(int _nstates);
+    explicit RateModel(int _nstates);
     /*
       storing once optimization has occurred
       map of bl and p matrix

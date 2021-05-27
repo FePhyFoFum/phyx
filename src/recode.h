@@ -39,7 +39,7 @@ public:
     static std::regex h_;
     static std::regex v_;
     
-    SequenceRecoder (std::string& recodescheme);
+    explicit SequenceRecoder (std::string& recodescheme);
     void parse_scheme ();
     void check_valid_scheme ();
     std::string get_recoded_seq (const std::string& origseq);

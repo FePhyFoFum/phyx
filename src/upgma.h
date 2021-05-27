@@ -28,7 +28,7 @@ private:
     void construct_tree ();
 
 public:
-    UPGMA (std::istream* pios);
+    explicit UPGMA (std::istream* pios);
     std::vector< std::vector<double> > get_matrix () const;
     std::string get_newick ();
 };

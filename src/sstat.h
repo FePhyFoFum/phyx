@@ -21,7 +21,7 @@ private:
     void calculateTestStatistic ();
     
 public:
-    MultinomialSeqStat (std::vector<Sequence>& seqs);
+    explicit MultinomialSeqStat (std::vector<Sequence>& seqs);
     double get_test_statistic ();
     
     //~MultinomialSeqStat();

@@ -21,7 +21,7 @@ private:
     void delete_sequence (SequenceConcatenater& newSeqs, const unsigned int& index);
 
 public:
-    SequenceConcatenater (const bool& toupcase);
+    explicit SequenceConcatenater (const bool& toupcase);
     SequenceConcatenater (std::string& seqf, const bool& toupcase);
     void concatenate (SequenceConcatenater& newSeqs);
     

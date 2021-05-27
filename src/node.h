@@ -27,7 +27,7 @@ private:
 
 public:
     Node ();
-    Node (Node * inparent);
+    explicit Node (Node * inparent);
     Node (double bl, int innumber, const std::string& inname, Node * inparent);
     
     int get_num_leaves ();
