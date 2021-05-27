@@ -511,7 +511,7 @@ void Node::deleteSegVector () {
  */
 Node::~Node () {
     std::map<std::string, NodeObject *>::iterator it;
-    for (it = assoc_.begin(); it != assoc_.end(); it++) {
+    for (it = assoc_.begin(); it != assoc_.end(); ++it) {
         delete assoc_[it->first];
     }
 }

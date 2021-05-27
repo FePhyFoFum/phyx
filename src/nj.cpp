@@ -175,12 +175,12 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
     std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
 
     //compare all sequences to other sequences
-    for (iter = sequences.begin(); iter != sequences.end(); iter++) {
+    for (iter = sequences.begin(); iter != sequences.end(); ++iter) {
         fasta = iter -> second;
         SeqName = iter -> first;
         SequenceName.push_back(SeqName);
         unsigned long SecondCount = 0;
-        for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
+        for (iter2 = sequences.begin(); iter2 != sequences.end(); ++iter2) {
             MatchScore = static_cast<double>(calc_hamming_dist(fasta, iter2 -> second));
             // this is never used
             //MatchName = SeqName + "," + iter2 -> first;
@@ -236,7 +236,7 @@ NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthre
 
 void NJOI::set_name_key () {
     int count = 0;
-    for (iter_ = sequences_.begin(); iter_ != sequences_.end(); iter_++) {
+    for (iter_ = sequences_.begin(); iter_ != sequences_.end(); ++iter_) {
         name_key_[count] = iter_ -> first;
         names_.push_back(iter_ -> first);
         count++;

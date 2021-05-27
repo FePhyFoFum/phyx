@@ -82,7 +82,7 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
             return LARGE;
         }   
     }
-    double sigma =1;// x[0];//1;
+    double sigma = 1; // x[0];//1;
     analysis_data_tree * d = (analysis_data_tree *) data;
     Tree * tr = d->tree;
     for (int i = 0; i < tr->getNodeCount(); i++) {

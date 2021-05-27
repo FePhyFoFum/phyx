@@ -96,7 +96,7 @@ bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
                 << " taxa that have the wrong names. Exiting." << std::endl;
         exit(1);
     }
-    for (it = v.begin(); it != v.end(); it++) {
+    for (it = v.begin(); it != v.end(); ++it) {
         if ((*it).size() > 1) {
             std::cout << *it << std::endl;
         }
@@ -386,7 +386,7 @@ int main(int argc, char * argv[]) {
                 }
             }
         }
-        nstates = maxstate+1;//TODO this can be determined by largest number +1
+        nstates = maxstate + 1; // TODO this can be determined by largest number +1
     }
     if (verbose) {
         (*loos) << "total number of states in dataset: " << nstates << std::endl;
@@ -688,7 +688,7 @@ int main(int argc, char * argv[]) {
                 for (int k = 0; k < nstates; k++) {
                     if (existing_states[k] == 1) {
                         if (verbose) {
-                            (*loos) << double(lhoods[excount]/totlike_sd) << " ";//"(" << lhoods[excount] << ") ";
+                            (*loos) << double(lhoods[excount]/totlike_sd) << " "; //"(" << lhoods[excount] << ") ";
                         }
                         ancout << "\t" << double(lhoods[excount]/totlike_sd);
                         if (double(lhoods[excount]/totlike_sd) < 0)

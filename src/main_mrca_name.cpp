@@ -185,7 +185,7 @@ int main(int argc, char * argv[]) {
             if (going) {
                 if (mrcaset) {
                     std::map<std::string, std::vector<std::string> >::iterator it;
-                    for (it = mrcas.begin(); it != mrcas.end(); it++) {
+                    for (it = mrcas.begin(); it != mrcas.end(); ++it) {
                         //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
                             std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;
@@ -217,7 +217,7 @@ int main(int argc, char * argv[]) {
             if (tree != nullptr) {
                 if (mrcaset) {
                     std::map<std::string, std::vector<std::string> >::iterator it;
-                    for (it = mrcas.begin(); it != mrcas.end(); it++) {
+                    for (it = mrcas.begin(); it != mrcas.end(); ++it) {
                         //std::cout << "Dealing with clade '" << (*it).first << "'" << std::endl;
                         if (!check_names_against_tree(tree, (*it).second)) {
                             std::cerr << "Error: check mrca file for typos. Exiting." << std::endl;

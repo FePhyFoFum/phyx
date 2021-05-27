@@ -404,7 +404,7 @@ void StateReconstructor::reverse (Node * node) {
         }
         for (int j = 0; j < nstates; j++) {
             for (int i = 0; i < nstates; i++) {
-                revconds->at(j) += tempA[i]*real((*p)(i, j));//tempA needs to change each time
+                revconds->at(j) += tempA[i]*real((*p)(i, j)); // tempA needs to change each time
                 if (stochastic) {
                     tempmoveAer[j] += tempA[i]*(((*ER)(i, j)));
                     tempmoveAen[j] += tempA[i]*(((*EN)(i, j)));
@@ -438,7 +438,7 @@ std::vector<Superdouble> StateReconstructor::calculate_ancstate_reverse_sd (Node
 
         for (int i = 0; i < nstates; i++) {
             //for (int j = 0; j < nstates; j++) {
-            //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
+            //  LHOODS[i] += (v1->at(i)*v2->at(j)); //*weight);
             //}
             LHOODS[i] = ((v1->at(i)*v2->at(i)) * Bs->at(i));
         }
@@ -458,7 +458,7 @@ std::vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) 
 
         for (int i = 0; i < nstates; i++) {
             //for (int j = 0; j < nstates; j++) {
-            //  LHOODS[i] += (v1->at(i)*v2->at(j));//*weight);
+            //  LHOODS[i] += (v1->at(i)*v2->at(j)); //*weight);
             //}
             LHOODS[i] = double((v1->at(i)*v2->at(i)) * Bs->at(i));
         }
