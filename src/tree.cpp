@@ -196,7 +196,7 @@ bool Tree::reRoot (Node * inroot) {
         ret = false;
     } else {
         Node * tempParent = inroot->getParent();
-        Node * newRoot = new Node(tempParent);
+        auto * newRoot = new Node(tempParent);
         newRoot->addChild(*inroot);
         inroot->setParent(*newRoot);
         tempParent->removeChild(*inroot);

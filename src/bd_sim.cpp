@@ -190,8 +190,8 @@ void BirthDeathSimulator::node_death (Node *innode) {
 
 
 void BirthDeathSimulator::node_birth (Node *innode) {
-    Node * left = new Node();
-    Node * right = new Node();
+    auto * left = new Node();
+    auto * right = new Node();
     innode->addChild(*left);
     innode->addChild(*right);
     BIRTHTIME_[left] = currenttime_;

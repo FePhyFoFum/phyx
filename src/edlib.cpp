@@ -244,7 +244,7 @@ char* edlibAlignmentToCigar (const unsigned char* const alignment, const int ali
         moveCodeToChar[0] = moveCodeToChar[3] = 'M';
     }
 
-    std::vector<char>* cigar = new std::vector<char>();
+    auto* cigar = new std::vector<char>();
     char lastMove = 0;  // Char of last move. 0 if there was no previous move.
     int numOfSameMoves = 0;
     for (int i = 0; i <= alignmentLength; i++) {
@@ -293,7 +293,7 @@ static inline Word* buildPeq (const int alphabetLength, const unsigned char* con
                              const int queryLength) {
     int maxNumBlocks = ceilDiv(queryLength, WORD_SIZE);
     // table of dimensions alphabetLength+1 x maxNumBlocks. Last symbol is wildcard.
-    Word* Peq = new Word[(alphabetLength + 1) * maxNumBlocks];
+    auto* Peq = new Word[(alphabetLength + 1) * maxNumBlocks];
 
     // Build Peq (1 is match, 0 is mismatch). NOTE: last column is wildcard(symbol that matches anything) with just 1s
     for (int symbol = 0; symbol <= alphabetLength; symbol++) {
@@ -322,7 +322,7 @@ static inline Word* buildPeq (const int alphabetLength, const unsigned char* con
  * Free returned array with delete[].
  */
 static inline unsigned char* createReverseCopy (const unsigned char* const seq, const int length) {
-    unsigned char* rSeq = new unsigned char[length];
+    auto* rSeq = new unsigned char[length];
     for (int i = 0; i < length; i++) {
         rSeq[i] = seq[length - i - 1];
     }
@@ -515,7 +515,7 @@ static int myersCalcEditDistanceSemiGlobal (
     int lastBlock = min(ceilDiv(k + 1, WORD_SIZE), maxNumBlocks) - 1; // y in Myers
     Block *bl; // Current block
 
-    Block* blocks = new Block[maxNumBlocks];
+    auto* blocks = new Block[maxNumBlocks];
 
     // For HW, solution will never be larger then queryLength.
     if (mode == EDLIB_MODE_HW) {
@@ -718,7 +718,7 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
     int lastBlock = min(maxNumBlocks, ceilDiv(min(k, (k + queryLength - targetLength) / 2) + 1, WORD_SIZE)) - 1;
     Block* bl; // Current block
 
-    Block* blocks = new Block[maxNumBlocks];
+    auto* blocks = new Block[maxNumBlocks];
 
     // Initialize P, M and score
     bl = blocks;
@@ -1270,7 +1270,7 @@ static int obtainAlignmentHirschberg (
     // scoresLeft contains scores from left column, starting with scoresLeftStartIdx row (query index)
     // and ending with scoresLeftEndIdx row (0-indexed).
     int scoresLeftLength = (lastBlockIdxLeft - firstBlockIdxLeft + 1) * WORD_SIZE;
-    int* scoresLeft = new int[scoresLeftLength];
+    auto* scoresLeft = new int[scoresLeftLength];
     for (int blockIdx = firstBlockIdxLeft; blockIdx <= lastBlockIdxLeft; blockIdx++) {
         Block block(alignDataLeftHalf->Ps[blockIdx], alignDataLeftHalf->Ms[blockIdx],
                     alignDataLeftHalf->scores[blockIdx]);
@@ -1286,7 +1286,7 @@ static int obtainAlignmentHirschberg (
     int firstBlockIdxRight = alignDataRightHalf->firstBlocks[0];
     int lastBlockIdxRight = alignDataRightHalf->lastBlocks[0];
     int scoresRightLength = (lastBlockIdxRight - firstBlockIdxRight + 1) * WORD_SIZE;
-    int* scoresRight = new int[scoresRightLength];
+    auto* scoresRight = new int[scoresRightLength];
     int* scoresRightOriginalStart = scoresRight;
     for (int blockIdx = firstBlockIdxRight; blockIdx <= lastBlockIdxRight; blockIdx++) {
         Block block(alignDataRightHalf->Ps[blockIdx], alignDataRightHalf->Ms[blockIdx],

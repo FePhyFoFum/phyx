@@ -105,7 +105,7 @@ void UPGMA::construct_tree () {
     // keep list of nodes left to be clustered. initially all terminal nodes
     std::vector<Node *> nodes(static_cast<unsigned long>(num_taxa_));
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-        Node * nd = new Node();
+        auto * nd = new Node();
         nd->setName(names_[i]);
         nd->setHeight(0.0);
         nodes[i] = nd;

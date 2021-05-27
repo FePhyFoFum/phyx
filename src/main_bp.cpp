@@ -617,7 +617,7 @@ int main(int argc, char * argv[]) {
     if (mapfileset) {
         std::string mot(mtreef);
         mot = mot +".pxbpmapped.tre";
-        std::ofstream * mofstr = new std::ofstream(mot);
+        auto * mofstr = new std::ofstream(mot);
         std::ostream * mpoos = mofstr;
         for (int i = 0; i < maptree->getInternalNodeCount(); i++) {
             if (maptree->getInternalNode(i) == maptree->getRoot()) {

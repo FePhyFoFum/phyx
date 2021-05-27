@@ -165,7 +165,7 @@ bool is_number (const std::string& s) {
 unsigned int get_longest_label (std::vector<std::string>& labels) {
     unsigned int longest_label_ = 0;
     for (auto & label : labels) {
-        unsigned int cur_len = static_cast<unsigned int>(label.size());
+        auto cur_len = static_cast<unsigned int>(label.size());
         if (cur_len > longest_label_) {
             longest_label_ = cur_len;
         }

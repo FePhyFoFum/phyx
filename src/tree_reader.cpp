@@ -22,7 +22,7 @@ TreeReader::TreeReader() {}
  * the existing code to the right bits
 */
 Tree * TreeReader::readTree (const std::string& pb) {
-    Tree * tree = new Tree();
+    auto * tree = new Tree();
     //std::string pb = trees;
     unsigned int x = 0;
     char nextChar = pb.c_str()[x];
@@ -38,7 +38,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
         //std::cout << "Working on: " << nextChar << std::endl;
         if (nextChar == '(') {
             if (start) {
-                Node * root = new Node();
+                auto * root = new Node();
                 tree->setRoot(root);
                 currNode = root;
                 start = false;
@@ -47,7 +47,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
                     std::cerr << "Malformed newick string. Can read until char " << x << "." << std::endl;
                     exit(1);
                 }
-                Node * newNode = new Node(currNode);
+                auto * newNode = new Node(currNode);
                 currNode->addChild(*newNode);
                 currNode = newNode;
             }
@@ -161,7 +161,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
         }
         // external named node
         else {
-            Node * newNode = new Node(currNode);
+            auto * newNode = new Node(currNode);
             currNode->addChild(*newNode);
             currNode = newNode;
             std::string nodeName;
