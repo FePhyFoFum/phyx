@@ -43,8 +43,8 @@ void Polytomy::sample_polytomies (Tree * tr) {
                 }
             }
             
-            for (unsigned int j = 0; j < terp.size(); j++) {
-                Node * n = m->getChild(terp[j]);
+            for (int j : terp) {
+                Node * n = m->getChild(j);
                 if (n->isExternal()) {
                     terminals_to_prune_.push_back(n->getName());
                     if (verbose) {
@@ -56,10 +56,10 @@ void Polytomy::sample_polytomies (Tree * tr) {
                     if (verbose) {
                         std::cout << "welp dealing with an internal node to prune here..." << std::endl;
                     }
-                    for (unsigned int k = 0; k < tchildren.size(); k++) {
-                        terminals_to_prune_.push_back(tchildren[k]);
+                    for (const auto & k : tchildren) {
+                        terminals_to_prune_.push_back(k);
                         if (verbose) {
-                            std::cout << "Descendant tip to be purged: " << tchildren[k] << std::endl;
+                            std::cout << "Descendant tip to be purged: " << k << std::endl;
                         }
                     }
                 }

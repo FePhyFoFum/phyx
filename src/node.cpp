@@ -150,8 +150,8 @@ void Node::setDepth (double de) {
 
 bool Node::hasChild (Node& test) {
     bool ret = false;
-    for (unsigned int i = 0; i < children_.size(); i++) {
-        if (children_.at(i) == &test) {
+    for (auto & chi : children_) {
+        if (chi == &test) {
             ret = true;
             break;
         }

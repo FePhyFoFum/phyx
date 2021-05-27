@@ -518,13 +518,13 @@ int main(int argc, char * argv[]) {
             unsigned int sumc = sum_matrix_col(matrix, i);
             if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
                 std::vector<std::string> nms;
-                for (unsigned int k = 0; k < biparts[i].size(); k++) {
+                for (int k : biparts[i]) {
                     nms.push_back(name_st_index[biparts[i][k]]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
-                    for (unsigned int k = 0; k < biparts2[i].size(); k++) {
+                    for (int k : biparts2[i]) {
                         nms_o.push_back(name_st_index[biparts2[i][k]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
@@ -541,7 +541,7 @@ int main(int argc, char * argv[]) {
                         bool logitest = test_logical(logical_matrix[i], logical_matrix[j], edgewisealltaxa);
                         if (logitest) {
                             std::vector<std::string> nms2;
-                            for (unsigned int k = 0; k < biparts[j].size(); k++) {
+                            for (int k : biparts[j]) {
                                 nms2.push_back(name_st_index[biparts[j][k]]);
                             }    
                             totalcount += bp_count[j];
@@ -550,7 +550,7 @@ int main(int argc, char * argv[]) {
                                 (*poos) << " \t " << get_string_vector(nms2);
                                 if (edgewisealltaxa) {
                                     std::vector<std::string> nms_o;
-                                    for (unsigned int k = 0; k < biparts2[j].size(); k++) {
+                                    for (int k : biparts2[j]) {
                                         nms_o.push_back(name_st_index[biparts2[j][k]]);
                                     }
                                     (*poos) << "| " << get_string_vector(nms_o);
@@ -594,7 +594,7 @@ int main(int argc, char * argv[]) {
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
-                    for (unsigned int k = 0; k < biparts2[i].size(); k++) {
+                    for (int k : biparts2[i]) {
                         nms_o.push_back(name_st_index[biparts2[i][k]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);

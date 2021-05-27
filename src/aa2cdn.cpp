@@ -59,11 +59,11 @@ void AAtoCDN::check_names () {
     if (!diff.empty()) {
         std::cerr << "The following names are present in the protein alignment, but not the nucleotide alignment:"
                 << std::endl;
-        for (unsigned int i = 0; i < diff.size(); i++) {
-            std::cerr << diff[i] << std::endl;
+        for (const auto & di : diff) {
+            std::cerr << di << std::endl;
             // remove from alignment
             for (unsigned int j = 0; j < aa_seqs_.size(); j++) {
-                if (aa_seqs_[j].get_id() == diff[i]) {
+                if (aa_seqs_[j].get_id() == di) {
                     aa_seqs_.erase(aa_seqs_.begin()+j);
                     break;
                 }

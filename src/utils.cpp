@@ -403,8 +403,8 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
 
 int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
     int x = 0;
-    for (unsigned int i = 0; i < matrix.size(); i++) {
-        x += matrix[i][static_cast<unsigned long>(col)];
+    for (auto & mati : matrix) {
+        x += mati[static_cast<unsigned long>(col)];
     }
     return x;
 }
@@ -412,9 +412,9 @@ int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
 
 int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
     int x = 0;
-    for (unsigned int i = 0; i < matrix.size(); i++) {
-        if (matrix[i][static_cast<unsigned long>(col)] < 0) {
-            x += matrix[i][static_cast<unsigned long>(col)];
+    for (auto & mati : matrix) {
+        if (mati[static_cast<unsigned long>(col)] < 0) {
+            x += mati[static_cast<unsigned long>(col)];
         }
     }
     return x;
@@ -545,8 +545,8 @@ std::string get_string_vector(std::vector<std::string>& sts) {
 
 std::string get_string_vector(std::vector<int>& sts) {
     std::string rets;
-    for (unsigned int i = 0; i < sts.size(); i++) {
-        rets += std::to_string(sts[i]) + " ";
+    for (int st : sts) {
+        rets += std::to_string(st) + " ";
     }
     return rets;
 }

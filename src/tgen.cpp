@@ -134,10 +134,10 @@ std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_t
         edge = edges[j];
         // first, swap new node in for root node (always num_taxa+1)
         unsigned int root = num_taxa_ + 1;
-        for (unsigned int i = 0; i < static_cast<unsigned int>(edge.size()); i++) {
-            if (edge[i][0] == root) {
-                edge[i][0] = new_node;
-            } else if (edge[i][0] == 0) {
+        for (auto & edgei : edge) {
+            if (edgei[0] == root) {
+                edgei[0] = new_node;
+            } else if (edgei[0] == 0) {
                 // early break: if 0, then edge has yet to be generated
                 break;
             }

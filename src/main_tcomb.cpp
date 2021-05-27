@@ -193,9 +193,9 @@ int main(int argc, char * argv[]) {
             // get start node on big tree by getting the mrca
             Node * connecthere = bigtree->getMRCA(diffnms);
             std::vector<Node *> childs = connecthere->getChildren();
-            for (unsigned int i = 0; i < childs.size(); i++) {
+            for (auto & child : childs) {
                 std::vector<std::string> v_int(diffnms.size());
-                std::set<std::string> lvsset = childs[i]->get_leave_names_set();
+                std::set<std::string> lvsset = child->get_leave_names_set();
                 auto it1 = set_intersection(lvsset.begin(), lvsset.end(),
                                 atns.begin(), atns.end(), v_int.begin());
                 v_int.resize(it1-v_int.begin());
@@ -205,11 +205,11 @@ int main(int argc, char * argv[]) {
                     auto it2 = set_difference(lvsset.begin(), lvsset.end(),
                             atns.begin(), atns.end(), v2.begin());
                     v2.resize(it2-v2.begin());
-                    for (unsigned int j = 0; j < v2.size(); j++) {
-                        std::cout << "to add " << v2[j]<< std::endl; 
-                        diffnds[v2[j]] = bigtree->getExternalNode(v2[j]);
+                    for (const auto & v2j : v2) {
+                        std::cout << "to add " << v2j << std::endl; 
+                        diffnds[v2j] = bigtree->getExternalNode(v2j);
                     }
-                    connecthere->removeChild(*childs[i]);
+                    connecthere->removeChild(*child);
                 }
             }
             Node * oldroot = addtree->getRoot();
@@ -241,9 +241,9 @@ int main(int argc, char * argv[]) {
                                 
                             }
                             std::vector<std::string> lvsnms = prn->get_leave_names();
-                            for (unsigned int i = 0; i < lvsnms.size(); i++) {
-                                if (diffnds.count(lvsnms[i]) > 0) {
-                                    diffnds.erase(lvsnms[i]);
+                            for (const auto & lvsnm : lvsnms) {
+                                if (diffnds.count(lvsnm) > 0) {
+                                    diffnds.erase(lvsnm);
                                 }
                             }
                             going = false;
