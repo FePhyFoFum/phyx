@@ -613,7 +613,6 @@ const std::string newick_punct = "()[]\':;,";
 // occurs in BOTH tree and alignment files (hence, location)
 // NOTE: returns the end comment line (so reader will need to read in next valid line)
 void process_nexus_comment (std::istream& stri, std::string& tline) {
-    bool done = false;
     std::string terp = tline;
     trim_spaces(terp);
     // check single-line comment
@@ -622,7 +621,7 @@ void process_nexus_comment (std::istream& stri, std::string& tline) {
         return;
     }
     // if not, dealing with a multi-line comment
-    while (!done) {
+    while (true) {
         getline_safe(stri, terp);
         trim_spaces(terp);
         if (!terp.empty()) {

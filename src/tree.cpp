@@ -371,7 +371,7 @@ Node * Tree::getMRCA (std::vector<Node *> innodes) {
  */
 Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
     Node * mrca = nullptr;
-    std::set<Node *> original; // original set of nodes
+    //std::set<Node *> original; // original set of nodes. not used
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
     } else {

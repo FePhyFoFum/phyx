@@ -186,9 +186,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
         return true;
     } else if (ftype == 2) { // fasta
         bool first = true;
-        bool going = true;
         std::string curseq;
-        while (going) {
+        while (true) {
             if (first && !retstring.empty()) {
                 tline = retstring;
                 retstring = "";
@@ -408,11 +407,10 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
         return true;
     } else if (ftype == 2) { // fasta
         bool first = true;
-        bool going = true;
         std::vector<std::string> tokens;
         std::string del(" \t");
         std::string curseq;
-        while (going) {
+        while (true) {
             if (first && !retstring.empty()) {
                 tline = retstring;
                 retstring = "";

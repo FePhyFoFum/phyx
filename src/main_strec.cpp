@@ -79,7 +79,7 @@ static struct option const long_options[] =
 
 bool checkdata(Tree * intree, std::vector<Sequence> runseqs);
 bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
-    std::vector<std::string> ret;
+    //std::vector<std::string> ret; // not used
     std::set<std::string> seqnames;
     std::set<std::string> treenames;
     for (int i = 0; i < intree->getExternalNodeCount(); i++) {
@@ -717,7 +717,7 @@ int main(int argc, char * argv[]) {
 
             for (unsigned int j = 0; j < stochtime.size(); j++) {
             if (!tree->getMRCA(mrcas[stochtime[j]])->isRoot()) {
-                std::vector<double> lhoods;
+                //std::vector<double> lhoods; // not used
                 if (verbose) {
                     (*loos)  << "mrca: " << stochtime[j] << std::endl;
                 }
@@ -763,7 +763,7 @@ int main(int argc, char * argv[]) {
             }
             for (unsigned int j = 0; j < stochnumber.size(); j++) {
                 if (!tree->getMRCA(mrcas[stochnumber[j]])->isRoot()) {
-                    std::vector<double> lhoods;
+                    //std::vector<double> lhoods; // not used
                     if (verbose) {
                         (*loos) << "mrca: " << stochnumber[j] << std::endl;
                     }

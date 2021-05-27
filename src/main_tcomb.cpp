@@ -222,8 +222,7 @@ int main(int argc, char * argv[]) {
                 for (auto iter = diffnds.begin(); iter != diffnds.end(); ++it) {
                     std::cout << iter->first << std::endl;
                     Node * cn = iter->second;
-                    bool goi = true;
-                    while (goi) {
+                    while (true) {
                         Node * prn = cn->getParent();
                         std::set<std::string> cs = cn->get_leave_names_set();
                         std::vector<std::string> v_int;
