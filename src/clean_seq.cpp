@@ -110,7 +110,6 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
         }
         
         std::string pad;
-        int diff = 0;
         int longest = get_longest_taxon_label();
         // header
         (*poos) << "Taxon" << std::string((longest - 5), ' ');
@@ -120,7 +119,7 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
         (*poos) << std::string((longest + 26), '-') << std::endl;
         for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
             (*poos) << seqs_[i].get_id();
-            diff = longest - static_cast<int>(seqs_[i].get_id().size());
+            auto diff = longest - static_cast<int>(seqs_[i].get_id().size());
             if (diff > 0) {
                 pad = std::string(diff, ' ');
                 (*poos) << pad;
@@ -154,9 +153,8 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
                     << std::right << std::setw(colWidth) << "Missing" << " "
                     << std::right << std::setw(colWidth) << "Prop." << std::endl;
             (*poos) << std::string(34, '-') << std::endl;
-            unsigned long pos = 0;
             for (unsigned long i = 0; i < static_cast<unsigned long>(num_char_/3); i++) {
-                pos = i * 3;
+                unsigned long pos = i * 3;
                 (*poos) << std::right << std::setw(5) << i << " "
                         << std::right << std::setw(colWidth) << missing_per_site_counts_[pos] << " "
                         << std::right << std::setw(colWidth) << missing_per_site_proportion_[pos] << " "
@@ -170,9 +168,8 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
 // get the longest label. for printing purposes
 int SequenceCleaner::get_longest_taxon_label () {
     int longest = 0;
-    int curLength = 0;
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-        curLength = static_cast<int>(seqs_[i].get_id().size());
+        auto curLength = static_cast<int>(seqs_[i].get_id().size());
         if (curLength > longest) {
             longest = curLength;
         }

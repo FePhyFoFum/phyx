@@ -524,7 +524,6 @@ void Tree::pruneExternalNode (Node * node) {
     if (node->isInternal()) {
         return;
     }
-    double bl = 0;
     Node * parent = node->getParent();
     if (parent->getChildCount() == 2) {
         Node * other = nullptr;
@@ -533,7 +532,7 @@ void Tree::pruneExternalNode (Node * node) {
                 other = parent->getChild(i);
             }
         }
-        bl = other->getBL()+parent->getBL();
+        double bl = other->getBL()+parent->getBL();
         Node * mparent = parent->getParent();
         if (mparent != nullptr) {
             mparent->addChild(*other);

@@ -164,9 +164,8 @@ bool is_number (const std::string& s) {
 // get the longest label. for printing/formatting purposes
 unsigned int get_longest_label (std::vector<std::string>& labels) {
     unsigned int longest_label_ = 0;
-    unsigned int cur_len = 0;
     for (auto & label : labels) {
-        cur_len = label.size();
+        unsigned int cur_len = label.size();
         if (cur_len > longest_label_) {
             longest_label_ = cur_len;
         }
@@ -318,9 +317,8 @@ std::vector<int> sample_without_replacement (const int& numTotal, const int& num
     std::vector<int> allsites (static_cast<unsigned long>(numTotal));
     std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0, 1, 2..., n-1
     
-    int randNum = 0;
     for (int i = 0; i < numSample; i++) {
-        randNum = random_int_range(i, (numTotal - 1));
+        int randNum = random_int_range(i, (numTotal - 1));
     // swap, so don't have to worry about multiple hits
         std::swap(allsites[static_cast<unsigned long>(i)], allsites[static_cast<unsigned long>(randNum)]);
         randsites[static_cast<unsigned long>(i)] = allsites[static_cast<unsigned long>(i)];

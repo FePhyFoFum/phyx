@@ -94,9 +94,8 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     
     // Need to fill the rest of the matrix up again
     unsigned long icount = 1;
-    unsigned long jcount = 0;
     for (unsigned long i = 0; i < msize; i++) {
-        jcount = 1;
+        unsigned long jcount = 1;
         if (i != mini1 && i != mini2) {
             for (unsigned long j = 0; j < msize; j++) {
                 if (j != mini1 && j != mini2) {

@@ -128,9 +128,8 @@ int main(int argc, char * argv[]) {
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
         bool going = true;
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (going) {
                 (*poos) << getNewickString(tree) << std::endl;
@@ -139,10 +138,9 @@ int main(int argc, char * argv[]) {
         }
     } else if (ft == 1) {
         // newick. just return original tree
-        Tree * tree;
         bool going = true;
         while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;

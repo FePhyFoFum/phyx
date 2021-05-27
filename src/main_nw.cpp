@@ -81,8 +81,8 @@ int main(int argc, char * argv[]) {
     char * outf = nullptr;
     //char * outaf = nullptr; not used
     char * matf = nullptr;
-    int seqtype = 0;//DNA default, 1 = aa
-    int num_threads = 2;//DNA default, 1 = aa
+    int seqtype = 0; // DNA default, 1 = aa
+    int num_threads = 2; // DNA default, 1 = aa
     bool verbose = false;
     
     while (true) {

@@ -22,7 +22,6 @@ Polytomy::Polytomy (const long int& seed) {
 void Polytomy::sample_polytomies (Tree * tr) {
     bool verbose = false;
     std::vector<std::string> tchildren;
-    int numChildren = 0;
     
     // welp with multiple trees do not want to keep this
     terminals_to_prune_.clear();
@@ -33,7 +32,7 @@ void Polytomy::sample_polytomies (Tree * tr) {
         tchildren.clear();
         Node * m = tr->getInternalNode(i);
         
-        numChildren = m->getChildCount();
+        int numChildren = m->getChildCount();
         if (numChildren > 2) {
             // select random taxa to prune
             std::vector<int> terp = sample_without_replacement(numChildren, (numChildren - 2));

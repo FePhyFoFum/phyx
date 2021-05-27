@@ -60,7 +60,6 @@ void MultinomialSeqStat::collect_site_patters () {
     
     // process raw counts
     //int numUniquePatterns = 0;
-    bool siteMatched = true;
     
 // Iterate from first site to last site
     for (std::vector<std::string>::const_iterator iterSites = inputPatterns.begin(); iterSites < inputPatterns.end(); ++iterSites) {
@@ -69,7 +68,7 @@ void MultinomialSeqStat::collect_site_patters () {
         
 // Check if pattern n+1 == pattern n; if so, update count, test next site; if not, log current count/pattern; MUCH FASTER!!
 //     - Need to check if last site, lest risk overshooting vector boundary
-        siteMatched = true;
+        bool siteMatched = true;
         while (siteMatched) {
             if (iterSites != inputPatterns.end() - 1) { // Last site
                 iterSites++;

@@ -146,9 +146,8 @@ int main(int argc, char * argv[]) {
     
     bool going = true;
     if (ft == 1) {
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            Tree * tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (going) {
                 // in addition to checking ultramtericity, the following sets node heights
                 if (is_ultrametric_paths(tree)) {
@@ -166,9 +165,8 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != nullptr) {
                 // in addition to checking ultramtericity, the following sets node heights

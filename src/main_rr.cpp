@@ -196,15 +196,13 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     bool going = true;
-    bool exists = false;
     if (!unroot) {
         if (ft == 0) { // Nexus
             std::map<std::string, std::string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (tree != nullptr) {
                     if (has_root_edge(tree)) {
@@ -213,6 +211,7 @@ int main(int argc, char * argv[]) {
                         std::cerr << "Exiting." << std::endl;
                         exit(0);
                     }
+                    bool exists = false;
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
@@ -241,9 +240,8 @@ int main(int argc, char * argv[]) {
                 }
             }
         } else if (ft == 1) { // newick
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
                     if (has_root_edge(tree)) {
                         std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;
@@ -251,6 +249,7 @@ int main(int argc, char * argv[]) {
                         std::cerr << "Exiting." << std::endl;
                         exit(0);
                     }
+                    bool exists = false;
                     if (ranked) {
                         // find first outgroup present in tree
                         bool ogexists = false;
@@ -285,9 +284,8 @@ int main(int argc, char * argv[]) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (tree != nullptr) {
                     if (has_root_edge(tree)) {
@@ -302,9 +300,8 @@ int main(int argc, char * argv[]) {
                 }
             }
         } else if (ft == 1) {
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
                     if (has_root_edge(tree)) {
                         std::cerr << "Error: tree has a root edge, so rerooting is not possible" << std::endl;

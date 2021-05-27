@@ -155,9 +155,8 @@ int main(int argc, char * argv[]) {
     }
     bool going = true;
     if (ft == 1) {
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
                 tc.collapse_edges(tree);
                 (*poos) << getNewickString(tree) << std::endl;
@@ -168,9 +167,8 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != nullptr) {
                 // this currently only works with the vanilla-est of trees

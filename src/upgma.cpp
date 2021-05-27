@@ -94,11 +94,9 @@ void UPGMA::construct_tree () {
     // location of minimum distance (top half)
     unsigned long ind1 = 0;
     unsigned long ind2 = 0;
-    double minD = 0.0;
     
     // initialize
     std::vector< std::vector<double> > dMatrix = full_distmatrix_;
-    double newHeight = 0.0;
     int numClusters = num_taxa_;
     Node * anc = nullptr; // new node, ancestor of 2 clusters
     Node * left = nullptr;
@@ -115,7 +113,7 @@ void UPGMA::construct_tree () {
     
     while (numClusters > 1) {
         // 1. get smallest distance present in the matrix
-        minD = get_smallest_distance(dMatrix, ind1, ind2);
+        double minD = get_smallest_distance(dMatrix, ind1, ind2);
         left = nodes[ind1];
         right = nodes[ind2];
         
@@ -128,7 +126,7 @@ void UPGMA::construct_tree () {
         
         // 4. compute edgelengths: half of the distance
         // edgelengths must subtract the existing height
-        newHeight = 0.5 * minD;
+        double newHeight = 0.5 * minD;
         left->setBL(newHeight - left->getHeight());
         right->setBL(newHeight - right->getHeight());
         
@@ -163,10 +161,9 @@ void UPGMA::construct_tree () {
         
         // now, fill in remaining
         unsigned long icount = 1;
-        unsigned long jcount = 1;
         auto ndsize = static_cast<unsigned long>(nodes.size());
         for (unsigned long i = 0; i < ndsize; i++) {
-            jcount = 1;
+            unsigned long jcount = 1;
             if (i != ind1 && i != ind2) {
                 for (unsigned long j = 0; j < ndsize; j++) {
                     if (j != ind1 && j != ind2) {

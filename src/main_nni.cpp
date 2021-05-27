@@ -144,9 +144,8 @@ int main(int argc, char * argv[]) {
     int treeCounter = 0;
     bool going = true;
     if (ft == 1) { // newick. easy
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (tree != nullptr) {
                 if (!is_binary(tree)) {
                     std::cerr << "Error: this only works for binary trees. Exiting." << std::endl;
@@ -169,9 +168,8 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != nullptr) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;

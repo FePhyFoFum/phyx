@@ -78,10 +78,9 @@ void CompTest::set_datatype () {
 
 // get counts of all valid character states per taxon
 void CompTest::count_chars () {
-    int sum = 0;
     std::string seq;
     for (int i = 0; i < num_taxa_; i++) {
-        sum = 0;
+        int sum = 0;
         seq = string_to_upper(seqs_[static_cast<unsigned long>(i)].get_sequence());
         std::vector<int> icounts(seq_chars_.length(), 0);
         
@@ -110,9 +109,8 @@ void CompTest::count_chars () {
 // get the longest label. for printing purposes
 void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
-    int cur_len = 0;
     for (int i = 0; i < num_taxa_; i++) {
-        cur_len = static_cast<int>(taxon_labels_[static_cast<unsigned long>(i)].size());
+        auto cur_len = static_cast<int>(taxon_labels_[static_cast<unsigned int>(i)].size());
         if (cur_len > longest_tax_label_) {
             longest_tax_label_ = cur_len;
         }
@@ -214,7 +212,6 @@ double CompTest::lower_incomplete_gamma_function (double s, double t) {
     double sum = 1.0;
     double numerator = 1.0;
     double denominator = 1.0;
-    double curr = 0.0;
     double stop = 1e-30;
     
     bool done = false;
@@ -224,7 +221,7 @@ double CompTest::lower_incomplete_gamma_function (double s, double t) {
         numerator *= t;
     	s++;
     	denominator *= s;
-    	curr = (numerator / denominator);
+    	double curr = (numerator / denominator);
     	sum += curr;
         if (curr < stop) { // get a better stop criterion
             done = true;

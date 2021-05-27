@@ -92,10 +92,9 @@ void SequenceSampler::sample_sites (const int& numchar) {
 std::vector<int> SequenceSampler::get_bootstrap_sites (const int& numchar) {
     // numchar zero-initialized elements
     std::vector<int> randsites (static_cast<unsigned long>(numchar));
-    int randnum = 0;
     
     for (int i = 0; i < numchar; i++) {
-        randnum = random_int_range(0, (numchar - 1));
+        int randnum = random_int_range(0, (numchar - 1));
         randsites[static_cast<unsigned long>(i)] = randnum;
     }
     sort(randsites.begin(), randsites.end());

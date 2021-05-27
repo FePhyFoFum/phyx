@@ -281,7 +281,6 @@ std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (
 // TODO: how to name ancestor nodes (sequences)
 //       - if we have this we can add to results (if desired))
 void SequenceGenerator::preorder_tree_traversal () {
-    double brlength = 0.0;
     int rate_count = 0;
     int check = 0;
     std::vector< std::vector<double> > QMatrix(nstates_, std::vector<double>(nstates_, 0.0));
@@ -323,7 +322,7 @@ void SequenceGenerator::preorder_tree_traversal () {
     
     // Pre-Order Traverse the tree
     for (int k = (tree_->getNodeCount() - 2); k >= 0; k--) {
-        brlength = tree_->getNode(k)->getBL();
+        double brlength = tree_->getNode(k)->getBL();
         /*
         for (unsigned int i = 0; i < QMatrix.size(); i++) {
             for (unsigned int j = 0; j < QMatrix.size(); j++) {

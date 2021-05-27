@@ -187,9 +187,8 @@ int main(int argc, char * argv[]) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going) {
                     tree = get_induced_tree(tree, names, silent);
@@ -199,9 +198,8 @@ int main(int argc, char * argv[]) {
             }
         } else if (ft == 1) {
             // newick
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
                     tree = get_induced_tree(tree, names, silent);
                     (*poos) << getNewickString(tree) << std::endl;
@@ -216,9 +214,8 @@ int main(int argc, char * argv[]) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
             ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                     &translation_table, &going);
                 if (going) {
                     toKeep = get_complement_tip_set(tree, names);
@@ -230,9 +227,8 @@ int main(int argc, char * argv[]) {
                 }
             }
         } else if (ft == 1) {
-            Tree * tree;
             while (going) {
-                tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
                 if (going) {
                     toKeep = get_complement_tip_set(tree, names);
                     if (toKeep.size() > 1) {

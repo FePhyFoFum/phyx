@@ -118,7 +118,6 @@ void SequenceConcatenater::write_partition_information (const std::vector<std::s
     std::string& partfile) {
     std::ofstream outfile(partfile.c_str());
     unsigned int charIndex = 1;
-    unsigned int stopIndex = 1;
     
     // need to check seq type when writing this
     // use infer_alpha / get_alpha_name
@@ -126,7 +125,7 @@ void SequenceConcatenater::write_partition_information (const std::vector<std::s
     //     - so: need to check each one
     
     for (unsigned int i = 0; i < partition_sizes_.size(); i++) {
-        stopIndex = charIndex + partition_sizes_[i] - 1;
+        unsigned int stopIndex = charIndex + partition_sizes_[i] - 1;
         bool going = true;
         std::string alpha;
         unsigned long j = 0;
