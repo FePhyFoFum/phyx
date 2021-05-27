@@ -84,7 +84,6 @@ void remove_internal_names(Tree * tr) {
 // NOTE: this is _very_ slow (for large trees) compared to painting the induced tree (pxtrt)
 void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent) {
     auto num_names = static_cast<unsigned long>(names.size());
-    int counter = 0;
     
     // new: note tree rooted status. if originally unrooted, make sure it stays that way on pruning
     bool rs = is_rooted(tree);
@@ -95,7 +94,6 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
         Node * m = tree->getExternalNode(names[i]);
         if (m != nullptr) {
             tree->pruneExternalNode(m);
-            counter++;
         } else {
             if (!silent) {
                 std::cerr << names[i] << " not in tree" << std::endl;

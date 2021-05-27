@@ -54,7 +54,7 @@ void SeqInfo::count_chars (std::string& seq) {
     if (output_indiv_) {
         std::vector<int> icounts(seq_chars_.length(), 0);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
+            unsigned int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
             char_counts_[i] += num;
             icounts[i] += num;
             sum += num;
@@ -69,7 +69,7 @@ void SeqInfo::count_chars (std::string& seq) {
         //std::transform(char_counts_.begin(), char_counts_.end(), icounts.begin(), char_counts_.begin(), std::plus<int>());
     } else {
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
+            unsigned int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
             char_counts_[i] += num;
             sum += num;
         }
@@ -190,15 +190,15 @@ void SeqInfo::return_freq_table () {
         }
         // return nchar for individual seqs
         (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-            int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
+        for (unsigned int i = 0; i < static_cast<unsigned int>(num_taxa_); i++) {
+            unsigned int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
             if (diff > 0) {
                 pad = std::string(diff, ' ');
                 (*poos_) << pad;
             }
             (*poos_) << " ";
-            for (unsigned long j = 0; j < static_cast<unsigned long>(seq_chars_.length()); j++) {
+            for (unsigned int j = 0; j < seq_chars_.length(); j++) {
                 (*poos_) << std::right << std::setw(colWidth)
                     << static_cast<double>(indiv_char_counts_[i][j]) / static_cast<double>(seq_lengths_[i]) << " ";
             }
@@ -366,8 +366,8 @@ void SeqInfo::return_missing () {
         (*poos_) << std::right << std::setw(colWidth) << "Proportion" << std::endl;
         
         // return nchar for individual seqs
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-            int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
+        for (unsigned int i = 0; i < static_cast<unsigned int>(num_taxa_); i++) {
+            int diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
             if (diff > 0) {
                 pad = std::string(diff, ' ');
@@ -417,8 +417,8 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         } else { // individual lengths
             collect_taxon_labels();
             longest_tax_label_ = get_longest_label(taxon_labels_);
-            for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-                int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
+            for (unsigned int i = 0; i < static_cast<unsigned int>(num_taxa_); i++) {
+                int diff = longest_tax_label_ - taxon_labels_[i].size();
                 (*poos_) << taxon_labels_[i];
                 if (diff > 0) {
                     std::string pad = std::string(diff, ' ');

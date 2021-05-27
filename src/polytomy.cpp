@@ -32,7 +32,6 @@ void Polytomy::sample_polytomies (Tree * tr) {
     for (int i = 0; i < tr->getInternalNodeCount(); i++) {
         tchildren.clear();
         Node * m = tr->getInternalNode(i);
-        std::string str = m->getName();
         
         numChildren = m->getChildCount();
         if (numChildren > 2) {

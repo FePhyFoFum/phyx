@@ -218,9 +218,9 @@ double CompTest::lower_incomplete_gamma_function (double s, double t) {
     double stop = 1e-30;
     
     bool done = false;
-    int counter = 0;
+    //int counter = 0;
     while (!done) {
-        counter++;
+        //counter++;
         numerator *= t;
     	s++;
     	denominator *= s;

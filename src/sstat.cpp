@@ -60,7 +60,7 @@ void MultinomialSeqStat::collect_site_patters () {
     sort(inputPatterns.begin(), inputPatterns.end());
     
     // process raw counts
-    int numUniquePatterns = 0;
+    //int numUniquePatterns = 0;
     bool siteMatched = true;
     
 // Iterate from first site to last site
@@ -87,7 +87,7 @@ void MultinomialSeqStat::collect_site_patters () {
 // No need to check against stored sites, as vector has been sorted in function 'getInputPatterns'
         //patterns_and_counts_.push_back(std::make_pair(currentPattern, currentPatternCount));
         patterns_and_counts_.emplace_back(currentPattern, currentPatternCount);
-        numUniquePatterns++;
+        //numUniquePatterns++;
     }
     //std::cout << "Found " << numUniquePatterns << " unique site patterns." << std::endl;
 }

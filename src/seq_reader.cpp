@@ -748,7 +748,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
     std::streampos spt = pios.tellg();
     
     std::string line;
-    std::string name;
+    //std::string name;
     std::string seq;
     int num_elem = 0; // count chunks when spaces present
     std::vector<std::string> tokens;
@@ -760,7 +760,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
     // first line
     getline_safe(pios, line);
     tokens = tokenize(line);
-    name = tokens[0];
+    //name = tokens[0];
     num_elem = static_cast<int>(tokens.size());
     if (num_elem == 2) {
         // could be: 1) simple, 2) multiline, or interleaved

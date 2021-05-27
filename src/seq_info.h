@@ -42,7 +42,7 @@ private:
     int seq_length_;
     std::istream* pios_;
     std::ostream* poos_;
-    int longest_tax_label_;
+    unsigned int longest_tax_label_;
     
     void read_in_alignment ();
     void collect_taxon_labels ();

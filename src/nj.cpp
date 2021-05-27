@@ -167,7 +167,7 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
 
     std::vector<std::string> SequenceName;
     std::map <std::string, std::string>::iterator iter, iter2;
-    std::string fasta, SeqName, MatchName;
+    std::string fasta, SeqName; //, MatchName;
     unsigned long FirstCount = 0;
     double MatchScore;
 
@@ -183,7 +183,8 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
         unsigned long SecondCount = 0;
         for (iter2 = sequences.begin(); iter2 != sequences.end(); iter2++) {
             MatchScore = static_cast<double>(calc_hamming_dist(fasta, iter2 -> second));
-            MatchName = SeqName + "," + iter2 -> first;
+            // this is never used
+            //MatchName = SeqName + "," + iter2 -> first;
             Score[FirstCount][SecondCount] = MatchScore;
             SecondCount++;
         }
