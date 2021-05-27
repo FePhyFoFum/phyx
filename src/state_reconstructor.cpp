@@ -472,15 +472,25 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
     // calculate and store local expectation matrix for each branch length
     for (int k = 0; k < tree->getNodeCount(); k++) {
         double dur =  tree->getNode(k)->getBL();
-        cx_mat eigvec(nstates, nstates); eigvec.fill(0);
-        cx_mat eigval(nstates, nstates); eigval.fill(0);
+        cx_mat eigvec(nstates, nstates);
+        eigvec.fill(0);
+        cx_mat eigval(nstates, nstates);
+        eigval.fill(0);
         bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
-        mat Ql(nstates, nstates);Ql.fill(0); Ql(from, to) = rm.get_Q()(from, to);
-        mat W(nstates, nstates);W.fill(0); W(from, from) = 1;
-        cx_mat summed(nstates, nstates); summed.fill(0);
-        cx_mat summedR(nstates, nstates); summedR.fill(0);
+        mat Ql(nstates, nstates);
+        Ql.fill(0);
+        Ql(from, to) = rm.get_Q()(from, to);
+        mat W(nstates, nstates);
+        W.fill(0);
+        W(from, from) = 1;
+        cx_mat summed(nstates, nstates);
+        summed.fill(0);
+        cx_mat summedR(nstates, nstates);
+        summedR.fill(0);
         for (int i = 0; i < nstates; i++) {
-            mat Ei(nstates, nstates); Ei.fill(0);Ei(i, i)=1;
+            mat Ei(nstates, nstates);
+            Ei.fill(0);
+            Ei(i, i)=1;
             cx_mat Si(nstates, nstates);
             Si = eigvec * Ei * inv(eigvec);
             for (int j = 0; j < nstates; j++) {
@@ -531,8 +541,10 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
     // calculate and store local expectation matrix for each branch length
     for (int k = 0; k < tree->getNodeCount(); k++) {
         double dur =  tree->getNode(k)->getBL();
-        cx_mat eigvec(nstates, nstates);eigvec.fill(0);
-        cx_mat eigval(nstates, nstates);eigval.fill(0);
+        cx_mat eigvec(nstates, nstates);
+        eigvec.fill(0);
+        cx_mat eigval(nstates, nstates);
+        eigval.fill(0);
         bool isImag = rm.get_eigenvec_eigenval_from_Q(&eigval, &eigvec);
         mat Ql(nstates, nstates);
         Ql.fill(0);
@@ -543,9 +555,13 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
                 }
             }
         }
-        mat W(nstates, nstates); W.fill(0); W(1, 1) = 1;
-        cx_mat summed(nstates, nstates); summed.fill(0);
-        cx_mat summedR(nstates, nstates); summedR.fill(0);
+        mat W(nstates, nstates);
+        W.fill(0);
+        W(1, 1) = 1;
+        cx_mat summed(nstates, nstates);
+        summed.fill(0);
+        cx_mat summedR(nstates, nstates);
+        summedR.fill(0);
         for (int i = 0; i < nstates; i++) {
             mat Ei(nstates, nstates);Ei.fill(0);Ei(i, i)=1;
             cx_mat Si(nstates, nstates);

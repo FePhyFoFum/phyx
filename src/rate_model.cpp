@@ -195,7 +195,8 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
         }
         return;
     }
-    mat tQ(nstates, nstates); tQ.fill(0);
+    mat tQ(nstates, nstates);
+    tQ.fill(0);
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -238,7 +239,8 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
         }
         return lastImag;
     }
-    mat tQ(nstates, nstates); tQ.fill(0);
+    mat tQ(nstates, nstates);
+    tQ.fill(0);
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);

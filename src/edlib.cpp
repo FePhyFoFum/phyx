@@ -549,29 +549,37 @@ static int myersCalcEditDistanceSemiGlobal (
         for (int b = firstBlock; b <= lastBlock; b++) {
             hout = calculateBlock(bl->P, bl->M, *Peq_c, hout, bl->P, bl->M);
             bl->score += hout;
-            bl++; Peq_c++;
+            bl++;
+            Peq_c++;
         }
-        bl--; Peq_c--;
+        bl--;
+        Peq_c--;
         //------------------------------------------------------------------//
 
         //---------- Adjust number of blocks according to Ukkonen ----------//
         if ((lastBlock < maxNumBlocks - 1) && (bl->score - hout <= k) // bl is pointing to last block
             && ((*(Peq_c + 1) & WORD_1) || hout < 0)) { // Peq_c is pointing to last block
             // If score of left block is not too big, calculate one more block
-            lastBlock++; bl++; Peq_c++;
+            lastBlock++;
+            bl++;
+            Peq_c++;
             bl->P = static_cast<Word>(-1); // All 1s
             bl->M = static_cast<Word>(0);
             bl->score = (bl - 1)->score - hout + WORD_SIZE + calculateBlock(bl->P, bl->M, *Peq_c, hout, bl->P, bl->M);
         } else {
             while (lastBlock >= firstBlock && bl->score >= k + WORD_SIZE) {
-                lastBlock--; bl--; Peq_c--;
+                lastBlock--;
+                bl--;
+                Peq_c--;
             }
         }
 
         // Every some columns, do some expensive but also more efficient block reducing -> this is important!
         if (c % STRONG_REDUCE_NUM == 0) {
             while (lastBlock >= firstBlock && allBlockCellsLarger(*bl, k)) {
-                lastBlock--; bl--; Peq_c--;
+                lastBlock--;
+                bl--;
+                Peq_c--;
             }
         }
 
@@ -758,7 +766,8 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
             && !(//score[lastBlock] >= k + WORD_SIZE ||  // NOTICE: this condition could be satisfied if above block also!
                  ((lastBlock + 1) * WORD_SIZE - 1
                   > k - bl->score + 2 * WORD_SIZE - 2 - targetLength + c + queryLength))) {
-            lastBlock++; bl++;
+            lastBlock++;
+            bl++;
             bl->P = static_cast<Word>(-1); // All 1s
             bl->M = static_cast<Word>(0);
             int newHout = calculateBlock(bl->P, bl->M, Peq_c[lastBlock], hout, bl->P, bl->M);
@@ -774,7 +783,8 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
                    || ((lastBlock + 1) * WORD_SIZE - 1 >
                        // TODO: Does not work if do not put +1! Why???
                        k - bl->score + 2 * WORD_SIZE - 2 - targetLength + c + queryLength + 1))) {
-            lastBlock--; bl--;
+            lastBlock--;
+            bl--;
         }
         //-------------------------//
 
@@ -808,7 +818,8 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
                 if (!reduce) {
                     break;
                 }
-                lastBlock--; bl--;
+                lastBlock--;
+                bl--;
             }
 
             while (firstBlock <= lastBlock) {
@@ -1353,11 +1364,13 @@ static int obtainAlignmentHirschberg (
     const int lrHeight = queryLength - ulHeight;
     const int ulWidth = leftHalfWidth;
     const int lrWidth = rightHalfWidth;
-    unsigned char* ulAlignment = nullptr; int ulAlignmentLength;
+    unsigned char* ulAlignment = nullptr;
+    int ulAlignmentLength;
     int ulStatusCode = obtainAlignment(query, rQuery + lrHeight, ulHeight,
                                        target, rTarget + lrWidth, ulWidth,
                                        alphabetLength, leftScore, &ulAlignment, &ulAlignmentLength);
-    unsigned char* lrAlignment = nullptr; int lrAlignmentLength;
+    unsigned char* lrAlignment = nullptr;
+    int lrAlignmentLength;
     int lrStatusCode = obtainAlignment(query + ulHeight, rQuery, lrHeight,
                                        target + ulWidth, rTarget, lrWidth,
                                        alphabetLength, rightScore, &lrAlignment, &lrAlignmentLength);

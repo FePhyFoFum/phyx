@@ -546,7 +546,8 @@ int main(int argc, char * argv[]) {
                 (*loos) << "skipping calculation" << std::endl;
                 continue;
             }
-            double finallike; Superdouble totlike_sd;
+            double finallike;
+            Superdouble totlike_sd;
             if (!periodsset) {
                 mat free_var(nstates_site_n, nstates_site_n);
                 free_var.fill(0);

@@ -315,12 +315,12 @@ void SeqInfo::get_num_chars () {
 void SeqInfo::calc_missing () {
     // missing data are the last two characters (-N for DNA, -X for protein)
     int miss = 0;
-    double temp = 0.0;
     
     calculate_freqs();
     
     if (!output_indiv_) {
         // proportion for alignment as a whole
+        double temp = 0.0;
         int total_num_chars = sum(char_counts_);
         for (unsigned int i = seq_chars_.length()-2; i < seq_chars_.length(); i++) {
             temp += static_cast<double>(char_counts_[i]) / static_cast<double>(total_num_chars);

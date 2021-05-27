@@ -29,7 +29,8 @@ double nlopt_bm_sr (unsigned n, const double *x, double *grad, void *data) {
    std::cout << x[0] << " " << x[1] << std::endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
-    rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
+    rowvec m = rowvec(d->x.n_cols);
+    m.fill(x[0]);
     double like = norm_pdf_multivariate(d->x, m, tvcv);
     return -like;
 }
@@ -42,7 +43,8 @@ double nlopt_bm_sr_log (unsigned n, const double *x, double *grad, void *data) {
     //std::cout << x[0] << " " << x[1] << std::endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
-    rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
+    rowvec m = rowvec(d->x.n_cols);
+    m.fill(x[0]);
     double like = norm_log_pdf_multivariate(d->x, m, tvcv);
     return -like;
 }
@@ -57,7 +59,8 @@ double nlopt_ou_sr_log (unsigned n, const double *x, double *grad, void *data) {
     }
     double alpha = x[2];
     analysis_data * d = (analysis_data *) data;
-    mat vcvDiag(d->ovcv.n_cols,d->ovcv.n_cols); vcvDiag.zeros(); 
+    mat vcvDiag(d->ovcv.n_cols, d->ovcv.n_cols);
+    vcvDiag.zeros(); 
     vcvDiag.diag() = (d->ovcv).diag();
     mat tm(vcvDiag.n_cols,vcvDiag.n_cols);
     tm.ones();
@@ -66,8 +69,9 @@ double nlopt_ou_sr_log (unsigned n, const double *x, double *grad, void *data) {
     mat Tij = diagi + diagj - (2 * d->ovcv);
     mat ouvcv = (1. / (2. * alpha)) * exp(-alpha * Tij) % (1. - exp(-2. * alpha * d->ovcv));
     ouvcv = ouvcv * x[1];
-    rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
-    double like = norm_log_pdf_multivariate(d->x,m,ouvcv);
+    rowvec m = rowvec(d->x.n_cols);
+    m.fill(x[0]);
+    double like = norm_log_pdf_multivariate(d->x, m, ouvcv);
     return -like;
 }
 
@@ -149,7 +153,9 @@ std::vector<double> optimize_single_rate_bm_ou_nlopt (rowvec& _x, mat& _vcv) {
     opt.optimize(x, minf);
 //    std::cout << result << std::endl;
     std::vector<double> results;
-    results.push_back(x[0]); results.push_back(x[1]); results.push_back(x[2]);
+    results.push_back(x[0]);
+    results.push_back(x[1]);
+    results.push_back(x[2]);
     results.push_back(minf);
     return results;
 }

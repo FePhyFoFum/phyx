@@ -117,7 +117,8 @@ void BDFit::fit_bd() {
     // parameters: r, epsilon
     std::vector<double> x(2);
     // starting values. maybe use intelligent starting values
-    x[0] = 0.05; x[1] = 0.5; // lambda = 0.1, mu = 0.05
+    x[0] = 0.05;
+    x[1] = 0.5; // lambda = 0.1, mu = 0.05
     
     // ML vals for example tree
     //x[0] = 0.7383142; x[1] = 0.3018887;
@@ -126,7 +127,8 @@ void BDFit::fit_bd() {
     opt.set_lower_bounds(0.0);
     // upper bounds: none for r, 1 for epsilon
     std::vector<double> ub(2);
-    ub[0] = 50; ub[1] = 1;
+    ub[0] = 50;
+    ub[1] = 1;
     opt.set_upper_bounds(ub);
     
     double minf;
