@@ -15,7 +15,7 @@ class bcolors:
 def test_program(name):
     x = None
     t = None
-    print ("TESTING",name)
+    print("TESTING", name)
     if name == "pxlstr":
         cm = "./pxlstr -t TEST/test.tre"
         t = 'tree #: 0\nrooted: true\nbinary: true\nnterminal: 5\nninternal: 4\nbranch lengths: true\nrttipvar: 0.004634\ntreelength: 1.595\nultrametric: false\nrootheight: NA\n'
@@ -159,19 +159,19 @@ def test_program(name):
         t = 'Observed character counts:\n                  A            C            G            T        Nchar\nTaxonA            5            6            1            8           20\nTaxonB            4            8            7            1           20\nTaxonC            7            7            2            4           20\nTaxonD            2            6            5            7           20\nTaxonE            2           10            3            5           20\nTotal            20           37           18           25          100\nchi-square test stat. = 18.458\ndf = 12\nprob = 0.102476\n'
     else:
         return
-    p = subprocess.Popen(cm,shell=True,stdout=subprocess.PIPE)
+    p = subprocess.Popen(cm, shell=True, stdout=subprocess.PIPE)
     x = p.communicate()
     #print(x)
     x = x[0].lstrip().decode("utf-8")
     if x == t:
-        print (bcolors.OKBLUE+"PASSED"+bcolors.ENDC)
+        print(bcolors.OKBLUE+"PASSED"+bcolors.ENDC)
         return True
     else:
         for i,j in zip(x,t):
-            print (i,j,i==j)
-        print (bcolors.FAIL+"FAILED"+bcolors.ENDC)
-        print ("intended output:\n",t)
-        print ("your output:\n",x)
+            print(i, j, i==j)
+        print(bcolors.FAIL+"FAILED"+bcolors.ENDC)
+        print("intended output:\n", t)
+        print("your output:\n", x)
         return False
 
 # this are skipped in the testing because they are preliminary, tests will
@@ -182,19 +182,19 @@ if __name__ == "__main__":
     dir = "." # by default test non-installed programs
     if len(sys.argv) == 2:
         dir = sys.argv[1]
-        print ("guess you want to test in: "+dir)
+        print("guess you want to test in: "+dir)
     elif len(sys.argv) > 2:
-        print ("python run_tests.py [program directory]")
+        print("python run_tests.py [program directory]")
         sys.exit(0)
     
     passed = 0
     failed = 0
     failedl = []
-    print ("=================")
+    print("=================")
     for i in os.listdir(dir):
         if i[:2] == "px":
             if i in notest:
-                print (bcolors.WARNING+"skipping "+i+bcolors.ENDC)
+                print(bcolors.WARNING+"skipping "+i+bcolors.ENDC)
                 continue
             t = test_program(i)
             if t == True:
@@ -203,13 +203,13 @@ if __name__ == "__main__":
                 failed += 1
                 failedl.append(i)
             else:
-                print (bcolors.WARNING+"no test for "+i+bcolors.ENDC)
-            print ("=================")
-    print ("PASSED TESTS:",passed)
-    print ("FAILED TESTS:",failed)
+                print(bcolors.WARNING+"no test for "+i+bcolors.ENDC)
+            print("=================")
+    print("PASSED TESTS:", passed)
+    print("FAILED TESTS:", failed)
     if failed > 0:
-        print ("These failed:")
-        print ("\t",",".join(failedl))
+        print("These failed:")
+        print("\t",",".join(failedl))
         sys.exit(1)
     else:
         sys.exit(0)
