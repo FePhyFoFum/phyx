@@ -485,7 +485,7 @@ int main(int argc, char * argv[]) {
             std::set<std::string> un_trees;
             for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
                 std::string sv = get_string_vector(matrix[i]);
-                if (count(un_trees.begin(), un_trees.end(), sv) == 0) {
+                if (un_trees.count(sv)) {
                     std::cout << trees[i]->getRoot()->getNewick(false) << ";" << std::endl;
                     un_trees.insert(sv);
                 }
@@ -592,8 +592,9 @@ int main(int argc, char * argv[]) {
                 }
             } else if (sumc == trees.size()) {
                 std::vector<std::string> nms;
-                for (unsigned int k = 0; k < biparts[i].size(); k++) {
-                    nms.push_back(name_st_index[biparts[i][k]]);
+                nms.reserve(biparts[i].size());
+                for (int k : biparts[i]) {
+                    nms.push_back(name_st_index[k]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {

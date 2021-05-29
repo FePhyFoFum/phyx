@@ -76,6 +76,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool fileset = false;
     bool optionsset = false; // if true, do not return all properties
+    int propcount = 0; // count how many properties are requested
     bool ultracheck = false;
     bool binarycheck = false;
     bool lengthcheck = false;
@@ -102,34 +103,42 @@ int main(int argc, char * argv[]) {
             case 'r':
                 rootedcheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'a':
                 agecheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'n':
                 ntipcheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'u':
                 ultracheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'b':
                 binarycheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'l':
                 lengthcheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'i':
                 namecheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'v':
                 rtvarcheck = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'o':
                 outfileset = true;
@@ -154,7 +163,7 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    if (static_cast<int>(ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck + namecheck) > 1) {
+    if (propcount > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }

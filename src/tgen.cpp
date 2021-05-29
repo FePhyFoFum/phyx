@@ -12,7 +12,7 @@
 
 
 TopologyGenerator::TopologyGenerator(const unsigned int& num_taxa, const bool& rooted,
-        const std::string& lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(lprefix),
+        std::string& lprefix):num_taxa_(num_taxa), rooted_(rooted), lprefix_(std::move(lprefix)),
         ntopos_(0), nedges_(0), curtax_(0), curnode_(0) {
     initialize();
 }
@@ -131,10 +131,10 @@ std::vector< std::vector< std::vector<unsigned int> > > TopologyGenerator::add_t
         edge = j;
         // first, swap new node in for root node (always num_taxa+1)
         unsigned int root = num_taxa_ + 1;
-        for (unsigned int i = 0; i < edge.size(); i++) {
-            if (edge[i][0] == root) {
-                edge[i][0] = new_node;
-            } else if (edge[i][0] == 0) {
+        for (auto & ei : edge) {
+            if (ei[0] == root) {
+                ei[0] = new_node;
+            } else if (ei[0] == 0) {
                 // early break: if 0, then edge has yet to be generated
                 break;
             }

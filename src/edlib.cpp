@@ -1430,8 +1430,8 @@ static int transformSequences (const char* const queryOriginal, const int queryL
     // Alphabet information, it is constructed on fly while transforming sequences.
     unsigned char letterIdx[256]; //!< letterIdx[c] is index of letter c in alphabet
     bool inAlphabet[256]; // inAlphabet[c] is true if c is in alphabet
-    for (int i = 0; i < 256; i++) {
-        inAlphabet[i] = false;
+    for (bool & i : inAlphabet) {
+        i = false;
     }
     int alphabetLength = 0;
 

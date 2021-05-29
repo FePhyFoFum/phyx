@@ -79,6 +79,7 @@ int main(int argc, char * argv[]) {
     bool indiv = false;
     bool force_protein = false; // i.e. if inference fails
     bool optionsset = false; // is true, do not return all properties
+    int propcount = 0; //count how many properties are requested
     bool get_labels = false;
     bool check_aligned = false;
     bool get_nseq = false;
@@ -110,14 +111,17 @@ int main(int argc, char * argv[]) {
             case 'n':
                 get_nseq = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'c':
                 get_nchar = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'l':
                 get_labels = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'p':
                 force_protein = true;
@@ -125,14 +129,17 @@ int main(int argc, char * argv[]) {
             case 'a':
                 check_aligned = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'f':
                 get_freqs = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'm':
                 get_missing = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'h':
                 print_help();
@@ -158,7 +165,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = nullptr;
     std::istream * pios = nullptr;
     
-    if (static_cast<int>(get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
+    if (propcount > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }

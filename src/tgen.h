@@ -38,7 +38,7 @@ private:
     
 public:
     TopologyGenerator (const unsigned int& num_taxa, const bool& rooted,
-        const std::string& lprefix);
+        std::string& lprefix);
     void get_newicks (std::ostream* poos);
     //~TopologyGenerator();
 };
