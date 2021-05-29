@@ -103,7 +103,7 @@ int main(int argc, char * argv[]) {
     
     while (true) {
         int oi = -1;
-        int curind = optind;
+        int curind;
         int c = getopt_long(argc, argv, "p:t:o:b:n:r:iscd:k:x:vhVC", long_options, &oi);
         if (c == -1) {
             break;

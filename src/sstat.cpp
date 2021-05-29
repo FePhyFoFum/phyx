@@ -107,7 +107,6 @@ void MultinomialSeqStat::calculateTestStatistic () {
         if (patterns_and_counts_[iterStoredPat].second != 0) {
             tempResult = (patterns_and_counts_[iterStoredPat].second)*(log(patterns_and_counts_[iterStoredPat].second));
             finalResult += tempResult;
-            tempResult = 0.0L;
         }
     }
     tempResult = static_cast<long double>(num_char_*(log(num_char_)));

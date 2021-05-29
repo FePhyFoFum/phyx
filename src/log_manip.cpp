@@ -412,19 +412,15 @@ void LogManipulator::get_column_names () {
             std::string curfile = files_[0];
             infilestr_.open(curfile.c_str());
             std::string line;
-            bool first_line = true;
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
                 }
-                if (first_line) {
-                    std::vector<std::string> header = tokenize(line);
-                    auto curpars = static_cast<int>(header.size());
-                    num_cols_ = curpars;
-                    parm_names_ = header;
-                    first_line = false;
-                    break;
-                }
+                std::vector<std::string> header = tokenize(line);
+                auto curpars = static_cast<int>(header.size());
+                num_cols_ = curpars;
+                parm_names_ = header;
+                break;
             }
             for (int i = 0; i < num_cols_; i++) {
                 (*poos_) << i+1 << ". " << parm_names_[static_cast<unsigned long>(i)] << std::endl;

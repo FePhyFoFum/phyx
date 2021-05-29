@@ -229,7 +229,6 @@ void Tree::removeRootEdge () {
             setRoot(curr);
             processRoot();
         } else {
-            going = false;
             break;
         }
     }
