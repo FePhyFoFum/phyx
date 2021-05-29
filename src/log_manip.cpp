@@ -512,10 +512,10 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         std::string line;
         bool first_line = true;
         int sample_counter = 0;
-        std::vector<int> cols_to_retain;
+        std::vector<int> cols_to_retain(static_cast<unsigned long>(col_ids.size()), 0);
         for (int col_id : col_ids) {
             // subtract 1 because input is 1-indexed
-            cols_to_retain.push_back(col_id - 1);
+            cols_to_retain[col_id] = col_id - 1;
         }
         num_cols_retain_ = static_cast<int>(cols_to_retain.size());
         

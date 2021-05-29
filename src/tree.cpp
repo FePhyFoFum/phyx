@@ -324,6 +324,7 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
         return this->getExternalNode(innodes[0]);
     }
     std::vector<std::string> outgroup;
+    outgroup.reserve(static_cast<unsigned int>(innodes.size()));
     for (const auto & innode : innodes) {
         outgroup.push_back(innode);
     }

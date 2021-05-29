@@ -53,9 +53,10 @@ double get_length_to_root (Node * n) {
  * calculate the variance between the lengths to the root and the tips
  */
 double get_root_tip_var (Tree * tr) {
-    std::vector<double> paths;
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
-        paths.push_back(get_length_to_root(tr->getExternalNode(i)));
+    int nc = tr->getExternalNodeCount();
+    std::vector<double> paths(static_cast<unsigned long>(nc), 0.0);
+    for (int i = 0; i < nc; i++) {
+        paths[i] = get_length_to_root(tr->getExternalNode(i));
     }
     double var = v_variance(paths);
     return var;
@@ -439,10 +440,13 @@ bool is_ultrametric_paths (Tree * tr) {
     if (essentially_equal(get_tree_length(tr), 0.0)) {
         return ultrametric;
     }
-
-    std::vector<double> paths;
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
-        paths.push_back(get_length_to_root(tr->getExternalNode(i)));
+    
+    
+    int nc = tr->getExternalNodeCount();
+    std::vector<double> paths(static_cast<unsigned long>(nc), 0.0);
+    
+    for (int i = 0; i < nc; i++) {
+        paths[i] = get_length_to_root(tr->getExternalNode(i));
         //std::cout << "Path: " << paths[i] << std::endl;
     }
     // compare against first
@@ -675,9 +679,10 @@ std::vector<std::string> get_names_in_tree_regex (Tree * tr, const std::string& 
 
 // returns a sorted vector of all terminal labels
 std::vector<std::string> get_tip_labels (Tree * tr) {
-    std::vector<std::string> labels;
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
-        labels.push_back(tr->getExternalNode(i)->getName());
+    int nc = tr->getExternalNodeCount();
+    std::vector<std::string> labels(static_cast<unsigned long>(nc), "");
+    for (int i = 0; i < nc; i++) {
+        labels[i] = tr->getExternalNode(i)->getName();
     }
     sort(labels.begin(), labels.end());
     return labels;
