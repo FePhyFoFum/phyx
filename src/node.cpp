@@ -217,7 +217,7 @@ std::string Node::getNewick (bool bl) {
         if (i == 0) {
             ret += "(";
         }
-        ret = ret+this->getChild(i)->getNewick(bl);
+        ret += this->getChild(i)->getNewick(bl);
         if (bl) {
             //std::ostringstream o;
             ////20 is what you get from raxml
@@ -304,7 +304,7 @@ std::string Node::getNewick (bool bl, const std::string& obj) {
         if (i == 0) {
             ret += "(";
         }
-        ret = ret+this->getChild(i)->getNewick(bl, obj);
+        ret += this->getChild(i)->getNewick(bl, obj);
         if (bl) {
             std::ostringstream o;
             o << this->getChild(i)->getBL();
