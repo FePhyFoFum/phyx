@@ -318,6 +318,7 @@ int main(int argc, char * argv[]) {
             std::vector<int> nms_i;
             std::set<std::string> nms_s;
             copy(nms.begin(), nms.end(), inserter(nms_s, nms_s.begin()));
+            nms_i.reserve(nms.size());
             for (const auto & nm : nms) {
                 nms_i.push_back(name_index[nm]);
             }
@@ -329,6 +330,7 @@ int main(int argc, char * argv[]) {
             it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                 nms_s.end(), nms_s2.begin());
             nms_s2.resize(it-nms_s2.begin());
+            nms_i2.reserve(nms_s2.size());
             for (const auto & k : nms_s2) {
                 nms_i2.push_back(name_index[k]);
             }
@@ -431,6 +433,7 @@ int main(int argc, char * argv[]) {
 
                 std::vector<std::string> nms = trees[i]->getInternalNode(j)->get_leave_names();
                 std::vector<int> nms_i;
+                nms_i.reserve(nms.size());
                 for (const auto & nm : nms) {
                     nms_i.push_back(name_index[nm]);
                 }
@@ -459,6 +462,7 @@ int main(int argc, char * argv[]) {
                     it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                             nms_s.end(), nms_s2.begin());
                     nms_s2.resize(it-nms_s2.begin());
+                    nms_i2.reserve(nms_s2.size());
                     for (const auto & k : nms_s2) {
                         nms_i2.push_back(name_index[k]);
                     }
@@ -625,6 +629,7 @@ int main(int argc, char * argv[]) {
             }
             std::vector<std::string> nms = maptree->getInternalNode(i)->get_leave_names();
             std::vector<int> nms_i;
+            nms_i.reserve(nms.size());
             for (const auto & nm : nms) {
                 nms_i.push_back(name_index[nm]);
             }
