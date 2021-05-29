@@ -60,9 +60,8 @@ void Collapser::collapse_edges (Tree * tr) {
                         //  << m->getBL() << std::endl;
                         tr->pruneInternalNode(m);
                         break;
-                    } else {
-                        //std::cout << "This one is cool: " << cursup << "; el = " << m->getBL() << std::endl;
                     }
+                    //std::cout << "This one is cool: " << cursup << "; el = " << m->getBL() << std::endl;
                 }
                 if (i == (tr->getInternalNodeCount() - 1)) {
                     done = true; // exit loop, no more polytomies remain

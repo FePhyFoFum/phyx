@@ -323,23 +323,22 @@ Node * Tree::getMRCA (std::vector<std::string> innodes) {
     Node * mrca = nullptr;
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
-    } else {
-        std::vector<std::string> outgroup;
-        for (const auto & innode : innodes) {
-            outgroup.push_back(innode);
-        }
-        Node * cur1 = this->getExternalNode(outgroup.at(0));
-        outgroup.erase(outgroup.begin());
-        Node * cur2 = nullptr;
-        Node * tempmrca = nullptr;
-        while (!outgroup.empty()) {
-            cur2 = this->getExternalNode(outgroup.at(0));
-            outgroup.erase(outgroup.begin());
-            tempmrca = getMRCATraverse(cur1, cur2);
-            cur1 = tempmrca;
-        }
-        mrca = cur1;
     }
+    std::vector<std::string> outgroup;
+    for (const auto & innode : innodes) {
+        outgroup.push_back(innode);
+    }
+    Node * cur1 = this->getExternalNode(outgroup.at(0));
+    outgroup.erase(outgroup.begin());
+    Node * cur2 = nullptr;
+    Node * tempmrca = nullptr;
+    while (!outgroup.empty()) {
+        cur2 = this->getExternalNode(outgroup.at(0));
+        outgroup.erase(outgroup.begin());
+        tempmrca = getMRCATraverse(cur1, cur2);
+        cur1 = tempmrca;
+    }
+    mrca = cur1;
     return mrca;
 }
 
@@ -348,19 +347,18 @@ Node * Tree::getMRCA (std::vector<Node *> innodes) {
     Node * mrca = nullptr;
     if (innodes.size() == 1) {
         return innodes[0];
-    } else {
-        Node * cur1 = innodes.at(0);
-        innodes.erase(innodes.begin());
-        Node * cur2 = nullptr;
-        Node * tempmrca = nullptr;
-        while (!innodes.empty()) {
-            cur2 = innodes.at(0);
-            innodes.erase(innodes.begin());
-            tempmrca = getMRCATraverse(cur1, cur2);
-            cur1 = tempmrca;
-        }
-        mrca = cur1;
     }
+    Node * cur1 = innodes.at(0);
+    innodes.erase(innodes.begin());
+    Node * cur2 = nullptr;
+    Node * tempmrca = nullptr;
+    while (!innodes.empty()) {
+        cur2 = innodes.at(0);
+        innodes.erase(innodes.begin());
+        tempmrca = getMRCATraverse(cur1, cur2);
+        cur1 = tempmrca;
+    }
+    mrca = cur1;
     return mrca;
 }
 
@@ -369,12 +367,13 @@ Node * Tree::getMRCA (std::vector<Node *> innodes) {
  * when the MRCA is returned as root, this will find 
  * the other node, internal that can serve as another root
  */
+// looks like lots missing here!
 Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
     Node * mrca = nullptr;
     //std::set<Node *> original; // original set of nodes. not used
     if (innodes.size() == 1) {
         return this->getExternalNode(innodes[0]);
-    } else {
+    } //else {
         // first get the root set
         // then get the leaves set
         // the difference will give the root back
@@ -386,7 +385,7 @@ Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
             // NOTE: this is missing!
             
         }
-    }
+    //}
     return mrca;
 }
 

@@ -187,9 +187,8 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
                 // break early if encountering an existing painted path
                 if (cur->getPainted()) {
                     break;
-                } else {
-                    cur->setPainted(true);
                 }
+                cur->setPainted(true);
             }
         } else {
             if (!silent) {
@@ -276,7 +275,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
     // print map<Node*, std::vector<Node*> >
     if (debug) {
         std::cout << std::endl << "TREE MAP:" << std::endl;
-        for (auto it = tree_map.begin(); it != tree_map.end(); it++) {
+        for (std::map<Node*, std::vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); it++) {
             std::cout << "Node: " << it->first->getName() << std::endl;
             std::vector<Node*> terp = it->second;
             for (auto & t : terp) {
@@ -538,9 +537,8 @@ bool postorder_ultrametricity_check (Node * node, bool& ultrametric) {
             if (!all_equal(heights)) {
                 ultrametric = false;
                 return ultrametric;
-            } else {
-                node->setHeight(heights[0]);
             }
+            node->setHeight(heights[0]);
         }
         if (node->isExternal()) { // tip
             node->setHeight(0.0);
@@ -619,9 +617,8 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
                         //std::cout << "yay! can try with parent of " << ingroup[i] << std::endl;
                         done = true;
                         break;
-                    } else {
-                        //std::cout << "nope: can't use " << ingroup[i] << std::endl;
                     }
+                    //std::cout << "nope: can't use " << ingroup[i] << std::endl;
                     if (i == (ingroup.size() - 1)) {
                         done = true;
                     }

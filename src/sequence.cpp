@@ -120,7 +120,8 @@ void Sequence::infer_alpha () {
             alphabet_ = AA;
         }
         return;
-    } else if (uniqueChars.find_first_not_of(protchars) == std::string::npos) {
+    }
+    if (uniqueChars.find_first_not_of(protchars) == std::string::npos) {
         alphabet_ = AA;
         return;
     }

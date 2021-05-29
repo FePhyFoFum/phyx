@@ -1012,21 +1012,20 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
                         (*alignment)[(*alignmentLength)++] = EDLIB_EDOP_DELETE;
                     }
                     break;
+                }
+                blockPos = WORD_SIZE - 1;
+                b--;
+                currP = alignData->Ps[c * maxNumBlocks + b];
+                currM = alignData->Ms[c * maxNumBlocks + b];
+                if (c > 0 && b >= alignData->firstBlocks[c-1] && b <= alignData->lastBlocks[c-1]) {
+                    thereIsLeftBlock = true;
+                    lP = alignData->Ps[(c - 1) * maxNumBlocks + b]; // TODO: improve this, too many operations
+                    lM = alignData->Ms[(c - 1) * maxNumBlocks + b];
                 } else {
-                    blockPos = WORD_SIZE - 1;
-                    b--;
-                    currP = alignData->Ps[c * maxNumBlocks + b];
-                    currM = alignData->Ms[c * maxNumBlocks + b];
-                    if (c > 0 && b >= alignData->firstBlocks[c-1] && b <= alignData->lastBlocks[c-1]) {
-                        thereIsLeftBlock = true;
-                        lP = alignData->Ps[(c - 1) * maxNumBlocks + b]; // TODO: improve this, too many operations
-                        lM = alignData->Ms[(c - 1) * maxNumBlocks + b];
-                    } else {
-                        thereIsLeftBlock = false;
-                        // TODO(martin): There may not be left block, but there can be left boundary - do we
-                        // handle this correctly then? Are l and ul score set correctly?
-                        // I should check that / refactor this.
-                    }
+                    thereIsLeftBlock = false;
+                    // TODO(martin): There may not be left block, but there can be left boundary - do we
+                    // handle this correctly then? Are l and ul score set correctly?
+                    // I should check that / refactor this.
                 }
             } else {
                 blockPos--;

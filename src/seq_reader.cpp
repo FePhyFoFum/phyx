@@ -108,7 +108,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
             }
             if (tokens[0] == ";") {
                 return false;
-            } else if (tokens[0][0] == '\'') { // treat ' and " cases separately
+            }
+            if (tokens[0][0] == '\'') { // treat ' and " cases separately
                 std::string::size_type start = tline.find_first_of('\'');
                 std::string::size_type stop  = tline.find_last_of('\'');
                 std::string label = tline.substr(start, stop - start + 1);
@@ -118,7 +119,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 seq.set_id(label);
                 seq.set_sequence(seqstr);
                 return true;
-            } else if (tokens[0][0] == '\"') {
+            }
+            if (tokens[0][0] == '\"') {
                 std::string::size_type start = tline.find_first_of('\"');
                 std::string::size_type stop  = tline.find_last_of('\"');
                 std::string label = tline.substr(start, stop - start + 1);
@@ -128,11 +130,10 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 seq.set_id(label);
                 seq.set_sequence(seqstr);
                 return true;
-            } else {
-                seq.set_id(tokens[0]);
-                seq.set_sequence(tokens[1]);
-                return true;
             }
+            seq.set_id(tokens[0]);
+            seq.set_sequence(tokens[1]);
+            return true;
         } else {
             return false;
         }
@@ -405,7 +406,8 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
             seq.add_cont_char(std::atof(tokens[i].c_str()));
         }
         return true;
-    } else if (ftype == 2) { // fasta
+    }
+    if (ftype == 2) { // fasta
         bool first = true;
         std::vector<std::string> tokens;
         std::string del(" \t");
@@ -767,77 +769,77 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
             // return to the original position in the stream
             pios.seekg(spt, std::ios_base::beg);
             return; // simple single line //
-        } else {
-            // read in next line
-            getline_safe(pios, line);
-            tokens = tokenize(line);
-            if (tokens.size() == 1) {
-                // simple multiline format
-                multiline = true;
-                // keep reading to check
-                /*
-                done = false;
-                while (!done) {
-                    seq += tokens[0];
-                    if (seq.length() == num_char) {
-                        done = true;
-                    } else {
-                        getline_safe(pios, line);
-                        tokens = tokenize(line);
-                    }
-                }
-                std::cout << "Successfully read in multiline sequence ;)" << std::endl;
-                std::cout << seq << std::endl;
-                */
-                // return to the original position in the stream
-                pios.seekg(spt, std::ios_base::beg);
-                return; // multiline //
-            } else if (tokens.size() == 2) {
-                // likely interleaved format
-                interleaved = true;
-                // keep reading to check. seq continues every num_taxa lines
-                /*
-                done = false;
-                int tcnt = 2; // we've read in two already
-                lcnt = 1;
-                while (!done) {
+        }
+        // read in next line
+        getline_safe(pios, line);
+        tokens = tokenize(line);
+        if (tokens.size() == 1) {
+            // simple multiline format
+            multiline = true;
+            // keep reading to check
+            /*
+            done = false;
+            while (!done) {
+                seq += tokens[0];
+                if (seq.length() == num_char) {
+                    done = true;
+                } else {
                     getline_safe(pios, line);
-                    tcnt++;
-                    //std::cout << "tcnt = " << tcnt << std::endl;
-                    if (tcnt == num_taxa) {
-                        //std::cout << "skipping line: " << line << std::endl;
-                        tcnt = 0;
-                    } else if (tcnt == 1) {
-                        lcnt++;
-                        if (line.empty()) {
-                            // there may be an empty line between blocks
-                            //std::cout << "skipping an empty line." << std::endl;
-                            getline_safe(pios, line);
-                        }
-                        tokens = tokenize(line);
-                        if (tokens.size() > 1) {
-                            std::cout << "Um, I'm not sure what is happening..." << std::endl;
-                        } else {
-                            seq += tokens[0];
-                            if (seq.length() == num_char) {
-                                done = true;
-                            }
-                        }
-                    } else {
-                        //std::cout << "skipping line: " << line << std::endl;
-                    }
+                    tokens = tokenize(line);
                 }
-                std::cout << "Successfully read in interleaved sequence ("
-                        << lcnt << " lines) ;)" << std::endl;
-                std::cout << seq << std::endl;
-                */
-                // return to the original position in the stream
-                pios.seekg(spt, std::ios_base::beg);
-                return; // interleaved //
-            } else {
-                std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
-                exit(1);
             }
+            std::cout << "Successfully read in multiline sequence ;)" << std::endl;
+            std::cout << seq << std::endl;
+            */
+            // return to the original position in the stream
+            pios.seekg(spt, std::ios_base::beg);
+            return; // multiline //
+        }
+        if (tokens.size() == 2) {
+            // likely interleaved format
+            interleaved = true;
+            // keep reading to check. seq continues every num_taxa lines
+            /*
+            done = false;
+            int tcnt = 2; // we've read in two already
+            lcnt = 1;
+            while (!done) {
+                getline_safe(pios, line);
+                tcnt++;
+                //std::cout << "tcnt = " << tcnt << std::endl;
+                if (tcnt == num_taxa) {
+                    //std::cout << "skipping line: " << line << std::endl;
+                    tcnt = 0;
+                } else if (tcnt == 1) {
+                    lcnt++;
+                    if (line.empty()) {
+                        // there may be an empty line between blocks
+                        //std::cout << "skipping an empty line." << std::endl;
+                        getline_safe(pios, line);
+                    }
+                    tokens = tokenize(line);
+                    if (tokens.size() > 1) {
+                        std::cout << "Um, I'm not sure what is happening..." << std::endl;
+                    } else {
+                        seq += tokens[0];
+                        if (seq.length() == num_char) {
+                            done = true;
+                        }
+                    }
+                } else {
+                    //std::cout << "skipping line: " << line << std::endl;
+                }
+            }
+            std::cout << "Successfully read in interleaved sequence ("
+                    << lcnt << " lines) ;)" << std::endl;
+            std::cout << seq << std::endl;
+            */
+            // return to the original position in the stream
+            pios.seekg(spt, std::ios_base::beg);
+            return; // interleaved //
+        } else {
+            std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
+            exit(1);
         }
     } else if (num_elem > 2) {
         // dealing with spaces
@@ -852,75 +854,73 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
             // return to the original position in the stream
             pios.seekg(spt, std::ios_base::beg);
             return; // just spaces //
-        } else {
-            // now, determine if multiline or interleaved
-            // if multiline, 2nd line will have (at maximum) 1 fewer element
-            // if interleaved, 2nd line will have the same number of elements
-            getline_safe(pios, line);
-            tokens = tokenize(line);
-            if (static_cast<int>(tokens.size()) == num_elem) {
-                interleaved = true;
-                // keep reading to check. seq continues every num_taxa lines
-                /*
-                done = false;
-                int tcnt = 2; // we've read in two already
-                lcnt = 1;
-                while (!done) {
-                    getline_safe(pios, line);
-                    tcnt++;
-                    //std::cout << "tcnt = " << tcnt << std::endl;
-                    if (tcnt == num_taxa) {
-                        //std::cout << "skipping line: " << line << std::endl;
-                        tcnt = 0;
-                    } else if (tcnt == 1) {
-                        lcnt++;
-                        if (line.empty()) {
-                            // there may be an empty line between blocks
-                            //std::cout << "skipping an empty line." << std::endl;
-                            getline_safe(pios, line);
-                        }
-                        tokens = tokenize(line);
-                        for (unsigned int i = 0; i < tokens.size(); i++) {
-                            seq += tokens[i];
-                        }
-                        if (seq.length() == num_char) {
-                            done = true;
-                        }
-                    } else {
-                        //std::cout << "skipping line: " << line << std::endl;
+        }
+        // now, determine if multiline or interleaved
+        // if multiline, 2nd line will have (at maximum) 1 fewer element
+        // if interleaved, 2nd line will have the same number of elements
+        getline_safe(pios, line);
+        tokens = tokenize(line);
+        if (static_cast<int>(tokens.size()) == num_elem) {
+            interleaved = true;
+            // keep reading to check. seq continues every num_taxa lines
+            /*
+            done = false;
+            int tcnt = 2; // we've read in two already
+            lcnt = 1;
+            while (!done) {
+                getline_safe(pios, line);
+                tcnt++;
+                //std::cout << "tcnt = " << tcnt << std::endl;
+                if (tcnt == num_taxa) {
+                    //std::cout << "skipping line: " << line << std::endl;
+                    tcnt = 0;
+                } else if (tcnt == 1) {
+                    lcnt++;
+                    if (line.empty()) {
+                        // there may be an empty line between blocks
+                        //std::cout << "skipping an empty line." << std::endl;
+                        getline_safe(pios, line);
                     }
-                }
-                std::cout << "Successfully read in spaces+interleaved sequence ("
-                        << lcnt << " lines) ;)" << std::endl;
-                std::cout << seq << std::endl;
-                */
-                // return to the original position in the stream
-                pios.seekg(spt, std::ios_base::beg);
-                return; // spaces & interleaved //
-            } else {
-                multiline = true;
-                // check to make sure
-                /*
-                lcnt = 1;
-                done = false;
-                while (!done) {
+                    tokens = tokenize(line);
                     for (unsigned int i = 0; i < tokens.size(); i++) {
                         seq += tokens[i];
-                        lcnt++;
                     }
                     if (seq.length() == num_char) {
                         done = true;
                     }
+                } else {
+                    //std::cout << "skipping line: " << line << std::endl;
                 }
-                std::cout << "Successfully read in spaces+multiline sequence ("
-                        << lcnt << " lines) ;)" << std::endl;
-                std::cout << seq << std::endl;
-                */
-                // return to the original position in the stream
-                pios.seekg(spt, std::ios_base::beg);
-                return; // spaces & multiline //
+            }
+            std::cout << "Successfully read in spaces+interleaved sequence ("
+                    << lcnt << " lines) ;)" << std::endl;
+            std::cout << seq << std::endl;
+            */
+            // return to the original position in the stream
+            pios.seekg(spt, std::ios_base::beg);
+            return; // spaces & interleaved //
+        }
+        multiline = true;
+        // check to make sure
+        /*
+        lcnt = 1;
+        done = false;
+        while (!done) {
+            for (unsigned int i = 0; i < tokens.size(); i++) {
+                seq += tokens[i];
+                lcnt++;
+            }
+            if (seq.length() == num_char) {
+                done = true;
             }
         }
+        std::cout << "Successfully read in spaces+multiline sequence ("
+                << lcnt << " lines) ;)" << std::endl;
+        std::cout << seq << std::endl;
+        */
+        // return to the original position in the stream
+        pios.seekg(spt, std::ios_base::beg);
+        return; // spaces & multiline //
     } else {
         std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
         exit(1);

@@ -130,9 +130,8 @@ bool Relabel::relabel_sequence (Sequence& seq) {
     if (name_map_.find(str) != name_map_.end()) {
         seq.set_id(name_map_[str]);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 

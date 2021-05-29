@@ -94,16 +94,15 @@ Tree * TreeReader::readTree (const std::string& pb) {
                         if (quoteType == '"') {
                             goingName = false;
                             break;
-                        } else {
-                            // check for double single quotes
-                            x++;
+                        }
+                        // check for double single quotes
+                        x++;
+                        nextChar = pb.c_str()[x];
+                        if (nextChar != quoteType) {
+                            x--;
                             nextChar = pb.c_str()[x];
-                            if (nextChar != quoteType) {
-                                x--;
-                                nextChar = pb.c_str()[x];
-                                goingName = false;
-                                break;
-                            }
+                            goingName = false;
+                            break;
                         }
                     }
                 } 
@@ -196,16 +195,15 @@ Tree * TreeReader::readTree (const std::string& pb) {
                         if (quoteType == '"') {
                             goingName = false;
                             break;
-                        } else {
-                            // check for double single quotes
-                            x++;
+                        }
+                        // check for double single quotes
+                        x++;
+                        nextChar = pb.c_str()[x];
+                        if (nextChar != quoteType) {
+                            x--;
                             nextChar = pb.c_str()[x];
-                            if (nextChar != quoteType) {
-                                x--;
-                                nextChar = pb.c_str()[x];
-                                goingName = false;
-                                break;
-                            }
+                            goingName = false;
+                            break;
                         }
                     }
                 } 
@@ -452,11 +450,10 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
             if (!getline_safe(stri, tline)) {
                 (*going) = false;
                 return nullptr;
-            } else {
-                trim_spaces(tline);
-                 if (!tline.empty()) {
-                     done = true;
-                 }
+            }
+            trim_spaces(tline);
+            if (!tline.empty()) {
+                done = true;
             }
         }
     }

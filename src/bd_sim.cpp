@@ -243,9 +243,8 @@ bool BirthDeathSimulator::event_is_birth () {
     double x = uniformDistrib_(generator_);
     if (x < relative_birth_rate_) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 

@@ -96,11 +96,10 @@ Superdouble Superdouble::operator + (Superdouble x) {
         Superdouble result(mantissa + (x.mantissa * (pow(10, exponentdif))), exponent);
         result.adjustDecimal();
         return result;
-    } else {
-        Superdouble result(x.mantissa, x.exponent);
-        result.adjustDecimal();
-        return result;
     }
+    Superdouble result(x.mantissa, x.exponent);
+    result.adjustDecimal();
+    return result;
 }
 
 
@@ -112,11 +111,10 @@ Superdouble Superdouble::operator - (Superdouble x) {
         Superdouble result(mantissa - (x.mantissa * (pow(10, exponentdif))), exponent);
         result.adjustDecimal();
         return result;
-    } else {
-        Superdouble result(-1.0 * x.mantissa, x.exponent);
-        result.adjustDecimal();
-        return result;
     }
+    Superdouble result(-1.0 * x.mantissa, x.exponent);
+    result.adjustDecimal();
+    return result;
 }
 
 
@@ -192,24 +190,24 @@ void Superdouble::operator -= (Superdouble x) {
 
 
 bool Superdouble::operator > (const Superdouble& x)const {
+    bool res = false;
     if (exponent > x.exponent) {
-        return true;
+        res = true;
     } else if (exponent == x.exponent && mantissa > x.mantissa) {
-        return true;
-    } else {
-        return false;
+        res = true;
     }
+    return res;
 }
 
 
 bool Superdouble::operator >= (const Superdouble& x)const {
+    bool res = false;
     if (exponent > x.exponent) {
-        return true;
+        res = true;
     } else if (exponent == x.exponent && mantissa >= x.mantissa) {
-        return true;
-    } else {
-        return false;
+        res = true;
     }
+    return res;
 }
 
 
@@ -225,13 +223,13 @@ bool Superdouble::operator < (const Superdouble& x)const {
 
 
 bool Superdouble::operator <= (const Superdouble& x)const {
+    bool res = false;
     if (exponent < x.exponent) {
-        return true;
+        res = true;
     } else if (exponent == x.exponent && mantissa <= x.mantissa) {
-        return true;
-    } else {
-        return false;
+        res = true;
     }
+    return res;
 }
 
 
@@ -262,8 +260,7 @@ Superdouble Superdouble::abs() {
     if (mantissa < 0) {
         Superdouble result(-mantissa, exponent);
         return result;
-    } else {
-        Superdouble result(mantissa, exponent);
-        return result;
     }
+    Superdouble result(mantissa, exponent);
+    return result;
 }
