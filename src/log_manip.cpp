@@ -122,7 +122,7 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     //  https://stats.stackexchange.com/a/441628/263112
     // the (preliminary) stuff below uses the BEAST-flavour, in part because values can be validated
     // indeed, at present this is just C++-ified code from the java source:
-    //  https://github.com/beast-dev/beast-mcmc/blob/d053c4683eed322038c4ff5a3580b4c173c77693/src/dr/inference/trace/TraceCorrelation.java#L127-L190
+    // https://tinyurl.com/847bpbpm
     
     // maximum lag to consider for ACT. may never be reached (i.e., smart early exit)
     // increasing MAXIMUM_LAG greatly increases computation time (see loops below)

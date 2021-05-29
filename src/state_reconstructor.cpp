@@ -335,7 +335,9 @@ double StateReconstructor::eval_likelihood () {
     ancdist_conditional_lh(*tree->getRoot());
     //return (-log(calculate_vector_double_sum(*
     //      (VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))));
-    return double(-(calculate_vector_Superdouble_sum(*(VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))).getLn());
+    double res = 0.0;
+    res = -(calculate_vector_Superdouble_sum(*(VectorNodeObject<Superdouble>*) tree->getRoot()->getObject(dc))).getLn();
+    return res;
 }
 
 

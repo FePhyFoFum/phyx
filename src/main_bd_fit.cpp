@@ -28,7 +28,7 @@ void print_help () {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input treefile, STDIN otherwise" << std::endl;
-    std::cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << std::endl;
+    std::cout << " -m, --model=STRING  diversification model. either 'yule', 'bd' (default), or 'best'" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;

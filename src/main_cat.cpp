@@ -21,7 +21,9 @@ void print_help () {
     std::cout << "Can use wildcards e.g.:" << std::endl;
     std::cout << "  pxcat -s *.phy -o my_cat_file.fa" << std::endl;
     std::cout << "However, if the argument list is too long (shell limit), put filenames in a file:" << std::endl;
-    std::cout << "  for x in *.phy; do echo $x >> flist.txt; done" << std::endl;
+    std::cout << "  for x in *.phy" << std::endl;
+    std::cout << "    do echo $x >> flist.txt" << std::endl;
+    std::cout << "  done" << std::endl;
     std::cout << "and call using the -f option:" << std::endl;
     std::cout << "  pxcat -f flist.txt -o my_cat_file.fa" << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus sequence formats." << std::endl;

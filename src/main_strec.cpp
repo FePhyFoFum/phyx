@@ -783,7 +783,8 @@ int main(int argc, char * argv[]) {
                                         sr.prepare_stochmap_reverse_all_nodes(excount, excount2);
                                         sr.prepare_ancstate_reverse();
                                         std::vector<double> stoch;
-                                        stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]), false);
+                                        stoch = sr.calculate_reverse_stochmap(*tree->getMRCA(mrcas[stochnumber[j]]),
+                                                false);
                                         double tnum = sum(stoch)/totlike_sd;
                                         if (verbose) {
                                             (*loos) << tnum << " ";

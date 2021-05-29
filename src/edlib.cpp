@@ -702,7 +702,9 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
     }
 
     // Each STRONG_REDUCE_NUM column is reduced in more expensive way.
-    const int STRONG_REDUCE_NUM = 2048; // TODO: Choose this number dinamically (based on query and target lengths?), so it does not affect speed of computation
+    // TODO: Choose this number dynamically (based on query and target lengths?),
+    // so it does not affect speed of computation
+    const int STRONG_REDUCE_NUM = 2048; 
 
     if (k < abs(targetLength - queryLength)) {
         *bestScore_ = *position_ = -1;
@@ -763,7 +765,7 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
         //--- Adjust last block ---//
         // If block is not beneath band, calculate next block. Only next because others are certainly beneath band.
         if (lastBlock + 1 < maxNumBlocks
-            && !(//score[lastBlock] >= k + WORD_SIZE ||  // NOTICE: this condition could be satisfied if above block also!
+            && !(//score[lastBlock] >= k + WORD_SIZE || // NOTICE: condition could be satisfied if above block also!
                  ((lastBlock + 1) * WORD_SIZE - 1
                   > k - bl->score + 2 * WORD_SIZE - 2 - targetLength + c + queryLength))) {
             lastBlock++;
@@ -776,7 +778,8 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
         }
 
         // While block is out of band, move one block up.
-        // NOTE: Condition used here is more loose than the one from the article, since I simplified the max() part of it.
+        // NOTE: Condition used here is more loose than the one from the article,
+        // since I simplified the max() part of it.
         // I could consider adding that max part, for optimal performance.
         while (lastBlock >= firstBlock
                && (bl->score >= k + WORD_SIZE
@@ -1021,7 +1024,8 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
                     } else {
                         thereIsLeftBlock = false;
                         // TODO(martin): There may not be left block, but there can be left boundary - do we
-                        // handle this correctly then? Are l and ul score set correctly? I should check that / refactor this.
+                        // handle this correctly then? Are l and ul score set correctly?
+                        // I should check that / refactor this.
                     }
                 }
             } else {

@@ -66,7 +66,8 @@ void SeqInfo::count_chars (std::string& seq) {
         }
         indiv_char_counts_.push_back(icounts);
         // this is cool, but unnecessary here
-        //std::transform(char_counts_.begin(), char_counts_.end(), icounts.begin(), char_counts_.begin(), std::plus<int>());
+        //std::transform(char_counts_.begin(), char_counts_.end(),
+        //  icounts.begin(), char_counts_.begin(), std::plus<int>());
     } else {
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(), seq_chars_[i]));
@@ -242,7 +243,8 @@ void SeqInfo::print_summary_table_whole_alignment () {
     //(*poos) << "General Stats For All Sequences" << std::endl;
     (*poos_) << "File type: " << file_type_ << std::endl;
     (*poos_) << "Number of sequences: " << num_taxa_ << std::endl;
-    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(),
+            std::not_equal_to<int>()) == seq_lengths_.end() ) {
         is_aligned_ = true;
     } else {
         is_aligned_ = false;
@@ -300,7 +302,8 @@ void SeqInfo::get_num_chars () {
         seq_lengths_.push_back(static_cast<int>(seq.get_length()));
     }
     // check if all seqs are the same length
-    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(), std::not_equal_to<int>()) == seq_lengths_.end() ) {
+    if (std::adjacent_find( seq_lengths_.begin(), seq_lengths_.end(),
+            std::not_equal_to<int>()) == seq_lengths_.end() ) {
         is_aligned_ = true;
         seq_length_ = seq_lengths_[0];
     } else {
