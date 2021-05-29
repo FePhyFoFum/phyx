@@ -154,7 +154,7 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    if ((ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck + namecheck) > 1) {
+    if (static_cast<int>(ultracheck + binarycheck + lengthcheck + agecheck + rootedcheck + rtvarcheck + ntipcheck + namecheck) > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }

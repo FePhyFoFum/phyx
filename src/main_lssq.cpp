@@ -158,7 +158,7 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = nullptr;
     std::istream * pios = nullptr;
     
-    if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
+    if (static_cast<int>(get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }
