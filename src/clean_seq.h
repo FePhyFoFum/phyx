@@ -9,9 +9,9 @@
 
 class SequenceCleaner {
 private:
-    int num_taxa_;
-    int num_char_;
-    int num_retained_;
+    unsigned int num_taxa_;
+    unsigned int num_char_;
+    unsigned int num_retained_;
     double missing_allowed_;
     
     bool by_taxon_;
@@ -29,12 +29,12 @@ private:
     std::vector<double> missing_per_site_proportion_;
     std::vector<int> missing_per_taxon_;
     std::vector<double> missing_per_taxon_proportion_;
-    std::vector<int> retained_sites_;
+    std::vector<unsigned int> retained_sites_;
     
     void count_missing ();
     void generate_cleaned_sequences ();
     std::string get_cleaned_seq (const std::string& origseq);
-    int get_longest_taxon_label ();
+    unsigned int get_longest_taxon_label ();
     void read_in_sequences (std::istream* pios);
     void set_bad_chars ();
 

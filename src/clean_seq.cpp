@@ -12,7 +12,7 @@
 
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
     const bool& by_taxon, const bool& by_codon, const bool& count_only,
-    const bool& verbose):num_taxa_(0), num_char_(0), num_retained_(0),
+    const bool& verbose):num_taxa_(0u), num_char_(0u), num_retained_(0u),
     missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), by_codon_(by_codon),
     count_only_(count_only), verbose_(verbose) {
     read_in_sequences(pios);
@@ -25,7 +25,7 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
 
 void SequenceCleaner::read_in_sequences (std::istream* pios) {
     seqs_ = ingest_alignment(pios, alpha_name_);
-    num_taxa_ = static_cast<int>(seqs_.size());
+    num_taxa_ = seqs_.size();
     
     // check aligned. if not, BAIL
     bool aligned = is_aligned(seqs_);
@@ -48,7 +48,7 @@ void SequenceCleaner::read_in_sequences (std::istream* pios) {
         }
     }
     
-    num_char_ = static_cast<int>(seqs_[0].get_length());
+    num_char_ = seqs_[0].get_length();
     set_bad_chars(); // uses alpha name
 }
 
@@ -74,14 +74,14 @@ std::vector<Sequence> SequenceCleaner::get_cleaned_seqs () {
 
 void SequenceCleaner::write_seqs (std::ostream* poos) {
     if (by_taxon_) {
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             if (missing_per_taxon_proportion_[i] < missing_allowed_) {
                 (*poos) << ">" << seqs_[i].get_id() << std::endl;
                 (*poos) << seqs_[i].get_sequence() << std::endl;
             }
         }
     } else {
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             std::string seq = cleaned_seqs_[i].get_sequence();
             if (seq.find_first_not_of(badChars_) != std::string::npos) {
                 (*poos) << ">" << cleaned_seqs_[i].get_id() << std::endl;
@@ -110,16 +110,16 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
         }
         
         std::string pad;
-        int longest = get_longest_taxon_label();
+        unsigned int longest = get_longest_taxon_label();
         // header
         (*poos) << "Taxon" << std::string((longest - 5), ' ');
         (*poos) << " " << std::right << std::setw(colWidth)
                 << "Missing" << " " << std::right << std::setw(colWidth)
                 << "Prop." << std::endl;
         (*poos) << std::string((longest + 26), '-') << std::endl;
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             (*poos) << seqs_[i].get_id();
-            auto diff = longest - static_cast<int>(seqs_[i].get_id().size());
+            auto diff = longest - seqs_[i].get_id().size();
             if (diff > 0) {
                 pad = std::string(diff, ' ');
                 (*poos) << pad;
@@ -142,7 +142,7 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
                     << std::right << std::setw(colWidth) << "Missing" << " "
                     << std::right << std::setw(colWidth) << "Prop." << std::endl;
             (*poos) << std::string(35, '-') << std::endl;
-            for (unsigned long i = 0; i < static_cast<unsigned long>(num_char_); i++) {
+            for (unsigned int i = 0; i < num_char_; i++) {
                 (*poos) << std::right << std::setw(9) << i << " "
                         << std::right << std::setw(colWidth) << missing_per_site_counts_[i] << " "
                         << std::right << std::setw(colWidth) << missing_per_site_proportion_[i] << " "
@@ -153,8 +153,8 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
                     << std::right << std::setw(colWidth) << "Missing" << " "
                     << std::right << std::setw(colWidth) << "Prop." << std::endl;
             (*poos) << std::string(34, '-') << std::endl;
-            for (unsigned long i = 0; i < static_cast<unsigned long>(num_char_/3); i++) {
-                unsigned long pos = i * 3;
+            for (unsigned int i = 0; i < (num_char_/3); i++) {
+                unsigned int pos = i * 3;
                 (*poos) << std::right << std::setw(5) << i << " "
                         << std::right << std::setw(colWidth) << missing_per_site_counts_[pos] << " "
                         << std::right << std::setw(colWidth) << missing_per_site_proportion_[pos] << " "
@@ -166,10 +166,10 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
 
 
 // get the longest label. for printing purposes
-int SequenceCleaner::get_longest_taxon_label () {
-    int longest = 0;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-        auto curLength = static_cast<int>(seqs_[i].get_id().size());
+unsigned int SequenceCleaner::get_longest_taxon_label () {
+    unsigned int longest = 0;
+    for (unsigned int i = 0; i < num_taxa_; i++) {
+        unsigned int curLength = seqs_[i].get_id().size();
         if (curLength > longest) {
             longest = curLength;
         }
@@ -183,7 +183,7 @@ void SequenceCleaner::generate_cleaned_sequences () {
     std::string name;
     std::string seq_string;
     Sequence orig_seq;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+    for (unsigned int i = 0; i < num_taxa_; i++) {
         Sequence new_seq;
         orig_seq = seqs_[i];
         name = orig_seq.get_id();
@@ -202,20 +202,17 @@ void SequenceCleaner::generate_cleaned_sequences () {
 // TODO: need to consider codon seqs
 void SequenceCleaner::count_missing () {
     // initialize empty vectors
-    auto nc = static_cast<unsigned long>(num_char_);
-    auto nt = static_cast<unsigned long>(num_taxa_);
-    
-    missing_per_site_counts_ = std::vector<int>(nc, 0);
-    missing_per_site_proportion_ = std::vector<double>(nc, 0.0);
-    missing_per_taxon_ = std::vector<int>(nt, 0);
-    missing_per_taxon_proportion_ = std::vector<double>(nt, 0.0);
+    missing_per_site_counts_ = std::vector<int>(num_char_, 0);
+    missing_per_site_proportion_ = std::vector<double>(num_char_, 0.0);
+    missing_per_taxon_ = std::vector<int>(num_taxa_, 0);
+    missing_per_taxon_proportion_ = std::vector<double>(num_taxa_, 0.0);
     
     std::string seq_string;
     
     if (!by_codon_) {
-        for (unsigned long i = 0; i < nt; i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             seq_string = string_to_upper(seqs_[i].get_sequence());
-            for (unsigned long j = 0; j < nc; j++) {
+            for (unsigned int j = 0; j < num_char_; j++) {
                 if (badChars_.find(seq_string[j]) != std::string::npos) {
                     missing_per_site_counts_[j]++;
                     missing_per_taxon_[i]++;
@@ -227,9 +224,9 @@ void SequenceCleaner::count_missing () {
         }
     } else {
         std::string codon;
-        for (unsigned long i = 0; i < nt; i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             seq_string = string_to_upper(seqs_[i].get_sequence());
-            for (unsigned long j = 0; j < nc; j += 3) {
+            for (unsigned int j = 0; j < num_char_; j += 3) {
                 codon = seq_string.substr(j, 3);
                 if (codon.find_first_of(badChars_) != std::string::npos) {
                     // if any char is bad, they all are
@@ -247,23 +244,23 @@ void SequenceCleaner::count_missing () {
     }
     
     // get proportions
-    for (unsigned long i = 0; i < nc; i++) {
+    for (unsigned int i = 0; i < num_char_; i++) {
         missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i])
                 / static_cast<double>(num_taxa_);
         //std::cout << i << ". missing = " << missing_per_site_counts_[i] << "("
         //        << missing_per_site_proportion_[i] << ")" << std::endl;
         if (missing_per_site_proportion_[i] <= missing_allowed_) {
-            retained_sites_.push_back(static_cast<int>(i));
+            retained_sites_.push_back(i);
         }
     }
     
-    num_retained_ = static_cast<int>(retained_sites_.size());
+    num_retained_ = retained_sites_.size();
 }
 
 
 std::string SequenceCleaner::get_cleaned_seq (const std::string& origseq) {
     std::string seq;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_retained_); i++) {
+    for (unsigned int i = 0; i < num_retained_; i++) {
         seq += origseq[retained_sites_[i]];
     }
     return seq;
