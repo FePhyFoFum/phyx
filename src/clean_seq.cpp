@@ -25,7 +25,7 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
 
 void SequenceCleaner::read_in_sequences (std::istream* pios) {
     seqs_ = ingest_alignment(pios, alpha_name_);
-    num_taxa_ = seqs_.size();
+    num_taxa_ = static_cast<unsigned int>(seqs_.size());
     
     // check aligned. if not, BAIL
     bool aligned = is_aligned(seqs_);
@@ -169,7 +169,7 @@ void SequenceCleaner::write_stats (std::ostream* poos) {
 unsigned int SequenceCleaner::get_longest_taxon_label () {
     unsigned int longest = 0;
     for (unsigned int i = 0; i < num_taxa_; i++) {
-        unsigned int curLength = seqs_[i].get_id().size();
+        unsigned int curLength = static_cast<unsigned int>(seqs_[i].get_id().size());
         if (curLength > longest) {
             longest = curLength;
         }
@@ -254,7 +254,7 @@ void SequenceCleaner::count_missing () {
         }
     }
     
-    num_retained_ = retained_sites_.size();
+    num_retained_ = static_cast<unsigned int>(retained_sites_.size());
 }
 
 
@@ -267,6 +267,4 @@ std::string SequenceCleaner::get_cleaned_seq (const std::string& origseq) {
 }
 
 
-SequenceCleaner::~SequenceCleaner() {
-    // TODO Auto-generated destructor stub
-}
+SequenceCleaner::~SequenceCleaner() = default;

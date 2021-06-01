@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <time.h>
+#include <ctime>
 #include <cstdlib>
 #include <getopt.h>
 
@@ -68,6 +68,7 @@ static struct option const long_options[] =
 bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
     int best_distance = 10000000;
     int best_dis_rev = 100000000;
+    bool res = false;
     std::string comp = comp_seq.get_sequence();
     std::string revcomp = comp_seq.reverse_complement();
     for (auto & seq : seqs) {
@@ -93,9 +94,9 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
         edlibFreeAlignResult(result);
     }
     if (best_dis_rev < best_distance) {
-        return true;
+        res = true;
     }
-    return false;
+    return res;
 }
 
 int main(int argc, char * argv[]) {

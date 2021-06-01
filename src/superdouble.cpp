@@ -16,7 +16,7 @@ Superdouble::Superdouble(long double m, int e):stilldouble(false), upperlimit(1e
 }
 
 
-Superdouble::~Superdouble() {}
+Superdouble::~Superdouble() = default;
 
 
 int Superdouble::getExponent() {
@@ -25,13 +25,13 @@ int Superdouble::getExponent() {
 
 
 double Superdouble::getMantissa() {
-    return mantissa;
+    return static_cast<double>(mantissa);
 }
 
 
 void Superdouble::adjustDecimal() {
     stilldouble = false;
-    if (std::isnormal(mantissa) == false) {
+    if (!std::isnormal(mantissa)) {
         exponent = 0;
         stilldouble = true;
     } else {

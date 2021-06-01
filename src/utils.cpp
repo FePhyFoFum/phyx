@@ -753,7 +753,7 @@ bool essentially_equal_doubles (double a, double b) {
         equal = true;
     }
     */
-    equal = (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON));
+    equal = (std::fabs(a - b) <= ( (std::fabs(a) > std::fabs(b) ? std::fabs(b) : std::fabs(a)) * EPSILON));
     
     return equal;
 }

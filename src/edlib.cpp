@@ -48,7 +48,7 @@ struct Block {
     Word M;  // Mvin
     int score; // score of last cell in block;
 
-    Block () {}
+    Block () = default;
     Block (Word P_, Word M_, int score_):P(P_), M(M_), score(score_) {}
 };
 

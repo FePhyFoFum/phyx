@@ -31,7 +31,7 @@ Node::Node (Node * inparent):BL_(0.0), height_(0.0), number_(0), name_(""), pare
 }
 
 
-Node::Node (double bl, int innumber, const std::string& inname, Node * inparent):BL_(bl), height_(0.0),
+Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl), height_(0.0),
     number_(innumber), name_(std::move(inname)), parent_(inparent), children_(std::vector<Node *> ()),
     assoc_(std::map<std::string, NodeObject *>()), assocDV_(std::map<std::string, std::vector<Superdouble> >()), 
     comment_(""), painted_(false) {
@@ -321,7 +321,7 @@ std::string Node::getNewick (bool bl, const std::string& obj) {
     }
     if (this->getObject(obj) != nullptr) {
         std::ostringstream o;
-        o << (*(static_cast<StringNodeObject*>(this->getObject(obj))));
+        o << (*(dynamic_cast<StringNodeObject*>(this->getObject(obj))));
         ret += "[&"+obj+"="+o.str()+"]";
     }
     return ret;

@@ -240,11 +240,12 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
 
 
 bool BirthDeathSimulator::event_is_birth () {
+    bool res = false;
     double x = uniformDistrib_(generator_);
     if (x < relative_birth_rate_) {
-        return true;
+        res = true;
     }
-    return false;
+    return res;
 }
 
 

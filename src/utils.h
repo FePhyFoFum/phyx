@@ -100,7 +100,7 @@ template<typename T> std::vector<T> in_first_not_second (std::vector<T> firstv, 
     std::sort(secondv.begin(), secondv.end());
     
     typename std::vector<T>::iterator it;
-    it=std::set_difference(firstv.begin(), firstv.end(), secondv.begin(), secondv.end(), res.begin());
+    it = std::set_difference(firstv.begin(), firstv.end(), secondv.begin(), secondv.end(), res.begin());
     res.resize(it-res.begin());
     
     //std::remove_copy_if(firstv.begin(), firstv.end(), std::back_inserter(res),
@@ -167,7 +167,7 @@ template<typename T> bool essentially_equal (T a, T b) {
         equal = true;
     }
     */
-    equal = (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON));
+    equal = (std::fabs(a - b) <= ( (std::fabs(a) > std::fabs(b) ? std::fabs(b) : std::fabs(a)) * EPSILON));
     
     return equal;
 }

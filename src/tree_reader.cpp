@@ -13,7 +13,7 @@
 #include "utils.h"
 
 
-TreeReader::TreeReader() {}
+TreeReader::TreeReader() = default;
 
 
 /*
