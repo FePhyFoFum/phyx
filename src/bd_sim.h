@@ -47,7 +47,7 @@ private:
 
 public:
     BirthDeathSimulator ();
-    BirthDeathSimulator (const double& estop, const double& tstop, const double& brate,
+    BirthDeathSimulator (const int& estop, const double& tstop, const double& brate,
         const double& drate, const long int& seed);
     Tree * make_tree (const bool& show_dead);
     std::string get_sim_summary ();

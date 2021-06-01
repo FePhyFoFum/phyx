@@ -14,7 +14,7 @@
 #include "utils.h"
 
 
-BirthDeathSimulator::BirthDeathSimulator (const double& estop, const double& tstop,
+BirthDeathSimulator::BirthDeathSimulator (const int& estop, const double& tstop,
     const double& brate, const double& drate, const long int& seed):numfailures_(0),
     maxfailures_(1000), birthrate_(brate), deathrate_(drate), sumrate_(brate+drate),
     relative_birth_rate_(brate/(brate+drate)), extantstop_(estop), timestop_(tstop),
