@@ -714,7 +714,7 @@ unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2) {
     // bail if sequences are of different lengths. should be caught earlier than this
     if (s1.size() != s2.size()) {
         throw std::invalid_argument(
-          "Hamming distances are only defined for strings of equal length"
+          "Hamming distances are only defined for strings of equal length."
       );
     }
     
@@ -736,7 +736,7 @@ double logn (double x, double base) {
 // equality checks //
 
 // check if 2 doubles are equal within some tolerance.
-bool essentially_equal (double a, double b) {
+bool essentially_equal_doubles (double a, double b) {
     bool equal = false;
     
     /*
@@ -747,10 +747,12 @@ bool essentially_equal (double a, double b) {
         << (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     */
     
+    // not used
+    /*
     if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(std::abs(a), std::abs(b)))) {
         equal = true;
     }
-    
+    */
     equal = (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON));
     
     return equal;
@@ -760,7 +762,7 @@ bool essentially_equal (double a, double b) {
 bool all_equal (std::vector<double> vals) {
     bool equal = false;
     auto it = std::find_if_not(vals.begin()+1, vals.end(),
-            std::bind(essentially_equal, std::placeholders::_1, vals[0]));
+            std::bind(essentially_equal_doubles, std::placeholders::_1, vals[0]));
     if (it == end(vals)) {
         equal = true;
     }

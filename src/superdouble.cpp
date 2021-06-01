@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "superdouble.h"
-
+#include "utils.h"
 
 Superdouble::Superdouble(long double m, int e):stilldouble(false), upperlimit(1e+100),
         lowerlimit(1e-100) {
@@ -91,7 +91,7 @@ Superdouble Superdouble::operator / (Superdouble x) {
 // add stilldouble
 Superdouble Superdouble::operator + (Superdouble x) {
     // only tricky thing is converting them to same exponent
-    if (mantissa != 0) {
+    if (!essentially_equal(mantissa, 0.0L)) {
         int exponentdif = x.exponent-exponent;
         Superdouble result(mantissa + (x.mantissa * (pow(10, exponentdif))), exponent);
         result.adjustDecimal();
@@ -106,7 +106,7 @@ Superdouble Superdouble::operator + (Superdouble x) {
 // add stilldouble
 Superdouble Superdouble::operator - (Superdouble x) {
     // only tricky thing is converting them to same exponent
-    if (mantissa != 0) {
+    if (!essentially_equal(mantissa, 0.0L)) {
         int exponentdif = x.exponent - exponent;
         Superdouble result(mantissa - (x.mantissa * (pow(10, exponentdif))), exponent);
         result.adjustDecimal();
@@ -150,7 +150,7 @@ void Superdouble::operator /= (Superdouble x) {
 
 void Superdouble::operator += (Superdouble x) {
     // only tricky thing is converting them to same exponent
-    if (mantissa != 0) {
+    if (!essentially_equal(mantissa, 0.0L)) {
         if (stilldouble && x.stilldouble) {
             mantissa += x.mantissa;
             if (std::abs(mantissa) > upperlimit || std::abs(mantissa) < lowerlimit) {
@@ -177,7 +177,7 @@ void Superdouble::operator += (Superdouble x) {
 // add stilldouble
 void Superdouble::operator -= (Superdouble x) {
     // only tricky thing is converting them to same exponent
-    if (mantissa != 0) {
+    if (!essentially_equal(mantissa, 0.0L)) {
         int exponentdif=x.exponent-exponent;
         mantissa=mantissa-(x.mantissa*(pow(10, exponentdif)));
         adjustDecimal();

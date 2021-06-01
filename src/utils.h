@@ -147,7 +147,33 @@ unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2);
 
 double logn (double x, double base);
 
-bool essentially_equal (double a, double b);
+bool essentially_equal_doubles (double a, double b);
+
+// template version to accommodate different precision types
+template<typename T> bool essentially_equal (T a, T b) {
+    bool equal = false;
+    T EPSILON = 1e-7;
+    /*
+    std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
+    std::cout << "ApproximatelyEqual: "
+        << (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "EssentiallyEqual: "
+        << (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    */
+    
+    // not used
+    /*
+    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(std::abs(a), std::abs(b)))) {
+        equal = true;
+    }
+    */
+    equal = (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON));
+    
+    return equal;
+}
+
+
+
 bool all_equal (std::vector<double> vals);
 bool all_equal (std::vector<int> vals);
 
