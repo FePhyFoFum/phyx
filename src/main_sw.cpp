@@ -219,6 +219,7 @@ int main(int argc, char * argv[]) {
     }
     if (outalnfileset) {
         afstr->close();
+        delete afstr;
     }
     return EXIT_SUCCESS;
 }
