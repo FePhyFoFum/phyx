@@ -775,7 +775,15 @@ bool all_equal (std::vector<int> vals) {
     if (std::all_of(vals.begin(), vals.end(), [&] (int i) {return i == vals[0];})) {
         equal = true;
     }
-    
+    return equal;
+}
+
+
+bool all_equal (std::vector<unsigned int> vals) {
+    bool equal = false;
+    if (std::all_of(vals.begin(), vals.end(), [&] (unsigned int i) {return i == vals[0];})) {
+        equal = true;
+    }
     return equal;
 }
 

@@ -173,9 +173,10 @@ template<typename T> bool essentially_equal (T a, T b) {
 }
 
 
-
 bool all_equal (std::vector<double> vals);
 bool all_equal (std::vector<int> vals);
+bool all_equal (std::vector<unsigned int> vals);
+
 
 // a basic poll checker for stream inputs
 bool check_for_input_to_stream ();

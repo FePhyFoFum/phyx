@@ -9,10 +9,10 @@
 
 class CompTest {
 private:
-    int num_taxa_;
-    int seq_length_;
-    int total_; // all valid chars
-    int df_;
+    unsigned int num_taxa_;
+    unsigned int seq_length_;
+    unsigned int total_; // all valid chars
+    unsigned int df_;
     double test_stat_;
     double prob_;
     
@@ -32,8 +32,8 @@ private:
     std::vector<Sequence> seqs_;
     std::vector<std::string> taxon_labels_;
     std::vector< std::vector<int> > indiv_char_counts_;
-    std::vector<int> row_totals_;
-    std::vector<int> col_totals_;
+    std::vector<unsigned int> row_totals_;
+    std::vector<unsigned int> col_totals_;
     
     unsigned int longest_tax_label_;
     

@@ -12,8 +12,8 @@
 #include "seq_utils.h"
 
 
-CompTest::CompTest (std::istream* pios, std::ostream* poos):num_taxa_(0), seq_length_(0),
-        total_(0), df_(0), test_stat_(0.0), prob_(0.0), seq_chars_(""), alpha_name_(""),
+CompTest::CompTest (std::istream* pios, std::ostream* poos):num_taxa_(0u), seq_length_(0u),
+        total_(0u), df_(0u), test_stat_(0.0), prob_(0.0), seq_chars_(""), alpha_name_(""),
         alpha_set_(false), datatype_set_(false), is_multi_(false), gap_('-'), missing_('?'),
         pios_(pios), poos_(poos), longest_tax_label_(0) {
     read_in_alignment();
@@ -30,8 +30,8 @@ void CompTest::read_in_alignment () {
         exit(0);
     }
     
-    num_taxa_ = static_cast<int>(seqs_.size());
-    seq_length_ = static_cast<int>(seqs_[0].get_length());
+    num_taxa_ = static_cast<unsigned int>(seqs_.size());
+    seq_length_ = seqs_[0].get_length();
     set_datatype();
     
     // if datatype is multi, but alphabet not set, get from entire concatenated sequence
@@ -39,8 +39,8 @@ void CompTest::read_in_alignment () {
         // grab all unique characters from the input string
         // here, seqs from all individuals are concatenated, so represents all sampled characters
         std::string concatenated;
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-            concatenated += seqs_[i].get_sequence();
+        for (unsigned int i = 0; i < num_taxa_; i++) {
+            concatenated += seqs_[static_cast<unsigned long>(i)].get_sequence();
         }
         seq_chars_ = get_alphabet_from_sequence(concatenated);
         // remove gap and missing (if present)
@@ -79,13 +79,13 @@ void CompTest::set_datatype () {
 // get counts of all valid character states per taxon
 void CompTest::count_chars () {
     std::string seq;
-    for (int i = 0; i < num_taxa_; i++) {
-        int sum = 0;
+    for (unsigned int i = 0; i < num_taxa_; i++) {
+        unsigned int sum = 0;
         seq = string_to_upper(seqs_[static_cast<unsigned long>(i)].get_sequence());
         std::vector<int> icounts(seq_chars_.length(), 0);
         
         for (unsigned int j = 0; j < seq_chars_.length(); j++) {
-            int num = static_cast<int>(std::count(seq.begin(), seq.end(), seq_chars_[j]));
+            auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(), seq_chars_[j]));
             icounts[j] += num;
             sum += num;
             col_totals_[j] += num;
@@ -109,8 +109,8 @@ void CompTest::count_chars () {
 // get the longest label. for printing purposes
 void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
-    for (int i = 0; i < num_taxa_; i++) {
-        unsigned int cur_len = taxon_labels_[static_cast<unsigned int>(i)].size();
+    for (unsigned int i = 0; i < num_taxa_; i++) {
+        unsigned int cur_len = static_cast<unsigned int>(taxon_labels_[static_cast<unsigned int>(i)].size());
         if (cur_len > longest_tax_label_) {
             longest_tax_label_ = cur_len;
         }
@@ -146,7 +146,7 @@ void CompTest::return_freq_table () {
     unsigned int diff = longest_tax_label_ - 5;
     pad = std::string(diff, ' ');
     (*poos_) << "Total" << pad << " ";
-    for (int col_total : col_totals_) {
+    for (unsigned int col_total : col_totals_) {
         (*poos_) << std::right << std::setw(colWidth) << col_total << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << total_ << std::endl;
@@ -155,7 +155,7 @@ void CompTest::return_freq_table () {
 
 void CompTest::calc_chi_square () {
     test_stat_ = 0.0;
-    df_ = static_cast<int>((num_taxa_ - 1) * (col_totals_.size() - 1));
+    df_ = static_cast<unsigned int>((num_taxa_ - 1) * (col_totals_.size() - 1));
     double observed = 0.0;
     double expected = 0.0;
     double cellv = 0.0;
