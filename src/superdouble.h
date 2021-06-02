@@ -41,7 +41,7 @@ private:
     friend std::ostream& operator<<(std::ostream& os, const Superdouble& x);
     
 public:
-    Superdouble(long double m=1.0, int e=0);
+    Superdouble(long double m=1.0l, int e=0);
     ~Superdouble();
     Superdouble operator* ( Superdouble x);
     Superdouble operator* ( double x);
@@ -65,7 +65,7 @@ public:
     void switch_sign();
     
     operator double() {
-        return static_cast<double>(mantissa * pow(10., exponent));
+        return static_cast<double>(mantissa) * pow(10., exponent);
     }
 };
 #endif /* PX_SUPERDOUBLE_H */

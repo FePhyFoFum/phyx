@@ -27,6 +27,7 @@ private:
     
     Tree* tree_;
     double treelength_;
+    // why are the following doubles?!? for eventual maths, obvs, but seems stupid here
     double nintnodes_;
     double nspeciation_;
     int ntips_;

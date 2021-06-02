@@ -167,7 +167,7 @@ template<typename T> bool essentially_equal (T a, T b) {
         equal = true;
     }
     */
-    equal = (std::fabs(a - b) <= ( (std::fabs(a) > std::fabs(b) ? std::fabs(b) : std::fabs(a)) * EPSILON));
+    equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
     
     return equal;
 }

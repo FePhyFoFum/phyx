@@ -110,7 +110,7 @@ void CompTest::count_chars () {
 void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
     for (int i = 0; i < num_taxa_; i++) {
-        auto cur_len = static_cast<int>(taxon_labels_[static_cast<unsigned int>(i)].size());
+        unsigned int cur_len = taxon_labels_[static_cast<unsigned int>(i)].size();
         if (cur_len > longest_tax_label_) {
             longest_tax_label_ = cur_len;
         }
@@ -131,7 +131,7 @@ void CompTest::return_freq_table () {
     }
     (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-        int diff = longest_tax_label_ - static_cast<int>(taxon_labels_[i].size());
+        unsigned int diff = longest_tax_label_ - static_cast<unsigned int>(taxon_labels_[i].size());
         (*poos_) << taxon_labels_[i];
         if (diff > 0) {
             pad = std::string(diff, ' ');
@@ -143,7 +143,7 @@ void CompTest::return_freq_table () {
         }
         (*poos_) << std::right << std::setw(colWidth) << row_totals_[i] << std::endl;
     }
-    int diff = longest_tax_label_ - 5;
+    unsigned int diff = longest_tax_label_ - 5;
     pad = std::string(diff, ' ');
     (*poos_) << "Total" << pad << " ";
     for (int col_total : col_totals_) {

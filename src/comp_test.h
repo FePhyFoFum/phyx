@@ -35,7 +35,7 @@ private:
     std::vector<int> row_totals_;
     std::vector<int> col_totals_;
     
-    int longest_tax_label_;
+    unsigned int longest_tax_label_;
     
     void read_in_alignment ();
     void set_datatype ();
