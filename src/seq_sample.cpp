@@ -184,7 +184,8 @@ std::vector<int> SequenceSampler::get_partition_sites (const std::string& part) 
 
 // opposite of get_partition_sites. want single vector listing site-specific partitions. e.g.
 // 1231231231231234444444444444
-// not used
+// not currently used
+/*
 void SequenceSampler::get_site_partitions () {
     std::vector<int> sites(static_cast<unsigned long>(num_partitioned_sites_), 0);
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_partitions_); i++) {
@@ -194,6 +195,7 @@ void SequenceSampler::get_site_partitions () {
     }
     site_partitions_ = sites;
 }
+*/
 
 
 // CHARSET GADPH = 2991-3406\3

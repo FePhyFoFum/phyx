@@ -249,7 +249,8 @@ bool BirthDeathSimulator::event_is_birth () {
 }
 
 
-// hrm not used
+// hrm not currently used
+/*
 void BirthDeathSimulator::set_distance_to_tip () {
     for (int i = 0; i < tree_->getExternalNodeCount(); i++) {
         double curh = 0.0;
@@ -268,9 +269,11 @@ void BirthDeathSimulator::set_distance_to_tip () {
         }
     }
 }
+*/
 
 
-// also not used
+// also not currently used
+/*
 double BirthDeathSimulator::get_distance_from_tip (Node *innode) {
     Node * cur = innode;
     double curh = 0.0;
@@ -281,3 +284,4 @@ double BirthDeathSimulator::get_distance_from_tip (Node *innode) {
     curh += cur->getBL();
     return curh;
 }
+*/

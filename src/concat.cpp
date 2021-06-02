@@ -109,10 +109,12 @@ Sequence SequenceConcatenater::get_sequence (const unsigned int& index)const {
 }
 
 
+// not currently used
+/*
 std::vector<unsigned int> SequenceConcatenater::get_partition_sizes ()const {
     return partition_sizes_;
 }
-
+*/
 
 void SequenceConcatenater::write_partition_information (const std::vector<std::string>& inputFiles,
     std::string& partfile) {

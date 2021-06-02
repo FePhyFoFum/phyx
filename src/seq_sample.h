@@ -34,7 +34,7 @@ private:
     void check_valid_partitions ();
     int get_num_partitioned_sites ();
     void calculate_num_partitioned_sites ();
-    void get_site_partitions (); // not used
+    //void get_site_partitions (); // not currently used
     [[ noreturn ]] void find_duplicates_missing (const std::vector<int>& allSites);
 
 public:

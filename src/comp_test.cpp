@@ -183,10 +183,9 @@ void CompTest::print_results () {
 // s = df/2, t = chi2/2
 double CompTest::calc_chi_square_prob (const double& df, const double& xstat) {
     // prob given by igf(df/2, x/2) / gamma(df/2)
-    double prob = 0.0;
     double s = df / 2;
     double t = xstat / 2;
-    prob = lower_incomplete_gamma_function(s, t);
+    double prob = lower_incomplete_gamma_function(s, t);
     prob /= tgamma(s); // from cmath
     prob = 1 - prob;
     return prob;

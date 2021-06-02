@@ -17,7 +17,7 @@ private:
     void read_sequences ();
     int get_sequence_length ()const;
     
-    std::vector<unsigned int> get_partition_sizes ()const;
+    //std::vector<unsigned int> get_partition_sizes ()const; // not currently used
     void delete_sequence (SequenceConcatenater& newSeqs, const unsigned int& index);
 
 public:

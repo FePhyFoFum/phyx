@@ -41,9 +41,9 @@ private:
     bool event_is_birth ();
     void delete_a_node (Node *);
     
-    // these are not used
-    double get_distance_from_tip (Node *innode);
-    void set_distance_to_tip ();
+    // these are not currently used
+    //double get_distance_from_tip (Node *innode);
+    //void set_distance_to_tip ();
 
 public:
     BirthDeathSimulator ();
