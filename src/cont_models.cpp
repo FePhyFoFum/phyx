@@ -182,7 +182,7 @@ void calc_square_change_anc_states (Tree * tree, int index) {
 
 
 void calc_postorder_square_change (Node * node, std::map<Node *, int>& nodenum,
-    mat * fullMcp, mat * fullVcp, int index) {
+        mat * fullMcp, mat * fullVcp, int index) {
     for (int i = 0; i < node->getChildCount(); i++) {
         calc_postorder_square_change(node->getChild(i), nodenum, fullMcp, fullVcp, index);    
     }

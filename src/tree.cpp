@@ -10,14 +10,14 @@
 
 
 Tree::Tree ():internal_node_count_(0), external_node_count_(0), edge_lengths_(false),
-    node_annotations_(false), internal_node_names_(false) {
+        node_annotations_(false), internal_node_names_(false) {
     root_ = nullptr;
     processRoot();
 }
 
 
 Tree::Tree (Node * inroot):internal_node_count_(0), external_node_count_(0),
-    edge_lengths_(false), node_annotations_(false), internal_node_names_(false) {
+        edge_lengths_(false), node_annotations_(false), internal_node_names_(false) {
     root_ = inroot;
     processRoot();
 }

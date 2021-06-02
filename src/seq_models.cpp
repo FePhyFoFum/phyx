@@ -10,7 +10,8 @@
 #include "utils.h"
 
 
-void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >& sc_mat) {
+void read_scoring_matrix (char * filename,
+        std::map<char, std::map<char, int> >& sc_mat) {
     std::ifstream fstr(filename);
     sc_mat.clear();
     std::vector<char> order;
@@ -44,7 +45,8 @@ void read_scoring_matrix (char * filename, std::map<char, std::map<char, int> >&
 }
 
 
-void read_scoring_matrix_from_lines(std::vector<std::string>& lines, std::map<char, std::map<char, int> >& sc_mat) {
+void read_scoring_matrix_from_lines(std::vector<std::string>& lines,
+        std::map<char, std::map<char, int> >& sc_mat) {
     sc_mat.clear();
     std::vector<char> order;
     bool first = true;

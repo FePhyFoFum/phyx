@@ -37,7 +37,8 @@ void Polytomy::sample_polytomies (Tree * tr) {
             // select random taxa to prune
             std::vector<int> terp = sample_without_replacement(numChildren, (numChildren - 2));
             if (verbose) {
-                std::cout << "numChildren for node " << m->getName() << " = " << numChildren << std::endl;
+                std::cout << "numChildren for node " << m->getName()
+                        << " = " << numChildren << std::endl;
                 for (int p = 0; p < numChildren; p++) {
                     std::cout << p << ". " << m->getChild(p)->getName() << std::endl;
                 }
@@ -48,18 +49,21 @@ void Polytomy::sample_polytomies (Tree * tr) {
                 if (n->isExternal()) {
                     terminals_to_prune_.push_back(n->getName());
                     if (verbose) {
-                        std::cout << "Random tip chosen to purge: " << n->getName() << std::endl;
+                        std::cout << "Random tip chosen to purge: "
+                                << n->getName() << std::endl;
                     }
                 } else {
                     // if internal, grab all terminal descendants and add to purge list
                     get_terminal_children(n, tchildren);
                     if (verbose) {
-                        std::cout << "welp dealing with an internal node to prune here..." << std::endl;
+                        std::cout << "welp dealing with an internal node to prune here..."
+                                << std::endl;
                     }
                     for (const auto & k : tchildren) {
                         terminals_to_prune_.push_back(k);
                         if (verbose) {
-                            std::cout << "Descendant tip to be purged: " << k << std::endl;
+                            std::cout << "Descendant tip to be purged: "
+                                    << k << std::endl;
                         }
                     }
                 }

@@ -20,10 +20,12 @@ inline double roundto (double in) {
 
 
 RateModel::RateModel(int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
-    lasteigval(_nstates, _nstates), lasteigvec(_nstates, _nstates),
-    eigval(_nstates, _nstates), eigvec(_nstates, _nstates),
-    lasteigval_simple(_nstates, _nstates), lasteigvec_simple(_nstates, _nstates),
-    eigval_simple(_nstates, _nstates), eigvec_simple(_nstates, _nstates), nstates(_nstates) {
+        lasteigval(_nstates, _nstates), lasteigvec(_nstates, _nstates),
+        eigval(_nstates, _nstates), eigvec(_nstates, _nstates),
+        lasteigval_simple(_nstates, _nstates), lasteigvec_simple(_nstates, _nstates),
+        eigval_simple(_nstates, _nstates), eigvec_simple(_nstates, _nstates),
+        lastImag(true), fortran_iexph(0), fortran_wsp(nullptr), fortran_m(0),
+        selection_model(0), nstates(_nstates), neg_p(true) {
     
     setup_Q();
     sameQ = false;
@@ -381,15 +383,18 @@ void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
 
 bool test_transition(char a, char b) {
     bool ret = false;
-    if ((a == 'A' &&  b == 'G') || (a == 'C' &&  b == 'T') || (a == 'G' &&  b == 'A') || (a == 'T' &&  b == 'C')) {
+    if ((a == 'A' &&  b == 'G') || (a == 'C' &&  b == 'T')
+            || (a == 'G' &&  b == 'A') || (a == 'T' &&  b == 'C')) {
         ret = true;
     }
     return ret;
 }
 
 
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string>& codon_dict, 
-    std::map<std::string, std::vector<int> >& codon_index, std::vector<std::string>& codon_list) {
+void generate_bigpibf_K_w(mat * bf, mat * K, mat * w,
+        std::map<std::string, std::string>& codon_dict,
+        std::map<std::string, std::vector<int> >& codon_index,
+        std::vector<std::string>& codon_list) {
     for (int i = 0; i < 61; i++) {
         for (int j = 0; j < 61; j++) {
             int diff = 0;

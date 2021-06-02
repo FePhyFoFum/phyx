@@ -13,7 +13,7 @@ class Node {
 private:
     double BL_; // branch length, points to parent
     double height_; // could be from tip or from root. need to be consistent
-    double depth_; // not being used
+    double depth_; // not being used. should be
     int number_;
     std::string name_;
     Node * parent_;

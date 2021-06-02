@@ -11,10 +11,10 @@
 
 
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
-    const bool& by_taxon, const bool& by_codon, const bool& count_only,
-    const bool& verbose):num_taxa_(0u), num_char_(0u), num_retained_(0u),
-    missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), by_codon_(by_codon),
-    count_only_(count_only), verbose_(verbose) {
+        const bool& by_taxon, const bool& by_codon, const bool& count_only,
+        const bool& verbose):num_taxa_(0u), num_char_(0u), num_retained_(0u),
+        missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon),
+        by_codon_(by_codon), count_only_(count_only), verbose_(verbose) {
     read_in_sequences(pios);
     count_missing();
     if (!count_only_) {

@@ -14,7 +14,8 @@
 #include "tree_utils.h"
 
 
-UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_("") {
+UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_(""),
+        tree_(nullptr) {
     std::string alphaName; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
     num_taxa_ = static_cast<int>(seqs_.size());

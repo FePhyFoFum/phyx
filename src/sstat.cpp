@@ -9,7 +9,7 @@
 
 
 MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0),
-    test_statistic_(0.0), seqs_(seqs) {
+        test_statistic_(0.0), seqs_(seqs) {
     num_taxa_ = static_cast<int>(seqs_.size());
     
     //std::cout << "Read in " << num_taxa_ << " sequences!" << std::endl;

@@ -281,8 +281,8 @@ int test_tree_filetype_stream (std::istream& stri, std::string& retstring) {
 /**
  * this will look for the translation table if it exists
  */
-bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std::string> * trans,
-    std::string * retstring) {
+bool get_nexus_translation_table (std::istream& stri, std::map<std::string,
+        std::string> * trans, std::string * retstring) {
     std::string line1;
     std::string del(" \t");
     std::vector<std::string> tokens;
@@ -353,7 +353,7 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
  * should add some error correction code here
 */
 Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstring,
-    bool ttexists, std::map<std::string, std::string> * trans, bool * going) {
+        bool ttexists, std::map<std::string, std::string> * trans, bool * going) {
     std::string tline;
     if (!retstring.empty()) {
         tline = retstring;
@@ -421,7 +421,8 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
  */
 // adding a simple check: if line is empty, assume we're done
 // TODO: deal with trees with internal line breaks (phylip does this?)
-Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring, bool * going) {
+Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring,
+        bool * going) {
     std::string tline;
     if (!retstring.empty()) {
         tline = retstring;
@@ -453,7 +454,8 @@ Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retst
         std::string terp;
         while (!done) {
             if (!getline_safe(stri, terp)) {
-                std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting." << std::endl;
+                std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting."
+                        << std::endl;
                 exit(1);
             } else {
                 trim_spaces(terp);

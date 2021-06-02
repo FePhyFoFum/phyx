@@ -122,7 +122,8 @@ std::string string_to_lower (const std::string& instr) {
 }
 
 
-void tokenize (const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters) {
+void tokenize (const std::string& str, std::vector<std::string>& tokens,
+        const std::string& delimiters) {
     // Skip delimiters at beginning.
     std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
     // Find first "non-delimiter".
@@ -271,7 +272,8 @@ bool check_comment_line (const std::string& line) {
 
 
 // used by pxstrec
-std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates) {
+std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename,
+        int numstates) {
     std::vector<double> cols(static_cast<unsigned long>(numstates), 1);
     std::vector<std::vector<double> > ratematrix;
     ratematrix = std::vector<std::vector<double> > (static_cast<unsigned long>(numstates), cols);
@@ -518,7 +520,8 @@ std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
 }
 
 
-std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std::vector<double>& vec2) {
+std::vector<double> average_vectors_elementwise (std::vector<double>& vec1,
+        std::vector<double>& vec2) {
     // bail if sequences are of different lengths.
     if (vec1.size() != vec2.size()) {
       throw std::invalid_argument(
@@ -553,7 +556,8 @@ std::string get_string_vector(std::vector<int>& sts) {
 
 
 // replace all occurrences of origSubStr to replSubStr
-void replace_all (std::string& str, const std::string& origSubStr, const std::string& replSubStr) {
+void replace_all (std::string& str, const std::string& origSubStr,
+        const std::string& replSubStr) {
     if (origSubStr.empty()) {
         return;
     }
@@ -570,7 +574,8 @@ void replace_all (std::string& str, const std::string& origSubStr, const std::st
 // characters will each be replaced). replacement string may be longer than what
 // is being replaced (a single character).
 // e.g. we might replace each chars in "()[]:;" by "_"
-void replace_each (std::string& str, const std::string& badChars, const std::string& replSubStr) {
+void replace_each (std::string& str, const std::string& badChars,
+        const std::string& replSubStr) {
     if (badChars.empty()) {
         return;
     }

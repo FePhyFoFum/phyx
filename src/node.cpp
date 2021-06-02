@@ -17,24 +17,28 @@
 #include "utils.h"
 
 
-Node::Node ():BL_(0.0), height_(0.0), number_(0), name_(""), parent_(nullptr),
-    children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
-    assocDV_(std::map<std::string, std::vector<Superdouble> >()), comment_(""), painted_(false) {
+Node::Node ():BL_(0.0), height_(0.0), depth_(0.0), number_(0), name_(""), parent_(nullptr),
+        children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
+        assocDV_(std::map<std::string, std::vector<Superdouble> >()), segs_(nullptr),
+        comment_(""), painted_(false) {
 
 }
 
 
-Node::Node (Node * inparent):BL_(0.0), height_(0.0), number_(0), name_(""), parent_(inparent),
-    children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
-    assocDV_(std::map<std::string, std::vector<Superdouble> >()), comment_(""), painted_(false) {
+Node::Node (Node * inparent):BL_(0.0), height_(0.0), depth_(0.0), number_(0), name_(""),
+        parent_(inparent), children_(std::vector<Node *> ()), assoc_(std::map<std::string,
+        NodeObject *>()), assocDV_(std::map<std::string, std::vector<Superdouble> >()),
+        segs_(nullptr), comment_(""), painted_(false) {
 
 }
 
 
-Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl), height_(0.0),
-    number_(innumber), name_(std::move(inname)), parent_(inparent), children_(std::vector<Node *> ()),
-    assoc_(std::map<std::string, NodeObject *>()), assocDV_(std::map<std::string, std::vector<Superdouble> >()), 
-    comment_(""), painted_(false) {
+Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl),
+        height_(0.0), depth_(0.0), number_(innumber), name_(std::move(inname)),
+        parent_(inparent), children_(std::vector<Node *> ()),
+        assoc_(std::map<std::string, NodeObject *>()),
+        assocDV_(std::map<std::string, std::vector<Superdouble> >()), segs_(nullptr),
+        comment_(""), painted_(false) {
 
 }
 

@@ -66,7 +66,8 @@ int test_seq_filetype_stream(std::istream& stri, std::string& retstring) {
  * TODO: - skip Nexus comment lines - done
  *       - check if label is quoted. if so, need to skip any whitespace that might be present
 */
-bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& retstring, Sequence& seq) {
+bool read_next_seq_from_stream (std::istream & stri, int ftype,
+        std::string& retstring, Sequence& seq) {
     std::string tline;
     if (ftype == 0) { // nexus
         // are we at the beginning of the file?
@@ -83,7 +84,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
                 }
             }
             if (!found) {
-                std::cout << "badly formatted nexus file, missing 'MATRIX' in data/character block" << std::endl;
+                std::cout << "badly formatted nexus file, missing 'MATRIX' in data/character block"
+                        << std::endl;
             }
             retstring = "";
         }
@@ -245,7 +247,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype, std::string& ret
 // need to check for internal comments
 // TODO: need to be able to handle quoted strings (specifically, labels that contain spaces)
 //       - see function above to see how to do this
-std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char) {
+std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa,
+        int num_char) {
     std::vector<Sequence> seqs;
     std::string tline;
     int totcount = 0;
@@ -368,7 +371,8 @@ int test_char_filetype_stream(std::istream& stri, std::string& retstring) {
  * TODO: decide if this should just be merged with the above reader
 */
 // *** this is only used by pxconrates ***
-bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string& retstring, Sequence& seq) {
+bool read_next_seq_char_from_stream (std::istream& stri, int ftype,
+        std::string& retstring, Sequence& seq) {
     std::string tline;
     if (ftype == 1) { // phylip
         std::vector<std::string> tokens;
@@ -464,7 +468,8 @@ bool read_next_seq_char_from_stream (std::istream& stri, int ftype, std::string&
 
 
 // overloaded stream version
-void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, bool& interleave) {
+void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char,
+        bool& interleave) {
     num_taxa = num_char = 0;
     std::string tline;
     while (getline_safe(stri, tline)) {
@@ -545,8 +550,9 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, boo
 //   FORMAT MISSING=? GAP=- DATATYPE=DNA INTERLEAVE=NO;
 //   MATRIX
           
-void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num_char,
-        bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing) {
+void get_nexus_alignment_properties (std::istream& stri, int& num_taxa,
+        int& num_char, bool& interleave, std::string& alpha_name,
+        std::string& symbols, char& gap, char& missing) {
     num_taxa = num_char = 0;
     alpha_name = symbols = "";
     // set defaults, in case not explicitly stated
@@ -674,7 +680,8 @@ void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num
 }
 
 
-void get_phylip_dimensions (const std::string& head, int& num_taxa, int& num_char) {
+void get_phylip_dimensions (const std::string& head, int& num_taxa,
+        int& num_char) {
     std::vector<std::string> header = tokenize(head);
     num_taxa = stoi(header[0]);
     num_char = stoi(header[1]);
@@ -838,7 +845,8 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
             pios.seekg(spt, std::ios_base::beg);
             return; // interleaved //
         } else {
-            std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
+            std::cerr << "Error: unrecognized phylip format. Exiting."
+                    << std::endl; 
             exit(1);
         }
     } else if (num_elem > 2) {
@@ -930,7 +938,8 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
 
 // read in various phylip formats
 // do you _see_ how needlessly complicated this is JF?!?
-std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& num_char) {
+std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
+        const int& num_char) {
     
     std::vector<Sequence> seqs;
     Sequence seq;
@@ -1192,7 +1201,8 @@ std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaNa
         // if num_char comes from a file, _must_ be aligned
         bool aligned = is_aligned(seqs);
         if (!aligned) {
-            std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
+            std::cerr << "Error: sequences are not aligned. Exiting."
+                    << std::endl;
             exit(0);
         }
     }

@@ -116,7 +116,8 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
 // tree must be rooted (traces terminate at root node)
 // if it is not, root on first name, do trace, and unroot
 // this has been tested and works (https://github.com/FePhyFoFum/phyx/issues/74)
-Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const bool& silent) {
+Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names,
+        const bool& silent) {
     bool rooted = is_rooted(tree);
     
     if (!rooted) {
@@ -139,7 +140,8 @@ Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const boo
 
 
 // check whether the names provided for a monophyletic clade
-bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& skip_missing) {
+bool is_monophyletic (Tree * tree, std::vector<std::string> names,
+        const bool& skip_missing) {
     bool mono = true;
     
     bool names_good = check_names_against_tree(tree, names);
@@ -202,7 +204,8 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
 
 // treemap: key is focal node, value is vector of adjacent nodes
 // both keys and values can be internal or terminal nodes
-void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
+void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
+        std::vector<Node*> >& tree_map) {
     
     bool debug = true;
     
@@ -227,7 +230,8 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
         for (int j = 0; j < tnd->getChildCount(); j++) {
             nds.push_back(tnd->getChild(j));
             if (debug) {
-                std::cout << "  Adding child node: " << tnd->getChild(j)->getName() << std::endl;
+                std::cout << "  Adding child node: "
+                        << tnd->getChild(j)->getName() << std::endl;
             }
         }
         if (tnd->getParent() == tr->getRoot() && rooted) {
@@ -235,7 +239,8 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
                     if (debug) {
-                        std::cout << "  Adding sibling node: " << tnd->getChild(j)->getName() << std::endl;
+                        std::cout << "  Adding sibling node: "
+                                << tnd->getChild(j)->getName() << std::endl;
                     }
                 }
             }
@@ -243,7 +248,8 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
             if (tnd->getParent() != nullptr) {
                 nds.push_back(tnd->getParent());
                 if (debug) {
-                    std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+                    std::cout << "  Adding parent node: "
+                            << tnd->getParent()->getName() << std::endl;
                 }
             }
         }
@@ -261,14 +267,16 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
                     if (debug) {
-                        std::cout << "  Adding sibling node: " << tnd->getParent()->getChild(j)->getName() << std::endl;
+                        std::cout << "  Adding sibling node: "
+                                << tnd->getParent()->getChild(j)->getName() << std::endl;
                     }
                 }
             }
         } else {
             nds.push_back(tnd->getParent());
             if (debug) {
-                std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+                std::cout << "  Adding parent node: "
+                        << tnd->getParent()->getName() << std::endl;
             }
         }
         tree_map[tnd] = nds;
@@ -642,7 +650,8 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
 
 
 // return all names that are found in tree
-std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::string>& names) {
+std::vector<std::string> get_names_in_tree (Tree * tr,
+        const std::vector<std::string>& names) {
     std::vector<std::string> matched;
     for (const auto & name : names) {
     //std::cout << "Checking name '" << names[i] << "'." << std::endl;
@@ -655,7 +664,8 @@ std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::st
 }
 
 
-std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<std::string>& orig_names) {
+std::vector<std::string> get_complement_tip_set (Tree * tr,
+        const std::vector<std::string>& orig_names) {
     std::vector<std::string> comp = get_tip_labels(tr);
     std::vector<std::string>::iterator it;
     for (const auto & orig_name : orig_names) {
@@ -669,7 +679,8 @@ std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<st
 }
 
 
-std::vector<std::string> get_names_in_tree_regex (Tree * tr, const std::string& pattern) {
+std::vector<std::string> get_names_in_tree_regex (Tree * tr,
+        const std::string& pattern) {
     std::vector<std::string> labels = get_tip_labels(tr);
     std::vector<std::string> matched = regex_search_labels(labels, pattern);
     return matched;
@@ -761,7 +772,8 @@ std::string double_to_str (double d) {
 }
 
 
-unsigned long int get_num_possible_trees (const unsigned int& n, const bool& rooted) {
+unsigned long int get_num_possible_trees (const unsigned int& n,
+        const bool& rooted) {
     return doublefactorial(2 * (n + static_cast<unsigned int>(rooted)) - 5);
 }
 

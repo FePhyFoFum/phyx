@@ -249,7 +249,8 @@ char single_dna_complement (char inc) {
 }
 
 
-void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
+void write_phylip_alignment (std::vector<Sequence>& seqs,
+        const bool& uppercase, std::ostream * ostr) {
     bool aligned = is_aligned(seqs);
     if (!aligned) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
@@ -274,7 +275,8 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * this is not for concatenation. only single gene regions
  * another one needs to be written for concatenation
  */
-void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
+void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
+        std::ostream * ostr) {
     unsigned int seqlength = seqs[0].get_length();
     std::string datatype = seqs[0].get_alpha_name();
     std::string symbols; // not required for binary (default), protein, DNA
@@ -339,7 +341,8 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
  * this would be for each site, so reuse your vectors!
  */
 void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
-    std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
+        std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
+        std::vector<int> >& codon_pos) {
     unsigned int start = site*3;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
@@ -361,7 +364,8 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
  * this would be for each site, so reuse your vectors!
  */
 void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
-    std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
+        std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
+        std::vector<int> >& codon_pos) {
     unsigned int start = site * 3;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);

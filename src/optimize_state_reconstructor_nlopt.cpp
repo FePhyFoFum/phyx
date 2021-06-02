@@ -40,7 +40,8 @@ double nlopt_sr (unsigned n, const double *x, double *grad, void *my_func_data) 
     return like;
 }
 
-void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_mask, int _nfree) {
+void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr,
+        mat * _free_mask, int _nfree) {
     nloptsr = _sr;
     nloptrm = _rm;
     nloptfree_variables = _free_mask;

@@ -9,8 +9,8 @@
 
 
 // individual recodings
-std::set<char> SequenceRecoder::recognized_ = {'R', 'Y', 'S', 'W', 'M', 'K', 'B', 'D',
-                                             'H', 'V', 'A', 'C', 'G', 'T'};
+std::set<char> SequenceRecoder::recognized_ = {'R', 'Y', 'S', 'W', 'M', 'K', 'B',
+                                             'D', 'H', 'V', 'A', 'C', 'G', 'T'};
 
 // regexes
 std::regex SequenceRecoder::r_ ("A|G");
@@ -37,7 +37,8 @@ SequenceRecoder::SequenceRecoder (std::string& recodescheme):recodescheme_(strin
 void SequenceRecoder::parse_scheme () {
     for (char terp : recodescheme_) {
         if (recognized_.find(terp) == recognized_.end()) {
-            std::cerr << "Error: recoding scheme '" << terp << "' not recognized. Exiting." << std::endl;
+            std::cerr << "Error: recoding scheme '" << terp << "' not recognized. Exiting."
+                    << std::endl;
             exit(0);
         }
         switch (terp) {

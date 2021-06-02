@@ -9,10 +9,11 @@
 #include "utils.h"
 
 
-LogManipulator::LogManipulator (const std::string& logtype, const std::vector<std::string>& input_files,
-    std::ostream* poos, const bool& verbose):burnin_(0), nthin_(0), nrandom_(0),
-    seed_(0), count_(false), ntotal_samples_(0), num_cols_(0), num_cols_retain_(0),
-    files_(input_files) {
+LogManipulator::LogManipulator (const std::string& logtype,
+        const std::vector<std::string>& input_files, std::ostream* poos,
+        const bool& verbose):burnin_(0), nthin_(0), nrandom_(0), seed_(0),
+        count_(false), ntotal_samples_(0), num_cols_(0), num_cols_retain_(0),
+        files_(input_files) {
     num_files_ = static_cast<int>(input_files.size());
     logtype_ = logtype;
     poos_ = poos;
@@ -20,8 +21,8 @@ LogManipulator::LogManipulator (const std::string& logtype, const std::vector<st
 }
 
 
-void LogManipulator::sample (const int& burnin, const int& nthin, const int& nrandom,
-    const long int& seed) {
+void LogManipulator::sample (const int& burnin, const int& nthin,
+        const int& nrandom, const long int& seed) {
     burnin_ = burnin;
     nthin_= nthin;
     nrandom_ = nrandom;
@@ -740,7 +741,8 @@ void LogManipulator::get_tree_name_prefix (std::string& sample) {
 }
 
 
-void LogManipulator::write_reformatted_sample (std::string& sample, int& sample_num) {
+void LogManipulator::write_reformatted_sample (std::string& sample,
+        int& sample_num) {
     std::vector<std::string> terp = tokenize(sample);
     if (logtype_ == "parameter") {
         (*poos_) << sample_num;

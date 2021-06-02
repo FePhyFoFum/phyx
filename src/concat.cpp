@@ -11,14 +11,14 @@
 
 
 // parent constructor. where things get concatenated
-SequenceConcatenater::SequenceConcatenater (const bool& toupcase):num_partitions_(0), num_char_(0),
-    num_taxa_(0), toupcase_(toupcase) {
+SequenceConcatenater::SequenceConcatenater (const bool& toupcase):num_partitions_(0),
+        num_char_(0), num_taxa_(0), toupcase_(toupcase) {
 }
 
 
 // constructor for individual file
 SequenceConcatenater::SequenceConcatenater (std::string& seqf, const bool& toupcase):num_partitions_(0),
-    num_char_(0), num_taxa_(0), toupcase_(toupcase), filename_(seqf) {
+        num_char_(0), num_taxa_(0), toupcase_(toupcase), filename_(seqf) {
     read_sequences();
 }
 
@@ -117,7 +117,7 @@ std::vector<unsigned int> SequenceConcatenater::get_partition_sizes ()const {
 */
 
 void SequenceConcatenater::write_partition_information (const std::vector<std::string>& inputFiles,
-    std::string& partfile) {
+        std::string& partfile) {
     std::ofstream outfile(partfile.c_str());
     unsigned int charIndex = 1;
     

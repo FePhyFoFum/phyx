@@ -78,15 +78,17 @@ string SequenceGenerator::nucleotides = "ATCG";
 */
 
 
-SequenceGenerator::SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
-    std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
-    const int& nreps, const long int& seed, const float& alpha, const float& pinvar,
-    const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
-    const std::vector<double>& aabasefreq, const bool& is_dna):tree_(tree),
-    seqlen_(seqlength), nreps_(nreps), seed_(seed), alpha_(alpha), pinvar_(pinvar),
-    root_sequence_(ancseq), base_freqs_(basefreq), aa_freqs_(aabasefreq), rmatrix_(rmatrix), 
-    multi_rates_(multirates), show_ancs_(showancs), print_node_labels_(printpost),
-    multi_model_(false), is_dna_(is_dna)  {
+SequenceGenerator::SequenceGenerator (const int&seqlength,
+        const std::vector<double>& basefreq, std::vector< std::vector<double> >& rmatrix,
+        Tree * tree, const bool& showancs,  const int& nreps, const long int& seed,
+        const float& alpha, const float& pinvar, const std::string& ancseq,
+        const bool& printpost, const std::vector<double>& multirates,
+        const std::vector<double>& aabasefreq, const bool& is_dna):tree_(tree),
+        seqlen_(seqlength), nreps_(nreps), seed_(seed), alpha_(alpha),
+        pinvar_(pinvar), root_sequence_(ancseq), base_freqs_(basefreq),
+        aa_freqs_(aabasefreq), rmatrix_(rmatrix),  multi_rates_(multirates),
+        show_ancs_(showancs), print_node_labels_(printpost), multi_model_(false),
+        is_dna_(is_dna)  {
     /*
      for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
@@ -151,7 +153,7 @@ void SequenceGenerator::initialize () {
  * if each individual state will undergo some type of change
  */
 std::string SequenceGenerator::simulate_sequence (const std::string& anc, 
-    std::vector< std::vector<double> >& QMatrix, const float& brlength) {
+        std::vector< std::vector<double> >& QMatrix, const float& brlength) {
     std::vector<double>::iterator low;
     std::vector< std::vector<double> > PMatrix(nstates_, std::vector<double>(nstates_, 0.0));
     //int ancChar = 0;
@@ -246,7 +248,7 @@ std::vector< std::vector<double> > SequenceGenerator::calculate_q_matrix () {
  * efficient but yeah...
  */
 std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (
-    const std::vector< std::vector<double> >& QMatrix, float br) {
+        const std::vector< std::vector<double> >& QMatrix, float br) {
 
     std::vector< std::vector<double> > Pmatrix(nstates_, std::vector<double>(nstates_, 0.0));
     mat A = randn<mat>(nstates_, nstates_);
@@ -487,7 +489,8 @@ std::string SequenceGenerator::generate_random_sequence () {
 
 
 // rates are in order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
-std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (const std::vector<double>& rates) {
+std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (
+        const std::vector<double>& rates) {
     // initialize
     std::vector< std::vector<double> > ratemat(nstates_, std::vector<double>(4, 0.33));
     
@@ -512,7 +515,8 @@ std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (con
         ratemat[3][3] = (rates[2] + rates[4] + rates[5]) * -1;
         
     } else {
-        std::cout << "Er, we don't deal with " << rates.size() << " rates at the moment..." << std::endl;
+        std::cout << "Er, we don't deal with " << rates.size()
+                << " rates at the moment..." << std::endl;
         exit(0);
     }
     return ratemat;
@@ -526,15 +530,18 @@ void SequenceGenerator::check_valid_sequence () {
     if (is_dna_) {
         std::size_t found = root_sequence_.find_first_not_of(nucleotides_);
         if (found != std::string::npos) {
-            std::cerr << "Error: illegal character '" << root_sequence_[found] << "' at position " 
-                << found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << std::endl;
+            std::cerr << "Error: illegal character '" << root_sequence_[found]
+                    << "' at position " << found+1
+                    << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting."
+                    << std::endl;
             exit(0);
         }
     } else {
         std::size_t found = root_sequence_.find_first_not_of(amino_acids_);
         if (found != std::string::npos) {
-            std::cerr << "Error: illegal character '" << root_sequence_[found] << "' at position " 
-                << found+1 << " (only AA chars allowed). Exiting." << std::endl;
+            std::cerr << "Error: illegal character '" << root_sequence_[found]
+                    << "' at position "  << found+1
+                    << " (only AA chars allowed). Exiting." << std::endl;
             exit(0);
         }        
         

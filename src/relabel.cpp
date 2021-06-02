@@ -8,13 +8,15 @@
 #include "sequence.h"
 
 
-Relabel::Relabel (const std::string& cnamesf, const std::string& nnamesf, const bool& verbose):num_taxa_(0) {
+Relabel::Relabel (const std::string& cnamesf, const std::string& nnamesf,
+        const bool& verbose):num_taxa_(0) {
     store_name_lists (cnamesf, nnamesf);
     verbose_ = verbose;
 }
 
 
-void Relabel::store_name_lists (const std::string& cnamesf, const std::string& nnamesf) {
+void Relabel::store_name_lists (const std::string& cnamesf,
+        const std::string& nnamesf) {
     std::vector<std::string> terp;
     std::string line;
     int ccount = 0;
@@ -34,7 +36,8 @@ void Relabel::store_name_lists (const std::string& cnamesf, const std::string& n
     // check all current names are unique (otherwise won't work with existing map)
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
     if (orig.size() < old_names_.size()) {
-        std::cerr << "Error: the current name list contains duplicates. Exiting." << std::endl;
+        std::cerr << "Error: the current name list contains duplicates. Exiting."
+                << std::endl;
         exit(0);
     }
     
@@ -115,7 +118,8 @@ void Relabel::relabel_tree (Tree * tr) {
     // report failed matches (if present)
     if (!orig.empty()) {
         if (verbose_) {
-            std::cerr << "The following names to match were not found in the tree:" << std::endl;
+            std::cerr << "The following names to match were not found in the tree:"
+                    << std::endl;
             for (const auto & elem : orig) {
                 std::cerr << elem << std::endl;
             }

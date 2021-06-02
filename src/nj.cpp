@@ -10,6 +10,47 @@ using namespace std; // commenting this out changes the result?!? ***
 #include "seq_reader.h"
 
 
+NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthreads_(threads) {
+    Sequence seq;
+    std::string retstring;
+    int ft = test_seq_filetype_stream(*pios, retstring);
+    
+    int seqcount = 0;
+    // some error checking. should be in general seq reader class
+    bool first = true;
+    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
+        sequences_[seq.get_id()] = seq.get_sequence();
+        if (!first) {
+            if (static_cast<int>(seq.get_length()) != num_char_) {
+                std::cerr << "Error: sequence " << seq.get_id() << " has "
+                    << seq.get_length() << " characters, was expecting " 
+                    << num_char_ << "." << std::endl << "Exiting." << std::endl;
+                exit(1);
+            }
+        } else {
+            num_char_ = static_cast<int>(seq.get_length());
+            first = false;
+        }
+        seqcount++;
+    }
+    //fasta has a trailing one
+    if (ft == 2) {
+        sequences_[seq.get_id()] = seq.get_sequence();
+        if (static_cast<int>(seq.get_length()) != num_char_) {
+            std::cerr << "Error: sequence " << seq.get_id() << " has "
+                << seq.get_length() << " characters, was expecting " 
+                << num_char_ << "." << std::endl << "Exiting." << std::endl;
+            exit(1);
+        };
+        seqcount++;
+    }
+    num_taxa_ = seqcount;
+    set_name_key ();
+    Matrix_ = BuildMatrix(sequences_);
+    TREEMAKE(names_, name_key_, Matrix_);
+}
+
+
 /*Calculates the Q matrix
  * Original Matrix: All the Original Distances
  * ConvertedMatrix: Conversion to Q Matrix
@@ -190,47 +231,6 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
         FirstCount++;
     }
     return Score;
-}
-
-
-NJOI::NJOI (std::istream* pios, int & threads):num_taxa_(0), num_char_(0), nthreads_(threads) {
-    Sequence seq;
-    std::string retstring;
-    int ft = test_seq_filetype_stream(*pios, retstring);
-    
-    int seqcount = 0;
-    // some error checking. should be in general seq reader class
-    bool first = true;
-    while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-        sequences_[seq.get_id()] = seq.get_sequence();
-        if (!first) {
-            if (static_cast<int>(seq.get_length()) != num_char_) {
-                std::cerr << "Error: sequence " << seq.get_id() << " has "
-                    << seq.get_length() << " characters, was expecting " 
-                    << num_char_ << "." << std::endl << "Exiting." << std::endl;
-                exit(1);
-            }
-        } else {
-            num_char_ = static_cast<int>(seq.get_length());
-            first = false;
-        }
-        seqcount++;
-    }
-    //fasta has a trailing one
-    if (ft == 2) {
-        sequences_[seq.get_id()] = seq.get_sequence();
-        if (static_cast<int>(seq.get_length()) != num_char_) {
-            std::cerr << "Error: sequence " << seq.get_id() << " has "
-                << seq.get_length() << " characters, was expecting " 
-                << num_char_ << "." << std::endl << "Exiting." << std::endl;
-            exit(1);
-        };
-        seqcount++;
-    }
-    num_taxa_ = seqcount;
-    set_name_key ();
-    Matrix_ = BuildMatrix(sequences_);
-    TREEMAKE(names_, name_key_, Matrix_);
 }
 
 

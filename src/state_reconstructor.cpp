@@ -17,17 +17,22 @@
 
 
 StateReconstructor::StateReconstructor (RateModel& _rm, std::vector<RateModel>& _vrm):tree(nullptr),
-    use_periods(false), nstates(_rm.nstates), rm(_rm), rm_periods(_vrm), dc("dist_conditionals"),
-    andc("anc_dist_conditionals"), store_p_matrices(false), use_stored_matrices(false), revB("revB"),
-    rev(false), rev_exp_number("rev_exp_number"), rev_exp_time("rev_exp_time"),
-    stochastic(false), stored_EN_matrices(std::map<Superdouble, mat >()),
-    stored_ER_matrices(std::map<Superdouble, mat >()), sp_alphas("sp_alphas"), alphas("alphas") {}
+        use_periods(false), nstates(_rm.nstates), rm(_rm), rm_periods(_vrm),
+        dc("dist_conditionals"), andc("anc_dist_conditionals"), store_p_matrices(false),
+        use_stored_matrices(false), revB("revB"), rev(false),
+        rev_exp_number("rev_exp_number"), rev_exp_time("rev_exp_time"),
+        stochastic(false), stored_EN_matrices(std::map<Superdouble,mat >()),
+        stored_ER_matrices(std::map<Superdouble, mat >()), sp_alphas("sp_alphas"),
+        alphas("alphas") {
+
+}
 
 
 /**
  * need to do this before you do the set tree
 */
-void StateReconstructor::set_periods (std::vector<double>& ps, std::vector<RateModel>& rms) {
+void StateReconstructor::set_periods (std::vector<double>& ps,
+        std::vector<RateModel>& rms) {
     use_periods = true;
     periods = ps;
     rm_periods = rms;
@@ -614,7 +619,8 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
 }
 
 
-std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node, bool tm) {
+std::vector<double> StateReconstructor::calculate_reverse_stochmap (Node& node,
+        bool tm) {
     if (node.isExternal() == false) { // is not a tip
         std::vector<double> totalExp(nstates, 0);
         std::vector<Superdouble> Bs;

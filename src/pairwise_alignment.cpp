@@ -14,8 +14,9 @@
  *
  * scoringmatrix should come from read_score_matrix
  */
-double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> >& scoringmatrix,
-    double gap_penalty, std::string& aln1, std::string& aln2) {
+double nw (Sequence& iseq1, Sequence& iseq2,
+        std::map<char, std::map<char, int> >& scoringmatrix, double gap_penalty,
+        std::string& aln1, std::string& aln2) {
     
     std::string seq1 = iseq1.seq_to_upper();
     std::string seq2 = iseq2.seq_to_upper();
@@ -103,8 +104,9 @@ double nw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> 
  *
  * scoringmatrix should come from read_score_matrix
  */
-double sw (Sequence& iseq1, Sequence& iseq2, std::map<char, std::map<char, int> >& scoringmatrix,
-    double gap_penalty, std::string& aln1, std::string& aln2) {
+double sw (Sequence& iseq1, Sequence& iseq2,
+        std::map<char, std::map<char, int> >& scoringmatrix, double gap_penalty,
+        std::string& aln1, std::string& aln2) {
     
     std::string seq1 = iseq1.seq_to_upper();
     std::string seq2 = iseq2.seq_to_upper();

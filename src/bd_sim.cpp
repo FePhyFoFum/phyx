@@ -15,12 +15,12 @@
 
 
 BirthDeathSimulator::BirthDeathSimulator (const int& estop, const double& tstop,
-    const double& brate, const double& drate, const long int& seed):numfailures_(0),
-    maxfailures_(1000), birthrate_(brate), deathrate_(drate), sumrate_(brate+drate),
-    relative_birth_rate_(brate/(brate+drate)), extantstop_(estop), timestop_(tstop),
-    numbirth_(0), numdeath_(0), seed_(seed), currenttime_(0.0),
-    extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
-    DEATHTIME_(std::map<Node*, double>()) {
+        const double& brate, const double& drate, const long int& seed):numfailures_(0),
+        maxfailures_(1000), birthrate_(brate), deathrate_(drate), sumrate_(brate+drate),
+        relative_birth_rate_(brate/(brate+drate)), extantstop_(estop), timestop_(tstop),
+        numbirth_(0), numdeath_(0), seed_(seed), currenttime_(0.0),
+        extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
+        DEATHTIME_(std::map<Node*, double>()), root_(nullptr), tree_(nullptr) {
     if (seed_ == -1) {
         seed_ = get_clock_seed();
     }
@@ -31,13 +31,14 @@ BirthDeathSimulator::BirthDeathSimulator (const int& estop, const double& tstop,
 
 // not currently used
 BirthDeathSimulator::BirthDeathSimulator ():numfailures_(0), maxfailures_(1000),
-    birthrate_(0.1), deathrate_(0.05), sumrate_(0.1+0.05),
-    relative_birth_rate_(0.1/(0.1+0.05)), extantstop_(10), timestop_(0), numbirth_(0), numdeath_(0),
-    currenttime_(0.0), extantnodes_(std::vector<Node*>()), BIRTHTIME_(std::map<Node*, double>()),
-    DEATHTIME_(std::map<Node*, double>()) {
-        seed_ = get_clock_seed();
-        generator_ =  std::mt19937(seed_);
-        uniformDistrib_ =  std::uniform_real_distribution<double>(0.0, 1.0);
+        birthrate_(0.1), deathrate_(0.05), sumrate_(0.1+0.05),
+        relative_birth_rate_(0.1/(0.1+0.05)), extantstop_(10), timestop_(0), numbirth_(0),
+        numdeath_(0), currenttime_(0.0), extantnodes_(std::vector<Node*>()),
+        BIRTHTIME_(std::map<Node*, double>()), DEATHTIME_(std::map<Node*, double>()),
+        root_(nullptr), tree_(nullptr) {
+    seed_ = get_clock_seed();
+    generator_ =  std::mt19937(seed_);
+    uniformDistrib_ =  std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 

@@ -96,7 +96,8 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
 }
 
 
-std::vector<double> optimize_single_rate_bm_nlopt (rowvec& _x, mat& _vcv, bool log) {
+std::vector<double> optimize_single_rate_bm_nlopt (rowvec& _x, mat& _vcv,
+        bool log) {
     analysis_data a;
     a.x = _x;
     a.ovcv = _vcv;
