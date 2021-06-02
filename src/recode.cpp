@@ -92,10 +92,18 @@ void SequenceRecoder::parse_scheme () {
 void SequenceRecoder::check_valid_scheme () {
     std::string nucs = "ACGT";
     std::vector<int> ncounts (4);
-    ncounts[0] = static_cast<int>(A_ + R_ + W_ + M_ + D_ + H_ + V_); // A
-    ncounts[1] = static_cast<int>(C_ + Y_ + S_ + M_ + B_ + H_ + V_); // C
-    ncounts[2] = static_cast<int>(G_ + R_ + S_ + K_ + B_ + D_ + V_); // G
-    ncounts[3] = static_cast<int>(T_ + Y_ + W_ + K_ + B_ + D_ + H_); // T
+    ncounts[0] = static_cast<int>(A_) + static_cast<int>(R_) + static_cast<int>(W_)
+            + static_cast<int>(M_) + static_cast<int>(D_) + static_cast<int>(H_)
+            + static_cast<int>(V_); // A
+    ncounts[1] = static_cast<int>(C_) + static_cast<int>(Y_) + static_cast<int>(S_)
+            + static_cast<int>(M_) + static_cast<int>(B_) + static_cast<int>(H_)
+            + static_cast<int>(V_); // C
+    ncounts[2] = static_cast<int>(G_) + static_cast<int>(R_) + static_cast<int>(S_)
+            + static_cast<int>(K_) + static_cast<int>(B_) + static_cast<int>(D_)
+            + static_cast<int>(V_); // G
+    ncounts[3] = static_cast<int>(T_) + static_cast<int>(Y_) + static_cast<int>(W_)
+            + static_cast<int>(K_) + static_cast<int>(B_) + static_cast<int>(D_)
+            + static_cast<int>(H_); // T
     
     bool invalid = false;
     for (unsigned int i = 0; i < ncounts.size(); i++) {
