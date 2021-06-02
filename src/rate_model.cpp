@@ -394,7 +394,6 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std:
         for (int j = 0; j < 61; j++) {
             int diff = 0;
             bool transit = false;
-            bool nonsyn = false;
             for (int m = 0; m < 3; m++) {
                 if (codon_list[i][m] != codon_list[j][m]) {
                     diff += 1;
@@ -404,6 +403,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std:
             if (diff > 1) {
                 (*bf)(i, j) = 0;
             } else {
+                bool nonsyn = false;
                 if (codon_dict[codon_list[i]] != codon_dict[codon_list[j]]) {
                     nonsyn = true;
                 }

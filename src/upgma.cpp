@@ -163,8 +163,8 @@ void UPGMA::construct_tree () {
         unsigned long icount = 1;
         auto ndsize = static_cast<unsigned long>(nodes.size());
         for (unsigned long i = 0; i < ndsize; i++) {
-            unsigned long jcount = 1;
             if (i != ind1 && i != ind2) {
+                unsigned long jcount = 1;
                 for (unsigned long j = 0; j < ndsize; j++) {
                     if (j != ind1 && j != ind2) {
                         newDistances[icount][jcount] = dMatrix[i][j];
