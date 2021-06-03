@@ -43,7 +43,7 @@ Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl
 }
 
 
-std::vector<Node*> Node::getChildren () {
+std::vector<Node*> Node::getChildren () const {
     return children_;
 }
 
@@ -102,7 +102,7 @@ void Node::setParent (Node& p) {
 }
 
 
-int Node::getNumber () {
+int Node::getNumber () const {
     return number_;
 }
 
@@ -112,7 +112,7 @@ void Node::setNumber (int n) {
 }
 
 
-bool Node::getPainted () {
+bool Node::getPainted () const {
     return painted_;
 }
 
@@ -122,7 +122,7 @@ void Node::setPainted (bool p) {
 }
 
 
-double Node::getBL () {
+double Node::getBL () const {
     return BL_;
 }
 
@@ -132,7 +132,7 @@ void Node::setBL (double bl) {
 }
 
 
-double Node::getHeight () {
+double Node::getHeight () const {
     return height_;
 }
 
@@ -142,7 +142,7 @@ void Node::setHeight (double he) {
 }
 
 
-double Node::getDepth () {
+double Node::getDepth () const {
     return depth_;
 }
 
@@ -195,7 +195,7 @@ Node * Node::getChild (int c) {
 }
 
 
-std::string Node::getName () {
+std::string Node::getName () const {
     return name_;
 }
 
@@ -205,7 +205,7 @@ void Node::setName (std::string s) {
 }
 
 
-std::string Node::getComment () {
+std::string Node::getComment () const {
     return comment_;
 }
 
@@ -332,7 +332,7 @@ std::string Node::getNewick (bool bl, const std::string& obj) {
 }
 
 
-Node * Node::getParent () {
+Node * Node::getParent () const {
     return parent_;
 }
 
@@ -500,7 +500,7 @@ void Node::initSegVector () {
 }
 
 
-std::vector<BranchSegment> * Node::getSegVector () {
+std::vector<BranchSegment> * Node::getSegVector () const {
     return segs_;
 }
 

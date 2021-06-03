@@ -192,7 +192,8 @@ double CompTest::calc_chi_square_prob (const double& df, const double& xstat) {
 }
 
 
-double CompTest::get_cell_value (const double& observed, const double& expected) {
+double CompTest::get_cell_value (const double& observed,
+        const double& expected) const {
     double res = pow((observed - expected), 2.0) / expected;
     return res;
 }

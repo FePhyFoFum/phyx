@@ -39,7 +39,7 @@ public:
     std::vector< std::vector<double> > BuildMatrix (std::map<std::string, std::string>& sequences);
     void TREEMAKE (std::vector<std::string>&, std::map<int, std::string>&,
         std::vector< std::vector<double> >&);
-    std::string get_newick ();
+    std::string get_newick () const;
 };
 
 #endif /* PX_NJ_H */

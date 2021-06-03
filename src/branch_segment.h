@@ -22,13 +22,13 @@ public:
     void setModel (RateModel * mod);
     //void setStartDist (std::vector<int> sd);
     void clearStartDist ();
-    double getDuration ();
-    int getPeriod ();
-    //std::vector<int> getStartDist();
+    double getDuration () const;
+    int getPeriod () const;
+    //std::vector<int> getStartDist() const;
     void set_start_dist_int (int d);
-    int get_start_dist_int ();
-    RateModel * getModel ();
-    std::vector<int> getFossilAreas ();
+    int get_start_dist_int () const;
+    RateModel * getModel () const;
+    std::vector<int> getFossilAreas () const;
     void setFossilArea(int area);
     std::vector<Superdouble> * distconds;
     std::vector<Superdouble> alphas; // alpha for the entire branch -- stored in the 0th segment for anc calc

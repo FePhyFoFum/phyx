@@ -385,7 +385,7 @@ void LogManipulator::count_tree_samples () {
 }
 
 
-void LogManipulator::get_sample_counts () {
+void LogManipulator::get_sample_counts () const {
     if (logtype_ == "parameter") {
         for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
             (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " samples of "

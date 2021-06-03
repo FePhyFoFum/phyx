@@ -87,12 +87,12 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
 }
 
 
-int SequenceConcatenater::get_sequence_length ()const {
+int SequenceConcatenater::get_sequence_length () const {
     return num_char_;
 }
 
 
-int SequenceConcatenater::get_num_taxa ()const {
+int SequenceConcatenater::get_num_taxa () const {
     return num_taxa_;
 }
 
@@ -104,14 +104,14 @@ void SequenceConcatenater::delete_sequence (SequenceConcatenater& newSeqs,
 }
 
 
-Sequence SequenceConcatenater::get_sequence (const unsigned int& index)const {
+Sequence SequenceConcatenater::get_sequence (const unsigned int& index) const {
     return seqs_[index];
 }
 
 
 // not currently used
 /*
-std::vector<unsigned int> SequenceConcatenater::get_partition_sizes ()const {
+std::vector<unsigned int> SequenceConcatenater::get_partition_sizes () const {
     return partition_sizes_;
 }
 */

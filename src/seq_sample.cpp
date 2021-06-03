@@ -59,7 +59,7 @@ void SequenceSampler::read_in_sequences (std::istream* pios) {
 
 
 // not currently used
-std::vector<int> SequenceSampler::get_sampled_sites () {
+std::vector<int> SequenceSampler::get_sampled_sites () const {
     return sample_sites_;
 }
 
@@ -244,7 +244,7 @@ void SequenceSampler::calculate_num_partitioned_sites () {
 }
 
 
-int SequenceSampler::get_num_partitioned_sites () {
+int SequenceSampler::get_num_partitioned_sites () const {
     return num_partitioned_sites_;
 }
 

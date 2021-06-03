@@ -87,7 +87,7 @@ void BDFit::fit_yule () {
     lambda_yule_ = nspeciation_ / treelength_;
     likelihood_yule_ = nspeciation_ * log(lambda_yule_) - lambda_yule_ * treelength_
         + std::lgamma(nintnodes_ + 1.0);
-    get_aic (likelihood_yule_, aic_yule_, aicc_yule_);
+    get_aic(likelihood_yule_, aic_yule_, aicc_yule_);
 }
 
 
@@ -184,7 +184,7 @@ void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
 }
 
 
-void BDFit::get_pars (std::ostream* poos) {
+void BDFit::get_pars (std::ostream* poos) const {
     (*poos) << "ntips: " << ntips_ << std::endl;
     (*poos) << "nspeciation: " << nspeciation_ << std::endl;
     (*poos) << "treelength: " << treelength_ << std::endl;

@@ -123,6 +123,6 @@ void MultinomialSeqStat::calculateTestStatistic () {
 }
 
 
-double MultinomialSeqStat::get_test_statistic () {
+double MultinomialSeqStat::get_test_statistic () const {
     return test_statistic_;
 }

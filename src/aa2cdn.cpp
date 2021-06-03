@@ -126,6 +126,6 @@ void AAtoCDN::write_codon_alignment (std::ostream* poos) {
 
 
 // not currently used, but available
-std::vector<Sequence> AAtoCDN::get_codon_alignment () {
+std::vector<Sequence> AAtoCDN::get_codon_alignment () const {
     return codon_seqs_;
 }

@@ -36,35 +36,35 @@ public:
     std::set<std::string> get_leave_names_set ();
     std::set<Node *> get_leaves_set ();
     
-    std::vector<Node*> getChildren ();
+    std::vector<Node*> getChildren () const;
     bool isExternal ();
     bool isInternal ();
     bool isRoot ();
     bool isKnuckle ();
     bool hasParent ();
     void setParent (Node& p);
-    int getNumber ();
+    int getNumber () const;
     void setNumber (int n);
-    bool getPainted ();
+    bool getPainted () const;
     void setPainted (bool p);
-    double getBL ();
+    double getBL () const;
     void setBL (double bl);
-    double getHeight ();
+    double getHeight () const;
     void setHeight (double he);
-    double getDepth ();
+    double getDepth () const;
     void setDepth (double de);
     bool hasChild (Node& test);
     bool addChild (Node& c);
     bool removeChild (Node& c);
     Node * getChild (int c);
-    std::string getName ();
-    std::string getComment ();
+    std::string getName () const;
+    std::string getComment () const;
     void setName (std::string s);
     void setComment (std::string s);
     std::string getNewick (bool bl);
     std::string getNewick (bool bl, const std::string& obj);
     std::string getPaintedNewick (bool bl);
-    Node * getParent ();
+    Node * getParent () const;
     int getChildCount ();
     void assocObject (const std::string& name, NodeObject& obj);
     void assocDoubleVector (const std::string& name, std::vector<Superdouble>& obj);
@@ -72,7 +72,7 @@ public:
     void deleteDoubleVector (const std::string& name);
     NodeObject * getObject (const std::string& name);
     void initSegVector ();
-    std::vector<BranchSegment> * getSegVector ();
+    std::vector<BranchSegment> * getSegVector () const;
     void deleteSegVector ();
     
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT

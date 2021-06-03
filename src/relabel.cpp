@@ -139,7 +139,7 @@ bool Relabel::relabel_sequence (Sequence& seq) {
 }
 
 
-std::set<std::string> Relabel::get_names_to_replace () {
+std::set<std::string> Relabel::get_names_to_replace () const {
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
     return orig;
 }

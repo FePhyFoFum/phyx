@@ -22,7 +22,7 @@ private:
     
 public:
     explicit MultinomialSeqStat (std::vector<Sequence>& seqs);
-    double get_test_statistic ();
+    double get_test_statistic () const;
     
     //~MultinomialSeqStat();
 };

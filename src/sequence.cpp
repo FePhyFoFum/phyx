@@ -37,7 +37,7 @@ Sequence::Sequence (std::string _id, std::string _seq):id_(std::move(_id)),
 
 
 // *** this doesn't seem to be used ***
-seqAlpha Sequence::get_alpha () {
+seqAlpha Sequence::get_alpha () const {
     return alphabet_;
 }
 
@@ -133,7 +133,7 @@ void Sequence::infer_alpha () {
 }
 
 
-bool Sequence::is_aligned () {
+bool Sequence::is_aligned () const {
     return aligned_;
 }
 
@@ -235,7 +235,7 @@ void Sequence::set_qualstr (std::string& stri, int offset) {
 }
 
 
-std::vector<double> Sequence::get_qualarr () {
+std::vector<double> Sequence::get_qualarr () const {
     return qualarr_;
 }
 

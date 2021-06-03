@@ -50,7 +50,7 @@ public:
     BirthDeathSimulator (const int& estop, const double& tstop, const double& brate,
         const double& drate, const long int& seed);
     Tree * make_tree (const bool& show_dead);
-    std::string get_sim_summary ();
+    std::string get_sim_summary () const;
     //~BirthDeathSimulator();
 };
 

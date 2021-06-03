@@ -67,7 +67,7 @@ void SequenceCleaner::set_bad_chars () {
 }
 
 
-std::vector<Sequence> SequenceCleaner::get_cleaned_seqs () {
+std::vector<Sequence> SequenceCleaner::get_cleaned_seqs () const {
     return cleaned_seqs_;
 }
 
@@ -258,7 +258,7 @@ void SequenceCleaner::count_missing () {
 }
 
 
-std::string SequenceCleaner::get_cleaned_seq (const std::string& origseq) {
+std::string SequenceCleaner::get_cleaned_seq (const std::string& origseq) const {
     std::string seq;
     for (unsigned int i = 0; i < num_retained_; i++) {
         seq += origseq[retained_sites_[i]];

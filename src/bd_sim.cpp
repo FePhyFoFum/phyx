@@ -123,7 +123,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
 
 // verbose summary:
 // birth & death rate, numbirths, numdeaths, numfailures, seed
-std::string BirthDeathSimulator::get_sim_summary () {
+std::string BirthDeathSimulator::get_sim_summary () const {
     std::string res;
     
     res += "birth rate = " + std::to_string(birthrate_);

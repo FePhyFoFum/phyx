@@ -75,7 +75,7 @@ Node * Tree::getInternalNode (std::string& name) {
 }
 
 
-int Tree::getExternalNodeCount () {
+int Tree::getExternalNodeCount () const {
     return external_node_count_;
 }
 
@@ -101,7 +101,7 @@ int Tree::getExtantNodeCount () {
 
 
 // NOTE: this includes the root
-int Tree::getInternalNodeCount () {
+int Tree::getInternalNodeCount () const {
     return internal_node_count_;
 }
 
@@ -127,12 +127,12 @@ Node * Tree::getNode (std::string& name) {
 }
 
 
-int Tree::getNodeCount () {
+int Tree::getNodeCount () const {
     return static_cast<int>(nodes_.size());
 }
 
 
-Node * Tree::getRoot () {
+Node * Tree::getRoot () const {
     return root_;
 }
 
@@ -152,7 +152,7 @@ void Tree::setNodeAnnotationsPresent (bool res) {
 }
 
 
-bool Tree::hasNodeAnnotations () {
+bool Tree::hasNodeAnnotations () const {
     return node_annotations_;
 }
 
@@ -162,12 +162,12 @@ void Tree::setNodeNamesPresent (bool res) {
 }
 
 
-bool Tree::hasNodeNames () {
+bool Tree::hasNodeNames () const {
     return internal_node_names_;
 }
 
 
-bool Tree::hasEdgeLengths () {
+bool Tree::hasEdgeLengths () const {
     return edge_lengths_;
 }
 

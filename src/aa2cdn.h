@@ -23,7 +23,7 @@ public:
     AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Sequence>& aa_seqs,
         const bool& remove_last);
     void write_codon_alignment (std::ostream* poos);
-    std::vector<Sequence> get_codon_alignment ();
+    std::vector<Sequence> get_codon_alignment () const;
 };
 
 #endif /* PX_AA_TO_CDN_H */

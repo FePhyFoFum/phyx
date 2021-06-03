@@ -550,7 +550,7 @@ void SequenceGenerator::check_valid_sequence () {
 
 
 // not sure of a more elegant way to do this...
-std::vector<Sequence> SequenceGenerator::get_sequences () {
+std::vector<Sequence> SequenceGenerator::get_sequences () const {
     return res;
 }
 
@@ -561,6 +561,7 @@ float SequenceGenerator::get_uniform_random_deviate () {
 }
 
 
+// hrm alpha is not used...
 float SequenceGenerator::get_gamma_random_deviate (float alpha) {
     return gammaDistrib_(generator_);
 }

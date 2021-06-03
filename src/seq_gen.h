@@ -84,7 +84,7 @@ public:
         const std::vector<double>& aabasefreq, const bool& is_dna);
     
     // return results
-    std::vector<Sequence> get_sequences ();
+    std::vector<Sequence> get_sequences () const;
 };
 
 #endif /* PX_SEQ_GEN_H */

@@ -22,7 +22,7 @@ public:
     Relabel (const std::string& cnamesf, const std::string& nnamesf, const bool& verbose);
     void relabel_tree (Tree * tr);
     bool relabel_sequence (Sequence& seq);
-    std::set<std::string> get_names_to_replace ();
+    std::set<std::string> get_names_to_replace () const;
 };
 
 #endif /* PX_RELABEL_TREE_H */

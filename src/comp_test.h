@@ -42,7 +42,7 @@ private:
     void count_chars ();
     void return_freq_table ();
     void get_longest_taxon_label ();
-    double get_cell_value (const double& observed, const double& expected);
+    double get_cell_value (const double& observed, const double& expected) const;
     void calc_chi_square ();
     double calc_chi_square_prob (const double& df, const double& xstat);
     double lower_incomplete_gamma_function (double s, double t);

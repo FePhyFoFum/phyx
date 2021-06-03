@@ -33,7 +33,7 @@ private:
     
     void count_missing ();
     void generate_cleaned_sequences ();
-    std::string get_cleaned_seq (const std::string& origseq);
+    std::string get_cleaned_seq (const std::string& origseq) const;
     unsigned int get_longest_taxon_label ();
     void read_in_sequences (std::istream* pios);
     void set_bad_chars ();
@@ -42,7 +42,7 @@ public:
     SequenceCleaner (std::istream* pios, double& prop_required,
         const bool& by_taxon, const bool& by_codon, const bool& count_only,
         const bool& verbose);
-    std::vector<Sequence> get_cleaned_seqs (); // not used, but available
+    std::vector<Sequence> get_cleaned_seqs () const; // not used, but available
     void write_seqs (std::ostream* poos);
     void write_stats (std::ostream* poos);
     virtual ~SequenceCleaner ();

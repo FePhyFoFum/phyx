@@ -93,7 +93,7 @@ void TreeInfo::calc_stats () {
 }
 
 
-void TreeInfo::get_stats (std::ostream* poos) {
+void TreeInfo::get_stats (std::ostream* poos) const {
     (*poos) << "rooted: " << std::boolalpha << rooted_tree_ << std::endl;
     (*poos) << "binary: " << std::boolalpha << binary_tree_ << std::endl;
     (*poos) << "nterminal: " << ntips_ << std::endl;

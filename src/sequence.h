@@ -29,13 +29,13 @@ public:
     Sequence ();
     Sequence (std::string, std::string, bool);
     Sequence (std::string, std::string);
-    seqAlpha get_alpha ();
+    seqAlpha get_alpha () const;
     std::string get_alpha_name ();
     void set_alpha (seqAlpha);
     
     void infer_alpha ();
     
-    bool is_aligned ();
+    bool is_aligned () const;
     std::string get_sequence ()const;
     std::string get_id ()const;
     unsigned int get_length ();
@@ -50,7 +50,7 @@ public:
     void set_id (std::string _id);
     void set_aligned (bool _align);
     void set_qualstr (std::string&, int);
-    std::vector<double> get_qualarr ();
+    std::vector<double> get_qualarr () const;
     double get_qualarr_mean ();
     std::string reverse_complement ();
     void perm_reverse_complement ();

@@ -32,14 +32,14 @@ private:
         int& stop, int& interval);
     std::vector<int> get_partition_sites (const std::string& part);
     void check_valid_partitions ();
-    int get_num_partitioned_sites ();
+    int get_num_partitioned_sites () const;
     void calculate_num_partitioned_sites ();
     //void get_site_partitions (); // not currently used
     [[ noreturn ]] void find_duplicates_missing (const std::vector<int>& allSites);
 
 public:
     SequenceSampler (std::istream* pios, const long int& seed, const double& jackfract, std::string& partf);
-    std::vector<int> get_sampled_sites ();
+    std::vector<int> get_sampled_sites () const;
     void sample_sites (const int& numchar);
     std::string get_resampled_seq (const std::string& origseq);
 

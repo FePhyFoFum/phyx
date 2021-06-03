@@ -29,7 +29,7 @@ public:
         const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
         const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,
         std::ostream* poos);
-    void get_stats (std::ostream* poos);
+    void get_stats (std::ostream* poos) const;
 };
 
 #endif /* PX_LS_TR_H */

@@ -244,6 +244,6 @@ void NJOI::set_name_key () {
 }
 
 
-std::string NJOI::get_newick () {
+std::string NJOI::get_newick () const {
     return newick_string_;
 }

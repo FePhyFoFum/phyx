@@ -37,8 +37,8 @@ private:
     bool stilldouble;
     double upperlimit;
     double lowerlimit;
-    void adjustDecimal();
-    friend std::ostream& operator<<(std::ostream& os, const Superdouble& x);
+    void adjustDecimal ();
+    friend std::ostream& operator << (std::ostream& os, const Superdouble& x);
     
 public:
     Superdouble(long double m=1.0l, int e=0);
@@ -54,18 +54,18 @@ public:
     void operator/= (Superdouble x);
     void operator+= (Superdouble x);
     void operator-= (Superdouble x);
-    bool operator < (const Superdouble& x)const;
-    bool operator > (const Superdouble& x)const;
-    bool operator >= (const Superdouble& x)const;
-    bool operator <= (const Superdouble& x)const;
-    int getExponent();
-    double getMantissa();
-    Superdouble getLn();
-    Superdouble abs();
-    void switch_sign();
+    bool operator < (const Superdouble& x) const;
+    bool operator > (const Superdouble& x) const;
+    bool operator >= (const Superdouble& x) const;
+    bool operator <= (const Superdouble& x) const;
+    int getExponent () const;
+    double getMantissa ();
+    Superdouble getLn ();
+    Superdouble abs ();
+    void switch_sign ();
     
     operator double() {
-        return static_cast<double>(mantissa) * pow(10., exponent);
+        return static_cast<double> (mantissa) * pow(10., exponent);
     }
 };
 #endif /* PX_SUPERDOUBLE_H */

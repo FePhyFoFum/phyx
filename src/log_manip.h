@@ -58,7 +58,7 @@ public:
     LogManipulator (const std::string& logtype, const std::vector<std::string>& input_files,
         std::ostream* poos, const bool& verbose);
     void count ();
-    void get_sample_counts ();
+    void get_sample_counts () const;
     void get_column_names ();
     void sample (const int& burnin, const int& nthin, const int& nrandom,
         const long int& seed);

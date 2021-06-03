@@ -42,7 +42,7 @@ private:
 
 public:
     BDFit(Tree * intree, const std::string& modelflavour);
-    void get_pars(std::ostream* poos);
+    void get_pars(std::ostream* poos) const;
 };
 
 // non-member function, as nlopt is weird with pointers...
