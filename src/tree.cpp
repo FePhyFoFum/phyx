@@ -215,8 +215,7 @@ bool Tree::reRoot (Node * inroot) {
 
 
 void Tree::removeRootEdge () {
-    bool going = true; // multiple stems? nefarious...
-    while (going) {
+    while (true) {
         if (root_->getChildCount() == 1) {
             /*
             1. grab child

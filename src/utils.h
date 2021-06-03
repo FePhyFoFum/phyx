@@ -151,7 +151,6 @@ bool essentially_equal_doubles (double a, double b);
 
 // template version to accommodate different precision types
 template<typename T> bool essentially_equal (T a, T b) {
-    bool equal = false;
     T EPSILON = 1e-7;
     /*
     std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
@@ -167,7 +166,7 @@ template<typename T> bool essentially_equal (T a, T b) {
         equal = true;
     }
     */
-    equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
+    bool equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
     
     return equal;
 }

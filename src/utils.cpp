@@ -742,7 +742,6 @@ double logn (double x, double base) {
 
 // check if 2 doubles are equal within some tolerance.
 bool essentially_equal_doubles (double a, double b) {
-    bool equal = false;
     
     /*
     std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
@@ -758,7 +757,7 @@ bool essentially_equal_doubles (double a, double b) {
         equal = true;
     }
     */
-    equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
+    bool equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
     
     return equal;
 }

@@ -118,8 +118,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
             x++;
             nextChar = pb.c_str()[x];
             std::string edgeL;
-            bool goingName = true;
-            while (goingName) {
+            while (true) {
                 edgeL += nextChar;
                 x++;
                 nextChar = pb.c_str()[x];
@@ -139,8 +138,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
             x++;
             nextChar = pb.c_str()[x];
             std::string note;
-            bool goingNote = true;
-            while (goingNote) {
+            while (true) {
                 note += nextChar;
                 x++;
                 nextChar = pb.c_str()[x];
