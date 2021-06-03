@@ -142,11 +142,13 @@ void Node::setHeight (double he) {
 }
 
 
+// not currently used
 double Node::getDepth () const {
     return depth_;
 }
 
 
+// not currently used
 void Node::setDepth (double de) {
     depth_ = de;
 }
@@ -205,6 +207,7 @@ void Node::setName (std::string s) {
 }
 
 
+// not currently used
 std::string Node::getComment () const {
     return comment_;
 }

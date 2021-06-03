@@ -22,7 +22,7 @@ Sequence::Sequence ():length_(0), aligned_(), alphabet_(NA) {}
 Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):id_(std::move(_id)),
         seq_(std::move(_seq)), alphabet_(NA) {
     length_ = static_cast<unsigned int>(seq_.size());
-    aligned_ = _aligned;
+    set_aligned(_aligned);
     infer_alpha();
 }
 
@@ -62,7 +62,6 @@ std::string Sequence::get_alpha_name () {
 }
 
 
-// *** this doesn't seem to be used ***
 void Sequence::set_alpha (seqAlpha s) {
     alphabet_ = s;
 }
@@ -75,13 +74,13 @@ void Sequence::infer_alpha () {
     
     // check for binary data
     if (check_binary_sequence(str)) {
-        alphabet_ = BINARY;
+        set_alpha(BINARY);
         return;
     }
     
     // do quick check for 'standard' data: will contain numbers
     if (str.find_first_of("0123456789") != std::string::npos) {
-        alphabet_ = MULTI;
+        set_alpha(MULTI);
         return;
     }
     
@@ -111,23 +110,23 @@ void Sequence::infer_alpha () {
     }
     
     if (uniqueChars.find_first_not_of(dnachars_with_ambiguous) == std::string::npos) {
-        alphabet_ = DNA;
+        set_alpha(DNA);
         // edge case: short protein alignment which by chance contains DNA-valid states
         int nDNA = count_dna_chars(str);
         if ( (static_cast<double>(nDNA) / static_cast<double>(validChars)) < 0.5) {
-            alphabet_ = AA;
+            set_alpha(AA);
         }
         return;
     }
     if (uniqueChars.find_first_not_of(protchars) == std::string::npos) {
-        alphabet_ = AA;
+        set_alpha(AA);
         return;
     }
     
     if (proteinHit > dnaHit) {
-        alphabet_ = AA;
+        set_alpha(AA);
     } else if (proteinHit == dnaHit) {
-        alphabet_ = DNA;
+        set_alpha(DNA);
     }
     
 }
@@ -202,7 +201,6 @@ void Sequence::set_id (std::string _id) {
 }
 
 
-// not used
 void Sequence::set_aligned (bool _align) {
     aligned_ = _align;
 }

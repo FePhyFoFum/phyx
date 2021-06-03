@@ -70,7 +70,7 @@ private:
     std::string simulate_sequence (const std::string& anc, std::vector< std::vector<double> >& Matrix,
         const float& brlength);
     std::string generate_random_sequence ();
-    std::vector< std::vector<double> > construct_rate_matrix (const std::vector<double>& rates);
+    //std::vector< std::vector<double> > construct_rate_matrix (const std::vector<double>& rates);
     void check_valid_sequence ();
     float get_uniform_random_deviate ();
     float get_gamma_random_deviate (float);

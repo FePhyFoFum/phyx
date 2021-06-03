@@ -21,7 +21,7 @@ void BranchSegment::setModel (RateModel * mod) {
 
 void BranchSegment::clearStartDist () {
     //startdist.clear();
-    startdistint = -666; //null is -666
+    set_start_dist_int(-666); //null is -666
 }
 
 
@@ -61,6 +61,7 @@ std::vector<int> BranchSegment::getFossilAreas () const {
 }
 
 
+// not used
 void BranchSegment::setFossilArea (int area) {
     fossilareaindices.push_back(area);
 }

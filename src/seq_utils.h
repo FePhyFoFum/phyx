@@ -21,9 +21,6 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
 void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos);
 std::vector<std::string> collect_names (const std::vector<Sequence>& algnmnt);
-void populate_codon_list (std::vector<std::string> * codon_list);
-void populate_map_codon_dict (std::map<std::string, std::string> * codon_dict);
-void populate_map_codon_indices (std::map<std::string, std::vector<int> > * codon_position);
 void create_vector_seq_codon_state_reconstructor (std::vector<Sequence>& origseqs,
     std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos);
 bool check_binary_sequence (const std::string& seq);
@@ -33,5 +30,12 @@ bool is_prot_char (char& residue);
 int count_dna_chars (const std::string& str);
 bool is_aligned (const std::vector<Sequence>& seqs);
 bool is_codon_alignment (const std::vector<Sequence>& seqs);
+
+// not used
+/*
+void populate_codon_list (std::vector<std::string> * codon_list);
+void populate_map_codon_dict (std::map<std::string, std::string> * codon_dict);
+void populate_map_codon_indices (std::map<std::string, std::vector<int> > * codon_position);
+*/
 
 #endif /* PX_SEQ_UTILS_H */

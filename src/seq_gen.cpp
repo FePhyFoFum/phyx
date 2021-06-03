@@ -489,6 +489,8 @@ std::string SequenceGenerator::generate_random_sequence () {
 
 
 // rates are in order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
+// not used
+/*
 std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (
         const std::vector<double>& rates) {
     // initialize
@@ -521,6 +523,7 @@ std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (
     }
     return ratemat;
 }
+*/
 
 
 // make sure sequence contains only valid nucleotide characters

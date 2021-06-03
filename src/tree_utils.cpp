@@ -284,7 +284,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
     // print map<Node*, std::vector<Node*> >
     if (debug) {
         std::cout << std::endl << "TREE MAP:" << std::endl;
-        for (std::map<Node*, std::vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); it++) {
+        for (std::map<Node*, std::vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); ++it) {
             std::cout << "Node: " << it->first->getName() << std::endl;
             std::vector<Node*> terp = it->second;
             for (auto & t : terp) {

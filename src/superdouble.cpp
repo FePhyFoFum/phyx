@@ -19,11 +19,13 @@ Superdouble::Superdouble (long double m, int e):stilldouble(false), upperlimit(1
 Superdouble::~Superdouble () = default;
 
 
+// not used
 int Superdouble::getExponent () const {
     return exponent;
 }
 
 
+// not used
 double Superdouble::getMantissa () {
     return static_cast<double>(mantissa);
 }
@@ -47,8 +49,9 @@ void Superdouble::adjustDecimal () {
 }
 
 
+// not used
 std::ostream& operator << (std::ostream& os, const Superdouble& x) {
-    os <<x.mantissa << "e" << x.exponent;
+    os << x.mantissa << "e" << x.exponent;
     return os;
 }
 
@@ -164,10 +167,10 @@ void Superdouble::operator += (Superdouble x) {
     } else {
         if (stilldouble && x.stilldouble) {
             mantissa = x.mantissa;
-            exponent=x.exponent;
+            exponent = x.exponent;
         } else {
-            mantissa=x.mantissa;
-            exponent=x.exponent;
+            mantissa = x.mantissa;
+            exponent = x.exponent;
             adjustDecimal();
         }
     }
@@ -178,12 +181,12 @@ void Superdouble::operator += (Superdouble x) {
 void Superdouble::operator -= (Superdouble x) {
     // only tricky thing is converting them to same exponent
     if (!essentially_equal(mantissa, 0.0L)) {
-        int exponentdif=x.exponent-exponent;
-        mantissa=mantissa-(x.mantissa*(pow(10, exponentdif)));
+        int exponentdif = x.exponent-exponent;
+        mantissa = mantissa - (x.mantissa*(pow(10, exponentdif)));
         adjustDecimal();
     } else {
-        mantissa=-1.0*x.mantissa;
-        exponent=x.exponent;
+        mantissa = -1.0 * x.mantissa;
+        exponent = x.exponent;
         adjustDecimal();
     }
 }
@@ -233,7 +236,7 @@ bool Superdouble::operator <= (const Superdouble& x)const {
 }
 
 
-// this just switches the sign of the superdouble
+// this just switches the sign of the superdouble. not used
 void Superdouble::switch_sign () {
     mantissa = -1 * mantissa;
 }

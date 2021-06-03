@@ -115,7 +115,7 @@ EdlibAlignResult edlibAlign (const char* const queryOriginal, const int queryLen
     result.numLocations = 0;
     result.alignment = nullptr;
     result.alignmentLength = 0;
-    result.alphabetLength = 0;
+    //result.alphabetLength = 0;
 
 
     /*------------ TRANSFORM SEQUENCES AND RECOGNIZE ALPHABET -----------*/

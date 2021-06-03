@@ -340,7 +340,7 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
+void create_vector_seq_codon_state_reconstructor (std::vector<Sequence>& origseqs,
         std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
         std::vector<int> >& codon_pos) {
     unsigned int start = site * 3;
@@ -363,7 +363,7 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
+void create_vector_seq_codon_state_reconstructor_all_site (std::vector<Sequence>& origseqs,
         std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
         std::vector<int> >& codon_pos) {
     unsigned int start = site * 3;
@@ -386,202 +386,6 @@ std::vector<std::string> collect_names (const std::vector<Sequence>& algnmnt) {
         names[i] = algnmnt[i].get_id();
     }
     return names;
-}
-
-
-// hrm not used
-void populate_codon_list(std::vector<std::string> * codon_list) {
-    (*codon_list).emplace_back("TTT");
-    (*codon_list).emplace_back("TTC");
-    (*codon_list).emplace_back("TTA");
-    (*codon_list).emplace_back("TTG");
-    (*codon_list).emplace_back("TCT");
-    (*codon_list).emplace_back("TCC");
-    (*codon_list).emplace_back("TCA");
-    (*codon_list).emplace_back("TCG");
-    (*codon_list).emplace_back("TAT");
-    (*codon_list).emplace_back("TAC");
-    (*codon_list).emplace_back("TGT");
-    (*codon_list).emplace_back("TGC");
-    (*codon_list).emplace_back("TGG");
-    (*codon_list).emplace_back("CTT");
-    (*codon_list).emplace_back("CTC");
-    (*codon_list).emplace_back("CTA");
-    (*codon_list).emplace_back("CTG");
-    (*codon_list).emplace_back("CCT");
-    (*codon_list).emplace_back("CCC");
-    (*codon_list).emplace_back("CCA");
-    (*codon_list).emplace_back("CCG");
-    (*codon_list).emplace_back("CAT");
-    (*codon_list).emplace_back("CAC");
-    (*codon_list).emplace_back("CAA");
-    (*codon_list).emplace_back("CAG");
-    (*codon_list).emplace_back("CGT");
-    (*codon_list).emplace_back("CGC");
-    (*codon_list).emplace_back("CGA");
-    (*codon_list).emplace_back("CGG");
-    (*codon_list).emplace_back("ATT");
-    (*codon_list).emplace_back("ATC");
-    (*codon_list).emplace_back("ATA");
-    (*codon_list).emplace_back("ATG");
-    (*codon_list).emplace_back("ACT");
-    (*codon_list).emplace_back("ACC");
-    (*codon_list).emplace_back("ACA");
-    (*codon_list).emplace_back("ACG");
-    (*codon_list).emplace_back("AAT");
-    (*codon_list).emplace_back("AAC");
-    (*codon_list).emplace_back("AAA");
-    (*codon_list).emplace_back("AAG");
-    (*codon_list).emplace_back("AGT");
-    (*codon_list).emplace_back("AGC");
-    (*codon_list).emplace_back("AGA");
-    (*codon_list).emplace_back("AGG");
-    (*codon_list).emplace_back("GTT");
-    (*codon_list).emplace_back("GTC");
-    (*codon_list).emplace_back("GTA");
-    (*codon_list).emplace_back("GTG");
-    (*codon_list).emplace_back("GCT");
-    (*codon_list).emplace_back("GCC");
-    (*codon_list).emplace_back("GCA");
-    (*codon_list).emplace_back("GCG");
-    (*codon_list).emplace_back("GAT");
-    (*codon_list).emplace_back("GAC");
-    (*codon_list).emplace_back("GAA");
-    (*codon_list).emplace_back("GAG");
-    (*codon_list).emplace_back("GGT");
-    (*codon_list).emplace_back("GGC");
-    (*codon_list).emplace_back("GGA");
-    (*codon_list).emplace_back("GGG");
-}
-
-
-void populate_map_codon_dict(std::map <std::string, std::string> * codon_dict) {
-    (*codon_dict)["TTT"] = "F";
-    (*codon_dict)["TTC"] = "F";
-    (*codon_dict)["TTA"] = "L";
-    (*codon_dict)["TTG"] = "L";
-    (*codon_dict)["TCT"] = "S";
-    (*codon_dict)["TCC"] = "S";
-    (*codon_dict)["TCA"] = "S";
-    (*codon_dict)["TCG"] = "S";
-    (*codon_dict)["TAT"] = "Y";
-    (*codon_dict)["TAC"] = "Y";
-    (*codon_dict)["TGT"] = "C";
-    (*codon_dict)["TGC"] = "C";
-    (*codon_dict)["TGG"] = "W";
-    (*codon_dict)["CTT"] = "L";
-    (*codon_dict)["CTC"] = "L";
-    (*codon_dict)["CTA"] = "L";
-    (*codon_dict)["CTG"] = "L";
-    (*codon_dict)["CCT"] = "P";
-    (*codon_dict)["CCC"] = "P";
-    (*codon_dict)["CCA"] = "P";
-    (*codon_dict)["CCG"] = "P";
-    (*codon_dict)["CAT"] = "H";
-    (*codon_dict)["CAC"] = "H";
-    (*codon_dict)["CAA"] = "Q";
-    (*codon_dict)["CAG"] = "Q";
-    (*codon_dict)["CGT"] = "R";
-    (*codon_dict)["CGC"] = "R";
-    (*codon_dict)["CGA"] = "R";
-    (*codon_dict)["CGG"] = "R";
-    (*codon_dict)["ATT"] = "I";
-    (*codon_dict)["ATC"] = "I";
-    (*codon_dict)["ATA"] = "I";
-    (*codon_dict)["ATG"] = "M";
-    (*codon_dict)["ACT"] = "T";
-    (*codon_dict)["ACC"] = "T";
-    (*codon_dict)["ACA"] = "T";
-    (*codon_dict)["ACG"] = "T";
-    (*codon_dict)["AAT"] = "N";
-    (*codon_dict)["AAC"] = "N";
-    (*codon_dict)["AAA"] = "K";
-    (*codon_dict)["AAG"] = "K";
-    (*codon_dict)["AGT"] = "S";
-    (*codon_dict)["AGC"] = "S";
-    (*codon_dict)["AGA"] = "R";
-    (*codon_dict)["AGG"] = "R";
-    (*codon_dict)["GTT"] = "V";
-    (*codon_dict)["GTC"] = "V";
-    (*codon_dict)["GTA"] = "V";
-    (*codon_dict)["GTG"] = "V";
-    (*codon_dict)["GCT"] = "A";
-    (*codon_dict)["GCC"] = "A";
-    (*codon_dict)["GCA"] = "A";
-    (*codon_dict)["GCG"] = "A";
-    (*codon_dict)["GAT"] = "D";
-    (*codon_dict)["GAC"] = "D";
-    (*codon_dict)["GAA"] = "E";
-    (*codon_dict)["GAG"] = "E";
-    (*codon_dict)["GGT"] = "G";
-    (*codon_dict)["GGC"] = "G";
-    (*codon_dict)["GGA"] = "G";
-    (*codon_dict)["GGG"] = "G";
-}
-
-
-void populate_map_codon_indices(std::map <std::string, std::vector<int> > * codon_position) {
-    (*codon_position)["TTT"] = {0};
-    (*codon_position)["TTC"] = {1};
-    (*codon_position)["TTA"] = {2};
-    (*codon_position)["TTG"] = {3};
-    (*codon_position)["TCT"] = {4};
-    (*codon_position)["TCC"] = {5};
-    (*codon_position)["TCA"] = {6};
-    (*codon_position)["TCG"] = {7};
-    (*codon_position)["TAT"] = {8};
-    (*codon_position)["TAC"] = {9};
-    (*codon_position)["TGT"] = {10};
-    (*codon_position)["TGC"] = {11};
-    (*codon_position)["TGG"] = {12};
-    (*codon_position)["CTT"] = {13};
-    (*codon_position)["CTC"] = {14};
-    (*codon_position)["CTA"] = {15};
-    (*codon_position)["CTG"] = {16};
-    (*codon_position)["CCT"] = {17};
-    (*codon_position)["CCC"] = {18};
-    (*codon_position)["CCA"] = {19};
-    (*codon_position)["CCG"] = {20};
-    (*codon_position)["CAT"] = {21};
-    (*codon_position)["CAC"] = {22};
-    (*codon_position)["CAA"] = {23};
-    (*codon_position)["CAG"] = {24};
-    (*codon_position)["CGT"] = {25};
-    (*codon_position)["CGC"] = {26};
-    (*codon_position)["CGA"] = {27};
-    (*codon_position)["CGG"] = {28};
-    (*codon_position)["ATT"] = {29};
-    (*codon_position)["ATC"] = {30};
-    (*codon_position)["ATA"] = {31};
-    (*codon_position)["ATG"] = {32}; 
-    (*codon_position)["ACT"] = {33};
-    (*codon_position)["ACC"] = {34};
-    (*codon_position)["ACA"] = {35};
-    (*codon_position)["ACG"] = {36};
-    (*codon_position)["AAT"] = {37};
-    (*codon_position)["AAC"] = {38};
-    (*codon_position)["AAA"] = {39};
-    (*codon_position)["AAG"] = {40};
-    (*codon_position)["AGT"] = {41};
-    (*codon_position)["AGC"] = {42};
-    (*codon_position)["AGA"] = {43};
-    (*codon_position)["AGG"] = {44};
-    (*codon_position)["GTT"] = {45};
-    (*codon_position)["GTC"] = {46};
-    (*codon_position)["GTA"] = {47};
-    (*codon_position)["GTG"] = {48};
-    (*codon_position)["GCT"] = {49};
-    (*codon_position)["GCC"] = {50};
-    (*codon_position)["GCA"] = {51};
-    (*codon_position)["GCG"] = {52};
-    (*codon_position)["GAT"] = {53};
-    (*codon_position)["GAC"] = {54};
-    (*codon_position)["GAA"] = {55};
-    (*codon_position)["GAG"] = {56};
-    (*codon_position)["GGT"] = {57};
-    (*codon_position)["GGC"] = {58};
-    (*codon_position)["GGA"] = {59};
-    (*codon_position)["GGG"] = {60};
 }
 
 
@@ -666,3 +470,203 @@ bool is_codon_alignment (const std::vector<Sequence>& seqs) {
     }
     return codons;
 }
+
+
+// these are not currently used
+/*
+void populate_codon_list (std::vector<std::string> * codon_list) {
+    (*codon_list).emplace_back("TTT");
+    (*codon_list).emplace_back("TTC");
+    (*codon_list).emplace_back("TTA");
+    (*codon_list).emplace_back("TTG");
+    (*codon_list).emplace_back("TCT");
+    (*codon_list).emplace_back("TCC");
+    (*codon_list).emplace_back("TCA");
+    (*codon_list).emplace_back("TCG");
+    (*codon_list).emplace_back("TAT");
+    (*codon_list).emplace_back("TAC");
+    (*codon_list).emplace_back("TGT");
+    (*codon_list).emplace_back("TGC");
+    (*codon_list).emplace_back("TGG");
+    (*codon_list).emplace_back("CTT");
+    (*codon_list).emplace_back("CTC");
+    (*codon_list).emplace_back("CTA");
+    (*codon_list).emplace_back("CTG");
+    (*codon_list).emplace_back("CCT");
+    (*codon_list).emplace_back("CCC");
+    (*codon_list).emplace_back("CCA");
+    (*codon_list).emplace_back("CCG");
+    (*codon_list).emplace_back("CAT");
+    (*codon_list).emplace_back("CAC");
+    (*codon_list).emplace_back("CAA");
+    (*codon_list).emplace_back("CAG");
+    (*codon_list).emplace_back("CGT");
+    (*codon_list).emplace_back("CGC");
+    (*codon_list).emplace_back("CGA");
+    (*codon_list).emplace_back("CGG");
+    (*codon_list).emplace_back("ATT");
+    (*codon_list).emplace_back("ATC");
+    (*codon_list).emplace_back("ATA");
+    (*codon_list).emplace_back("ATG");
+    (*codon_list).emplace_back("ACT");
+    (*codon_list).emplace_back("ACC");
+    (*codon_list).emplace_back("ACA");
+    (*codon_list).emplace_back("ACG");
+    (*codon_list).emplace_back("AAT");
+    (*codon_list).emplace_back("AAC");
+    (*codon_list).emplace_back("AAA");
+    (*codon_list).emplace_back("AAG");
+    (*codon_list).emplace_back("AGT");
+    (*codon_list).emplace_back("AGC");
+    (*codon_list).emplace_back("AGA");
+    (*codon_list).emplace_back("AGG");
+    (*codon_list).emplace_back("GTT");
+    (*codon_list).emplace_back("GTC");
+    (*codon_list).emplace_back("GTA");
+    (*codon_list).emplace_back("GTG");
+    (*codon_list).emplace_back("GCT");
+    (*codon_list).emplace_back("GCC");
+    (*codon_list).emplace_back("GCA");
+    (*codon_list).emplace_back("GCG");
+    (*codon_list).emplace_back("GAT");
+    (*codon_list).emplace_back("GAC");
+    (*codon_list).emplace_back("GAA");
+    (*codon_list).emplace_back("GAG");
+    (*codon_list).emplace_back("GGT");
+    (*codon_list).emplace_back("GGC");
+    (*codon_list).emplace_back("GGA");
+    (*codon_list).emplace_back("GGG");
+}
+
+
+// also not used
+void populate_map_codon_dict (std::map <std::string, std::string> * codon_dict) {
+    (*codon_dict)["TTT"] = "F";
+    (*codon_dict)["TTC"] = "F";
+    (*codon_dict)["TTA"] = "L";
+    (*codon_dict)["TTG"] = "L";
+    (*codon_dict)["TCT"] = "S";
+    (*codon_dict)["TCC"] = "S";
+    (*codon_dict)["TCA"] = "S";
+    (*codon_dict)["TCG"] = "S";
+    (*codon_dict)["TAT"] = "Y";
+    (*codon_dict)["TAC"] = "Y";
+    (*codon_dict)["TGT"] = "C";
+    (*codon_dict)["TGC"] = "C";
+    (*codon_dict)["TGG"] = "W";
+    (*codon_dict)["CTT"] = "L";
+    (*codon_dict)["CTC"] = "L";
+    (*codon_dict)["CTA"] = "L";
+    (*codon_dict)["CTG"] = "L";
+    (*codon_dict)["CCT"] = "P";
+    (*codon_dict)["CCC"] = "P";
+    (*codon_dict)["CCA"] = "P";
+    (*codon_dict)["CCG"] = "P";
+    (*codon_dict)["CAT"] = "H";
+    (*codon_dict)["CAC"] = "H";
+    (*codon_dict)["CAA"] = "Q";
+    (*codon_dict)["CAG"] = "Q";
+    (*codon_dict)["CGT"] = "R";
+    (*codon_dict)["CGC"] = "R";
+    (*codon_dict)["CGA"] = "R";
+    (*codon_dict)["CGG"] = "R";
+    (*codon_dict)["ATT"] = "I";
+    (*codon_dict)["ATC"] = "I";
+    (*codon_dict)["ATA"] = "I";
+    (*codon_dict)["ATG"] = "M";
+    (*codon_dict)["ACT"] = "T";
+    (*codon_dict)["ACC"] = "T";
+    (*codon_dict)["ACA"] = "T";
+    (*codon_dict)["ACG"] = "T";
+    (*codon_dict)["AAT"] = "N";
+    (*codon_dict)["AAC"] = "N";
+    (*codon_dict)["AAA"] = "K";
+    (*codon_dict)["AAG"] = "K";
+    (*codon_dict)["AGT"] = "S";
+    (*codon_dict)["AGC"] = "S";
+    (*codon_dict)["AGA"] = "R";
+    (*codon_dict)["AGG"] = "R";
+    (*codon_dict)["GTT"] = "V";
+    (*codon_dict)["GTC"] = "V";
+    (*codon_dict)["GTA"] = "V";
+    (*codon_dict)["GTG"] = "V";
+    (*codon_dict)["GCT"] = "A";
+    (*codon_dict)["GCC"] = "A";
+    (*codon_dict)["GCA"] = "A";
+    (*codon_dict)["GCG"] = "A";
+    (*codon_dict)["GAT"] = "D";
+    (*codon_dict)["GAC"] = "D";
+    (*codon_dict)["GAA"] = "E";
+    (*codon_dict)["GAG"] = "E";
+    (*codon_dict)["GGT"] = "G";
+    (*codon_dict)["GGC"] = "G";
+    (*codon_dict)["GGA"] = "G";
+    (*codon_dict)["GGG"] = "G";
+}
+
+
+// also also not used
+void populate_map_codon_indices (std::map <std::string, std::vector<int> > * codon_position) {
+    (*codon_position)["TTT"] = {0};
+    (*codon_position)["TTC"] = {1};
+    (*codon_position)["TTA"] = {2};
+    (*codon_position)["TTG"] = {3};
+    (*codon_position)["TCT"] = {4};
+    (*codon_position)["TCC"] = {5};
+    (*codon_position)["TCA"] = {6};
+    (*codon_position)["TCG"] = {7};
+    (*codon_position)["TAT"] = {8};
+    (*codon_position)["TAC"] = {9};
+    (*codon_position)["TGT"] = {10};
+    (*codon_position)["TGC"] = {11};
+    (*codon_position)["TGG"] = {12};
+    (*codon_position)["CTT"] = {13};
+    (*codon_position)["CTC"] = {14};
+    (*codon_position)["CTA"] = {15};
+    (*codon_position)["CTG"] = {16};
+    (*codon_position)["CCT"] = {17};
+    (*codon_position)["CCC"] = {18};
+    (*codon_position)["CCA"] = {19};
+    (*codon_position)["CCG"] = {20};
+    (*codon_position)["CAT"] = {21};
+    (*codon_position)["CAC"] = {22};
+    (*codon_position)["CAA"] = {23};
+    (*codon_position)["CAG"] = {24};
+    (*codon_position)["CGT"] = {25};
+    (*codon_position)["CGC"] = {26};
+    (*codon_position)["CGA"] = {27};
+    (*codon_position)["CGG"] = {28};
+    (*codon_position)["ATT"] = {29};
+    (*codon_position)["ATC"] = {30};
+    (*codon_position)["ATA"] = {31};
+    (*codon_position)["ATG"] = {32}; 
+    (*codon_position)["ACT"] = {33};
+    (*codon_position)["ACC"] = {34};
+    (*codon_position)["ACA"] = {35};
+    (*codon_position)["ACG"] = {36};
+    (*codon_position)["AAT"] = {37};
+    (*codon_position)["AAC"] = {38};
+    (*codon_position)["AAA"] = {39};
+    (*codon_position)["AAG"] = {40};
+    (*codon_position)["AGT"] = {41};
+    (*codon_position)["AGC"] = {42};
+    (*codon_position)["AGA"] = {43};
+    (*codon_position)["AGG"] = {44};
+    (*codon_position)["GTT"] = {45};
+    (*codon_position)["GTC"] = {46};
+    (*codon_position)["GTA"] = {47};
+    (*codon_position)["GTG"] = {48};
+    (*codon_position)["GCT"] = {49};
+    (*codon_position)["GCC"] = {50};
+    (*codon_position)["GCA"] = {51};
+    (*codon_position)["GCG"] = {52};
+    (*codon_position)["GAT"] = {53};
+    (*codon_position)["GAC"] = {54};
+    (*codon_position)["GAA"] = {55};
+    (*codon_position)["GAG"] = {56};
+    (*codon_position)["GGT"] = {57};
+    (*codon_position)["GGC"] = {58};
+    (*codon_position)["GGA"] = {59};
+    (*codon_position)["GGG"] = {60};
+}
+*/

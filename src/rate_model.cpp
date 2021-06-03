@@ -14,9 +14,12 @@ inline int signof (double d) {
 }
 
 
+// not used
+/*
 inline double roundto (double in) {
     return floor(in*(1000)+0.5)/(1000);
 }
+*/
 
 
 RateModel::RateModel (int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
@@ -42,7 +45,7 @@ RateModel::RateModel (int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
 
 void RateModel::set_Q_cell (int from, int to, double num) {
     Q(from, to) = num;
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
@@ -56,7 +59,7 @@ void RateModel::set_Q_diag () {
         }
         Q(i, i) = 0-su;
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
@@ -71,7 +74,7 @@ void RateModel::setup_Q () {
             }
         }
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
@@ -85,7 +88,7 @@ void RateModel::setup_Q (std::vector< std::vector<double> >& inQ) {
         colvec a = (sum(Q, 1));
         Q(i, i) = -(a(i)-Q(i, i));
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
@@ -96,10 +99,11 @@ void RateModel::setup_Q (mat& inQ) {
         }
     }
     set_Q_diag();
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
+// not used
 void RateModel::set_n_qs (int number) {
     for (int i = 0; i < number; i++) {
         mat tm(nstates, nstates);
@@ -123,7 +127,7 @@ void RateModel::set_Q_which (mat& inQ, int which) {
         }
         Qs[which](i, i) = 0-su;
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
@@ -133,7 +137,7 @@ void RateModel::set_Q (mat& inQ) {
             Q(i, j) = inQ(i, j);
         }
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
 
