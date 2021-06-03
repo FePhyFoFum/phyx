@@ -10,8 +10,6 @@
 #include "tree.h"
 #include "tree_utils.h"
 #include "utils.h"
-#include "node.h"
-#include "superdouble.h"
 #include "log.h"
 #include "citations.h"
 
