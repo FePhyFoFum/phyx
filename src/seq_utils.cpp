@@ -256,7 +256,7 @@ void write_phylip_alignment (std::vector<Sequence>& seqs,
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
-    int seqlength = seqs[0].get_length();
+    unsigned int seqlength = seqs[0].get_length();
     // header: num_taxa, num_char
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
     
@@ -343,7 +343,7 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
 void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
         std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
         std::vector<int> >& codon_pos) {
-    unsigned int start = site*3;
+    unsigned int start = site * 3;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq;
@@ -351,7 +351,7 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
             setsq += "0";
         }
         for (int j : codon_pos[codon]) {
-            setsq.replace(codon_pos[codon][j], 1, "1");
+            setsq.replace(codon_pos[codon][static_cast<unsigned long>(j)], 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }
@@ -372,7 +372,7 @@ void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>&
         std::string setsq(61, '0');
         
         for (int j : codon_pos[codon]) {
-            setsq.replace(codon_pos[codon][j], 1, "1");
+            setsq.replace(codon_pos[codon][static_cast<unsigned long>(j)], 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }

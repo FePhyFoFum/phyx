@@ -15,7 +15,7 @@ private:
     std::vector<unsigned int> partition_sizes_;
     
     void read_sequences ();
-    int get_sequence_length () const;
+    unsigned int get_sequence_length () const;
     
     //std::vector<unsigned int> get_partition_sizes ()const; // not currently used
     void delete_sequence (SequenceConcatenater& newSeqs, const unsigned int& index);
@@ -25,7 +25,7 @@ public:
     SequenceConcatenater (std::string& seqf, const bool& toupcase);
     void concatenate (SequenceConcatenater& newSeqs);
     
-    int get_num_taxa () const;
+    unsigned int get_num_taxa () const;
     Sequence get_sequence (const unsigned int& index) const;
     void write_partition_information (const std::vector<std::string>& inputFiles,
         std::string& partfile);

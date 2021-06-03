@@ -68,7 +68,7 @@ void LogManipulator::return_statistics_table () {
     const int colWidth = 12; // this value works nice with decimal and sci. notation
     std::cout.precision(6);
     //(*poos_) << std::fixed;
-    int longest_label = get_longest_label(parm_names_);
+    unsigned int longest_label = get_longest_label(parm_names_);
     std::string pad = std::string(longest_label, ' ');
     // header
     (*poos_) << pad << " ";
@@ -79,7 +79,7 @@ void LogManipulator::return_statistics_table () {
     for (unsigned long i = 1; i < static_cast<unsigned long>(num_cols_); i++) {
         calculate_summary_statistics (parm_samples_[i], mean, variance, median,
             ESS, ACT, nsamples, step_size);
-        int diff = longest_label - static_cast<int>(parm_names_[i].size());
+        unsigned int diff = longest_label - static_cast<unsigned int>(parm_names_[i].size());
         (*poos_) << parm_names_[i];
         if (diff > 0) {
             pad = std::string(diff, ' ');
@@ -143,13 +143,13 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     double del2 = 0.0;
 
     for (unsigned long i = 0; i < max_lag; i++) {
-        for (unsigned long j = 0; j < n_samples - i; j++) {
+        for (unsigned long j = 0; j < static_cast<unsigned long>(n_samples - i); j++) {
             del1 = vals[j] - mean;
             del2 = vals[j + i] - mean;
             gamma_stat[i] += (del1 * del2);
         }
 
-        gamma_stat[i] /= static_cast<double>(n_samples - i);
+        gamma_stat[i] /= static_cast<double>(static_cast<unsigned long>(n_samples) - i);
 
         if (i == 0) {
             var_stat = gamma_stat[0];
@@ -476,7 +476,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 
                 num_cols_retain_ = static_cast<int>(cols_to_retain.size());
                 for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << header[cols_to_retain[static_cast<unsigned long>(i)]];
+                    (*poos_) << header[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
                     if (i < (num_cols_retain_ - 1)) {
                         (*poos_) << "\t";
                     }
@@ -487,7 +487,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
             }
             std::vector<std::string> samp = tokenize(line);
             for (int i = 0; i < num_cols_retain_; i++) {
-                (*poos_) << samp[cols_to_retain[static_cast<unsigned long>(i)]];
+                (*poos_) << samp[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
                 if (i < (num_cols_retain_ - 1)) {
                     (*poos_) << "\t";
                 }
@@ -516,7 +516,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         std::vector<int> cols_to_retain(static_cast<unsigned long>(col_ids.size()), 0);
         for (int col_id : col_ids) {
             // subtract 1 because input is 1-indexed
-            cols_to_retain[col_id] = col_id - 1;
+            cols_to_retain[static_cast<unsigned long>(col_id)] = col_id - 1;
         }
         num_cols_retain_ = static_cast<int>(cols_to_retain.size());
         
@@ -538,7 +538,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 
                 parm_names_ = header;
                 for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << header[cols_to_retain[static_cast<unsigned long>(i)]];
+                    (*poos_) << header[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
                     if (i < (num_cols_retain_ - 1)) {
                         (*poos_) << "\t";
                     }
@@ -549,7 +549,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
             }
             std::vector<std::string> samp = tokenize(line);
             for (int i = 0; i < num_cols_retain_; i++) {
-                (*poos_) << samp[cols_to_retain[static_cast<unsigned long>(i)]];
+                (*poos_) << samp[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
                 if (i < (num_cols_retain_ - 1)) {
                     (*poos_) << "\t";
                 }

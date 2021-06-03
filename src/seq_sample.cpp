@@ -68,9 +68,9 @@ std::string SequenceSampler::get_resampled_seq (const std::string& origseq) {
     std::string seq;
     for (unsigned int i = 0; i < sample_sites_.size(); i++) {
         if (i == 0) {
-            seq = origseq[sample_sites_[i]];
+            seq = origseq[static_cast<unsigned long>(sample_sites_[i])];
         } else {
-            seq += origseq[sample_sites_[i]];
+            seq += origseq[static_cast<unsigned long>(sample_sites_[i])];
         }
     }
     return seq;
@@ -113,7 +113,7 @@ std::vector<int> SequenceSampler::get_partitioned_bootstrap_sites () {
         std::vector<int> randsites = get_bootstrap_sites(curNum);
         for (unsigned long j = 0; j < static_cast<unsigned long>(curNum); j ++) {
         // put partitions back in same spot as original, so partition file does not need to change
-            master[partitions_[i][j]] = partitions_[i][randsites[j]];
+            master[static_cast<unsigned long>(partitions_[i][j])] = partitions_[i][randsites[j]];
         }
     }
     return master;

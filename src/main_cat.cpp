@@ -177,7 +177,7 @@ int main(int argc, char * argv[]) {
     }
 
     // write sequences
-    for (int i = 0; i < result.get_num_taxa(); i++) {
+    for (unsigned int i = 0; i < result.get_num_taxa(); i++) {
         Sequence curr = result.get_sequence(i);
         (*poos) << ">" << curr.get_id() << std::endl;
         (*poos) << curr.get_sequence() << std::endl;

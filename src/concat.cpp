@@ -28,7 +28,7 @@ void SequenceConcatenater::read_sequences () {
     
     std::string alphaName;
     seqs_ = ingest_alignment(pios, alphaName);
-    num_taxa_ = static_cast<int>(seqs_.size());
+    num_taxa_ = static_cast<unsigned int>(seqs_.size());
     
     if (toupcase_) {
         for (unsigned int i = 0; i < num_taxa_; i++) {
@@ -52,8 +52,8 @@ void SequenceConcatenater::read_sequences () {
 // where stuff actually happens
 void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
     std::string old_filler(num_char_, '-');
-    int new_seq_len = newSeqs.get_sequence_length();
-    std::string new_filler(new_seq_len, '-');
+    unsigned int new_seq_len = newSeqs.get_sequence_length();
+    std::string new_filler(static_cast<unsigned long>(new_seq_len), '-');
     num_char_ += new_seq_len;
     for (unsigned int i = 0; i != num_taxa_; i++) {
         bool match_found = false;
@@ -87,12 +87,12 @@ void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
 }
 
 
-int SequenceConcatenater::get_sequence_length () const {
+unsigned int SequenceConcatenater::get_sequence_length () const {
     return num_char_;
 }
 
 
-int SequenceConcatenater::get_num_taxa () const {
+unsigned int SequenceConcatenater::get_num_taxa () const {
     return num_taxa_;
 }
 
