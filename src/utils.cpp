@@ -155,7 +155,7 @@ std::vector<std::string> tokenize (const std::string& input) {
 
 bool is_number (const std::string& s) {
     std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) {
+    while (it != s.end() && (std::isdigit(*it) != 0)) {
         ++it;
     }
     return !s.empty() && it == s.end();

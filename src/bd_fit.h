@@ -41,7 +41,7 @@ private:
     void get_aic(const double& lik, double& aic, double& aicc);
 
 public:
-    BDFit(Tree * intree, const std::string& modelflavour);
+    BDFit(Tree * intree, std::string& modelflavour);
     void get_pars(std::ostream* poos) const;
 };
 

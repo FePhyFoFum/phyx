@@ -485,7 +485,7 @@ int main(int argc, char * argv[]) {
             std::set<std::string> un_trees;
             for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
                 std::string sv = get_string_vector(matrix[i]);
-                if (un_trees.count(sv)) {
+                if (un_trees.count(sv) != 0) {
                     std::cout << trees[i]->getRoot()->getNewick(false) << ";" << std::endl;
                     un_trees.insert(sv);
                 }

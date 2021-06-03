@@ -252,7 +252,7 @@ char* edlibAlignmentToCigar (const unsigned char* const alignment, const int ali
         if (i == alignmentLength || (moveCodeToChar[alignment[i]] != lastMove && lastMove != 0)) {
             // Write number of moves to cigar string.
             int numDigits = 0;
-            for (; numOfSameMoves; numOfSameMoves /= 10) {
+            for (; numOfSameMoves != 0; numOfSameMoves /= 10) {
                 cigar->push_back('0' + numOfSameMoves % 10);
                 numDigits++;
             }
@@ -408,10 +408,10 @@ static inline std::vector<int> getBlockCellValues (const Block& block) {
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
         scores[static_cast<unsigned long>(i)] = score;
-        if (block.P & mask) {
+        if ((block.P & mask) != 0u) {
             score--;
         }
-        if (block.M & mask) {
+        if ((block.M & mask) != 0u) {
             score++;
         }
         mask >>= 1;
@@ -431,10 +431,10 @@ static inline void readBlock (const Block& block, int* const dest) {
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
         dest[WORD_SIZE - 1 - i] = score;
-        if (block.P & mask) {
+        if ((block.P & mask) != 0u) {
             score--;
         }
-        if (block.M & mask) {
+        if ((block.M & mask) != 0u) {
             score++;
         }
         mask >>= 1;
@@ -453,10 +453,10 @@ static inline void readBlockReverse (const Block& block, int* const dest) {
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
         dest[i] = score;
-        if (block.P & mask) {
+        if ((block.P & mask) != 0u) {
             score--;
         }
-        if (block.M & mask) {
+        if ((block.M & mask) != 0u) {
             score++;
         }
         mask >>= 1;
@@ -558,7 +558,7 @@ static int myersCalcEditDistanceSemiGlobal (
 
         //---------- Adjust number of blocks according to Ukkonen ----------//
         if ((lastBlock < maxNumBlocks - 1) && (bl->score - hout <= k) // bl is pointing to last block
-            && ((*(Peq_c + 1) & WORD_1) || hout < 0)) { // Peq_c is pointing to last block
+            && (((*(Peq_c + 1) & WORD_1) != 0u) || hout < 0)) { // Peq_c is pointing to last block
             // If score of left block is not too big, calculate one more block
             lastBlock++;
             bl++;
@@ -964,10 +964,10 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
         if (lScore == -1 && thereIsLeftBlock) {
             lScore = alignData->scores[(c - 1) * maxNumBlocks + b]; // score of block to the left
             for (int i = 0; i < WORD_SIZE - blockPos - 1; i++) {
-                if (lP & HIGH_BIT_MASK) {
+                if ((lP & HIGH_BIT_MASK) != 0u) {
                     lScore--;
                 }
-                if (lM & HIGH_BIT_MASK) {
+                if ((lM & HIGH_BIT_MASK) != 0u) {
                     lScore++;
                 }
                 lP <<= 1;
@@ -977,8 +977,12 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
         if (ulScore == -1) {
             if (lScore != -1) {
                 ulScore = lScore;
-                if (lP & HIGH_BIT_MASK) ulScore--;
-                if (lM & HIGH_BIT_MASK) ulScore++;
+                if ((lP & HIGH_BIT_MASK) != 0u) {
+                    ulScore--;
+                }
+                if ((lM & HIGH_BIT_MASK) != 0u) {
+                    ulScore++;
+                }
             }
             else if (c > 0 && b-1 >= alignData->firstBlocks[c-1] && b-1 <= alignData->lastBlocks[c-1]) {
                 // This is the case when upper left cell is last cell in block,
@@ -988,10 +992,10 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
         }
         if (uScore == -1) {
             uScore = currScore;
-            if (currP & HIGH_BIT_MASK) {
+            if ((currP & HIGH_BIT_MASK) != 0u) {
                 uScore--;
             }
-            if (currM & HIGH_BIT_MASK) {
+            if ((currM & HIGH_BIT_MASK) != 0u) {
                 uScore++;
             }
             currP <<= 1;
@@ -1259,10 +1263,10 @@ static int obtainAlignmentHirschberg (
     delete[] rPeq;
 
     if (leftHalfCalcStatus == EDLIB_STATUS_ERROR || rightHalfCalcStatus == EDLIB_STATUS_ERROR) {
-        if (alignDataLeftHalf) {
+        if (alignDataLeftHalf != nullptr) {
             delete alignDataLeftHalf;
         }
-        if (alignDataRightHalf) {
+        if (alignDataRightHalf != nullptr) {
             delete alignDataRightHalf;
         }
         return EDLIB_STATUS_ERROR;
@@ -1380,10 +1384,10 @@ static int obtainAlignmentHirschberg (
                                        target + ulWidth, rTarget, lrWidth,
                                        alphabetLength, rightScore, &lrAlignment, &lrAlignmentLength);
     if (ulStatusCode == EDLIB_STATUS_ERROR || lrStatusCode == EDLIB_STATUS_ERROR) {
-        if (ulAlignment) {
+        if (ulAlignment != nullptr) {
             free(ulAlignment);
         }
-        if (lrAlignment) {
+        if (lrAlignment != nullptr) {
             free(lrAlignment);
         }
         return EDLIB_STATUS_ERROR;
@@ -1475,13 +1479,13 @@ EdlibAlignConfig edlibDefaultAlignConfig (void) {
 
 
 void edlibFreeAlignResult (EdlibAlignResult result) {
-    if (result.endLocations) {
+    if (result.endLocations != nullptr) {
         free(result.endLocations);
     }
-    if (result.startLocations) {
+    if (result.startLocations != nullptr) {
         free(result.startLocations);
     }
-    if (result.alignment) {
+    if (result.alignment != nullptr) {
         free(result.alignment);
     }
 }
