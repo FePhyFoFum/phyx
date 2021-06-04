@@ -45,7 +45,7 @@ public:
     std::string get_recoded_seq (const std::string& origseq);
     void recode_seq (std::string& s);
     
-    //~SequenceRecoder();
+    //~SequenceRecoder ();
 };
 
 #endif /* PX_RECODE_H */

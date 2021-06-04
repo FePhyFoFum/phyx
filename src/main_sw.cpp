@@ -134,7 +134,7 @@ int main(int argc, char * argv[]) {
                 std::cout << get_SW_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0]);
+                print_error(*argv);
                 exit(0);
         }
     }
