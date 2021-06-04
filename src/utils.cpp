@@ -496,7 +496,7 @@ int count_zeros (std::vector<int>& in) {
 
 
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in) {
-    Superdouble sum = 0;
+    Superdouble sum(0);
     for (const auto & i : in) {
         sum += i;
         // std::cout << i << " sum:" << sum << std::endl;
