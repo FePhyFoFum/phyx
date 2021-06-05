@@ -985,7 +985,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
                         residues += token;
                     }
                 }
-                if (static_cast<int>(residues.size()) == num_char) {
+                if (static_cast<unsigned int>(residues.size()) == num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -1009,7 +1009,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
                 } else {
                     residues += tokens[0];
                 }
-                if (static_cast<int>(residues.size()) == num_char) {
+                if (static_cast<unsigned int>(residues.size()) == num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -1083,7 +1083,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
         int bad_len = 0;
         for (unsigned int i = 0; i < seqs.size(); i++) {
             residues = seqs[i].get_sequence();
-            if (static_cast<int>(residues.size()) != num_char) {
+            if (static_cast<unsigned int>(residues.size()) != num_char) {
                 bad_idx = i;
                 bad_len = static_cast<int>(residues.size());
                 good = false;
@@ -1107,7 +1107,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
             for (unsigned int i = 1; i < tokens.size(); i++) {
                 residues += tokens[i];
             }
-            if (static_cast<int>(residues.size()) != num_char) {
+            if (static_cast<unsigned int>(residues.size()) != num_char) {
                 std::cerr << "Error: bad phylip file. Taxon '" << name
                     << "' had " << residues.size() << " characters, but " << num_char
                     << " were expected. Exiting." << std::endl;
