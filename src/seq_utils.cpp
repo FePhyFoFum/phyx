@@ -340,6 +340,7 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
+// this is not currently used
 void create_vector_seq_codon_state_reconstructor (std::vector<Sequence>& origseqs,
         std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
         std::vector<int> >& codon_pos) {

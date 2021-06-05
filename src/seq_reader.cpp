@@ -939,7 +939,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
 // read in various phylip formats
 // do you _see_ how needlessly complicated this is JF?!?
 std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
-        const int& num_char) {
+        const unsigned int& num_char) {
     
     std::vector<Sequence> seqs;
     Sequence seq;

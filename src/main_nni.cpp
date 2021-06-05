@@ -129,7 +129,7 @@ int main(int argc, char * argv[]) {
     
     // TODO: upgrade from srand
     if (seed != -1) {
-        srand(seed);
+        srand(static_cast<unsigned int>(seed));
     } else {
         srand(get_clock_seed());
     }

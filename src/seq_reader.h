@@ -22,7 +22,8 @@ void get_phylip_dimensions (const std::string& head, int& num_taxa, int& num_cha
 bool is_complicated_phylip (std::istream& pios, const int& num_char);
 void get_phylip_format (std::istream& pios, const unsigned int& num_char,
         bool& interleaved, bool& spaces, bool& multiline);
-std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& num_char);
+std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
+        const unsigned int& num_char);
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);
 
 #endif /* PX_SEQ_READER_H */

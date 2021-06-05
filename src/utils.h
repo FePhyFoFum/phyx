@@ -37,7 +37,7 @@ std::istream& getline_safe(std::istream& is, std::string& t);
 unsigned int factorial (unsigned int n);
 unsigned long int doublefactorial (unsigned int n);
 
-long int get_clock_seed ();
+unsigned int get_clock_seed ();
 
 // template version. pass result vector as arg; will delete anything already in res
 template<typename T> void parse_comma_list (std::string& str, std::vector<T>& res) {

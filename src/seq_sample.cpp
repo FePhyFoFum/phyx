@@ -19,7 +19,7 @@ SequenceSampler::SequenceSampler (std::istream* pios, const long int& seed,
     if (seed == -1) {
         srand(get_clock_seed());
     } else {
-        srand(seed);
+        srand(static_cast<unsigned int>(seed));
     }
     if (jkfract_ != 0.0) {
         jackknife_ = true;

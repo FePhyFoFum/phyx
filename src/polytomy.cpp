@@ -13,7 +13,7 @@ Polytomy::Polytomy (const long int& seed) {
     if (seed == -1) {
         srand(get_clock_seed());
     } else {
-        srand(seed);
+        srand(static_cast<unsigned int>(seed));
     }
 }
 
@@ -44,7 +44,7 @@ void Polytomy::sample_polytomies (Tree * tr) {
                 }
             }
             
-            for (int j : terp) {
+            for (unsigned int j : terp) {
                 Node * n = m->getChild(j);
                 if (n->isExternal()) {
                     terminals_to_prune_.push_back(n->getName());

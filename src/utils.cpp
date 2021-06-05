@@ -225,7 +225,7 @@ unsigned long int doublefactorial (unsigned int n) {
 
 
 // higher resolution than time( nullptr );
-long int get_clock_seed () {
+unsigned int get_clock_seed () {
     return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
 }
 
