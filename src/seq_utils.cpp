@@ -75,7 +75,7 @@ char get_dna_from_pos (const std::set<int>& ins) {
 
 std::set<int> get_dna_pos (char inc) {
     std::set<int> ret;
-    inc = toupper(inc);
+    inc = static_cast<char>(toupper(inc));
     if (inc == 'A') {
         ret.insert(0);
     } else if (inc == 'C') {
@@ -199,7 +199,7 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
  *
  */
 char single_dna_complement (char inc) {
-    inc = toupper(inc);
+    inc = static_cast<char>(toupper(inc));
     if (inc == 'A') {
         return 'T';
     }

@@ -143,7 +143,7 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     double del2 = 0.0;
 
     for (unsigned long i = 0; i < max_lag; i++) {
-        for (unsigned long j = 0; j < static_cast<unsigned long>(n_samples - i); j++) {
+        for (unsigned long j = 0; j < static_cast<unsigned long>(n_samples) - i; j++) {
             del1 = vals[j] - mean;
             del2 = vals[j + i] - mean;
             gamma_stat[i] += (del1 * del2);
@@ -736,7 +736,8 @@ void LogManipulator::get_tree_name_prefix (std::string& sample) {
     std::vector<std::string> terp = tokenize(sample);
     std::string tree_name = terp[1];
     std::size_t found = tree_name.find_first_of("0123456789");
-    tree_name.replace(tree_name.begin(), tree_name.end(), tree_name.begin(), tree_name.begin()+found);
+    tree_name.replace(tree_name.begin(), tree_name.end(), tree_name.begin(),
+            tree_name.begin()+found);
     tree_name_prefix_ = tree_name;
 }
 

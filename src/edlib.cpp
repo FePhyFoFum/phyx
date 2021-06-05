@@ -1445,7 +1445,7 @@ static int transformSequences (const char* const queryOriginal, const int queryL
         auto c = static_cast<unsigned char>(queryOriginal[i]);
         if (!inAlphabet[c]) {
             inAlphabet[c] = true;
-            letterIdx[c] = alphabetLength;
+            letterIdx[c] = static_cast<unsigned char>(alphabetLength);
             alphabetLength++;
         }
         (*queryTransformed)[i] = letterIdx[c];
@@ -1454,7 +1454,7 @@ static int transformSequences (const char* const queryOriginal, const int queryL
         auto c = static_cast<unsigned char>(targetOriginal[i]);
         if (!inAlphabet[c]) {
             inAlphabet[c] = true;
-            letterIdx[c] = alphabetLength;
+            letterIdx[c] = static_cast<unsigned char>(alphabetLength);
             alphabetLength++;
         }
         (*targetTransformed)[i] = letterIdx[c];
