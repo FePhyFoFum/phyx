@@ -735,7 +735,7 @@ void LogManipulator::sample_trees () {
 void LogManipulator::get_tree_name_prefix (std::string& sample) {
     std::vector<std::string> terp = tokenize(sample);
     std::string tree_name = terp[1];
-    std::size_t found = tree_name.find_first_of("0123456789");
+    auto found = static_cast<long>(tree_name.find_first_of("0123456789"));
     tree_name.replace(tree_name.begin(), tree_name.end(), tree_name.begin(),
             tree_name.begin()+found);
     tree_name_prefix_ = tree_name;

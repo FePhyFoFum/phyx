@@ -114,8 +114,8 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
         + names[mini2] + ":" + std::to_string(brlength1 / static_cast<double>(num_char_)) +  ")";
     
     // erase in backwards order as it preserves the indexes
-    names.erase(names.begin()+mini2);
-    names.erase(names.begin()+mini1);
+    names.erase(names.begin()+static_cast<long>(mini2));
+    names.erase(names.begin()+static_cast<long>(mini1));
     names.insert(names.begin(), newname);
     
     // Make Smaller Matrix
@@ -160,7 +160,7 @@ void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector
     //super large value
     double MIN = 99999999999.99;
     for (unsigned long i = 0; i < (static_cast<unsigned long>(NumbOfSequences) - 1); i++) {
-        unsigned long idx = static_cast<unsigned long>(std::min_element(Matrix[i].begin() + (i + 1),
+        unsigned long idx = static_cast<unsigned long>(std::min_element(Matrix[i].begin() + (i + 1u),
                 Matrix[i].end()) - Matrix[i].begin());
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];

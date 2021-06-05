@@ -92,11 +92,11 @@ void SequenceSampler::sample_sites (const unsigned int& numchar) {
 // sample with replacement.
 std::vector<unsigned int> SequenceSampler::get_bootstrap_sites (const unsigned int& numchar) {
     // numchar zero-initialized elements
-    std::vector<unsigned int> randsites (static_cast<unsigned long>(numchar));
+    std::vector<unsigned int> randsites(static_cast<unsigned long>(numchar));
     
     for (unsigned int i = 0; i < numchar; i++) {
-        int randnum = random_int_range(0, (numchar - 1));
-        randsites[static_cast<unsigned long>(i)] = randnum;
+        int randnum = random_int_range(0, (static_cast<int>(numchar) - 1));
+        randsites[static_cast<unsigned long>(i)] = static_cast<unsigned int>(randnum);
     }
     sort(randsites.begin(), randsites.end());
     

@@ -45,7 +45,7 @@ void Polytomy::sample_polytomies (Tree * tr) {
             }
             
             for (unsigned int j : terp) {
-                Node * n = m->getChild(j);
+                Node * n = m->getChild(static_cast<int>(j));
                 if (n->isExternal()) {
                     terminals_to_prune_.push_back(n->getName());
                     if (verbose) {
