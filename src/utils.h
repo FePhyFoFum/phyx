@@ -115,7 +115,7 @@ std::vector<double> string_v_to_double_v (const std::vector<std::string>& in);
 std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates);
 int random_int_range (int min, int max);
 
-std::vector<int> sample_without_replacement( const int& numTotal,const int& numSample);
+std::vector<unsigned int> sample_without_replacement( const int& numTotal,const int& numSample);
 
 void print_error (char * pname);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB);

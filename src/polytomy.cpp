@@ -35,7 +35,7 @@ void Polytomy::sample_polytomies (Tree * tr) {
         int numChildren = m->getChildCount();
         if (numChildren > 2) {
             // select random taxa to prune
-            std::vector<int> terp = sample_without_replacement(numChildren, (numChildren - 2));
+            std::vector<unsigned int> terp = sample_without_replacement(numChildren, (numChildren - 2));
             if (verbose) {
                 std::cout << "numChildren for node " << m->getName()
                         << " = " << numChildren << std::endl;

@@ -435,7 +435,7 @@ std::vector<float> SequenceGenerator::set_site_rates () {
     if (pinvar_ != 0.0) {
         int numsample = seqlen_ * pinvar_ + 0.5;
         // sample invariable sites
-        std::vector<int> randsites = sample_without_replacement(seqlen_, numsample);
+        std::vector<unsigned int> randsites = sample_without_replacement(seqlen_, numsample);
         // must be a more elegant way of doing this
         for (int i = 0; i < numsample; i++) {
             srates[randsites[i]] = 0.0;

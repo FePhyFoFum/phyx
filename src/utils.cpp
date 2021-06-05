@@ -314,9 +314,9 @@ int random_int_range (int min, int max) {
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
 // ok, this is pretty sweet, if i do say so myself
-std::vector<int> sample_without_replacement (const int& numTotal, const int& numSample) {
-    std::vector<int> randsites (static_cast<unsigned long>(numSample)); // numchar zero-initialized elements
-    std::vector<int> allsites (static_cast<unsigned long>(numTotal));
+std::vector<unsigned int> sample_without_replacement (const int& numTotal, const int& numSample) {
+    std::vector<unsigned int> randsites (static_cast<unsigned long>(numSample)); // numchar zero-initialized elements
+    std::vector<unsigned int> allsites (static_cast<unsigned long>(numTotal));
     std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0, 1, 2..., n-1
     
     for (int i = 0; i < numSample; i++) {
