@@ -216,14 +216,6 @@ Tree * TreeReader::readTree (const std::string& pb) {
 }
 
 
-// for processing strings we know are valid tree strings
-Tree * read_tree_string (std::string pb) {
-    TreeReader tr;
-    Tree * tree = tr.readTree(std::move(pb));
-    return tree;
-}
-
-
 /*
  * tests the filetype by checking the first string and guessing based on
  * #nexus, ( newick

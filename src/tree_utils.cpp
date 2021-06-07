@@ -130,7 +130,8 @@ Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names,
     
     paint_nodes(tree, names, silent);
     std::string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
-    Tree * indTree = read_tree_string(tracetreenewick);
+    TreeReader tr;
+    Tree * indTree = tr.readTree(tracetreenewick);
     deknuckle_tree(indTree); // guaranteed to have knuckles atm
     indTree->removeRootEdge();
     
