@@ -25,7 +25,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
     auto * tree = new Tree();
     //std::string pb = trees;
     unsigned int x = 0;
-    char nextChar = pb.c_str()[x];
+    char nextChar = pb.at(x);
     bool start = true;
     bool keepGoing = true;
     bool in_quote = false;
@@ -57,7 +57,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
             // internal named node (or more likely support annotation)
             currNode = currNode->getParent();
             x++;
-            nextChar = pb.c_str()[x];
+            nextChar = pb.at(x);
             //std::cout << "Working on: " << nextChar << std::endl;
             std::string nodeName;
             bool goingName = true;
@@ -74,7 +74,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
                 while (goingName) {
                     nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                         || nextChar == '[' || nextChar == ';') {
                         break;
@@ -83,11 +83,11 @@ Tree * TreeReader::readTree (const std::string& pb) {
                 x--;
             } else {
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 while (goingName) {
                     nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == quoteType) {
                         nodeName += nextChar;
                         if (quoteType == '"') {
@@ -95,7 +95,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
                         }
                         // check for double single quotes
                         x++;
-                        nextChar = pb.c_str()[x];
+                        nextChar = pb.at(x);
                         if (nextChar != quoteType) {
                             x--;
                             break;
@@ -116,12 +116,12 @@ Tree * TreeReader::readTree (const std::string& pb) {
         } else if (nextChar == ':') {
             // edge length
             x++;
-            nextChar = pb.c_str()[x];
+            nextChar = pb.at(x);
             std::string edgeL;
             while (true) {
                 edgeL += nextChar;
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                     || nextChar == ';'|| nextChar == '[') {
                     break;
@@ -136,12 +136,12 @@ Tree * TreeReader::readTree (const std::string& pb) {
         else if (nextChar == '[') {
             hasAnnotations = true;
             x++;
-            nextChar = pb.c_str()[x];
+            nextChar = pb.at(x);
             std::string note;
             while (true) {
                 note += nextChar;
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 if (nextChar == ']' ) {
                     break;
                 }
@@ -167,7 +167,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
                 while (goingName) {
                     nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                         || nextChar == '[') {
                         break;
@@ -176,11 +176,11 @@ Tree * TreeReader::readTree (const std::string& pb) {
                 x--;
             } else {
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 while (goingName) {
                     nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == quoteType) {
                         nodeName += nextChar;
                         if (quoteType == '"') {
@@ -188,7 +188,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
                         }
                         // check for double single quotes
                         x++;
-                        nextChar = pb.c_str()[x];
+                        nextChar = pb.at(x);
                         if (nextChar != quoteType) {
                             x--;
                             break;
@@ -202,7 +202,7 @@ Tree * TreeReader::readTree (const std::string& pb) {
         if (x < pb.length() - 1) { // added
             x++;
         }
-        nextChar = pb.c_str()[x];
+        nextChar = pb.at(x);
     }
     //bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
     bool hasEdgeLengths = sumEL > 0.0;
