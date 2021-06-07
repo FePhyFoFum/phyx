@@ -9,8 +9,8 @@
 
 
 MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0),
-        test_statistic_(0.0), seqs_(seqs) {
-    num_taxa_ = static_cast<int>(seqs_.size());
+        test_statistic_(0.0l), seqs_(seqs) {
+    num_taxa_ = static_cast<unsigned long>(seqs_.size());
     
     //std::cout << "Read in " << num_taxa_ << " sequences!" << std::endl;
     
@@ -26,15 +26,15 @@ MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0
 
 bool MultinomialSeqStat::checked_aligned () {
     bool is_aligned_ = true;
-    std::vector<int> seq_lengths(static_cast<unsigned long>(num_taxa_), 0);
+    std::vector<unsigned long> seq_lengths(num_taxa_, 0);
     
     // gather all lengths
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-        seq_lengths[i] = static_cast<int>(seqs_[i].get_length());
+    for (unsigned long i = 0; i < num_taxa_; i++) {
+        seq_lengths[i] = seqs_[i].get_length();
     }
     
     // check if all seqs are the same length
-    if (std::adjacent_find( seq_lengths.begin(), seq_lengths.end(), std::not_equal_to<int>()) == seq_lengths.end() ) {
+    if (std::adjacent_find( seq_lengths.begin(), seq_lengths.end(), std::not_equal_to<unsigned int>()) == seq_lengths.end() ) {
         is_aligned_ = true;
         num_char_ = seq_lengths[0];
     } else {
@@ -49,7 +49,7 @@ void MultinomialSeqStat::collect_site_patters () {
     for (unsigned long i = 0; i < static_cast<unsigned long>(num_char_); i++) {
         char a = seqs_[0].get_sequence().at(i);
         std::string pat(1, a);
-        for (unsigned long j = 1; j < static_cast<unsigned long>(num_taxa_); j++) {
+        for (unsigned long j = 1; j < num_taxa_; j++) {
             char residue = seqs_[j].get_sequence().at(i);
             pat += residue;
         }
@@ -64,7 +64,7 @@ void MultinomialSeqStat::collect_site_patters () {
 // Iterate from first site to last site
     for (std::vector<std::string>::const_iterator iterSites = inputPatterns.begin(); iterSites < inputPatterns.end(); ++iterSites) {
         std::string currentPattern = *iterSites;
-        int currentPatternCount = 1;
+        unsigned long currentPatternCount = 1u;
         
 // Check if pattern n+1 == pattern n; if so, update count, test next site; if not, log current count/pattern; MUCH FASTER!!
 //     - Need to check if last site, lest risk overshooting vector boundary
@@ -123,6 +123,6 @@ void MultinomialSeqStat::calculateTestStatistic () {
 }
 
 
-double MultinomialSeqStat::get_test_statistic () const {
+long double MultinomialSeqStat::get_test_statistic () const {
     return test_statistic_;
 }

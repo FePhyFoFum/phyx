@@ -28,7 +28,7 @@ private:
     char gap_;
     char missing_;
     std::map<char, double> total_;
-    int num_taxa_;
+    unsigned int num_taxa_;
     double percent_missing_;
     
     // new stuff

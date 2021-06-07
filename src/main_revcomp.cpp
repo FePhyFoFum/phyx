@@ -19,6 +19,7 @@
 
 void print_help ();
 std::string get_version_line ();
+bool reverse_it_or_not (std::vector<Sequence>& seqs, Sequence comp_seq);
 
 void print_help () {
     std::cout << "Reverse complement sequences." << std::endl;

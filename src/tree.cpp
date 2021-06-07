@@ -37,7 +37,7 @@ void Tree::addInternalNode (Node * tn) {
 }
 
 
-Node * Tree::getExternalNode (int num) {
+Node * Tree::getExternalNode (unsigned int num) {
     return external_nodes_.at(static_cast<unsigned long>(num));
 }
 
@@ -47,7 +47,7 @@ Node * Tree::getExternalNode (int num) {
  */
 Node * Tree::getExternalNode (const std::string& name) {
     Node * ret = nullptr;
-    for (int i = 0; i < external_node_count_; i++) {
+    for (unsigned int i = 0; i < external_node_count_; i++) {
         if (external_nodes_.at(static_cast<unsigned long>(i))->getName() == name) {
             ret = external_nodes_.at(static_cast<unsigned long>(i));
         }
@@ -56,7 +56,7 @@ Node * Tree::getExternalNode (const std::string& name) {
 }
 
 
-Node * Tree::getInternalNode (int num) {
+Node * Tree::getInternalNode (unsigned int num) {
     return internal_nodes_.at(static_cast<unsigned long>(num));
 }
 
@@ -66,7 +66,7 @@ Node * Tree::getInternalNode (int num) {
  */
 Node * Tree::getInternalNode (std::string& name) {
     Node * ret = nullptr;
-    for (int i = 0; i < internal_node_count_; i++) {
+    for (unsigned int i = 0; i < internal_node_count_; i++) {
         if (internal_nodes_.at(static_cast<unsigned long>(i))->getName() == name) {
             ret = internal_nodes_.at(static_cast<unsigned long>(i));
         }
@@ -75,22 +75,22 @@ Node * Tree::getInternalNode (std::string& name) {
 }
 
 
-int Tree::getExternalNodeCount () const {
+unsigned int Tree::getExternalNodeCount () const {
     return external_node_count_;
 }
 
 
-int Tree::getExtantNodeCount () {
+unsigned int Tree::getExtantNodeCount () {
     setHeightFromRootToNodes();
     double largest = 0;
-    for (int i = 0; i < external_node_count_; i++) {
+    for (unsigned int i = 0; i < external_node_count_; i++) {
         double th = getExternalNode(i)->getHeight();
         if (th > largest) {
             largest = th;
         }
     }
-    int count = 0;
-    for (int i = 0; i < external_node_count_; i++) {
+    unsigned int count = 0;
+    for (unsigned int i = 0; i < external_node_count_; i++) {
         double th = getExternalNode(i)->getHeight();
         if (fabs(th-largest) < 0.00001) {
             count += 1;
@@ -101,12 +101,12 @@ int Tree::getExtantNodeCount () {
 
 
 // NOTE: this includes the root
-int Tree::getInternalNodeCount () const {
+unsigned int Tree::getInternalNodeCount () const {
     return internal_node_count_;
 }
 
 
-Node * Tree::getNode (int num) {
+Node * Tree::getNode (unsigned int num) {
     return nodes_.at(static_cast<unsigned long>(num));
 }
 
@@ -127,8 +127,8 @@ Node * Tree::getNode (std::string& name) {
 }
 
 
-int Tree::getNodeCount () const {
-    return static_cast<int>(nodes_.size());
+unsigned int Tree::getNodeCount () const {
+    return static_cast<unsigned int>(nodes_.size());
 }
 
 
@@ -279,7 +279,7 @@ void Tree::tritomyRoot (Node * toberoot) {
             double nbl = currootCH->getBL();
             curroot->getChild(1)->setBL(curroot->getChild(1)->getBL() + nbl);
             curroot->removeChild(*currootCH);
-            for (int i = 0; i < currootCH->getChildCount(); i++) {
+            for (unsigned int i = 0; i < currootCH->getChildCount(); i++) {
                 curroot->addChild(*currootCH->getChild(i));
                 //currootCH.getChild(i).setParent(curroot);
             }
@@ -288,7 +288,7 @@ void Tree::tritomyRoot (Node * toberoot) {
             double nbl = currootCH->getBL();
             curroot->getChild(0)->setBL(curroot->getChild(0)->getBL() + nbl);
             curroot->removeChild(*currootCH);
-            for (int i = 0; i < currootCH->getChildCount(); i++) {
+            for (unsigned int i = 0; i < currootCH->getChildCount(); i++) {
                 curroot->addChild(*currootCH->getChild(i));
                 //currootCH.getChild(i).setParent(curroot);
             }
@@ -299,7 +299,7 @@ void Tree::tritomyRoot (Node * toberoot) {
             double nbl = currootCH->getBL();
             curroot->getChild(1)->setBL(curroot->getChild(1)->getBL() + nbl);
             curroot->removeChild(*currootCH);
-            for (int i = 0; i < currootCH->getChildCount(); i++) {
+            for (unsigned int i = 0; i < currootCH->getChildCount(); i++) {
                 curroot->addChild(*currootCH->getChild(i));
                 //currootCH.getChild(i).setParent(curroot);
             }
@@ -308,7 +308,7 @@ void Tree::tritomyRoot (Node * toberoot) {
             double nbl = currootCH->getBL();
             curroot->getChild(0)->setBL(curroot->getChild(0)->getBL() + nbl);
             curroot->removeChild(*currootCH);
-            for (int i = 0; i < currootCH->getChildCount(); i++) {
+            for (unsigned int i = 0; i < currootCH->getChildCount(); i++) {
                 curroot->addChild(*currootCH->getChild(i));
                 //currootCH.getChild(i).setParent(curroot);
             }
@@ -379,7 +379,7 @@ Node * Tree::getInternalMRCA (std::vector<std::string>& innodes) {
         // we want to choose a node that has all of the outgroups
         // and the smallest number of other nodes
         // this is the best case when there
-        for (int i = 0; i < this->getInternalNodeCount(); i++) {
+        for (unsigned int i = 0; i < this->getInternalNodeCount(); i++) {
             
             // NOTE: this is missing!
             
@@ -402,7 +402,7 @@ void Tree::setHeightFromRootToNode (Node& inNode, double newHeight) {
     } else {
         inNode.setHeight(newHeight);
     }
-    for (int i = 0; i < inNode.getChildCount(); i++) {
+    for (unsigned int i = 0; i < inNode.getChildCount(); i++) {
         setHeightFromRootToNode(*inNode.getChild(i), newHeight);
     }
 }
@@ -412,14 +412,14 @@ void Tree::setHeightFromRootToNode (Node& inNode, double newHeight) {
  * only makes sense for ultrametric trees
  */
 void Tree::setHeightFromTipToNodes () {
-    for (int i = 0; i < external_node_count_; i++) {
+    for (unsigned int i = 0; i < external_node_count_; i++) {
         double curh = 0.0;
         Node * cur = this->getExternalNode(i);
         cur->setHeight(curh);
         while (cur->getParent() != nullptr) {
             curh += cur->getBL();
             cur = cur->getParent();
-            if (cur->getHeight()<curh) {
+            if (cur->getHeight() < curh) {
                 cur->setHeight(curh);
             }
         }
@@ -493,7 +493,7 @@ void Tree::postOrderProcessRoot (Node * node) {
         return;
     }
     if (node->getChildCount() > 0) {
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             postOrderProcessRoot(node->getChild(i));
         }
     }
@@ -525,7 +525,7 @@ void Tree::pruneExternalNode (Node * node) {
     Node * parent = node->getParent();
     if (parent->getChildCount() == 2) {
         Node * other = nullptr;
-        for (int i = 0; i < parent->getChildCount(); i++) {
+        for (unsigned int i = 0; i < parent->getChildCount(); i++) {
             if (parent->getChild(i) != node) {
                 other = parent->getChild(i);
             }
@@ -535,7 +535,7 @@ void Tree::pruneExternalNode (Node * node) {
         if (mparent != nullptr) {
             mparent->addChild(*other);
             other->setBL(bl);
-            for (int i = 0; i < mparent->getChildCount(); i++) {
+            for (unsigned int i = 0; i < mparent->getChildCount(); i++) {
                 if (mparent->getChild(i) == parent) {
                     mparent->removeChild(*parent);
                     break;
@@ -572,7 +572,7 @@ void Tree::pruneInternalNode (Node * node) {
     //std::cout << "Parent edge length: " << pel << std::endl;
     Node * gparent = node->getParent();
     
-    for (int i = 0; i < node->getChildCount(); i++) {
+    for (unsigned int i = 0; i < node->getChildCount(); i++) {
         Node * child = node->getChild(i);
         //std::cout << "  " << i << ". Original edge length: " << child->getBL() << std::endl;
         double newEL = pel + child->getBL();
@@ -623,10 +623,10 @@ Node * Tree::getMRCATraverse (Node * curn1, Node * curn2) {
  */
 
 Tree::~Tree () {
-    for (int i = 0; i < internal_node_count_; i++) {
+    for (unsigned int i = 0; i < internal_node_count_; i++) {
         delete getInternalNode(i);
     }
-    for (int i = 0; i < external_node_count_; i++) {
+    for (unsigned int i = 0; i < external_node_count_; i++) {
         delete getExternalNode(i);
     }
 }

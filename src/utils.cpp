@@ -16,12 +16,13 @@
 
 #include "utils.h"
 #include "superdouble.h"
+#include "constants.h"
 
 
 // TODO: use const where possible
 
 // set threshold. should maybe use superdouble.
-double EPSILON = 1e-7;
+extern const double EPSILON; // moved to constants.h
 
 // other stuff i am playing around with. temporary. 
 /*
@@ -226,7 +227,7 @@ unsigned long int doublefactorial (unsigned int n) {
 
 // higher resolution than time( nullptr );
 unsigned int get_clock_seed () {
-    return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    return (static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 }
 
 
@@ -307,20 +308,21 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string
 
 // NOTE: this assumes that srand have been seeded previously
 // e.g., srand(get_clock_seed());
-int random_int_range (int min, int max) {
-    return min + (rand() % static_cast<int>(max - min + 1));
+unsigned int random_int_range (const unsigned int& min, const unsigned int& max) {
+    return min + (rand() % static_cast<unsigned int>(max - min + 1));
 }
 
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
 // ok, this is pretty sweet, if i do say so myself
-std::vector<unsigned int> sample_without_replacement (const int& numTotal, const int& numSample) {
+std::vector<unsigned int> sample_without_replacement (const unsigned int& numTotal,
+        const unsigned int& numSample) {
     std::vector<unsigned int> randsites (static_cast<unsigned long>(numSample)); // numchar zero-initialized elements
     std::vector<unsigned int> allsites (static_cast<unsigned long>(numTotal));
     std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0, 1, 2..., n-1
     
-    for (int i = 0; i < numSample; i++) {
-        int randNum = random_int_range(i, (numTotal - 1));
+    for (unsigned int i = 0; i < numSample; i++) {
+        unsigned int randNum = random_int_range(i, (numTotal - 1));
     // swap, so don't have to worry about multiple hits
         std::swap(allsites[static_cast<unsigned long>(i)], allsites[static_cast<unsigned long>(randNum)]);
         randsites[static_cast<unsigned long>(i)] = allsites[static_cast<unsigned long>(i)];

@@ -189,18 +189,18 @@ int main(int argc, char * argv[]) {
                 (*poouts) << "#nexus" << std::endl << "begin trees;" << std::endl;
             }
             for (unsigned int x = 0; x < trees.size(); x++) {
-                for (int i = 0; i < trees[x]->getExternalNodeCount(); i++) {
-                    std::vector<Superdouble> tv (1);
+                for (unsigned int i = 0; i < trees[x]->getExternalNodeCount(); i++) {
+                    std::vector<Superdouble> tv(1);
                     tv[0] = seqs[seq_map[trees[x]->getExternalNode(i)->getName()]].get_cont_char(c);
                     trees[x]->getExternalNode(i)->assocDoubleVector("val", tv);
                 }
-                for (int i = 0; i < trees[x]->getInternalNodeCount(); i++) {
-                    std::vector<Superdouble> tv (1);
+                for (unsigned int i = 0; i < trees[x]->getInternalNodeCount(); i++) {
+                    std::vector<Superdouble> tv(1);
                     tv[0] = 0;
                     trees[x]->getInternalNode(i)->assocDoubleVector("val", tv);
                 }
                 calc_square_change_anc_states(trees[x], 0); // second character dies here
-                for (int i = 0; i < trees[x]->getInternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < trees[x]->getInternalNodeCount(); i++) {
                     double tv = (*trees[x]->getInternalNode(i)->getDoubleVector("val"))[0];
                     trees[x]->getInternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;
@@ -210,7 +210,7 @@ int main(int argc, char * argv[]) {
                     trees[x]->getInternalNode(i)->assocObject("value", nob);
                     //trees[x]->getInternalNode(i)->setName(s.str());
                 }
-                for (int i = 0; i < trees[x]->getExternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < trees[x]->getExternalNodeCount(); i++) {
                     double tv = (*trees[x]->getExternalNode(i)->getDoubleVector("val"))[0];
                     trees[x]->getExternalNode(i)->deleteDoubleVector("val");
                     std::ostringstream s;

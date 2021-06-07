@@ -78,7 +78,7 @@ string SequenceGenerator::nucleotides = "ATCG";
 */
 
 
-SequenceGenerator::SequenceGenerator (const int&seqlength,
+SequenceGenerator::SequenceGenerator (const unsigned int& seqlength,
         const std::vector<double>& basefreq, std::vector< std::vector<double> >& rmatrix,
         Tree * tree, const bool& showancs,  const int& nreps, const long int& seed,
         const float& alpha, const float& pinvar, const std::string& ancseq,
@@ -158,7 +158,7 @@ std::string SequenceGenerator::simulate_sequence (const std::string& anc,
     std::vector< std::vector<double> > PMatrix(nstates_, std::vector<double>(nstates_, 0.0));
     //int ancChar = 0;
     std::string newstring = anc; // instead of building, set size and replace
-    for (int i = 0; i < seqlen_; i++) {
+    for (unsigned int i = 0; i < seqlen_; i++) {
         float RandNumb = get_uniform_random_deviate();
         int ancChar = 0;
         if (is_dna_) {
@@ -444,7 +444,7 @@ std::vector<float> SequenceGenerator::set_site_rates () {
     
     // gamma-distributed rate variation. could explore other distributions...
     if (alpha_ != -1.0) { // default i.e. no rate variation
-        for (int i = 0; i < seqlen_; i++) {
+        for (unsigned int i = 0; i < seqlen_; i++) {
             // want to skip over sites that are set to invariable
             if (srates[i] != 0.0) {
                 srates[i] = get_gamma_random_deviate(alpha_);
@@ -465,7 +465,7 @@ std::string SequenceGenerator::generate_random_sequence () {
         // cumulative sum
         std::partial_sum(base_freqs_.begin(), base_freqs_.end(), cumsum.begin(), std::plus<double>());
     
-        for (int i = 0; i < seqlen_; i++) {
+        for (unsigned int i = 0; i < seqlen_; i++) {
             float RandNumb = get_uniform_random_deviate();
             low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
             ancseq[i] = nucleotides_[low - cumsum.begin()];
@@ -477,9 +477,9 @@ std::string SequenceGenerator::generate_random_sequence () {
         // cumulative sum
         std::partial_sum(aa_freqs_.begin(), aa_freqs_.end(), cumsum.begin(), std::plus<double>());
     
-        for (int i = 0; i < seqlen_; i++) {
+        for (unsigned int i = 0; i < seqlen_; i++) {
             float RandNumb = get_uniform_random_deviate();
-            low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+            low = std::lower_bound(cumsum.begin(), cumsum.end(), RandNumb);
             ancseq[i] = amino_acids_[low - cumsum.begin()];
         }    
     }

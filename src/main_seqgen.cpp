@@ -97,7 +97,8 @@ int main(int argc, char * argv[]) {
     float pinvar = 0.0;
     double tot;
     std::string yorn = "n";
-    int seqlen = 1000;
+    unsigned int seqlen = 1000;
+    int x = 0;
     int pos = 0;
     int pos2 = 0;
     std::string infreqs;
@@ -171,7 +172,13 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'l':
-                seqlen = string_to_int(optarg, "-l");
+                x = string_to_int(optarg, "-l");
+                if (x < 0) {
+                    std::cerr << "Error: Sequence length must be a positive integer. Exiting."
+                            << std::endl;
+                    exit(0);
+                }
+                seqlen = static_cast<unsigned int>(x);
                 break;
             case 'a':
                 showancs = true;

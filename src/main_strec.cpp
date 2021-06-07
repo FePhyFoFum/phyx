@@ -84,7 +84,7 @@ bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
     //std::vector<std::string> ret; // not used
     std::set<std::string> seqnames;
     std::set<std::string> treenames;
-    for (int i = 0; i < intree->getExternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < intree->getExternalNodeCount(); i++) {
         treenames.insert(intree->getExternalNode(i)->getName());
     }
     for (unsigned int i = 0; i < runseqs.size(); i++) {
@@ -656,7 +656,7 @@ int main(int argc, char * argv[]) {
             for (unsigned int j = 0; j < ancstates.size(); j++) {
             if (ancstates[j] == "_all_") {
                 std::vector<Superdouble> lhoods;
-                for (int l = 0; l < tree->getInternalNodeCount(); l++) {
+                for (unsigned int l = 0; l < tree->getInternalNodeCount(); l++) {
                     lhoods = sr.calculate_ancstate_reverse_sd(*tree->getInternalNode(l));
                     totlike_sd = calculate_vector_Superdouble_sum(lhoods);
 

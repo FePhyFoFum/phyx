@@ -28,18 +28,18 @@ void Polytomy::sample_polytomies (Tree * tr) {
     
     // currently works up through the tree
     // hrm maybe go from root down? would save on duplicates
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         tchildren.clear();
         Node * m = tr->getInternalNode(i);
         
-        int numChildren = m->getChildCount();
+        unsigned int numChildren = m->getChildCount();
         if (numChildren > 2) {
             // select random taxa to prune
             std::vector<unsigned int> terp = sample_without_replacement(numChildren, (numChildren - 2));
             if (verbose) {
                 std::cout << "numChildren for node " << m->getName()
                         << " = " << numChildren << std::endl;
-                for (int p = 0; p < numChildren; p++) {
+                for (unsigned int p = 0; p < numChildren; p++) {
                     std::cout << p << ". " << m->getChild(p)->getName() << std::endl;
                 }
             }

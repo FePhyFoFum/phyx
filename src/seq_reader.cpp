@@ -939,7 +939,7 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
 // read in various phylip formats
 // do you _see_ how needlessly complicated this is JF?!?
 std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
-        const unsigned int& num_char) {
+        const int& file_num_char) {
     
     std::vector<Sequence> seqs;
     Sequence seq;
@@ -955,7 +955,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
     std::string residues;
     std::string name;
     
-    get_phylip_format(pios, num_char, interleaved, spaces, multiline);
+    get_phylip_format(pios, file_num_char, interleaved, spaces, multiline);
     
     //std::cout << "interleaved = " << interleaved << "; spaces = "
     //        << spaces << "; multiline = " << multiline<< std::endl;
@@ -985,7 +985,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
                         residues += token;
                     }
                 }
-                if (static_cast<unsigned int>(residues.size()) == num_char) {
+                if (static_cast<int>(residues.size()) == file_num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -1009,7 +1009,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
                 } else {
                     residues += tokens[0];
                 }
-                if (static_cast<unsigned int>(residues.size()) == num_char) {
+                if (static_cast<int>(residues.size()) == file_num_char) {
                     seq.set_id(name);
                     seq.set_sequence(residues);
                     seqs.push_back(seq);
@@ -1083,7 +1083,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
         int bad_len = 0;
         for (unsigned int i = 0; i < seqs.size(); i++) {
             residues = seqs[i].get_sequence();
-            if (static_cast<unsigned int>(residues.size()) != num_char) {
+            if (static_cast<int>(residues.size()) != file_num_char) {
                 bad_idx = i;
                 bad_len = static_cast<int>(residues.size());
                 good = false;
@@ -1092,7 +1092,7 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
         }
         if (!good) {
             std::cerr << "Error: bad phylip file. Taxon '" << seqs[bad_idx].get_id()
-                << "' had " << bad_len << " characters, but " << num_char
+                << "' had " << bad_len << " characters, but " << file_num_char
                 << " were expected. Exiting." << std::endl;
             exit(1);
         }
@@ -1107,9 +1107,9 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
             for (unsigned int i = 1; i < tokens.size(); i++) {
                 residues += tokens[i];
             }
-            if (static_cast<unsigned int>(residues.size()) != num_char) {
+            if (static_cast<int>(residues.size()) != file_num_char) {
                 std::cerr << "Error: bad phylip file. Taxon '" << name
-                    << "' had " << residues.size() << " characters, but " << num_char
+                    << "' had " << residues.size() << " characters, but " << file_num_char
                     << " were expected. Exiting." << std::endl;
                     exit(1);
             }

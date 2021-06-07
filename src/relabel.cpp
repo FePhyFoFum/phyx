@@ -79,7 +79,7 @@ void Relabel::store_name_lists (const std::string& cnamesf,
 void Relabel::relabel_tree (Tree * tr) {
     // keep track of matches
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getExternalNodeCount(); i++) {
         std::string str = tr->getExternalNode(i)->getName();
         if (name_map_.find(str) != name_map_.end()) {
             //std::cout << "Tree label '" << str << "' found in name list!" << std::endl;
@@ -96,7 +96,7 @@ void Relabel::relabel_tree (Tree * tr) {
         }  
     }
     // do internal labels as well. be quieter here (don't expect internal nodes to have labels)
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         std::string str = tr->getInternalNode(i)->getName();
         if (str.empty()) {
             continue;

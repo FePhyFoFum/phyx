@@ -185,7 +185,7 @@ int main(int argc, char * argv[]) {
             v.resize(it-v.begin());
             std::map<std::string, Node *> diffnds;
             std::vector<std::string> diffnms; 
-            for (int i = 0; i <bigtree->getExtantNodeCount(); i++) {
+            for (unsigned int i = 0; i < bigtree->getExtantNodeCount(); i++) {
                 if (std::count(v.begin(), v.end(), bigtree->getExternalNode(i)->getName()) == 1) {
                     diffnms.push_back(bigtree->getExternalNode(i)->getName());
                 }

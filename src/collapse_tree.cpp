@@ -45,7 +45,7 @@ void Collapser::collapse_edges (Tree * tr) {
             loop_count++;
             //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount()
             //  << " internal nodes to consider." << std::endl;
-            for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+            for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
                 std::string str = m->getName();
                 if (str.empty()) {

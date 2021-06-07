@@ -17,7 +17,7 @@ private:
     // constant values
     Tree * tree_;
     
-    int seqlen_;
+    unsigned int seqlen_;
     int nreps_;
     long int seed_;
     int nstates_; // number of character states
@@ -77,7 +77,7 @@ private:
     std::vector<float> set_site_rates ();
     
 public:
-    SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
+    SequenceGenerator (const unsigned int&seqlength, const std::vector<double>& basefreq,
         std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
         const int& nreps, const long int& seed, const float& alpha, const float& pinvar,
         const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,

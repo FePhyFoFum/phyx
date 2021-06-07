@@ -260,7 +260,7 @@ int main(int argc, char * argv[]) {
     std::map<int, std::string> name_st_index;
     // added to make sure we have all the names if it is partially overlapping
     for (auto & tree : trees) {
-        for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+        for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
             std::string tname = tree->getExternalNode(i)->getName();
             if (find(names.begin(), names.end(), tname) == names.end()) {
                 name_index[tname] = i;
@@ -297,7 +297,7 @@ int main(int argc, char * argv[]) {
             not_included_i.push_back(name_index[not_included_nm]);
         }
         std::vector<int> bp_count_tree; // for edgewise to make sure we don't double count
-        for (int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
+        for (unsigned int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
             std::vector<std::string> nms = trees[i]->getInternalNode(j)->get_leave_names();
             // skip the root
             if (nms.size() == rt_nms.size()) {
@@ -413,7 +413,7 @@ int main(int argc, char * argv[]) {
             if (numch > 2) {
                 unrooted = true;
             }
-            for (int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
+            for (unsigned int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
                 // if we are using a cutoff, skip the edge that is below the num
                 if (cutoff) {
                     if (trees[i]->getInternalNode(j)->getName().length() < 1) {
@@ -624,7 +624,7 @@ int main(int argc, char * argv[]) {
         mot = mot +".pxbpmapped.tre";
         auto * mofstr = new std::ofstream(mot);
         std::ostream * mpoos = mofstr;
-        for (int i = 0; i < maptree->getInternalNodeCount(); i++) {
+        for (unsigned int i = 0; i < maptree->getInternalNodeCount(); i++) {
             if (maptree->getInternalNode(i) == maptree->getRoot()) {
                 continue;
             }

@@ -14,7 +14,7 @@ private:
     double BL_; // branch length, points to parent
     double height_; // could be from tip or from root. need to be consistent
     double depth_; // not being used. should be
-    int number_;
+    unsigned int number_;
     std::string name_;
     Node * parent_;
     // children are _immediate_ children, not all descendants
@@ -28,7 +28,8 @@ private:
 public:
     Node ();
     explicit Node (Node * inparent);
-    Node (double bl, int innumber, std::string inname, Node * inparent);
+    // not used
+    Node (double bl, unsigned int innumber, std::string inname, Node * inparent);
     
     int get_num_leaves ();
     std::vector<Node*> get_leaves ();
@@ -43,8 +44,8 @@ public:
     bool isKnuckle ();
     bool hasParent ();
     void setParent (Node& p);
-    int getNumber () const;
-    void setNumber (int n);
+    unsigned int getNumber () const;
+    void setNumber (unsigned int n);
     bool getPainted () const;
     void setPainted (bool p);
     double getBL () const;
@@ -56,7 +57,7 @@ public:
     bool hasChild (Node& test);
     bool addChild (Node& c);
     bool removeChild (Node& c);
-    Node * getChild (int c);
+    Node * getChild (unsigned int c);
     std::string getName () const;
     std::string getComment () const;
     void setName (std::string s);
@@ -65,7 +66,7 @@ public:
     std::string getNewick (bool bl, const std::string& obj);
     std::string getPaintedNewick (bool bl);
     Node * getParent () const;
-    int getChildCount ();
+    unsigned int getChildCount ();
     void assocObject (const std::string& name, NodeObject& obj);
     void assocDoubleVector (const std::string& name, std::vector<Superdouble>& obj);
     std::vector<Superdouble> * getDoubleVector (const std::string& name);

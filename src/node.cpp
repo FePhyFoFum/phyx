@@ -33,7 +33,8 @@ Node::Node (Node * inparent):BL_(0.0), height_(0.0), depth_(0.0), number_(0), na
 }
 
 
-Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl),
+// not used
+Node::Node (double bl, unsigned int innumber, std::string inname, Node * inparent):BL_(bl),
         height_(0.0), depth_(0.0), number_(innumber), name_(std::move(inname)),
         parent_(inparent), children_(std::vector<Node *> ()),
         assoc_(std::map<std::string, NodeObject *>()),
@@ -102,12 +103,12 @@ void Node::setParent (Node& p) {
 }
 
 
-int Node::getNumber () const {
+unsigned int Node::getNumber () const {
     return number_;
 }
 
 
-void Node::setNumber (int n) {
+void Node::setNumber (unsigned int n) {
     number_ = n;
 }
 
@@ -192,7 +193,7 @@ bool Node::removeChild (Node& c) {
 }
 
 
-Node * Node::getChild (int c) {
+Node * Node::getChild (unsigned int c) {
     return children_.at(static_cast<unsigned long>(c));
 }
 
@@ -220,7 +221,7 @@ void Node::setComment (std::string s) {
 // since nexus writer uses this, using stricter nexus punctuation
 std::string Node::getNewick (bool bl) {
     std::string ret;
-    for (int i = 0; i < this->getChildCount(); i++) {
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
         }
@@ -254,8 +255,8 @@ std::string Node::getNewick (bool bl) {
 // recursive
 std::string Node::getPaintedNewick (bool bl) {
     std::string ret;
-    std::vector<int> paintedchildren;
-    for (int i = 0; i < this->getChildCount(); i++) {
+    std::vector<unsigned int> paintedchildren;
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
         if (this->getChild(i)->getPainted()) {
             paintedchildren.push_back(i);
         }
@@ -307,7 +308,7 @@ std::string Node::getPaintedNewick (bool bl) {
  */
 std::string Node::getNewick (bool bl, const std::string& obj) {
     std::string ret;
-    for (int i = 0; i < this->getChildCount(); i++) {
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
         }
@@ -340,8 +341,8 @@ Node * Node::getParent () const {
 }
 
 
-int Node::getChildCount () {
-    return static_cast<int>(children_.size());
+unsigned int Node::getChildCount () {
+    return static_cast<unsigned int>(children_.size());
 }
 
 
@@ -388,7 +389,7 @@ int Node::get_num_leaves () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -410,7 +411,7 @@ std::vector<Node*> Node::get_leaves () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -432,7 +433,7 @@ std::set<Node*> Node::get_leaves_set () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -451,7 +452,7 @@ std::set<std::string> Node::get_leave_names_set () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -470,7 +471,7 @@ std::vector<std::string> Node::get_leave_names () {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {

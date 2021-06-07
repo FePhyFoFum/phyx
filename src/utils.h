@@ -101,7 +101,7 @@ template<typename T> std::vector<T> in_first_not_second (std::vector<T> firstv, 
     
     typename std::vector<T>::iterator it;
     it = std::set_difference(firstv.begin(), firstv.end(), secondv.begin(), secondv.end(), res.begin());
-    res.resize(it-res.begin());
+    res.resize(static_cast<unsigned long>(it-res.begin()));
     
     //std::remove_copy_if(firstv.begin(), firstv.end(), std::back_inserter(res),
     //    [&secondv](const T& arg) {return (std::find(secondv.begin(), secondv.end(), arg) != secondv.end());});
@@ -113,9 +113,10 @@ std::vector<double> string_v_to_double_v (const std::vector<std::string>& in);
 //------------------------------------------------------------------------//
 
 std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates);
-int random_int_range (int min, int max);
 
-std::vector<unsigned int> sample_without_replacement( const int& numTotal,const int& numSample);
+unsigned int random_int_range (const unsigned int& min, const unsigned int& max);
+std::vector<unsigned int> sample_without_replacement (const unsigned int& numTotal,
+        const unsigned int& numSample);
 
 void print_error (char * pname);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB);

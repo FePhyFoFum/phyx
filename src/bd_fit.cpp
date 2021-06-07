@@ -13,7 +13,7 @@
 
 
 // hrm a debugging thing i gather
-int counter = 0;
+//int counter = 0;
 
 
 typedef struct {
@@ -149,7 +149,7 @@ void BDFit::fit_bd() {
 double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad,
     void *data) {
     // count iterations for optimization of algorithm
-    counter++;
+    //counter++;
     
     auto d = static_cast<analysis_data *>(data);
     

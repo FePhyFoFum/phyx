@@ -47,7 +47,7 @@ void StateReconstructor::set_tree (Tree * tr) {
     if (verbose) {
         std::cout << "initializing nodes..." << std::endl;
     }
-    for (int i = 0; i < tree->getNodeCount(); i++) {
+    for (unsigned int i = 0; i < tree->getNodeCount(); i++) {
         if (tree->getNode(i)->getBL()<MINBL) {
             tree->getNode(i)->setBL(MINBL * 100);
         }
@@ -64,7 +64,7 @@ void StateReconstructor::set_tree (Tree * tr) {
     if (use_periods) {
         std::cout << "initializing branch segments..." << std::endl;
         tree->setHeightFromTipToNodes();
-        for (int i = 0; i < tree->getNodeCount(); i++) {
+        for (unsigned int i = 0; i < tree->getNodeCount(); i++) {
             if (tree->getNode(i)->hasParent()) {
                 std::vector<double> pers(periods);
                 double anc = tree->getNode(i)->getParent()->getHeight();
@@ -104,7 +104,7 @@ void StateReconstructor::set_tree (Tree * tr) {
  * this will setup the distconds and ancdistconds for each segment
 */
 void StateReconstructor::set_periods_model () {
-    for (int i = 0; i < tree->getNodeCount(); i++) {
+    for (unsigned int i = 0; i < tree->getNodeCount(); i++) {
         std::vector<BranchSegment> * tsegs = tree->getNode(i)->getSegVector();
         for (unsigned int j = 0; j < tsegs->size(); j++) {
             tsegs->at(j).setModel(&rm_periods[tsegs->at(j).getPeriod()]);
@@ -361,7 +361,7 @@ void StateReconstructor::reverse (Node * node) {
         }
         node->assocObject(revB,*revconds);
         delete revconds;
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             reverse(node->getChild(i));
         }
     } else {
@@ -427,7 +427,7 @@ void StateReconstructor::reverse (Node * node) {
         }
         node->assocObject(revB,*revconds); // leak
         delete revconds;
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             reverse(node->getChild(i));
         }
     }
@@ -477,7 +477,7 @@ std::vector<double> StateReconstructor::calculate_ancstate_reverse (Node& node) 
 void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
     stochastic = true;
     // calculate and store local expectation matrix for each branch length
-    for (int k = 0; k < tree->getNodeCount(); k++) {
+    for (unsigned int k = 0; k < tree->getNodeCount(); k++) {
         double dur =  tree->getNode(k)->getBL();
         cx_mat eigvec(nstates, nstates);
         eigvec.fill(0);
@@ -548,7 +548,7 @@ void StateReconstructor::prepare_stochmap_reverse_all_nodes (int from, int to) {
 void StateReconstructor::prepare_stochmap_reverse_all_nodes_all_matrices () {
     stochastic = true;
     // calculate and store local expectation matrix for each branch length
-    for (int k = 0; k < tree->getNodeCount(); k++) {
+    for (unsigned int k = 0; k < tree->getNodeCount(); k++) {
         double dur =  tree->getNode(k)->getBL();
         cx_mat eigvec(nstates, nstates);
         eigvec.fill(0);

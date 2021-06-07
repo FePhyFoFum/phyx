@@ -175,13 +175,13 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                for (int i = 0; i < tree->getInternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
@@ -204,13 +204,13 @@ int main(int argc, char * argv[]) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
             if (tree != nullptr) {
-                for (int i = 0; i < tree->getInternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");

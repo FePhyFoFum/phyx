@@ -95,7 +95,7 @@ std::vector<unsigned int> SequenceSampler::get_bootstrap_sites (const unsigned i
     std::vector<unsigned int> randsites(static_cast<unsigned long>(numchar));
     
     for (unsigned int i = 0; i < numchar; i++) {
-        int randnum = random_int_range(0, (static_cast<int>(numchar) - 1));
+        unsigned int randnum = random_int_range(0, numchar - 1);
         randsites[static_cast<unsigned long>(i)] = static_cast<unsigned int>(randnum);
     }
     sort(randsites.begin(), randsites.end());
@@ -214,16 +214,18 @@ void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens
     partition_names_.push_back(tokens[1]);
     //std::cout << "Processing partition '" << tokens[1] << "': ";
     
+    // why is there not std::stou?!?
+    
     if (is_number(tokens[2])) {
-        start = std::stoul(tokens[2].c_str()) - 1;
+        start = static_cast<unsigned int>(std::stoul(tokens[2].c_str())) - 1;
         //std::cout << "start = " << start;
     }
     if (is_number(tokens[3])) {
-        stop = std::stoul(tokens[3].c_str()) - 1;
+        stop =  static_cast<unsigned int>(std::stoul(tokens[3].c_str())) - 1;
         //std::cout << "; stop = " << stop;
     }
     if ((static_cast<int>(tokens.size()) == 5) && is_number(tokens[4])) {
-        interval = std::stoul(tokens[4].c_str());
+        interval =  static_cast<unsigned int>(std::stoul(tokens[4].c_str()));
         //std::cout << "; interval = " << interval;
     }
     //std::cout << std::endl;

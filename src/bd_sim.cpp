@@ -110,7 +110,7 @@ Tree * BirthDeathSimulator::make_tree (const bool& show_dead) {
         delete_dead_nodes();
     }
 
-    for (int i = 0; i < tree_->getExternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tree_->getExternalNodeCount(); i++) {
         totallength += tree_->getExternalNode(i)->getBL();
         std::stringstream out;
         out << count;
@@ -214,7 +214,7 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
     Node * tparent = innode->getParent();
     if (tparent != root_) {
         Node * child = nullptr;
-        for (int i = 0; i < tparent->getChildCount(); i++) {
+        for (unsigned int i = 0; i < tparent->getChildCount(); i++) {
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
             }
@@ -228,7 +228,7 @@ void BirthDeathSimulator::delete_a_node (Node * innode) {
         child->setBL(child->getBL()+tparent->getBL());
     } else {
         Node * child = nullptr;
-        for (int i = 0; i < tparent->getChildCount(); i++) {
+        for (unsigned int i = 0; i < tparent->getChildCount(); i++) {
             if (tparent->getChild(i) != innode) {
                 child = tparent->getChild(i);
             }

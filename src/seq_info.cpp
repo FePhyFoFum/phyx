@@ -159,7 +159,7 @@ void SeqInfo::read_in_alignment () {
             exit(1);
         }
     }
-    num_taxa_ = static_cast<int>(seqs_.size());
+    num_taxa_ = static_cast<unsigned int>(seqs_.size());
 }
 
 
@@ -370,7 +370,7 @@ void SeqInfo::return_missing () {
         (*poos_) << std::right << std::setw(colWidth) << "Proportion" << std::endl;
         
         // return nchar for individual seqs
-        for (unsigned int i = 0; i < static_cast<unsigned int>(num_taxa_); i++) {
+        for (unsigned int i = 0; i < num_taxa_; i++) {
             unsigned long diff = longest_tax_label_ - taxon_labels_[i].size();
             (*poos_) << taxon_labels_[i];
             if (diff > 0) {
@@ -421,7 +421,7 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
         } else { // individual lengths
             collect_taxon_labels();
             longest_tax_label_ = get_longest_label(taxon_labels_);
-            for (unsigned int i = 0; i < static_cast<unsigned int>(num_taxa_); i++) {
+            for (unsigned int i = 0; i < num_taxa_; i++) {
                 unsigned long diff = longest_tax_label_ - taxon_labels_[i].size();
                 (*poos_) << taxon_labels_[i];
                 if (diff > 0) {

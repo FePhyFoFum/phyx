@@ -406,7 +406,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
     TreeReader tr;
     tree = tr.readTree(tstring);
     if (ttexists) {
-        for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+        for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
             tree->getExternalNode(i)->setName((*trans)[tree->getExternalNode(i)->getName()]);
         }
     }

@@ -85,7 +85,7 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
     double sigma = 1; // x[0];//1;
     analysis_data_tree * d = (analysis_data_tree *) data;
     Tree * tr = d->tree;
-    for (int i = 0; i < tr->getNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getNodeCount(); i++) {
         if (tr->getNode(i) != tr->getRoot()) {
             tr->getNode(i)->setBL(x[i+1]);
         }
@@ -162,10 +162,11 @@ std::vector<double> optimize_single_rate_bm_ou_nlopt (rowvec& _x, mat& _vcv) {
 }
 
 
+// not used
 std::vector<double> optimize_single_rate_bm_bl (Tree * tr) {
     analysis_data_tree a;
     a.tree = tr;
-    int n = 1+tr->getNodeCount() - 1;
+    int n = static_cast<int>(1 + tr->getNodeCount() - 1); // ?!?
     //nlopt::opt opt(nlopt::LN_NELDERMEAD, n);
     //BOBYQA is better but the other finishes more
     //nlopt::opt opt(nlopt::LN_BOBYQA,n);
@@ -183,7 +184,7 @@ std::vector<double> optimize_single_rate_bm_bl (Tree * tr) {
     nlopt::result result = opt.optimize(x, minf);
     std::cout << result << std::endl;
     std::vector<double> results;
-    for (int i = 0; i < tr->getNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getNodeCount(); i++) {
         if (tr->getNode(i) != tr->getRoot()) {
             tr->getNode(i)->setBL(x[i+1]);
         }
