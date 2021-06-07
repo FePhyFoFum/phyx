@@ -16,10 +16,10 @@
 //int counter = 0;
 
 
-typedef struct {
+using analysis_data = struct {
     int N = 0;
     std::vector<double> bt;
-} analysis_data;
+};
 
 
 BDFit::BDFit (Tree * intree, std::string& modelflavour):model_(std::move(modelflavour)),

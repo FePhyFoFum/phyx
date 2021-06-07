@@ -8,7 +8,8 @@
 #include "edlib.h"
 
 
-typedef uint64_t Word;
+//typedef uint64_t Word;
+using Word = uint64_t;
 static const int WORD_SIZE = sizeof(Word) * 8; // Size of Word in bits
 static const Word WORD_1 = static_cast<Word>(1);
 static const Word HIGH_BIT_MASK = WORD_1 << (WORD_SIZE - 1);  // 100..00
