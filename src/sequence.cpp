@@ -20,7 +20,7 @@ Sequence::Sequence ():length_(0), aligned_(), alphabet_(NA) {}
 
 
 Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):id_(std::move(_id)),
-        seq_(std::move(_seq)), alphabet_(NA) {
+        seq_(std::move(_seq)), aligned_(), alphabet_(NA) {
     length_ = static_cast<unsigned int>(seq_.size());
     set_aligned(_aligned);
     infer_alpha();
@@ -29,7 +29,7 @@ Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):id_(std::m
 
 // *** this doesn't seem to be used ***
 Sequence::Sequence (std::string _id, std::string _seq):id_(std::move(_id)),
-        seq_(std::move(_seq)) {
+        seq_(std::move(_seq)), alphabet_(NA) {
     length_ = static_cast<unsigned int>(seq_.size());
     aligned_ = false;
     infer_alpha();
