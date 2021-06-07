@@ -210,32 +210,32 @@ void BirthDeathSimulator::delete_dead_nodes () {
 }
 
 
+// this implicitly assumes a binary tree, which will be true bc simulation
 void BirthDeathSimulator::delete_a_node (Node * innode) {
     Node * tparent = innode->getParent();
     if (tparent != root_) {
-        Node * child = nullptr;
         for (unsigned int i = 0; i < tparent->getChildCount(); i++) {
             if (tparent->getChild(i) != innode) {
-                child = tparent->getChild(i);
+                Node * child = tparent->getChild(i);
+                Node * pparent = tparent->getParent();
+                tparent->removeChild(*innode);
+                tparent->removeChild(*child);
+                pparent->removeChild(*tparent);
+                pparent->addChild(*child);
+                child->setParent(*pparent);
+                child->setBL(child->getBL()+tparent->getBL());
             }
         }
-        Node * pparent = tparent->getParent();
-        tparent->removeChild(*innode);
-        tparent->removeChild(*child);
-        pparent->removeChild(*tparent);
-        pparent->addChild(*child);
-        child->setParent(*pparent);
-        child->setBL(child->getBL()+tparent->getBL());
+        
     } else {
-        Node * child = nullptr;
         for (unsigned int i = 0; i < tparent->getChildCount(); i++) {
             if (tparent->getChild(i) != innode) {
-                child = tparent->getChild(i);
+                Node * child = tparent->getChild(i);
+                tparent->removeChild(*innode);
+                tree_->setRoot(child);
+                root_ = child;
             }
         }
-        tparent->removeChild(*innode);
-        tree_->setRoot(child);
-        root_ = child;
     }
 }
 
