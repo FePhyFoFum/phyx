@@ -218,7 +218,7 @@ int main(int argc, char * argv[]) {
         // *** check list of names to keep is at least 2
         // don't assume all trees have the same leaf set
         std::vector<std::string> toKeep;
-        int numLeaves;
+        unsigned int numLeaves;
         if (ft == 0) {
             std::map<std::string, std::string> translation_table;
             bool ttexists;
@@ -230,7 +230,7 @@ int main(int argc, char * argv[]) {
                 if (going) {
                     toKeep = get_complement_tip_set(tree, names);
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - static_cast<int>(toKeep.size()) > 1) {
+                    if (numLeaves - static_cast<unsigned int>(toKeep.size()) > 1) {
                         if (is_monophyletic(tree, names, ignore_missing)) {
                             (*poos) << "true" << std::endl;
                         } else {
@@ -247,7 +247,7 @@ int main(int argc, char * argv[]) {
                 if (going) {
                     toKeep = get_complement_tip_set(tree, names);
                     numLeaves = tree->getExternalNodeCount();
-                    if (numLeaves - static_cast<int>(toKeep.size()) > 1) {
+                    if (numLeaves - static_cast<unsigned int>(toKeep.size()) > 1) {
                         if (is_monophyletic(tree, names, ignore_missing)) {
                             (*poos) << "true" << std::endl;
                         } else {

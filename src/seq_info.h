@@ -34,12 +34,13 @@ private:
     // new stuff
     std::vector<Sequence> seqs_;
     std::vector<std::string> taxon_labels_;
-    std::vector<int> seq_lengths_;
-    std::vector<int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
-    std::vector<int> missing_counts_; // for individual seqs
-    std::vector< std::vector<int> > indiv_char_counts_;
+    std::vector<unsigned int> seq_lengths_;
+    std::vector<unsigned int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
+    std::vector<unsigned int> missing_counts_; // for individual seqs
+    std::vector< std::vector<unsigned int> > indiv_char_counts_;
     bool is_aligned_;
-    int seq_length_;
+    int seq_length_reader_; // signed variable used by alignment readers
+    unsigned int aligned_length_; // actual stored value for class
     std::istream* pios_;
     std::ostream* poos_;
     unsigned int longest_tax_label_;

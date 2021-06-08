@@ -79,7 +79,7 @@ double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& d
     double minD = 99999999999.99;
     auto numseqs = static_cast<unsigned long>(dmatrix.size());
     for (unsigned long i = 0; i < (numseqs - 1); i++) {
-        unsigned long idx = static_cast<unsigned long>(std::min_element(dmatrix[i].begin() + (i + 1),
+        auto idx = static_cast<unsigned long>(std::min_element(dmatrix[i].begin() + (i + 1),
                 dmatrix[i].end()) - dmatrix[i].begin());
         if (dmatrix[i][idx] < minD) {
             minD = dmatrix[i][idx];

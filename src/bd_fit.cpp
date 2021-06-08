@@ -17,7 +17,7 @@
 
 
 using analysis_data = struct {
-    int N = 0;
+    unsigned int N = 0;
     std::vector<double> bt;
 };
 
@@ -93,7 +93,7 @@ void BDFit::fit_yule () {
 
 void BDFit::fit_bd() {
     branching_times_.resize(static_cast<unsigned int>(nintnodes_));
-    for (int i = 0; i < static_cast<int>(nintnodes_); i++) {
+    for (unsigned int i = 0; i < static_cast<unsigned int>(nintnodes_); i++) {
         branching_times_[static_cast<unsigned long>(i)] = tree_->getInternalNode(i)->getHeight();
     }
     
@@ -153,7 +153,7 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
     
     auto d = static_cast<analysis_data *>(data);
     
-    int N = d->N;
+    unsigned int N = d->N;
     std::vector<double> bt = d->bt;
     
     double lik = std::lgamma(N) + (N - 2) * log(x[0]) + N * log(1 - x[1]);

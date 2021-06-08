@@ -260,8 +260,8 @@ int main(int argc, char * argv[]) {
     std::map<int, std::string> name_st_index;
     // added to make sure we have all the names if it is partially overlapping
     for (auto & tree : trees) {
-        for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
-            std::string tname = tree->getExternalNode(i)->getName();
+        for (int i = 0; i < static_cast<int>(tree->getExternalNodeCount()); i++) {
+            std::string tname = tree->getExternalNode(static_cast<unsigned int>(i))->getName();
             if (find(names.begin(), names.end(), tname) == names.end()) {
                 name_index[tname] = i;
                 names.push_back(tname);
@@ -278,8 +278,8 @@ int main(int argc, char * argv[]) {
     for (unsigned long i = 0; i < numtrees; i++) {
         // get the biparts
         bool unrooted = false;
-        int numch = trees[i]->getRoot()->getChildCount();
-        if (numch > 2) {
+        unsigned int numch = trees[i]->getRoot()->getChildCount();
+        if (numch > 2u) {
             unrooted = true;
         }
         std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
@@ -346,7 +346,8 @@ int main(int argc, char * argv[]) {
                     bp_count.push_back(1);
                 } else {
                     // get index 
-                    size_t index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
+                    auto index = static_cast<size_t>(find(biparts.begin(),
+                            biparts.end(), nms_i)-biparts.begin());
                     bp_count[index] += 1;
                 }
                 // do the otherside for unrooted
@@ -358,7 +359,8 @@ int main(int argc, char * argv[]) {
                         not_included.push_back(not_included_i);
                         bp_count.push_back(1);
                     } else {
-                        size_t index = find(biparts.begin(), biparts.end(), nms_i2)-biparts.begin();
+                        auto index = static_cast<size_t>(find(biparts.begin(),
+                                biparts.end(), nms_i2)-biparts.begin());
                         bp_count[index] += 1;
                     }
                 }
@@ -381,9 +383,11 @@ int main(int argc, char * argv[]) {
                     // get index 
                     size_t index;
                     if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 1) {
-                        index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
+                        index = static_cast<size_t>(find(biparts.begin(),
+                                biparts.end(), nms_i)-biparts.begin());
                     } else {
-                        index = find(biparts.begin(), biparts.end(), nms_i2)-biparts.begin();
+                        index = static_cast<size_t>(find(biparts.begin(),
+                                biparts.end(), nms_i2)-biparts.begin());
                     }
                     // need to accommodate that it can be reflected in the edgewise case
                     if (static_cast<int>(std::count(bp_count_tree.begin(), bp_count_tree.end(), index)) == 0) {
@@ -409,8 +413,8 @@ int main(int argc, char * argv[]) {
         std::vector<std::vector<int> > matrix(numtrees, cols);
         for (unsigned long i = 0; i < numtrees; i++) {
             bool unrooted = false;
-            int numch = trees[i]->getRoot()->getChildCount();
-            if (numch > 2) {
+            unsigned int numch = trees[i]->getRoot()->getChildCount();
+            if (numch > 2u) {
                 unrooted = true;
             }
             for (unsigned int j = 0; j < trees[i]->getInternalNodeCount(); j++) {
@@ -441,12 +445,15 @@ int main(int argc, char * argv[]) {
                 size_t index;
                 if (edgewisealltaxa) {
                     if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 1) {
-                        index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
+                        index = static_cast<size_t>(find(biparts.begin(), biparts.end(),
+                                nms_i)-biparts.begin());
                     } else {
-                        index = find(biparts2.begin(), biparts2.end(), nms_i)-biparts2.begin();
+                        index = static_cast<size_t>(find(biparts2.begin(), biparts2.end(),
+                                nms_i)-biparts2.begin());
                     } 
                 } else {
-                    index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
+                    index = static_cast<size_t>(find(biparts.begin(), biparts.end(),
+                            nms_i) - biparts.begin());
                 }
                 matrix[i][index] = 1;
                 if (unrooted && trees[i]->getInternalNode(j)->getParent() == trees[i]->getRoot()) {
@@ -499,7 +506,7 @@ int main(int argc, char * argv[]) {
         // there is a one if the bipart has the name
         // need to add the -1 for bipart2
         std::vector<int> cols2(names.size(), 0);
-        std::vector<std::vector<int> > logical_matrix (biparts.size(), cols2);
+        std::vector<std::vector<int> > logical_matrix(biparts.size(), cols2);
         for (unsigned int i = 0; i < biparts.size(); i++) {
             for (unsigned int j = 0; j < names.size(); j++) {
                 if (std::count(biparts[i].begin(), biparts[i].end(), name_index[names[j]]) != 0) {
@@ -519,17 +526,17 @@ int main(int argc, char * argv[]) {
                     continue;
                 }
             }
-            unsigned int sumc = sum_matrix_col(matrix, i);
+            auto sumc = static_cast<unsigned int>(sum_matrix_col(matrix, i));
             if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
                 std::vector<std::string> nms;
                 for (int k : biparts[i]) {
-                    nms.push_back(name_st_index[biparts[i][k]]);
+                    nms.push_back(name_st_index[biparts[i][static_cast<unsigned long>(k)]]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (int k : biparts2[i]) {
-                        nms_o.push_back(name_st_index[biparts2[i][k]]);
+                        nms_o.push_back(name_st_index[biparts2[i][static_cast<unsigned long>(k)]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
                 }
@@ -540,13 +547,13 @@ int main(int argc, char * argv[]) {
                     (*poos) << "\n\tCONFLICTS:" << std::endl;
                 }
                 for (unsigned int j = 0; j < biparts.size(); j++) {
-                    unsigned int sumc2 = sum_matrix_col(matrix, j);
+                    auto sumc2 = static_cast<unsigned int>(sum_matrix_col(matrix, j));
                     if (i != j && sumc2 != trees.size() && sumc2 > (smallest_proportion*trees.size())) {
                         bool logitest = test_logical(logical_matrix[i], logical_matrix[j], edgewisealltaxa);
                         if (logitest) {
                             std::vector<std::string> nms2;
                             for (int k : biparts[j]) {
-                                nms2.push_back(name_st_index[biparts[j][k]]);
+                                nms2.push_back(name_st_index[biparts[j][static_cast<unsigned long>(k)]]);
                             }    
                             totalcount += bp_count[j];
                             conflict_nums.push_back(bp_count[j]);
@@ -555,7 +562,7 @@ int main(int argc, char * argv[]) {
                                 if (edgewisealltaxa) {
                                     std::vector<std::string> nms_o;
                                     for (int k : biparts2[j]) {
-                                        nms_o.push_back(name_st_index[biparts2[j][k]]);
+                                        nms_o.push_back(name_st_index[biparts2[j][static_cast<unsigned long>(k)]]);
                                     }
                                     (*poos) << "| " << get_string_vector(nms_o);
                                 }
@@ -600,7 +607,7 @@ int main(int argc, char * argv[]) {
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (int k : biparts2[i]) {
-                        nms_o.push_back(name_st_index[biparts2[i][k]]);
+                        nms_o.push_back(name_st_index[biparts2[i][static_cast<unsigned long>(k)]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
                 }
@@ -639,14 +646,17 @@ int main(int argc, char * argv[]) {
             bool found = false;
             if (edgewisealltaxa) {
                 if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 1) {
-                    index = find(biparts.begin(), biparts.end(), nms_i)-biparts.begin();
+                    index = static_cast<size_t>(find(biparts.begin(), biparts.end(),
+                            nms_i)-biparts.begin());
                     found = true;
                 } else {
-                    index = find(biparts2.begin(), biparts2.end(), nms_i)-biparts2.begin();
+                    index = static_cast<size_t>(find(biparts2.begin(), biparts2.end(),
+                            nms_i)-biparts2.begin());
                     found = true;
                 } 
             } else {
-                index = find(biparts.begin(), biparts.end(), nms_i) - biparts.begin();
+                index = static_cast<size_t>(find(biparts.begin(), biparts.end(),
+                        nms_i) - biparts.begin());
                 found = true;
             }
             if (!found) {

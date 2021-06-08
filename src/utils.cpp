@@ -405,7 +405,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
 //------------------------------------------------------------------------//
 // simple math on vectors
 
-int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
+int sum_matrix_col (std::vector<std::vector<int> >& matrix, unsigned int col) {
     int x = 0;
     for (auto & mati : matrix) {
         x += mati[static_cast<unsigned long>(col)];
@@ -475,6 +475,12 @@ double sum (std::vector<double>& in) {
 
 
 int sum (std::vector<int>& in) {
+    return std::accumulate(in.begin(), in.end(), 0);
+}
+
+
+// hrm look into templated function
+unsigned int sum (std::vector<unsigned int>& in) {
     return std::accumulate(in.begin(), in.end(), 0);
 }
 

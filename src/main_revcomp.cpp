@@ -101,7 +101,7 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
 }
 
 int main(int argc, char * argv[]) {
-    srand (time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
     log_call(argc, argv);
     
     bool fileset = false;

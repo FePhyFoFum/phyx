@@ -61,6 +61,7 @@ template<typename T> void parse_comma_list (std::string& str, std::vector<T>& re
 // do stuff over vectors
 double sum (std::vector<double>& in);
 int sum (std::vector<int>& in);
+unsigned int sum (std::vector<unsigned int>& in);
 
 int count_zeros (std::vector<int>& in);
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in);
@@ -122,7 +123,7 @@ void print_error (char * pname);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise);
 
-int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col);
+int sum_matrix_col (std::vector<std::vector<int> >& matrix, unsigned int col);
 int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col);
 
 std::string get_string_vector (std::vector<std::string>& sts);

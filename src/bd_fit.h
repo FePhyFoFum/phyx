@@ -30,7 +30,7 @@ private:
     // why are the following doubles?!? for eventual maths, obvs, but seems stupid here
     double nintnodes_;
     double nspeciation_;
-    int ntips_;
+    unsigned int ntips_;
     std::vector<double> branching_times_;
     double rootheight_;
     

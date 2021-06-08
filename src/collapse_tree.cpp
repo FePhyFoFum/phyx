@@ -51,7 +51,7 @@ void Collapser::collapse_edges (Tree * tr) {
                 if (str.empty()) {
                     //std::cout << "Whoops. This node has no support value." << std::endl;
                 } else {
-                    float cursup = std::stof(str);
+                    double cursup = std::stod(str);
                     if (!scale_set_) {
                         guess_scale(cursup);
                     }

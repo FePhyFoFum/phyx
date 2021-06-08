@@ -194,11 +194,11 @@ int main(int argc, char * argv[]) {
     
     // magic number: if number to be remove is > than this, use the induced tree procedure instead
     // this is demonstrated here: https://github.com/FePhyFoFum/phyx/issues/74
-    int MAX_RMT = 50;
+    unsigned int MAX_RMT = 50;
     
     bool going = true;
-    int numLeaves;
-    int num_names = 0;
+    unsigned int numLeaves;
+    unsigned int num_names = 0;
     std::vector<std::string> toKeep; // if trace is used
     std::vector<std::string> currNames; // keep original copy of names in case sampling differs across trees
     
@@ -226,7 +226,7 @@ int main(int argc, char * argv[]) {
                     currNames = get_names_in_tree(tree, currNames);
                 }
                 
-                num_names = static_cast<int>(currNames.size());
+                num_names = static_cast<unsigned int>(currNames.size());
                 
                 if (num_names == 0) {
                     if (!silent) {
@@ -268,7 +268,7 @@ int main(int argc, char * argv[]) {
                     currNames = get_names_in_tree(tree, currNames);
                 }
                 
-                num_names = static_cast<int>(currNames.size());
+                num_names = static_cast<unsigned int>(currNames.size());
                 
                 if (num_names == 0) {
                     if (!silent) {

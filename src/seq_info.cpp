@@ -17,7 +17,8 @@ SeqInfo::SeqInfo (std::istream* pios, std::ostream* poos, bool& indiv,
         is_protein_(false), is_multi_(false), is_binary_(false),
         alpha_set_(false), alpha_name_(""), seq_type_(""), gap_('-'),
         missing_('?'), num_taxa_(0), percent_missing_(0.0),
-        is_aligned_(false), seq_length_(0), longest_tax_label_(0) {
+        is_aligned_(false), seq_length_reader_(0), aligned_length_(0),
+        longest_tax_label_(0) {
     // maybe get rid of this? how often is inference wrong?
     if (force_protein) {
         is_protein_ = true;
@@ -53,9 +54,10 @@ void SeqInfo::count_chars (std::string& seq) {
     unsigned int sum = 0;
     seq = string_to_upper(seq);
     if (output_indiv_) {
-        std::vector<int> icounts(seq_chars_.length(), 0);
+        std::vector<unsigned int> icounts(seq_chars_.length(), 0);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(), seq_chars_[i]));
+            auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(),
+                    seq_chars_[i]));
             char_counts_[i] += num;
             icounts[i] += num;
             sum += num;
@@ -71,7 +73,8 @@ void SeqInfo::count_chars (std::string& seq) {
         //  icounts.begin(), char_counts_.begin(), std::plus<int>());
     } else {
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(), seq_chars_[i]));
+            auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(),
+                    seq_chars_[i]));
             char_counts_[i] += num;
             sum += num;
         }
@@ -98,7 +101,7 @@ void SeqInfo::read_in_alignment () {
     if (file_type_ == "nexus") {
         //std::cout << "Trying to read in a Nexus alignment..." << std::endl;
         bool is_interleaved = false;
-        get_nexus_alignment_properties(*pios_, file_ntax, seq_length_,
+        get_nexus_alignment_properties(*pios_, file_ntax, seq_length_reader_,
                 is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
         // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
         set_datatype();
@@ -115,17 +118,17 @@ void SeqInfo::read_in_alignment () {
             }
         } else {
             // need to read in everything at once
-            seqs_ = read_interleaved_nexus(*pios_, file_ntax, seq_length_);
+            seqs_ = read_interleaved_nexus(*pios_, file_ntax, seq_length_reader_);
         }
     } else {
         bool complicated_phylip = false;
         // check if we are dealing with a complicated phylip format
         if (file_type_ == "phylip") {
-            get_phylip_dimensions(retstring, file_ntax, seq_length_);
-            complicated_phylip = is_complicated_phylip(*pios_, seq_length_);
+            get_phylip_dimensions(retstring, file_ntax, seq_length_reader_);
+            complicated_phylip = is_complicated_phylip(*pios_, seq_length_reader_);
         }
         if (complicated_phylip) {
-            seqs_ = read_phylip(*pios_, file_ntax, seq_length_);
+            seqs_ = read_phylip(*pios_, file_ntax, seq_length_reader_);
             if (!datatype_set_) {
                 alpha_name_ = seqs_[0].get_alpha_name();
                 set_datatype();
@@ -171,7 +174,7 @@ void SeqInfo::calculate_freqs () {
         seq = sq;
         temp_seq_ = seq.get_sequence();
         name = seq.get_id();
-        seq_lengths_.push_back(static_cast<int>(temp_seq_.length()));
+        seq_lengths_.push_back(temp_seq_.length());
         count_chars(temp_seq_);
         taxon_labels_.push_back(name);
     }
@@ -252,8 +255,8 @@ void SeqInfo::print_summary_table_whole_alignment () {
     }
     (*poos_) << "Is aligned: " << std::boolalpha << is_aligned_ << std::endl;
     if (is_aligned_) {
-        seq_length_ = seq_lengths_[0];
-        (*poos_) << "Sequence length: " << seq_length_ << std::endl;
+        aligned_length_ = seq_lengths_[0];
+        (*poos_) << "Sequence length: " << aligned_length_ << std::endl;
         total_num_chars = static_cast<double>(seq_lengths_[0] * num_taxa_);
     } else {
         total_num_chars = static_cast<double>(sum(seq_lengths_));
@@ -300,16 +303,15 @@ void SeqInfo::check_is_aligned () {
 
 void SeqInfo::get_num_chars () {
     for (auto & seq : seqs_) {
-        seq_lengths_.push_back(static_cast<int>(seq.get_length()));
+        seq_lengths_.push_back(seq.get_length());
     }
     // check if all seqs are the same length
     if (std::adjacent_find(seq_lengths_.begin(), seq_lengths_.end(),
             std::not_equal_to<>()) == seq_lengths_.end()) {
         is_aligned_ = true;
-        seq_length_ = seq_lengths_[0];
+        aligned_length_ = seq_lengths_[0];
     } else {
         is_aligned_ = false;
-        seq_length_ = -1;
     }
 }
 
@@ -318,14 +320,14 @@ void SeqInfo::get_num_chars () {
 // assumes gap=- and missing=?
 void SeqInfo::calc_missing () {
     // missing data are the last two characters (-N for DNA, -X for protein)
-    int miss = 0;
+    unsigned int miss = 0;
     
     calculate_freqs();
     
     if (!output_indiv_) {
         // proportion for alignment as a whole
         double temp = 0.0;
-        int total_num_chars = sum(char_counts_);
+        unsigned int total_num_chars = sum(char_counts_);
         for (auto i = static_cast<unsigned int>(seq_chars_.length()-2u); i < seq_chars_.length(); i++) {
             temp += static_cast<double>(char_counts_[i]) / static_cast<double>(total_num_chars);
             miss += char_counts_[i];
@@ -343,7 +345,7 @@ void SeqInfo::calc_missing () {
             temp_seq_ = seq.get_sequence();
             name = seq.get_id();
             taxon_labels_.push_back(name);
-            seq_lengths_.push_back(static_cast<int>(temp_seq_.length()));
+            seq_lengths_.push_back(temp_seq_.length());
             count_chars(temp_seq_);
             miss = 0;
             for (auto j = static_cast<unsigned int>(seq_chars_.length()-2); j < seq_chars_.length(); j++) {
@@ -412,8 +414,8 @@ void SeqInfo::get_property (const bool& get_labels, const bool& check_aligned,
     } else if (get_nchar) {
         get_num_chars ();
         if (!output_indiv_) { // single return value
-            if (seq_length_ != -1) {
-                (*poos_) << seq_length_ << std::endl;
+            if (is_aligned_) {
+                (*poos_) << aligned_length_ << std::endl;
             } else {
                 // not aligned
                 (*poos_) << "sequences are not aligned" << std::endl;
