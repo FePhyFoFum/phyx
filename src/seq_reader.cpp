@@ -136,9 +136,8 @@ bool read_next_seq_from_stream (std::istream & stri, int ftype,
             seq.set_id(tokens[0]);
             seq.set_sequence(tokens[1]);
             return true;
-        } else {
-            return false;
         }
+        return false;
     } else if (ftype == 1) { // phylip
         std::vector<std::string> tokens;
         std::string del(" \t");
@@ -844,11 +843,9 @@ void get_phylip_format (std::istream& pios, const unsigned int& num_char,
             // return to the original position in the stream
             pios.seekg(spt, std::ios_base::beg);
             return; // interleaved //
-        } else {
-            std::cerr << "Error: unrecognized phylip format. Exiting."
-                    << std::endl; 
-            exit(1);
         }
+        std::cerr << "Error: unrecognized phylip format. Exiting." << std::endl; 
+        exit(1);
     } else if (num_elem > 2) {
         // dealing with spaces
         spaces = true;

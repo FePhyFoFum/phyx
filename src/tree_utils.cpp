@@ -15,9 +15,6 @@
 #include "constants.h"
 
 
-extern const double EPSILON;
-
-
 int get_distance_between_two_nodes (Tree * tr, Node * nd1, Node * nd2) {
     std::vector<Node *> vnd;
     vnd.push_back(nd1);
@@ -287,7 +284,7 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
     // print map<Node*, std::vector<Node*> >
     if (debug) {
         std::cout << std::endl << "TREE MAP:" << std::endl;
-        for (std::map<Node*, std::vector<Node*> >::iterator it = tree_map.begin();
+        for (auto it = tree_map.begin();
                 it != tree_map.end(); ++it) {
             std::cout << "Node: " << it->first->getName() << std::endl;
             std::vector<Node*> terp = it->second;

@@ -110,7 +110,7 @@ void CompTest::count_chars () {
 void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
     for (unsigned int i = 0; i < num_taxa_; i++) {
-        unsigned int cur_len = static_cast<unsigned int>(taxon_labels_[static_cast<unsigned int>(i)].size());
+        auto cur_len = static_cast<unsigned int>(taxon_labels_[static_cast<unsigned int>(i)].size());
         if (cur_len > longest_tax_label_) {
             longest_tax_label_ = cur_len;
         }

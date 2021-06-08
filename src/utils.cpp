@@ -22,7 +22,7 @@
 // TODO: use const where possible
 
 // set threshold. should maybe use superdouble.
-extern const double EPSILON; // moved to constants.h
+//extern const double EPSILON; // moved to constants.h
 
 // other stuff i am playing around with. temporary. 
 /*

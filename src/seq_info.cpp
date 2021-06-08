@@ -102,7 +102,7 @@ void SeqInfo::read_in_alignment () {
                 is_interleaved, alpha_name_, seq_chars_, gap_, missing_);
         // std::cout << "alpha_name_ = " << alpha_name_ << std::endl;
         set_datatype();
-        if (is_multi_ && seq_chars_ != "") {
+        if (is_multi_ && !seq_chars_.empty()) {
             seq_chars_ += gap_;
             seq_chars_ += missing_;
             char_counts_.resize(seq_chars_.size(), 0);

@@ -215,13 +215,13 @@ bool Superdouble::operator >= (const Superdouble& x)const {
 
 
 bool Superdouble::operator < (const Superdouble& x)const {
+    bool res = false;
     if (exponent < x.exponent) {
-        return true;
+        res = true;
     } else if (exponent == x.exponent && mantissa < x.mantissa) {
-        return true;
-    } else {
-        return false;
+        res = true;
     }
+    return res;
 }
 
 

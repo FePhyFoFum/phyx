@@ -335,7 +335,6 @@ void LogManipulator::count_parameter_samples () {
                     continue;
                 }
                 num_samps++;
-                continue;
             }
             indiv_sample_totals_.push_back(num_samps);
             infilestr_.close();

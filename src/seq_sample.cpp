@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cmath>
 #include <cstdlib>
 #include <algorithm>
 #include <fstream>
@@ -121,7 +122,7 @@ std::vector<unsigned int> SequenceSampler::get_partitioned_bootstrap_sites () {
 
 // sample WITHOUT replacement. not with partitioned models
 std::vector<unsigned int> SequenceSampler::get_jackknife_sites (const unsigned int& numchar) {
-    auto numsample = static_cast<unsigned int>(numchar * jkfract_ + 0.5);
+    auto numsample = static_cast<unsigned int>(std::lround(numchar * jkfract_ + 0.5));
     std::vector<unsigned int> randsites = sample_without_replacement(numchar, numsample);
     return randsites;
 }
@@ -217,15 +218,15 @@ void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens
     // why is there not std::stou?!?
     
     if (is_number(tokens[2])) {
-        start = static_cast<unsigned int>(std::stoul(tokens[2].c_str())) - 1;
+        start = static_cast<unsigned int>(std::stoul(tokens[2])) - 1;
         //std::cout << "start = " << start;
     }
     if (is_number(tokens[3])) {
-        stop =  static_cast<unsigned int>(std::stoul(tokens[3].c_str())) - 1;
+        stop =  static_cast<unsigned int>(std::stoul(tokens[3])) - 1;
         //std::cout << "; stop = " << stop;
     }
     if ((static_cast<int>(tokens.size()) == 5) && is_number(tokens[4])) {
-        interval =  static_cast<unsigned int>(std::stoul(tokens[4].c_str()));
+        interval =  static_cast<unsigned int>(std::stoul(tokens[4]));
         //std::cout << "; interval = " << interval;
     }
     //std::cout << std::endl;
@@ -277,7 +278,7 @@ void SequenceSampler::check_valid_partitions () {
     std::vector<unsigned int> duplicates;
     std::vector<unsigned int> missing;
     
-    unsigned int maxVal = static_cast<unsigned int>(allSites.back());
+    auto maxVal = static_cast<unsigned int>(allSites.back());
     
     std::vector<unsigned int> counts(static_cast<unsigned long>(maxVal), 0);
     for (unsigned int allSite : allSites) {
