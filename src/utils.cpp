@@ -517,7 +517,7 @@ std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
       );
     }
     std::vector<int> res = vec1;
-    std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<int>());
+    std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<>());
     return res;
 }
 
@@ -531,7 +531,7 @@ std::vector<double> average_vectors_elementwise (std::vector<double>& vec1,
       );
     }
     std::vector<double> res = sum_vectors_elementwise(vec1, vec2);
-    std::transform(res.begin(), res.end(), res.begin(), std::bind1st (std::multiplies <double> () , 0.5));
+    std::transform(res.begin(), res.end(), res.begin(), std::bind1st(std::multiplies<double>(), 0.5));
     
     return res;
 }
@@ -729,7 +729,7 @@ unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2) {
     unsigned int startv = 0;
     
     return std::inner_product(
-        s1.begin(), s1.end(), s2.begin(), startv, std::plus<unsigned int>(),
+        s1.begin(), s1.end(), s2.begin(), startv, std::plus<>(),
         std::not2(std::equal_to<std::string::value_type>())
     );
 }

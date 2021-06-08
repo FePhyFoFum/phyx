@@ -98,7 +98,7 @@ void BDFit::fit_bd() {
     }
     
     // sort in descending order
-    sort(branching_times_.begin(), branching_times_.end(), std::greater<double>());
+    sort(branching_times_.begin(), branching_times_.end(), std::greater<>());
     
     analysis_data a;
     a.N = ntips_;

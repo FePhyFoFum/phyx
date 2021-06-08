@@ -34,7 +34,8 @@ bool MultinomialSeqStat::checked_aligned () {
     }
     
     // check if all seqs are the same length
-    if (std::adjacent_find( seq_lengths.begin(), seq_lengths.end(), std::not_equal_to<unsigned int>()) == seq_lengths.end() ) {
+    if (std::adjacent_find(seq_lengths.begin(), seq_lengths.end(),
+            std::not_equal_to<>()) == seq_lengths.end()) {
         is_aligned_ = true;
         num_char_ = seq_lengths[0];
     } else {
