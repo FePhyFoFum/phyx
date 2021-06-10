@@ -76,7 +76,7 @@ void LogManipulator::return_statistics_table () {
         (*poos_) << std::right << std::setw(colWidth) << stat_name << " ";
     }
     (*poos_) << std::endl;
-    for (unsigned long i = 1; i < static_cast<unsigned long>(num_cols_); i++) {
+    for (size_t i = 1; i < static_cast<size_t>(num_cols_); i++) {
         calculate_summary_statistics (parm_samples_[i], mean, variance, median,
             ESS, ACT, nsamples, step_size);
         unsigned int diff = longest_label - static_cast<unsigned int>(parm_names_[i].size());
@@ -116,6 +116,7 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
         const int& n_samples, const int& step_size) {
     // leave median for last, since it alters the ordering, which is needed for ACT
     v_mean_variance(vals, mean, variance);
+    size_t ns = static_cast<size_t>(n_samples);
     
     //-----------------------------------------------------------//
     // effective sample size (ESS) and autocorrelation time (ACT)
@@ -143,13 +144,13 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     double del2 = 0.0;
 
     for (unsigned long i = 0; i < max_lag; i++) {
-        for (unsigned long j = 0; j < static_cast<unsigned long>(n_samples) - i; j++) {
+        for (size_t j = 0; j < ns - i; j++) {
             del1 = vals[j] - mean;
             del2 = vals[j + i] - mean;
             gamma_stat[i] += (del1 * del2);
         }
 
-        gamma_stat[i] /= static_cast<double>(static_cast<unsigned long>(n_samples) - i);
+        gamma_stat[i] /= static_cast<double>(ns - i);
 
         if (i == 0) {
             var_stat = gamma_stat[0];
@@ -189,7 +190,7 @@ void LogManipulator::collect_parameter_samples () {
         bool first_entry = true; // use for initialization
         std::vector <double> terp; // a vector to reuse throughout
         ntotal_samples_ = 0;
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
             std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
@@ -209,7 +210,7 @@ void LogManipulator::collect_parameter_samples () {
                         if (first_entry) {
                             // let us initialize the sample collector
                             unsigned long n_expected = 10000000; // purposely an overestimate to avoid reallocation
-                            for (unsigned long j = 0; j < static_cast<unsigned long>(num_cols_); j++) {
+                            for (size_t j = 0; j < static_cast<size_t>(num_cols_); j++) {
                                 parm_samples_.push_back(terp);
                                 parm_samples_[j].reserve(n_expected);
                             }
@@ -260,7 +261,7 @@ void LogManipulator::collect_parameter_samples () {
             infilestr_.close();
         }
         if (verbose_) {
-            for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
+            for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
                 std::cout << files_[i] << ": " << indiv_sample_totals_[i]
                     << " samples retained (from original " << indiv_raw_counts_[i]
                     << " samples) for " << (num_cols_ - 1) << " variables." << std::endl;
@@ -282,7 +283,7 @@ void LogManipulator::store_sample (std::string const& line) {
     // convert to double. note that this include the first entry (state) which is an int
     std::vector<double> converted = string_v_to_double_v(sample);
     // finally, store these puppies in the initialized container parm_samples_
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_cols_); i++) {
+    for (size_t i = 0; i < static_cast<size_t>(num_cols_); i++) {
         parm_samples_[i].push_back(converted[i]);
     }
 }
@@ -301,8 +302,8 @@ void LogManipulator::count () {
 void LogManipulator::count_parameter_samples () {
     num_cols_ = 0;
     if (!files_.empty()) {
-        for (int i = 0; i < num_files_; i++) {
-            std::string curfile = files_[static_cast<unsigned long>(i)];
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
+            std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
             bool first_line = true;
@@ -353,8 +354,8 @@ void LogManipulator::count_parameter_samples () {
 
 void LogManipulator::count_tree_samples () {
     if (!files_.empty()) {
-        for (int i = 0; i < num_files_; i++) {
-            std::string curfile = files_[static_cast<unsigned long>(i)];
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
+            std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
             int num_samps = 0;
@@ -385,8 +386,9 @@ void LogManipulator::count_tree_samples () {
 
 
 void LogManipulator::get_sample_counts () const {
+    size_t nf = static_cast<size_t>(num_files_);
     if (logtype_ == "parameter") {
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
+        for (size_t i = 0; i < nf; i++) {
             (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " samples of "
                 << (num_cols_ - 1) << " variables." << std::endl;
         }
@@ -395,7 +397,7 @@ void LogManipulator::get_sample_counts () const {
                 << (num_cols_ - 1) << " variables across " << num_files_ << " files." << std::endl;
         }
     } else {
-        for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
+        for (size_t i = 0; i < nf; i++) {
             (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " trees." << std::endl;
         }
         if (num_files_ > 1) {
@@ -423,7 +425,7 @@ void LogManipulator::get_column_names () {
                 break;
             }
             for (int i = 0; i < num_cols_; i++) {
-                (*poos_) << i+1 << ". " << parm_names_[static_cast<unsigned long>(i)] << std::endl;
+                (*poos_) << i+1 << ". " << parm_names_[static_cast<size_t>(i)] << std::endl;
             }
         } else {
         // multiple files. make sure number/name/order of columns is identical
@@ -456,7 +458,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 num_cols_ = curpars;
                 parm_names_ = header;
                 
-                cols_to_retain.resize(static_cast<unsigned long>(num_cols_));
+                cols_to_retain.resize(static_cast<size_t>(num_cols_));
                 
                 // check that right end of col_ids is valid (0 already checked upstream)
                 // vector has been sorted
@@ -475,7 +477,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 
                 num_cols_retain_ = static_cast<int>(cols_to_retain.size());
                 for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << header[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
+                    (*poos_) << header[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
                     if (i < (num_cols_retain_ - 1)) {
                         (*poos_) << "\t";
                     }
@@ -486,7 +488,7 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
             }
             std::vector<std::string> samp = tokenize(line);
             for (int i = 0; i < num_cols_retain_; i++) {
-                (*poos_) << samp[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
+                (*poos_) << samp[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
                 if (i < (num_cols_retain_ - 1)) {
                     (*poos_) << "\t";
                 }
@@ -512,10 +514,10 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         std::string line;
         bool first_line = true;
         int sample_counter = 0;
-        std::vector<int> cols_to_retain(static_cast<unsigned long>(col_ids.size()), 0);
+        std::vector<int> cols_to_retain(static_cast<size_t>(col_ids.size()), 0);
         for (int col_id : col_ids) {
             // subtract 1 because input is 1-indexed
-            cols_to_retain[static_cast<unsigned long>(col_id)] = col_id - 1;
+            cols_to_retain[static_cast<size_t>(col_id)] = col_id - 1;
         }
         num_cols_retain_ = static_cast<int>(cols_to_retain.size());
         
@@ -537,7 +539,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 
                 parm_names_ = header;
                 for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << header[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
+                    (*poos_) << header[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
                     if (i < (num_cols_retain_ - 1)) {
                         (*poos_) << "\t";
                     }
@@ -548,7 +550,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
             }
             std::vector<std::string> samp = tokenize(line);
             for (int i = 0; i < num_cols_retain_; i++) {
-                (*poos_) << samp[static_cast<unsigned long>(cols_to_retain[static_cast<unsigned long>(i)])];
+                (*poos_) << samp[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
                 if (i < (num_cols_retain_ - 1)) {
                     (*poos_) << "\t";
                 }
@@ -568,8 +570,8 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
 void LogManipulator::sample_parameters () {
     if (!files_.empty()) { // hrm this should not be necessary...
         ntotal_samples_ = 0;
-        for (int i = 0; i < num_files_; i++) {
-            std::string curfile = files_[static_cast<unsigned long>(i)];
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
+            std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
             bool first_line = true;
@@ -586,7 +588,7 @@ void LogManipulator::sample_parameters () {
                         num_cols_ = curpars;
                         parm_names_ = header;
                         for (int j = 0; j < num_cols_; j++) {
-                            (*poos_) << parm_names_[static_cast<unsigned long>(j)];
+                            (*poos_) << parm_names_[static_cast<size_t>(j)];
                             if (j < (num_cols_ - 1)) {
                                 (*poos_) << "\t";
                             }
@@ -637,7 +639,7 @@ void LogManipulator::sample_parameters () {
             infilestr_.close();
         }
         if (verbose_) {
-            for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
+            for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
                 std::cout << files_[i] << ": " << indiv_sample_totals_[i]
                     << " samples retained (from original " << indiv_raw_counts_[i]
                     << " samples) for " << (num_cols_ - 1) << " variables." << std::endl;
@@ -652,8 +654,9 @@ void LogManipulator::sample_parameters () {
 void LogManipulator::sample_trees () {
     if (!files_.empty()) {
         ntotal_samples_ = 0;
-        for (int i = 0; i < num_files_; i++) {
-            std::string curfile = files_[static_cast<unsigned long>(i)];
+        size_t nf = static_cast<size_t>(num_files_);
+        for (size_t i = 0; i < nf; i++) {
+            std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
             int tree_counter = 0; // this is the raw number of tree lines in a file
@@ -717,7 +720,7 @@ void LogManipulator::sample_trees () {
         (*poos_) << "End;" << std::endl;
         
         if (verbose_) {
-            for (unsigned long i = 0; i < static_cast<unsigned long>(num_files_); i++) {
+            for (size_t i = 0; i < nf; i++) {
                 std::cerr << files_[i] << ": " << indiv_sample_totals_[i]
                     << " tree samples retained (from original " << indiv_raw_counts_[i]
                     << " samples)." << std::endl;
@@ -747,7 +750,7 @@ void LogManipulator::write_reformatted_sample (std::string& sample,
     if (logtype_ == "parameter") {
         (*poos_) << sample_num;
         for (int i = 1; i < num_cols_; i++) {
-            (*poos_) << "\t" << terp[static_cast<unsigned long>(i)];
+            (*poos_) << "\t" << terp[static_cast<size_t>(i)];
         }
         (*poos_) << std::endl;
     } else {

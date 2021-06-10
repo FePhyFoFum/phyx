@@ -240,7 +240,7 @@ int main(int argc, char * argv[]) {
     }
     //----END READ MAP TREE
 
-    auto numtrees = static_cast<unsigned long>(trees.size());
+    size_t numtrees = trees.size();
     if (numtrees == 0) {
         if (fileset) {
             fstr->close();
@@ -409,7 +409,7 @@ int main(int argc, char * argv[]) {
         if (edgewisealltaxa) {
             colsize--; // no root for edgewise
         }
-        std::vector<int> cols(static_cast<unsigned long>(colsize), 0);
+        std::vector<int> cols(static_cast<size_t>(colsize), 0);
         std::vector<std::vector<int> > matrix(numtrees, cols);
         for (unsigned long i = 0; i < numtrees; i++) {
             bool unrooted = false;
@@ -482,7 +482,7 @@ int main(int argc, char * argv[]) {
                     if (x == static_cast<int>(matrix[i].size())) {
                         x = static_cast<int>(find(biparts.begin(), biparts.end(), nms_i)-biparts.begin());
                     }
-                    matrix[i][static_cast<unsigned long>(x)] = 1;
+                    matrix[i][static_cast<size_t>(x)] = 1;
                 }
             }
         }
@@ -490,7 +490,7 @@ int main(int argc, char * argv[]) {
         if (uniquetree) {
             std::cout << "====UNIQUE TREES====" << std::endl;
             std::set<std::string> un_trees;
-            for (unsigned long i = 0; i < static_cast<unsigned long>(numtrees); i++) {
+            for (size_t i = 0; i < static_cast<size_t>(numtrees); i++) {
                 std::string sv = get_string_vector(matrix[i]);
                 if (un_trees.count(sv) != 0) {
                     std::cout << trees[i]->getRoot()->getNewick(false) << ";" << std::endl;
@@ -530,13 +530,13 @@ int main(int argc, char * argv[]) {
             if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
                 std::vector<std::string> nms;
                 for (int k : biparts[i]) {
-                    nms.push_back(name_st_index[biparts[i][static_cast<unsigned long>(k)]]);
+                    nms.push_back(name_st_index[biparts[i][static_cast<size_t>(k)]]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (int k : biparts2[i]) {
-                        nms_o.push_back(name_st_index[biparts2[i][static_cast<unsigned long>(k)]]);
+                        nms_o.push_back(name_st_index[biparts2[i][static_cast<size_t>(k)]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
                 }
@@ -553,7 +553,7 @@ int main(int argc, char * argv[]) {
                         if (logitest) {
                             std::vector<std::string> nms2;
                             for (int k : biparts[j]) {
-                                nms2.push_back(name_st_index[biparts[j][static_cast<unsigned long>(k)]]);
+                                nms2.push_back(name_st_index[biparts[j][static_cast<size_t>(k)]]);
                             }    
                             totalcount += bp_count[j];
                             conflict_nums.push_back(bp_count[j]);
@@ -562,7 +562,7 @@ int main(int argc, char * argv[]) {
                                 if (edgewisealltaxa) {
                                     std::vector<std::string> nms_o;
                                     for (int k : biparts2[j]) {
-                                        nms_o.push_back(name_st_index[biparts2[j][static_cast<unsigned long>(k)]]);
+                                        nms_o.push_back(name_st_index[biparts2[j][static_cast<size_t>(k)]]);
                                     }
                                     (*poos) << "| " << get_string_vector(nms_o);
                                 }
@@ -607,7 +607,7 @@ int main(int argc, char * argv[]) {
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
                     for (int k : biparts2[i]) {
-                        nms_o.push_back(name_st_index[biparts2[i][static_cast<unsigned long>(k)]]);
+                        nms_o.push_back(name_st_index[biparts2[i][static_cast<size_t>(k)]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
                 }

@@ -60,17 +60,17 @@ void NJOI::CalcQ (const int& NumbOfSequences, std::vector< std::vector<double> >
     std::vector< std::vector<double> >& ConvertedMatrix, std::vector< std::vector<double> >& LengthMatrix) {
 
     ConvertedMatrix = OriginalMatrix;
-    auto nseq = static_cast<unsigned long>(NumbOfSequences);
+    auto nseq = static_cast<size_t>(NumbOfSequences);
     std::vector<double> Sums(nseq, 0.0);
     
-    for (unsigned long i = 0; i < nseq; i++) {
+    for (size_t i = 0; i < nseq; i++) {
         Sums[i] = sum(OriginalMatrix[i]);
         std::transform(ConvertedMatrix[i].begin(), ConvertedMatrix[i].end(), ConvertedMatrix[i].begin(), 
             std::bind1st(std::multiplies<double>(), static_cast<double>(NumbOfSequences - 2)));
     }
     
-    for (unsigned long i = 0; i < nseq; i++) {
-        for (unsigned long j = 0; j < nseq; j++) {
+    for (size_t i = 0; i < nseq; i++) {
+        for (size_t j = 0; j < nseq; j++) {
             if (i != j) {
                 LengthMatrix[i][j] = abs(Sums[i] - Sums[j]);
                 ConvertedMatrix[i][j] -= (Sums[i] + Sums[j]);
@@ -102,7 +102,8 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     int& NumbOfSequences, std::vector< std::vector<double> >& NewMatrix, unsigned long& mini1,
     unsigned long& mini2, double& brlength1, double& brlength2) {
     
-    auto msize = static_cast<unsigned long>(NewMatrix.size());
+    size_t msize = NewMatrix.size();
+    size_t ns = static_cast<size_t>(NumbOfSequences);
     
     //update the tree values, Tree Size is the node it is at
     std::vector<double> row_hits = NewMatrix[mini1];
@@ -119,12 +120,12 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
     names.insert(names.begin(), newname);
     
     // Make Smaller Matrix
-    std::vector< std::vector<double> > temp_matrix(static_cast<unsigned long>(NumbOfSequences),
-            std::vector<double>(static_cast<unsigned long>(NumbOfSequences), 0.0));
+    std::vector< std::vector<double> > temp_matrix(ns,
+            std::vector<double>(static_cast<size_t>(NumbOfSequences), 0.0));
     
     unsigned long count = 0;
     // Make a new First Row and Column
-    for (unsigned long i = 0; i < msize; i++) {
+    for (size_t i = 0; i < msize; i++) {
         if (i != mini1 && i != mini2) {
             ColRow = (col_hits[i] + row_hits[i] - small_length) * 0.5;
             count++;
@@ -157,10 +158,11 @@ void NJOI::Tree_Update (std::string& newname, std::vector<std::string>& names,
 // has to be a more efficient way of doing this!
 void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector<double> >& Matrix,
     unsigned long& mini1, unsigned long& mini2) {
+    size_t ns = static_cast<size_t>(NumbOfSequences);
     //super large value
     double MIN = 99999999999.99;
-    for (unsigned long i = 0; i < (static_cast<unsigned long>(NumbOfSequences) - 1); i++) {
-        unsigned long idx = static_cast<unsigned long>(std::min_element(Matrix[i].begin() + (i + 1u),
+    for (size_t i = 0; i < ns - 1; i++) {
+        auto idx = static_cast<size_t>(std::min_element(Matrix[i].begin() + (i + 1u),
                 Matrix[i].end()) - Matrix[i].begin());
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];
@@ -180,7 +182,7 @@ void NJOI::TREEMAKE (std::vector<std::string>& names, std::map<int, std::string>
     
     unsigned long mini1 = 0, mini2 = 0;
     auto NumbOfSequences = static_cast<int>(NumbKeys.size());
-    auto nseq = static_cast<unsigned long>(NumbOfSequences); // for initializing
+    auto nseq = static_cast<size_t>(NumbOfSequences); // for initializing
     double brlength1 = 0.0;
     double brlength2 = 0.0;
     std::vector< std::vector<double> > LengthMatrix(nseq, std::vector<double>(nseq, 0.0));
@@ -212,7 +214,7 @@ std::vector< std::vector<double> > NJOI::BuildMatrix (std::map<std::string, std:
     double MatchScore;
 
     // an easier way to initialize a std::vector of std::vectors:
-    auto ntax = static_cast<unsigned long>(sequences.size());
+    size_t ntax = sequences.size();
     std::vector< std::vector<double> > Score(ntax, std::vector<double>(ntax, 0.0));
 
     //compare all sequences to other sequences

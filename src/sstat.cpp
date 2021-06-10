@@ -47,7 +47,7 @@ bool MultinomialSeqStat::checked_aligned () {
 
 void MultinomialSeqStat::collect_site_patters () {
     std::vector<std::string> inputPatterns;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_char_); i++) {
+    for (unsigned long i = 0; i < num_char_; i++) {
         char a = seqs_[0].get_sequence().at(i);
         std::string pat(1, a);
         for (unsigned long j = 1; j < num_taxa_; j++) {
@@ -102,9 +102,9 @@ void MultinomialSeqStat::calculateTestStatistic () {
 */
     long double tempResult = 0.0L;
     long double finalResult = 0.0L;
-    auto numPatterns = static_cast<unsigned long>(patterns_and_counts_.size());
+    size_t numPatterns = patterns_and_counts_.size();
 
-    for (unsigned long iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
+    for (size_t iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
         if (patterns_and_counts_[iterStoredPat].second != 0) {
             tempResult = (patterns_and_counts_[iterStoredPat].second)*(log(patterns_and_counts_[iterStoredPat].second));
             finalResult += tempResult;

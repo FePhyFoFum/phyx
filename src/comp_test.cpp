@@ -40,7 +40,7 @@ void CompTest::read_in_alignment () {
         // here, seqs from all individuals are concatenated, so represents all sampled characters
         std::string concatenated;
         for (unsigned int i = 0; i < num_taxa_; i++) {
-            concatenated += seqs_[static_cast<unsigned long>(i)].get_sequence();
+            concatenated += seqs_[static_cast<size_t>(i)].get_sequence();
         }
         seq_chars_ = get_alphabet_from_sequence(concatenated);
         // remove gap and missing (if present)
@@ -81,7 +81,7 @@ void CompTest::count_chars () {
     std::string seq;
     for (unsigned int i = 0; i < num_taxa_; i++) {
         unsigned int sum = 0;
-        seq = string_to_upper(seqs_[static_cast<unsigned long>(i)].get_sequence());
+        seq = string_to_upper(seqs_[static_cast<size_t>(i)].get_sequence());
         std::vector<int> icounts(seq_chars_.length(), 0);
         
         for (unsigned int j = 0; j < seq_chars_.length(); j++) {
@@ -130,7 +130,7 @@ void CompTest::return_freq_table () {
         (*poos_) << std::right << std::setw(colWidth) << seq_char << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+    for (size_t i = 0; i < static_cast<size_t>(num_taxa_); i++) {
         unsigned int diff = longest_tax_label_ - static_cast<unsigned int>(taxon_labels_[i].size());
         (*poos_) << taxon_labels_[i];
         if (diff > 0) {
@@ -159,8 +159,8 @@ void CompTest::calc_chi_square () {
     double observed = 0.0;
     double expected = 0.0;
     double cellv = 0.0;
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
-        for (unsigned int j = 0; j < col_totals_.size(); j++) {
+    for (size_t i = 0; i < static_cast<size_t>(num_taxa_); i++) {
+        for (size_t j = 0; j < col_totals_.size(); j++) {
             observed = static_cast<double>(indiv_char_counts_[i][j]);
             expected = static_cast<double>(col_totals_[j]) * static_cast<double>(row_totals_[i])
                     / static_cast<double>(total_);

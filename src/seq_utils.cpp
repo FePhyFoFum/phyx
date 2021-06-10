@@ -345,12 +345,12 @@ void create_vector_seq_codon_state_reconstructor (std::vector<Sequence>& origseq
         std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
         std::vector<int> >& codon_pos) {
     unsigned int start = static_cast<unsigned int>(site) * 3u;
-    for (unsigned int i = 0; i < origseqs.size(); i++) {
+    for (size_t i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq(61, '0');
         
         for (int j : codon_pos[codon]) {
-            setsq.replace(static_cast<unsigned long>(codon_pos[codon][static_cast<unsigned long>(j)]), 1, "1");
+            setsq.replace(static_cast<size_t>(codon_pos[codon][static_cast<size_t>(j)]), 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }
@@ -371,7 +371,7 @@ void create_vector_seq_codon_state_reconstructor_all_site (std::vector<Sequence>
         std::string setsq(61, '0');
         
         for (int j : codon_pos[codon]) {
-            setsq.replace(static_cast<unsigned long>(codon_pos[codon][static_cast<unsigned long>(j)]), 1, "1");
+            setsq.replace(static_cast<size_t>(codon_pos[codon][static_cast<size_t>(j)]), 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }

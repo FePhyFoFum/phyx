@@ -53,7 +53,7 @@ void SequenceConcatenater::read_sequences () {
 void SequenceConcatenater::concatenate(SequenceConcatenater& newSeqs) {
     std::string old_filler(num_char_, '-');
     unsigned int new_seq_len = newSeqs.get_sequence_length();
-    std::string new_filler(static_cast<unsigned long>(new_seq_len), '-');
+    std::string new_filler(static_cast<size_t>(new_seq_len), '-');
     num_char_ += new_seq_len;
     for (unsigned int i = 0; i != num_taxa_; i++) {
         bool match_found = false;

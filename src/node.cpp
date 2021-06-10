@@ -194,7 +194,7 @@ bool Node::removeChild (Node& c) {
 
 
 Node * Node::getChild (unsigned int c) {
-    return children_.at(static_cast<unsigned long>(c));
+    return children_.at(static_cast<size_t>(c));
 }
 
 

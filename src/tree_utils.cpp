@@ -53,9 +53,9 @@ double get_length_to_root (Node * n) {
  */
 double get_root_tip_var (Tree * tr) {
     unsigned int nc = tr->getExternalNodeCount();
-    std::vector<double> paths(static_cast<unsigned long>(nc), 0.0);
+    std::vector<double> paths(static_cast<size_t>(nc), 0.0);
     for (unsigned int i = 0; i < nc; i++) {
-        paths[static_cast<unsigned long>(i)] = get_length_to_root(tr->getExternalNode(i));
+        paths[static_cast<size_t>(i)] = get_length_to_root(tr->getExternalNode(i));
     }
     double var = v_variance(paths);
     return var;
@@ -83,13 +83,13 @@ void remove_internal_names(Tree * tr) {
 
 // NOTE: this is _very_ slow (for large trees) compared to painting the induced tree (pxtrt)
 void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent) {
-    auto num_names = static_cast<unsigned long>(names.size());
+    size_t num_names = names.size();
     
     // new: note tree rooted status. if originally unrooted, make sure it stays that way on pruning
     bool rs = is_rooted(tree);
     //std::cout << "rooted tree: " << std::boolalpha << rs << std::endl;
     
-    for (unsigned long i = 0; i < num_names; i++) {
+    for (size_t i = 0; i < num_names; i++) {
         //std::cout << "Attempting to remove tip '" << names[i] << "'." << std::endl;
         Node * m = tree->getExternalNode(names[i]);
         if (m != nullptr) {
@@ -177,10 +177,10 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names,
 
 // assumes a rooted tree
 void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& silent) {
-    auto num_names = static_cast<unsigned long>(names.size());
+    size_t num_names = names.size();
     tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
-    for (unsigned long i = 0; i < num_names; i++) {
+    for (size_t i = 0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);
         if (m != nullptr) {
             m->setPainted(true);
@@ -450,11 +450,11 @@ bool is_ultrametric_paths (Tree * tr) {
         return ultrametric;
     }
     
-    unsigned int nc = tr->getExternalNodeCount();
-    std::vector<double> paths(static_cast<unsigned long>(nc), 0.0);
+    auto nc = static_cast<size_t>(tr->getExternalNodeCount());
+    std::vector<double> paths(nc, 0.0);
     
-    for (unsigned int i = 0; i < nc; i++) {
-        paths[static_cast<unsigned long>(i)] = get_length_to_root(tr->getExternalNode(i));
+    for (size_t i = 0; i < nc; i++) {
+        paths[i] = get_length_to_root(tr->getExternalNode(i));
         //std::cout << "Path: " << paths[i] << std::endl;
     }
     // compare against first
@@ -691,9 +691,9 @@ std::vector<std::string> get_names_in_tree_regex (Tree * tr,
 // returns a sorted vector of all terminal labels
 std::vector<std::string> get_tip_labels (Tree * tr) {
     unsigned int nc = tr->getExternalNodeCount();
-    std::vector<std::string> labels(static_cast<unsigned long>(nc), "");
+    std::vector<std::string> labels(static_cast<size_t>(nc), "");
     for (unsigned int i = 0; i < nc; i++) {
-        labels[static_cast<unsigned long>(i)] = tr->getExternalNode(i)->getName();
+        labels[static_cast<size_t>(i)] = tr->getExternalNode(i)->getName();
     }
     sort(labels.begin(), labels.end());
     return labels;

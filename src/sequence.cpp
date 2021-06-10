@@ -161,7 +161,7 @@ void Sequence::add_cont_char (double _num) {
 
 
 double Sequence::get_cont_char (int _index) {
-    return cont_chars_[static_cast<unsigned long>(_index)];
+    return cont_chars_[static_cast<size_t>(_index)];
 }
 
 
@@ -181,7 +181,7 @@ void Sequence::add_multistate_char(int _num) {
 
 
 int Sequence::get_multistate_char (int _index) {
-    return multistate_chars_[static_cast<unsigned long>(_index)];
+    return multistate_chars_[static_cast<size_t>(_index)];
 }
 
 

@@ -16,10 +16,10 @@ void VcfReader::read_vcf (std::istream* pios) {
     bool started = false;
     bool first = true;
     // these column numbers should be constant (i think?), but let's not leave anything to chance
-    unsigned long refcol = 0;
-    unsigned long altcol = 0;
-    unsigned long taxstartcol = 0;
-    unsigned long ncols = 0;
+    size_t refcol = 0;
+    size_t altcol = 0;
+    size_t taxstartcol = 0;
+    size_t ncols = 0;
     
     std::string line;
     while (getline_safe(*pios, line)) {
@@ -36,16 +36,16 @@ void VcfReader::read_vcf (std::istream* pios) {
             states.insert(states.begin(), refstate);
             
             if (!first) {
-                unsigned long counter = 0;
-                for (unsigned long i = taxstartcol; i < ncols; i++) {
-                    unsigned long idx = stoul(temp[i]);
+                size_t counter = 0;
+                for (size_t i = taxstartcol; i < ncols; i++) {
+                    size_t idx = stoul(temp[i]);
                     seqs_[counter] += states[idx];
                     counter++;
                 }
             } else {
                 // construct result vector during first data row (site)
-                for (unsigned long i = taxstartcol; i < ncols; i++) {
-                    unsigned long idx = stoul(temp[i]);
+                for (size_t i = taxstartcol; i < ncols; i++) {
+                    size_t idx = stoul(temp[i]);
                     seqs_.push_back(states[idx]);
                 }
                 first = false;
@@ -54,8 +54,8 @@ void VcfReader::read_vcf (std::istream* pios) {
             // skip preceeding lines
             if (temp[0] == "#CHROM") {
                 bool read_taxa = false;
-                ncols = static_cast<unsigned long>(temp.size());
-                for (unsigned long i = 1; i < ncols; i++) {
+                ncols = temp.size();
+                for (size_t i = 1; i < ncols; i++) {
                     if (read_taxa) {
                         taxa_.push_back(temp[i]);    
                         //std::cout << " " << temp[i];

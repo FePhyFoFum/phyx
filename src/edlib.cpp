@@ -408,7 +408,7 @@ static inline std::vector<int> getBlockCellValues (const Block& block) {
     int score = block.score;
     Word mask = HIGH_BIT_MASK;
     for (int i = 0; i < WORD_SIZE - 1; i++) {
-        scores[static_cast<unsigned long>(i)] = score;
+        scores[static_cast<size_t>(i)] = score;
         if ((block.P & mask) != 0u) {
             score--;
         }
@@ -473,7 +473,7 @@ static inline void readBlockReverse (const Block& block, int* const dest) {
 static inline bool allBlockCellsLarger (const Block& block, const int k) {
     std::vector<int> scores = getBlockCellValues(block);
     for (int i = 0; i < WORD_SIZE; i++) {
-        if (scores[static_cast<unsigned long>(i)] <= k) {
+        if (scores[static_cast<size_t>(i)] <= k) {
             return false;
         }
     }
@@ -643,7 +643,7 @@ static int myersCalcEditDistanceSemiGlobal (
     if (lastBlock == maxNumBlocks - 1) {
         std::vector<int> blockScores = getBlockCellValues(*bl);
         for (int i = 0; i < W; i++) {
-            int colScore = blockScores[static_cast<unsigned long>(i + 1)];
+            int colScore = blockScores[static_cast<size_t>(i + 1)];
             if (colScore <= k && (bestScore == -1 || colScore <= bestScore)) {
                 if (colScore != bestScore) {
                     positions.clear();
@@ -813,8 +813,8 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
                 bool reduce = true;
                 for (int i = WORD_SIZE - numCells; i < WORD_SIZE; i++) {
                     // TODO: Does not work if do not put +1! Why???
-                    if (scores[static_cast<unsigned long>(i)] <= k &&
-                            r <= k - scores[static_cast<unsigned long>(i)] - targetLength + c + queryLength + 1) {
+                    if (scores[static_cast<size_t>(i)] <= k &&
+                            r <= k - scores[static_cast<size_t>(i)] - targetLength + c + queryLength + 1) {
                         reduce = false;
                         break;
                     }
@@ -834,8 +834,8 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
                 int r = firstBlock * WORD_SIZE + numCells - 1;
                 bool reduce = true;
                 for (int i = WORD_SIZE - numCells; i < WORD_SIZE; i++) {
-                    if (scores[static_cast<unsigned long>(i)] <= k &&
-                            r >= scores[static_cast<unsigned long>(i)] - k - targetLength + c + queryLength) {
+                    if (scores[static_cast<size_t>(i)] <= k &&
+                            r >= scores[static_cast<size_t>(i)] - k - targetLength + c + queryLength) {
                         reduce = false;
                         break;
                     }
@@ -892,7 +892,7 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
 
     if (lastBlock == maxNumBlocks - 1) { // If last block of last column was calculated
         // Obtain best score from block -> it is complicated because query is padded with W cells
-        int bestScore = getBlockCellValues(blocks[lastBlock])[static_cast<unsigned long>(W)];
+        int bestScore = getBlockCellValues(blocks[lastBlock])[static_cast<size_t>(W)];
         if (bestScore <= k) {
             *bestScore_ = bestScore;
             *position_ = targetLength - 1;

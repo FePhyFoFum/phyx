@@ -67,11 +67,11 @@ std::vector<unsigned int> SequenceSampler::get_sampled_sites () const {
 
 std::string SequenceSampler::get_resampled_seq (const std::string& origseq) {
     std::string seq;
-    for (unsigned int i = 0; i < sample_sites_.size(); i++) {
+    for (size_t i = 0; i < sample_sites_.size(); i++) {
         if (i == 0) {
-            seq = origseq[static_cast<unsigned long>(sample_sites_[i])];
+            seq = origseq[sample_sites_[i]];
         } else {
-            seq += origseq[static_cast<unsigned long>(sample_sites_[i])];
+            seq += origseq[sample_sites_[i]];
         }
     }
     return seq;
@@ -93,11 +93,12 @@ void SequenceSampler::sample_sites (const unsigned int& numchar) {
 // sample with replacement.
 std::vector<unsigned int> SequenceSampler::get_bootstrap_sites (const unsigned int& numchar) {
     // numchar zero-initialized elements
-    std::vector<unsigned int> randsites(static_cast<unsigned long>(numchar));
+    size_t nc = static_cast<size_t>(numchar);
+    std::vector<unsigned int> randsites(nc);
     
-    for (unsigned int i = 0; i < numchar; i++) {
+    for (size_t i = 0; i < nc; i++) {
         unsigned int randnum = random_int_range(0, numchar - 1);
-        randsites[static_cast<unsigned long>(i)] = static_cast<unsigned int>(randnum);
+        randsites[i] = static_cast<unsigned int>(randnum);
     }
     sort(randsites.begin(), randsites.end());
     
@@ -107,14 +108,14 @@ std::vector<unsigned int> SequenceSampler::get_bootstrap_sites (const unsigned i
 
 // set up so same composition as original
 std::vector<unsigned int> SequenceSampler::get_partitioned_bootstrap_sites () {
-    std::vector<unsigned int> master(static_cast<unsigned long>(num_partitioned_sites_), 0);
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_partitions_); i++) {
-        auto curNum = static_cast<unsigned int>(partitions_[i].size());
+    std::vector<unsigned int> master(num_partitioned_sites_, 0);
+    for (size_t i = 0; i < num_partitions_; i++) {
+        size_t curNum = partitions_[i].size();
         //std::cout << "Partition #" << i << " contains " << curNum << " sites." << std::endl;
         std::vector<unsigned int> randsites = get_bootstrap_sites(curNum);
-        for (unsigned long j = 0; j < static_cast<unsigned long>(curNum); j ++) {
+        for (size_t j = 0; j < curNum; j ++) {
         // put partitions back in same spot as original, so partition file does not need to change
-            master[static_cast<unsigned long>(partitions_[i][j])] = partitions_[i][randsites[j]];
+            master[partitions_[i][j]] = partitions_[i][randsites[j]];
         }
     }
     return master;
@@ -189,8 +190,8 @@ std::vector<unsigned int> SequenceSampler::get_partition_sites (const std::strin
 // not currently used
 /*
 void SequenceSampler::get_site_partitions () {
-    std::vector<unsigned int> sites(static_cast<unsigned long>(num_partitioned_sites_), 0);
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_partitions_); i++) {
+    std::vector<unsigned int> sites(static_cast<size_t>(num_partitioned_sites_), 0);
+    for (unsigned long i = 0; i < static_cast<size_t>(num_partitions_); i++) {
         for (unsigned long j = 0; j < partitions_[i].size(); j++) {
             sites[partitions_[i][j]] = static_cast<unsigned int>(i);
         }
@@ -236,7 +237,7 @@ void SequenceSampler::get_partition_parameters (std::vector<std::string>& tokens
 void SequenceSampler::calculate_num_partitioned_sites () {
     num_partitioned_sites_ = 0;
     for (unsigned int i = 0; i < num_partitions_; i++) {
-        num_partitioned_sites_ += static_cast<unsigned int>(partitions_[static_cast<unsigned long>(i)].size());
+        num_partitioned_sites_ += static_cast<unsigned int>(partitions_[static_cast<size_t>(i)].size());
 //         std::cout << "Partition #" << i << " contains " << (int)partitions[i].size()
 //        << " sites:" << std::endl;
 //         for (unsigned int j = 0; j < partitions[i].size(); j++) {
@@ -255,7 +256,7 @@ unsigned int SequenceSampler::get_num_partitioned_sites () const {
 // should do some error-checking e.g. for 1) missing sites, 2) overlapping partitions
 void SequenceSampler::check_valid_partitions () {
     std::vector<unsigned int> allSites = partitions_[0];
-    for (unsigned long i = 1; i < static_cast<unsigned long>(num_partitions_); i++) {
+    for (size_t i = 1; i < static_cast<size_t>(num_partitions_); i++) {
         allSites.insert(allSites.end(), partitions_[i].begin(), partitions_[i].end());
     }
     sort(allSites.begin(), allSites.end());
@@ -278,15 +279,15 @@ void SequenceSampler::check_valid_partitions () {
     std::vector<unsigned int> duplicates;
     std::vector<unsigned int> missing;
     
-    auto maxVal = static_cast<unsigned int>(allSites.back());
+    size_t maxVal = allSites.back();
     
-    std::vector<unsigned int> counts(static_cast<unsigned long>(maxVal), 0);
+    std::vector<unsigned int> counts(maxVal, 0);
     for (unsigned int allSite : allSites) {
-        counts[static_cast<unsigned long>(allSite)]++;
+        counts[static_cast<size_t>(allSite)]++;
     }
     
-    for (unsigned int i = 0; i < maxVal; i++) {
-        switch (counts[static_cast<unsigned long>(i)]) {
+    for (size_t i = 0; i < maxVal; i++) {
+        switch (counts[i]) {
             case 0:
                 missing.push_back(i);
                 break;
@@ -320,7 +321,7 @@ void SequenceSampler::check_valid_partitions () {
 
 
 void SequenceSampler::write_resampled_seqs (std::ostream* poos) {
-    for (unsigned long i = 0; i < static_cast<unsigned long>(num_taxa_); i++) {
+    for (size_t i = 0; i < static_cast<size_t>(num_taxa_); i++) {
         (*poos) << ">" << seqs_[i].get_id() << std::endl;
         (*poos) << get_resampled_seq(seqs_[i].get_sequence()) << std::endl;
     }
