@@ -25,7 +25,7 @@ private:
     bool has_labels_;
     bool has_annotations_;
     
-    void guess_scale (const float& sup);
+    void guess_scale (const double& sup);
     
 public:
     explicit Collapser (const double& threshold);

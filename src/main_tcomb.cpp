@@ -182,7 +182,7 @@ int main(int argc, char * argv[]) {
             std::vector<std::string> v(btns.size());
             auto it = set_difference(btns.begin(), btns.end(), atns.begin(),
                     atns.end(), v.begin());
-            v.resize(it-v.begin());
+            v.resize(static_cast<size_t>(it-v.begin()));
             std::map<std::string, Node *> diffnds;
             std::vector<std::string> diffnms; 
             for (unsigned int i = 0; i < bigtree->getExtantNodeCount(); i++) {
@@ -198,13 +198,13 @@ int main(int argc, char * argv[]) {
                 std::set<std::string> lvsset = child->get_leave_names_set();
                 auto it1 = set_intersection(lvsset.begin(), lvsset.end(),
                                 atns.begin(), atns.end(), v_int.begin());
-                v_int.resize(it1-v_int.begin());
+                v_int.resize(static_cast<size_t>(it1-v_int.begin()));
                 if (!v_int.empty()) {
                     // need to add those missing not the overlapping
                     std::vector<std::string> v2(lvsset.size());
                     auto it2 = set_difference(lvsset.begin(), lvsset.end(),
                             atns.begin(), atns.end(), v2.begin());
-                    v2.resize(it2-v2.begin());
+                    v2.resize(static_cast<size_t>(it2-v2.begin()));
                     for (const auto & v2j : v2) {
                         std::cout << "to add " << v2j << std::endl; 
                         diffnds[v2j] = bigtree->getExternalNode(v2j);

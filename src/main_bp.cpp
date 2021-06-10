@@ -291,7 +291,7 @@ int main(int argc, char * argv[]) {
         std::vector<std::string>::iterator it2;
         it2 = std::set_difference(names_s.begin(), names_s.end(), rt_nms_set.begin(),
                 rt_nms_set.end(), not_included_nms.begin());
-        not_included_nms.resize(it2-not_included_nms.begin());
+        not_included_nms.resize(static_cast<size_t>(it2-not_included_nms.begin()));
         for (const auto & not_included_nm : not_included_nms) {
             std::cerr << " not included: " << not_included_nm << std::endl;
             not_included_i.push_back(name_index[not_included_nm]);
@@ -329,7 +329,7 @@ int main(int argc, char * argv[]) {
             std::vector<std::string>::iterator it;
             it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                 nms_s.end(), nms_s2.begin());
-            nms_s2.resize(it-nms_s2.begin());
+            nms_s2.resize(static_cast<size_t>(it-nms_s2.begin()));
             nms_i2.reserve(nms_s2.size());
             for (const auto & k : nms_s2) {
                 nms_i2.push_back(name_index[k]);
@@ -468,7 +468,7 @@ int main(int argc, char * argv[]) {
                     std::vector<std::string>::iterator it;
                     it = std::set_difference(rt_nms_set.begin(), rt_nms_set.end(), nms_s.begin(),
                             nms_s.end(), nms_s2.begin());
-                    nms_s2.resize(it-nms_s2.begin());
+                    nms_s2.resize(static_cast<size_t>(it-nms_s2.begin()));
                     nms_i2.reserve(nms_s2.size());
                     for (const auto & k : nms_s2) {
                         nms_i2.push_back(name_index[k]);

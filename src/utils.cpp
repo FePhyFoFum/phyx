@@ -483,7 +483,7 @@ int sum (std::vector<int>& in) {
 
 // hrm look into templated function
 unsigned int sum (std::vector<unsigned int>& in) {
-    return std::accumulate(in.begin(), in.end(), 0);
+    return static_cast<unsigned int>(std::accumulate(in.begin(), in.end(), 0));
 }
 
 

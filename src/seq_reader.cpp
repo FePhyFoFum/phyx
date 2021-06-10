@@ -952,7 +952,8 @@ std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
     std::string residues;
     std::string name;
     
-    get_phylip_format(pios, file_num_char, interleaved, spaces, multiline);
+    get_phylip_format(pios, static_cast<unsigned int>(file_num_char), interleaved,
+            spaces, multiline);
     
     //std::cout << "interleaved = " << interleaved << "; spaces = "
     //        << spaces << "; multiline = " << multiline<< std::endl;

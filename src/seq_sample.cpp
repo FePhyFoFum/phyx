@@ -112,7 +112,7 @@ std::vector<unsigned int> SequenceSampler::get_partitioned_bootstrap_sites () {
     for (size_t i = 0; i < num_partitions_; i++) {
         size_t curNum = partitions_[i].size();
         //std::cout << "Partition #" << i << " contains " << curNum << " sites." << std::endl;
-        std::vector<unsigned int> randsites = get_bootstrap_sites(curNum);
+        std::vector<unsigned int> randsites = get_bootstrap_sites(static_cast<unsigned int>(curNum));
         for (size_t j = 0; j < curNum; j ++) {
         // put partitions back in same spot as original, so partition file does not need to change
             master[partitions_[i][j]] = partitions_[i][randsites[j]];
@@ -279,14 +279,14 @@ void SequenceSampler::check_valid_partitions () {
     std::vector<unsigned int> duplicates;
     std::vector<unsigned int> missing;
     
-    size_t maxVal = allSites.back();
+    unsigned int maxVal = allSites.back();
     
     std::vector<unsigned int> counts(maxVal, 0);
     for (unsigned int allSite : allSites) {
         counts[static_cast<size_t>(allSite)]++;
     }
     
-    for (size_t i = 0; i < maxVal; i++) {
+    for (unsigned int i = 0; i < maxVal; i++) {
         switch (counts[i]) {
             case 0:
                 missing.push_back(i);

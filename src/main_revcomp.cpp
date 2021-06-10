@@ -73,8 +73,9 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
     std::string comp = comp_seq.get_sequence();
     std::string revcomp = comp_seq.reverse_complement();
     for (auto & seq : seqs) {
-        EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seq.get_sequence().c_str(), 
-                seq.get_length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
+        EdlibAlignResult result = edlibAlign(comp.c_str(), static_cast<int>(comp.length()),
+                seq.get_sequence().c_str(), static_cast<int>(seq.get_length()),
+                edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0) {
             continue;
         }
@@ -84,8 +85,9 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
         edlibFreeAlignResult(result);
     }
     for (auto & seq : seqs) {
-        EdlibAlignResult result = edlibAlign(revcomp.c_str(), revcomp.length(), seq.get_sequence().c_str(), 
-                seq.get_length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
+        EdlibAlignResult result = edlibAlign(revcomp.c_str(), static_cast<int>(revcomp.length()),
+                seq.get_sequence().c_str(), static_cast<int>(seq.get_length()),
+                edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0) {
             continue;
         }

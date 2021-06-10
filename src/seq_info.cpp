@@ -174,7 +174,7 @@ void SeqInfo::calculate_freqs () {
         seq = sq;
         temp_seq_ = seq.get_sequence();
         name = seq.get_id();
-        seq_lengths_.push_back(temp_seq_.length());
+        seq_lengths_.push_back(static_cast<unsigned int>(temp_seq_.length()));
         count_chars(temp_seq_);
         taxon_labels_.push_back(name);
     }
@@ -227,7 +227,7 @@ void SeqInfo::return_freq_table () {
         }
         (*poos_) << std::endl;
         // freqs
-        int total_num_chars = sum(char_counts_);
+        unsigned int total_num_chars = sum(char_counts_);
         for (unsigned int i = 0; i < seq_chars_.length(); i++) {
             (*poos_) << std::fixed << std::right << std::setw(colWidth)
                 << static_cast<double>(char_counts_[i]) / static_cast<double>(total_num_chars);
@@ -345,7 +345,7 @@ void SeqInfo::calc_missing () {
             temp_seq_ = seq.get_sequence();
             name = seq.get_id();
             taxon_labels_.push_back(name);
-            seq_lengths_.push_back(temp_seq_.length());
+            seq_lengths_.push_back(static_cast<unsigned int>(temp_seq_.length()));
             count_chars(temp_seq_);
             miss = 0;
             for (auto j = static_cast<unsigned int>(seq_chars_.length()-2); j < seq_chars_.length(); j++) {

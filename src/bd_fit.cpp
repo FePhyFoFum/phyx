@@ -92,9 +92,10 @@ void BDFit::fit_yule () {
 
 
 void BDFit::fit_bd() {
-    branching_times_.resize(static_cast<unsigned int>(nintnodes_));
-    for (size_t i = 0; i < static_cast<size_t>(nintnodes_); i++) {
-        branching_times_[i] = tree_->getInternalNode(i)->getHeight();
+    auto nn = static_cast<size_t>(nintnodes_);
+    branching_times_.resize(nn);
+    for (size_t i = 0; i < nn; i++) {
+        branching_times_[i] = tree_->getInternalNode(static_cast<unsigned int>(i))->getHeight();
     }
     
     // sort in descending order

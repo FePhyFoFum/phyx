@@ -450,11 +450,11 @@ bool is_ultrametric_paths (Tree * tr) {
         return ultrametric;
     }
     
-    auto nc = static_cast<size_t>(tr->getExternalNodeCount());
-    std::vector<double> paths(nc, 0.0);
+    unsigned int nc = tr->getExternalNodeCount();
+    std::vector<double> paths(static_cast<size_t>(nc), 0.0);
     
-    for (size_t i = 0; i < nc; i++) {
-        paths[i] = get_length_to_root(tr->getExternalNode(i));
+    for (unsigned int i = 0; i < nc; i++) {
+        paths[static_cast<size_t>(i)] = get_length_to_root(tr->getExternalNode(i));
         //std::cout << "Path: " << paths[i] << std::endl;
     }
     // compare against first

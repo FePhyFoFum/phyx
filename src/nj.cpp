@@ -162,7 +162,7 @@ void NJOI::Choose_Smallest (int& NumbOfSequences, const std::vector< std::vector
     //super large value
     double MIN = 99999999999.99;
     for (size_t i = 0; i < ns - 1; i++) {
-        auto idx = static_cast<size_t>(std::min_element(Matrix[i].begin() + (i + 1u),
+        auto idx = static_cast<size_t>(std::min_element(Matrix[i].begin() + (i + 1ul),
                 Matrix[i].end()) - Matrix[i].begin());
         if (Matrix[i][idx] < MIN) {
             MIN = Matrix[i][idx];

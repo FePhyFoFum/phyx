@@ -27,11 +27,11 @@ struct AlignmentData {
         // We build a complete table and mark first and last block for each column
         // (because algorithm is banded so only part of each columns is used).
         // TODO: do not build a whole table, but just enough blocks for each column.
-        Ps     = new Word[maxNumBlocks * targetLength];
-        Ms     = new Word[maxNumBlocks * targetLength];
-        scores = new  int[maxNumBlocks * targetLength];
-        firstBlocks = new int[targetLength];
-        lastBlocks  = new int[targetLength];
+        Ps     = new Word[static_cast<size_t>(maxNumBlocks * targetLength)];
+        Ms     = new Word[static_cast<size_t>(maxNumBlocks * targetLength)];
+        scores = new  int[static_cast<size_t>(maxNumBlocks * targetLength)];
+        firstBlocks = new int[static_cast<size_t>(targetLength)];
+        lastBlocks  = new int[static_cast<size_t>(targetLength)];
     }
 
     ~AlignmentData () {
@@ -171,7 +171,7 @@ EdlibAlignResult edlibAlign (const char* const queryOriginal, const int queryLen
 
         // Find starting locations.
         if (config.task == EDLIB_TASK_LOC || config.task == EDLIB_TASK_PATH) {
-            result.startLocations = static_cast<int *>(malloc(result.numLocations * sizeof(int)));
+            result.startLocations = static_cast<int *>(malloc(static_cast<size_t>(result.numLocations) * sizeof(int)));
             if (config.mode == EDLIB_MODE_HW) {  // If HW, I need to calculate start locations.
                 const unsigned char* rTarget = createReverseCopy(target, targetLength);
                 const unsigned char* rQuery  = createReverseCopy(query, queryLength);
@@ -294,7 +294,7 @@ static inline Word* buildPeq (const int alphabetLength, const unsigned char* con
                              const int queryLength) {
     int maxNumBlocks = ceilDiv(queryLength, WORD_SIZE);
     // table of dimensions alphabetLength+1 x maxNumBlocks. Last symbol is wildcard.
-    auto* Peq = new Word[(alphabetLength + 1) * maxNumBlocks];
+    auto* Peq = new Word[static_cast<size_t>((alphabetLength + 1) * maxNumBlocks)];
 
     // Build Peq (1 is match, 0 is mismatch). NOTE: last column is wildcard(symbol that matches anything) with just 1s
     for (int symbol = 0; symbol <= alphabetLength; symbol++) {
@@ -322,8 +322,9 @@ static inline Word* buildPeq (const int alphabetLength, const unsigned char* con
  * Returns new sequence that is reverse of given sequence.
  * Free returned array with delete[].
  */
-static inline unsigned char* createReverseCopy (const unsigned char* const seq, const int length) {
-    auto* rSeq = new unsigned char[length];
+static inline unsigned char* createReverseCopy (const unsigned char* const seq,
+        const int length) {
+    auto* rSeq = new unsigned char[static_cast<size_t>(length)];
     for (int i = 0; i < length; i++) {
         rSeq[i] = seq[length - i - 1];
     }
@@ -516,7 +517,7 @@ static int myersCalcEditDistanceSemiGlobal (
     int lastBlock = min(ceilDiv(k + 1, WORD_SIZE), maxNumBlocks) - 1; // y in Myers
     Block *bl; // Current block
 
-    auto* blocks = new Block[maxNumBlocks];
+    auto* blocks = new Block[static_cast<size_t>(maxNumBlocks)];
 
     // For HW, solution will never be larger then queryLength.
     if (mode == EDLIB_MODE_HW) {
@@ -721,7 +722,7 @@ static int myersCalcEditDistanceNW (const Word* const Peq, const int W, const in
     int lastBlock = min(maxNumBlocks, ceilDiv(min(k, (k + queryLength - targetLength) / 2) + 1, WORD_SIZE)) - 1;
     Block* bl; // Current block
 
-    auto* blocks = new Block[maxNumBlocks];
+    auto* blocks = new Block[static_cast<size_t>(maxNumBlocks)];
 
     // Initialize P, M and score
     bl = blocks;
@@ -924,7 +925,7 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
     const int maxNumBlocks = ceilDiv(queryLength, WORD_SIZE);
     const int W = maxNumBlocks * WORD_SIZE - queryLength;
 
-    *alignment = static_cast<unsigned char*>(malloc((queryLength + targetLength - 1) * sizeof(unsigned char)));
+    *alignment = static_cast<unsigned char*>(malloc(static_cast<size_t>(queryLength + targetLength - 1) * sizeof(unsigned char)));
     *alignmentLength = 0;
     int c = targetLength - 1; // index of column
     int b = maxNumBlocks - 1; // index of block in column
@@ -1130,7 +1131,8 @@ static int obtainAlignmentTraceback (const int queryLength, const int targetLeng
         //----------------------------------//
     }
 
-    *alignment = static_cast<unsigned char*>(realloc(*alignment, (*alignmentLength) * sizeof(unsigned char)));
+    *alignment = static_cast<unsigned char*>(realloc(*alignment,
+        static_cast<size_t>(*alignmentLength) * sizeof(unsigned char)));
     std::reverse(*alignment, *alignment + (*alignmentLength));
     return EDLIB_STATUS_OK;
 }
@@ -1161,7 +1163,7 @@ static int obtainAlignment (
     // Handle special case when one of sequences has length of 0.
     if (queryLength == 0 || targetLength == 0) {
         *alignmentLength = targetLength + queryLength;
-        *alignment = static_cast<unsigned char*>(malloc((*alignmentLength) * sizeof(unsigned char)));
+        *alignment = static_cast<unsigned char*>(malloc(static_cast<size_t>(*alignmentLength) * sizeof(unsigned char)));
         for (int i = 0; i < *alignmentLength; i++) {
             (*alignment)[i] = queryLength == 0 ? EDLIB_EDOP_DELETE : EDLIB_EDOP_INSERT;
         }
@@ -1179,8 +1181,9 @@ static int obtainAlignment (
 
     // If estimated memory consumption for traceback algorithm is smaller than 1MB use it,
     // otherwise use Hirschberg's algorithm. By running few tests I choose boundary of 1MB as optimal.
-    long long alignmentDataSize = static_cast<long long>(2 * sizeof(Word) + sizeof(int)) * maxNumBlocks * targetLength
-        + 2LL * sizeof(int) * targetLength;
+    auto tl = static_cast<size_t>(targetLength);
+    long long alignmentDataSize = static_cast<long long>(2 * sizeof(Word) + sizeof(int))
+        * static_cast<size_t>(maxNumBlocks) * tl + 2LL * sizeof(int) * tl;
     if (alignmentDataSize < 1024 * 1024) {
         int score_, endLocation_;  // Used only to call function.
         AlignmentData* alignData = nullptr;
@@ -1280,7 +1283,7 @@ static int obtainAlignmentHirschberg (
     // scoresLeft contains scores from left column, starting with scoresLeftStartIdx row (query index)
     // and ending with scoresLeftEndIdx row (0-indexed).
     int scoresLeftLength = (lastBlockIdxLeft - firstBlockIdxLeft + 1) * WORD_SIZE;
-    auto* scoresLeft = new int[scoresLeftLength];
+    auto* scoresLeft = new int[static_cast<size_t>(scoresLeftLength)];
     for (int blockIdx = firstBlockIdxLeft; blockIdx <= lastBlockIdxLeft; blockIdx++) {
         Block block(alignDataLeftHalf->Ps[blockIdx], alignDataLeftHalf->Ms[blockIdx],
                     alignDataLeftHalf->scores[blockIdx]);
@@ -1296,7 +1299,7 @@ static int obtainAlignmentHirschberg (
     int firstBlockIdxRight = alignDataRightHalf->firstBlocks[0];
     int lastBlockIdxRight = alignDataRightHalf->lastBlocks[0];
     int scoresRightLength = (lastBlockIdxRight - firstBlockIdxRight + 1) * WORD_SIZE;
-    auto* scoresRight = new int[scoresRightLength];
+    auto* scoresRight = new int[static_cast<size_t>(scoresRightLength)];
     int* scoresRightOriginalStart = scoresRight;
     for (int blockIdx = firstBlockIdxRight; blockIdx <= lastBlockIdxRight; blockIdx++) {
         Block block(alignDataRightHalf->Ps[blockIdx], alignDataRightHalf->Ms[blockIdx],
@@ -1396,9 +1399,9 @@ static int obtainAlignmentHirschberg (
 
     // Build alignment by concatenating upper left alignment with lower right alignment.
     *alignmentLength = ulAlignmentLength + lrAlignmentLength;
-    *alignment = static_cast<unsigned char*>(malloc((*alignmentLength) * sizeof(unsigned char)));
-    memcpy(*alignment, ulAlignment, ulAlignmentLength);
-    memcpy(*alignment + ulAlignmentLength, lrAlignment, lrAlignmentLength);
+    *alignment = static_cast<unsigned char*>(malloc(static_cast<size_t>(*alignmentLength) * sizeof(unsigned char)));
+    memcpy(*alignment, ulAlignment, static_cast<size_t>(ulAlignmentLength));
+    memcpy(*alignment + ulAlignmentLength, lrAlignment, static_cast<size_t>(lrAlignmentLength));
 
     free(ulAlignment);
     free(lrAlignment);
@@ -1431,8 +1434,10 @@ static int transformSequences (const char* const queryOriginal, const int queryL
     // Each letter is assigned an ordinal number, starting from 0 up to alphabetLength - 1,
     // and new query and target are created in which letters are replaced with their ordinal numbers.
     // This query and target are used in all the calculations later.
-    *queryTransformed = static_cast<unsigned char *>(malloc(sizeof(unsigned char) * queryLength));
-    *targetTransformed = static_cast<unsigned char *>(malloc(sizeof(unsigned char) * targetLength));
+    *queryTransformed = static_cast<unsigned char *>(malloc(sizeof(unsigned char)
+            * static_cast<size_t>(queryLength)));
+    *targetTransformed = static_cast<unsigned char *>(malloc(sizeof(unsigned char)
+            * static_cast<size_t>(targetLength)));
 
     // Alphabet information, it is constructed on fly while transforming sequences.
     unsigned char letterIdx[256]; //!< letterIdx[c] is index of letter c in alphabet
