@@ -356,7 +356,7 @@ RATE_DEPS += \
 %.o: ./%.cpp
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
-PROGS := pxaa2cdn pxbdsim pxboot pxbp pxcat pxclsq pxcltr pxcolt pxcomp pxconsq pxcontrates pxfqfilt pxlog pxlssq pxlstr pxmono pxmrca pxmrcacut pxmrcaname pxnj pxnw pxpoly pxrecode pxrevcomp pxrls pxrlt pxrmk pxrms pxrmt pxrr pxs2fa pxs2nex pxs2phy pxseqgen pxssort pxsstat pxstrec pxsw pxt2new pxt2nex pxtcol pxtcomb pxtgen pxtlate pxtrt pxtscale pxupgma pxvcf2fa $(NLOPT_PROGRAMS)
+PROGS := pxaa2cdn pxbdsim pxboot pxbp pxcat pxclsq pxcltr pxcolt pxcomp pxconsq pxcontrates pxfqfilt pxlog pxlssq pxlstr pxmono pxmrca pxmrcacut pxmrcaname pxnw pxpoly pxrecode pxrevcomp pxrls pxrlt pxrmk pxrms pxrmt pxrr pxs2fa pxs2nex pxs2phy pxseqgen pxssort pxsstat pxstrec pxsw pxt2new pxt2nex pxtcol pxtcomb pxtgen pxtlate pxtrt pxtscale pxvcf2fa $(NLOPT_PROGRAMS)
 
 
 # default all target
