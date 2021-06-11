@@ -118,7 +118,13 @@ int main(int argc, char * argv[]) {
     std::ofstream * ofstr = nullptr;
     
     if (heightset && scaleset) {
-        std::cerr << "Error: supply only rootheight (-r) or scale (-s), not both. Exiting." << std::endl;
+        std::cerr << "Error: supply only rootheight (-r) or scale (-s), not both. Exiting."
+                << std::endl;
+        exit(0);
+    }
+    if (!heightset && !scaleset) {
+        std::cerr << "Error: you have to set -r or -s. Exiting."
+                << std::endl;
         exit(0);
     }
     
