@@ -331,7 +331,7 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
         }
         //(*ostr) << seq.get_id() << "\t" << seq.get_sequence() << std::endl;
     }
-    (*ostr) << ";\nend;\n" << std::endl;
+    (*ostr) << ";\nend;" << std::endl;
 }
 
 
