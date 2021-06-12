@@ -129,21 +129,19 @@ void SeqInfo::read_in_alignment () {
         }
         if (complicated_phylip) {
             seqs_ = read_phylip(*pios_, file_ntax, seq_length_reader_);
-            if (!datatype_set_) {
-                alpha_name_ = seqs_[0].get_alpha_name();
-                set_datatype();
-            }
+            make_concatenated_sequence();
+            set_alphabet_from_sampled_seqs(concatenated_);
+            set_datatype();
         } else {
             while (read_next_seq_from_stream(*pios_, ft, retstring, seq)) {
                 seqs_.push_back(seq);
-                if (!datatype_set_) {
-                    alpha_name_ = seq.get_alpha_name();
-                    set_datatype();
-                }
             }
             if (ft == 2) { // fasta has an trailing one
                 seqs_.push_back(seq);
             }
+            make_concatenated_sequence();
+            set_alphabet_from_sampled_seqs(concatenated_);
+            set_datatype();
         }
     }
     
@@ -153,6 +151,7 @@ void SeqInfo::read_in_alignment () {
         // here, seqs from all individuals are concatenated, so represents all sampled characters
         make_concatenated_sequence();
         set_alphabet_from_sampled_seqs(concatenated_);
+        set_datatype();
     }
     if (file_ntax != 0) {
         if (file_ntax != static_cast<int>(seqs_.size())) {
@@ -497,6 +496,7 @@ void SeqInfo::summarize () {
 }
 
 
+// this... doesn't set the alphabet?!?
 void SeqInfo::set_alphabet_from_sampled_seqs (const std::string& seq) {
     seq_chars_ = get_alphabet_from_sequence(seq);
     // expecting order: valid, gap, missing
@@ -508,5 +508,9 @@ void SeqInfo::set_alphabet_from_sampled_seqs (const std::string& seq) {
     seq_chars_ += gap_;
     seq_chars_ += missing_;
     char_counts_.resize(seq_chars_.size(), 0);
+    Sequence sq;
+    sq.set_id("cat");
+    sq.set_sequence(seq);
+    alpha_name_ = sq.get_alpha_name();
     alpha_set_ = true;
 }
