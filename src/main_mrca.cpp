@@ -39,7 +39,7 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 std::string get_version_line () {
-    std::string vl = "pxmrca 1.2\n";
+    std::string vl = "pxmrca 1.3\n";
     vl += "Copyright (C) 2013-2021 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Stephen A. Smith (blackrim)";

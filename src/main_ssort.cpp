@@ -38,7 +38,7 @@ void print_help () {
 }
 
 std::string get_version_line () {
-    std::string vl = "pxssort 1.2\n";
+    std::string vl = "pxssort 1.3\n";
     vl += "Copyright (C) 2017-2021 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Stephen A. Smith (blackrim), Joseph W. Brown";
