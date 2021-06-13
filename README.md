@@ -2,7 +2,11 @@
 
 <img src="logo.png" alt="phyx logo" width=208px/> 
 
+---
+
 **_Note_** Phyx recently overwent an overhaul such that a simple `git pull && git make` will fail. Instead, see instructions [here](#problems-after-updating-git-pull).
+
+---
 
 **phyx** performs phylogenetics analyses on trees and sequences. See installation instructions for Linux and Mac including any dependencies on the wiki [here](https://github.com/FePhyFoFum/phyx/wiki/Installation) or below.
 
