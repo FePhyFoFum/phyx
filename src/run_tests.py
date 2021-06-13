@@ -23,7 +23,7 @@ def check_individual_results(cm, t):
     if x == t:
         print(bcolors.OKGREEN + "PASSED" + bcolors.ENDC)
         global pass_count
-        pass_count = pass_count + 1
+        pass_count += 1
         return True
     else:
         for i,j in zip(x,t):
@@ -32,7 +32,7 @@ def check_individual_results(cm, t):
         print("intended output:\n", t)
         print("your output:\n", x)
         global fail_count
-        fail_count = fail_count + 1
+        fail_count += 1
         return False
 
 def print_success(res):
@@ -350,8 +350,6 @@ def test_program(name):
     elif name == "pxrr":
         cm = "./pxrr -t TEST/test.tre -g TaxonA"
         t = '(TaxonA:0.05,(TaxonB:0.03,((TaxonD:0.23,TaxonE:0.16):0.7,TaxonC:0.25):0.125):0.05);\n'
-    
-    
     elif name == "pxs2fa":
         res = True
         print("nexus ", end = '')
@@ -410,10 +408,6 @@ def test_program(name):
             res = False
         print_success(res)
         return res
-    
-    
-    
-    
     elif name == "pxs2phy":
         res = True
         print("fasta ", end = '')
@@ -438,8 +432,6 @@ def test_program(name):
             res = False
         print_success(res)
         return res
-        
-        
     elif name == "pxseqgen":
         cm = "./pxseqgen -t TEST/test.tre -x 1 -l 10"
         t = '>TaxonE\nCTGTAACTAG\n>TaxonD\nCTGTAACTAG\n>TaxonC\nGTCTAACAGG\n>TaxonB\nGTTTGACTGG\n>TaxonA\nTTTTGACTGG\n'
@@ -477,14 +469,13 @@ def test_program(name):
         cm = "./pxsw -s TEST/test.fa | grep TaxonA | grep TaxonB"
         t = 'TaxonA\tTaxonB\t40\n'
     
-    
+    # do standard nvanilla nexus, and one with translation table, and one with quotes labels
     elif name == "pxt2new":
         cm = "./pxt2new -t TEST/test_nexus.tre"
         t = '(((TaxonA:0.1,TaxonB:0.03):0.125,TaxonC:0.25):0.4,(TaxonD:0.23,TaxonE:0.16):0.3);\n'
     elif name == "pxt2nex":
         cm = "./pxt2nex -t TEST/collapse.tre"
         t = '#NEXUS\nBegin trees;\ntree tree0 = [&R] (((TaxonA:0.1,TaxonB:0.03)0.43:0.125,TaxonC:0.25)1.0:0.4,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\nend;\n'
-    
     
     elif name == "pxtgen":
         res = True
@@ -551,7 +542,7 @@ def test_program(name):
     if x == t:
         print(bcolors.OKBLUE + "PASSED" + bcolors.ENDC)
         global pass_count
-        pass_count = pass_count + 1
+        pass_count += 1
         return True
     else:
         for i,j in zip(x,t):
@@ -560,7 +551,7 @@ def test_program(name):
         print("intended output:\n", t)
         print("your output:\n", x)
         global fail_count
-        fail_count = fail_count + 1
+        fail_count += 1
         return False
 
 # this are skipped in the testing because they are preliminary, tests will
@@ -579,11 +570,13 @@ if __name__ == "__main__":
     passed = 0
     failed = 0
     failedl = []
+    skipped = 0
     print("=================")
     for i in sorted(os.listdir(dir)):
         if i[:2] == "px":
             if i in notest:
                 print(bcolors.WARNING + "skipping " + i + bcolors.ENDC)
+                skipped += 1
                 continue
             t = test_program(i)
             if t == True:
@@ -593,9 +586,11 @@ if __name__ == "__main__":
                 failedl.append(i)
             else:
                 print(bcolors.WARNING + "no test for " + i + bcolors.ENDC)
+                skipped += 1
             print("=================")
     print("PASSED PROGRAMS: " + str(passed) + " (" + str(pass_count) + " tests)")
     print("FAILED PROGRAMS: " + str(failed) + " (" + str(fail_count) + " tests)")
+    print("PROGRAMS WITHOUT TESTS: " + str(skipped))
     if failed > 0:
         print("These failed:")
         print("\t",",".join(failedl))

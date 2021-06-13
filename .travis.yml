@@ -36,5 +36,5 @@ before_install:
 script:
   - export CC=gcc-7
   - export CXX=g++-7
-  - cd src && autoconf && ./configure && make -j 2 && make test
+  - cd src && autoreconf -fi && ./configure && make -j 2 && make test
 
