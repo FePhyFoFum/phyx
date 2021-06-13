@@ -17,10 +17,13 @@
 #include "seq_models.h"
 #include "pairwise_alignment.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Conduct Needleman-Wunsch analysis for all the seqs in a file." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Output is a list of the scores and distances (and the alignments if asked)." << std::endl;
@@ -43,21 +46,27 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxnw 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxnw 1.3\n";
+    vl += "Copyright (C) 2013-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"outalnf", required_argument, NULL, 'a'},
-    {"seqtype", required_argument, NULL, 't'},
-    {"matrix", required_argument, NULL, 'm'},
-    {"nthreads", required_argument, NULL, 'n'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"outalnf", required_argument, nullptr, 'a'},
+    {"seqtype", required_argument, nullptr, 't'},
+    {"matrix", required_argument, nullptr, 'm'},
+    {"nthreads", required_argument, nullptr, 'n'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -68,14 +77,15 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     //bool outalnfileset = false; // not used
     bool matrixfileset = false;
-    char * seqf = NULL;
-    char * outf = NULL;
-    //char * outaf = NULL; not used
-    char * matf = NULL;
-    int seqtype = 0;//DNA default, 1 = aa
-    int num_threads = 2;//DNA default, 1 = aa
+    char * seqf = nullptr;
+    char * outf = nullptr;
+    //char * outaf = nullptr; not used
+    char * matf = nullptr;
+    int seqtype = 0; // DNA default, 1 = aa
+    int num_threads = 2; // DNA default, 1 = aa
     bool verbose = false;
-    while(true) {
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:a:t:m:n:vhVC", long_options, &oi);
         if (c == -1) {
@@ -117,18 +127,19 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
+                std::cout << get_NW_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
     std::map<char, std::map<char, int> > sc_mat;
-    if (matrixfileset == true) {
+    if (matrixfileset) {
         read_scoring_matrix(matf, sc_mat);
     } else {
         if (seqtype == 0) {
@@ -142,29 +153,29 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
 
-    std::string alphaName = "";
+    std::string alphaName;
     std::vector<Sequence> seqs = ingest_alignment(pios, alphaName);
 
     // go all by all
@@ -183,8 +194,8 @@ int main(int argc, char * argv[]) {
                     std::cout << seqs[i].get_id() << "\t" << seqs[j].get_id()
                         << "\t" << sc << std::endl;
                     if (verbose) {
-                        std::cout << seqs[i].get_id() <<  "\t" << aln1 << "\n"
-                            << seqs[j].get_id()  << "\t" << aln2 << std::endl;
+                        std::cout << seqs[i].get_id() << "\t" << aln1 << "\n"
+                            << seqs[j].get_id() << "\t" << aln2 << std::endl;
                     }
                 }
             }

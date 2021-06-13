@@ -1,6 +1,6 @@
-#ifndef _PHYXLOG_H_
-#define _PHYXLOG_H_
+#ifndef PX_PHYXLOG_H
+#define PX_PHYXLOG_H
 
 void log_call (int argc, char * argv[]);
 
-#endif /* _PHYXLOG_H_ */
+#endif /* PX_PHYXLOG_H */

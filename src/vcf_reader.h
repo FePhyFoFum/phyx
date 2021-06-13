@@ -1,5 +1,5 @@
-#ifndef _VCF_READER_H_
-#define _VCF_READER_H_
+#ifndef PX_VCF_READER_H
+#define PX_VCF_READER_H
 
 #include <vector>
 #include <string>
@@ -15,8 +15,8 @@ private:
     void read_vcf (std::istream* pios);
 
 public:
-    VcfReader (std::istream* pios);
+    explicit VcfReader (std::istream* pios);
     void write_seqs (const bool& uppercase, std::ostream* poos);
 };
 
-#endif /* _VCF_READER_H_ */
+#endif /* PX_VCF_READER_H */

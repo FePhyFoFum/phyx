@@ -10,11 +10,13 @@
 #include "tree.h"
 #include "tree_reader.h"
 #include "log.h"
+#include "citations.h"
 
-extern std::string PHYX_CITATION;
 
+void print_help ();
+std::string get_version_line ();
 
-void print_help() {
+void print_help () {
     std::cout << "Basic sequence simulator under the GTR model." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << std::endl;
@@ -51,30 +53,36 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxseqgen 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxseqgen 1.3\n";
+    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"length", required_argument, NULL, 'l'},
-    {"basef", required_argument, NULL, 'b'},
-    {"gamma", required_argument, NULL, 'g'},
-    {"pinvar", required_argument, NULL, 'i'},
-    {"ratemat", required_argument, NULL, 'r'},
-    {"aaratemat", required_argument, NULL, 'w'},
-    {"aabasef", required_argument, NULL, 'q'},
-    {"nreps", required_argument, NULL, 'n'},
-    {"seed", required_argument, NULL, 'x'},
-    {"ancestors", no_argument, NULL, 'a'},
-    {"printnodelabels", no_argument, NULL, 'p'},
-    {"protein", no_argument, NULL, 'c'},
-    {"multimodel", required_argument, NULL, 'm'},
-    {"rootseq", required_argument, NULL, 'k'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"length", required_argument, nullptr, 'l'},
+    {"basef", required_argument, nullptr, 'b'},
+    {"gamma", required_argument, nullptr, 'g'},
+    {"pinvar", required_argument, nullptr, 'i'},
+    {"ratemat", required_argument, nullptr, 'r'},
+    {"aaratemat", required_argument, nullptr, 'w'},
+    {"aabasef", required_argument, nullptr, 'q'},
+    {"nreps", required_argument, nullptr, 'n'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"ancestors", no_argument, nullptr, 'a'},
+    {"printnodelabels", no_argument, nullptr, 'p'},
+    {"protein", no_argument, nullptr, 'c'},
+    {"multimodel", required_argument, nullptr, 'm'},
+    {"rootseq", required_argument, nullptr, 'k'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -89,22 +97,23 @@ int main(int argc, char * argv[]) {
     float pinvar = 0.0;
     double tot;
     std::string yorn = "n";
-    int seqlen = 1000;
+    unsigned int seqlen = 1000;
+    int x = 0;
     int pos = 0;
     int pos2 = 0;
     std::string infreqs;
     std::string inrates;
     std::string holdrates;
     std::string ancseq;
-    char * outf = NULL;
-    char * treef = NULL;
+    char * outf = nullptr;
+    char * treef = nullptr;
     std::vector<double> diag(20, 0.0);
     std::vector<double> basefreq(4, 0.25);
     std::vector<double> aabasefreq(20, 0.05);
     std::vector<double> userrates;
     std::vector<double> multirates;
     int nreps = 1; // not implemented at the moment
-    int seed = -1;
+    long int seed = -1;
     int numpars = 0;
     float alpha = -1.0;
     std::vector< std::vector<double>> dmatrix;
@@ -130,9 +139,10 @@ int main(int argc, char * argv[]) {
             std::cout << dmatrix[i][j] << " ";
         }
         std::cout << "\n";
+    vl += "";
     }*/
 
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:l:b:g:i:r:w:q:n:x:apcm:k:hVC", long_options, &oi);
         if (c == -1) {
@@ -162,7 +172,13 @@ int main(int argc, char * argv[]) {
                 }
                 break;
             case 'l':
-                seqlen = string_to_int(optarg, "-l");
+                x = string_to_int(optarg, "-l");
+                if (x < 0) {
+                    std::cerr << "Error: Sequence length must be a positive integer. Exiting."
+                            << std::endl;
+                    exit(0);
+                }
+                seqlen = static_cast<unsigned int>(x);
                 break;
             case 'a':
                 showancs = true;
@@ -201,6 +217,7 @@ int main(int argc, char * argv[]) {
                       std::cout << rmatrix[i][j] << " ";
                    }
                     std::cout << "\n";
+    vl += "";
                 }*/
                 break;
             case 'w':
@@ -210,7 +227,8 @@ int main(int argc, char * argv[]) {
                 
                 // NOTE: will have to alter this check for a.a., non-reversible, etc.
                 if (userrates.size() != 190) {
-                    std::cerr << "Error: must provide 190 substitution parameters, I know its a stupidly large amount. " <<
+                    std::cerr << "Error: must provide 190 substitution parameters. ";
+                    std::cerr << "I know its a stupidly large amount. " <<
                         "Only " << userrates.size() << " provided. Exiting." << std::endl;
                     exit(0);
                 }
@@ -242,13 +260,14 @@ int main(int argc, char * argv[]) {
                         std::cout << aa_rmatrix[i][j] << " ";
                     }
                     std::cout << "\n";
+    vl += "";
                 }*/
                 break;
             case 'n':
                 nreps = string_to_int(optarg, "-n");
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 'q':
                 is_dna = false;
@@ -294,13 +313,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -315,23 +334,23 @@ int main(int argc, char * argv[]) {
         dmatrix = aa_rmatrix;
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
@@ -368,10 +387,9 @@ int main(int argc, char * argv[]) {
     int treeCounter = 0;
     bool going = true;
     if (ft == 1) { // newick. easy
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
-            if (tree != NULL) {
+            Tree * tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            if (tree != nullptr) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);
@@ -390,11 +408,10 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (going == true) {
+            if (going) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 SequenceGenerator SGen(seqlen, basefreq, dmatrix, tree, showancs,
                     nreps, seed, alpha, pinvar, ancseq, printpost, multirates, aabasefreq, is_dna);

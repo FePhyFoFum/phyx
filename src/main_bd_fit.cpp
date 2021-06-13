@@ -14,8 +14,11 @@
 #include "utils.h"
 #include "bd_fit.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
+
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Fit a lineage diversification model to a tree." << std::endl;
@@ -25,7 +28,7 @@ void print_help () {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -t, --treef=FILE    input treefile, STDIN otherwise" << std::endl;
-    std::cout << " -m, --model=STRING  diversification model; either 'yule', 'bd' (default), or 'best'" << std::endl;
+    std::cout << " -m, --model=STRING  diversification model. either 'yule', 'bd' (default), or 'best'" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -35,18 +38,24 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxbdfit 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
+std::string get_version_line () {
+    std::string vl = "pxbdfit 1.3\n";
+    vl += "Copyright (C) 2016-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph W. Brown";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"model", required_argument, NULL, 'm'},
-    {"outf", required_argument, NULL, 'o'},
-    {"showd", no_argument, NULL, 's'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"model", required_argument, nullptr, 'm'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"showd", no_argument, nullptr, 's'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -56,13 +65,13 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool tfileset = false;
     
-    char * treef = NULL;
-    char * outf = NULL;
+    char * treef = nullptr;
+    char * outf = nullptr;
     
     std::string model = "bd";
     std::set<std::string> avail_models{"bd", "yule", "best"};
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:m:o:x:hVC", long_options, &oi);
         if (c == -1) {
@@ -91,13 +100,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -106,23 +115,23 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
 
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
@@ -137,9 +146,8 @@ int main(int argc, char * argv[]) {
     
     bool going = true;
     if (ft == 1) {
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
+            Tree * tree = read_next_tree_from_stream_newick (*pios, retstring, &going);
             if (going) {
                 // in addition to checking ultramtericity, the following sets node heights
                 if (is_ultrametric_paths(tree)) {
@@ -157,11 +165,10 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 // in addition to checking ultramtericity, the following sets node heights
                 if (is_ultrametric_paths(tree)) {
                     BDFit bd(tree, model);

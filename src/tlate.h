@@ -1,5 +1,5 @@
-#ifndef _TLATE_H_
-#define _TLATE_H_
+#ifndef PX_TLATE_H
+#define PX_TLATE_H
 
 #include <string>
 #include <map>
@@ -9,9 +9,9 @@ private:
     std::map<std::string, std::string> table_;
     
 public:
-    TLATE (const std::string& table);
+    explicit TLATE (const std::string& table);
     std::string translate (std::string& dna);
     //virtual ~tlate();
 };
 
-#endif /* _TLATE_H_ */
+#endif /* PX_TLATE_H */

@@ -1,5 +1,5 @@
-#ifndef _AA_TO_CDN_H_
-#define _AA_TO_CDN_H_
+#ifndef PX_AA_TO_CDN_H
+#define PX_AA_TO_CDN_H
 
 #include <string>
 
@@ -20,10 +20,10 @@ private:
 
 public:
     AAtoCDN ();
-    AAtoCDN (const std::vector<Sequence>& nuc_seqs, const std::vector<Sequence>& aa_seqs,
+    AAtoCDN (std::vector<Sequence> nuc_seqs, std::vector<Sequence> aa_seqs,
         const bool& remove_last);
     void write_codon_alignment (std::ostream* poos);
-    std::vector<Sequence> get_codon_alignment ();
+    std::vector<Sequence> get_codon_alignment () const;
 };
 
-#endif /* _AA_TO_CDN_H_ */
+#endif /* PX_AA_TO_CDN_H */

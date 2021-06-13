@@ -23,6 +23,7 @@ phyx.log
 .idea*
 examples_old*
 CMakeLists.txt
+build
 convert_phylip_to_states.py
 logo.svg
 *.bbl

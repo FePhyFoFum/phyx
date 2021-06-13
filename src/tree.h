@@ -1,5 +1,5 @@
-#ifndef _TREE_H_
-#define _TREE_H_
+#ifndef PX_TREE_H
+#define PX_TREE_H
 
 #include <string>
 #include <vector>
@@ -15,8 +15,8 @@ private:
     std::vector<Node *> internal_nodes_;
     std::vector<Node *> external_nodes_;
     std::map<std::string, Node*> name_node_map_;
-    int internal_node_count_;
-    int external_node_count_;
+    unsigned int internal_node_count_;
+    unsigned int external_node_count_;
     bool edge_lengths_;
     bool node_annotations_;
     bool internal_node_names_;
@@ -30,31 +30,31 @@ private:
     
 public:
     Tree ();
-    Tree (Node * root);
+    explicit Tree (Node * inroot);
     Tree * clone () { return new Tree(*this); }
     
     void addExternalNode (Node * tn);
     void addInternalNode (Node * tn);
     void pruneExternalNode (Node * node);
     void pruneInternalNode (Node * node);
-    Node * getExternalNode (int num);
-    Node * getExternalNode (std::string name);
-    Node * getInternalNode (int num);
+    Node * getExternalNode (unsigned int num);
+    Node * getExternalNode (const std::string& name);
+    Node * getInternalNode (unsigned int num);
     Node * getInternalNode (std::string& name);
-    Node * getNode (int num);
+    Node * getNode (unsigned int num);
     Node * getNode (std::string& name);
-    int getNodeCount ();
-    int getExtantNodeCount ();
-    int getExternalNodeCount ();
-    int getInternalNodeCount ();
-    Node * getRoot ();
+    unsigned int getNodeCount () const;
+    unsigned int getExtantNodeCount ();
+    unsigned int getExternalNodeCount () const;
+    unsigned int getInternalNodeCount () const;
+    Node * getRoot () const;
     void setRoot (Node * inroot);
     void setEdgeLengthsPresent (bool res);
-    bool hasEdgeLengths ();
+    bool hasEdgeLengths () const;
     void setNodeAnnotationsPresent (bool res);
-    bool hasNodeAnnotations ();
+    bool hasNodeAnnotations () const;
     void setNodeNamesPresent (bool res);
-    bool hasNodeNames ();
+    bool hasNodeNames () const;
     void unRoot ();
     bool reRoot (Node * inroot);
     void duplicateRootSupport ();
@@ -71,4 +71,4 @@ public:
     ~Tree ();
 };
 
-#endif /* _TREE_H_ */
+#endif /* PX_TREE_H */

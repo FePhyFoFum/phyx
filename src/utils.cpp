@@ -4,7 +4,7 @@
 #include <fstream>
 #include <numeric>
 #include <algorithm>
-#include <stdlib.h>
+#include <cstdlib>
 #include <sstream>
 #include <cmath>
 #include <limits>
@@ -16,12 +16,13 @@
 
 #include "utils.h"
 #include "superdouble.h"
+#include "constants.h"
 
 
 // TODO: use const where possible
 
 // set threshold. should maybe use superdouble.
-double EPSILON = 1e-7;
+//extern const double EPSILON; // moved to constants.h
 
 // other stuff i am playing around with. temporary. 
 /*
@@ -44,8 +45,8 @@ void check_file_exists (const std::string& filename) {
 
 
 void check_inout_streams_identical (char * in, char * out) {
-    if ((std::string)in == (std::string)out) {
-        std::cerr << "Error: input and output file names must differ (streams!). Exiting." << std::endl;
+    if (in == out) {
+        std::cerr << "Error: input and output streams (files) must differ. Exiting." << std::endl;
         exit(0);
     }
 }
@@ -56,12 +57,25 @@ void check_inout_streams_identical (char * in, char * out) {
 int string_to_int (const std::string& in, const std::string& arg) {
     int res = 0;
     try {
-            res = stoi(in);
-        }
-        catch (const std::invalid_argument& ia) {
-            std::cerr << "Error: invalid argument for " << arg << " (expecting int). Exiting." << std::endl;
-            exit(0);
-        }
+            res = std::stoi(in);
+    } catch (const std::invalid_argument& ia) {
+        std::cerr << "Error: invalid argument for " << arg
+                << "; expecting int (" << ia.what() << "). Exiting." << std::endl;
+        exit(0);
+    }
+    return res;
+}
+
+
+long int string_to_long_int (const std::string& in, const std::string& arg) {
+    long int res = 0;
+    try {
+            res = std::stol(in);
+    } catch (const std::invalid_argument& ia) {
+        std::cerr << "Error: invalid argument for " << arg
+                << "; expecting long int (" << ia.what() << "). Exiting." << std::endl;
+        exit(0);
+    }
     return res;
 }
 
@@ -70,12 +84,25 @@ int string_to_int (const std::string& in, const std::string& arg) {
 float string_to_float (const std::string& in, const std::string& arg) {
     float res = 0;
     try {
-            res = stof(in);
-        }
-        catch (const std::invalid_argument& ia) {
-            std::cerr << "Error: invalid argument for " << arg << " (expecting float). Exiting." << std::endl;
+            res = std::stof(in);
+    } catch (const std::invalid_argument& ia) {
+            std::cerr << "Error: invalid argument for " << arg
+                    << "; expecting float (" << ia.what() << "). Exiting." << std::endl;
             exit(0);
-        }
+    }
+    return res;
+}
+
+
+double string_to_double (const std::string& in, const std::string& arg) {
+    double res = 0;
+    try {
+            res = std::stod(in);
+    } catch (const std::invalid_argument& ia) {
+            std::cerr << "Error: invalid argument for " << arg
+                    << "; expecting double (" << ia.what() << "). Exiting." << std::endl;
+            exit(0);
+    }
     return res;
 }
 
@@ -96,7 +123,8 @@ std::string string_to_lower (const std::string& instr) {
 }
 
 
-void tokenize (const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters) {
+void tokenize (const std::string& str, std::vector<std::string>& tokens,
+        const std::string& delimiters) {
     // Skip delimiters at beginning.
     std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
     // Find first "non-delimiter".
@@ -128,7 +156,7 @@ std::vector<std::string> tokenize (const std::string& input) {
 
 bool is_number (const std::string& s) {
     std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) {
+    while (it != s.end() && (std::isdigit(*it) != 0)) {
         ++it;
     }
     return !s.empty() && it == s.end();
@@ -136,11 +164,12 @@ bool is_number (const std::string& s) {
 
 
 // get the longest label. for printing/formatting purposes
-int get_longest_label (std::vector<std::string>& labels) {
-    int longest_label_ = 0;
-    for (unsigned int i = 0; i < labels.size(); i++) {
-        if ((int)labels[i].size() > longest_label_) {
-            longest_label_ = labels[i].size();
+unsigned int get_longest_label (std::vector<std::string>& labels) {
+    unsigned int longest_label_ = 0;
+    for (auto & label : labels) {
+        auto cur_len = static_cast<unsigned int>(label.size());
+        if (cur_len > longest_label_) {
+            longest_label_ = cur_len;
         }
     }
     return longest_label_;
@@ -161,48 +190,53 @@ std::istream& getline_safe(std::istream& is, std::string& t) {
     std::istream::sentry se(is, true);
     std::streambuf* sb = is.rdbuf();
 
-    for(;;) {
+    for (;;) {
         int c = sb->sbumpc();
         switch (c) {
         case '\n':
             return is;
         case '\r':
-            if(sb->sgetc() == '\n')
+            if (sb->sgetc() == '\n') {
                 sb->sbumpc();
+            }
             return is;
         case std::streambuf::traits_type::eof():
             // Also handle the case when the last line has no line ending
-            if(t.empty())
+            if (t.empty()) {
                 is.setstate(std::ios::eofbit);
+            }
             return is;
         default:
-            t += (char)c;
+            t += static_cast<char>(c);
         }
     }
 }
 
 
-int factorial (int n) {
+// not currently used
+unsigned int factorial (unsigned int n) {
     return (n == 0 || n == 1) ? 1 : factorial(n - 1) * n;
 }
 
 
 // used for counting trees
-int doublefactorial(int n) {
+unsigned long int doublefactorial (unsigned int n) {
     return (n == 0 || n == 1) ? 1 : doublefactorial(n - 2) * n; 
 } 
 
 
-// higher resolution than time( NULL );
+// higher resolution than time( nullptr );
 unsigned int get_clock_seed () {
-    return (std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    return (static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 }
 
 
 void trim_spaces (std::string& str) {
     // Trim Both leading and trailing spaces
-    size_t startpos = str.find_first_not_of(" \t\r\n"); // Find the first character position after excluding leading blank spaces
-    size_t endpos = str.find_last_not_of(" \t\r\n"); // Find the first character position from reverse af
+    // Find the first character position after excluding leading blank spaces
+    size_t startpos = str.find_first_not_of(" \t\r\n");
+    // Find the first character position from reverse af
+    size_t endpos = str.find_last_not_of(" \t\r\n");
 
     // if all spaces or empty return an empty string
     if (std::string::npos == startpos || std::string::npos == endpos) {
@@ -212,7 +246,8 @@ void trim_spaces (std::string& str) {
     }
     /*
     // Code for Trim Leading Spaces only
-    size_t startpos = str.find_first_not_of(\t); // Find the first character position after excluding leading blank spaces
+    // Find the first character position after excluding leading blank spaces
+    size_t startpos = str.find_first_not_of(\t);
     if (string::npos != startpos)
     str = str.substr( startpos );
     */
@@ -238,9 +273,12 @@ bool check_comment_line (const std::string& line) {
 
 
 // used by pxstrec
-std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numstates) {
-    std::vector<double> cols(numstates, 1);
-    std::vector<std::vector<double> > ratematrix = std::vector<std::vector<double> > (numstates, cols);
+std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename,
+        int numstates) {
+    auto ns = static_cast<size_t>(numstates);
+    std::vector<double> cols(ns, 1);
+    std::vector<std::vector<double> > ratematrix;
+    ratematrix = std::vector<std::vector<double> > (ns, cols);
     //read file
     std::ifstream ifs(filename.c_str());
     std::string line;
@@ -251,11 +289,11 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filen
             std::string del(" ,\t");
             tokens.clear();
             tokenize(line, tokens, del);
-            for (unsigned int j = 0; j < tokens.size(); j++) {
-                trim_spaces(tokens[j]);
+            for (auto & tk : tokens) {
+                trim_spaces(tk); // this will never be used, as it was split on whitespace
             }
             for (unsigned int j = 0; j < tokens.size(); j++) {
-                ratematrix[fromarea][j] = atof(tokens[j].c_str());
+                ratematrix[static_cast<size_t>(fromarea)][j] = std::atof(tokens[j].c_str());
             }
             if (fromarea < numstates-1) {
                 fromarea += 1;
@@ -271,31 +309,31 @@ std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filen
 
 // NOTE: this assumes that srand have been seeded previously
 // e.g., srand(get_clock_seed());
-int random_int_range (int min, int max) {
-    return min + (rand() % (int)(max - min + 1));
+unsigned int random_int_range (const unsigned int& min, const unsigned int& max) {
+    return min + (rand() % static_cast<unsigned int>(max - min + 1));
 }
 
 
 // given numTotal sites, sample numSample without replacement between 0 -> (numTotal-1)
 // ok, this is pretty sweet, if i do say so myself
-std::vector<int> sample_without_replacement (const int& numTotal, const int& numSample) {
-    std::vector<int> randsites (numSample); // numchar zero-initialized elements
-    std::vector<int> allsites (numTotal);
+std::vector<unsigned int> sample_without_replacement (const unsigned int& numTotal,
+        const unsigned int& numSample) {
+    std::vector<unsigned int> randsites (static_cast<size_t>(numSample)); // numchar zero-initialized elements
+    std::vector<unsigned int> allsites (static_cast<size_t>(numTotal));
     std::iota(allsites.begin(), allsites.end(), 0); // generate sequence 0, 1, 2..., n-1
     
-    int randNum = 0;
-    for (int i = 0; i < numSample; i++) {
-        randNum = random_int_range(i, (numTotal - 1));
+    for (unsigned int i = 0; i < numSample; i++) {
+        unsigned int randNum = random_int_range(i, (numTotal - 1u));
     // swap, so don't have to worry about multiple hits
-        std::swap(allsites[i], allsites[randNum]);
-        randsites[i] = allsites[i];
+        std::swap(allsites[static_cast<size_t>(i)], allsites[static_cast<size_t>(randNum)]);
+        randsites[static_cast<size_t>(i)] = allsites[static_cast<size_t>(i)];
     }
     return randsites;
 }
 
 
 // arg below is always '?'. besides, getopt prints errors to sterr
-void print_error (char * pname, char arg) {
+void print_error (char * pname) {
     // std::cout << pname <<": invalid option -- '" << arg << "'" << std::endl;
     std::cout << "Try `" << pname << " --help' for more information." << std::endl;
 }
@@ -341,7 +379,7 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
     //had to change because of negatives
     if ((match1 != sum(matA)) && (match1 != sum(matB))) {
         if (numdiffs != matA.size()) {
-            if (edgewise == true) {
+            if (edgewise) {
                 int match2 = 0;
                 unsigned int numdiffs2 = 0;
                 for (unsigned int i = 0; i < matA.size(); i++) {
@@ -368,20 +406,21 @@ bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise
 //------------------------------------------------------------------------//
 // simple math on vectors
 
-int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col) {
-    int x=0;
-    for (unsigned int i = 0; i < matrix.size(); i++) {
-        x += matrix[i][col];
+int sum_matrix_col (std::vector<std::vector<int> >& matrix, unsigned int col) {
+    int x = 0;
+    for (auto & mati : matrix) {
+        x += mati[static_cast<size_t>(col)];
     }
     return x;
 }
 
 
+// not used
 int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
-    int x=0;
-    for (unsigned int i = 0; i < matrix.size(); i++) {
-        if (matrix[i][col] < 0) {
-            x += matrix[i][col];
+    int x = 0;
+    for (auto & mati : matrix) {
+        if (mati[static_cast<size_t>(col)] < 0) {
+            x += mati[static_cast<size_t>(col)];
         }
     }
     return x;
@@ -390,9 +429,9 @@ int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col) {
 
 // NOTE: this partially rearranges elements, so make a copy if order is important
 double v_median (std::vector<double>& in) {
-    int n = in.size() / 2;
+    int n = static_cast<int>(in.size()) / 2;
     std::nth_element(in.begin(), in.begin()+n, in.end());
-    double median = in[n];
+    double median = in[static_cast<size_t>(n)];
     
     if (n % 2 == 0) { // if the length is even
       auto max_it = std::max_element(in.begin(), in.begin()+n);
@@ -404,13 +443,13 @@ double v_median (std::vector<double>& in) {
 
 // should make this a templated function
 double v_mean (std::vector<double>& in) {
-    return sum(in) / (double)in.size();
+    return sum(in) / static_cast<double>(in.size());
 }
 
 
 // if you want one, prolly want the other too
 void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
-    double n = (double)in.size();
+    auto n = static_cast<double>(in.size());
     mn = sum(in) / n;
     std::vector<double> diff(in.size());
     std::transform(in.begin(), in.end(), diff.begin(),
@@ -421,9 +460,9 @@ void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
 
 
 double v_variance (std::vector<double>& in) {
-    double n = (double)in.size();
+    auto n = static_cast<double>(in.size());
     double meann = sum(in) / n;
-    std::vector<double> diff((int)n);
+    std::vector<double> diff(static_cast<size_t>(n));
     std::transform(in.begin(), in.end(), diff.begin(),
         std::bind2nd(std::minus<double>(), meann));
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
@@ -442,6 +481,12 @@ int sum (std::vector<int>& in) {
 }
 
 
+// hrm look into templated function
+unsigned int sum (std::vector<unsigned int>& in) {
+    return static_cast<unsigned int>(std::accumulate(in.begin(), in.end(), 0));
+}
+
+
 std::vector<double> string_v_to_double_v (const std::vector<std::string>& in) {
     std::vector<double> out(in.size());
     std::transform(in.begin(), in.end(), out.begin(), [](const std::string& val) {return std::stod(val);});
@@ -451,8 +496,8 @@ std::vector<double> string_v_to_double_v (const std::vector<std::string>& in) {
 
 int count_zeros (std::vector<int>& in) {
     int x = 0;
-    for (unsigned int i = 0; i < in.size(); i++) {
-        if (in[i] == 0) {
+    for (int i : in) {
+        if (i == 0) {
             x += 1;
         }
     }
@@ -461,10 +506,10 @@ int count_zeros (std::vector<int>& in) {
 
 
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in) {
-    Superdouble sum = 0;
-    for (unsigned int i = 0; i < in.size(); i++) {
-        sum += in[i];
-        // std::cout << in[i] << " sum:" << sum << std::endl;
+    Superdouble sum(0);
+    for (const auto & i : in) {
+        sum += i;
+        // std::cout << i << " sum:" << sum << std::endl;
     }
     // std::cout << "endsum:" << sum << std::endl;
     return sum;
@@ -480,12 +525,13 @@ std::vector<int> sum (std::vector<int>& vec1, std::vector<int>& vec2) {
       );
     }
     std::vector<int> res = vec1;
-    std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<int>());
+    std::transform(res.begin(), res.end(), vec2.begin(), res.begin(), std::plus<>());
     return res;
 }
 
 
-std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std::vector<double>& vec2) {
+std::vector<double> average_vectors_elementwise (std::vector<double>& vec1,
+        std::vector<double>& vec2) {
     // bail if sequences are of different lengths.
     if (vec1.size() != vec2.size()) {
       throw std::invalid_argument(
@@ -493,7 +539,7 @@ std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std:
       );
     }
     std::vector<double> res = sum_vectors_elementwise(vec1, vec2);
-    std::transform(res.begin(), res.end(), res.begin(), std::bind1st (std::multiplies <double> () , 0.5));
+    std::transform(res.begin(), res.end(), res.begin(), std::bind1st(std::multiplies<double>(), 0.5));
     
     return res;
 }
@@ -503,8 +549,8 @@ std::vector<double> average_vectors_elementwise (std::vector<double>& vec1, std:
 
 std::string get_string_vector(std::vector<std::string>& sts) {
     std::string rets;
-    for (unsigned int i = 0; i < sts.size(); i++) {
-        rets += sts[i]+ " ";
+    for (const auto & st : sts) {
+        rets += st + " ";
     }
     return rets;
 }
@@ -512,15 +558,16 @@ std::string get_string_vector(std::vector<std::string>& sts) {
 
 std::string get_string_vector(std::vector<int>& sts) {
     std::string rets;
-    for (unsigned int i = 0; i < sts.size(); i++) {
-        rets += std::to_string(sts[i]) + " ";
+    for (int st : sts) {
+        rets += std::to_string(st) + " ";
     }
     return rets;
 }
 
 
 // replace all occurrences of origSubStr to replSubStr
-void replace_all (std::string& str, const std::string& origSubStr, const std::string& replSubStr) {
+void replace_all (std::string& str, const std::string& origSubStr,
+        const std::string& replSubStr) {
     if (origSubStr.empty()) {
         return;
     }
@@ -537,7 +584,8 @@ void replace_all (std::string& str, const std::string& origSubStr, const std::st
 // characters will each be replaced). replacement string may be longer than what
 // is being replaced (a single character).
 // e.g. we might replace each chars in "()[]:;" by "_"
-void replace_each (std::string& str, const std::string& badChars, const std::string& replSubStr) {
+void replace_each (std::string& str, const std::string& badChars,
+        const std::string& replSubStr) {
     if (badChars.empty()) {
         return;
     }
@@ -572,14 +620,14 @@ void replace_each (std::string& str, const std::string& badChars, const std::str
  Where they diverge (punctuation in Nexus but not newick):  
  
 /-----------------------------------------------------------------------*/
-const std::string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>";
+//const std::string nexus_punct  = "()[]{}/\\,;:=*\'\"`+-<>"; // escaped string literal
+const std::string nexus_punct  = R"(()[]{}/\,;:=*'"`+-<>)"; // raw string literal
 const std::string newick_punct = "()[]\':;,";
 
 // given a line that begins with [, keep reading until a line where last char is ] (i.e., end of comment)
 // occurs in BOTH tree and alignment files (hence, location)
 // NOTE: returns the end comment line (so reader will need to read in next valid line)
 void process_nexus_comment (std::istream& stri, std::string& tline) {
-    bool done = false;
     std::string terp = tline;
     trim_spaces(terp);
     // check single-line comment
@@ -588,7 +636,7 @@ void process_nexus_comment (std::istream& stri, std::string& tline) {
         return;
     }
     // if not, dealing with a multi-line comment
-    while (!done) {
+    while (true) {
         getline_safe(stri, terp);
         trim_spaces(terp);
         if (!terp.empty()) {
@@ -610,7 +658,9 @@ bool check_nexus_comment (std::string line) {
     return comment;
 }
 
+
 // get a taxon label that is newick-compliant
+// this is not currently used, but probably should be
 std::string get_valid_newick_label (const std::string& inLabel) {
     std::string outLabel = inLabel;
     
@@ -621,7 +671,7 @@ std::string get_valid_newick_label (const std::string& inLabel) {
     // does the label require quotes?
     if (outLabel.find_first_of(newick_punct) != std::string::npos) {
         quotify_label(outLabel);
-    } else if (outLabel.find_first_of(" ") != std::string::npos) {
+    } else if (outLabel.find_first_of(' ') != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
     }
     return outLabel;
@@ -639,7 +689,7 @@ std::string get_valid_nexus_label (const std::string& inLabel) {
     // does the label require quotes?
     if (outLabel.find_first_of(nexus_punct) != std::string::npos) {
         quotify_label(outLabel);
-    } else if (outLabel.find_first_of(" ") != std::string::npos) {
+    } else if (outLabel.find_first_of(' ') != std::string::npos) {
         std::replace(outLabel.begin(), outLabel.end(), ' ', '_');
     }
     return outLabel;
@@ -680,12 +730,14 @@ unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2) {
     // bail if sequences are of different lengths. should be caught earlier than this
     if (s1.size() != s2.size()) {
         throw std::invalid_argument(
-          "Hamming distances are only defined for strings of equal length"
+          "Hamming distances are only defined for strings of equal length."
       );
     }
-
+    
+    unsigned int startv = 0;
+    
     return std::inner_product(
-        s1.begin(), s1.end(), s2.begin(), 0, std::plus<unsigned int>(),
+        s1.begin(), s1.end(), s2.begin(), startv, std::plus<>(),
         std::not2(std::equal_to<std::string::value_type>())
     );
 }
@@ -700,20 +752,23 @@ double logn (double x, double base) {
 // equality checks //
 
 // check if 2 doubles are equal within some tolerance.
-bool essentially_equal (double a, double b) {
-    bool equal = false;
+bool essentially_equal_doubles (double a, double b) {
     
     /*
     std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
-    std::cout << "ApproximatelyEqual: " <<  (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
-    std::cout << "EssentiallyEqual: " <<  (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "ApproximatelyEqual: "
+        << (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "EssentiallyEqual: "
+        << (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
     */
     
-    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(abs(a), abs(b)))) {
+    // not used
+    /*
+    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(std::abs(a), std::abs(b)))) {
         equal = true;
     }
-    
-    equal = (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON));
+    */
+    bool equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
     
     return equal;
 }
@@ -721,8 +776,8 @@ bool essentially_equal (double a, double b) {
 
 bool all_equal (std::vector<double> vals) {
     bool equal = false;
-    std::vector<double>::iterator it = std::find_if_not(vals.begin()+1, vals.end(),
-            std::bind(essentially_equal, std::placeholders::_1, vals[0]));
+    auto it = std::find_if_not(vals.begin()+1, vals.end(),
+            std::bind(essentially_equal_doubles, std::placeholders::_1, vals[0]));
     if (it == end(vals)) {
         equal = true;
     }
@@ -735,20 +790,28 @@ bool all_equal (std::vector<int> vals) {
     if (std::all_of(vals.begin(), vals.end(), [&] (int i) {return i == vals[0];})) {
         equal = true;
     }
-    
+    return equal;
+}
+
+
+bool all_equal (std::vector<unsigned int> vals) {
+    bool equal = false;
+    if (std::all_of(vals.begin(), vals.end(), [&] (unsigned int i) {return i == vals[0];})) {
+        equal = true;
+    }
     return equal;
 }
 
 
 bool check_for_input_to_stream () {
+    bool ret = true;
     struct pollfd pfd = { STDIN_FILENO, POLLIN, 0 };
-    int ret = 0;
-    ret = poll(&pfd, 1, 500);
-    if (ret == 0) {
-        return false;
-    } else {
-        return true;
+    int ret_poll = 0;
+    ret_poll = poll(&pfd, 1, 500);
+    if (ret_poll == 0) {
+        ret = false;
     }
+    return ret;
 }
 
 
@@ -756,9 +819,9 @@ bool check_for_input_to_stream () {
 // return elements in a *not* found in b
 std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b) {
     std::vector<std::string> comp;
-    for (unsigned int i = 0; i < a.size(); i++) {
-        if (find(b.begin(), b.end(), a[i]) == b.end()) {
-            comp.push_back(a[i]);
+    for (const auto & i : a) {
+        if (find(b.begin(), b.end(), i) == b.end()) {
+            comp.push_back(i);
         }
     }
     return comp;
@@ -767,7 +830,7 @@ std::vector<std::string> get_complement (std::vector<std::string>& a, std::vecto
 
 // peek at the next line in the stream
 std::string peek_line (std::istream& pios) {
-    std::string nextLine = "";
+    std::string nextLine;
     // get current position
     std::streampos spt = pios.tellg();
     // read in next line
@@ -781,7 +844,7 @@ std::string peek_line (std::istream& pios) {
 // same as above, except read in the next n lines
 std::vector<std::string> peek_lines (std::istream& pios, const int& n) {
     std::vector<std::string> peekedLines;
-    std::string nextLine = "";
+    std::string nextLine;
     // get current position
     std::streampos spt = pios.tellg();
     // read in the lines
@@ -800,10 +863,10 @@ std::vector<std::string> regex_search_labels (const std::vector<std::string>& na
         const std::string& pattern) {
     std::vector<std::string> results;
     const std::regex regexp(pattern);
-    for (int i = 0; i < (int)names.size(); i++) {
-        //std::cout << names[i] << ": " << std::regex_search(names[i], regexp) << std::endl;
-        if (std::regex_search(names[i], regexp)) {
-            results.push_back(names[i]);
+    for (const auto & name : names) {
+        //std::cout << name << ": " << std::regex_search(name, regexp) << std::endl;
+        if (std::regex_search(name, regexp)) {
+            results.push_back(name);
         }
     }
     return results;

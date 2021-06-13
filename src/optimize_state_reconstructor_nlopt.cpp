@@ -30,7 +30,7 @@ double nlopt_sr (unsigned n, const double *x, double *grad, void *my_func_data) 
     double like;
     nloptrm->set_Q_diag();
     like = nloptsr->eval_likelihood();
-    if (nloptrm->neg_p == true) {
+    if (nloptrm->neg_p) {
         like = 10000000000000;
     }
     //std::cout << like << std::endl;
@@ -40,7 +40,8 @@ double nlopt_sr (unsigned n, const double *x, double *grad, void *my_func_data) 
     return like;
 }
 
-void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_mask, int _nfree) {
+void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr,
+        mat * _free_mask, int _nfree) {
     nloptsr = _sr;
     nloptrm = _rm;
     nloptfree_variables = _free_mask;
@@ -54,7 +55,7 @@ void optimize_sr_nlopt (RateModel * _rm,StateReconstructor * _sr, mat * _free_ma
 
     opt.set_lower_bounds(0.0000);
     opt.set_upper_bounds(100000);
-    opt.set_min_objective(nlopt_sr, NULL);
+    opt.set_min_objective(nlopt_sr, nullptr);
     opt.set_xtol_rel(0.001);
     opt.set_maxeval(5000);
 

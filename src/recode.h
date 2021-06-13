@@ -1,5 +1,5 @@
-#ifndef _RECODE_H_
-#define _RECODE_H_
+#ifndef PX_RECODE_H
+#define PX_RECODE_H
 
 #include <string>
 #include <set>
@@ -39,13 +39,13 @@ public:
     static std::regex h_;
     static std::regex v_;
     
-    SequenceRecoder (std::string& recodescheme);
+    explicit SequenceRecoder (std::string& recodescheme);
     void parse_scheme ();
     void check_valid_scheme ();
     std::string get_recoded_seq (const std::string& origseq);
     void recode_seq (std::string& s);
     
-    //~SequenceRecoder();
+    //~SequenceRecoder ();
 };
 
-#endif /* _RECODE_H_ */
+#endif /* PX_RECODE_H */

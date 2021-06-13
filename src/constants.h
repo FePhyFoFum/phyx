@@ -1,14 +1,12 @@
-#ifndef _CONSTANTS_H_
-#define _CONSTANTS_H_
+#ifndef PX_CONSTANTS_H
+#define PX_CONSTANTS_H
 
-#include <string>
+//#include <string>
 
 // a place to put global constants so they do not have to be redefined
 
 const long double PI = 3.1415926535897932384626433832795L;
 const long double E = 2.718281828459045;
+const double EPSILON = 1e-7;
 
-// Phyx citation
-std::string PHYX_CITATION = "Brown, Joseph W., Joseph F. Walker, and Stephen A. Smith. 2017. Phyx: phylogenetic tools for unix. Bioinformatics 33(12): 1886-1888. https://doi.org/10.1093/bioinformatics/btx063";
-
-#endif /* _CONSTANTS_H_ */
+#endif /* PX_CONSTANTS_H */

@@ -21,10 +21,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  more development by Stephen A. Smith
+ modernizing by Joseph W. Brown (2021)
  */
 
-#ifndef _SUPERDOUBLE_H_
-#define _SUPERDOUBLE_H_
+#ifndef PX_SUPERDOUBLE_H
+#define PX_SUPERDOUBLE_H
 
 #include <cmath>
 #include <iostream>
@@ -36,11 +37,11 @@ private:
     bool stilldouble;
     double upperlimit;
     double lowerlimit;
-    void adjustDecimal();
-    friend std::ostream& operator<<(std::ostream& os, const Superdouble& x);
+    void adjustDecimal ();
+    friend std::ostream& operator << (std::ostream& os, const Superdouble& x);
     
 public:
-    Superdouble(long double mantissa=1.0, int exponent=0);
+    Superdouble(long double m=1.0l, int e=0);
     ~Superdouble();
     Superdouble operator* ( Superdouble x);
     Superdouble operator* ( double x);
@@ -53,16 +54,18 @@ public:
     void operator/= (Superdouble x);
     void operator+= (Superdouble x);
     void operator-= (Superdouble x);
-    bool operator < (const Superdouble& x)const;
-    bool operator > (const Superdouble& x)const;
-    bool operator >= (const Superdouble& x)const;
-    bool operator <= (const Superdouble& x)const;
-    int getExponent();
-    double getMantissa();
-    Superdouble getLn();
-    Superdouble abs();
-    void switch_sign();
+    bool operator < (const Superdouble& x) const;
+    bool operator > (const Superdouble& x) const;
+    bool operator >= (const Superdouble& x) const;
+    bool operator <= (const Superdouble& x) const;
+    int getExponent () const;
+    double getMantissa ();
+    Superdouble getLn ();
+    Superdouble abs ();
+    void switch_sign ();
     
-    operator double() {return mantissa*pow(10.,exponent);};
+    operator double() {
+        return static_cast<double> (mantissa) * pow(10., exponent);
+    }
 };
-#endif /* _SUPERDOUBLE_H_ */
+#endif /* PX_SUPERDOUBLE_H */

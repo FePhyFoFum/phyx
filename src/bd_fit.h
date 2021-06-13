@@ -1,5 +1,5 @@
-#ifndef _BD_FIT_H_
-#define _BD_FIT_H_
+#ifndef PX_BD_FIT_H
+#define PX_BD_FIT_H
 
 #include <vector>
 #include <string>
@@ -27,9 +27,10 @@ private:
     
     Tree* tree_;
     double treelength_;
+    // why are the following doubles?!? for eventual maths, obvs, but seems stupid here
     double nintnodes_;
     double nspeciation_;
-    double ntips_;
+    unsigned int ntips_;
     std::vector<double> branching_times_;
     double rootheight_;
     
@@ -40,12 +41,12 @@ private:
     void get_aic(const double& lik, double& aic, double& aicc);
 
 public:
-    BDFit(Tree * intree, const std::string& modelflavour);
-    void get_pars(std::ostream* poos);
+    BDFit(Tree * intree, std::string& modelflavour);
+    void get_pars(std::ostream* poos) const;
 };
 
 // non-member function, as nlopt is weird with pointers...
 double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad,
     void *data);
 
-#endif /* _BD_FIT_H_ */
+#endif /* PX_BD_FIT_H */

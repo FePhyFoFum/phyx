@@ -1,5 +1,5 @@
-#ifndef _TREE_READER_H_
-#define _TREE_READER_H_
+#ifndef PX_TREE_READER_H
+#define PX_TREE_READER_H
 
 #include <string>
 #include <map>
@@ -11,11 +11,12 @@
 class TreeReader {
 public:
     TreeReader ();
-    Tree * readTree (std::string trees);
+    Tree * readTree (const std::string& pb);
 };
 
-Tree * read_tree_string (std::string trees);
-int test_tree_filetype (std::string filen);
+
+// hrm why are these not member functions?
+int test_tree_filetype (const std::string&);
 int test_tree_filetype_stream (std::istream& stri, std::string& retstring);
 bool get_nexus_translation_table (std::istream& stri,
         std::map<std::string, std::string> * trans, std::string * retstring);
@@ -24,4 +25,4 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
 Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring,
         bool * going);
 
-#endif /* _TREE_READER_H_ */
+#endif /* PX_TREE_READER_H */

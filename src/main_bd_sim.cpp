@@ -13,8 +13,11 @@
 #include "utils.h"
 #include "bd_sim.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
+
+void print_help ();
+std::string get_version_line ();
 
 void print_help () {
     std::cout << "Birth-death tree simulator." << std::endl;
@@ -29,6 +32,7 @@ void print_help () {
     std::cout << " -n, --nreps=INT     number of replicates, default=1" << std::endl;
     std::cout << " -s, --showextinct   show lineages that went extinct, default=false" << std::endl;
     std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
+    std::cout << " -v, --verbose       print per-tree simulation summary (to cerr)" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -38,22 +42,29 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
- std::string versionline("pxbdsim 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph W. Brown");
+ std::string get_version_line () {
+    std::string vl = "pxbdsim 1.3\n";
+    vl += "Copyright (C) 2013-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Stephen A. Smith (blackrim), Joseph W. Brown";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"extant", required_argument, NULL, 'e'},
-    {"time", required_argument, NULL, 't'},
-    {"birth", required_argument, NULL, 'b'},
-    {"death", required_argument, NULL, 'd'},
-    {"nreps", required_argument, NULL, 'n'},
-    {"outf", required_argument, NULL, 'o'},
-    {"showextinct", no_argument, NULL, 's'},
-    {"seed", required_argument, NULL, 'x'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"extant", required_argument, nullptr, 'e'},
+    {"time", required_argument, nullptr, 't'},
+    {"birth", required_argument, nullptr, 'b'},
+    {"death", required_argument, nullptr, 'd'},
+    {"nreps", required_argument, nullptr, 'n'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"showextinct", no_argument, nullptr, 's'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -63,18 +74,19 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool timeset = false;
     bool extantset = false;
-    char * outf = NULL;
+    char * outf = nullptr;
     int ext = 0;
     int nreps = 1;
     double time = 0.0;
     double birth = 1.0;
     double death = 0.0;
     bool showd = false;
+    bool verbose = false;
+    long int seed = -1;
     
-    int seed = -1;
-    while(true) {
+    while (true) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:shVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "e:t:b:d:n:o:x:vshVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -84,18 +96,18 @@ int main(int argc, char * argv[]) {
                 extantset = true;
                 break;
             case 't':
-                time = string_to_float(optarg, "-t");
+                time = string_to_double(optarg, "-t");
                 timeset = true;
                 break;
             case 'b':
-                birth = string_to_float(optarg, "-b");
+                birth = string_to_double(optarg, "-b");
                 if (birth <= 0) {
                     std::cerr << "Error: birth rate must be > 0. Exiting." << std::endl;
                     exit(0);
                 }
                 break;
             case 'd':
-                death = string_to_float(optarg, "-d");
+                death = string_to_double(optarg, "-d");
                 if (death < 0) {
                     std::cerr << "Error: death rate must be >= 0. Exiting." << std::endl;
                     exit(0);
@@ -104,12 +116,15 @@ int main(int argc, char * argv[]) {
             case 'n':
                 nreps = string_to_int(optarg, "-n");
                 break;
+            case 'v':
+                verbose = true;
+                break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 's':
                 showd = true;
@@ -118,18 +133,18 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
     
-    if (ext == 0 && time == 0) {
+    if (!extantset && !timeset) {
         std::cerr << "Error: you have to set -e or -t. Exiting." << std::endl;
         exit(0);
     }
@@ -138,10 +153,10 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-     std::ostream * poos = NULL;
-     std::ofstream * ofstr = NULL;
+     std::ostream * poos = nullptr;
+     std::ofstream * ofstr = nullptr;
     
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -151,10 +166,17 @@ int main(int argc, char * argv[]) {
     BirthDeathSimulator bd(ext, time, birth, death, seed);
     for (int i = 0; i < nreps; i++) {
         Tree * bdtr = bd.make_tree(showd);
-        if (bdtr->getExtantNodeCount() > 1) {
-            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << std::endl;
-        } else {
+        
+        // only extinct-pruned scenarios can produce a single terminal tree
+        // tree writer has a problem with this, so need to manually fix
+        if (!showd && bdtr->getExtantNodeCount() == 1) {
             (*poos) << "(" << bdtr->getRoot()->getNewick(true) << ");" << std::endl;
+        } else {
+            (*poos) << bdtr->getRoot()->getNewick(true) << ";" << std::endl;
+        }
+        // print simulation summary
+        if (verbose) {
+            std::cerr << bd.get_sim_summary() << std::endl;
         }
     }
     if (outfileset) {

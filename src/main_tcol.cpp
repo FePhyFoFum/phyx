@@ -11,10 +11,13 @@
 #include "tree_utils.h"
 #include "log.h"
 #include "aa2cdn.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Add information to a tree so that you can color the edges." << std::endl;
     std::cout << "This will take nexus and newick inputs from a file or STDIN." << std::endl;
     std::cout << "Results are written in nexus format so that it can be read by figtree." << std::endl;
@@ -34,18 +37,24 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxtcol 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxtcol 1.3\n";
+    vl += "Copyright (C) 2016-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"mrcaf", required_argument, NULL, 's'},
-    {"nodeidf", required_argument, NULL, 'r'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"mrcaf", required_argument, nullptr, 's'},
+    {"nodeidf", required_argument, nullptr, 'r'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -54,15 +63,17 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool tfileset = false;
+    
+    // hrm add this back in?
     //bool mrcafset = false; not used
+    //char * mrcaf = nullptr;
+    
     bool nodeidfset = false;
-    //char * mrcaf = NULL;
-    char * nodeidf = NULL;
-    char * outf = NULL;
-    char * treef = NULL;
-    std::string cnamef = "";
-    std::string nnamef = "";
-    while(true) {
+    char * nodeidf = nullptr;
+    char * outf = nullptr;
+    char * treef = nullptr;
+
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:m:d:o:hVC", long_options, &oi);
         if (c == -1) {
@@ -90,13 +101,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -105,22 +116,22 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -129,7 +140,7 @@ int main(int argc, char * argv[]) {
     
     //for node ids
     std::map<std::string, std::string> nodeid_map;
-    if (nodeidfset == true) {
+    if (nodeidfset) {
         std::ifstream nfstr(nodeidf);
         std::string tline;
         while (getline_safe(nfstr, tline)) {
@@ -139,8 +150,8 @@ int main(int argc, char * argv[]) {
             }
             std::vector<std::string> tokens2;
             tokenize(tline, tokens2, "\t");
-            for (unsigned int j = 0; j < tokens2.size(); j++) {
-                trim_spaces(tokens2[j]);
+            for (auto & tk : tokens2) {
+                trim_spaces(tk);
             }
             if (tokens2.size() != 2) {
                 continue;
@@ -164,13 +175,13 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
-                for (int i = 0; i < tree->getInternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");
@@ -192,14 +203,14 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
-                for (int i = 0; i < tree->getInternalNodeCount(); i++) {
+            if (tree != nullptr) {
+                for (unsigned int i = 0; i < tree->getInternalNodeCount(); i++) {
                     Node * tnode = tree->getInternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName("[&name=\""+tnode->getName()+"\",ann="+nodeid_map[tnode->getName()]+"]");
                     } 
                 }
-                for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+                for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
                     Node * tnode = tree->getExternalNode(i);
                     if (nodeid_map.find(tnode->getName()) != nodeid_map.end()) {
                         tnode->setName(tnode->getName()+"[&ann="+nodeid_map[tnode->getName()]+"]");

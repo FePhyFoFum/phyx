@@ -1,5 +1,5 @@
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#ifndef PX_UTILS_H
+#define PX_UTILS_H
 
 #include <string>
 #include <vector>
@@ -12,15 +12,17 @@
 #include "superdouble.h"
 
 
-// TODO organize this stuff
+// TODO organize this stuff!
 
 void check_file_exists (const std::string& filename);
 void check_inout_streams_identical (char * in, char * out);
 int string_to_int (const std::string& in, const std::string& arg);
+long int string_to_long_int (const std::string& in, const std::string& arg);
 
-std::string string_to_upper (const std::string& str);
+std::string string_to_upper (const std::string& instr);
 std::string string_to_lower (const std::string& instr);
 float string_to_float (const std::string& in, const std::string& arg);
+double string_to_double (const std::string& in, const std::string& arg);
 
 void tokenize (const std::string& str, std::vector<std::string>& tokens,
         const std::string& delimiters = " ");
@@ -28,12 +30,12 @@ std::vector<std::string> tokenize (const std::string& input);
 void trim_spaces (std::string& str);
 bool check_comment_line (const std::string& line);
 bool is_number (const std::string&);
-int get_longest_label (std::vector<std::string>& labels);
+unsigned int get_longest_label (std::vector<std::string>& labels);
 
 std::istream& getline_safe(std::istream& is, std::string& t);
 
-int factorial (int n);
-int doublefactorial (int n);
+unsigned int factorial (unsigned int n);
+unsigned long int doublefactorial (unsigned int n);
 
 unsigned int get_clock_seed ();
 
@@ -59,6 +61,7 @@ template<typename T> void parse_comma_list (std::string& str, std::vector<T>& re
 // do stuff over vectors
 double sum (std::vector<double>& in);
 int sum (std::vector<int>& in);
+unsigned int sum (std::vector<unsigned int>& in);
 
 int count_zeros (std::vector<int>& in);
 Superdouble calculate_vector_Superdouble_sum (std::vector<Superdouble>& in);
@@ -98,8 +101,8 @@ template<typename T> std::vector<T> in_first_not_second (std::vector<T> firstv, 
     std::sort(secondv.begin(), secondv.end());
     
     typename std::vector<T>::iterator it;
-    it=std::set_difference(firstv.begin(), firstv.end(), secondv.begin(), secondv.end(), res.begin());
-    res.resize(it-res.begin());
+    it = std::set_difference(firstv.begin(), firstv.end(), secondv.begin(), secondv.end(), res.begin());
+    res.resize(static_cast<unsigned long>(it-res.begin()));
     
     //std::remove_copy_if(firstv.begin(), firstv.end(), std::back_inserter(res),
     //    [&secondv](const T& arg) {return (std::find(secondv.begin(), secondv.end(), arg) != secondv.end());});
@@ -110,16 +113,17 @@ std::vector<double> string_v_to_double_v (const std::vector<std::string>& in);
 
 //------------------------------------------------------------------------//
 
-std::vector<std::vector<double> > processRateMatrixConfigFile (std::string filename, int numareas);
-int random_int_range (int min, int max);
+std::vector<std::vector<double> > processRateMatrixConfigFile (const std::string& filename, int numstates);
 
-std::vector<int> sample_without_replacement( const int& numTotal,const int& numSample);
+unsigned int random_int_range (const unsigned int& min, const unsigned int& max);
+std::vector<unsigned int> sample_without_replacement (const unsigned int& numTotal,
+        const unsigned int& numSample);
 
-void print_error (char * pname, char arg);
+void print_error (char * pname);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB);
 bool test_logical (std::vector<int>& matA, std::vector<int>& matB, bool edgewise);
 
-int sum_matrix_col (std::vector<std::vector<int> >& matrix, int col);
+int sum_matrix_col (std::vector<std::vector<int> >& matrix, unsigned int col);
 int sum_matrix_col_negs (std::vector<std::vector<int> >& matrix, int col);
 
 std::string get_string_vector (std::vector<std::string>& sts);
@@ -145,12 +149,40 @@ unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2);
 
 double logn (double x, double base);
 
-bool essentially_equal (double a, double b);
+bool essentially_equal_doubles (double a, double b);
+
+// template version to accommodate different precision types
+template<typename T> bool essentially_equal (T a, T b) {
+    T EPSILON = 1e-7;
+    /*
+    std::cout << "fabs(a - b) = " << fabs(a - b) << std::endl;
+    std::cout << "ApproximatelyEqual: "
+        << (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    std::cout << "EssentiallyEqual: "
+        << (fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * EPSILON)) << std::endl;
+    */
+    
+    // not used
+    /*
+    if (fabs(a - b) <= std::max(EPSILON, EPSILON * std::max(std::abs(a), std::abs(b)))) {
+        equal = true;
+    }
+    */
+    bool equal = (std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * EPSILON));
+    
+    return equal;
+}
+
+
 bool all_equal (std::vector<double> vals);
 bool all_equal (std::vector<int> vals);
+bool all_equal (std::vector<unsigned int> vals);
+
 
 // a basic poll checker for stream inputs
 bool check_for_input_to_stream ();
+
+std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b);
 
 std::string peek_line (std::istream& pios);
 std::vector<std::string> peek_lines (std::istream& pios, const int& n);
@@ -158,4 +190,4 @@ std::vector<std::string> peek_lines (std::istream& pios, const int& n);
 std::vector<std::string> regex_search_labels (const std::vector<std::string>& names,
         const std::string& pattern);
 
-#endif /* _UTILS_H_ */
+#endif /* PX_UTILS_H */

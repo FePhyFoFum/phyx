@@ -1,5 +1,5 @@
-#ifndef _OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H_
-#define _OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H_
+#ifndef PX_OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H
+#define PX_OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H
 
 #include <nlopt.h>
 
@@ -11,4 +11,4 @@ using namespace arma;
 
 void optimize_sr_nlopt(RateModel * _rm,StateReconstructor * _sr, mat * _free_mask, int _nfree);
 
-#endif /* _OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H_ */
+#endif /* PX_OPTIMIZE_STATE_RECONSTRUCTOR_NLOPT_H */

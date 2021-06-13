@@ -1,5 +1,5 @@
-#ifndef _BD_SIM_H_
-#define _BD_SIM_H_
+#ifndef PX_BD_SIM_H
+#define PX_BD_SIM_H
 
 #include <vector>
 #include <random>
@@ -9,7 +9,7 @@ class Node; // forward declaration
 
 class BirthDeathSimulator {
 private:
-    int failures_;
+    int numfailures_;
     int maxfailures_;
     double birthrate_;
     double deathrate_;
@@ -17,7 +17,9 @@ private:
     double relative_birth_rate_;
     int extantstop_;
     double timestop_;
-    int numofchanges_;
+    int numbirth_;
+    int numdeath_;
+    long int seed_;
     double currenttime_;
     std::vector<Node*> extantnodes_;
     std::vector<Node*> dead_nodes_;
@@ -38,15 +40,18 @@ private:
     void setup_parameters ();
     bool event_is_birth ();
     void delete_a_node (Node *);
-    double get_distance_from_tip (Node *innode);
-    void set_distance_to_tip ();
+    
+    // these are not currently used
+    //double get_distance_from_tip (Node *innode);
+    //void set_distance_to_tip ();
 
 public:
     BirthDeathSimulator ();
-    BirthDeathSimulator (const double& estop, const double& tstop, const double& brate,
-        const double& drate, const int& seed);
+    BirthDeathSimulator (const int& estop, const double& tstop, const double& brate,
+        const double& drate, const long int& seed);
     Tree * make_tree (const bool& show_dead);
+    std::string get_sim_summary () const;
     //~BirthDeathSimulator();
 };
 
-#endif /* _BD_SIM_H_ */
+#endif /* PX_BD_SIM_H */

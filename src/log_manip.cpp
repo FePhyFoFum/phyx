@@ -9,18 +9,20 @@
 #include "utils.h"
 
 
-LogManipulator::LogManipulator (const std::string& logtype, const std::vector<std::string>& input_files,
-    std::ostream* poos, const bool& verbose) {
-    files_ = input_files;
-    num_files_ = input_files.size();
+LogManipulator::LogManipulator (const std::string& logtype,
+        const std::vector<std::string>& input_files, std::ostream* poos,
+        const bool& verbose):burnin_(0), nthin_(0), nrandom_(0), seed_(0),
+        count_(false), ntotal_samples_(0), num_cols_(0), num_cols_retain_(0),
+        files_(input_files) {
+    num_files_ = static_cast<int>(input_files.size());
     logtype_ = logtype;
     poos_ = poos;
     verbose_ = verbose;
 }
 
 
-void LogManipulator::sample (const int& burnin, const int& nthin, const int& nrandom,
-    const int& seed) {
+void LogManipulator::sample (const int& burnin, const int& nthin,
+        const int& nrandom, const long int& seed) {
     burnin_ = burnin;
     nthin_= nthin;
     nrandom_ = nrandom;
@@ -54,32 +56,30 @@ void LogManipulator::return_statistics_table () {
     double ESS = 0.0;
     double ACT = 0.0;
     // n should be constant (i.e. a rectangular log)
-    int nsamples = parm_samples_[0].size();
+    auto nsamples = static_cast<int>(parm_samples_[0].size());
     // need interval between samples i.e. how thinned
     // first column in parm log is the state number
     // converted to int since all read in as doubles
     // note this assumes constant thinning. should be safe
     // could only possibly be a problem when combining logs from analyses with different sampling settings
-    int step_size = (int)(parm_samples_[0][1] - parm_samples_[0][0]);
-    
-    
+    auto step_size = static_cast<int>(parm_samples_[0][1] - parm_samples_[0][0]);
     
     // need to find the longest parameter name to set width of first column
     const int colWidth = 12; // this value works nice with decimal and sci. notation
     std::cout.precision(6);
     //(*poos_) << std::fixed;
-    int longest_label = get_longest_label(parm_names_);
+    unsigned int longest_label = get_longest_label(parm_names_);
     std::string pad = std::string(longest_label, ' ');
     // header
     (*poos_) << pad << " ";
-    for (unsigned int i = 0; i < stat_names.size(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << stat_names[i] << " ";
+    for (const auto & stat_name : stat_names) {
+        (*poos_) << std::right << std::setw(colWidth) << stat_name << " ";
     }
     (*poos_) << std::endl;
-    for (int i = 1; i < num_cols_; i++) {
+    for (size_t i = 1; i < static_cast<size_t>(num_cols_); i++) {
         calculate_summary_statistics (parm_samples_[i], mean, variance, median,
             ESS, ACT, nsamples, step_size);
-        int diff = longest_label - parm_names_[i].size();
+        unsigned int diff = longest_label - static_cast<unsigned int>(parm_names_[i].size());
         (*poos_) << parm_names_[i];
         if (diff > 0) {
             pad = std::string(diff, ' ');
@@ -116,12 +116,15 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
         const int& n_samples, const int& step_size) {
     // leave median for last, since it alters the ordering, which is needed for ACT
     v_mean_variance(vals, mean, variance);
+    size_t ns = static_cast<size_t>(n_samples);
     
     //-----------------------------------------------------------//
     // effective sample size (ESS) and autocorrelation time (ACT)
-    // NOTE: there does not appear to be A correct way to compute ESS: https://stats.stackexchange.com/a/441628/263112
+    // NOTE: there does not appear to be A correct way to compute ESS:
+    //  https://stats.stackexchange.com/a/441628/263112
     // the (preliminary) stuff below uses the BEAST-flavour, in part because values can be validated
-    // indeed, at present this is just C++-ified code from the java source: https://github.com/beast-dev/beast-mcmc/blob/d053c4683eed322038c4ff5a3580b4c173c77693/src/dr/inference/trace/TraceCorrelation.java#L127-L190
+    // indeed, at present this is just C++-ified code from the java source:
+    // https://tinyurl.com/847bpbpm
     
     // maximum lag to consider for ACT. may never be reached (i.e., smart early exit)
     // increasing MAXIMUM_LAG greatly increases computation time (see loops below)
@@ -133,21 +136,21 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     // anyway, keep it like this for now to make sure identical values are computed
     
     int MAXIMUM_LAG = 2000;
-    int max_lag = std::min(n_samples - 1, MAXIMUM_LAG);
+    unsigned long max_lag = static_cast<unsigned long>(std::min(n_samples - 1, MAXIMUM_LAG));
     std::vector<double> gamma_stat(max_lag);
     
     double var_stat = 0.0;
     double del1 = 0.0;
     double del2 = 0.0;
 
-    for (int i = 0; i < max_lag; i++) {
-        for (int j = 0; j < n_samples - i; j++) {
+    for (unsigned long i = 0; i < max_lag; i++) {
+        for (size_t j = 0; j < ns - i; j++) {
             del1 = vals[j] - mean;
             del2 = vals[j + i] - mean;
             gamma_stat[i] += (del1 * del2);
         }
 
-        gamma_stat[i] /= ((double)(n_samples - i));
+        gamma_stat[i] /= static_cast<double>(ns - i);
 
         if (i == 0) {
             var_stat = gamma_stat[0];
@@ -163,14 +166,14 @@ void LogManipulator::calculate_summary_statistics (std::vector<double>& vals,
     }
 
     // ACT
-    if (gamma_stat[0] == 0) {
+    if (essentially_equal(gamma_stat[0], 0.0)) {
         ACT = 0;
     } else {
         ACT = step_size * var_stat / gamma_stat[0];
     }
 
     // finally, ESS
-    if (ACT == 0) {
+    if (essentially_equal(ACT, 0.0)) {
         ESS = 1;
     } else {
         ESS = (step_size * n_samples) / ACT;
@@ -187,7 +190,7 @@ void LogManipulator::collect_parameter_samples () {
         bool first_entry = true; // use for initialization
         std::vector <double> terp; // a vector to reuse throughout
         ntotal_samples_ = 0;
-        for (int i = 0; i < num_files_; i++) {
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
             std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
@@ -197,18 +200,19 @@ void LogManipulator::collect_parameter_samples () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = header.size();
+                    auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
                         num_cols_ = curpars;
                         parm_names_ = header;
                         if (first_entry) {
                             // let us initialize the sample collector
-                            int n_expected = 10000000; // purposely an overestimate to avoid reallocation
-                            for (int i = 0; i < num_cols_; i++) {
+                            unsigned long n_expected = 10000000; // purposely an overestimate to avoid reallocation
+                            for (size_t j = 0; j < static_cast<size_t>(num_cols_); j++) {
                                 parm_samples_.push_back(terp);
-                                parm_samples_[i].reserve(n_expected);
+                                parm_samples_[j].reserve(n_expected);
                             }
                             first_entry = false;
                         }
@@ -228,36 +232,36 @@ void LogManipulator::collect_parameter_samples () {
                     }
                     first_line = false;
                     continue;
-                } else {
-                    if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
-                        // skip because does not match sampling parameters
-                        par_counter++;
-                        continue;
-                    } else if ((par_counter - burnin_) == 0) {
-                        // keep first post-burnin sample from a file
-                        par_counter++;
-                        store_sample(line);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
-                        par_counter++;
-                        store_sample(line);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else {
-                        // skip because have not yet exceeded burnin
-                        par_counter++;
-                    }
                 }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
+                    // skip because does not match sampling parameters
+                    par_counter++;
+                    continue;
+                }
+                if ((par_counter - burnin_) == 0) {
+                    // keep first post-burnin sample from a file
+                    par_counter++;
+                    store_sample(line);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
+                    par_counter++;
+                    store_sample(line);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                // skip because have not yet exceeded burnin
+                par_counter++;
             }
             indiv_raw_counts_.push_back(par_counter);
             indiv_sample_totals_.push_back(sample_counter);
             infilestr_.close();
         }
         if (verbose_) {
-            for (int i = 0; i < num_files_; i++) {
+            for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
                 std::cout << files_[i] << ": " << indiv_sample_totals_[i]
                     << " samples retained (from original " << indiv_raw_counts_[i]
                     << " samples) for " << (num_cols_ - 1) << " variables." << std::endl;
@@ -279,7 +283,7 @@ void LogManipulator::store_sample (std::string const& line) {
     // convert to double. note that this include the first entry (state) which is an int
     std::vector<double> converted = string_v_to_double_v(sample);
     // finally, store these puppies in the initialized container parm_samples_
-    for (int i = 0; i < num_cols_; i++) {
+    for (size_t i = 0; i < static_cast<size_t>(num_cols_); i++) {
         parm_samples_[i].push_back(converted[i]);
     }
 }
@@ -298,7 +302,7 @@ void LogManipulator::count () {
 void LogManipulator::count_parameter_samples () {
     num_cols_ = 0;
     if (!files_.empty()) {
-        for (int i = 0; i < num_files_; i++) {
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
             std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
@@ -307,9 +311,10 @@ void LogManipulator::count_parameter_samples () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = header.size();
+                    auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
                         num_cols_ = curpars;
                         parm_names_ = header;
@@ -329,10 +334,8 @@ void LogManipulator::count_parameter_samples () {
                     }
                     first_line = false;
                     continue;
-                } else {
-                    num_samps++;
-                    continue;
                 }
+                num_samps++;
             }
             indiv_sample_totals_.push_back(num_samps);
             infilestr_.close();
@@ -351,7 +354,7 @@ void LogManipulator::count_parameter_samples () {
 
 void LogManipulator::count_tree_samples () {
     if (!files_.empty()) {
-        for (int i = 0; i < num_files_; i++) {
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
             std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
@@ -359,13 +362,12 @@ void LogManipulator::count_tree_samples () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else {
-                    std::vector<std::string> tokens = tokenize(line);
-                    std::string first = tokens[0];
-                    std::transform(first.begin(), first.end(), first.begin(), ::tolower);
-                    if (first == "tree") {
-                        num_samps++;
-                    }
+                }
+                std::vector<std::string> tokens = tokenize(line);
+                std::string first = tokens[0];
+                std::transform(first.begin(), first.end(), first.begin(), ::tolower);
+                if (first == "tree") {
+                    num_samps++;
                 }
             }
             indiv_sample_totals_.push_back(num_samps);
@@ -383,9 +385,10 @@ void LogManipulator::count_tree_samples () {
 }
 
 
-void LogManipulator::get_sample_counts () {
+void LogManipulator::get_sample_counts () const {
+    size_t nf = static_cast<size_t>(num_files_);
     if (logtype_ == "parameter") {
-        for (int i = 0; i < num_files_; i++) {
+        for (size_t i = 0; i < nf; i++) {
             (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " samples of "
                 << (num_cols_ - 1) << " variables." << std::endl;
         }
@@ -394,7 +397,7 @@ void LogManipulator::get_sample_counts () {
                 << (num_cols_ - 1) << " variables across " << num_files_ << " files." << std::endl;
         }
     } else {
-        for (int i = 0; i < num_files_; i++) {
+        for (size_t i = 0; i < nf; i++) {
             (*poos_) << files_[i] << ": " << indiv_sample_totals_[i] << " trees." << std::endl;
         }
         if (num_files_ > 1) {
@@ -411,21 +414,18 @@ void LogManipulator::get_column_names () {
             std::string curfile = files_[0];
             infilestr_.open(curfile.c_str());
             std::string line;
-            bool first_line = true;
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
-                    std::vector<std::string> header = tokenize(line);
-                    int curpars = header.size();
-                    num_cols_ = curpars;
-                    parm_names_ = header;
-                    first_line = false;
-                    break;
                 }
+                std::vector<std::string> header = tokenize(line);
+                auto curpars = static_cast<int>(header.size());
+                num_cols_ = curpars;
+                parm_names_ = header;
+                break;
             }
             for (int i = 0; i < num_cols_; i++) {
-                (*poos_) << i+1 << ". " << parm_names_[i] << std::endl;
+                (*poos_) << i+1 << ". " << parm_names_[static_cast<size_t>(i)] << std::endl;
             }
         } else {
         // multiple files. make sure number/name/order of columns is identical
@@ -451,13 +451,14 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
         while (getline_safe(infilestr_, line)) {
             if (line.empty() || check_comment_line(line)) {
                 continue;
-            } else if (first_line) {
+            }
+            if (first_line) {
                 std::vector<std::string> header = tokenize(line);
-                int curpars = header.size();
+                auto curpars = static_cast<int>(header.size());
                 num_cols_ = curpars;
                 parm_names_ = header;
                 
-                cols_to_retain.resize(num_cols_);
+                cols_to_retain.resize(static_cast<size_t>(num_cols_));
                 
                 // check that right end of col_ids is valid (0 already checked upstream)
                 // vector has been sorted
@@ -469,14 +470,14 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 std::iota(cols_to_retain.begin(), cols_to_retain.end(), 0);
                 
                 // remove unwanted column indices (reverse order)
-                for (std::vector<int>::const_reverse_iterator i = col_ids.rbegin(); i < col_ids.rend(); i++) {
+                for (auto i = col_ids.rbegin(); i < col_ids.rend(); i++) {
                     // subtract 1 because input is 1-indexed
                     cols_to_retain.erase(cols_to_retain.begin()+(*i)-1);
                 }
                 
-                num_cols_retain_ = cols_to_retain.size();
+                num_cols_retain_ = static_cast<int>(cols_to_retain.size());
                 for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << header[cols_to_retain[i]];
+                    (*poos_) << header[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
                     if (i < (num_cols_retain_ - 1)) {
                         (*poos_) << "\t";
                     }
@@ -484,17 +485,16 @@ void LogManipulator::delete_columns (const std::vector<int>& col_ids) {
                 (*poos_) << std::endl;
                 first_line = false;
                 continue;
-            } else {
-                std::vector<std::string> samp = tokenize(line);
-                for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << samp[cols_to_retain[i]];
-                    if (i < (num_cols_retain_ - 1)) {
-                        (*poos_) << "\t";
-                    }
-                }
-                (*poos_) << std::endl;
-                sample_counter++;
             }
+            std::vector<std::string> samp = tokenize(line);
+            for (int i = 0; i < num_cols_retain_; i++) {
+                (*poos_) << samp[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
+                if (i < (num_cols_retain_ - 1)) {
+                    (*poos_) << "\t";
+                }
+            }
+            (*poos_) << std::endl;
+            sample_counter++;
         }
             
         if (verbose_) {
@@ -514,19 +514,20 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
         std::string line;
         bool first_line = true;
         int sample_counter = 0;
-        std::vector<int> cols_to_retain;
-        for (unsigned int i = 0; i < col_ids.size(); i++) {
+        std::vector<int> cols_to_retain(static_cast<size_t>(col_ids.size()), 0);
+        for (int col_id : col_ids) {
             // subtract 1 because input is 1-indexed
-            cols_to_retain.push_back(col_ids[i] - 1);
+            cols_to_retain[static_cast<size_t>(col_id)] = col_id - 1;
         }
-        num_cols_retain_ = cols_to_retain.size();
+        num_cols_retain_ = static_cast<int>(cols_to_retain.size());
         
         while (getline_safe(infilestr_, line)) {
             if (line.empty() || check_comment_line(line)) {
                 continue;
-            } else if (first_line) {
+            }
+            if (first_line) {
                 std::vector<std::string> header = tokenize(line);
-                int curpars = header.size();
+                auto curpars = static_cast<int>(header.size());
                 num_cols_ = curpars;
                 
                 // check that right end of col_ids is valid (0 already checked upstream)
@@ -538,7 +539,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 
                 parm_names_ = header;
                 for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << header[cols_to_retain[i]];
+                    (*poos_) << header[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
                     if (i < (num_cols_retain_ - 1)) {
                         (*poos_) << "\t";
                     }
@@ -546,17 +547,16 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
                 (*poos_) << std::endl;
                 first_line = false;
                 continue;
-            } else {
-                std::vector<std::string> samp = tokenize(line);
-                for (int i = 0; i < num_cols_retain_; i++) {
-                    (*poos_) << samp[cols_to_retain[i]];
-                    if (i < (num_cols_retain_ - 1)) {
-                        (*poos_) << "\t";
-                    }
-                }
-                (*poos_) << std::endl;
-                sample_counter++;
             }
+            std::vector<std::string> samp = tokenize(line);
+            for (int i = 0; i < num_cols_retain_; i++) {
+                (*poos_) << samp[static_cast<size_t>(cols_to_retain[static_cast<size_t>(i)])];
+                if (i < (num_cols_retain_ - 1)) {
+                    (*poos_) << "\t";
+                }
+            }
+            (*poos_) << std::endl;
+            sample_counter++;
         }
             
         if (verbose_) {
@@ -570,7 +570,7 @@ void LogManipulator::retain_columns (const std::vector<int>& col_ids) {
 void LogManipulator::sample_parameters () {
     if (!files_.empty()) { // hrm this should not be necessary...
         ntotal_samples_ = 0;
-        for (int i = 0; i < num_files_; i++) {
+        for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
             std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
@@ -580,14 +580,15 @@ void LogManipulator::sample_parameters () {
             while (getline_safe(infilestr_, line)) {
                 if (line.empty() || check_comment_line(line)) {
                     continue;
-                } else if (first_line) {
+                }
+                if (first_line) {
                     std::vector<std::string> header = tokenize(line);
-                    int curpars = header.size();
+                    auto curpars = static_cast<int>(header.size());
                     if (i == 0) { // first header
                         num_cols_ = curpars;
                         parm_names_ = header;
                         for (int j = 0; j < num_cols_; j++) {
-                            (*poos_) << parm_names_[j];
+                            (*poos_) << parm_names_[static_cast<size_t>(j)];
                             if (j < (num_cols_ - 1)) {
                                 (*poos_) << "\t";
                             }
@@ -609,36 +610,36 @@ void LogManipulator::sample_parameters () {
                     }
                     first_line = false;
                     continue;
-                } else {
-                    if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
-                        // skip because does not match sampling parameters
-                        par_counter++;
-                        continue;
-                    } else if ((par_counter - burnin_) == 0) {
-                        // keep first post-burnin sample from a file
-                        par_counter++;
-                        write_reformatted_sample(line, ntotal_samples_);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
-                        par_counter++;
-                        write_reformatted_sample(line, ntotal_samples_);
-                        sample_counter++;
-                        ntotal_samples_++;
-                        continue;
-                    } else {
-                        // skip because have not yet exceeded burnin
-                        par_counter++;
-                    }
                 }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) < nthin_) {
+                    // skip because does not match sampling parameters
+                    par_counter++;
+                    continue;
+                }
+                if ((par_counter - burnin_) == 0) {
+                    // keep first post-burnin sample from a file
+                    par_counter++;
+                    write_reformatted_sample(line, ntotal_samples_);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                if ((par_counter - burnin_) > 0 && (par_counter - burnin_) % nthin_ == 0) {
+                    par_counter++;
+                    write_reformatted_sample(line, ntotal_samples_);
+                    sample_counter++;
+                    ntotal_samples_++;
+                    continue;
+                }
+                // skip because have not yet exceeded burnin
+                par_counter++;
             }
             indiv_raw_counts_.push_back(par_counter);
             indiv_sample_totals_.push_back(sample_counter);
             infilestr_.close();
         }
         if (verbose_) {
-            for (int i = 0; i < num_files_; i++) {
+            for (size_t i = 0; i < static_cast<size_t>(num_files_); i++) {
                 std::cout << files_[i] << ": " << indiv_sample_totals_[i]
                     << " samples retained (from original " << indiv_raw_counts_[i]
                     << " samples) for " << (num_cols_ - 1) << " variables." << std::endl;
@@ -653,7 +654,8 @@ void LogManipulator::sample_parameters () {
 void LogManipulator::sample_trees () {
     if (!files_.empty()) {
         ntotal_samples_ = 0;
-        for (int i = 0; i < num_files_; i++) {
+        size_t nf = static_cast<size_t>(num_files_);
+        for (size_t i = 0; i < nf; i++) {
             std::string curfile = files_[i];
             infilestr_.open(curfile.c_str());
             std::string line;
@@ -669,45 +671,45 @@ void LogManipulator::sample_trees () {
                         }
                     }
                     continue;
-                } else {
-                    std::vector<std::string> tokens = tokenize(line);
-                    std::string first = tokens[0];
-                    std::transform(first.begin(), first.end(), first.begin(), ::tolower);
-                    if (first == "tree") {
-                        if (tree_counter == 0) {
-                            trees_encountered = true;
-                        }
-                        if (ntotal_samples_ == 0) {
-                            // grab tree naming scheme
-                            get_tree_name_prefix(line);
-                        }
-                        if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) < nthin_) {
-                            // skip because does not match sampling parameters
-                            tree_counter++;
-                            continue;
-                        } else if ((tree_counter - burnin_) == 0) {
-                            // keep first post-burnin sample from a file
-                            tree_counter++;
-                            write_reformatted_sample(line, ntotal_samples_);
-                            sample_counter++;
-                            ntotal_samples_++;
-                            continue;
-                        } else if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) % nthin_ == 0) {
-                            tree_counter++;
-                            write_reformatted_sample(line, ntotal_samples_);
-                            sample_counter++;
-                            ntotal_samples_++;
-                            continue;
-                        } else {
-                            // skip because have not yet exceeded burnin
-                            tree_counter++;
-                        }
-                    } else { // not a tree line. only care about first file here. don't want anything below trees
-                        // keep header from first file
-                        // likely includes translation table
-                        if (i == 0 && !trees_encountered) {
-                            (*poos_) << line << std::endl;
-                        }
+                }
+                std::vector<std::string> tokens = tokenize(line);
+                std::string first = tokens[0];
+                std::transform(first.begin(), first.end(), first.begin(), ::tolower);
+                if (first == "tree") {
+                    if (tree_counter == 0) {
+                        trees_encountered = true;
+                    }
+                    if (ntotal_samples_ == 0) {
+                        // grab tree naming scheme
+                        get_tree_name_prefix(line);
+                    }
+                    if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) < nthin_) {
+                        // skip because does not match sampling parameters
+                        tree_counter++;
+                        continue;
+                    }
+                    if ((tree_counter - burnin_) == 0) {
+                        // keep first post-burnin sample from a file
+                        tree_counter++;
+                        write_reformatted_sample(line, ntotal_samples_);
+                        sample_counter++;
+                        ntotal_samples_++;
+                        continue;
+                    }
+                    if ((tree_counter - burnin_) > 0 && (tree_counter - burnin_) % nthin_ == 0) {
+                        tree_counter++;
+                        write_reformatted_sample(line, ntotal_samples_);
+                        sample_counter++;
+                        ntotal_samples_++;
+                        continue;
+                    }
+                    // skip because have not yet exceeded burnin
+                    tree_counter++;
+                } else { // not a tree line. only care about first file here. don't want anything below trees
+                    // keep header from first file
+                    // likely includes translation table
+                    if (i == 0 && !trees_encountered) {
+                        (*poos_) << line << std::endl;
                     }
                 }
             }
@@ -718,7 +720,7 @@ void LogManipulator::sample_trees () {
         (*poos_) << "End;" << std::endl;
         
         if (verbose_) {
-            for (int i = 0; i < num_files_; i++) {
+            for (size_t i = 0; i < nf; i++) {
                 std::cerr << files_[i] << ": " << indiv_sample_totals_[i]
                     << " tree samples retained (from original " << indiv_raw_counts_[i]
                     << " samples)." << std::endl;
@@ -735,18 +737,20 @@ void LogManipulator::sample_trees () {
 void LogManipulator::get_tree_name_prefix (std::string& sample) {
     std::vector<std::string> terp = tokenize(sample);
     std::string tree_name = terp[1];
-    std::size_t found = tree_name.find_first_of("0123456789");
-    tree_name.replace(tree_name.begin(), tree_name.end(), tree_name.begin(), tree_name.begin()+found);
+    auto found = static_cast<long>(tree_name.find_first_of("0123456789"));
+    tree_name.replace(tree_name.begin(), tree_name.end(), tree_name.begin(),
+            tree_name.begin()+found);
     tree_name_prefix_ = tree_name;
 }
 
 
-void LogManipulator::write_reformatted_sample (std::string& sample, int& sample_num) {
+void LogManipulator::write_reformatted_sample (std::string& sample,
+        int& sample_num) {
     std::vector<std::string> terp = tokenize(sample);
     if (logtype_ == "parameter") {
         (*poos_) << sample_num;
         for (int i = 1; i < num_cols_; i++) {
-            (*poos_) << "\t" << terp[i];
+            (*poos_) << "\t" << terp[static_cast<size_t>(i)];
         }
         (*poos_) << std::endl;
     } else {

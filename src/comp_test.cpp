@@ -12,10 +12,10 @@
 #include "seq_utils.h"
 
 
-CompTest::CompTest (std::istream* pios, std::ostream* poos):num_taxa_(0), seq_length_(0),
-        total_(0), df_(0), test_stat_(0.0), prob_(0.0), seq_chars_(""), alpha_name_(""),
+CompTest::CompTest (std::istream* pios, std::ostream* poos):num_taxa_(0u), seq_length_(0u),
+        total_(0u), df_(0u), test_stat_(0.0), prob_(0.0), seq_chars_(""), alpha_name_(""),
         alpha_set_(false), datatype_set_(false), is_multi_(false), gap_('-'), missing_('?'),
-        pios_(pios), poos_(poos) {
+        pios_(pios), poos_(poos), longest_tax_label_(0) {
     read_in_alignment();
     count_chars();
     calc_chi_square();
@@ -30,17 +30,17 @@ void CompTest::read_in_alignment () {
         exit(0);
     }
     
-    num_taxa_ = (int)seqs_.size();
-    seq_length_ = (int)seqs_[0].get_length();
+    num_taxa_ = static_cast<unsigned int>(seqs_.size());
+    seq_length_ = seqs_[0].get_length();
     set_datatype();
     
     // if datatype is multi, but alphabet not set, get from entire concatenated sequence
     if (is_multi_ && !alpha_set_) {
         // grab all unique characters from the input string
         // here, seqs from all individuals are concatenated, so represents all sampled characters
-        std::string concatenated = "";
-        for (int i = 0; i < num_taxa_; i++) {
-            concatenated += seqs_[i].get_sequence();
+        std::string concatenated;
+        for (unsigned int i = 0; i < num_taxa_; i++) {
+            concatenated += seqs_[static_cast<size_t>(i)].get_sequence();
         }
         seq_chars_ = get_alphabet_from_sequence(concatenated);
         // remove gap and missing (if present)
@@ -78,18 +78,17 @@ void CompTest::set_datatype () {
 
 // get counts of all valid character states per taxon
 void CompTest::count_chars () {
-    int sum = 0;
-    std::string seq = "";
-    for (int i = 0; i < num_taxa_; i++) {
-        sum = 0;
-        seq = string_to_upper(seqs_[i].get_sequence());
+    std::string seq;
+    for (unsigned int i = 0; i < num_taxa_; i++) {
+        unsigned int sum = 0;
+        seq = string_to_upper(seqs_[static_cast<size_t>(i)].get_sequence());
         std::vector<int> icounts(seq_chars_.length(), 0);
         
-        for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-            int num = std::count(seq.begin(), seq.end(), seq_chars_[i]);
-            icounts[i] += num;
+        for (unsigned int j = 0; j < seq_chars_.length(); j++) {
+            auto num = static_cast<unsigned int>(std::count(seq.begin(), seq.end(), seq_chars_[j]));
+            icounts[j] += num;
             sum += num;
-            col_totals_[i] += num;
+            col_totals_[j] += num;
         }
         indiv_char_counts_.push_back(icounts);
         // row totals need to be all the same. if not, could be:
@@ -110,9 +109,10 @@ void CompTest::count_chars () {
 // get the longest label. for printing purposes
 void CompTest::get_longest_taxon_label () {
     longest_tax_label_ = 0;
-    for (int i = 0; i < num_taxa_; i++) {
-        if ((int)taxon_labels_[i].size() > longest_tax_label_) {
-            longest_tax_label_ = taxon_labels_[i].size();
+    for (unsigned int i = 0; i < num_taxa_; i++) {
+        auto cur_len = static_cast<unsigned int>(taxon_labels_[static_cast<unsigned int>(i)].size());
+        if (cur_len > longest_tax_label_) {
+            longest_tax_label_ = cur_len;
         }
     }
 }
@@ -126,12 +126,12 @@ void CompTest::return_freq_table () {
     // header
     (*poos_) << "Observed character counts:" << std::endl;
     (*poos_) << pad << " ";
-    for (unsigned int i = 0; i < seq_chars_.length(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << seq_chars_[i] << " ";
+    for (char seq_char : seq_chars_) {
+        (*poos_) << std::right << std::setw(colWidth) << seq_char << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << "Nchar" << std::endl;
-    for (int i = 0; i < num_taxa_; i++) {
-        int diff = longest_tax_label_ - taxon_labels_[i].size();
+    for (size_t i = 0; i < static_cast<size_t>(num_taxa_); i++) {
+        unsigned int diff = longest_tax_label_ - static_cast<unsigned int>(taxon_labels_[i].size());
         (*poos_) << taxon_labels_[i];
         if (diff > 0) {
             pad = std::string(diff, ' ');
@@ -143,11 +143,11 @@ void CompTest::return_freq_table () {
         }
         (*poos_) << std::right << std::setw(colWidth) << row_totals_[i] << std::endl;
     }
-    int diff = longest_tax_label_ - 5;
+    unsigned int diff = longest_tax_label_ - 5;
     pad = std::string(diff, ' ');
     (*poos_) << "Total" << pad << " ";
-    for (unsigned int i = 0; i < col_totals_.size(); i++) {
-        (*poos_) << std::right << std::setw(colWidth) << col_totals_[i] << " ";
+    for (unsigned int col_total : col_totals_) {
+        (*poos_) << std::right << std::setw(colWidth) << col_total << " ";
     }
     (*poos_) << std::right << std::setw(colWidth) << total_ << std::endl;
 } 
@@ -155,13 +155,16 @@ void CompTest::return_freq_table () {
 
 void CompTest::calc_chi_square () {
     test_stat_ = 0.0;
-    df_ = (num_taxa_ - 1) * (col_totals_.size() - 1);
-    for (int i = 0; i < num_taxa_; i++) {
-        for (unsigned int j = 0; j < col_totals_.size(); j++) {
-            double observed = (double)indiv_char_counts_[i][j];
-            double expected = (double)col_totals_[j] * (double)row_totals_[i]
-                / (double) total_;
-            double cellv = get_cell_value(observed, expected);
+    df_ = static_cast<unsigned int>((num_taxa_ - 1) * (col_totals_.size() - 1));
+    double observed = 0.0;
+    double expected = 0.0;
+    double cellv = 0.0;
+    for (size_t i = 0; i < static_cast<size_t>(num_taxa_); i++) {
+        for (size_t j = 0; j < col_totals_.size(); j++) {
+            observed = static_cast<double>(indiv_char_counts_[i][j]);
+            expected = static_cast<double>(col_totals_[j]) * static_cast<double>(row_totals_[i])
+                    / static_cast<double>(total_);
+            cellv = get_cell_value(observed, expected);
             test_stat_ += cellv;
         }
     }
@@ -180,17 +183,17 @@ void CompTest::print_results () {
 // s = df/2, t = chi2/2
 double CompTest::calc_chi_square_prob (const double& df, const double& xstat) {
     // prob given by igf(df/2, x/2) / gamma(df/2)
-    double prob = 0.0;
     double s = df / 2;
     double t = xstat / 2;
-    prob = lower_incomplete_gamma_function(s, t);
+    double prob = lower_incomplete_gamma_function(s, t);
     prob /= tgamma(s); // from cmath
     prob = 1 - prob;
     return prob;
 }
 
 
-double CompTest::get_cell_value (const double& observed, const double& expected) {
+double CompTest::get_cell_value (const double& observed,
+        const double& expected) const {
     double res = pow((observed - expected), 2.0) / expected;
     return res;
 }
@@ -209,17 +212,16 @@ double CompTest::lower_incomplete_gamma_function (double s, double t) {
     double sum = 1.0;
     double numerator = 1.0;
     double denominator = 1.0;
-    double curr = 0.0;
     double stop = 1e-30;
     
     bool done = false;
-    int counter = 0;
+    //int counter = 0;
     while (!done) {
-        counter++;
+        //counter++;
         numerator *= t;
     	s++;
     	denominator *= s;
-    	curr = (numerator / denominator);
+    	double curr = (numerator / denominator);
     	sum += curr;
         if (curr < stop) { // get a better stop criterion
             done = true;

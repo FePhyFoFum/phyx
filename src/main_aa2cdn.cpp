@@ -9,10 +9,13 @@
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Generate a codon alignment from aligned amino acids and unaligned nucleotides." << std::endl;
     std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;
@@ -32,18 +35,24 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxaa2cdn 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxaa2cdn 1.3\n";
+    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"aaseqf", required_argument, NULL, 'a'},
-    {"nucseqf", required_argument, NULL, 'n'},
-    {"outf", required_argument, NULL, 'o'},
-    {"rmlastcdn", no_argument, NULL, 'r'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"aaseqf", required_argument, nullptr, 'a'},
+    {"nucseqf", required_argument, nullptr, 'n'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"rmlastcdn", no_argument, nullptr, 'r'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -54,9 +63,9 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool nucfileset = false;
     bool rm_last = false;
-    char * aaseqf = NULL;
-    char * nucseqf = NULL;
-    char * outf = NULL;
+    char * aaseqf = nullptr;
+    char * nucseqf = nullptr;
+    char * outf = nullptr;
 
     while (true) {
         int oi = -1;
@@ -86,13 +95,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -113,62 +122,58 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::ifstream * fstr = NULL;
-    std::istream * pios = NULL;
-    std::ifstream * nucfstr = NULL;
-    std::istream * nucpios = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::istream * pios = nullptr;
+    std::ifstream * nucfstr = nullptr;
+    std::istream * nucpios = nullptr;
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(aaseqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (nucfileset == true) {
+    if (nucfileset) {
         nucfstr = new std::ifstream(nucseqf);
         nucpios = nucfstr;
     } else {
         nucpios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
     
-    Sequence aa_seq, nuc_seq;
-    std::string retstring;
-    
     // use general purpose reader
     std::vector<Sequence> nuc_seqs;
     std::vector<Sequence> aa_seqs;
-    std::string alphaName = "";
+    std::string alphaName;
     
     // read in nucleotide seqs
     nuc_seqs = ingest_alignment(nucpios, alphaName);
-    if (alphaName.compare("DNA") != 0) {
+    if (alphaName != "DNA") {
         std::cerr << "Error: incorrect alignment type provided. DNA was expected, but "
             << alphaName << " detected. Exiting." << std::endl;
         exit(0);
     }
     
     bool inFrame = true;
-    unsigned int curN = 0;
-    for (unsigned int i = 0; i < nuc_seqs.size(); i++) {
-        curN = nuc_seqs[i].get_length();
+    for (auto & nuc_seq : nuc_seqs) {
+        unsigned int  curN = nuc_seq.get_length();
         if (curN % 3 != 0) {
-            std::cerr << "Error: nucleotide sequence length for '" << nuc_seqs[i].get_id()
+            std::cerr << "Error: nucleotide sequence length for '" << nuc_seq.get_id()
                 << "' is not a multiple of 3." << std::endl;
             inFrame = false;
         }
@@ -180,7 +185,7 @@ int main(int argc, char * argv[]) {
     
     // and amino acid alignment
     aa_seqs = ingest_alignment(pios, alphaName);
-    if (alphaName.compare("AA") != 0) {
+    if (alphaName != "AA") {
         std::cerr << "Error: incorrect alignment type provided. Amino acids was expected, but "
             << alphaName << " detected. Exiting." << std::endl;
         exit(0);

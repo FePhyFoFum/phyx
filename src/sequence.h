@@ -1,5 +1,5 @@
-#ifndef _SEQUENCE_H_
-#define _SEQUENCE_H_
+#ifndef PX_SEQUENCE_H
+#define PX_SEQUENCE_H
 
 #include <vector>
 #include <string>
@@ -29,28 +29,28 @@ public:
     Sequence ();
     Sequence (std::string, std::string, bool);
     Sequence (std::string, std::string);
-    seqAlpha get_alpha ();
+    seqAlpha get_alpha () const;
     std::string get_alpha_name ();
     void set_alpha (seqAlpha);
     
     void infer_alpha ();
     
-    bool is_aligned ();
+    bool is_aligned () const;
     std::string get_sequence ()const;
     std::string get_id ()const;
     unsigned int get_length ();
-    void add_cont_char (double num);
+    void add_cont_char (double _num);
     double get_cont_char (int _index);
     int get_num_cont_char ();
     void clear_cont_char ();
-    void add_multistate_char (int num);
+    void add_multistate_char (int _num);
     int get_multistate_char (int _index);
     int get_num_multistate_char ();
-    void set_sequence (std::string seq);
-    void set_id (std::string id);
-    void set_aligned (bool al);
+    void set_sequence (std::string _seq);
+    void set_id (std::string _id);
+    void set_aligned (bool _align);
     void set_qualstr (std::string&, int);
-    std::vector<double> get_qualarr ();
+    std::vector<double> get_qualarr () const;
     double get_qualarr_mean ();
     std::string reverse_complement ();
     void perm_reverse_complement ();
@@ -60,4 +60,4 @@ public:
     std::string seq_to_upper ();
 
 };
-#endif /* _SEQUENCE_H_ */
+#endif /* PX_SEQUENCE_H */

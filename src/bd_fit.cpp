@@ -13,18 +13,20 @@
 
 
 // hrm a debugging thing i gather
-int counter = 0;
+//int counter = 0;
 
 
-typedef struct {
-    int N;
+using analysis_data = struct {
+    unsigned int N = 0;
     std::vector<double> bt;
-} analysis_data;
+};
 
 
-BDFit::BDFit (Tree * intree, const std::string& modelflavour):model_(modelflavour),
-    lambda_bd_(0.0), lambda_yule_(0.0), mu_(0.0), r_(0.0), epsilon_(0.0), likelihood_bd_(0.0),
-    likelihood_yule_(0.0), aic_bd_(0.0), aicc_bd_(0.0), aic_yule_(0.0), aicc_yule_(0.0) {
+BDFit::BDFit (Tree * intree, std::string& modelflavour):model_(std::move(modelflavour)),
+        lambda_bd_(0.0), lambda_yule_(0.0), mu_(0.0), r_(0.0), epsilon_(0.0),
+        likelihood_bd_(0.0), likelihood_yule_(0.0), aic_bd_(0.0), aicc_bd_(0.0),
+        aic_yule_(0.0), aicc_yule_(0.0), treelength_(0.0), nintnodes_(0.0),
+        nspeciation_(0.0), ntips_(0), rootheight_(0.0) {
     tree_ = intree;
     fit_model();
 }
@@ -85,18 +87,19 @@ void BDFit::fit_yule () {
     lambda_yule_ = nspeciation_ / treelength_;
     likelihood_yule_ = nspeciation_ * log(lambda_yule_) - lambda_yule_ * treelength_
         + std::lgamma(nintnodes_ + 1.0);
-    get_aic (likelihood_yule_, aic_yule_, aicc_yule_);
+    get_aic(likelihood_yule_, aic_yule_, aicc_yule_);
 }
 
 
 void BDFit::fit_bd() {
-    branching_times_.resize(nintnodes_);
-    for (int i = 0; i < nintnodes_; i++) {
-        branching_times_[i] = tree_->getInternalNode(i)->getHeight();
+    auto nn = static_cast<size_t>(nintnodes_);
+    branching_times_.resize(nn);
+    for (size_t i = 0; i < nn; i++) {
+        branching_times_[i] = tree_->getInternalNode(static_cast<unsigned int>(i))->getHeight();
     }
     
     // sort in descending order
-    sort(branching_times_.begin(), branching_times_.end(), std::greater<double>());
+    sort(branching_times_.begin(), branching_times_.end(), std::greater<>());
     
     analysis_data a;
     a.N = ntips_;
@@ -116,7 +119,8 @@ void BDFit::fit_bd() {
     // parameters: r, epsilon
     std::vector<double> x(2);
     // starting values. maybe use intelligent starting values
-    x[0] = 0.05; x[1] = 0.5; // lambda = 0.1, mu = 0.05
+    x[0] = 0.05;
+    x[1] = 0.5; // lambda = 0.1, mu = 0.05
     
     // ML vals for example tree
     //x[0] = 0.7383142; x[1] = 0.3018887;
@@ -125,7 +129,8 @@ void BDFit::fit_bd() {
     opt.set_lower_bounds(0.0);
     // upper bounds: none for r, 1 for epsilon
     std::vector<double> ub(2);
-    ub[0] = 50; ub[1] = 1;
+    ub[0] = 50;
+    ub[1] = 1;
     opt.set_upper_bounds(ub);
     
     double minf;
@@ -145,11 +150,11 @@ void BDFit::fit_bd() {
 double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad,
     void *data) {
     // count iterations for optimization of algorithm
-    counter++;
+    //counter++;
     
-    analysis_data * d = (analysis_data *) data;
+    auto d = static_cast<analysis_data *>(data);
     
-    int N = d->N;
+    unsigned int N = d->N;
     std::vector<double> bt = d->bt;
     
     double lik = std::lgamma(N) + (N - 2) * log(x[0]) + N * log(1 - x[1]);
@@ -157,8 +162,8 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
     lik += (x[0] * std::accumulate(bt.begin()+1, bt.end(), 0.0));
     
     double tempsum = 0.0;
-    for (unsigned int i = 0; i < bt.size(); i++) {
-        tempsum += log(exp(bt[i] * x[0]) - x[1]);
+    for (double i : bt) {
+        tempsum += log(exp(i * x[0]) - x[1]);
     }
     
     lik += tempsum * (-2);
@@ -171,7 +176,7 @@ double nlopt_bd_log_lik (const std::vector<double>& x, std::vector<double>& grad
 // 'n' here (number of data points) is taken as the number of terminals
 void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
     double K = 1.0;
-    double n = ntips_;
+    auto n = static_cast<double>(ntips_);
     if (model_ == "bd") {
         K = 2.0;
     }
@@ -180,7 +185,7 @@ void BDFit::get_aic (const double& lik, double& aic, double& aicc) {
 }
 
 
-void BDFit::get_pars (std::ostream* poos) {
+void BDFit::get_pars (std::ostream* poos) const {
     (*poos) << "ntips: " << ntips_ << std::endl;
     (*poos) << "nspeciation: " << nspeciation_ << std::endl;
     (*poos) << "treelength: " << treelength_ << std::endl;

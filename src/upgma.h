@@ -1,5 +1,5 @@
-#ifndef _UPGMA_H_
-#define _UPGMA_H_
+#ifndef PX_UPGMA_H
+#define PX_UPGMA_H
 
 #include <string>
 #include <vector>
@@ -24,13 +24,13 @@ private:
         std::vector< std::vector<double> >& newmatrix);
     std::vector< std::vector<double> > build_matrix ();
     double get_smallest_distance (const std::vector< std::vector<double> >& dmatrix,
-        int& mini1, int& mini2);
+        unsigned long& mini1, unsigned long& mini2);
     void construct_tree ();
 
 public:
-    UPGMA (std::istream* pios);
+    explicit UPGMA (std::istream* pios);
     std::vector< std::vector<double> > get_matrix () const;
     std::string get_newick ();
 };
 
-#endif /* _UPGMA_H_ */
+#endif /* PX_UPGMA_H */

@@ -5,8 +5,8 @@
  *      Author: smitty
  */
 
-#ifndef _STRING_NODE_OBJECT_H_
-#define _STRING_NODE_OBJECT_H_
+#ifndef PX_STRING_NODE_OBJECT_H
+#define PX_STRING_NODE_OBJECT_H
 
 #include <string>
 
@@ -14,12 +14,12 @@
 
 class StringNodeObject: public std::string, public NodeObject {
 public:
-    StringNodeObject(const char * value): std::string(value) {}
-    StringNodeObject(const std::string& value): std::string(value) {}
+    explicit StringNodeObject(const char * value): std::string(value) {}
+    explicit StringNodeObject(const std::string& value): std::string(value) {}
     virtual ~StringNodeObject() {}
 
 public:
     StringNodeObject * clone() const { return new StringNodeObject(*this); }
 };
 
-#endif /* _STRING_NODE_OBJECT_H_ */
+#endif /* PX_STRING_NODE_OBJECT_H */

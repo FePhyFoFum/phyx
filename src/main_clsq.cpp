@@ -4,17 +4,20 @@
 #include <cstring>
 #include <getopt.h>
 
-#include "clsq.h"
+#include "clean_seq.h"
 #include "utils.h"
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
 // TODO: throw out stop_codons: "TAG", "TAA", "TGA"
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;
@@ -40,21 +43,27 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxclsq 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxclsq 1.3\n";
+    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"prop", required_argument, NULL, 'p'},
-    {"taxa", required_argument, NULL, 't'},
-    {"codon", required_argument, NULL, 'c'},
-    {"info", required_argument, NULL, 'i'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"prop", required_argument, nullptr, 'p'},
+    {"taxa", required_argument, nullptr, 't'},
+    {"codon", required_argument, nullptr, 'c'},
+    {"info", required_argument, nullptr, 'i'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -63,15 +72,15 @@ int main(int argc, char * argv[]) {
     
     bool fileset = false;
     bool outfileset = false;
-    char * seqf = NULL;
-    char * outf = NULL;
+    char * seqf = nullptr;
+    char * outf = nullptr;
     double prop_required = 0.5;
     bool verbose = false;
     bool by_taxon = false;
     bool by_codon = false;
     bool count_only = false;
 
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:p:atcivhVC", long_options, &oi);
         if (c == -1) {
@@ -88,9 +97,10 @@ int main(int argc, char * argv[]) {
                 outf = strdup(optarg);
                 break;
             case 'p':
-                prop_required = string_to_float(optarg, "-p");
+                prop_required = string_to_double(optarg, "-p");
                 if (prop_required > 1.0 || prop_required < 0.0) {
-                    std::cerr << "Error: proportion of required data present (-p) must be 0 <= p <= 1.0. Exiting." << std::endl;
+                    std::cerr << "Error: proportion of required data present (-p) must be 0 <= p <= 1.0. Exiting."
+                            << std::endl;
                     exit(0);
                 }
                 break;
@@ -110,13 +120,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -125,23 +135,23 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::istream * pios = NULL;
-    std::ifstream * fstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::istream * pios = nullptr;
+    std::ifstream * fstr = nullptr;
     
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }

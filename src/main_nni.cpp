@@ -12,10 +12,13 @@
 #include "utils.h"
 #include "tree_utils.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Generate a Nearest Neighbor Interchange (NNI) tree." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
@@ -34,17 +37,23 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxnni 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown");
+std::string get_version_line () {
+    std::string vl = "pxnni 1.3\n";
+    vl += "Copyright (C) 2013-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Stephen A. Smith (blackrim), Joseph F. Walker, and Joseph W. Brown";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"seed", required_argument, NULL, 'x'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -53,11 +62,11 @@ int main(int argc, char * argv[]) {
     
     bool outfileset = false;
     bool fileset = false;
-    char * outf = NULL;
-    char * seqf = NULL;
+    char * outf = nullptr;
+    char * seqf = nullptr;
     int seed = -1;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:o:x:hVC", long_options, &oi);
         if (c == -1) {
@@ -80,13 +89,13 @@ int main(int argc, char * argv[]) {
                 seed = string_to_int(optarg, "-x");
                 break;
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -95,24 +104,24 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
         poos = &std::cout;
     }
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
@@ -120,7 +129,7 @@ int main(int argc, char * argv[]) {
     
     // TODO: upgrade from srand
     if (seed != -1) {
-        srand(seed);
+        srand(static_cast<unsigned int>(seed));
     } else {
         srand(get_clock_seed());
     }
@@ -135,10 +144,9 @@ int main(int argc, char * argv[]) {
     int treeCounter = 0;
     bool going = true;
     if (ft == 1) { // newick. easy
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (tree != NULL) {
+            Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            if (tree != nullptr) {
                 if (!is_binary(tree)) {
                     std::cerr << "Error: this only works for binary trees. Exiting." << std::endl;
                     exit(0);
@@ -160,11 +168,10 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 //std::cout << "Working on tree #" << treeCounter << std::endl;
                 std::map<Node*, std::vector<Node*> > tree_map;
                 create_tree_map_from_rootnode(tree, tree_map);

@@ -12,8 +12,7 @@
 #include "tree_utils.h"
 #include "tree_reader.h"
 #include "utils.h"
-
-extern double EPSILON;
+#include "constants.h"
 
 
 int get_distance_between_two_nodes (Tree * tr, Node * nd1, Node * nd2) {
@@ -25,7 +24,7 @@ int get_distance_between_two_nodes (Tree * tr, Node * nd1, Node * nd2) {
     Node * cur = nd1;
     while (cur != mrca) {
         cur = cur->getParent();
-        count+= 1;
+        count += 1;
     }
     cur = nd2;
     while (cur != mrca) {
@@ -41,7 +40,7 @@ int get_distance_between_two_nodes (Tree * tr, Node * nd1, Node * nd2) {
  */
 double get_length_to_root (Node * n) {
     double length = 0;
-    while (n->getParent() != NULL) {
+    while (n->getParent() != nullptr) {
         length += n->getBL();
         n = n->getParent();
     }
@@ -53,9 +52,10 @@ double get_length_to_root (Node * n) {
  * calculate the variance between the lengths to the root and the tips
  */
 double get_root_tip_var (Tree * tr) {
-    std::vector<double> paths;
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
-        paths.push_back(get_length_to_root(tr->getExternalNode(i)));
+    unsigned int nc = tr->getExternalNodeCount();
+    std::vector<double> paths(static_cast<size_t>(nc), 0.0);
+    for (unsigned int i = 0; i < nc; i++) {
+        paths[static_cast<size_t>(i)] = get_length_to_root(tr->getExternalNode(i));
     }
     double var = v_variance(paths);
     return var;
@@ -64,10 +64,10 @@ double get_root_tip_var (Tree * tr) {
 
 // assumes annotations are of form: [something]
 void remove_annotations (Tree * tr) {
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         tr->getInternalNode(i)->setComment("");
     }
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getExternalNodeCount(); i++) {
         tr->getExternalNode(i)->setComment("");
     }
 }
@@ -75,7 +75,7 @@ void remove_annotations (Tree * tr) {
 
 // same as above, but for names
 void remove_internal_names(Tree * tr) {
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         tr->getInternalNode(i)->setName("");
     }
 }
@@ -83,22 +83,20 @@ void remove_internal_names(Tree * tr) {
 
 // NOTE: this is _very_ slow (for large trees) compared to painting the induced tree (pxtrt)
 void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& silent) {
-    int num_names = names.size();
-    int counter = 0;
+    size_t num_names = names.size();
     
     // new: note tree rooted status. if originally unrooted, make sure it stays that way on pruning
     bool rs = is_rooted(tree);
     //std::cout << "rooted tree: " << std::boolalpha << rs << std::endl;
     
-    for (int i = 0; i < num_names; i++) {
+    for (size_t i = 0; i < num_names; i++) {
         //std::cout << "Attempting to remove tip '" << names[i] << "'." << std::endl;
         Node * m = tree->getExternalNode(names[i]);
-        if (m != NULL) {
+        if (m != nullptr) {
             tree->pruneExternalNode(m);
-            counter++;
         } else {
             if (!silent) {
-                std::cerr << names[i] << " not in tree"  << std::endl;
+                std::cerr << names[i] << " not in tree" << std::endl;
             }
         }
         //std::cout << "After pruning, tree rootedness: " << std::boolalpha << is_rooted(tree) << std::endl;
@@ -117,7 +115,8 @@ void remove_tips (Tree * tree, std::vector<std::string>& names, const bool& sile
 // tree must be rooted (traces terminate at root node)
 // if it is not, root on first name, do trace, and unroot
 // this has been tested and works (https://github.com/FePhyFoFum/phyx/issues/74)
-Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const bool& silent) {
+Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names,
+        const bool& silent) {
     bool rooted = is_rooted(tree);
     
     if (!rooted) {
@@ -128,7 +127,8 @@ Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const boo
     
     paint_nodes(tree, names, silent);
     std::string tracetreenewick = tree->getRoot()->getPaintedNewick(true) + ";";
-    Tree * indTree = read_tree_string(tracetreenewick);
+    TreeReader tr;
+    Tree * indTree = tr.readTree(tracetreenewick);
     deknuckle_tree(indTree); // guaranteed to have knuckles atm
     indTree->removeRootEdge();
     
@@ -140,7 +140,8 @@ Tree * get_induced_tree (Tree * tree, std::vector<std::string>& names, const boo
 
 
 // check whether the names provided for a monophyletic clade
-bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& skip_missing) {
+bool is_monophyletic (Tree * tree, std::vector<std::string> names,
+        const bool& skip_missing) {
     bool mono = true;
     
     bool names_good = check_names_against_tree(tree, names);
@@ -150,13 +151,12 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
             exit(0);
         } else {
             std::vector<std::string> good_names;
-            std::vector<std::string>::iterator it;
-            for (unsigned int i = 0; i < names.size(); i++) {
-                if (check_name_against_tree(tree, names[i])) {
-                    good_names.emplace_back(names[i]);
+            for (auto & name : names) {
+                if (check_name_against_tree(tree, name)) {
+                    good_names.emplace_back(name);
                 }
             }
-            if (good_names.size() == 0) {
+            if (good_names.empty()) {
                 std::cerr << "Error: no names are present in the tree. Exiting." << std::endl;
                 exit(1);
             }
@@ -168,7 +168,7 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
     Node * nd = tree->getMRCA(names);
     int num_leaves = nd->get_num_leaves();
     
-    if (num_leaves != (int)names.size()) {
+    if (num_leaves != static_cast<int>(names.size())) {
         mono = false;
     }
     return mono;
@@ -177,26 +177,25 @@ bool is_monophyletic (Tree * tree, std::vector<std::string> names, const bool& s
 
 // assumes a rooted tree
 void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& silent) {
-    int num_names = names.size();
+    size_t num_names = names.size();
     tree->getRoot()->setPainted(true); // probably do not want this, but mrca is expensive
     
-    for (int i = 0; i < num_names; i++) {
+    for (size_t i = 0; i < num_names; i++) {
         Node * m = tree->getNode(names[i]);
-        if (m != NULL) {
+        if (m != nullptr) {
             m->setPainted(true);
             Node * cur = m;
             while (cur != tree->getRoot()) {
                 cur = cur->getParent();
                 // break early if encountering an existing painted path
-                if (cur->getPainted() == true) {
+                if (cur->getPainted()) {
                     break;
-                } else {
-                    cur->setPainted(true);
                 }
+                cur->setPainted(true);
             }
         } else {
             if (!silent) {
-                std::cerr << names[i] << " not in tree"  << std::endl;
+                std::cerr << names[i] << " not in tree" << std::endl;
             }
         }
     }
@@ -205,67 +204,92 @@ void paint_nodes (Tree * tree, std::vector<std::string>& names, const bool& sile
 
 // treemap: key is focal node, value is vector of adjacent nodes
 // both keys and values can be internal or terminal nodes
-void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
+void create_tree_map_from_rootnode (Tree * tr, std::map<Node*,
+        std::vector<Node*> >& tree_map) {
     
     bool debug = true;
     
     //check if rooted or unrooted
     bool rooted = is_rooted(tr);
-    if (debug) std::cout << "tree is rooted: " << std::boolalpha << rooted << std::endl;
+    if (debug) {
+        std::cout << "tree is rooted: " << std::boolalpha << rooted << std::endl;
+    }
     // internal nodes
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         Node * tnd = tr->getInternalNode(i);
-        if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
-        if (tnd->getParent() == NULL && rooted == true) { // root on rooted tree
-            if (debug) std::cout << "  Node has no parent, as it is the root" << std::endl;
+        if (debug) {
+            std::cout << "Focal node: " << tnd->getName() << std::endl;
+        }
+        if (tnd->getParent() == nullptr && rooted) { // root on rooted tree
+            if (debug) {
+                std::cout << "  Node has no parent, as it is the root" << std::endl;
+            }
             continue;
         }
         std::vector<Node *> nds;
-        for (int j = 0; j < tnd->getChildCount(); j++) {
+        for (unsigned int j = 0; j < tnd->getChildCount(); j++) {
             nds.push_back(tnd->getChild(j));
-            if (debug) std::cout << "  Adding child node: " << tnd->getChild(j)->getName() << std::endl;
+            if (debug) {
+                std::cout << "  Adding child node: "
+                        << tnd->getChild(j)->getName() << std::endl;
+            }
         }
-        if (tnd->getParent() == tr->getRoot() && rooted == true) {
-            for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
+        if (tnd->getParent() == tr->getRoot() && rooted) {
+            for (unsigned int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
-                    if (debug) std::cout << "  Adding sibling node: " << tnd->getChild(j)->getName() << std::endl;
+                    if (debug) {
+                        std::cout << "  Adding sibling node: "
+                                << tnd->getChild(j)->getName() << std::endl;
+                    }
                 }
             }
         } else {
-            if (tnd->getParent() != NULL) {
+            if (tnd->getParent() != nullptr) {
                 nds.push_back(tnd->getParent());
-                if (debug) std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+                if (debug) {
+                    std::cout << "  Adding parent node: "
+                            << tnd->getParent()->getName() << std::endl;
+                }
             }
         }
         tree_map[tnd] = nds;
     }
     // terminal nodes
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getExternalNodeCount(); i++) {
         std::vector<Node *> nds;
         Node * tnd = tr->getExternalNode(i);
-        if (debug) std::cout << "Focal node: " << tnd->getName() << std::endl;
-        if (tnd->getParent() == tr->getRoot() && rooted == true) {
-            for (int j = 0; j < tnd->getParent()->getChildCount(); j++) {
+        if (debug) {
+            std::cout << "Focal node: " << tnd->getName() << std::endl;
+        }
+        if (tnd->getParent() == tr->getRoot() && rooted) {
+            for (unsigned int j = 0; j < tnd->getParent()->getChildCount(); j++) {
                 if (tnd->getParent()->getChild(j) != tnd) {
                     nds.push_back(tnd->getParent()->getChild(j));
-                    if (debug) std::cout << "  Adding sibling node: " << tnd->getParent()->getChild(j)->getName() << std::endl;
+                    if (debug) {
+                        std::cout << "  Adding sibling node: "
+                                << tnd->getParent()->getChild(j)->getName() << std::endl;
+                    }
                 }
             }
         } else {
             nds.push_back(tnd->getParent());
-            if (debug) std::cout << "  Adding parent node: " << tnd->getParent()->getName() << std::endl;
+            if (debug) {
+                std::cout << "  Adding parent node: "
+                        << tnd->getParent()->getName() << std::endl;
+            }
         }
         tree_map[tnd] = nds;
     }
     // print map<Node*, std::vector<Node*> >
     if (debug) {
         std::cout << std::endl << "TREE MAP:" << std::endl;
-        for (std::map<Node*, std::vector<Node*> >::iterator it = tree_map.begin(); it != tree_map.end(); it++) {
+        for (auto it = tree_map.begin();
+                it != tree_map.end(); ++it) {
             std::cout << "Node: " << it->first->getName() << std::endl;
             std::vector<Node*> terp = it->second;
-            for (unsigned int i = 0; i < terp.size(); i++) {
-                std::cout << "  " << terp[i]->getName() << " ";
+            for (auto & t : terp) {
+                std::cout << "  " << t->getName() << " ";
             }
             std::cout << std::endl;
         }
@@ -277,11 +301,13 @@ void create_tree_map_from_rootnode (Tree * tr, std::map<Node*, std::vector<Node*
 void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_map) {
     bool debug = true;
     bool success = false;
-    if (debug) std::cout << "treemap is of size: " << tree_map.size() << std::endl;
+    if (debug) {
+        std::cout << "treemap is of size: " << tree_map.size() << std::endl;
+    }
     while (!success) {
-        std::map<Node*, std::vector<Node*> >::iterator item = tree_map.begin();
+        auto item = tree_map.begin();
         // this is dumb. instead use: sample_without_replacement(numTotal, numSample)
-        int r = random_int_range(0, tree_map.size());
+        unsigned int r = random_int_range(0, static_cast<unsigned int>(tree_map.size()));
         if (debug) {
             std::cout << "r1: tree_map.size() = " << tree_map.size() << std::endl;
             std::cout << "r1 = " << r << std::endl;
@@ -291,7 +317,7 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         Node * first = (*item).first;
         
         // ack. 'middle' is not necessarily in the middle at all
-        int r2 = random_int_range(0,(*item).second.size());
+        unsigned int r2 = random_int_range(0, static_cast<unsigned int>((*item).second.size()));
         
         if (debug) {
             std::cout << std::endl << "Node first (" << r << "): " << first->getName() << std::endl;
@@ -303,12 +329,14 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         std::advance( item, r2 );
         Node * middle = (*item).first;
         if (first == middle) {
-            if (debug) std::cout << "Bailing because first == middle..." << std::endl;
+            if (debug) {
+                std::cout << "Bailing because first == middle..." << std::endl;
+            }
             continue;
         }
         
         // furthermore, 'second' need not be anywhere near 'first' or 'middle
-        int r3 = random_int_range(0,(*item).second.size());
+        unsigned int r3 = random_int_range(0, static_cast<unsigned int>((*item).second.size()));
         
         if (debug) {
             std::cout << "Node middle (" << r2 << "): " << middle->getName() << std::endl;
@@ -320,14 +348,18 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         std::advance( item, r3 );
         Node * second = (*item).first;
         
-        if (debug) std::cout << "Node second (" << r3 << "): " << second->getName() << std::endl;
+        if (debug) {
+            std::cout << "Node second (" << r3 << "): " << second->getName() << std::endl;
+        }
         
         // TODO: need to fix what happens when the parent is the root, seems to break down
         // could also check this above instead of all at once
         if (first == second || second == middle || first == tr->getRoot()
             || second == tr->getRoot() || first->getParent() == tr->getRoot()
             || second->getParent() == tr->getRoot()) {
-            if (debug) std::cout << "Bailing on this combination..." << std::endl;
+            if (debug) {
+                std::cout << "Bailing on this combination..." << std::endl;
+            }
             continue;
         }
 
@@ -335,8 +367,7 @@ void nni_from_tree_map (Tree * tr, std::map<Node*, std::vector<Node*> >& tree_ma
         tr->processRoot();
 
         success = true;
-    }
-    return;
+    };
 }
 
 
@@ -354,8 +385,8 @@ bool is_rooted (Tree * tr) {
 bool is_binary (Tree * tr) {
     bool binary = false;
     
-    int nintnodes = tr->getInternalNodeCount();
-    int ntips = tr->getExternalNodeCount();
+    unsigned int nintnodes = tr->getInternalNodeCount();
+    unsigned int ntips = tr->getExternalNodeCount();
     
     if (is_rooted(tr)) {
         if (nintnodes == (ntips - 1)) {
@@ -374,8 +405,8 @@ bool is_binary (Tree * tr) {
 double get_tree_length (Tree * tr) {
    double length = 0.0;
    //Node * root = tr->getRoot(); // not used
-   int numNodes = tr->getNodeCount();
-   for (int i = 0; i < numNodes; i++) {
+   unsigned int numNodes = tr->getNodeCount();
+   for (unsigned int i = 0; i < numNodes; i++) {
        length += tr->getNode(i)->getBL();
    }
    return length;
@@ -391,8 +422,8 @@ bool has_branchlengths (Tree * tr) {
 
 // simply multiply each edge by some scalar (determined somehow)
 void rescale_tree (Tree * tr, const double& scalef) {
-    int numNodes = tr->getNodeCount();
-    for (int i = 0; i < numNodes; i++) {
+    unsigned int numNodes = tr->getNodeCount();
+    for (unsigned int i = 0; i < numNodes; i++) {
         double terp = tr->getNode(i)->getBL();
         if (terp != 0.0) {
             double newlength = terp * scalef;
@@ -415,13 +446,15 @@ bool is_ultrametric_paths (Tree * tr) {
     if (!is_rooted(tr)) {
         return ultrametric;
     }
-    if (get_tree_length(tr) == 0) {
+    if (essentially_equal(get_tree_length(tr), 0.0)) {
         return ultrametric;
     }
-
-    std::vector<double> paths;
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
-        paths.push_back(get_length_to_root(tr->getExternalNode(i)));
+    
+    unsigned int nc = tr->getExternalNodeCount();
+    std::vector<double> paths(static_cast<size_t>(nc), 0.0);
+    
+    for (unsigned int i = 0; i < nc; i++) {
+        paths[static_cast<size_t>(i)] = get_length_to_root(tr->getExternalNode(i));
         //std::cout << "Path: " << paths[i] << std::endl;
     }
     // compare against first
@@ -432,7 +465,8 @@ bool is_ultrametric_paths (Tree * tr) {
     */
     // this might be better, as it exits earlier on a fail.
     /*
-    vector<double>::iterator it = find_if_not(paths.begin()+1, paths.end(), bind(essentially_equal, placeholders::_1, paths[0]));
+    vector<double>::iterator it = find_if_not(paths.begin()+1, paths.end(),
+        bind(essentially_equal, placeholders::_1, paths[0]));
     if (it == end(paths)) {
         ultrametric = true;
     }
@@ -440,7 +474,8 @@ bool is_ultrametric_paths (Tree * tr) {
 
     /*
     for (unsigned int i = 1; i < paths.size(); i++) {
-        std::cout << "Comparing " << paths[0] << " to " << paths[i] << " = " << (paths[0] - paths[i]) << "." << std::endl;
+        std::cout << "Comparing " << paths[0] << " to " << paths[i] << " = "
+            << (paths[0] - paths[i]) << "." << std::endl;
         essentially_equal(paths[0], paths[i]);
     }
 
@@ -464,13 +499,13 @@ bool is_ultrametric_paths (Tree * tr) {
 
 // ultrametricity needs to be checked before this
 void set_node_heights (Node * node) {
-    if (node == NULL) {
+    if (node == nullptr) {
         return;
     }
     if (node->getChildCount() > 0) {
         std::vector<double> heights;
         //bool parentHeight = 0.0; // not used
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             set_node_heights(node->getChild(i));
             heights.push_back(node->getChild(i)->getBL() + node->getChild(i)->getHeight());
         }
@@ -488,7 +523,7 @@ bool is_ultrametric_postorder (Tree * tr) {
     if (!is_rooted(tr)) {
         return ultrametric;
     }
-    if (get_tree_length(tr) == 0) {
+    if (essentially_equal(get_tree_length(tr), 0.0)) {
         return ultrametric;
     }
     Node * root = tr->getRoot();
@@ -501,22 +536,21 @@ bool is_ultrametric_postorder (Tree * tr) {
 // postorder
 bool postorder_ultrametricity_check (Node * node, bool& ultrametric) {
     if (ultrametric) {
-        if (node == NULL) {
+        if (node == nullptr) {
             return ultrametric;
         }
         if (node->getChildCount() > 0) {
             std::vector<double> heights;
             //double parentHeight = 0.0; // not used
-            for (int i = 0; i < node->getChildCount(); i++) {
+            for (unsigned int i = 0; i < node->getChildCount(); i++) {
                 postorder_ultrametricity_check(node->getChild(i), ultrametric);
                 heights.push_back(node->getChild(i)->getBL() + node->getChild(i)->getHeight());
             }
             if (!all_equal(heights)) {
                 ultrametric = false;
                 return ultrametric;
-            } else {
-                node->setHeight(heights[0]);
             }
+            node->setHeight(heights[0]);
         }
         if (node->isExternal()) { // tip
             node->setHeight(0.0);
@@ -528,11 +562,11 @@ bool postorder_ultrametricity_check (Node * node, bool& ultrametric) {
 
 bool check_names_against_tree (Tree * tr, std::vector<std::string> names) {
     bool allgood = true;
-    for (unsigned int i = 0; i < names.size(); i++) {
-    //std::cout << "Checking name '" << names[i] << "'." << std::endl;
-        Node * nd = tr->getExternalNode(names[i]);
-        if (nd == NULL) {
-            std::cerr << "Taxon '" << names[i] << "' not found in tree." << std::endl;
+    for (const auto & name : names) {
+    //std::cout << "Checking name '" << name << "'." << std::endl;
+        Node * nd = tr->getExternalNode(name);
+        if (nd == nullptr) {
+            std::cerr << "Taxon '" << name << "' not found in tree." << std::endl;
             allgood = false;
         }
     }
@@ -544,7 +578,7 @@ bool check_names_against_tree (Tree * tr, std::vector<std::string> names) {
 bool check_name_against_tree (Tree * tr, const std::string& name) {
     bool allgood = true;
     Node * nd = tr->getExternalNode(name);
-    if (nd == NULL) {
+    if (nd == nullptr) {
         allgood = false;
     }
     return allgood;
@@ -566,7 +600,7 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
         }
     }
     Node * m = tree->getMRCA(outgr);
-    if (m == NULL) {
+    if (m == nullptr) {
         return false;
     }
     if (m == tree->getRoot()) {
@@ -586,7 +620,7 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
             //std::cout << "doh: mrca of ingroup is the same node!" << std::endl;
             bool done = false;
             // root randomly, then do desired rooting
-            Node * n = NULL;
+            Node * n = nullptr;
             while (!done) {
                 for (unsigned int i = 0; i < ingroup.size(); i++) {
                     n = tree->getExternalNode(ingroup[i]);
@@ -595,15 +629,14 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
                         //std::cout << "yay! can try with parent of " << ingroup[i] << std::endl;
                         done = true;
                         break;
-                    } else {
-                        //std::cout << "nope: can't use " << ingroup[i] << std::endl;
                     }
+                    //std::cout << "nope: can't use " << ingroup[i] << std::endl;
                     if (i == (ingroup.size() - 1)) {
                         done = true;
                     }
                 }
             }
-            success = tree->reRoot(n);
+            tree->reRoot(n);
             std::string intermediate = getNewickString(tree);
             //std::cout << "intermediate result: " << intermediate << std::endl;
             //delete tree; // apparently necessary
@@ -618,25 +651,27 @@ bool reroot (Tree * tree, const std::vector<std::string>& outgroups, const bool&
 
 
 // return all names that are found in tree
-std::vector<std::string> get_names_in_tree (Tree * tr, const std::vector<std::string>& names) {
+std::vector<std::string> get_names_in_tree (Tree * tr,
+        const std::vector<std::string>& names) {
     std::vector<std::string> matched;
-    for (unsigned int i = 0; i < names.size(); i++) {
+    for (const auto & name : names) {
     //std::cout << "Checking name '" << names[i] << "'." << std::endl;
-        Node * nd = tr->getExternalNode(names[i]);
-        if (nd != NULL) {
-            matched.push_back(names[i]);
+        Node * nd = tr->getExternalNode(name);
+        if (nd != nullptr) {
+            matched.push_back(name);
         }
     }
     return matched;
 }
 
 
-std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<std::string>& orig_names) {
+std::vector<std::string> get_complement_tip_set (Tree * tr,
+        const std::vector<std::string>& orig_names) {
     std::vector<std::string> comp = get_tip_labels(tr);
     std::vector<std::string>::iterator it;
-    for (unsigned int i = 0; i < orig_names.size(); i++) {
+    for (const auto & orig_name : orig_names) {
         // remove bad names
-        it = std::find(comp.begin(), comp.end(), orig_names[i]);
+        it = std::find(comp.begin(), comp.end(), orig_name);
         if (it != comp.end()) {
             comp.erase(it);
         }
@@ -645,7 +680,8 @@ std::vector<std::string> get_complement_tip_set (Tree * tr, const std::vector<st
 }
 
 
-std::vector<std::string> get_names_in_tree_regex (Tree * tr, const std::string& pattern) {
+std::vector<std::string> get_names_in_tree_regex (Tree * tr,
+        const std::string& pattern) {
     std::vector<std::string> labels = get_tip_labels(tr);
     std::vector<std::string> matched = regex_search_labels(labels, pattern);
     return matched;
@@ -654,9 +690,10 @@ std::vector<std::string> get_names_in_tree_regex (Tree * tr, const std::string& 
 
 // returns a sorted vector of all terminal labels
 std::vector<std::string> get_tip_labels (Tree * tr) {
-    std::vector<std::string> labels;
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
-        labels.push_back(tr->getExternalNode(i)->getName());
+    unsigned int nc = tr->getExternalNodeCount();
+    std::vector<std::string> labels(static_cast<size_t>(nc), "");
+    for (unsigned int i = 0; i < nc; i++) {
+        labels[static_cast<size_t>(i)] = tr->getExternalNode(i)->getName();
     }
     sort(labels.begin(), labels.end());
     return labels;
@@ -665,7 +702,7 @@ std::vector<std::string> get_tip_labels (Tree * tr) {
 
 // remove all knuckles (2-degree nodes) in a tree
 void deknuckle_tree (Tree * tree) {
-    for (int i = 0; i < tree->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tree->getInternalNodeCount(); i++) {
         Node * tnd = tree->getInternalNode(i);
         if (tnd->isKnuckle()) {
             //std::cout << tnd->getName() << " is a KNUCKLE!" << std::endl;
@@ -703,7 +740,7 @@ std::string getNewickString (Tree * tree) {
 
 
 // same as above but with objects
-std::string getNewickString (Tree * tree, std::string obj) {
+std::string getNewickString (Tree * tree, const std::string& obj) {
     bool bl = tree->hasEdgeLengths();
     std::string phy = tree->getRoot()->getNewick(bl, obj) + ";";
     return phy;
@@ -714,7 +751,7 @@ std::string getNewickString (Tree * tree, std::string obj) {
 // e.g. ((((A:0.1,B:0.1):0.1,C:0.2):0.1,D:0.3):0.5);
 bool has_root_edge (Tree * tr) {
     bool rootEdge = false;
-    int nchild = tr->getRoot()->getChildCount();
+    unsigned int nchild = tr->getRoot()->getChildCount();
     //std::cout << "Root has " << nchild << " children." << std::endl;
     if (nchild == 1) {
         rootEdge = true;
@@ -724,7 +761,7 @@ bool has_root_edge (Tree * tr) {
 
 
 std::string double_to_str (double d) {
-    size_t len = snprintf(0, 0, "%.16f", d);
+    auto len = static_cast<size_t>(snprintf(nullptr, 0, "%.16f", d));
     std::string s(len+1, 0);
     snprintf(&s[0], len+1, "%.16f", d);
     s.pop_back();
@@ -736,19 +773,20 @@ std::string double_to_str (double d) {
 }
 
 
-unsigned long int get_num_possible_trees (const int& n, const bool& rooted) {
-    return doublefactorial(2 * (n + rooted) - 5);
+unsigned long int get_num_possible_trees (const unsigned int& n,
+        const bool& rooted) {
+    return doublefactorial(2 * (n + static_cast<unsigned int>(rooted)) - 5);
 }
 
 
 // get all terminal descendants from some node (i.e., does not need to be root)
 // uses postorder traversal
 void get_terminal_children (Node * node, std::vector<Node *>& children) {
-    if (node == NULL) {
+    if (node == nullptr) {
         return;
     }
     if (node->getChildCount() > 0) {
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             get_terminal_children(node->getChild(i), children);
         }
     }
@@ -760,11 +798,11 @@ void get_terminal_children (Node * node, std::vector<Node *>& children) {
 
 // same as above, but names rather than nodes
 void get_terminal_children (Node * node, std::vector<std::string>& children) {
-    if (node == NULL) {
+    if (node == nullptr) {
         return;
     }
     if (node->getChildCount() > 0) {
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             get_terminal_children(node->getChild(i), children);
         }
     }
@@ -776,11 +814,11 @@ void get_terminal_children (Node * node, std::vector<std::string>& children) {
 
 // like above, but all descendants (not just terminals)
 void get_all_descendant_nodes (Node * node, std::vector<Node *>& children) {
-    if (node == NULL) {
+    if (node == nullptr) {
         return;
     }
     if (node->getChildCount() > 0) {
-        for (int i = 0; i < node->getChildCount(); i++) {
+        for (unsigned int i = 0; i < node->getChildCount(); i++) {
             get_terminal_children(node->getChild(i), children);
         }
     }

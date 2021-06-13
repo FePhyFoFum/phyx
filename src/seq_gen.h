@@ -1,5 +1,5 @@
-#ifndef _SEQ_GEN_H_
-#define _SEQ_GEN_H_
+#ifndef PX_SEQ_GEN_H
+#define PX_SEQ_GEN_H
 
 #include <string>
 #include <vector>
@@ -17,9 +17,9 @@ private:
     // constant values
     Tree * tree_;
     
-    int seqlen_;
+    unsigned int seqlen_;
     int nreps_;
-    int seed_;
+    long int seed_;
     int nstates_; // number of character states
     
     float alpha_;
@@ -70,21 +70,21 @@ private:
     std::string simulate_sequence (const std::string& anc, std::vector< std::vector<double> >& Matrix,
         const float& brlength);
     std::string generate_random_sequence ();
-    std::vector< std::vector<double> > construct_rate_matrix (const std::vector<double>& rates);
+    //std::vector< std::vector<double> > construct_rate_matrix (const std::vector<double>& rates);
     void check_valid_sequence ();
     float get_uniform_random_deviate ();
     float get_gamma_random_deviate (float);
     std::vector<float> set_site_rates ();
     
 public:
-    SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
+    SequenceGenerator (const unsigned int&seqlength, const std::vector<double>& basefreq,
         std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
-        const int& nreps, const int& seed, const float& alpha, const float& pinvar,
+        const int& nreps, const long int& seed, const float& alpha, const float& pinvar,
         const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
         const std::vector<double>& aabasefreq, const bool& is_dna);
     
     // return results
-    std::vector<Sequence> get_sequences ();
+    std::vector<Sequence> get_sequences () const;
 };
 
-#endif /* _SEQ_GEN_H_ */
+#endif /* PX_SEQ_GEN_H */

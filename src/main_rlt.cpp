@@ -11,10 +11,13 @@
 #include "relabel.h"
 #include "tree_utils.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Taxon relabelling for trees." << std::endl;
     std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
@@ -36,19 +39,25 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrlt 1.2\nCopyright (C) 2018-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxrlt 1.3\n";
+    vl += "Copyright (C) 2018-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"cnames", required_argument, NULL, 'c'},
-    {"nnames", required_argument, NULL, 'n'},
-    {"outf", required_argument, NULL, 'o'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"cnames", required_argument, nullptr, 'c'},
+    {"nnames", required_argument, nullptr, 'n'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -60,11 +69,12 @@ int main(int argc, char * argv[]) {
     bool cfileset = false;
     bool nfileset = false;
     bool verbose = false;
-    char * outf = NULL;
-    char * treef = NULL;
-    std::string cnamef = "";
-    std::string nnamef = "";
-    while(true) {
+    char * outf = nullptr;
+    char * treef = nullptr;
+    std::string cnamef;
+    std::string nnamef;
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:c:n:o:vhVC", long_options, &oi);
         if (c == -1) {
@@ -79,12 +89,12 @@ int main(int argc, char * argv[]) {
             case 'c':
                 cfileset = true;
                 cnamef = strdup(optarg);
-                check_file_exists(cnamef.c_str());
+                check_file_exists(cnamef);
                 break;
             case 'n':
                 nfileset = true;
                 nnamef = strdup(optarg);
-                check_file_exists(nnamef.c_str());
+                check_file_exists(nnamef);
                 break;
             case 'o':
                 outfileset = true;
@@ -97,13 +107,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -112,27 +122,27 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (!nfileset | !cfileset) {
+    if (!nfileset || !cfileset) {
         std::cerr << "Error: must supply both name files (-c for current, -n for new). Exiting." << std::endl;
         exit(0);
     }
     
-    if (tfileset == true) {
+    if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -149,9 +159,8 @@ int main(int argc, char * argv[]) {
     }
     bool going = true;
     if (ft == 1) {
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+            Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
             if (going) {
                 rl.relabel_tree(tree);
                 (*poos) << getNewickString(tree) << std::endl;
@@ -162,11 +171,10 @@ int main(int argc, char * argv[]) {
         std::map<std::string, std::string> translation_table;
         bool ttexists;
         ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        Tree * tree;
         while (going) {
-            tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (tree != NULL) {
+            if (tree != nullptr) {
                 rl.relabel_tree(tree);
                 (*poos) << getNewickString(tree) << std::endl;
                 delete tree;

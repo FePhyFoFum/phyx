@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -13,7 +13,7 @@
 #include "utils.h"
 
 
-TreeReader::TreeReader() {}
+TreeReader::TreeReader() = default;
 
 
 /*
@@ -21,33 +21,33 @@ TreeReader::TreeReader() {}
  * we should take this out as soon as we are ready to repoint
  * the existing code to the right bits
 */
-Tree * TreeReader::readTree (std::string trees) {
-    Tree * tree = new Tree();
-    std::string pb = trees;
+Tree * TreeReader::readTree (const std::string& pb) {
+    auto * tree = new Tree();
+    //std::string pb = trees;
     unsigned int x = 0;
-    char nextChar = pb.c_str()[x];
+    char nextChar = pb.at(x);
     bool start = true;
     bool keepGoing = true;
     bool in_quote = false;
     bool hasAnnotations = false;
     bool hasInternalNodeNames = false;
-    char quoteType;
-    Node * currNode = NULL;
+    char quoteType = '\0';
+    Node * currNode = nullptr;
     double sumEL = 0.0;
-    while (keepGoing == true) {
+    while (keepGoing) {
         //std::cout << "Working on: " << nextChar << std::endl;
         if (nextChar == '(') {
-            if (start == true) {
-                Node * root = new Node();
+            if (start) {
+                auto * root = new Node();
                 tree->setRoot(root);
                 currNode = root;
                 start = false;
             } else {
-                if (currNode == NULL) {
+                if (currNode == nullptr) {
                     std::cerr << "Malformed newick string. Can read until char " << x << "." << std::endl;
                     exit(1);
                 }
-                Node * newNode = new Node(currNode);
+                auto * newNode = new Node(currNode);
                 currNode->addChild(*newNode);
                 currNode = newNode;
             }
@@ -57,9 +57,9 @@ Tree * TreeReader::readTree (std::string trees) {
             // internal named node (or more likely support annotation)
             currNode = currNode->getParent();
             x++;
-            nextChar = pb.c_str()[x];
+            nextChar = pb.at(x);
             //std::cout << "Working on: " << nextChar << std::endl;
-            std::string nodeName = "";
+            std::string nodeName;
             bool goingName = true;
             in_quote = false;
             if (nextChar == ',' || nextChar == ')' || nextChar == ':'
@@ -68,49 +68,44 @@ Tree * TreeReader::readTree (std::string trees) {
             } else if (nextChar == '"' || nextChar == '\'') {
                 in_quote = true;
                 quoteType = nextChar;
-                nodeName = nodeName + nextChar;
+                nodeName += nextChar;
             }
             if (!in_quote) {
                 while (goingName) {
-                    nodeName = nodeName + nextChar;
+                    nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                         || nextChar == '[' || nextChar == ';') {
-                        goingName = false;
                         break;
                     }
                 }
                 x--;
             } else {
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 while (goingName) {
-                    nodeName = nodeName + nextChar;
+                    nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == quoteType) {
-                        nodeName = nodeName + nextChar;
+                        nodeName += nextChar;
                         if (quoteType == '"') {
-                            goingName = false;
                             break;
-                        } else {
-                            // check for double single quotes
-                            x++;
-                            nextChar = pb.c_str()[x];
-                            if (nextChar != quoteType) {
-                                x--;
-                                nextChar = pb.c_str()[x];
-                                goingName = false;
-                                break;
-                            }
+                        }
+                        // check for double single quotes
+                        x++;
+                        nextChar = pb.at(x);
+                        if (nextChar != quoteType) {
+                            x--;
+                            break;
                         }
                     }
                 } 
             }// work on edge
             currNode->setName(nodeName);
             //std::cout << nodeName << std::endl;
-            if (nodeName.size() > 0) {
+            if (!nodeName.empty()) {
                 hasInternalNodeNames = true;
             }
             if (!in_quote) {
@@ -121,20 +116,18 @@ Tree * TreeReader::readTree (std::string trees) {
         } else if (nextChar == ':') {
             // edge length
             x++;
-            nextChar = pb.c_str()[x];
-            std::string edgeL = "";
-            bool goingName = true;
-            while (goingName == true) {
-                edgeL = edgeL + nextChar;
+            nextChar = pb.at(x);
+            std::string edgeL;
+            while (true) {
+                edgeL += nextChar;
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                     || nextChar == ';'|| nextChar == '[') {
-                    goingName = false;
                     break;
                 }
             } // work on edge
-            double edd = strtod(edgeL.c_str(), NULL);
+            double edd = strtod(edgeL.c_str(), nullptr);
             currNode->setBL(edd);
             sumEL += edd;
             x--;
@@ -143,15 +136,13 @@ Tree * TreeReader::readTree (std::string trees) {
         else if (nextChar == '[') {
             hasAnnotations = true;
             x++;
-            nextChar = pb.c_str()[x];
-            std::string note = "";
-            bool goingNote = true;
-            while (goingNote == true) {
-                note = note + nextChar;
+            nextChar = pb.at(x);
+            std::string note;
+            while (true) {
+                note += nextChar;
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 if (nextChar == ']' ) {
-                    goingNote = false;
                     break;
                 }
             }
@@ -161,51 +152,46 @@ Tree * TreeReader::readTree (std::string trees) {
         }
         // external named node
         else {
-            Node * newNode = new Node(currNode);
+            auto * newNode = new Node(currNode);
             currNode->addChild(*newNode);
             currNode = newNode;
-            std::string nodeName = "";
+            std::string nodeName;
             bool goingName = true;
             in_quote = false;
             if (nextChar == '"' || nextChar == '\'') {
                 in_quote = true;
                 quoteType = nextChar;
-                nodeName = nodeName + nextChar;
+                nodeName += nextChar;
             }
             if (!in_quote) {
                 while (goingName) {
-                    nodeName = nodeName + nextChar;
+                    nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == ',' || nextChar == ')' || nextChar == ':'
                         || nextChar == '[') {
-                        goingName = false;
                         break;
                     }
                 }
                 x--;
             } else {
                 x++;
-                nextChar = pb.c_str()[x];
+                nextChar = pb.at(x);
                 while (goingName) {
-                    nodeName = nodeName + nextChar;
+                    nodeName += nextChar;
                     x++;
-                    nextChar = pb.c_str()[x];
+                    nextChar = pb.at(x);
                     if (nextChar == quoteType) {
-                        nodeName = nodeName + nextChar;
+                        nodeName += nextChar;
                         if (quoteType == '"') {
-                            goingName = false;
                             break;
-                        } else {
-                            // check for double single quotes
-                            x++;
-                            nextChar = pb.c_str()[x];
-                            if (nextChar != quoteType) {
-                                x--;
-                                nextChar = pb.c_str()[x];
-                                goingName = false;
-                                break;
-                            }
+                        }
+                        // check for double single quotes
+                        x++;
+                        nextChar = pb.at(x);
+                        if (nextChar != quoteType) {
+                            x--;
+                            break;
                         }
                     }
                 } 
@@ -216,23 +202,16 @@ Tree * TreeReader::readTree (std::string trees) {
         if (x < pb.length() - 1) { // added
             x++;
         }
-        nextChar = pb.c_str()[x];
+        nextChar = pb.at(x);
     }
-    bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
+    //bool hasEdgeLengths = (sumEL > 0.0) ? true : false;
+    bool hasEdgeLengths = sumEL > 0.0;
     tree->setEdgeLengthsPresent(hasEdgeLengths);
     //std::cout << "hasAnnotations = " << hasAnnotations << std::endl;
     tree->setNodeAnnotationsPresent(hasAnnotations);
     //std::cout << "hasInternalNodeNames = " << hasInternalNodeNames << std::endl;
     tree->setNodeNamesPresent(hasInternalNodeNames);
     tree->processRoot();
-    return tree;
-}
-
-
-// for processing strings we know are valid tree strings
-Tree * read_tree_string (std::string trees) {
-    TreeReader tr;
-    Tree * tree = tr.readTree(trees);
     return tree;
 }
 
@@ -246,12 +225,12 @@ Tree * read_tree_string (std::string trees) {
  *  to deal with translate or not
  */
 // hrm this does not seem to be used anymore
-int test_tree_filetype (std::string filen) {
+int test_tree_filetype (const std::string& filen) {
     std::string tline;
     std::ifstream infile(filen.c_str());
     int ret = 666; // if you get 666, there is no filetype set
     while (getline_safe(infile, tline)) {
-        if (tline.size() < 1) {
+        if (tline.empty()) {
             continue;
         }
     //nexus
@@ -292,8 +271,8 @@ int test_tree_filetype_stream (std::istream& stri, std::string& retstring) {
 /**
  * this will look for the translation table if it exists
  */
-bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std::string> * trans,
-    std::string * retstring) {
+bool get_nexus_translation_table (std::istream& stri, std::map<std::string,
+        std::string> * trans, std::string * retstring) {
     std::string line1;
     std::string del(" \t");
     std::vector<std::string> tokens;
@@ -317,34 +296,35 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
             exists = true;
             //std::cout << "Found translation table!" << std::endl;
             continue;
-        } else if (begintrees == true && tgoing == false) {
+        }
+        if (begintrees && !tgoing) {
             //std::cout << "No translation table present!" << std::endl;
-                return false;
+            return false;
         }
         if (uc.find("BEGIN TREES") != std::string::npos) {
             begintrees = true;
            //std::cout << "Found Begin trees!" << std::endl;
         }
-        if (tgoing == true) {
+        if (tgoing) {
             //trimspaces and split up strings
             tokens.clear();
             tokenize(line1, tokens, del);
-            size_t endcheck = line1.find(";");
+            size_t endcheck = line1.find(';');
             if (endcheck != std::string::npos) { // semicolon present. this is the last line.
                 //std::cout << "Ending translation table!" << std::endl;
                 going = false;
                 (*retstring) = "";
             }
             if (tokens.size() != 1) { // not trailing lone semicolon
-                for (unsigned int i = 0; i < tokens.size(); i++) {
-                    trim_spaces(tokens[i]);
+                for (auto & tk : tokens) {
+                    trim_spaces(tk);
                 }
-                size_t found = tokens[1].find(",");
+                size_t found = tokens[1].find(',');
                 if (found != std::string::npos) {
                     tokens[1].erase(found, 1);
                 }
                 if (!going) {
-                    size_t found2 = tokens[1].find(";");
+                    size_t found2 = tokens[1].find(';');
                     if (found2 != std::string::npos) {
                         tokens[1].erase(found2, 1);
                     }
@@ -363,9 +343,9 @@ bool get_nexus_translation_table (std::istream& stri, std::map<std::string, std:
  * should add some error correction code here
 */
 Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstring,
-    bool ttexists, std::map<std::string, std::string> * trans, bool * going) {
+        bool ttexists, std::map<std::string, std::string> * trans, bool * going) {
     std::string tline;
-    if (retstring.size() > 0) {
+    if (!retstring.empty()) {
         tline = retstring;
         retstring = "";
         bool done = false;
@@ -386,7 +366,7 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
         while (reading) {
             if (!getline_safe(stri, tline)) {
                 (*going) = false;
-                return NULL;
+                return nullptr;
             }
             trim_spaces(tline); // important!
             if (!tline.empty()) {
@@ -404,21 +384,21 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
     std::string uc = string_to_upper(tline);
     if (uc.find("END;") != std::string::npos) {
         (*going) = false;
-        return NULL;
+        return nullptr;
     }
     //vector<string> tokens;
     //string del(" \t");
     //tokenize(tline, tokens, del);
     //string tstring(tokens[tokens.size()-1]);
     
-    size_t startpos = tline.find_first_of("(");
+    size_t startpos = tline.find_first_of('(');
     std::string tstring = tline.substr(startpos);
     Tree * tree;
     //std::cout << tstring << std::endl;
     TreeReader tr;
     tree = tr.readTree(tstring);
     if (ttexists) {
-        for (int i = 0; i < tree->getExternalNodeCount(); i++) {
+        for (unsigned int i = 0; i < tree->getExternalNodeCount(); i++) {
             tree->getExternalNode(i)->setName((*trans)[tree->getExternalNode(i)->getName()]);
         }
     }
@@ -431,40 +411,41 @@ Tree * read_next_tree_from_stream_nexus (std::istream& stri, std::string& retstr
  */
 // adding a simple check: if line is empty, assume we're done
 // TODO: deal with trees with internal line breaks (phylip does this?)
-Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring, bool * going) {
+Tree * read_next_tree_from_stream_newick (std::istream& stri, std::string& retstring,
+        bool * going) {
     std::string tline;
-    if (retstring.size() > 0) {
+    if (!retstring.empty()) {
         tline = retstring;
         retstring = "";
     } else if (!getline_safe(stri, tline)) {
         (*going) = false;
-        return NULL;
+        return nullptr;
     }
     trim_spaces(tline);
     
     // hrm do we want to allow empty lines in between trees? i think so?
-    if (tline.size() == 0) {
+    if (tline.empty()) {
         //std::cout << "You've got yerself an empty line, there." << std::endl;
         bool done = false;
         while (!done) {
             if (!getline_safe(stri, tline)) {
                 (*going) = false;
-                return NULL;
-            } else {
-                trim_spaces(tline);
-                 if (tline.size() != 0) {
-                     done = true;
-                 }
+                return nullptr;
+            }
+            trim_spaces(tline);
+            if (!tline.empty()) {
+                done = true;
             }
         }
     }
     
     if (tline.back() != ';') {
         bool done = false;
-        std::string terp = "";
+        std::string terp;
         while (!done) {
             if (!getline_safe(stri, terp)) {
-                std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting." << std::endl;
+                std::cerr << "Error: malformed tree string (missing trailing semicolon). Exiting."
+                        << std::endl;
                 exit(1);
             } else {
                 trim_spaces(terp);

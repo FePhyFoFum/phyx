@@ -16,10 +16,10 @@ void VcfReader::read_vcf (std::istream* pios) {
     bool started = false;
     bool first = true;
     // these column numbers should be constant (i think?), but let's not leave anything to chance
-    int refcol = 0;
-    int altcol = 0;
-    int taxstartcol = 0;
-    int ncols = 0;
+    size_t refcol = 0;
+    size_t altcol = 0;
+    size_t taxstartcol = 0;
+    size_t ncols = 0;
     
     std::string line;
     while (getline_safe(*pios, line)) {
@@ -36,16 +36,16 @@ void VcfReader::read_vcf (std::istream* pios) {
             states.insert(states.begin(), refstate);
             
             if (!first) {
-                int counter = 0;
-                for (int i = taxstartcol; i < ncols; i++) {
-                    int idx = stoi(temp[i]);
+                size_t counter = 0;
+                for (size_t i = taxstartcol; i < ncols; i++) {
+                    size_t idx = stoul(temp[i]);
                     seqs_[counter] += states[idx];
                     counter++;
                 }
             } else {
                 // construct result vector during first data row (site)
-                for (int i = taxstartcol; i < ncols; i++) {
-                    int idx = stoi(temp[i]);
+                for (size_t i = taxstartcol; i < ncols; i++) {
+                    size_t idx = stoul(temp[i]);
                     seqs_.push_back(states[idx]);
                 }
                 first = false;
@@ -55,7 +55,7 @@ void VcfReader::read_vcf (std::istream* pios) {
             if (temp[0] == "#CHROM") {
                 bool read_taxa = false;
                 ncols = temp.size();
-                for (unsigned int i = 1; i < temp.size(); i++) {
+                for (size_t i = 1; i < ncols; i++) {
                     if (read_taxa) {
                         taxa_.push_back(temp[i]);    
                         //std::cout << " " << temp[i];
@@ -89,7 +89,7 @@ void VcfReader::read_vcf (std::istream* pios) {
 std::vector<std::string> VcfReader::get_alts (const std::string& str) {
     std::vector<std::string> res;
     std::stringstream ss(str);
-    while(ss.good()) {
+    while (ss.good()) {
         std::string substr;
         getline(ss, substr, ',');
         res.push_back(substr);

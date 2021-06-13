@@ -64,7 +64,7 @@ AC_CHECK_FUNCS([floor pow sqrt])
 # Platform specific setup
 #############################
 
-OPT_FLAGS="-O3 -std=c++11"
+OPT_FLAGS="-O3 -std=c++14"
 
 AC_SUBST([HOMP],[N])
 if `$CXX -v 2>&1 | grep 'gcc version' >/dev/null 2>&1` ; then

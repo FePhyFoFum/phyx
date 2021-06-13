@@ -17,78 +17,84 @@
 #include "utils.h"
 
 
-Node::Node ():BL_(0.0), height_(0.0), number_(0), name_(""), parent_(NULL),
-    children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
-    assocDV_(std::map<std::string, std::vector<Superdouble> >()), comment_(""), painted_(false) {
+Node::Node ():BL_(0.0), height_(0.0), depth_(0.0), number_(0), name_(""), parent_(nullptr),
+        children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
+        assocDV_(std::map<std::string, std::vector<Superdouble> >()), segs_(nullptr),
+        comment_(""), painted_(false) {
 
 }
 
 
-Node::Node (Node * inparent):BL_(0.0), height_(0.0), number_(0), name_(""), parent_(inparent),
-    children_(std::vector<Node *> ()), assoc_(std::map<std::string, NodeObject *>()),
-    assocDV_(std::map<std::string, std::vector<Superdouble> >()), comment_(""), painted_(false) {
+Node::Node (Node * inparent):BL_(0.0), height_(0.0), depth_(0.0), number_(0), name_(""),
+        parent_(inparent), children_(std::vector<Node *> ()), assoc_(std::map<std::string,
+        NodeObject *>()), assocDV_(std::map<std::string, std::vector<Superdouble> >()),
+        segs_(nullptr), comment_(""), painted_(false) {
 
 }
 
 
-Node::Node (double bl, int innumber, std::string inname, Node * inparent):BL_(bl), height_(0.0),
-    number_(innumber), name_(inname), parent_(inparent), children_(std::vector<Node *> ()),
-    assoc_(std::map<std::string, NodeObject *>()), assocDV_(std::map<std::string, std::vector<Superdouble> >()), 
-    comment_(""), painted_(false) {
+// not used
+Node::Node (double bl, unsigned int innumber, std::string inname, Node * inparent):BL_(bl),
+        height_(0.0), depth_(0.0), number_(innumber), name_(std::move(inname)),
+        parent_(inparent), children_(std::vector<Node *> ()),
+        assoc_(std::map<std::string, NodeObject *>()),
+        assocDV_(std::map<std::string, std::vector<Superdouble> >()), segs_(nullptr),
+        comment_(""), painted_(false) {
 
 }
 
 
-std::vector<Node*> Node::getChildren () {
+std::vector<Node*> Node::getChildren () const {
     return children_;
 }
 
 
 bool Node::isExternal () {
-    if (children_.size() < 1) {
-        return true;
-    } else {
-        return false;
+    bool ret = false;
+    if (children_.empty()) {
+        ret = true;
     }
+    return ret;
 }
 
 
 bool Node::isInternal () {
-    if (children_.size() > 0) {
-        return true;
-    } else {
-        return false;
+    bool ret = false;
+    if (!children_.empty()) {
+        ret = true;
     }
+    return ret;
 }
 
 
 bool Node::isRoot () {
-    if (parent_ == NULL) {
-        return true;
-    } else {
-        return false;
+    bool ret = false;
+    if (parent_ == nullptr) {
+        ret = true;
     }
+    return ret;
 }
 
 
 // is the internal node of two degree (one parent and one child?)
+// neither tips nor the root can be a knuckle
 bool Node::isKnuckle () {
-    // neither tips nor the root can be a knuckle
-    if (isRoot() || isExternal()) {
-        return false;
-    } else if (children_.size() == 1) {
-        return true;
+    bool ret = false;
+    if (!isRoot() && !isExternal()) {
+        if (children_.size() == 1) {
+            ret = true;
+        }
     }
-    return false;
+    return ret;
 }
 
 
 bool Node::hasParent () {
-    if (parent_ == NULL) {
-        return false;
-    } else {
-        return true;
+    bool ret = true;
+    if (parent_ == nullptr) {
+        ret = false;
     }
+    return ret;
 }
 
 
@@ -97,17 +103,17 @@ void Node::setParent (Node& p) {
 }
 
 
-int Node::getNumber () {
+unsigned int Node::getNumber () const {
     return number_;
 }
 
 
-void Node::setNumber (int n) {
+void Node::setNumber (unsigned int n) {
     number_ = n;
 }
 
 
-bool Node::getPainted () {
+bool Node::getPainted () const {
     return painted_;
 }
 
@@ -117,7 +123,7 @@ void Node::setPainted (bool p) {
 }
 
 
-double Node::getBL () {
+double Node::getBL () const {
     return BL_;
 }
 
@@ -127,7 +133,7 @@ void Node::setBL (double bl) {
 }
 
 
-double Node::getHeight () {
+double Node::getHeight () const {
     return height_;
 }
 
@@ -137,11 +143,13 @@ void Node::setHeight (double he) {
 }
 
 
-double Node::getDepth () {
+// not currently used
+double Node::getDepth () const {
     return depth_;
 }
 
 
+// not currently used
 void Node::setDepth (double de) {
     depth_ = de;
 }
@@ -149,8 +157,8 @@ void Node::setDepth (double de) {
 
 bool Node::hasChild (Node& test) {
     bool ret = false;
-    for (unsigned int i = 0; i < children_.size(); i++) {
-        if (children_.at(i) == &test) {
+    for (auto & chi : children_) {
+        if (chi == &test) {
             ret = true;
             break;
         }
@@ -160,64 +168,65 @@ bool Node::hasChild (Node& test) {
 
 
 bool Node::addChild (Node& c) {
-    if (hasChild(c) == false) {
+    bool ret = false;
+    if (!hasChild(c)) {
         children_.push_back(&c);
         c.setParent(*this);
-        return true;
-    } else {
-        return false;
+        ret = true;
     }
+    return ret;
 }
 
 
 bool Node::removeChild (Node& c) {
-    if (hasChild(c) == true) {
+    bool ret = false;
+    if (hasChild(c)) {
         for (unsigned int i = 0; i < children_.size(); i++) {
             if (children_.at(i) == &c) {
                 children_.erase(children_.begin()+i);
                 break;
             }
         }
-        return true;
-    } else {
-        return false;
+        ret = true;
     }
+    return ret;
 }
 
 
-Node * Node::getChild (int c) {
-    return children_.at(c);
+Node * Node::getChild (unsigned int c) {
+    return children_.at(static_cast<size_t>(c));
 }
 
 
-std::string Node::getName () {
+std::string Node::getName () const {
     return name_;
 }
 
 
 void Node::setName (std::string s) {
-    name_ = s;
+    name_ = std::move(s);
 }
 
 
-std::string Node::getComment () {
+// not currently used
+std::string Node::getComment () const {
     return comment_;
 }
 
 void Node::setComment (std::string s) {
-    comment_ = s;
+    comment_ = std::move(s);
 }
 
 
 // since nexus writer uses this, using stricter nexus punctuation
 std::string Node::getNewick (bool bl) {
-    std::string ret = "";
-    for (int i = 0; i < this->getChildCount(); i++) {
+    std::string ret;
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
         }
-        ret = ret+this->getChild(i)->getNewick(bl);
-        if (bl == true) {
+        ret += this->getChild(i)->getNewick(bl);
+        if (bl) {
             //std::ostringstream o;
             ////20 is what you get from raxml
             //o.setf(ios::fixed, std::ios::floatfield);
@@ -231,7 +240,7 @@ std::string Node::getNewick (bool bl) {
             ret += ",";
         }
     }
-    if (name_.size() > 0) {
+    if (!name_.empty()) {
         // newick punct is a subset of Nexus, so labels will be safe
         std::string compliantName = get_valid_nexus_label(name_);
         ret += compliantName;
@@ -245,10 +254,10 @@ std::string Node::getNewick (bool bl) {
 // root edge could be solved by passing in the correct node initially, but MRCA is expensive
 // recursive
 std::string Node::getPaintedNewick (bool bl) {
-    std::string ret = "";
-    std::vector<int> paintedchildren;
-    for (int i = 0; i < this->getChildCount(); i++) {
-        if (this->getChild(i)->getPainted() == true) {
+    std::string ret;
+    std::vector<unsigned int> paintedchildren;
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
+        if (this->getChild(i)->getPainted()) {
             paintedchildren.push_back(i);
         }
     }
@@ -273,7 +282,7 @@ std::string Node::getPaintedNewick (bool bl) {
             ret += "(";
         }
         ret += this->getChild(paintedchildren[i])->getPaintedNewick(bl);
-        if (bl == true) {
+        if (bl) {
             std::ostringstream o;
             // 20 is what you get from raxml
             o << std::setprecision(20) << this->getChild(paintedchildren[i])->getBL();
@@ -285,7 +294,7 @@ std::string Node::getPaintedNewick (bool bl) {
             ret += ",";
         }
     }
-    if (this->getName().size() > 0) {
+    if (!this->getName().empty()) {
         ret += this->getName();
     }
     return ret;
@@ -297,14 +306,14 @@ std::string Node::getPaintedNewick (bool bl) {
  * nodes with the [&obj=string]
  * needs to be a string in setObject
  */
-std::string Node::getNewick (bool bl, std::string obj) {
-    std::string ret = "";
-    for (int i = 0; i < this->getChildCount(); i++) {
+std::string Node::getNewick (bool bl, const std::string& obj) {
+    std::string ret;
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
         if (i == 0) {
             ret += "(";
         }
-        ret = ret+this->getChild(i)->getNewick(bl, obj);
-        if (bl == true) {
+        ret += this->getChild(i)->getNewick(bl, obj);
+        if (bl) {
             std::ostringstream o;
             o << this->getChild(i)->getBL();
             ret += ":" + o.str();
@@ -315,29 +324,29 @@ std::string Node::getNewick (bool bl, std::string obj) {
             ret += ",";
         }
     }
-    if (this->name_.size() > 0) {
+    if (!this->name_.empty()) {
         ret = ret + this->name_;
     }
-    if (this->getObject(obj) != NULL) {
+    if (this->getObject(obj) != nullptr) {
         std::ostringstream o;
-        o << (*((StringNodeObject*) (this->getObject(obj))));
+        o << (*(dynamic_cast<StringNodeObject*>(this->getObject(obj))));
         ret += "[&"+obj+"="+o.str()+"]";
     }
     return ret;
 }
 
 
-Node * Node::getParent () {
+Node * Node::getParent () const {
     return parent_;
 }
 
 
-int Node::getChildCount () {
-    return children_.size();
+unsigned int Node::getChildCount () {
+    return static_cast<unsigned int>(children_.size());
 }
 
 
-void Node::assocObject (std::string name, NodeObject& obj) {
+void Node::assocObject (const std::string& name, NodeObject& obj) {
     if (assoc_.count(name) > 0) {
         delete assoc_[name];
     }
@@ -345,7 +354,7 @@ void Node::assocObject (std::string name, NodeObject& obj) {
 }
 
 
-void Node::assocDoubleVector (std::string name, std::vector<Superdouble>& obj) {
+void Node::assocDoubleVector (const std::string& name, std::vector<Superdouble>& obj) {
     if (assocDV_.count(name) > 0) {
         assocDV_.erase(name);
     }
@@ -357,12 +366,12 @@ void Node::assocDoubleVector (std::string name, std::vector<Superdouble>& obj) {
 }
 
 
-std::vector<Superdouble> * Node::getDoubleVector (std::string name) {
+std::vector<Superdouble> * Node::getDoubleVector (const std::string& name) {
     return &assocDV_[name];
 }
 
 
-void Node::deleteDoubleVector (std::string name) {
+void Node::deleteDoubleVector (const std::string& name) {
     if (assocDV_.count(name) > 0) {
         assocDV_.erase(name);
     }
@@ -376,11 +385,11 @@ int Node::get_num_leaves () {
     int retnum = 0;
     std::stack<Node*> nodes;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -398,11 +407,11 @@ std::vector<Node*> Node::get_leaves () {
     std::vector<Node*> retnodes;
     std::stack<Node*> nodes;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -420,11 +429,11 @@ std::set<Node*> Node::get_leaves_set () {
     std::set<Node*> retnodes;
     std::stack<Node*> nodes;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -439,11 +448,11 @@ std::set<std::string> Node::get_leave_names_set () {
     std::stack<Node*> nodes;
     std::set<std::string> names;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -458,11 +467,11 @@ std::vector<std::string> Node::get_leave_names () {
     std::stack<Node*> nodes;
     std::vector<std::string> names;
     nodes.push(this);
-    while (nodes.empty() == false) {
+    while (!nodes.empty()) {
         Node * nd = nodes.top();
         nodes.pop();
         if (nd->getChildCount() > 0) {
-            for (int i = 0; i < nd->getChildCount(); i++) {
+            for (unsigned int i = 0; i < nd->getChildCount(); i++) {
                 nodes.push(nd->getChild(i));
             }
         } else {
@@ -485,7 +494,7 @@ std::vector<std::string> Node::get_leave_names () {
  * tree.getRoot()->assocObject("testvno", vno);
  * std::cout << ((VectorNodeObject<int> *) (tree.getRoot()->getObject("testvno")))->at(0) << std::endl;
  */
-NodeObject  * Node::getObject (std::string name) {
+NodeObject  * Node::getObject (const std::string& name) {
     return assoc_[name];
 }
 
@@ -495,7 +504,7 @@ void Node::initSegVector () {
 }
 
 
-std::vector<BranchSegment> * Node::getSegVector () {
+std::vector<BranchSegment> * Node::getSegVector () const {
     return segs_;
 }
 
@@ -510,7 +519,7 @@ void Node::deleteSegVector () {
  */
 Node::~Node () {
     std::map<std::string, NodeObject *>::iterator it;
-    for (it = assoc_.begin() ; it != assoc_.end(); it++) {
+    for (it = assoc_.begin(); it != assoc_.end(); ++it) {
         delete assoc_[it->first];
     }
 }

@@ -1,5 +1,5 @@
-#ifndef _LOG_MANIP_H_
-#define _LOG_MANIP_H_
+#ifndef PX_LOG_MANIP_H
+#define PX_LOG_MANIP_H
 
 #include <string>
 #include <vector>
@@ -15,7 +15,7 @@ private:
     int nthin_;
     
     int nrandom_;
-    int seed_;
+    long int seed_;
     
     bool count_; // just count (i.e. do not edit)
     bool verbose_;
@@ -30,7 +30,7 @@ private:
     std::string tree_name_prefix_;
     
     std::vector<std::string> files_;
-    std::istream* pios_;
+    //std::istream* pios_;
     std::ostream* poos_;
     std::ifstream infilestr_;
     std::vector<std::string> parm_names_;
@@ -58,13 +58,13 @@ public:
     LogManipulator (const std::string& logtype, const std::vector<std::string>& input_files,
         std::ostream* poos, const bool& verbose);
     void count ();
-    void get_sample_counts ();
+    void get_sample_counts () const;
     void get_column_names ();
     void sample (const int& burnin, const int& nthin, const int& nrandom,
-        const int& seed);
+        const long int& seed);
     void delete_columns (const std::vector<int>& col_ids);
     void retain_columns (const std::vector<int>& col_ids);
     void summarize (const int& burnin, const int& nthin); // calculate summary statistics over samples
 };
 
-#endif /* _LOG_MANIP_H_ */
+#endif /* PX_LOG_MANIP_H */

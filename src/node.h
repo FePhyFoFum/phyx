@@ -1,5 +1,5 @@
-#ifndef _NODE_H_
-#define _NODE_H_
+#ifndef PX_NODE_H
+#define PX_NODE_H
 
 #include <map>
 #include <set>
@@ -13,8 +13,8 @@ class Node {
 private:
     double BL_; // branch length, points to parent
     double height_; // could be from tip or from root. need to be consistent
-    double depth_; // not being used
-    int number_;
+    double depth_; // not being used. should be
+    unsigned int number_;
     std::string name_;
     Node * parent_;
     // children are _immediate_ children, not all descendants
@@ -27,8 +27,9 @@ private:
 
 public:
     Node ();
-    Node (Node * parent);
-    Node (double bl, int number, std::string name, Node * parent);
+    explicit Node (Node * inparent);
+    // not used
+    Node (double bl, unsigned int innumber, std::string inname, Node * inparent);
     
     int get_num_leaves ();
     std::vector<Node*> get_leaves ();
@@ -36,43 +37,43 @@ public:
     std::set<std::string> get_leave_names_set ();
     std::set<Node *> get_leaves_set ();
     
-    std::vector<Node*> getChildren ();
+    std::vector<Node*> getChildren () const;
     bool isExternal ();
     bool isInternal ();
     bool isRoot ();
     bool isKnuckle ();
     bool hasParent ();
     void setParent (Node& p);
-    int getNumber ();
-    void setNumber (int n);
-    bool getPainted ();
+    unsigned int getNumber () const;
+    void setNumber (unsigned int n);
+    bool getPainted () const;
     void setPainted (bool p);
-    double getBL ();
+    double getBL () const;
     void setBL (double bl);
-    double getHeight ();
+    double getHeight () const;
     void setHeight (double he);
-    double getDepth ();
+    double getDepth () const;
     void setDepth (double de);
     bool hasChild (Node& test);
     bool addChild (Node& c);
     bool removeChild (Node& c);
-    Node * getChild (int c);
-    std::string getName ();
-    std::string getComment ();
+    Node * getChild (unsigned int c);
+    std::string getName () const;
+    std::string getComment () const;
     void setName (std::string s);
     void setComment (std::string s);
     std::string getNewick (bool bl);
-    std::string getNewick (bool bl, std::string obj);
+    std::string getNewick (bool bl, const std::string& obj);
     std::string getPaintedNewick (bool bl);
-    Node * getParent ();
-    int getChildCount ();
-    void assocObject (std::string name, NodeObject& obj);
-    void assocDoubleVector (std::string name, std::vector<Superdouble>& obj);
-    std::vector<Superdouble> * getDoubleVector (std::string name);
-    void deleteDoubleVector (std::string name);
-    NodeObject * getObject (std::string name);
+    Node * getParent () const;
+    unsigned int getChildCount ();
+    void assocObject (const std::string& name, NodeObject& obj);
+    void assocDoubleVector (const std::string& name, std::vector<Superdouble>& obj);
+    std::vector<Superdouble> * getDoubleVector (const std::string& name);
+    void deleteDoubleVector (const std::string& name);
+    NodeObject * getObject (const std::string& name);
     void initSegVector ();
-    std::vector<BranchSegment> * getSegVector ();
+    std::vector<BranchSegment> * getSegVector () const;
     void deleteSegVector ();
     
     VectorNodeObject<Superdouble> seg_sp_stoch_map_revB_time; //segment specific rev B, combining the tempA and the ENLT
@@ -80,4 +81,4 @@ public:
     ~Node ();
 };
 
-#endif /* _NODE_H_ */
+#endif /* PX_NODE_H */

@@ -2,7 +2,7 @@
 #include <vector>
 #include <set>
 #include <map>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <algorithm>
 
@@ -23,7 +23,7 @@ std::string protchars = "ABCDEFGHIKLMNPQRSTVWXYZ";
  * An empty set contains only gaps. An N has a count for all nucleotides.
  * When a site has valid nucleotides and gaps, the gaps are ignored.
  */
-char get_dna_from_pos (std::set<int> ins) {
+char get_dna_from_pos (const std::set<int>& ins) {
     if (ins.count(0) == 1) {
         if (ins.count(1) == 1) {
             if (ins.count(2) == 1) {
@@ -75,7 +75,7 @@ char get_dna_from_pos (std::set<int> ins) {
 
 std::set<int> get_dna_pos (char inc) {
     std::set<int> ret;
-    inc = toupper(inc);
+    inc = static_cast<char>(toupper(inc));
     if (inc == 'A') {
         ret.insert(0);
     } else if (inc == 'C') {
@@ -125,7 +125,7 @@ std::set<int> get_dna_pos (char inc) {
 }
 
 
-char get_prot_char (std::set<char> inc) {
+char get_prot_char (const std::set<char>& inc) {
     // if any is missing, consensus is missing
     if (inc.count('X') == 1 || inc.count('-') == 1) {
         return 'X';
@@ -137,13 +137,13 @@ char get_prot_char (std::set<char> inc) {
     // there are a handful of ambiguity codes
     // B = Aspartic acid (D) or Asparagine (N)
     // Z = Glutamine (Q) or Glutamic acid (E)
-    int B = inc.count('D') + inc.count('N') + inc.count('B');
-    int Z = inc.count('Q') + inc.count('E') + inc.count('Z');
+    int B = static_cast<int>(inc.count('D') + inc.count('N') + inc.count('B'));
+    int Z = static_cast<int>(inc.count('Q') + inc.count('E') + inc.count('Z'));
     
-    if (B == (int)inc.size()) {
+    if (B == static_cast<int>(inc.size())) {
         return 'B';
     }
-    if (Z == (int)inc.size()) {
+    if (Z == static_cast<int>(inc.size())) {
         return 'Z';
     }
     
@@ -160,25 +160,25 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
-    int seqlength = seqs[0].get_length();
+    unsigned int seqlength = seqs[0].get_length();
     std::string retstring;
     if (alpha == "DNA") {
-        for (int i = 0; i < seqlength; i++) {
+        for (unsigned int i = 0; i < seqlength; i++) {
             std::set<int> fullset;
-            for (unsigned int j = 0; j < seqs.size(); j++) {
-                std::set<int> tset = get_dna_pos(seqs[j].get_sequence()[i]);
+            for (auto & seq : seqs) {
+                std::set<int> tset = get_dna_pos(seq.get_sequence()[i]);
                 fullset.insert(tset.begin(), tset.end());
             }
             retstring += get_dna_from_pos(fullset);
         }
     } else if (alpha == "AA") {
-        for (int i = 0; i < seqlength; i++) {
+        for (unsigned int i = 0; i < seqlength; i++) {
             std::set<char> fullset;
             //bool ambig = false; // doesn't do anything
-            for (unsigned int j = 0; j < seqs.size(); j++) {
-                fullset.insert(seqs[j].get_sequence()[i]);
+            for (auto & seq : seqs) {
+                fullset.insert(seq.get_sequence()[i]);
                 // break early if any ambiguous code is encountered
-                if (seqs[j].get_sequence()[i] == 'X' || seqs[j].get_sequence()[i] == '-') {
+                if (seq.get_sequence()[i] == 'X' || seq.get_sequence()[i] == '-') {
                     //ambig = true;
                     break;
                 }
@@ -199,59 +199,73 @@ std::string consensus_seq (std::vector<Sequence>& seqs, std::string& alpha) {
  *
  */
 char single_dna_complement (char inc) {
-    inc = toupper(inc);
-    if (inc=='A') {
+    inc = static_cast<char>(toupper(inc));
+    if (inc == 'A') {
         return 'T';
-    } else if (inc=='T') {
-        return 'A';
-    } else if (inc=='U') {
-        return 'A';
-    } else if (inc=='G') {
-        return 'C';
-    } else if (inc=='C') {
-        return 'G';
-    } else if (inc=='Y') {
-        return 'R';
-    } else if (inc=='R') {
-        return 'Y';
-    } else if (inc=='S') {
-        return 'S';
-    } else if (inc=='W') {
-        return 'W';
-    } else if (inc=='K') {
-        return 'M';
-    } else if (inc=='M') {
-        return 'K';
-    } else if (inc=='B') {
-        return 'V';
-    } else if (inc=='D') {
-        return 'H';
-    } else if (inc=='H') {
-        return 'D';
-    } else if (inc=='V') {
-        return 'B';
-    } else {
-        return 'N';
     }
+    if (inc == 'T') {
+        return 'A';
+    }
+    if (inc == 'U') {
+        return 'A';
+    }
+    if (inc == 'G') {
+        return 'C';
+    }
+    if (inc == 'C') {
+        return 'G';
+    }
+    if (inc == 'Y') {
+        return 'R';
+    }
+    if (inc == 'R') {
+        return 'Y';
+    }
+    if (inc == 'S') {
+        return 'S';
+    }
+    if (inc == 'W') {
+        return 'W';
+    }
+    if (inc == 'K') {
+        return 'M';
+    }
+    if (inc == 'M') {
+        return 'K';
+    }
+    if (inc == 'B') {
+        return 'V';
+    }
+    if (inc == 'D') {
+        return 'H';
+    }
+    if (inc == 'H') {
+        return 'D';
+    }
+    if (inc == 'V') {
+        return 'B';
+    }
+    return 'N';
 }
 
 
-void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
+void write_phylip_alignment (std::vector<Sequence>& seqs,
+        const bool& uppercase, std::ostream * ostr) {
     bool aligned = is_aligned(seqs);
     if (!aligned) {
         std::cerr << "Error: sequences are not aligned. Exiting." << std::endl;
         exit(0);
     }
-    int seqlength = seqs[0].get_length();
+    unsigned int seqlength = seqs[0].get_length();
     // header: num_taxa, num_char
     (*ostr) << seqs.size() << " " << seqlength << std::endl;
     
-    for (unsigned int i = 0; i < seqs.size(); i++) {
+    for (auto & seq : seqs) {
         if (uppercase) {
-            std::string terp = seqs[i].seq_to_upper();
-            (*ostr) << seqs[i].get_id() << "\t" << terp << std::endl;
+            std::string terp = seq.seq_to_upper();
+            (*ostr) << seq.get_id() << "\t" << terp << std::endl;
         } else {
-            (*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
+            (*ostr) << seq.get_id() << "\t" << seq.get_sequence() << std::endl;
         }
     }
 }
@@ -261,10 +275,11 @@ void write_phylip_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
  * this is not for concatenation. only single gene regions
  * another one needs to be written for concatenation
  */
-void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, std::ostream * ostr) {
-    int seqlength = seqs[0].get_length();
+void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase,
+        std::ostream * ostr) {
+    unsigned int seqlength = seqs[0].get_length();
     std::string datatype = seqs[0].get_alpha_name();
-    std::string symbols = ""; // not required for binary (default), protein, DNA
+    std::string symbols; // not required for binary (default), protein, DNA
     //std::cout << std::endl << "datatype = " << datatype << std::endl << std::endl;
     
     if (datatype == "AA") { // "AA" is not a valid Nexus datatype
@@ -278,11 +293,11 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
         datatype = "STANDARD";
         //std::cout << "assembling symbols now" << std::endl;
         std::string combined;
-        for (unsigned int i = 0; i < seqs.size(); i++) {
+        for (auto & seq : seqs) {
             if (uppercase) {
-                combined += seqs[i].seq_to_upper();
+                combined += seq.seq_to_upper();
             } else {
-                combined += seqs[i].get_sequence();
+                combined += seq.get_sequence();
             }
         }
         symbols = get_alphabet_from_sequence(combined);
@@ -306,17 +321,17 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
     // removing 'INTERLEAVE=NO` as it appears to not be NCL-compliant
     (*ostr) << " GAP=- MISSING=?;" << std::endl;
     (*ostr) << "\tMATRIX\n" << std::endl;
-    for (unsigned int i = 0; i < seqs.size(); i++) {
+    for (auto & seq : seqs) {
         // MrBayes is not Nexus-compliant, so using a "safe" version
         if (uppercase) {
-            std::string terp = seqs[i].seq_to_upper();
-            (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << terp << std::endl;
+            std::string terp = seq.seq_to_upper();
+            (*ostr) << get_valid_nexus_label(seq.get_id()) << "\t" << terp << std::endl;
         } else {
-            (*ostr) << get_valid_nexus_label(seqs[i].get_id()) << "\t" << seqs[i].get_sequence() << std::endl;
+            (*ostr) << get_valid_nexus_label(seq.get_id()) << "\t" << seq.get_sequence() << std::endl;
         }
-        //(*ostr) << seqs[i].get_id() << "\t" << seqs[i].get_sequence() << std::endl;
+        //(*ostr) << seq.get_id() << "\t" << seq.get_sequence() << std::endl;
     }
-    (*ostr) << ";\nend;\n" << std::endl;
+    (*ostr) << ";\nend;" << std::endl;
 }
 
 
@@ -325,17 +340,17 @@ void write_nexus_alignment (std::vector<Sequence>& seqs, const bool& uppercase, 
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs,
-    std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
-    int start = site*3;
-    for (unsigned int i = 0; i < origseqs.size(); i++) {
+// this is not currently used
+void create_vector_seq_codon_state_reconstructor (std::vector<Sequence>& origseqs,
+        std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
+        std::vector<int> >& codon_pos) {
+    unsigned int start = static_cast<unsigned int>(site) * 3u;
+    for (size_t i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
-        std::string setsq = "";
-        for (int j = 0; j < 61; j++) {
-            setsq += "0";
-        }
-        for (unsigned int j = 0; j < codon_pos[codon].size(); j++) {
-            setsq.replace(codon_pos[codon][j], 1, "1");
+        std::string setsq(61, '0');
+        
+        for (int j : codon_pos[codon]) {
+            setsq.replace(static_cast<size_t>(codon_pos[codon][static_cast<size_t>(j)]), 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }
@@ -347,15 +362,16 @@ void create_vector_seq_codon_state_reconstructor(std::vector<Sequence>& origseqs
  * that would be 000000100000 for each codon that is present
  * this would be for each site, so reuse your vectors!
  */
-void create_vector_seq_codon_state_reconstructor_all_site(std::vector<Sequence>& origseqs,
-    std::vector<Sequence>& sr_seqs, int site, std::map<std::string, std::vector<int> >& codon_pos) {
-    int start = site * 3;
+void create_vector_seq_codon_state_reconstructor_all_site (std::vector<Sequence>& origseqs,
+        std::vector<Sequence>& sr_seqs, int site, std::map<std::string,
+        std::vector<int> >& codon_pos) {
+    unsigned int start = static_cast<unsigned int>(site) * 3u;
     for (unsigned int i = 0; i < origseqs.size(); i++) {
         std::string codon = origseqs[i].get_sequence().substr(start, 3);
         std::string setsq(61, '0');
         
-        for (unsigned int j = 0; j < codon_pos[codon].size(); j++) {
-            setsq.replace(codon_pos[codon][j], 1, "1");
+        for (int j : codon_pos[codon]) {
+            setsq.replace(static_cast<size_t>(codon_pos[codon][static_cast<size_t>(j)]), 1, "1");
         }
         sr_seqs[i].set_sequence(setsq);
     }
@@ -372,72 +388,158 @@ std::vector<std::string> collect_names (const std::vector<Sequence>& algnmnt) {
 }
 
 
-void populate_codon_list(std::vector<std::string> * codon_list) {
-    (*codon_list).push_back("TTT");
-    (*codon_list).push_back("TTC");
-    (*codon_list).push_back("TTA");
-    (*codon_list).push_back("TTG");
-    (*codon_list).push_back("TCT");
-    (*codon_list).push_back("TCC");
-    (*codon_list).push_back("TCA");
-    (*codon_list).push_back("TCG");
-    (*codon_list).push_back("TAT");
-    (*codon_list).push_back("TAC");
-    (*codon_list).push_back("TGT");
-    (*codon_list).push_back("TGC");
-    (*codon_list).push_back("TGG");
-    (*codon_list).push_back("CTT");
-    (*codon_list).push_back("CTC");
-    (*codon_list).push_back("CTA");
-    (*codon_list).push_back("CTG");
-    (*codon_list).push_back("CCT");
-    (*codon_list).push_back("CCC");
-    (*codon_list).push_back("CCA");
-    (*codon_list).push_back("CCG");
-    (*codon_list).push_back("CAT");
-    (*codon_list).push_back("CAC");
-    (*codon_list).push_back("CAA");
-    (*codon_list).push_back("CAG");
-    (*codon_list).push_back("CGT");
-    (*codon_list).push_back("CGC");
-    (*codon_list).push_back("CGA");
-    (*codon_list).push_back("CGG");
-    (*codon_list).push_back("ATT");
-    (*codon_list).push_back("ATC");
-    (*codon_list).push_back("ATA");
-    (*codon_list).push_back("ATG");
-    (*codon_list).push_back("ACT");
-    (*codon_list).push_back("ACC");
-    (*codon_list).push_back("ACA");
-    (*codon_list).push_back("ACG");
-    (*codon_list).push_back("AAT");
-    (*codon_list).push_back("AAC");
-    (*codon_list).push_back("AAA");
-    (*codon_list).push_back("AAG");
-    (*codon_list).push_back("AGT");
-    (*codon_list).push_back("AGC");
-    (*codon_list).push_back("AGA");
-    (*codon_list).push_back("AGG");
-    (*codon_list).push_back("GTT");
-    (*codon_list).push_back("GTC");
-    (*codon_list).push_back("GTA");
-    (*codon_list).push_back("GTG");
-    (*codon_list).push_back("GCT");
-    (*codon_list).push_back("GCC");
-    (*codon_list).push_back("GCA");
-    (*codon_list).push_back("GCG");
-    (*codon_list).push_back("GAT");
-    (*codon_list).push_back("GAC");
-    (*codon_list).push_back("GAA");
-    (*codon_list).push_back("GAG");
-    (*codon_list).push_back("GGT");
-    (*codon_list).push_back("GGC");
-    (*codon_list).push_back("GGA");
-    (*codon_list).push_back("GGG");
+bool check_binary_sequence (const std::string& seq) {
+    bool binary = false;
+    if (seq.find_first_not_of("01-?") == std::string::npos) {
+        binary = true;
+    }
+    return binary;
 }
 
 
-void populate_map_codon_dict(std::map <std::string, std::string> * codon_dict) {
+// get all unique character states
+std::string get_alphabet_from_sequence (const std::string& instr) {
+    std::string uniqueChars;
+    std::string sorted = instr;
+    std::sort(sorted.begin(), sorted.end());
+    std::unique_copy(sorted.begin(), sorted.end(), std::back_inserter(uniqueChars));
+    return uniqueChars;
+}
+
+
+bool is_dna_char (char& residue) {
+    bool isDNA = false;
+    std::size_t found = dnachars_with_ambiguous.find(residue);
+    if (found != std::string::npos) {
+        isDNA = true;
+    }
+    return isDNA;
+}
+
+
+bool is_prot_char (char& residue) {
+    bool isAA = false;
+    std::size_t found = protchars.find(residue);
+    if (found != std::string::npos) {
+        isAA = true;
+    }
+    return isAA;
+}
+
+
+// ignore ambiguity codes
+int count_dna_chars (const std::string& str) {
+    int ndna = 0;
+    std::string dnaChars = "ACGT";
+    for (char dnaChar : dnaChars) {
+        ndna += std::count(str.begin(), str.end(), dnaChar);
+    }
+    return ndna;
+}
+
+
+bool is_aligned (const std::vector<Sequence>& seqs) {
+    bool aligned = true;
+    bool first = true;
+    Sequence seq;
+    unsigned int num_char = 0;
+    for (const auto & sq : seqs) {
+        seq = sq;
+        if (!first) {
+            if (seq.get_length() != num_char) {
+                aligned = false;
+            }
+        } else {
+            num_char = seq.get_length();
+            first = false;
+        }
+    }
+    return aligned;
+}
+
+
+bool is_codon_alignment (const std::vector<Sequence>& seqs) {
+    bool codons = true;
+    Sequence seq;
+    for (const auto & sq : seqs) {
+        seq = sq;
+        if (static_cast<int>(seq.get_length()) % 3 != 0) {
+            codons = false;
+        }
+    }
+    return codons;
+}
+
+
+// these are not currently used
+/*
+void populate_codon_list (std::vector<std::string> * codon_list) {
+    (*codon_list).emplace_back("TTT");
+    (*codon_list).emplace_back("TTC");
+    (*codon_list).emplace_back("TTA");
+    (*codon_list).emplace_back("TTG");
+    (*codon_list).emplace_back("TCT");
+    (*codon_list).emplace_back("TCC");
+    (*codon_list).emplace_back("TCA");
+    (*codon_list).emplace_back("TCG");
+    (*codon_list).emplace_back("TAT");
+    (*codon_list).emplace_back("TAC");
+    (*codon_list).emplace_back("TGT");
+    (*codon_list).emplace_back("TGC");
+    (*codon_list).emplace_back("TGG");
+    (*codon_list).emplace_back("CTT");
+    (*codon_list).emplace_back("CTC");
+    (*codon_list).emplace_back("CTA");
+    (*codon_list).emplace_back("CTG");
+    (*codon_list).emplace_back("CCT");
+    (*codon_list).emplace_back("CCC");
+    (*codon_list).emplace_back("CCA");
+    (*codon_list).emplace_back("CCG");
+    (*codon_list).emplace_back("CAT");
+    (*codon_list).emplace_back("CAC");
+    (*codon_list).emplace_back("CAA");
+    (*codon_list).emplace_back("CAG");
+    (*codon_list).emplace_back("CGT");
+    (*codon_list).emplace_back("CGC");
+    (*codon_list).emplace_back("CGA");
+    (*codon_list).emplace_back("CGG");
+    (*codon_list).emplace_back("ATT");
+    (*codon_list).emplace_back("ATC");
+    (*codon_list).emplace_back("ATA");
+    (*codon_list).emplace_back("ATG");
+    (*codon_list).emplace_back("ACT");
+    (*codon_list).emplace_back("ACC");
+    (*codon_list).emplace_back("ACA");
+    (*codon_list).emplace_back("ACG");
+    (*codon_list).emplace_back("AAT");
+    (*codon_list).emplace_back("AAC");
+    (*codon_list).emplace_back("AAA");
+    (*codon_list).emplace_back("AAG");
+    (*codon_list).emplace_back("AGT");
+    (*codon_list).emplace_back("AGC");
+    (*codon_list).emplace_back("AGA");
+    (*codon_list).emplace_back("AGG");
+    (*codon_list).emplace_back("GTT");
+    (*codon_list).emplace_back("GTC");
+    (*codon_list).emplace_back("GTA");
+    (*codon_list).emplace_back("GTG");
+    (*codon_list).emplace_back("GCT");
+    (*codon_list).emplace_back("GCC");
+    (*codon_list).emplace_back("GCA");
+    (*codon_list).emplace_back("GCG");
+    (*codon_list).emplace_back("GAT");
+    (*codon_list).emplace_back("GAC");
+    (*codon_list).emplace_back("GAA");
+    (*codon_list).emplace_back("GAG");
+    (*codon_list).emplace_back("GGT");
+    (*codon_list).emplace_back("GGC");
+    (*codon_list).emplace_back("GGA");
+    (*codon_list).emplace_back("GGG");
+}
+
+
+// also not used
+void populate_map_codon_dict (std::map <std::string, std::string> * codon_dict) {
     (*codon_dict)["TTT"] = "F";
     (*codon_dict)["TTC"] = "F";
     (*codon_dict)["TTA"] = "L";
@@ -502,7 +604,8 @@ void populate_map_codon_dict(std::map <std::string, std::string> * codon_dict) {
 }
 
 
-void populate_map_codon_indices(std::map <std::string, std::vector<int> > * codon_position) {
+// also also not used
+void populate_map_codon_indices (std::map <std::string, std::vector<int> > * codon_position) {
     (*codon_position)["TTT"] = {0};
     (*codon_position)["TTC"] = {1};
     (*codon_position)["TTA"] = {2};
@@ -565,86 +668,4 @@ void populate_map_codon_indices(std::map <std::string, std::vector<int> > * codo
     (*codon_position)["GGA"] = {59};
     (*codon_position)["GGG"] = {60};
 }
-
-
-bool check_binary_sequence (const std::string& seq) {
-    bool binary = false;
-    if (seq.find_first_not_of("01-?") == std::string::npos) {
-        binary = true;
-    }
-    return binary;
-}
-
-
-// get all unique character states
-std::string get_alphabet_from_sequence (const std::string& instr) {
-    std::string uniqueChars;
-    std::string sorted = instr;
-    std::sort(sorted.begin(), sorted.end());
-    std::unique_copy(sorted.begin(), sorted.end(), std::back_inserter(uniqueChars));
-    return uniqueChars;
-}
-
-
-bool is_dna_char (char& residue) {
-    bool isDNA = false;
-    std::size_t found = dnachars_with_ambiguous.find(residue);
-    if (found != std::string::npos) {
-        isDNA = true;
-    }
-    return isDNA;
-}
-
-
-bool is_prot_char (char& residue) {
-    bool isAA = false;
-    std::size_t found = protchars.find(residue);
-    if (found != std::string::npos) {
-        isAA = true;
-    }
-    return isAA;
-}
-
-
-// ignore ambiguity codes
-int count_dna_chars (const std::string& str) {
-    int ndna = 0;
-    std::string dnaChars = "ACGT";
-    for (size_t i = 0; i < dnaChars.length(); ++i) {
-        ndna += std::count(str.begin(), str.end(), dnaChars[i]);
-    }
-    return ndna;
-}
-
-
-bool is_aligned (const std::vector<Sequence>& seqs) {
-    bool aligned = true;
-    bool first = true;
-    Sequence seq;
-    int num_char = 0;
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        seq = seqs[i];
-        if (!first) {
-            if ((int)seq.get_length() != num_char) {
-                aligned = false;
-            }
-        } else {
-            num_char = seq.get_length();
-            first = false;
-        }
-    }
-    return aligned;
-}
-
-
-bool is_codon_alignment (const std::vector<Sequence>& seqs) {
-    bool codons = true;
-    Sequence seq;
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        seq = seqs[i];
-        if ((int)seq.get_length() % 3 != 0) {
-            codons = false;
-        }
-    }
-    return codons;
-}
+*/

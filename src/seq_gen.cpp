@@ -19,6 +19,10 @@ using arma::expmat;
 #include "tree_utils.h"
 
 
+std::string SequenceGenerator::nucleotides_ = "ACGT";
+std::string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
+
+
 // TODO: do we want this order?
 /*Default Rate Matrix looks like this, I don't know why but I always go A,T,C,G
  *
@@ -29,8 +33,8 @@ using arma::expmat;
  * G .33 .33 .33  -1
  */
 
-// this should enable easy changing of order, if desired
 
+// this should enable easy changing of order, if desired
 std::map<char, int> SequenceGenerator::nuc_map_ = {
    {'A', 0},
    {'C', 1},
@@ -38,11 +42,8 @@ std::map<char, int> SequenceGenerator::nuc_map_ = {
    {'T', 3}
 };
 
-std::string SequenceGenerator::nucleotides_ = "ACGT";
-std::string SequenceGenerator::amino_acids_ = "ARNDCQEGHILKMFPSTWYV";
 
 std::map<char, int> SequenceGenerator::aa_map_ = {
-
    {'A', 0},
    {'R', 1},
    {'N', 2},
@@ -65,6 +66,7 @@ std::map<char, int> SequenceGenerator::aa_map_ = {
    {'V', 19}
 };
 
+
 /*
 std::map <char, int> SequenceGenerator::nucMap = {
    {'A', 0},
@@ -74,16 +76,19 @@ std::map <char, int> SequenceGenerator::nucMap = {
 };
 string SequenceGenerator::nucleotides = "ATCG";
 */
- 
-SequenceGenerator::SequenceGenerator (const int&seqlength, const std::vector<double>& basefreq,
-    std::vector< std::vector<double> >& rmatrix, Tree * tree, const bool& showancs, 
-    const int& nreps, const int& seed, const float& alpha, const float& pinvar,
-    const std::string& ancseq, const bool& printpost, const std::vector<double>& multirates,
-    const std::vector<double>& aabasefreq, const bool& is_dna):tree_(tree),
-    seqlen_(seqlength), nreps_(nreps), seed_(seed), alpha_(alpha), pinvar_(pinvar),
-    root_sequence_(ancseq), base_freqs_(basefreq), aa_freqs_(aabasefreq), rmatrix_(rmatrix), 
-    multi_rates_(multirates), show_ancs_(showancs), print_node_labels_(printpost),
-    multi_model_(false), is_dna_(is_dna)  {
+
+
+SequenceGenerator::SequenceGenerator (const unsigned int& seqlength,
+        const std::vector<double>& basefreq, std::vector< std::vector<double> >& rmatrix,
+        Tree * tree, const bool& showancs,  const int& nreps, const long int& seed,
+        const float& alpha, const float& pinvar, const std::string& ancseq,
+        const bool& printpost, const std::vector<double>& multirates,
+        const std::vector<double>& aabasefreq, const bool& is_dna):tree_(tree),
+        seqlen_(seqlength), nreps_(nreps), seed_(seed), alpha_(alpha),
+        pinvar_(pinvar), root_sequence_(ancseq), base_freqs_(basefreq),
+        aa_freqs_(aabasefreq), rmatrix_(rmatrix),  multi_rates_(multirates),
+        show_ancs_(showancs), print_node_labels_(printpost), multi_model_(false),
+        is_dna_(is_dna)  {
     /*
      for (unsigned int i = 0; i < rmatrix.size(); i++) {
         for (unsigned int j = 0; j < rmatrix.size(); j++) {
@@ -148,12 +153,12 @@ void SequenceGenerator::initialize () {
  * if each individual state will undergo some type of change
  */
 std::string SequenceGenerator::simulate_sequence (const std::string& anc, 
-    std::vector< std::vector<double> >& QMatrix, const float& brlength) {
+        std::vector< std::vector<double> >& QMatrix, const float& brlength) {
     std::vector<double>::iterator low;
     std::vector< std::vector<double> > PMatrix(nstates_, std::vector<double>(nstates_, 0.0));
     //int ancChar = 0;
     std::string newstring = anc; // instead of building, set size and replace
-    for (int i = 0; i < seqlen_; i++) {
+    for (unsigned int i = 0; i < seqlen_; i++) {
         float RandNumb = get_uniform_random_deviate();
         int ancChar = 0;
         if (is_dna_) {
@@ -242,8 +247,8 @@ std::vector< std::vector<double> > SequenceGenerator::calculate_q_matrix () {
  * Changes to armadillos format then back I don't like the way could be more
  * efficient but yeah...
  */
-std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (const std::vector< std::vector<double> >& QMatrix,
-    float br) {
+std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (
+        const std::vector< std::vector<double> >& QMatrix, float br) {
 
     std::vector< std::vector<double> > Pmatrix(nstates_, std::vector<double>(nstates_, 0.0));
     mat A = randn<mat>(nstates_, nstates_);
@@ -278,7 +283,6 @@ std::vector< std::vector<double> > SequenceGenerator::calculate_p_matrix (const 
 // TODO: how to name ancestor nodes (sequences)
 //       - if we have this we can add to results (if desired))
 void SequenceGenerator::preorder_tree_traversal () {
-    double brlength = 0.0;
     int rate_count = 0;
     int check = 0;
     std::vector< std::vector<double> > QMatrix(nstates_, std::vector<double>(nstates_, 0.0));
@@ -320,7 +324,7 @@ void SequenceGenerator::preorder_tree_traversal () {
     
     // Pre-Order Traverse the tree
     for (int k = (tree_->getNodeCount() - 2); k >= 0; k--) {
-        brlength = tree_->getNode(k)->getBL();
+        double brlength = tree_->getNode(k)->getBL();
         /*
         for (unsigned int i = 0; i < QMatrix.size(); i++) {
             for (unsigned int j = 0; j < QMatrix.size(); j++) {
@@ -333,7 +337,7 @@ void SequenceGenerator::preorder_tree_traversal () {
         if (multi_model_) {
             check = (int)round(multi_rates_[0]);
             //std::cout << check << " " << rate_count << std::endl;
-            if (tree_->getNode(k)->isInternal() == true && multi_rates_.size() != 0) {
+            if (tree_->getNode(k)->isInternal() && multi_rates_.size() != 0) {
                 if (check == rate_count) {
                     rmatrix_[0][2] = multi_rates_[1];
                     rmatrix_[2][0] = multi_rates_[1];
@@ -384,7 +388,7 @@ void SequenceGenerator::preorder_tree_traversal () {
         
         seqs_[dec] = decSeq;
         ancq_[dec] = QMatrix; // why store this?
-        if (show_ancs_ && tree_->getNode(k)->isInternal() == true) {
+        if (show_ancs_ && tree_->getNode(k)->isInternal()) {
             std::string tname = tree_->getNode(k)->getName();
             Sequence seq(tname, decSeq);
             res.push_back(seq);
@@ -409,11 +413,11 @@ void SequenceGenerator::print_node_labels() {
 void SequenceGenerator::label_internal_nodes() {
     int count = 1;
     std::string str = "Node";
-    std::string nlabel = "";
+    std::string nlabel;
     Node * root = tree_->getRoot();
     root->setName("Node_0");
     for (int k = (tree_->getNodeCount() - 2); k >= 0; k--) {
-        if (tree_->getNode(k)->isInternal() == true) {
+        if (tree_->getNode(k)->isInternal()) {
             //std::cout << k << std::endl;
             str = std::to_string(count);
             nlabel = "Node_" + str;
@@ -431,7 +435,7 @@ std::vector<float> SequenceGenerator::set_site_rates () {
     if (pinvar_ != 0.0) {
         int numsample = seqlen_ * pinvar_ + 0.5;
         // sample invariable sites
-        std::vector<int> randsites = sample_without_replacement(seqlen_, numsample);
+        std::vector<unsigned int> randsites = sample_without_replacement(seqlen_, numsample);
         // must be a more elegant way of doing this
         for (int i = 0; i < numsample; i++) {
             srates[randsites[i]] = 0.0;
@@ -440,7 +444,7 @@ std::vector<float> SequenceGenerator::set_site_rates () {
     
     // gamma-distributed rate variation. could explore other distributions...
     if (alpha_ != -1.0) { // default i.e. no rate variation
-        for (int i = 0; i < seqlen_; i++) {
+        for (unsigned int i = 0; i < seqlen_; i++) {
             // want to skip over sites that are set to invariable
             if (srates[i] != 0.0) {
                 srates[i] = get_gamma_random_deviate(alpha_);
@@ -461,7 +465,7 @@ std::string SequenceGenerator::generate_random_sequence () {
         // cumulative sum
         std::partial_sum(base_freqs_.begin(), base_freqs_.end(), cumsum.begin(), std::plus<double>());
     
-        for (int i = 0; i < seqlen_; i++) {
+        for (unsigned int i = 0; i < seqlen_; i++) {
             float RandNumb = get_uniform_random_deviate();
             low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
             ancseq[i] = nucleotides_[low - cumsum.begin()];
@@ -473,9 +477,9 @@ std::string SequenceGenerator::generate_random_sequence () {
         // cumulative sum
         std::partial_sum(aa_freqs_.begin(), aa_freqs_.end(), cumsum.begin(), std::plus<double>());
     
-        for (int i = 0; i < seqlen_; i++) {
+        for (unsigned int i = 0; i < seqlen_; i++) {
             float RandNumb = get_uniform_random_deviate();
-            low = std::lower_bound (cumsum.begin(), cumsum.end(), RandNumb);
+            low = std::lower_bound(cumsum.begin(), cumsum.end(), RandNumb);
             ancseq[i] = amino_acids_[low - cumsum.begin()];
         }    
     }
@@ -485,7 +489,10 @@ std::string SequenceGenerator::generate_random_sequence () {
 
 
 // rates are in order: A<->C,A<->G,A<->T,C<->G,C<->T,G<->T
-std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (const std::vector<double>& rates) {
+// not used
+/*
+std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (
+        const std::vector<double>& rates) {
     // initialize
     std::vector< std::vector<double> > ratemat(nstates_, std::vector<double>(4, 0.33));
     
@@ -510,11 +517,13 @@ std::vector< std::vector<double> > SequenceGenerator::construct_rate_matrix (con
         ratemat[3][3] = (rates[2] + rates[4] + rates[5]) * -1;
         
     } else {
-        std::cout << "Er, we don't deal with " << rates.size() << " rates at the moment..." << std::endl;
+        std::cout << "Er, we don't deal with " << rates.size()
+                << " rates at the moment..." << std::endl;
         exit(0);
     }
     return ratemat;
 }
+*/
 
 
 // make sure sequence contains only valid nucleotide characters
@@ -524,15 +533,18 @@ void SequenceGenerator::check_valid_sequence () {
     if (is_dna_) {
         std::size_t found = root_sequence_.find_first_not_of(nucleotides_);
         if (found != std::string::npos) {
-            std::cerr << "Error: illegal character '" << root_sequence_[found] << "' at position " 
-                << found+1 << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting." << std::endl;
+            std::cerr << "Error: illegal character '" << root_sequence_[found]
+                    << "' at position " << found+1
+                    << " (only A,C,G,T allowed). Maybe specify AA with -c? Exiting."
+                    << std::endl;
             exit(0);
         }
     } else {
         std::size_t found = root_sequence_.find_first_not_of(amino_acids_);
         if (found != std::string::npos) {
-            std::cerr << "Error: illegal character '" << root_sequence_[found] << "' at position " 
-                << found+1 << " (only AA chars allowed). Exiting." << std::endl;
+            std::cerr << "Error: illegal character '" << root_sequence_[found]
+                    << "' at position "  << found+1
+                    << " (only AA chars allowed). Exiting." << std::endl;
             exit(0);
         }        
         
@@ -541,7 +553,7 @@ void SequenceGenerator::check_valid_sequence () {
 
 
 // not sure of a more elegant way to do this...
-std::vector<Sequence> SequenceGenerator::get_sequences () {
+std::vector<Sequence> SequenceGenerator::get_sequences () const {
     return res;
 }
 
@@ -552,6 +564,7 @@ float SequenceGenerator::get_uniform_random_deviate () {
 }
 
 
+// hrm alpha is not used...
 float SequenceGenerator::get_gamma_random_deviate (float alpha) {
     return gammaDistrib_(generator_);
 }

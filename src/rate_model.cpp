@@ -14,16 +14,21 @@ inline int signof (double d) {
 }
 
 
+// not used
+/*
 inline double roundto (double in) {
     return floor(in*(1000)+0.5)/(1000);
 }
+*/
 
 
-RateModel::RateModel(int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
-    lasteigval(_nstates, _nstates), lasteigvec(_nstates, _nstates),
-    eigval(_nstates, _nstates), eigvec(_nstates, _nstates),
-    lasteigval_simple(_nstates, _nstates), lasteigvec_simple(_nstates, _nstates),
-    eigval_simple(_nstates, _nstates), eigvec_simple(_nstates, _nstates), nstates(_nstates) {
+RateModel::RateModel (int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
+        lasteigval(_nstates, _nstates), lasteigvec(_nstates, _nstates),
+        eigval(_nstates, _nstates), eigvec(_nstates, _nstates),
+        lasteigval_simple(_nstates, _nstates), lasteigvec_simple(_nstates, _nstates),
+        eigval_simple(_nstates, _nstates), eigvec_simple(_nstates, _nstates),
+        lastImag(true), fortran_iexph(0), fortran_wsp(nullptr), fortran_m(0),
+        selection_model(0), nstates(_nstates), neg_p(true) {
     
     setup_Q();
     sameQ = false;
@@ -38,12 +43,13 @@ RateModel::RateModel(int _nstates):Q(_nstates, _nstates), labels(), Q_mask(),
 }
 
 
-void RateModel::set_Q_cell(int from, int to, double num) {
+void RateModel::set_Q_cell (int from, int to, double num) {
     Q(from, to) = num;
-    sameQ = false;
+    set_sameQ(false);
 }
 
-void RateModel::set_Q_diag() {
+
+void RateModel::set_Q_diag () {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         double su = 0;
         for (unsigned int j = 0; j < Q.n_cols; j++) {
@@ -53,10 +59,11 @@ void RateModel::set_Q_diag() {
         }
         Q(i, i) = 0-su;
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
-void RateModel::setup_Q() {
+
+void RateModel::setup_Q () {
     Q.fill(0);
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
@@ -67,10 +74,11 @@ void RateModel::setup_Q() {
             }
         }
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
-void RateModel::setup_Q(std::vector< std::vector<double> >& inQ) {
+
+void RateModel::setup_Q (std::vector< std::vector<double> >& inQ) {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             Q(i, j) = inQ[i][j];
@@ -80,27 +88,31 @@ void RateModel::setup_Q(std::vector< std::vector<double> >& inQ) {
         colvec a = (sum(Q, 1));
         Q(i, i) = -(a(i)-Q(i, i));
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
-void RateModel::setup_Q(mat& inQ) {
+
+void RateModel::setup_Q (mat& inQ) {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             Q(i, j) = inQ(i, j);
         }
     }
     set_Q_diag();
-    sameQ = false;
+    set_sameQ(false);
 }
 
-void RateModel::set_n_qs(int number) {
+
+// not used
+void RateModel::set_n_qs (int number) {
     for (int i = 0; i < number; i++) {
         mat tm(nstates, nstates);
         Qs.push_back(tm);
     }
 }
 
-void RateModel::set_Q_which(mat& inQ, int which) {
+
+void RateModel::set_Q_which (mat& inQ, int which) {
     for (unsigned int i = 0; i < Qs[which].n_rows; i++) {
         for (unsigned int j = 0; j < Qs[which].n_cols; j++) {
             Qs[which](i, j) = inQ(i, j);
@@ -115,23 +127,26 @@ void RateModel::set_Q_which(mat& inQ, int which) {
         }
         Qs[which](i, i) = 0-su;
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
-void RateModel::set_Q(mat& inQ) {
+
+void RateModel::set_Q (mat& inQ) {
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             Q(i, j) = inQ(i, j);
         }
     }
-    sameQ = false;
+    set_sameQ(false);
 }
 
-mat& RateModel::get_Q() {
+
+mat& RateModel::get_Q () {
     return Q;
 }
 
-cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
+
+cx_mat RateModel::setup_P (double bl, bool store_p_matrices) {
     //sameQ = false;
     eigvec.fill(0);
     eigval.fill(0);
@@ -150,13 +165,14 @@ cx_mat RateModel::setup_P(double bl, bool store_p_matrices) {
             neg_p = true;
         }
     }
-    if (store_p_matrices == true) {
+    if (store_p_matrices) {
         stored_p_matrices[bl] = P;    
     }
     return P;
 }
 
-void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
+
+void RateModel::setup_P_simple (mat& p, double bl, bool store_p_matrices) {
 //    sameQ = false;
     eigvec_simple.fill(0);
     eigval_simple.fill(0);
@@ -168,14 +184,15 @@ void RateModel::setup_P_simple(mat& p, double bl, bool store_p_matrices) {
     }
     mat C_inv = inv(eigvec_simple);
     p = eigvec_simple * eigval_simple * C_inv;
-/*    if (store_p_matrices == true) {
+/*    if (store_p_matrices) {
     stored_p_matrices[bl] = P;    
     }*/
     //return P;
 }
 
-void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) {
-    if (sameQ == true) {
+
+void RateModel::get_eigenvec_eigenval_from_Q_simple (mat * eigval, mat * eigvec) {
+    if (sameQ) {
         for (unsigned int i = 0; i < Q.n_rows; i++) {
             for (unsigned int j = 0; j < Q.n_cols; j++) {
                 (*eigval)(i, j) = lasteigval_simple(i, j);
@@ -184,7 +201,8 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
         }
         return;
     }
-    mat tQ(nstates, nstates); tQ.fill(0);
+    mat tQ(nstates, nstates);
+    tQ.fill(0);
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -217,8 +235,8 @@ void RateModel::get_eigenvec_eigenval_from_Q_simple(mat * eigval, mat * eigvec) 
  *
  * this should use the armadillo library
  */
-bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
-    if (sameQ == true) {
+bool RateModel::get_eigenvec_eigenval_from_Q (cx_mat * eigval, cx_mat * eigvec) {
+    if (sameQ) {
         for (unsigned int i = 0; i < Q.n_rows; i++) {
             for (unsigned int j = 0; j < Q.n_cols; j++) {
                 (*eigval)(i, j) = lasteigval(i, j);
@@ -227,7 +245,8 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
         }
         return lastImag;
     }
-    mat tQ(nstates, nstates); tQ.fill(0);
+    mat tQ(nstates, nstates);
+    tQ.fill(0);
     for (unsigned int i = 0; i < Q.n_rows; i++) {
         for (unsigned int j = 0; j < Q.n_cols; j++) {
             tQ(i, j) = Q(i, j);
@@ -259,16 +278,22 @@ bool RateModel::get_eigenvec_eigenval_from_Q(cx_mat * eigval, cx_mat * eigvec) {
     return isImag;
 }
 
+
 //taking out fortran
 //
 /*
 extern"C" {
-    void wrapalldmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
-    void wrapsingledmexpv_(int * n,int* m,double * t,double* v,double * w,double* tol,double* anorm,double* wsp,int * lwsp,int* iwsp,int *liwsp, int * itrace,int *iflag,int *ia, int *ja, double *a, int *nz, double * res);
-    void wrapdgpadm_(int * ideg,int * m,double * t,double * H,int * ldh,double * wsp,int * lwsp,int * ipiv,int * iexph,int *ns,int *iflag );
+    void wrapalldmexpv_(int * n, int* m, double * t, double* v, double * w, double* tol,
+        double* anorm, double* wsp, int * lwsp, int* iwsp, int *liwsp, int * itrace,
+        int *iflag, int *ia, int *ja, double *a, int *nz, double * res);
+    void wrapsingledmexpv_(int * n, int* m, double * t, double* v, double * w, double* tol,
+        double* anorm, double* wsp, int * lwsp, int* iwsp, int *liwsp, int * itrace,
+        int *iflag, int *ia, int *ja, double *a, int *nz, double * res);
+    void wrapdgpadm_(int * ideg, int * m, double * t, double * H, int * ldh, double * wsp,
+        int * lwsp, int * ipiv, int * iexph, int *ns, int *iflag );
 }
 
-void RateModel::setup_fortran_P_whichQ(int which, mat& P, double t) {
+void RateModel::setup_fortran_P_whichQ (int which, mat& P, double t) {
     Q = Qs[which];
     setup_fortran_P(P,t,false);
 }
@@ -277,7 +302,7 @@ void RateModel::setup_fortran_P_whichQ(int which, mat& P, double t) {
 /*
  * runs the basic padm fortran expokit full matrix exp
  *
-void RateModel::setup_fortran_P(mat& P, double t, bool store_p_matrices) {
+void RateModel::setup_fortran_P (mat& P, double t, bool store_p_matrices) {
     //
     //  return P, the matrix of dist-to-dist transition probabilities,
     //  from the model's rate matrix (Q) over a time duration (t)
@@ -316,11 +341,14 @@ void RateModel::setup_fortran_P(mat& P, double t, bool store_p_matrices) {
     
 }
 */
-void RateModel::set_sameQ(bool s) {
+
+
+void RateModel::set_sameQ (bool s) {
     sameQ = s;
 }
 
-void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
+
+void update_simple_goldman_yang_q (mat * inm, double K, double w, mat& bigpibf,
         mat& bigpiK, mat& bigpiw) {
     double s = 0;
     for (int i = 0; i < 61; i++) {
@@ -356,21 +384,25 @@ void update_simple_goldman_yang_q(mat * inm, double K, double w, mat& bigpibf,
     //(*inm) = trans((*inm));
 }
 
-bool test_transition(char a, char b) {
+
+bool test_transition (char a, char b) {
     bool ret = false;
-    if ((a == 'A' &&  b == 'G') || (a == 'C' &&  b == 'T') || (a == 'G' &&  b == 'A') || (a == 'T' &&  b == 'C')) {
+    if ((a == 'A' &&  b == 'G') || (a == 'C' &&  b == 'T')
+            || (a == 'G' &&  b == 'A') || (a == 'T' &&  b == 'C')) {
         ret = true;
     }
     return ret;
 }
 
-void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std::string>& codon_dict, 
-    std::map<std::string, std::vector<int> >& codon_index, std::vector<std::string>& codon_list) {
+
+void generate_bigpibf_K_w (mat * bf, mat * K, mat * w,
+        std::map<std::string, std::string>& codon_dict,
+        std::map<std::string, std::vector<int> >& codon_index,
+        std::vector<std::string>& codon_list) {
     for (int i = 0; i < 61; i++) {
         for (int j = 0; j < 61; j++) {
             int diff = 0;
             bool transit = false;
-            bool nonsyn = false;
             for (int m = 0; m < 3; m++) {
                 if (codon_list[i][m] != codon_list[j][m]) {
                     diff += 1;
@@ -380,6 +412,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std:
             if (diff > 1) {
                 (*bf)(i, j) = 0;
             } else {
+                bool nonsyn = false;
                 if (codon_dict[codon_list[i]] != codon_dict[codon_list[j]]) {
                     nonsyn = true;
                 }
@@ -397,7 +430,7 @@ void generate_bigpibf_K_w(mat * bf, mat * K, mat * w, std::map<std::string, std:
 
 //take out fortran
 /*
-void convert_matrix_to_single_row_for_fortran(mat& inmatrix, double t, double * H) {
+void convert_matrix_to_single_row_for_fortran (mat& inmatrix, double t, double * H) {
     int count = 0;
     for (unsigned int i = 0; i < inmatrix.n_cols; i++) {
         for (unsigned int j = 0; j < inmatrix.n_cols; j++) {

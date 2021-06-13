@@ -29,7 +29,8 @@ double nlopt_bm_sr (unsigned n, const double *x, double *grad, void *data) {
    std::cout << x[0] << " " << x[1] << std::endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
-    rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
+    rowvec m = rowvec(d->x.n_cols);
+    m.fill(x[0]);
     double like = norm_pdf_multivariate(d->x, m, tvcv);
     return -like;
 }
@@ -42,7 +43,8 @@ double nlopt_bm_sr_log (unsigned n, const double *x, double *grad, void *data) {
     //std::cout << x[0] << " " << x[1] << std::endl;
     analysis_data * d = (analysis_data *) data;
     mat tvcv = (d->ovcv) * x[1];
-    rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
+    rowvec m = rowvec(d->x.n_cols);
+    m.fill(x[0]);
     double like = norm_log_pdf_multivariate(d->x, m, tvcv);
     return -like;
 }
@@ -57,7 +59,8 @@ double nlopt_ou_sr_log (unsigned n, const double *x, double *grad, void *data) {
     }
     double alpha = x[2];
     analysis_data * d = (analysis_data *) data;
-    mat vcvDiag(d->ovcv.n_cols,d->ovcv.n_cols); vcvDiag.zeros(); 
+    mat vcvDiag(d->ovcv.n_cols, d->ovcv.n_cols);
+    vcvDiag.zeros(); 
     vcvDiag.diag() = (d->ovcv).diag();
     mat tm(vcvDiag.n_cols,vcvDiag.n_cols);
     tm.ones();
@@ -66,8 +69,9 @@ double nlopt_ou_sr_log (unsigned n, const double *x, double *grad, void *data) {
     mat Tij = diagi + diagj - (2 * d->ovcv);
     mat ouvcv = (1. / (2. * alpha)) * exp(-alpha * Tij) % (1. - exp(-2. * alpha * d->ovcv));
     ouvcv = ouvcv * x[1];
-    rowvec m = rowvec(d->x.n_cols); m.fill(x[0]);
-    double like = norm_log_pdf_multivariate(d->x,m,ouvcv);
+    rowvec m = rowvec(d->x.n_cols);
+    m.fill(x[0]);
+    double like = norm_log_pdf_multivariate(d->x, m, ouvcv);
     return -like;
 }
 
@@ -78,10 +82,10 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
             return LARGE;
         }   
     }
-    double sigma =1;// x[0];//1;
+    double sigma = 1; // x[0];//1;
     analysis_data_tree * d = (analysis_data_tree *) data;
     Tree * tr = d->tree;
-    for (int i = 0; i < tr->getNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getNodeCount(); i++) {
         if (tr->getNode(i) != tr->getRoot()) {
             tr->getNode(i)->setBL(x[i+1]);
         }
@@ -92,7 +96,8 @@ double nlopt_bm_bl (unsigned n, const double *x, double *grad, void *data) {
 }
 
 
-std::vector<double> optimize_single_rate_bm_nlopt (rowvec& _x, mat& _vcv, bool log) {
+std::vector<double> optimize_single_rate_bm_nlopt (rowvec& _x, mat& _vcv,
+        bool log) {
     analysis_data a;
     a.x = _x;
     a.ovcv = _vcv;
@@ -149,16 +154,19 @@ std::vector<double> optimize_single_rate_bm_ou_nlopt (rowvec& _x, mat& _vcv) {
     opt.optimize(x, minf);
 //    std::cout << result << std::endl;
     std::vector<double> results;
-    results.push_back(x[0]); results.push_back(x[1]); results.push_back(x[2]);
+    results.push_back(x[0]);
+    results.push_back(x[1]);
+    results.push_back(x[2]);
     results.push_back(minf);
     return results;
 }
 
 
+// not used
 std::vector<double> optimize_single_rate_bm_bl (Tree * tr) {
     analysis_data_tree a;
     a.tree = tr;
-    int n = 1+tr->getNodeCount() - 1;
+    int n = static_cast<int>(1 + tr->getNodeCount() - 1); // ?!?
     //nlopt::opt opt(nlopt::LN_NELDERMEAD, n);
     //BOBYQA is better but the other finishes more
     //nlopt::opt opt(nlopt::LN_BOBYQA,n);
@@ -176,7 +184,7 @@ std::vector<double> optimize_single_rate_bm_bl (Tree * tr) {
     nlopt::result result = opt.optimize(x, minf);
     std::cout << result << std::endl;
     std::vector<double> results;
-    for (int i = 0; i < tr->getNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getNodeCount(); i++) {
         if (tr->getNode(i) != tr->getRoot()) {
             tr->getNode(i)->setBL(x[i+1]);
         }

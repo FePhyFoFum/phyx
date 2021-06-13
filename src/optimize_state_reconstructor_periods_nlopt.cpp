@@ -17,7 +17,8 @@ std::vector<RateModel> * nloptrm_periods;
 std::vector<mat> * nloptfree_variables_periods;
 
 
-double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_func_data) {
+double nlopt_sr_periods (unsigned n, const double *x, double *grad,
+        void *my_func_data) {
     for (unsigned int k = 0; k < nloptfree_variables_periods->size(); k++) {
         for (unsigned int i = 0; i < (*nloptfree_variables_periods)[k].n_rows; i++) {
             for (unsigned int j = 0; j < (*nloptfree_variables_periods)[k].n_cols; j++) {
@@ -36,7 +37,7 @@ double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_fun
     }
     like = nloptsr_periods->eval_likelihood();
     for (unsigned int i = 0; i < nloptrm_periods->size(); i++) {
-        if (nloptrm_periods->at(i).neg_p == true) {
+        if (nloptrm_periods->at(i).neg_p) {
             like = 10000000000000;
             break;
         }
@@ -48,8 +49,8 @@ double nlopt_sr_periods (unsigned n, const double *x, double *grad, void *my_fun
     return like;
 }
 
-void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor * _sr,
-        std::vector<mat> * _free_mask, int _nfree) {
+void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,
+        StateReconstructor * _sr, std::vector<mat> * _free_mask, int _nfree) {
     nloptsr_periods = _sr;
     nloptrm_periods = _rm;
     nloptfree_variables_periods = _free_mask;
@@ -63,7 +64,7 @@ void optimize_sr_periods_nlopt (std::vector<RateModel> * _rm,StateReconstructor 
     
     opt.set_lower_bounds(0.0000);
     opt.set_upper_bounds(100000);
-    opt.set_min_objective(nlopt_sr_periods, NULL);
+    opt.set_min_objective(nlopt_sr_periods, nullptr);
     opt.set_xtol_rel(0.001);
     opt.set_maxeval(10000);
     

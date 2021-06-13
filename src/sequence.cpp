@@ -16,30 +16,28 @@
 
 
 // this is the constructor almost always used
-Sequence::Sequence ():id_(), seq_(), length_(0), aligned_(), alphabet_(NA) {}
+Sequence::Sequence ():length_(0), aligned_(), alphabet_(NA) {}
 
 
-Sequence::Sequence (std::string _id, std::string _seq, bool _aligned) {
-    id_ = _id;
-    seq_ = _seq;
-    length_ = seq_.size();
-    aligned_ = _aligned;
+Sequence::Sequence (std::string _id, std::string _seq, bool _aligned):id_(std::move(_id)),
+        seq_(std::move(_seq)), aligned_(), alphabet_(NA) {
+    length_ = static_cast<unsigned int>(seq_.size());
+    set_aligned(_aligned);
     infer_alpha();
 }
 
 
 // *** this doesn't seem to be used ***
-Sequence::Sequence (std::string _id, std::string _seq) {
-    id_ = _id;
-    seq_ = _seq;
-    length_ = seq_.size();
+Sequence::Sequence (std::string _id, std::string _seq):id_(std::move(_id)),
+        seq_(std::move(_seq)), alphabet_(NA) {
+    length_ = static_cast<unsigned int>(seq_.size());
     aligned_ = false;
     infer_alpha();
 }
 
 
 // *** this doesn't seem to be used ***
-seqAlpha Sequence::get_alpha () {
+seqAlpha Sequence::get_alpha () const {
     return alphabet_;
 }
 
@@ -64,7 +62,6 @@ std::string Sequence::get_alpha_name () {
 }
 
 
-// *** this doesn't seem to be used ***
 void Sequence::set_alpha (seqAlpha s) {
     alphabet_ = s;
 }
@@ -77,13 +74,13 @@ void Sequence::infer_alpha () {
     
     // check for binary data
     if (check_binary_sequence(str)) {
-        alphabet_ = BINARY;
+        set_alpha(BINARY);
         return;
     }
     
     // do quick check for 'standard' data: will contain numbers
     if (str.find_first_of("0123456789") != std::string::npos) {
-        alphabet_ = MULTI;
+        set_alpha(MULTI);
         return;
     }
     
@@ -100,41 +97,42 @@ void Sequence::infer_alpha () {
     std::string uniqueChars = get_alphabet_from_sequence(str);
     
     // if the above fails (e.g., RNA), do the former check
-    for (size_t i = 0; i < uniqueChars.length(); ++i) {
-        int num = std::count(str.begin(), str.end(), uniqueChars[i]);
-        if (is_prot_char(uniqueChars[i])) {
+    for (char & uniqueChar : uniqueChars) {
+        int num = static_cast<int>(std::count(str.begin(), str.end(), uniqueChar));
+        if (is_prot_char(uniqueChar)) {
             proteinHit += num;
             validChars += num;
             // DNA chars are a subset of protein chars
-            if (is_dna_char(uniqueChars[i])) {
+            if (is_dna_char(uniqueChar)) {
                 dnaHit += num;
             }
         }
     }
     
     if (uniqueChars.find_first_not_of(dnachars_with_ambiguous) == std::string::npos) {
-        alphabet_ = DNA;
+        set_alpha(DNA);
         // edge case: short protein alignment which by chance contains DNA-valid states
         int nDNA = count_dna_chars(str);
-        if ( ((double)nDNA / (double)validChars) < 0.5) {
-            alphabet_ = AA;
+        if ( (static_cast<double>(nDNA) / static_cast<double>(validChars)) < 0.5) {
+            set_alpha(AA);
         }
         return;
-    } else if (uniqueChars.find_first_not_of(protchars) == std::string::npos) {
-        alphabet_ = AA;
+    }
+    if (uniqueChars.find_first_not_of(protchars) == std::string::npos) {
+        set_alpha(AA);
         return;
     }
     
     if (proteinHit > dnaHit) {
-        alphabet_ = AA;
+        set_alpha(AA);
     } else if (proteinHit == dnaHit) {
-        alphabet_ = DNA;
+        set_alpha(DNA);
     }
     
 }
 
 
-bool Sequence::is_aligned () {
+bool Sequence::is_aligned () const {
     return aligned_;
 }
 
@@ -151,7 +149,7 @@ std::string Sequence::get_id () const {
 
 unsigned int Sequence::get_length () {
     if (length_ == 0) {
-        length_ = seq_.size();
+        length_ = static_cast<unsigned int>(seq_.size());
     }
     return length_;
 }
@@ -163,12 +161,12 @@ void Sequence::add_cont_char (double _num) {
 
 
 double Sequence::get_cont_char (int _index) {
-    return cont_chars_[_index];
+    return cont_chars_[static_cast<size_t>(_index)];
 }
 
 
 int Sequence::get_num_cont_char () {
-    return cont_chars_.size();
+    return static_cast<int>(cont_chars_.size());
 }
 
 
@@ -183,29 +181,28 @@ void Sequence::add_multistate_char(int _num) {
 
 
 int Sequence::get_multistate_char (int _index) {
-    return multistate_chars_[_index];
+    return multistate_chars_[static_cast<size_t>(_index)];
 }
 
 
 int Sequence::get_num_multistate_char () {
-    return multistate_chars_.size();
+    return static_cast<int>(multistate_chars_.size());
 }
 
 
 void Sequence::set_sequence (std::string _seq) {
-    seq_ = _seq;
-    length_ = seq_.size();
+    seq_ = std::move(_seq);
+    length_ = static_cast<unsigned int>(seq_.size());
 }
 
 
 void Sequence::set_id (std::string _id) {
-    id_ = _id;
+    id_ = std::move(_id);
 }
 
 
-// not used
-void Sequence::set_aligned (bool _aligned) {
-    aligned_ = _aligned;
+void Sequence::set_aligned (bool _align) {
+    aligned_ = _align;
 }
 
 
@@ -230,13 +227,13 @@ void Sequence::perm_reverse_complement () {
 void Sequence::set_qualstr (std::string& stri, int offset) {
     qualarr_.clear();
     qualstr_ = stri;
-    for (unsigned int i = 0; i < stri.size(); i++) {
-        qualarr_.push_back(((int)stri[i])-offset);
+    for (char c : stri) {
+        qualarr_.push_back((static_cast<double>(c)) - offset);
     }
 }
 
 
-std::vector<double> Sequence::get_qualarr () {
+std::vector<double> Sequence::get_qualarr () const {
     return qualarr_;
 }
 

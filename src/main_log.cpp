@@ -9,10 +9,13 @@
 #include "utils.h"
 #include "log_manip.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "MCMC log file manipulator." << std::endl;
     std::cout << "Can combine and resample parameters or trees across files." << std::endl;
     std::cout << "Log files need not contain the same number of samples." << std::endl;
@@ -27,12 +30,13 @@ void print_help() {
     std::cout << " -t, --treef=FILE    input tree log file(s)" << std::endl;
     std::cout << " -b, --burnin=INT    number of samples to exclude at the beginning of a file" << std::endl;
     std::cout << " -n, --thin=INT      interval of resampling" << std::endl;
-//    std::cout << " -r, --rand=INT      number of random samples (without replacement) not yet implemented!" << std::endl;
+    // not yet implemented:
+//    std::cout << " -r, --rand=INT      number of random samples (without replacement)" << std::endl;
     std::cout << " -i, --info          calculate log file attributes and exit" << std::endl;
     std::cout << " -s, --summarize     summary statistics of samples (parameter logs only)" << std::endl;
     std::cout << " -c, --columns       print out column names (parameter logs only)" << std::endl;
-    std::cout << " -d, --delete=CSL    delete columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
-    std::cout << " -k, --keep=CSL      keep only columns by 1-index sep by commas (NO SPACES!) (parameter logs only)" << std::endl;
+    std::cout << " -d, --delete=CSL    delete parm columns by 1-index sep by commas (NO SPACES!)" << std::endl;
+    std::cout << " -k, --keep=CSL      keep only parm columns by 1-index sep by commas (NO SPACES!)" << std::endl;
 //    std::cout << " -x, --seed=INT      random number seed, clock otherwise" << std::endl;
     std::cout << " -v, --verbose       make the output more verbose" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
@@ -44,27 +48,33 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxlog 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown");
+std::string get_version_line () {
+    std::string vl = "pxlog 1.3\n";
+    vl += "Copyright (C) 2016-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph W. Brown";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"parmf", required_argument, NULL, 'p'},
-    {"treef", required_argument, NULL, 't'},
-    {"outf", required_argument, NULL, 'o'},
-    {"burnin", required_argument, NULL, 'b'},
-    {"thin", required_argument, NULL, 'n'},
-    {"rand", required_argument, NULL, 'r'},
-    {"info", no_argument, NULL, 'i'},
-    {"summarize", no_argument, NULL, 's'},
-    {"columns", no_argument, NULL, 'c'},
-    {"delete", required_argument, NULL, 'd'},
-    {"keep", required_argument, NULL, 'k'},
-    {"seed", required_argument, NULL, 'x'},
-    {"verbose", no_argument, NULL, 'v'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"parmf", required_argument, nullptr, 'p'},
+    {"treef", required_argument, nullptr, 't'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"burnin", required_argument, nullptr, 'b'},
+    {"thin", required_argument, nullptr, 'n'},
+    {"rand", required_argument, nullptr, 'r'},
+    {"info", no_argument, nullptr, 'i'},
+    {"summarize", no_argument, nullptr, 's'},
+    {"columns", no_argument, nullptr, 'c'},
+    {"delete", required_argument, nullptr, 'd'},
+    {"keep", required_argument, nullptr, 'k'},
+    {"seed", required_argument, nullptr, 'x'},
+    {"verbose", no_argument, nullptr, 'v'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -80,7 +90,7 @@ int main(int argc, char * argv[]) {
     int burnin = 0;
     int nthin = 1;
     int nrandom = -1;
-    int seed = -1;
+    long int seed = -1;
     bool verbose = false;
     bool count = false;
     bool summarize = false;
@@ -89,12 +99,11 @@ int main(int argc, char * argv[]) {
     bool keep_columns = false;
     std::string incolids;
     std::string logtype;
+    char * outf = nullptr;
     
-    char * outf = NULL;
-    
-    while(true) {
+    while (true) {
         int oi = -1;
-        int curind = optind;
+        int curind;
         int c = getopt_long(argc, argv, "p:t:o:b:n:r:iscd:k:x:vhVC", long_options, &oi);
         if (c == -1) {
             break;
@@ -150,9 +159,17 @@ int main(int argc, char * argv[]) {
                 break;
             case 'b':
                 burnin = string_to_int(optarg, "-b");
+                if (burnin < 0) {
+                    std::cerr << "Error: burnin must be a positive integer. Exiting." << std::endl;
+                    exit(0);
+                }
                 break;
             case 'n':
                 nthin = string_to_int(optarg, "-n");
+                if (nthin < 1) {
+                    std::cerr << "Error: nthin must be a >= 1. Exiting." << std::endl;
+                    exit(0);
+                }
                 break;
             case 'r':
                 nrandom = string_to_int(optarg, "-r");
@@ -179,7 +196,7 @@ int main(int argc, char * argv[]) {
                 sort(col_indices.begin(), col_indices.end());
                 break;
             case 'x':
-                seed = string_to_int(optarg, "-x");
+                seed = string_to_long_int(optarg, "-x");
                 break;
             case 'v':
                 verbose = true;
@@ -188,30 +205,30 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
     
     // not used at the moment: assumed that all input comes from files
-    //istream * pios = NULL;
-    //ifstream * fstr = NULL;
+    //istream * pios = nullptr;
+    //ifstream * fstr = nullptr;
     
     if (!tfileset && !pfileset) {
         std::cerr << "Error: must specify a tree file or parameter file. Exiting." << std::endl;
         exit(0);
     }
     
-    if (tfileset == true && pfileset == true) {
+    if (tfileset && pfileset) {
         std::cerr << "Error: set tree file *or* parameter file, not both. Exiting." << std::endl;
         exit(0);
     }
@@ -235,7 +252,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {

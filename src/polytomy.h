@@ -1,5 +1,5 @@
-#ifndef _POLYTOMY_TREE_H_
-#define _POLYTOMY_TREE_H_
+#ifndef PX_POLYTOMY_TREE_H
+#define PX_POLYTOMY_TREE_H
 
 class Tree; // forward declaration
 
@@ -8,12 +8,11 @@ class Tree; // forward declaration
 class Polytomy {
 private:
 
-    bool sample_polytomy_;
     std::vector<std::string> terminals_to_prune_;
     
 public:
-    Polytomy (const int& seed);
+    explicit Polytomy (const long int& seed);
     void sample_polytomies (Tree * tr);
 };
 
-#endif /* _POLYTOMY_TREE_H_ */
+#endif /* PX_POLYTOMY_TREE_H */

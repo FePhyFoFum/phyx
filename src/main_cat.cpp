@@ -10,15 +10,20 @@
 #include "utils.h"
 #include "concat.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Sequence file concatenation." << std::endl;
     std::cout << "Can use wildcards e.g.:" << std::endl;
     std::cout << "  pxcat -s *.phy -o my_cat_file.fa" << std::endl;
     std::cout << "However, if the argument list is too long (shell limit), put filenames in a file:" << std::endl;
-    std::cout << "  for x in *.phy; do echo $x >> flist.txt; done" << std::endl;
+    std::cout << "  for x in *.phy" << std::endl;
+    std::cout << "    do echo $x >> flist.txt" << std::endl;
+    std::cout << "  done" << std::endl;
     std::cout << "and call using the -f option:" << std::endl;
     std::cout << "  pxcat -f flist.txt -o my_cat_file.fa" << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus sequence formats." << std::endl;
@@ -40,19 +45,25 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxcat 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxcat 1.3\n";
+    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"flist", required_argument, NULL, 'f'},
-    {"outf", required_argument, NULL, 'o'},
-    {"partf", required_argument, NULL, 'p'},
-    {"uppercase", no_argument, NULL, 'u'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"flist", required_argument, nullptr, 'f'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"partf", required_argument, nullptr, 'p'},
+    {"uppercase", no_argument, nullptr, 'u'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -64,13 +75,13 @@ int main(int argc, char * argv[]) {
     bool logparts = false;
     bool toupcase = false;
     std::vector<std::string> inputFiles;
-    char * outf = NULL;
-    std::string partf = "";
-    std::string listf = "";
+    char * outf = nullptr;
+    std::string partf;
+    std::string listf;
 
-    while(true) {
+    while (true) {
         int oi = -1;
-        int curind = optind;
+        int curind;
         int c = getopt_long(argc, argv, "s:f:o:p:uhVC", long_options, &oi);
         if (c == -1) {
             break;
@@ -116,13 +127,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -131,7 +142,7 @@ int main(int argc, char * argv[]) {
         std::cerr << "Error: must specify 1 or more files to concatenate. Exiting." << std::endl;
         exit(0);
     }
-    if (listf != "") {
+    if (!listf.empty()) {
         std::string line;
         std::ifstream ifs(listf.c_str());
         while (getline (ifs, line)) {
@@ -142,10 +153,10 @@ int main(int argc, char * argv[]) {
         ifs.close();
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
 
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -155,8 +166,8 @@ int main(int argc, char * argv[]) {
     SequenceConcatenater result(toupcase);
     bool first = true;
 
-    for (unsigned int i = 0; i < inputFiles.size(); i++) {
-        SequenceConcatenater curr(inputFiles[i], toupcase);
+    for (auto & inputFile : inputFiles) {
+        SequenceConcatenater curr(inputFile, toupcase);
         if (!first) {
             result.concatenate(curr);
         } else {
@@ -166,7 +177,7 @@ int main(int argc, char * argv[]) {
     }
 
     // write sequences
-    for (int i = 0; i < result.get_num_taxa(); i++) {
+    for (unsigned int i = 0; i < result.get_num_taxa(); i++) {
         Sequence curr = result.get_sequence(i);
         (*poos) << ">" << curr.get_id() << std::endl;
         (*poos) << curr.get_sequence() << std::endl;

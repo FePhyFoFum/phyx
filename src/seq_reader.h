@@ -1,5 +1,5 @@
-#ifndef _SEQ_READER_H_
-#define _SEQ_READER_H_
+#ifndef PX_SEQ_READER_H
+#define PX_SEQ_READER_H
 
 #include <string>
 #include <vector>
@@ -18,11 +18,12 @@ void get_nexus_dimensions (std::istream& stri, int& num_taxa, int& num_char, boo
 void get_nexus_alignment_properties (std::istream& stri, int& num_taxa, int& num_char,
         bool& interleave, std::string& alpha_name, std::string& symbols, char& gap, char& missing);
 std::vector<Sequence> read_interleaved_nexus (std::istream& stri, int num_taxa, int num_char);
-void get_phylip_dimensions (std::string head, int& num_taxa, int& num_char);
+void get_phylip_dimensions (const std::string& head, int& num_taxa, int& num_char);
 bool is_complicated_phylip (std::istream& pios, const int& num_char);
-void get_phylip_format (std::istream& pios, const unsigned int& num_taxa, const unsigned int& num_char,
+void get_phylip_format (std::istream& pios, const unsigned int& num_char,
         bool& interleaved, bool& spaces, bool& multiline);
-std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa, const int& num_char);
+std::vector<Sequence> read_phylip (std::istream& pios, const int& num_taxa,
+        const int& file_num_char);
 std::vector<Sequence> ingest_alignment (std::istream* pios, std::string& alphaName);
 
-#endif /* _SEQ_READER_H_ */
+#endif /* PX_SEQ_READER_H */

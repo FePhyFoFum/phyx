@@ -8,10 +8,13 @@
 #include "seq_reader.h"
 #include "sequence.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Filter fastq files by mean quality." << std::endl;
     std::cout << "Data can be read from a file or STDIN." << std::endl;
     std::cout << std::endl;
@@ -29,17 +32,23 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxfqfilt 1.2\nCopyright (C) 2013-2021 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxfqfilt 1.3\n";
+    vl += "Copyright (C) 2013-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"mean", required_argument, NULL, 'm'},
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"mean", required_argument, nullptr, 'm'},
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -49,9 +58,10 @@ int main(int argc, char * argv[]) {
     double meanfilt = 30;
     bool fileset = false;
     bool outfileset = false;
-    char * seqf = NULL;
-    char * outf = NULL;
-    while(true) {
+    char * seqf = nullptr;
+    char * outf = nullptr;
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "m:s:o:hVC", long_options, &oi);
         if (c == -1) {
@@ -59,7 +69,7 @@ int main(int argc, char * argv[]) {
         }
         switch(c) {
             case 'm':
-                meanfilt = string_to_float(optarg, "-m");
+                meanfilt = string_to_double(optarg, "-m");
                 break;
             case 's':
                 fileset = true;
@@ -74,13 +84,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -92,22 +102,22 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -128,11 +138,11 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (fileset == true) {
+    if (fileset) {
         fstr->close();
         delete pios;
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr->close();
         delete poos;
     }

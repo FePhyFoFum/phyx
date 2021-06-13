@@ -12,10 +12,13 @@
 #include "utils.h"
 #include "tree_utils.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Remove tree tips by label." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;
@@ -38,21 +41,27 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrmt 1.2\nCopyright (C) 2014-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxrmt 1.3\n";
+    vl += "Copyright (C) 2014-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph W. Brown, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"treef", required_argument, NULL, 't'},
-    {"names", required_argument, NULL, 'n'},
-    {"namesf", required_argument, NULL, 'f'},
-    {"regex", required_argument, NULL, 'r'},
-    {"outf", required_argument, NULL, 'o'},
-    {"comp", no_argument, NULL, 'c'},
-    {"silent", required_argument, NULL, 's'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"treef", required_argument, nullptr, 't'},
+    {"names", required_argument, nullptr, 'n'},
+    {"namesf", required_argument, nullptr, 'f'},
+    {"regex", required_argument, nullptr, 'r'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"comp", no_argument, nullptr, 'c'},
+    {"silent", required_argument, nullptr, 's'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -67,13 +76,14 @@ int main(int argc, char * argv[]) {
     std::vector<std::string> names;
     bool complement = false;
     bool regex = false;
-    std::string regex_pattern = "";
+    std::string regex_pattern;
 
-    char * treef = NULL;
-    char * outf = NULL;
-    char * namesc = NULL;
-    char * namesfc = NULL;
-    while(true) {
+    char * treef = nullptr;
+    char * outf = nullptr;
+    char * namesc = nullptr;
+    char * namesfc = nullptr;
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "t:n:f:r:co:shVC", long_options, &oi);
         if (c == -1) {
@@ -112,13 +122,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -127,16 +137,16 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
-    if (namesset == true) {
+    if (namesset) {
         std::vector<std::string> tokens2;
         std::string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
-        for (unsigned int j = 0; j < tokens2.size(); j++) {
-            trim_spaces(tokens2[j]);
-            names.push_back(tokens2[j]);
+        for (auto & tk : tokens2) {
+            trim_spaces(tk); // this will never have to be used, as spaces would break cmd line call
+            names.push_back(tk);
         }
-    } else if (namefileset == true) {
+    } else if (namefileset) {
         std::ifstream nfstr(namesfc);
         std::string tline;
         while (getline_safe(nfstr, tline)) {
@@ -146,27 +156,28 @@ int main(int argc, char * argv[]) {
         nfstr.close();
     } else if (!regex) {
         std::cerr << "Error: you must specify which tips to remove." << std::endl;
-        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)." << std::endl;
+        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)."
+                << std::endl;
         std::cerr << "Exiting." << std::endl;
         exit(0);
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -183,11 +194,11 @@ int main(int argc, char * argv[]) {
     
     // magic number: if number to be remove is > than this, use the induced tree procedure instead
     // this is demonstrated here: https://github.com/FePhyFoFum/phyx/issues/74
-    int MAX_RMT = 50;
+    unsigned int MAX_RMT = 50;
     
     bool going = true;
-    int numLeaves;
-    int num_names = 0;
+    unsigned int numLeaves;
+    unsigned int num_names = 0;
     std::vector<std::string> toKeep; // if trace is used
     std::vector<std::string> currNames; // keep original copy of names in case sampling differs across trees
     
@@ -200,7 +211,7 @@ int main(int argc, char * argv[]) {
         while (going) {
             tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
                 &translation_table, &going);
-            if (going == true) {
+            if (going) {
                 numLeaves = tree->getExternalNodeCount();
                 currNames = names; 
                 
@@ -215,7 +226,7 @@ int main(int argc, char * argv[]) {
                     currNames = get_names_in_tree(tree, currNames);
                 }
                 
-                num_names = currNames.size();
+                num_names = static_cast<unsigned int>(currNames.size());
                 
                 if (num_names == 0) {
                     if (!silent) {
@@ -242,7 +253,7 @@ int main(int argc, char * argv[]) {
         Tree * tree;
         while (going) {
             tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going == true) {
+            if (going) {
                 numLeaves = tree->getExternalNodeCount();
                 currNames = names; 
                 
@@ -257,7 +268,7 @@ int main(int argc, char * argv[]) {
                     currNames = get_names_in_tree(tree, currNames);
                 }
                 
-                num_names = currNames.size();
+                num_names = static_cast<unsigned int>(currNames.size());
                 
                 if (num_names == 0) {
                     if (!silent) {

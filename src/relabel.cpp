@@ -8,13 +8,15 @@
 #include "sequence.h"
 
 
-Relabel::Relabel (std::string& cnamesf, std::string nnamesf, const bool& verbose) {
+Relabel::Relabel (const std::string& cnamesf, const std::string& nnamesf,
+        const bool& verbose):num_taxa_(0) {
     store_name_lists (cnamesf, nnamesf);
     verbose_ = verbose;
 }
 
 
-void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
+void Relabel::store_name_lists (const std::string& cnamesf,
+        const std::string& nnamesf) {
     std::vector<std::string> terp;
     std::string line;
     int ccount = 0;
@@ -34,7 +36,8 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
     // check all current names are unique (otherwise won't work with existing map)
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
     if (orig.size() < old_names_.size()) {
-        std::cerr << "Error: the current name list contains duplicates. Exiting." << std::endl;
+        std::cerr << "Error: the current name list contains duplicates. Exiting."
+                << std::endl;
         exit(0);
     }
     
@@ -59,13 +62,13 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
             << ") lists differ in length. Exiting." << std::endl;
         exit(0);
     } else {
-        num_taxa_ = (int)old_names_.size();
-        for (int i = 0; i < num_taxa_; i++) {
+        num_taxa_ = static_cast<int>(old_names_.size());
+        for (size_t i = 0; i < static_cast<size_t>(num_taxa_); i++) {
             name_map_[old_names_[i]] = new_names_[i];
         }
     }
     /*
-    for(map<string, string>::const_iterator it = name_map_.begin(); it != name_map_.end(); ++it) {
+    for (map<string, string>::const_iterator it = name_map_.begin(); it != name_map_.end(); ++it) {
         std::cout << it->first << " " << it->second << std::endl;
     }
     */
@@ -76,7 +79,7 @@ void Relabel::store_name_lists (std::string& cnamesf, std::string nnamesf) {
 void Relabel::relabel_tree (Tree * tr) {
     // keep track of matches
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
-    for (int i = 0; i < tr->getExternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getExternalNodeCount(); i++) {
         std::string str = tr->getExternalNode(i)->getName();
         if (name_map_.find(str) != name_map_.end()) {
             //std::cout << "Tree label '" << str << "' found in name list!" << std::endl;
@@ -93,9 +96,9 @@ void Relabel::relabel_tree (Tree * tr) {
         }  
     }
     // do internal labels as well. be quieter here (don't expect internal nodes to have labels)
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         std::string str = tr->getInternalNode(i)->getName();
-        if (str == "") {
+        if (str.empty()) {
             continue;
         }
         if (name_map_.find(str) != name_map_.end()) {
@@ -113,10 +116,11 @@ void Relabel::relabel_tree (Tree * tr) {
     }
     
     // report failed matches (if present)
-    if (orig.size() > 0) {
+    if (!orig.empty()) {
         if (verbose_) {
-            std::cerr << "The following names to match were not found in the tree:" << std::endl;
-            for (auto elem : orig) {
+            std::cerr << "The following names to match were not found in the tree:"
+                    << std::endl;
+            for (const auto & elem : orig) {
                 std::cerr << elem << std::endl;
             }
         }
@@ -130,13 +134,12 @@ bool Relabel::relabel_sequence (Sequence& seq) {
     if (name_map_.find(str) != name_map_.end()) {
         seq.set_id(name_map_[str]);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 
-std::set<std::string> Relabel::get_names_to_replace () {
+std::set<std::string> Relabel::get_names_to_replace () const {
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
     return orig;
 }

@@ -9,8 +9,8 @@
 
 
 // individual recodings
-std::set<char> SequenceRecoder::recognized_ = {'R', 'Y', 'S', 'W', 'M', 'K', 'B', 'D',
-                                             'H', 'V', 'A', 'C', 'G', 'T'};
+std::set<char> SequenceRecoder::recognized_ = {'R', 'Y', 'S', 'W', 'M', 'K', 'B',
+                                             'D', 'H', 'V', 'A', 'C', 'G', 'T'};
 
 // regexes
 std::regex SequenceRecoder::r_ ("A|G");
@@ -26,20 +26,19 @@ std::regex SequenceRecoder::v_ ("A|C|G");
 
 
 // should check if nucleotide (not applicable to other seq types)
-SequenceRecoder::SequenceRecoder (std::string& recodescheme):R_(false), Y_(false), S_(false),
-    W_(false), M_(false), K_(false), B_(false), D_(false), H_(false), V_(false),
-    A_(false), C_(false), G_(false), T_(false) {
-    recodescheme_ = string_to_upper(recodescheme);
+SequenceRecoder::SequenceRecoder (std::string& recodescheme):recodescheme_(string_to_upper(recodescheme)),
+    R_(false), Y_(false), S_(false), W_(false), M_(false), K_(false), B_(false),
+    D_(false), H_(false), V_(false), A_(false), C_(false), G_(false), T_(false) {
     parse_scheme();
     check_valid_scheme();
 }
 
 
 void SequenceRecoder::parse_scheme () {
-    for (unsigned int i = 0; i < recodescheme_.size(); i++) {
-        char terp = recodescheme_[i];
+    for (char terp : recodescheme_) {
         if (recognized_.find(terp) == recognized_.end()) {
-            std::cerr << "Error: recoding scheme '" << terp << "' not recognized. Exiting." << std::endl;
+            std::cerr << "Error: recoding scheme '" << terp << "' not recognized. Exiting."
+                    << std::endl;
             exit(0);
         }
         switch (terp) {
@@ -94,10 +93,18 @@ void SequenceRecoder::parse_scheme () {
 void SequenceRecoder::check_valid_scheme () {
     std::string nucs = "ACGT";
     std::vector<int> ncounts (4);
-    ncounts[0] = A_ + R_ + W_ + M_ + D_ + H_ + V_; // A
-    ncounts[1] = C_ + Y_ + S_ + M_ + B_ + H_ + V_; // C
-    ncounts[2] = G_ + R_ + S_ + K_ + B_ + D_ + V_; // G
-    ncounts[3] = T_ + Y_ + W_ + K_ + B_ + D_ + H_; // T
+    ncounts[0] = static_cast<int>(A_) + static_cast<int>(R_) + static_cast<int>(W_)
+            + static_cast<int>(M_) + static_cast<int>(D_) + static_cast<int>(H_)
+            + static_cast<int>(V_); // A
+    ncounts[1] = static_cast<int>(C_) + static_cast<int>(Y_) + static_cast<int>(S_)
+            + static_cast<int>(M_) + static_cast<int>(B_) + static_cast<int>(H_)
+            + static_cast<int>(V_); // C
+    ncounts[2] = static_cast<int>(G_) + static_cast<int>(R_) + static_cast<int>(S_)
+            + static_cast<int>(K_) + static_cast<int>(B_) + static_cast<int>(D_)
+            + static_cast<int>(V_); // G
+    ncounts[3] = static_cast<int>(T_) + static_cast<int>(Y_) + static_cast<int>(W_)
+            + static_cast<int>(K_) + static_cast<int>(B_) + static_cast<int>(D_)
+            + static_cast<int>(H_); // T
     
     bool invalid = false;
     for (unsigned int i = 0; i < ncounts.size(); i++) {

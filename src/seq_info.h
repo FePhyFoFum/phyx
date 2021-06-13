@@ -1,5 +1,5 @@
-#ifndef _LS_SEQ_H_
-#define _LS_SEQ_H_
+#ifndef PX_LS_SEQ_H
+#define PX_LS_SEQ_H
 
 #include <string>
 #include <map>
@@ -28,21 +28,22 @@ private:
     char gap_;
     char missing_;
     std::map<char, double> total_;
-    int num_taxa_;
+    unsigned int num_taxa_;
     double percent_missing_;
     
     // new stuff
     std::vector<Sequence> seqs_;
     std::vector<std::string> taxon_labels_;
-    std::vector<int> seq_lengths_;
-    std::vector<int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
-    std::vector<int> missing_counts_; // for individual seqs
-    std::vector< std::vector<int> > indiv_char_counts_;
+    std::vector<unsigned int> seq_lengths_;
+    std::vector<unsigned int> char_counts_; // length seq_chars_ (i.e. the alphabet). accumulated across all seqs
+    std::vector<unsigned int> missing_counts_; // for individual seqs
+    std::vector< std::vector<unsigned int> > indiv_char_counts_;
     bool is_aligned_;
-    int seq_length_;
+    int seq_length_reader_; // signed variable used by alignment readers
+    unsigned int aligned_length_; // actual stored value for class
     std::istream* pios_;
     std::ostream* poos_;
-    int longest_tax_label_;
+    unsigned int longest_tax_label_;
     
     void read_in_alignment ();
     void collect_taxon_labels ();
@@ -65,7 +66,7 @@ public:
     void summarize ();
     void get_property (const bool& get_labels, const bool& check_aligned,
         const bool& get_nseq, const bool& get_freqs, const bool& get_nchar,
-        const double& get_missing);
+        const bool& get_missing);
 };
 
-#endif /* _LS_SEQ_H_ */
+#endif /* PX_LS_SEQ_H */

@@ -1,5 +1,5 @@
-#ifndef _OPTIMIZE_CONT_MODELS_NLOPT_H_
-#define _OPTIMIZE_CONT_MODELS_NLOPT_H_
+#ifndef PX_OPTIMIZE_CONT_MODELS_NLOPT_H
+#define PX_OPTIMIZE_CONT_MODELS_NLOPT_H
 
 #include <vector>
 #include <nlopt.h>
@@ -19,4 +19,4 @@ std::vector<double> optimize_single_rate_bm_nlopt(rowvec& _x, mat& _vcv, bool lo
 std::vector<double> optimize_single_rate_bm_ou_nlopt(rowvec& _x, mat& _vcv);
 std::vector<double> optimize_single_rate_bm_bl(Tree * tr);
 
-#endif /* _OPTIMIZE_CONT_MODELS_NLOPT_H_ */
+#endif /* PX_OPTIMIZE_CONT_MODELS_NLOPT_H */

@@ -9,7 +9,8 @@
 #include "node.h"
 
 
-Collapser::Collapser (const double& threshold):scale_set_(false) {
+Collapser::Collapser (const double& threshold):scale_set_(false),has_labels_(false),
+        has_annotations_(false) {
     threshold_ = threshold;
 }
 
@@ -42,24 +43,25 @@ void Collapser::collapse_edges (Tree * tr) {
         int loop_count = 0;
         while (!done) {
             loop_count++;
-            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount() << " internal nodes to consider." << std::endl;
-            for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+            //std::cout << "Loop #" << loop_count << ". There are " << tr->getInternalNodeCount()
+            //  << " internal nodes to consider." << std::endl;
+            for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
                 Node * m = tr->getInternalNode(i);
                 std::string str = m->getName();
-                if (str == "") {
+                if (str.empty()) {
                     //std::cout << "Whoops. This node has no support value." << std::endl;
                 } else {
-                    float cursup = std::stof(str);
+                    double cursup = std::stod(str);
                     if (!scale_set_) {
                         guess_scale(cursup);
                     }
                     if (cursup < threshold_) {
-                        //std::cout << "Welp. This one has got to go (" << cursup << "); el = " << m->getBL() << std::endl;
+                        //std::cout << "Welp. This one has got to go (" << cursup << "); el = "
+                        //  << m->getBL() << std::endl;
                         tr->pruneInternalNode(m);
                         break;
-                    } else {
-                        //std::cout << "This one is cool: " << cursup << "; el = " << m->getBL() << std::endl;
                     }
+                    //std::cout << "This one is cool: " << cursup << "; el = " << m->getBL() << std::endl;
                 }
                 if (i == (tr->getInternalNodeCount() - 1)) {
                     done = true; // exit loop, no more polytomies remain
@@ -83,7 +85,7 @@ need to consider ranges:
 */
 // using a support value (the first encountered), determine whether scale is proportions or percentages
 // if appropriate will reset threshold (e.g. from 0.5 to 50)
-void Collapser::guess_scale (const float& sup) {
+void Collapser::guess_scale (const double& sup) {
     if (sup > 1.0) { // overkill
         //std::cout << "Ok, looks like a percentage here guys." << std::endl;
         threshold_ *= 100;

@@ -1,5 +1,5 @@
-#ifndef _VECTOR_NODE_OBJECT_H_
-#define _VECTOR_NODE_OBJECT_H_
+#ifndef PX_VECTOR_NODE_OBJECT_H
+#define PX_VECTOR_NODE_OBJECT_H
 
 #include <vector>
 
@@ -24,4 +24,4 @@ public:
     VectorNodeObject<T> * clone () const { return new VectorNodeObject<T>(*this); }
 };
 
-#endif /* _VECTOR_NODE_OBJECT_H_ */
+#endif /* PX_VECTOR_NODE_OBJECT_H */

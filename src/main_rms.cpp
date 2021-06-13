@@ -11,10 +11,13 @@
 #include "sequence.h"
 #include "seq_reader.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Remove sequences by label." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;
@@ -36,20 +39,26 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrms 1.2\nCopyright (C) 2015-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph W. Brown, Joseph F. Walker, Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxrms 1.3\n";
+    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph W. Brown, Joseph F. Walker, Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"names", required_argument, NULL, 'n'},
-    {"namesf", required_argument, NULL, 'f'},
-    {"regex", required_argument, NULL, 'r'},
-    {"comp", no_argument, NULL, 'c'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"names", required_argument, nullptr, 'n'},
+    {"namesf", required_argument, nullptr, 'f'},
+    {"regex", required_argument, nullptr, 'r'},
+    {"comp", no_argument, nullptr, 'c'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -63,17 +72,17 @@ int main(int argc, char * argv[]) {
     bool complement = false;
     bool regex = false;
     std::regex regexp;
-    std::string regex_pattern = "";
+    std::string regex_pattern;
     bool match = false; // for regex searches
     
-    char * namesc = NULL;
-    char * namesfc = NULL;
-    char * seqf = NULL;
-    char * outf = NULL;
-    std::string rmf = "";
+    char * namesc = nullptr;
+    char * namesfc = nullptr;
+    char * seqf = nullptr;
+    char * outf = nullptr;
+    std::string rmf;
     std::vector<std::string> names;
 
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:n:f:r:co:hVC", long_options, &oi);
         if (c == -1) {
@@ -110,13 +119,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -125,21 +134,21 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (namesset == true) {
+    if (namesset) {
         std::vector<std::string> tokens2;
         std::string del2(",");
         tokens2.clear();
         tokenize(namesc, tokens2, del2);
-        for (unsigned int j = 0; j < tokens2.size(); j++) {
-            trim_spaces(tokens2[j]);
-            names.push_back(tokens2[j]);
+        for (auto & tk : tokens2) {
+            trim_spaces(tk); // this will never have to be used, as spaces would break cmd line call
+            names.push_back(tk);
         }
-    } else if (namefileset == true) {
+    } else if (namefileset) {
         std::ifstream nfstr(namesfc);
         std::string tline;
         while (getline_safe(nfstr, tline)) {
@@ -152,22 +161,23 @@ int main(int argc, char * argv[]) {
         nfstr.close();
     } else if (!regex) {
         std::cerr << "Error: you must specify which tips to remove." << std::endl;
-        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)." << std::endl;
+        std::cerr << "This can be done with a list (-n) or file (-f) of names, or a regular expression (-r)."
+                << std::endl;
         std::cerr << "Exiting." << std::endl;
         exit(0);
     }
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }    
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -204,8 +214,8 @@ int main(int argc, char * argv[]) {
             }
         } else {
             std::vector<Sequence> seqs = read_interleaved_nexus(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 seq_name = seq.get_id();
                 if (regex) {
                     match = std::regex_search(seq_name, regexp);
@@ -229,8 +239,8 @@ int main(int argc, char * argv[]) {
         }
         if (complicated_phylip) {
             std::vector<Sequence> seqs = read_phylip(*pios, num_taxa, num_char);
-            for (unsigned int i = 0; i < seqs.size(); i++) {
-                seq = seqs[i];
+            for (const auto & sq : seqs) {
+                seq = sq;
                 seq_name = seq.get_id();
                 if (regex) {
                     match = std::regex_search(seq_name, regexp);

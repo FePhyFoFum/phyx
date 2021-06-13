@@ -1,5 +1,5 @@
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#ifndef PX_TIMER_H
+#define PX_TIMER_H
 
 #include <chrono>
 
@@ -7,9 +7,9 @@ class Timer {
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time_point_;
     std::chrono::time_point<std::chrono::high_resolution_clock> end_time_point_;
-    unsigned long start_;
-    unsigned long end_;
-    unsigned long duration_;
+    long start_;
+    long end_;
+    long duration_;
     
 public:
     Timer ();
@@ -17,4 +17,4 @@ public:
     ~Timer ();  
 };
 
-#endif /* _TIMER_H_ */
+#endif /* PX_TIMER_H */

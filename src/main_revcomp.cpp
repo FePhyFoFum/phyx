@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include <time.h>
+#include <ctime>
 #include <cstdlib>
 #include <getopt.h>
 
@@ -14,10 +14,14 @@
 #include "utils.h"
 #include "log.h"
 #include "edlib.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+bool reverse_it_or_not (std::vector<Sequence>& seqs, Sequence comp_seq);
+
+void print_help () {
     std::cout << "Reverse complement sequences." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;
@@ -40,30 +44,38 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxrevcomp 1.2\nCopyright (C) 2017-2021 FePhyFoFum\nLicense GPLv3\nWritten by Stephen A. Smith (blackrim)");
+std::string get_version_line () {
+    std::string vl = "pxrevcomp 1.3\n";
+    vl += "Copyright (C) 2017-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Stephen A. Smith (blackrim)";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"ids", required_argument, NULL, 'i'},
-    {"guess", no_argument, NULL, 'g'},
-    {"pguess", no_argument, NULL, 'p'},
-    {"sguess", no_argument, NULL, 'm'},
-    {"outf", required_argument, NULL, 'o'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"ids", required_argument, nullptr, 'i'},
+    {"guess", no_argument, nullptr, 'g'},
+    {"pguess", no_argument, nullptr, 'p'},
+    {"sguess", no_argument, nullptr, 'm'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
     int best_distance = 10000000;
     int best_dis_rev = 100000000;
+    bool res = false;
     std::string comp = comp_seq.get_sequence();
     std::string revcomp = comp_seq.reverse_complement();
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        EdlibAlignResult result = edlibAlign(comp.c_str(), comp.length(), seqs[i].get_sequence().c_str(), 
-                seqs[i].get_length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
+    for (auto & seq : seqs) {
+        EdlibAlignResult result = edlibAlign(comp.c_str(), static_cast<int>(comp.length()),
+                seq.get_sequence().c_str(), static_cast<int>(seq.get_length()),
+                edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0) {
             continue;
         }
@@ -72,9 +84,10 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
         }
         edlibFreeAlignResult(result);
     }
-    for (unsigned int i = 0; i < seqs.size(); i++) {
-        EdlibAlignResult result = edlibAlign(revcomp.c_str(), revcomp.length(), seqs[i].get_sequence().c_str(), 
-                seqs[i].get_length(), edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
+    for (auto & seq : seqs) {
+        EdlibAlignResult result = edlibAlign(revcomp.c_str(), static_cast<int>(revcomp.length()),
+                seq.get_sequence().c_str(), static_cast<int>(seq.get_length()),
+                edlibNewAlignConfig(best_distance, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE));
         if (result.editDistance < 0) {
             continue;
         }
@@ -84,13 +97,13 @@ bool reverse_it_or_not(std::vector<Sequence>& seqs, Sequence comp_seq) {
         edlibFreeAlignResult(result);
     }
     if (best_dis_rev < best_distance) {
-        return true;
+        res = true;
     }
-    return false;
+    return res;
 }
 
 int main(int argc, char * argv[]) {
-    srand (time(NULL));
+    srand(static_cast<unsigned int>(time(nullptr)));
     log_call(argc, argv);
     
     bool fileset = false;
@@ -102,10 +115,11 @@ int main(int argc, char * argv[]) {
     bool pguess = false;
     bool sguess = false;
     double sguess_samplenum = 0.2; // 10% of them will be used for revcomp
-    char * seqf = NULL;
-    char * outf = NULL;
-    char * idssc = NULL;
-    while(true) {
+    char * seqf = nullptr;
+    char * outf = nullptr;
+    char * idssc = nullptr;
+    
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:i:o:mgphVC", long_options, &oi);
         if (c == -1) {
@@ -140,13 +154,13 @@ int main(int argc, char * argv[]) {
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -155,31 +169,31 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    if (idsset == true) {
+    if (idsset) {
         std::vector<std::string> tokens2;
         tokenize(idssc, tokens2, ",");
-        for (unsigned int j = 0; j < tokens2.size(); j++) {
-            trim_spaces(tokens2[j]);
-            ids.push_back(tokens2[j]);
+        for (auto & tk : tokens2) {
+            trim_spaces(tk); // this will never have to be used, as spaces would break cmd line call
+            ids.push_back(tk);
         }
     }
 
-    std::istream * pios = NULL;
-    std::ostream * poos = NULL;
-    std::ifstream * fstr = NULL;
-    std::ofstream * ofstr = NULL;
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
@@ -189,15 +203,15 @@ int main(int argc, char * argv[]) {
     Sequence seq;
     std::string retstring;
     int ft = test_seq_filetype_stream(*pios, retstring);
-    if (guess == false) {
+    if (!guess) {
         while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-            if (idsset == false || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
+            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id()) == 1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
         }
         if (ft == 2) {
-            if (idsset == false || std::count(ids.begin(), ids.end(), seq.get_id())==1) {
+            if (!idsset || std::count(ids.begin(), ids.end(), seq.get_id()) == 1) {
                 seq.perm_reverse_complement();
             }
             (*poos) << seq.get_fasta();
@@ -206,7 +220,7 @@ int main(int argc, char * argv[]) {
        bool first = true;
        std::vector<Sequence> done; //for pguess
        while (read_next_seq_from_stream(*pios, ft, retstring, seq)) {
-           if (first == true) {
+           if (first) {
                done.push_back(seq);
                (*poos) << seq.get_fasta();
                first = false;
@@ -218,7 +232,7 @@ int main(int argc, char * argv[]) {
                if (pguess) {
                    done.push_back(seq);
                } else if (sguess) {
-                   double r = ((double) rand() / (RAND_MAX));
+                   double r = (static_cast<double>(rand()) / static_cast<double>(RAND_MAX));
                     if (r < sguess_samplenum) {
                         done.push_back(seq);
                     }

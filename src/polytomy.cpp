@@ -9,11 +9,11 @@
 #include "node.h"
 
 
-Polytomy::Polytomy (const int& seed) {
+Polytomy::Polytomy (const long int& seed) {
     if (seed == -1) {
         srand(get_clock_seed());
     } else {
-        srand(seed);
+        srand(static_cast<unsigned int>(seed));
     }
 }
 
@@ -22,53 +22,55 @@ Polytomy::Polytomy (const int& seed) {
 void Polytomy::sample_polytomies (Tree * tr) {
     bool verbose = false;
     std::vector<std::string> tchildren;
-    int numChildren = 0;
     
     // welp with multiple trees do not want to keep this
     terminals_to_prune_.clear();
     
     // currently works up through the tree
     // hrm maybe go from root down? would save on duplicates
-    for (int i = 0; i < tr->getInternalNodeCount(); i++) {
+    for (unsigned int i = 0; i < tr->getInternalNodeCount(); i++) {
         tchildren.clear();
         Node * m = tr->getInternalNode(i);
-        std::string str = m->getName();
         
-        numChildren = m->getChildCount();
+        unsigned int numChildren = m->getChildCount();
         if (numChildren > 2) {
             // select random taxa to prune
-            std::vector<int> terp = sample_without_replacement(numChildren, (numChildren - 2));
+            std::vector<unsigned int> terp = sample_without_replacement(numChildren, (numChildren - 2));
             if (verbose) {
-                std::cout << "numChildren for node " << m->getName() << " = " << numChildren << std::endl;
-                for (int p = 0; p < numChildren; p++) {
+                std::cout << "numChildren for node " << m->getName()
+                        << " = " << numChildren << std::endl;
+                for (unsigned int p = 0; p < numChildren; p++) {
                     std::cout << p << ". " << m->getChild(p)->getName() << std::endl;
                 }
             }
             
-            for (unsigned int j = 0; j < terp.size(); j++) {
-                Node * n = m->getChild(terp[j]);
+            for (unsigned int j : terp) {
+                Node * n = m->getChild(j);
                 if (n->isExternal()) {
                     terminals_to_prune_.push_back(n->getName());
                     if (verbose) {
-                        std::cout << "Random tip chosen to purge: " << n->getName() << std::endl;
+                        std::cout << "Random tip chosen to purge: "
+                                << n->getName() << std::endl;
                     }
                 } else {
                     // if internal, grab all terminal descendants and add to purge list
                     get_terminal_children(n, tchildren);
                     if (verbose) {
-                        std::cout << "welp dealing with an internal node to prune here..." << std::endl;
+                        std::cout << "welp dealing with an internal node to prune here..."
+                                << std::endl;
                     }
-                    for (unsigned int k = 0; k < tchildren.size(); k++) {
-                        terminals_to_prune_.push_back(tchildren[k]);
+                    for (const auto & k : tchildren) {
+                        terminals_to_prune_.push_back(k);
                         if (verbose) {
-                            std::cout << "Descendant tip to be purged: " << tchildren[k] << std::endl;
+                            std::cout << "Descendant tip to be purged: "
+                                    << k << std::endl;
                         }
                     }
                 }
             }
         }
     }
-    if (terminals_to_prune_.size() > 0) {
+    if (!terminals_to_prune_.empty()) {
         // get rid of any duplicates (can happen with nested polytomies)
         terminals_to_prune_ = get_unique_elements(terminals_to_prune_);
         if (verbose) {

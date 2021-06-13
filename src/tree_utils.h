@@ -1,5 +1,5 @@
-#ifndef _TREE_UTILS_H_
-#define _TREE_UTILS_H_
+#ifndef PX_TREE_UTILS_H
+#define PX_TREE_UTILS_H
 
 #include <string>
 #include <vector>
@@ -44,13 +44,13 @@ std::vector<std::string> get_tip_labels (Tree * tr);
 void deknuckle_tree (Tree * tree);
 void remove_knuckle (Node * node);
 std::string getNewickString (Tree * tree);
-std::string getNewickString (Tree * tree, std::string object);
+std::string getNewickString (Tree * tree, const std::string& obj);
 
 std::string double_to_str (double d);
 
-unsigned long int get_num_possible_trees (const int& n, const bool& rooted);
+unsigned long int get_num_possible_trees (const unsigned int& n, const bool& rooted);
 
 void get_terminal_children (Node * node, std::vector<Node *>& children);
 void get_terminal_children (Node * node, std::vector<std::string>& children);
 void get_all_descendant_nodes (Node * node, std::vector<Node *>& children);
-#endif /* _TREE_UTILS_H_ */
+#endif /* PX_TREE_UTILS_H */

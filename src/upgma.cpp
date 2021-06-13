@@ -14,11 +14,12 @@
 #include "tree_utils.h"
 
 
-UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_("") {
-    std::string alphaName = ""; // not used, but required by reader
+UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_(""),
+        tree_(nullptr) {
+    std::string alphaName; // not used, but required by reader
     seqs_ = ingest_alignment(pios, alphaName);
-    num_taxa_ = (int)seqs_.size();
-    num_char_ = (int)seqs_[0].get_length();
+    num_taxa_ = static_cast<int>(seqs_.size());
+    num_char_ = static_cast<int>(seqs_[0].get_length());
     
     // check that it is aligned (doesn't make sense otherwise)
     if (!is_aligned(seqs_)) {
@@ -33,17 +34,19 @@ UPGMA::UPGMA (std::istream* pios):num_taxa_(0), num_char_(0), newickstring_("") 
 std::vector< std::vector<double> > UPGMA::build_matrix () {
     // 1) skip self comparisons
     // 2) only calculate one half of matrix (i.e., no duplicate calcs)
-    std::vector< std::vector<double> > distances(num_taxa_, std::vector<double>(num_taxa_, 0.0));
+    auto nt = static_cast<size_t>(num_taxa_);
+    std::vector< std::vector<double> > distances(nt,
+            std::vector<double>(nt, 0.0));
     
     double tempScore = 0.0;
-    for (int i = 0; i < num_taxa_; i++) {
+    for (size_t i = 0; i < nt; i++) {
         std::string seq1 = seqs_[i].get_sequence();
-        for (int j = (i + 1); j < num_taxa_; j++) {
+        for (size_t j = (i + 1); j < nt; j++) {
             std::string seq2 = seqs_[j].get_sequence();
             // get distance
-            tempScore = (double)calc_hamming_dist(seq1, seq2);
+            tempScore = static_cast<double>(calc_hamming_dist(seq1, seq2));
             // put scale in terms of number of sites. original version did not do this
-            tempScore /= (double)num_char_;
+            tempScore /= static_cast<double>(num_char_);
             // put in both top and bottom of matrix, even though only top is used
             distances[i][j] = distances[j][i] = tempScore;
         }
@@ -71,12 +74,14 @@ std::vector< std::vector<double> > UPGMA::build_matrix () {
 
 // find smallest pairwise distance
 // will always find this on the top half of the matrix i.e., mini1 < mini2
-double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& dmatrix, int& mini1, int& mini2) {
+double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& dmatrix,
+        unsigned long& mini1, unsigned long& mini2) {
     // super large value
     double minD = 99999999999.99;
-    int numseqs = dmatrix.size();
-    for (int i = 0; i < (numseqs - 1); i++) {
-        int idx = std::min_element(dmatrix[i].begin() + (i + 1), dmatrix[i].end()) - dmatrix[i].begin();
+    size_t numseqs = dmatrix.size();
+    for (size_t i = 0; i < (numseqs - 1); i++) {
+        auto idx = static_cast<size_t>(std::min_element(dmatrix[i].begin() + (i + 1),
+                dmatrix[i].end()) - dmatrix[i].begin());
         if (dmatrix[i][idx] < minD) {
             minD = dmatrix[i][idx];
             mini1 = i;
@@ -89,22 +94,21 @@ double UPGMA::get_smallest_distance (const std::vector< std::vector<double> >& d
 
 void UPGMA::construct_tree () {
     // location of minimum distance (top half)
-    int ind1 = 0;
-    int ind2 = 0;
-    double minD = 0.0;
+    unsigned long ind1 = 0;
+    unsigned long ind2 = 0;
     
     // initialize
     std::vector< std::vector<double> > dMatrix = full_distmatrix_;
-    double newHeight = 0.0;
-    int numClusters = num_taxa_;
-    Node * anc = NULL; // new node, ancestor of 2 clusters
-    Node * left = NULL;
-    Node * right = NULL;
+    Node * anc = nullptr; // new node, ancestor of 2 clusters
+    Node * left = nullptr;
+    Node * right = nullptr;
+    auto nt = static_cast<size_t>(num_taxa_);
+    size_t numClusters = nt;
     
     // keep list of nodes left to be clustered. initially all terminal nodes
-    std::vector<Node *> nodes(num_taxa_);
-    for (int i = 0; i < num_taxa_; i++) {
-        Node * nd = new Node();
+    std::vector<Node *> nodes(nt);
+    for (size_t i = 0; i < nt; i++) {
+        auto * nd = new Node();
         nd->setName(names_[i]);
         nd->setHeight(0.0);
         nodes[i] = nd;
@@ -112,7 +116,7 @@ void UPGMA::construct_tree () {
     
     while (numClusters > 1) {
         // 1. get smallest distance present in the matrix
-        minD = get_smallest_distance(dMatrix, ind1, ind2);
+        double minD = get_smallest_distance(dMatrix, ind1, ind2);
         left = nodes[ind1];
         right = nodes[ind2];
         
@@ -125,7 +129,7 @@ void UPGMA::construct_tree () {
         
         // 4. compute edgelengths: half of the distance
         // edgelengths must subtract the existing height
-        newHeight = 0.5 * minD;
+        double newHeight = 0.5 * minD;
         left->setBL(newHeight - left->getHeight());
         right->setBL(newHeight - right->getHeight());
         
@@ -136,19 +140,20 @@ void UPGMA::construct_tree () {
         // new distances are proportional averages (size of clusters)
         // new cluster is placed first (row & column)
         std::vector<double> avdists(numClusters, 0.0);
-        double Lweight = left->isExternal() ? 1.0 : (double)left->getChildCount();
-        double Rweight = right->isExternal() ? 1.0 : (double)right->getChildCount();
-        for (int i = 0; i < numClusters; i++) {
+        double Lweight = left->isExternal() ? 1.0 : static_cast<double>(left->getChildCount());
+        double Rweight = right->isExternal() ? 1.0 : static_cast<double>(right->getChildCount());
+        for (unsigned long i = 0; i < numClusters; i++) {
             avdists[i] = ((dMatrix[ind1][i] * Lweight) + (dMatrix[ind2][i] * Rweight)) / (Lweight + Rweight);
         }
         
         numClusters--;
-        std::vector< std::vector<double> > newDistances(numClusters, std::vector<double>(numClusters, 0.0));
+        std::vector< std::vector<double> > newDistances(numClusters,
+                std::vector<double>(numClusters, 0.0));
         
         // put in distances to new clusters first
         double tempDist = 0.0;
-        int count = 0;
-        for (int i = 0; i < (int)nodes.size(); i++) {
+        unsigned long count = 0;
+        for (size_t i = 0; i < nodes.size(); i++) {
             if (i != ind1 && i != ind2) {
                 count++;
                 tempDist = avdists[i];
@@ -158,12 +163,12 @@ void UPGMA::construct_tree () {
         }
         
         // now, fill in remaining
-        int icount = 1;
-        int jcount = 1;
-        for (int i = 0; i < (int)nodes.size(); i++) {
-            jcount = 1;
+        unsigned long icount = 1;
+        auto ndsize = nodes.size();
+        for (size_t i = 0; i < ndsize; i++) {
             if (i != ind1 && i != ind2) {
-                for (int j = 0; j < (int)nodes.size(); j++) {
+                size_t jcount = 1;
+                for (size_t j = 0; j < ndsize; j++) {
                     if (j != ind1 && j != ind2) {
                         newDistances[icount][jcount] = dMatrix[i][j];
                         newDistances[jcount][icount] = dMatrix[i][j];
@@ -180,8 +185,8 @@ void UPGMA::construct_tree () {
         // 6. finally, update node vector (1 shorter). new node always goes first)
         std::vector<Node *> newNodes(numClusters);
         newNodes[0] = anc;
-        int counter = 1;
-        for (int i = 0; i < (int)nodes.size(); i++) {
+        unsigned long counter = 1;
+        for (unsigned long i = 0; i < ndsize; i++) {
             if (i != ind1 && i != ind2) {
                 newNodes[counter] = nodes[i];
                 counter++;

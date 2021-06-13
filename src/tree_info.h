@@ -1,5 +1,5 @@
-#ifndef _LS_TR_H_
-#define _LS_TR_H_
+#ifndef PX_LS_TR_H
+#define PX_LS_TR_H
 
 #include <string>
 #include <vector>
@@ -24,12 +24,12 @@ private:
     void calc_stats ();
 
 public:
-    TreeInfo (Tree * intree);
+    explicit TreeInfo (Tree * intree);
     TreeInfo (Tree * intree, const bool& ultracheck, const bool& binarycheck,
         const bool& agecheck, const bool& rootedcheck, const bool& ntipcheck,
         const bool& lengthcheck, const bool& namecheck, const bool& rtvarcheck,
         std::ostream* poos);
-    void get_stats (std::ostream* poos);
+    void get_stats (std::ostream* poos) const;
 };
 
-#endif /* _LS_TR_H_ */
+#endif /* PX_LS_TR_H */

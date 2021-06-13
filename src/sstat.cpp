@@ -8,9 +8,9 @@
 #include "sstat.h"
 
 
-MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs) {
-    seqs_ = seqs;
-    num_taxa_ = seqs.size();
+MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs):num_char_(0),
+        test_statistic_(0.0l), seqs_(seqs) {
+    num_taxa_ = static_cast<unsigned long>(seqs_.size());
     
     //std::cout << "Read in " << num_taxa_ << " sequences!" << std::endl;
     
@@ -26,15 +26,16 @@ MultinomialSeqStat::MultinomialSeqStat (std::vector<Sequence>& seqs) {
 
 bool MultinomialSeqStat::checked_aligned () {
     bool is_aligned_ = true;
-    std::vector<int> seq_lengths(num_taxa_, 0);
+    std::vector<unsigned long> seq_lengths(num_taxa_, 0);
     
     // gather all lengths
-    for (int i = 0; i < num_taxa_; i++) {
-        seq_lengths[i] = (int)seqs_[i].get_length();
+    for (unsigned long i = 0; i < num_taxa_; i++) {
+        seq_lengths[i] = seqs_[i].get_length();
     }
     
     // check if all seqs are the same length
-    if (std::adjacent_find( seq_lengths.begin(), seq_lengths.end(), std::not_equal_to<int>()) == seq_lengths.end() ) {
+    if (std::adjacent_find(seq_lengths.begin(), seq_lengths.end(),
+            std::not_equal_to<>()) == seq_lengths.end()) {
         is_aligned_ = true;
         num_char_ = seq_lengths[0];
     } else {
@@ -46,10 +47,10 @@ bool MultinomialSeqStat::checked_aligned () {
 
 void MultinomialSeqStat::collect_site_patters () {
     std::vector<std::string> inputPatterns;
-    for (int i = 0; i < num_char_; i++) {
+    for (unsigned long i = 0; i < num_char_; i++) {
         char a = seqs_[0].get_sequence().at(i);
         std::string pat(1, a);
-        for (int j = 1; j < num_taxa_; j++) {
+        for (unsigned long j = 1; j < num_taxa_; j++) {
             char residue = seqs_[j].get_sequence().at(i);
             pat += residue;
         }
@@ -59,24 +60,23 @@ void MultinomialSeqStat::collect_site_patters () {
     sort(inputPatterns.begin(), inputPatterns.end());
     
     // process raw counts
-    int numUniquePatterns = 0;
-    bool siteMatched = true;
+    //int numUniquePatterns = 0;
     
 // Iterate from first site to last site
     for (std::vector<std::string>::const_iterator iterSites = inputPatterns.begin(); iterSites < inputPatterns.end(); ++iterSites) {
         std::string currentPattern = *iterSites;
-        int currentPatternCount = 1;
+        unsigned long currentPatternCount = 1u;
         
 // Check if pattern n+1 == pattern n; if so, update count, test next site; if not, log current count/pattern; MUCH FASTER!!
 //     - Need to check if last site, lest risk overshooting vector boundary
-        siteMatched = true;
+        bool siteMatched = true;
         while (siteMatched) {
             if (iterSites != inputPatterns.end() - 1) { // Last site
-                iterSites++;
+                ++iterSites;
                 if (*iterSites == currentPattern) {
                     currentPatternCount++;
                 } else { // Exit loop, counted all matching patterns
-                    iterSites--;
+                    --iterSites;
                     siteMatched = false;
                 }
             } else { // At last pattern
@@ -86,7 +86,7 @@ void MultinomialSeqStat::collect_site_patters () {
 // No need to check against stored sites, as vector has been sorted in function 'getInputPatterns'
         //patterns_and_counts_.push_back(std::make_pair(currentPattern, currentPatternCount));
         patterns_and_counts_.emplace_back(currentPattern, currentPatternCount);
-        numUniquePatterns++;
+        //numUniquePatterns++;
     }
     //std::cout << "Found " << numUniquePatterns << " unique site patterns." << std::endl;
 }
@@ -100,18 +100,17 @@ void MultinomialSeqStat::calculateTestStatistic () {
 | 2) Sum values above
 | 3) Subtract N*ln(N) from sum
 */
-    long double tempResult = 0.0;
-    long double finalResult = 0.0;
-    int numPatterns = patterns_and_counts_.size();
+    long double tempResult = 0.0L;
+    long double finalResult = 0.0L;
+    size_t numPatterns = patterns_and_counts_.size();
 
-    for (int iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
+    for (size_t iterStoredPat = 0; iterStoredPat < numPatterns; ++iterStoredPat) {
         if (patterns_and_counts_[iterStoredPat].second != 0) {
             tempResult = (patterns_and_counts_[iterStoredPat].second)*(log(patterns_and_counts_[iterStoredPat].second));
             finalResult += tempResult;
-            tempResult = 0.0;
         }
     }
-    tempResult = (double)num_char_*(log(num_char_));
+    tempResult = static_cast<long double>(num_char_*(log(num_char_)));
     /*
         std::cout << "'numIncludedChar*log(numIncludedChar)' calculated as: " << tempResult << std::endl;
         std::cout << "'final sum' is: " << finalResult << std::endl;
@@ -125,6 +124,6 @@ void MultinomialSeqStat::calculateTestStatistic () {
 }
 
 
-double MultinomialSeqStat::get_test_statistic () {
+long double MultinomialSeqStat::get_test_statistic () const {
     return test_statistic_;
 }

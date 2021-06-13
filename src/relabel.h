@@ -1,5 +1,5 @@
-#ifndef _RELABEL_TREE_H_
-#define _RELABEL_TREE_H_
+#ifndef PX_RELABEL_TREE_H
+#define PX_RELABEL_TREE_H
 
 #include <map>
 #include <vector>
@@ -16,13 +16,13 @@ private:
     std::map<std::string, std::string> name_map_;
     bool verbose_;
     
-    void store_name_lists (std::string& cnamesf, std::string nnamesf);
+    void store_name_lists (const std::string& cnamesf, const std::string& nnamesf);
     
 public:
-    Relabel (std::string& cnamesf, std::string nnamesf, const bool& verbose);
+    Relabel (const std::string& cnamesf, const std::string& nnamesf, const bool& verbose);
     void relabel_tree (Tree * tr);
     bool relabel_sequence (Sequence& seq);
-    std::set<std::string> get_names_to_replace ();
+    std::set<std::string> get_names_to_replace () const;
 };
 
-#endif /* _RELABEL_TREE_H_ */
+#endif /* PX_RELABEL_TREE_H */

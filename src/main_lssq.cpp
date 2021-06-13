@@ -11,10 +11,13 @@
 #include "seq_reader.h"
 #include "seq_info.h"
 #include "log.h"
-#include "constants.h" // contains PHYX_CITATION
+#include "citations.h"
 
 
-void print_help() {
+void print_help ();
+std::string get_version_line ();
+
+void print_help () {
     std::cout << "Print sequence file summary." << std::endl;
     std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
     std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
@@ -41,24 +44,30 @@ void print_help() {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 
-std::string versionline("pxlssq 1.2\nCopyright (C) 2016-2021 FePhyFoFum\nLicense GPLv3\nWritten by Joseph F. Walker, Joseph W. Brown");
+std::string get_version_line () {
+    std::string vl = "pxlssq 1.3\n";
+    vl += "Copyright (C) 2016-2021 FePhyFoFum\n";
+    vl += "License GPLv3\n";
+    vl += "Written by Joseph F. Walker, Joseph W. Brown";
+    return vl;
+}
 
 static struct option const long_options[] =
 {
-    {"seqf", required_argument, NULL, 's'},
-    {"outf", required_argument, NULL, 'o'},
-    {"indiv", no_argument, NULL, 'i'},
-    {"nseq", no_argument, NULL, 'n'},
-    {"nchar", no_argument, NULL, 'c'},
-    {"labels", no_argument, NULL, 'l'},
-    {"prot", no_argument, NULL, 'p'},
-    {"aligned", no_argument, NULL, 'a'},
-    {"freqs", no_argument, NULL, 'f'},
-    {"missing", no_argument, NULL, 'm'},
-    {"help", no_argument, NULL, 'h'},
-    {"version", no_argument, NULL, 'V'},
-    {"citation", no_argument, NULL, 'C'},
-    {NULL, 0, NULL, 0}
+    {"seqf", required_argument, nullptr, 's'},
+    {"outf", required_argument, nullptr, 'o'},
+    {"indiv", no_argument, nullptr, 'i'},
+    {"nseq", no_argument, nullptr, 'n'},
+    {"nchar", no_argument, nullptr, 'c'},
+    {"labels", no_argument, nullptr, 'l'},
+    {"prot", no_argument, nullptr, 'p'},
+    {"aligned", no_argument, nullptr, 'a'},
+    {"freqs", no_argument, nullptr, 'f'},
+    {"missing", no_argument, nullptr, 'm'},
+    {"help", no_argument, nullptr, 'h'},
+    {"version", no_argument, nullptr, 'V'},
+    {"citation", no_argument, nullptr, 'C'},
+    {nullptr, 0, nullptr, 0}
 };
 
 int main(int argc, char * argv[]) {
@@ -70,16 +79,17 @@ int main(int argc, char * argv[]) {
     bool indiv = false;
     bool force_protein = false; // i.e. if inference fails
     bool optionsset = false; // is true, do not return all properties
+    int propcount = 0; //count how many properties are requested
     bool get_labels = false;
     bool check_aligned = false;
     bool get_nseq = false;
     bool get_nchar = false;
     bool get_freqs = false;
     bool get_missing = false;
-    char * outf = NULL;
-    char * seqf = NULL;
+    char * outf = nullptr;
+    char * seqf = nullptr;
     
-    while(true) {
+    while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:inclpafmhVC", long_options, &oi);
         if (c == -1) {
@@ -101,14 +111,17 @@ int main(int argc, char * argv[]) {
             case 'n':
                 get_nseq = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'c':
                 get_nchar = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'l':
                 get_labels = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'p':
                 force_protein = true;
@@ -116,26 +129,29 @@ int main(int argc, char * argv[]) {
             case 'a':
                 check_aligned = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'f':
                 get_freqs = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'm':
                 get_missing = true;
                 optionsset = true;
+                propcount++;
                 break;
             case 'h':
                 print_help();
                 exit(0);
             case 'V':
-                std::cout << versionline << std::endl;
+                std::cout << get_version_line() << std::endl;
                 exit(0);
             case 'C':
-                std::cout << PHYX_CITATION << std::endl;
+                std::cout << get_phyx_citation() << std::endl;
                 exit(0);
             default:
-                print_error(argv[0], (char)c);
+                print_error(*argv);
                 exit(0);
         }
     }
@@ -144,27 +160,27 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(seqf, outf);
     }
     
-    std::ostream * poos = NULL;
-    std::ofstream * ofstr = NULL;
-    std::ifstream * fstr = NULL;
-    std::istream * pios = NULL;
+    std::ostream * poos = nullptr;
+    std::ofstream * ofstr = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::istream * pios = nullptr;
     
-    if ((get_labels + check_aligned + get_nseq + get_freqs + get_nchar + get_missing) > 1) {
+    if (propcount > 1) {
         std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
         exit(0);
     }
     
-    if (fileset == true) {
+    if (fileset) {
         fstr = new std::ifstream(seqf);
         pios = fstr;
     } else {
         pios = &std::cin;
-        if (check_for_input_to_stream() == false) {
+        if (!check_for_input_to_stream()) {
             print_help();
             exit(1);
         }
     }
-    if (outfileset == true) {
+    if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
     } else {
