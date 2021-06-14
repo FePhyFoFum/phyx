@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        working-directory: src
+        working-directory: ./src
     steps:
     - name: Install brew dependencies
       if: runner.os == 'macOS'
