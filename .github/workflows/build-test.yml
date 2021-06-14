@@ -26,15 +26,7 @@ jobs:
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get install --no-install-recommends -y \
-        autotools-dev \
-        autoconf \
-        automake \
-        libtool \
-        liblapack-dev \
-        libatlas-cpp-0.6-dev \ 
-        libnlopt-dev \
-        libarmadillo-dev
+        sudo apt-get install autotools-dev autoconf automake libtool liblapack-dev libatlas-cpp-0.6-dev libnlopt-dev libarmadillo-dev
     - name: autoconf
       run: autoconf
     - name: configure
