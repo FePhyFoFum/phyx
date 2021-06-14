@@ -18,7 +18,8 @@ jobs:
       run:
         working-directory: ./src
     steps:
-    - name: Install brew dependencies
+    - uses: actions/checkout@v2
+      - name: Install brew dependencies
       if: runner.os == 'macOS'
       run:
           brew install nlopt armadillo
@@ -26,7 +27,6 @@ jobs:
       if: runner.os == 'Linux'
       run:
         sudo apt-get install liblapack-dev libatlas-cpp-0.6-dev libnlopt-dev libarmadillo-dev
-    - uses: actions/checkout@v2
     - name: autoconf
       run: autoconf
     - name: configure
