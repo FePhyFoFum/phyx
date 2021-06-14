@@ -19,7 +19,7 @@ jobs:
         working-directory: ./src
     steps:
     - uses: actions/checkout@v2
-      - name: Install brew dependencies
+    - name: Install brew dependencies
       if: runner.os == 'macOS'
       run:
           brew install nlopt armadillo
