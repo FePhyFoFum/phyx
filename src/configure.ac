@@ -31,6 +31,8 @@ can compile with these flags
    AC_SUBST([HNLOPT],[N])
 fi
 
+#AC_CHECK_HEADER([nlopt.hpp],[echo "found nlopt.hpp"],[echo "no nlopt.hpp found?!?"])
+
 #need to find a better lib to search for
 have_arma=no
 AC_SUBST([HARM],[Y])
