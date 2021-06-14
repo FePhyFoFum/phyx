@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install brew dependencies
       if: runner.os == 'macOS'
-      run: |
+      run:
           brew install nlopt armadillo
     - name: Install apt dependencies
       if: runner.os == 'Linux'
@@ -32,7 +32,7 @@ jobs:
         automake \
         libtool \
         liblapack-dev \
-        libatlas-cpp-0.6-dev\ 
+        libatlas-cpp-0.6-dev \ 
         libnlopt-dev \
         libarmadillo-dev
     - name: autoconf
