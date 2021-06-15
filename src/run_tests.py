@@ -586,7 +586,7 @@ if __name__ == "__main__":
             if t == True:
                 passed += 1
             elif t == False:
-                if i in ignorefail:
+                if i in ignore:
                     ignorefailed += 1
                     ignorefailedl.append(i)
                 else:
