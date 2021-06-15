@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/FePhyFoFum/phyx.svg?branch=master)](https://travis-ci.com/FePhyFoFum/phyx)
+[![Build Status](https://travis-ci.com/FePhyFoFum/phyx.svg?branch=master)](https://travis-ci.com/FePhyFoFum/phyx) [![Build-N-Test](https://github.com/FePhyFoFum/phyx/actions/workflows/build-test.yml/badge.svg)](https://github.com/FePhyFoFum/phyx/actions/workflows/build-test.yml)
 
 <img src="logo.png" alt="phyx logo" width=208px/> 
 
@@ -113,7 +113,7 @@ Mac has become increasingly difficult to support at the command line with change
 
         brew install git cmake nlopt armadillo
 
-3. On to phyx. first, clone the repository (if you haven't already):
+3. On to phyx. First, clone the repository (if you haven't already):
 
         git clone https://github.com/FePhyFoFum/phyx.git
 
@@ -131,7 +131,6 @@ If you want to install it so it is available anywhere in your system, do:
 
 ### Install with HPC GCC (advanced instructions)
 1. Install gcc and gfortran. Download gcc-6.2-bin.tar.gz or more recent from http://hpc.sourceforge.net/. Install with:
-    ​     
 
         sudo tar -xvf gcc-6.2-bin.tar -C /
 
