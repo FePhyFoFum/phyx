@@ -28,7 +28,7 @@ jobs:
       run: |
         sudo apt-get install autotools-dev autoconf automake libtool liblapack-dev libatlas-cpp-0.6-dev libnlopt0 libnlopt-dev libarmadillo-dev
     - name: autoconf
-      run: autoconf
+      run: autoreconf -fiv
     - name: configure
       run: ./configure
     - name: make
