@@ -22,11 +22,20 @@ jobs:
     - name: Install brew dependencies
       if: runner.os == 'macOS'
       run:
-          brew install nlopt armadillo automake autoconf
+          brew install nlopt armadillo automake
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get install autotools-dev automake libtool liblapack-dev libatlas-cpp-0.6-dev libnlopt0 libnlopt-dev libnlopt-cxx-dev libarmadillo-dev
+        sudo apt-get install -y \
+        autotools-dev \
+        automake \
+        libtool \
+        liblapack-dev \
+        libatlas-cpp-0.6-dev \
+        libnlopt0 \
+        libnlopt-dev \
+        libnlopt-cxx-dev \
+        libarmadillo-dev
     - name: autoconf
       run: autoreconf -fiv
     - name: configure
