@@ -22,7 +22,7 @@ jobs:
     - name: Install brew dependencies
       if: runner.os == 'macOS'
       run:
-          brew install nlopt armadillo automake
+          brew install nlopt armadillo automake autoconf
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |

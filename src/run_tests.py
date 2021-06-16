@@ -288,8 +288,8 @@ def test_program(name):
         cm = "./pxnw -s TEST/test.fa | grep TaxonA | grep TaxonB"
         t = 'TaxonA\tTaxonB\t40\n'
     elif name == "pxpoly":
-        cm = "./pxpoly -t TEST/polytomy.tre -x 13"
-        t = '(((TaxonC:0.25,(TaxonA2:0.08,TaxonA3:0.07)1.0:0.235)1.0:0.5,TaxonW:0.36)0.99:0.39,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\n'
+        cm = "./pxpoly -t TEST/polytomy.tre -x 39"
+        t = '((TaxonX:0.13,TaxonW:0.36)0.99:0.39,(TaxonD:0.23,TaxonE:0.16)0.94:0.3);\n'
     elif name == "pxrecode":
         res = True
         print("RY-coding ", end = '')
