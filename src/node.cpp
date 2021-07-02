@@ -218,7 +218,7 @@ void Node::setComment (std::string s) {
 }
 
 
-// since nexus writer uses this, using stricter nexus punctuation
+// this default function uses newick compliant labels. 
 std::string Node::getNewick (bool bl) {
     std::string ret;
     for (unsigned int i = 0; i < this->getChildCount(); i++) {
@@ -242,6 +242,37 @@ std::string Node::getNewick (bool bl) {
     }
     if (!name_.empty()) {
         // newick punct is a subset of Nexus, so labels will be safe
+        std::string compliantName = get_valid_newick_label(name_);
+        ret += compliantName;
+    }
+    return ret;
+}
+
+
+// same as above, except with Nexus-compliant labels
+std::string Node::getTreeStringNexus (bool bl) {
+    std::string ret;
+    for (unsigned int i = 0; i < this->getChildCount(); i++) {
+        if (i == 0) {
+            ret += "(";
+        }
+        ret += this->getChild(i)->getTreeStringNexus(bl);
+        if (bl) {
+            //std::ostringstream o;
+            ////20 is what you get from raxml
+            //o.setf(ios::fixed, std::ios::floatfield);
+            //o << std::setprecision(20) << this->getChild(i)->getBL();
+            //ret += ":" + o.str();
+            ret += ":" + double_to_str(this->getChild(i)->getBL());
+        }
+        if (i == this->getChildCount()-1) {
+            ret += ")";
+        } else {
+            ret += ",";
+        }
+    }
+    
+    if (!name_.empty()) {
         std::string compliantName = get_valid_nexus_label(name_);
         ret += compliantName;
     }

@@ -135,10 +135,10 @@ int main(int argc, char * argv[]) {
                 }
                 if (is_rooted(tree)) {
                     (*poos) << "tree tree" << treeCounter << " = [&R] "
-                            << getNewickString(tree) << std::endl;
+                            << getNexusString(tree) << std::endl;
                 } else {
                     (*poos) << "tree tree" << treeCounter << " = [&U] "
-                            << getNewickString(tree) << std::endl;
+                            << getNexusString(tree) << std::endl;
                 }
                 treeCounter++;
             }
@@ -157,10 +157,10 @@ int main(int argc, char * argv[]) {
                 }
                 if (is_rooted(tree)) {
                     (*poos) << "tree tree" << treeCounter << " = [&R] "
-                            << getNewickString(tree) << std::endl;
+                            << getNexusString(tree) << std::endl;
                 } else {
                     (*poos) << "tree tree" << treeCounter << " = [&U] "
-                            << getNewickString(tree) << std::endl;
+                            << getNexusString(tree) << std::endl;
                 }
                 treeCounter++;
             }

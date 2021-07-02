@@ -63,6 +63,7 @@ public:
     void setName (std::string s);
     void setComment (std::string s);
     std::string getNewick (bool bl);
+    std::string getTreeStringNexus (bool bl);
     std::string getNewick (bool bl, const std::string& obj);
     std::string getPaintedNewick (bool bl);
     Node * getParent () const;

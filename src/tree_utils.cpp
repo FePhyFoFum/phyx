@@ -739,6 +739,14 @@ std::string getNewickString (Tree * tree) {
 }
 
 
+// same as above, but use Nexus-compliant lanels
+std::string getNexusString (Tree * tree) {
+    bool bl = tree->hasEdgeLengths();
+    std::string phy = tree->getRoot()->getTreeStringNexus(bl) + ";";
+    return phy;
+}
+
+
 // same as above but with objects
 std::string getNewickString (Tree * tree, const std::string& obj) {
     bool bl = tree->hasEdgeLengths();

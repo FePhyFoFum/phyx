@@ -28,9 +28,10 @@ void print_help () {
     std::cout << "Label internal nodes with clade names." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN," << std::endl;
     std::cout << "and an MRCA file with format:" << std::endl;
-    std::cout << "MRCANAME = tip1 tip2 ..." << std::endl;
-    std::cout << "If no MRCA file is present, this will label anything" << std::endl;
-    std::cout << "that isn't labeled" << std::endl;
+    std::cout << "    MRCANAME = tip1 tip2 ..." << std::endl;
+    std::cout << "If no MRCA file is present, internal nodes will be labelled:" << std::endl;
+    std::cout << "    px1, px2, ..., pxn" << std::endl;
+    std::cout << "Output is written in newick format." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxmrcaname [OPTIONS]..." << std::endl;
     std::cout << std::endl;
@@ -118,8 +119,8 @@ int main(int argc, char * argv[]) {
     }
     
     if (!mrcaset) {
-        std::cerr << "Because no file was provided, all the internal nodes" << std::endl;
-        std::cerr << "will be labelled" << std::endl;
+        std::cerr << "Because no mrca file was provided, all the internal nodes will be labelled"
+                << std::endl;
     }
     
     std::istream * pios = nullptr;
