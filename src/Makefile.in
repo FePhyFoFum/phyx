@@ -351,17 +351,16 @@ RATE_DEPS += \
 #./mcmc.d \
 #./state_reconstructor_simple.d \
 
+main_%.o: ./main_%.cpp
+	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
-# Each subdirectory must supply rules for building sources it contributes
-%.o: ./%.cpp
+%.o: ./%.cpp ./%.h
 	$(CXX) $(OPT_FLAGS) $(CPPFLAGS) $(LDFLAGS) -c -fmessage-length=0 -MMD -MP -MF "$(@:%.o=%.d)" -o "$@" "$<"
 
 PROGS := pxaa2cdn pxbdsim pxboot pxbp pxcat pxclsq pxcltr pxcolt pxcomp pxconsq pxfqfilt pxlog pxlssq pxlstr pxmono pxmrca pxmrcacut pxmrcaname pxnw pxpoly pxrecode pxrevcomp pxrls pxrlt pxrmk pxrms pxrmt pxrr pxs2fa pxs2nex pxs2phy pxseqgen pxssort pxsstat pxsw pxt2new pxt2nex pxtcol pxtcomb pxtgen pxtlate pxtrt pxtscale pxvcf2fa $(NLOPT_PROGRAMS)
 
-
 # default all target
 all: $(PROGS)
-
 
 ## Sequence-oriented programs ##
 
