@@ -7,7 +7,7 @@ os:
 - linux
 
 # default is xenial
-dist: bionic
+dist: focal
 
 addons:
   apt:
