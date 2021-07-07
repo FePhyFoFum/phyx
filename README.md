@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/FePhyFoFum/phyx.svg?branch=master)](https://travis-ci.com/FePhyFoFum/phyx) [![Build-N-Test](https://github.com/FePhyFoFum/phyx/actions/workflows/build-test.yml/badge.svg)](https://github.com/FePhyFoFum/phyx/actions/workflows/build-test.yml)
+[![Build-N-Test](https://github.com/FePhyFoFum/phyx/actions/workflows/build-test.yml/badge.svg)](https://github.com/FePhyFoFum/phyx/actions/workflows/build-test.yml)
 
 <img src="logo.png" alt="phyx logo" width=208px/> 
 
