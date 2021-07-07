@@ -13,6 +13,11 @@ addons:
   apt:
     sources:
       - sourceline: "ppa:ubuntu-toolchain-r/test"
+    packages:
+      - gcc-9
+      - g++-9
+env:
+    - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
 
 compiler:
   - gcc
@@ -20,6 +25,7 @@ compiler:
 ### how to install these (and maybe cache for a faster build?)
 # some (many?) may already be available
 before_install:
+  - eval "${MATRIX_EVAL}"
   - sudo apt-get update
   - sudo apt-get install -y autotools-dev
   - sudo apt-get install -y autoconf
