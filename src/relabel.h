@@ -27,6 +27,7 @@ public:
     void relabel_tree (Tree * tr);
     void regex_relabel_tree (Tree * tr);
     bool relabel_sequence (Sequence& seq);
+    void regex_relabel_sequence (Sequence& seq);
     std::set<std::string> get_names_to_replace () const;
 };
 

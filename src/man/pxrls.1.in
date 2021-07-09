@@ -9,6 +9,7 @@ pxrls \- manual page for pxrls 1.3
 Taxon relabelling for alignments.
 This will take fasta, phylip, and nexus formats from a file or STDIN.
 Two ordered lists of taxa, \fB\-c\fR (current) and \fB\-n\fR (new) must be provided.
+Alternatively, a regex pattern (\fB\-p\fR) and replacement (\fB\-r\fR) text can be provided.
 Results are written in fasta format.
 .SH OPTIONS
 .TP
@@ -20,6 +21,10 @@ file containing current taxon labels (one per line)
 .TP
 \fB\-n\fR, \fB\-\-nnames\fR=\fI\,FILE\/\fR
 file containing new taxon labels (one per line)
+.HP
+\fB\-p\fR, \fB\-\-pattern\fR=\fI\,STRING\/\fR regex pattern to replace
+.HP
+\fB\-r\fR, \fB\-\-replace\fR=\fI\,STRING\/\fR replacement pattern
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 make the output more verbose

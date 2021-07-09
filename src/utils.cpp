@@ -874,6 +874,7 @@ std::vector<std::string> regex_search_labels (const std::vector<std::string>& na
 }
 
 
+// not currently used
 std::vector<std::string> regex_replace_labels (const std::vector<std::string>& names,
         const std::string& pattern, const std::string& replacetext) {
     std::vector<std::string> results;

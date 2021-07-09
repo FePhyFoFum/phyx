@@ -318,8 +318,18 @@ def test_program(name):
         cm = "./pxrevcomp -s TEST/test.fa"
         t = '>TaxonA\nTTAAAGGGACAGGGAAATTT\n>TaxonB\nGGTCTTGGGGCCCCTCGAGC\n>TaxonC\nTCATTTTTAAGGGGGAGCGT\n>TaxonD\nCCACCGGAGTTGAACAAGGA\n>TaxonE\nCCGGCGGGGGGGAATAGTAA\n'
     elif name == "pxrls":
+        res = True
+        print("name files ", end = '')
         cm = "./pxrls -s TEST/test.fa -c TEST/oldnames.txt -n TEST/newnames.txt"
         t = '>Cinclus_mexicanus\nAAATTTCCCTGTCCCTTTAA\n>Anodorhynchus_hyacinthinus\nGCTCGAGGGGCCCCAAGACC\n>Stellula_calliope\nACGCTCCCCCTTAAAAATGA\n>Anser_anser\nTCCTTGTTCAACTCCGGTGG\n>Gallus_gallus\nTTACTATTCCCCCCCGCCGG\n'
+        if not check_individual_results(cm, t):
+            res = False
+        print("regex ", end = '')
+        cm = "./pxrls -s TEST/test.fa -p Taxon -r species_"
+        t = '>species_A\nAAATTTCCCTGTCCCTTTAA\n>species_B\nGCTCGAGGGGCCCCAAGACC\n>species_C\nACGCTCCCCCTTAAAAATGA\n>species_D\nTCCTTGTTCAACTCCGGTGG\n>species_E\nTTACTATTCCCCCCCGCCGG\n'
+        if not check_individual_results(cm, t):
+            res = False
+        return res
     elif name == "pxrlt":
         res = True
         print("name files ", end = '')

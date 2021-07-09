@@ -157,6 +157,15 @@ bool Relabel::relabel_sequence (Sequence& seq) {
 }
 
 
+void Relabel::regex_relabel_sequence (Sequence& seq) {
+    std::string str = seq.get_id();
+    std::string res = std::regex_replace(str, regex_pattern_, regex_replace_);
+    if (str != res) {
+        seq.set_id(res);
+    }
+}
+
+
 std::set<std::string> Relabel::get_names_to_replace () const {
     std::set<std::string> orig(old_names_.begin(), old_names_.end());
     return orig;

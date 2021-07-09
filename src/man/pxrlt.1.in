@@ -8,6 +8,7 @@ pxrlt \- manual page for pxrlt 1.3
 .SH DESCRIPTION
 Taxon relabelling for trees.
 Two ordered lists of taxa, \fB\-c\fR (current) and \fB\-n\fR (new) must be provided.
+Alternatively, a regex pattern (\fB\-p\fR) and replacement (\fB\-r\fR) text can be provided.
 This will take a newick\- or nexus\-formatted tree from a file or STDIN.
 Output is written in newick format.
 .SH OPTIONS
@@ -20,6 +21,10 @@ file containing current taxon labels (one per line)
 .TP
 \fB\-n\fR, \fB\-\-nnames\fR=\fI\,FILE\/\fR
 file containing new taxon labels (one per line)
+.HP
+\fB\-p\fR, \fB\-\-pattern\fR=\fI\,STRING\/\fR regex pattern to replace
+.HP
+\fB\-r\fR, \fB\-\-replace\fR=\fI\,STRING\/\fR replacement pattern
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 make the output more verbose
