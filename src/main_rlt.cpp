@@ -26,14 +26,16 @@ void print_help () {
     std::cout << "Usage: pxrlt [OPTIONS]..." << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -t, --treef=FILE    input tree file, STDIN otherwise" << std::endl;
-    std::cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << std::endl;
-    std::cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << std::endl;
-    std::cout << " -v, --verbose       make the output more verbose" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
-    std::cout << " -h, --help          display this help and exit" << std::endl;
-    std::cout << " -V, --version       display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -t, --treef=FILE     input tree file, STDIN otherwise" << std::endl;
+    std::cout << " -c, --cnames=FILE    file containing current taxon labels (one per line)" << std::endl;
+    std::cout << " -n, --nnames=FILE    file containing new taxon labels (one per line)" << std::endl;
+    std::cout << " -p, --pattern=STRING regex pattern to replace" << std::endl;
+    std::cout << " -r, --replace=STRING replacement pattern" << std::endl;
+    std::cout << " -v, --verbose        make the output more verbose" << std::endl;
+    std::cout << " -o, --outf=FILE      output file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
@@ -52,6 +54,8 @@ static struct option const long_options[] =
     {"treef", required_argument, nullptr, 't'},
     {"cnames", required_argument, nullptr, 'c'},
     {"nnames", required_argument, nullptr, 'n'},
+    {"pattern", required_argument, nullptr, 'p'},
+    {"replace", required_argument, nullptr, 'r'},
     {"outf", required_argument, nullptr, 'o'},
     {"verbose", no_argument, nullptr, 'v'},
     {"help", no_argument, nullptr, 'h'},
@@ -69,6 +73,9 @@ int main(int argc, char * argv[]) {
     bool cfileset = false;
     bool nfileset = false;
     bool verbose = false;
+    bool regex = false;
+    std::string regex_pattern;
+    std::string replacement_text;
     char * outf = nullptr;
     char * treef = nullptr;
     std::string cnamef;
@@ -76,7 +83,7 @@ int main(int argc, char * argv[]) {
     
     while (true) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "t:c:n:o:vhVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "t:c:n:p:r:o:vhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -95,6 +102,14 @@ int main(int argc, char * argv[]) {
                 nfileset = true;
                 nnamef = strdup(optarg);
                 check_file_exists(nnamef);
+                break;
+            case 'p':
+                regex = true;
+                regex_pattern = strdup(optarg);
+                break;
+            case 'r':
+                regex = true;
+                replacement_text = strdup(optarg);
                 break;
             case 'o':
                 outfileset = true;
@@ -127,11 +142,6 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = nullptr;
     std::ofstream * ofstr = nullptr;
     
-    if (!nfileset || !cfileset) {
-        std::cerr << "Error: must supply both name files (-c for current, -n for new). Exiting." << std::endl;
-        exit(0);
-    }
-    
     if (tfileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
@@ -149,35 +159,80 @@ int main(int argc, char * argv[]) {
         poos = &std::cout;
     }
     
-    Relabel rl (cnamef, nnamef, verbose);
-    
-    std::string retstring;
-    int ft = test_tree_filetype_stream(*pios, retstring);
-    if (ft != 0 && ft != 1) {
-        std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
-        exit(0);
-    }
-    bool going = true;
-    if (ft == 1) {
-        while (going) {
-            Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
-            if (going) {
-                rl.relabel_tree(tree);
-                (*poos) << getNewickString(tree) << std::endl;
-                delete tree;
+    if (!regex) {
+        if (!nfileset || !cfileset) {
+            std::cerr << "Error: must supply both name files (-c for current, -n for new). Exiting." << std::endl;
+            exit(0);
+        }
+        
+        Relabel rl (cnamef, nnamef, verbose);
+
+        std::string retstring;
+        int ft = test_tree_filetype_stream(*pios, retstring);
+        if (ft != 0 && ft != 1) {
+            std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
+            exit(0);
+        }
+        bool going = true;
+        if (ft == 1) {
+            while (going) {
+                Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going) {
+                    rl.relabel_tree(tree);
+                    (*poos) << getNewickString(tree) << std::endl;
+                    delete tree;
+                }
+            }
+        } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+            std::map<std::string, std::string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+            while (going) {
+                Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (tree != nullptr) {
+                    rl.relabel_tree(tree);
+                    (*poos) << getNewickString(tree) << std::endl;
+                    delete tree;
+                }
             }
         }
-    } else if (ft == 0) { // Nexus. need to worry about possible translation tables
-        std::map<std::string, std::string> translation_table;
-        bool ttexists;
-        ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
-        while (going) {
-            Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
-                &translation_table, &going);
-            if (tree != nullptr) {
-                rl.relabel_tree(tree);
-                (*poos) << getNewickString(tree) << std::endl;
-                delete tree;
+    } else {
+        if (replacement_text.empty() || regex_pattern.empty()) {
+            std::cerr << "Error: must supply both pattern to match and replacement text. Exiting." << std::endl;
+            exit(0);
+        }
+        
+        Relabel rl (regex_pattern, replacement_text);
+        
+        std::string retstring;
+        int ft = test_tree_filetype_stream(*pios, retstring);
+        if (ft != 0 && ft != 1) {
+            std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
+            exit(0);
+        }
+        bool going = true;
+        if (ft == 1) {
+            while (going) {
+                Tree * tree = read_next_tree_from_stream_newick(*pios, retstring, &going);
+                if (going) {
+                    rl.regex_relabel_tree(tree);
+                    (*poos) << getNewickString(tree) << std::endl;
+                    delete tree;
+                }
+            }
+        } else if (ft == 0) { // Nexus. need to worry about possible translation tables
+            std::map<std::string, std::string> translation_table;
+            bool ttexists;
+            ttexists = get_nexus_translation_table(*pios, &translation_table, &retstring);
+            while (going) {
+                Tree * tree = read_next_tree_from_stream_nexus(*pios, retstring, ttexists,
+                    &translation_table, &going);
+                if (tree != nullptr) {
+                    rl.regex_relabel_tree(tree);
+                    (*poos) << getNewickString(tree) << std::endl;
+                    delete tree;
+                }
             }
         }
     }

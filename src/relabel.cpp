@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <regex>
 
 #include "relabel.h"
 #include "tree.h"
@@ -10,10 +11,27 @@
 
 Relabel::Relabel (const std::string& cnamesf, const std::string& nnamesf,
         const bool& verbose):num_taxa_(0) {
-    store_name_lists (cnamesf, nnamesf);
+    store_name_lists(cnamesf, nnamesf);
     verbose_ = verbose;
 }
 
+
+Relabel::Relabel (std::string& regex_pattern, std::string& regex_replace) {
+    regex_pattern_ = regex_pattern;
+    regex_replace_ = regex_replace;
+    verbose_ = false;
+}
+
+
+void Relabel::regex_relabel_tree (Tree * tr) {
+    for (unsigned int i = 0; i < tr->getExternalNodeCount(); i++) {
+        std::string str = tr->getExternalNode(i)->getName();
+        std::string res = std::regex_replace(str, regex_pattern_, regex_replace_);
+        if (str != res) {
+            tr->getExternalNode(i)->setName(res);
+        }
+    }
+}
 
 void Relabel::store_name_lists (const std::string& cnamesf,
         const std::string& nnamesf) {

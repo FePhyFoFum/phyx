@@ -13,6 +13,7 @@
 #include <chrono>
 #include <poll.h>
 #include <unistd.h>
+#include <regex>
 
 #include "utils.h"
 #include "superdouble.h"
@@ -868,6 +869,18 @@ std::vector<std::string> regex_search_labels (const std::vector<std::string>& na
         if (std::regex_search(name, regexp)) {
             results.push_back(name);
         }
+    }
+    return results;
+}
+
+
+std::vector<std::string> regex_replace_labels (const std::vector<std::string>& names,
+        const std::string& pattern, const std::string& replacetext) {
+    std::vector<std::string> results;
+    const std::regex regexp(pattern);
+    for (const auto & name : names) {
+        std::string res = std::regex_replace(name, regexp, replacetext);
+        //std::cout << name << ": " << std::regex_search(name, regexp) << std::endl;
     }
     return results;
 }

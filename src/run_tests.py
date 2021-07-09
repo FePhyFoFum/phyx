@@ -321,8 +321,18 @@ def test_program(name):
         cm = "./pxrls -s TEST/test.fa -c TEST/oldnames.txt -n TEST/newnames.txt"
         t = '>Cinclus_mexicanus\nAAATTTCCCTGTCCCTTTAA\n>Anodorhynchus_hyacinthinus\nGCTCGAGGGGCCCCAAGACC\n>Stellula_calliope\nACGCTCCCCCTTAAAAATGA\n>Anser_anser\nTCCTTGTTCAACTCCGGTGG\n>Gallus_gallus\nTTACTATTCCCCCCCGCCGG\n'
     elif name == "pxrlt":
+        res = True
+        print("name files ", end = '')
         cm = "./pxrlt -t TEST/kingdoms.tre -c TEST/kingdoms.oldnames.txt -n TEST/kingdoms.newnames.txt"
         t = '(Eubacteria:4200,(Archaea:3806.0102499999998145,((((SAR:1626.0427319999998872,Plant:1626.0276670000000649):72.3801839999999999,Excavata:1698.4229159999999865):74.7312199999999933,Amoebozoa:1773.1541360000001077):7.9375349999999996,(Animal:1295.717544000000089,Fungi:1295.7033610000000863):485.3800600000000145):2024.9200000000000728):394);\n'
+        if not check_individual_results(cm, t):
+            res = False
+        print("regex ", end = '')
+        cm = "./pxrlt -t TEST/test.tre -p Taxon -r species_"
+        t = '(((species_A:0.1,species_B:0.03):0.125,species_C:0.25):0.4,(species_D:0.23,species_E:0.16):0.3);\n'
+        if not check_individual_results(cm, t):
+            res = False
+        return res
     elif name == "pxrmk":
         cm = "./pxrmk -t TEST/knuckle_tree.tre"
         t = '(((((s4:0.1190332191,s5:0.1190332191)C:0.02544171746,s6:0.1444749366)D:0.7647640019,s7:0.9092389385)E:0.76874935,(s3:1.2572336289999999,(s1:0.3603553431,s2:0.3603553431)A:1.1968782862)B:0.5207546592)F:0.06349158892,((s8:0.3106889265,s9:0.3106889265)G:0.1031508249,s10:0.4138397514)H:1.3276401259999999);\n'

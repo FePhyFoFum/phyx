@@ -7,7 +7,6 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include <regex>
 
 #include "superdouble.h"
 
@@ -189,5 +188,7 @@ std::vector<std::string> peek_lines (std::istream& pios, const int& n);
 
 std::vector<std::string> regex_search_labels (const std::vector<std::string>& names,
         const std::string& pattern);
+std::vector<std::string> regex_replace_labels (const std::vector<std::string>& names,
+        const std::string& pattern, const std::string& replacetext);
 
 #endif /* PX_UTILS_H */

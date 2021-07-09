@@ -132,33 +132,33 @@ std::string SequenceRecoder::get_recoded_seq (const std::string& origseq) {
 
 void SequenceRecoder::recode_seq (std::string& s) {
     if (R_) {
-        s = std::regex_replace (s, r_, "R");
+        s = std::regex_replace(s, r_, "R");
     }
     if (Y_) {
-        s = std::regex_replace (s, y_, "Y");
+        s = std::regex_replace(s, y_, "Y");
     }
     if (S_) {
-        s = std::regex_replace (s, s_, "S");
+        s = std::regex_replace(s, s_, "S");
     }
     if (W_) {
-        s = std::regex_replace (s, w_, "W");
+        s = std::regex_replace(s, w_, "W");
     }
     if (M_) {
-        s = std::regex_replace (s, m_, "M");
+        s = std::regex_replace(s, m_, "M");
     }
     if (K_) {
-        s = std::regex_replace (s, k_, "K");
+        s = std::regex_replace(s, k_, "K");
     }
     if (B_) {
-        s = std::regex_replace (s, b_, "B");
+        s = std::regex_replace(s, b_, "B");
     }
     if (D_) {
-        s = std::regex_replace (s, d_, "D");
+        s = std::regex_replace(s, d_, "D");
     }
     if (H_) {
-        s = std::regex_replace (s, h_, "H");
+        s = std::regex_replace(s, h_, "H");
     }
     if (V_) {
-        s = std::regex_replace (s, v_, "V");
+        s = std::regex_replace(s, v_, "V");
     }
 }
