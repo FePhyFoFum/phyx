@@ -688,14 +688,15 @@ std::vector<std::string> get_names_in_tree_regex (Tree * tr,
 }
 
 
-// returns a sorted vector of all terminal labels
+// returns a *sorted* vector of all terminal labels
+// removing the sorted business, since we may want the ordering in some other aspect
 std::vector<std::string> get_tip_labels (Tree * tr) {
     unsigned int nc = tr->getExternalNodeCount();
     std::vector<std::string> labels(static_cast<size_t>(nc), "");
     for (unsigned int i = 0; i < nc; i++) {
         labels[static_cast<size_t>(i)] = tr->getExternalNode(i)->getName();
     }
-    sort(labels.begin(), labels.end());
+    //sort(labels.begin(), labels.end());
     return labels;
 }
 

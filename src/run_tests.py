@@ -267,6 +267,11 @@ def test_program(name):
         t = 'tree #: 0\nrooted: true\nbinary: true\nnterminal: 29\nninternal: 28\nbranch lengths: true\nrttipvar: 8.9928e-07\ntreelength: 0.13572\nultrametric: false\nrootheight: NA\n'
         if not check_individual_results(cm, t):
             res = False
+        print("terminal labels ", end = '')
+        cm = "./pxlstr -t TEST/binary_test.tre -i"
+        t = 'TaxonX\nTaxonC\nTaxonA1\nTaxonA2\nTaxonA3\nTaxonB\nTaxonW\nTaxonD\nTaxonE\nTaxonX\nTaxonW\nTaxonD\nTaxonE\n'
+        if not check_individual_results(cm, t):
+            res = False
         print_success(res)
         return res
     elif name == "pxmono":
