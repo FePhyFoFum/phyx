@@ -199,6 +199,7 @@ int main(int argc, char * argv[]) {
             }
         }
     } else {
+        // regex
         if (replacement_text.empty() || regex_pattern.empty()) {
             std::cerr << "Error: must supply both pattern to match and replacement text. Exiting." << std::endl;
             exit(0);
