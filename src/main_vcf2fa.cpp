@@ -16,6 +16,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Convert vcf file to fasta." << std::endl;
     std::cout << "Currently only handles haploid data; phased data will come soon." << std::endl;
     std::cout << "Data can be read from a file or STDIN." << std::endl;

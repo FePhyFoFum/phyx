@@ -16,6 +16,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Generate a codon alignment from aligned amino acids and unaligned nucleotides." << std::endl;
     std::cout << "Taxa found in only 1 input file will be removed." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs." << std::endl;

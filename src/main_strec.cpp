@@ -26,6 +26,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "This will conduct state reconstruction analyses." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxstrec [OPTIONS]... FILES" << std::endl;

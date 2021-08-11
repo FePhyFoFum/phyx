@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Taxon relabelling for alignments." << std::endl;
     std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
@@ -27,16 +28,16 @@ void print_help () {
     std::cout << "Usage: pxrls [OPTIONS]... FILES" << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << " -s, --seqf=FILE     input seq file, STDIN otherwise" << std::endl;
-    std::cout << " -c, --cnames=FILE   file containing current taxon labels (one per line)" << std::endl;
-    std::cout << " -n, --nnames=FILE   file containing new taxon labels (one per line)" << std::endl;
+    std::cout << " -s, --seqf=FILE      input seq file, STDIN otherwise" << std::endl;
+    std::cout << " -c, --cnames=FILE    file containing current taxon labels (one per line)" << std::endl;
+    std::cout << " -n, --nnames=FILE    file containing new taxon labels (one per line)" << std::endl;
     std::cout << " -p, --pattern=STRING regex pattern to replace" << std::endl;
     std::cout << " -r, --replace=STRING replacement pattern" << std::endl;
-    std::cout << " -v, --verbose       make the output more verbose" << std::endl;
-    std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
-    std::cout << " -h, --help          display this help and exit" << std::endl;
-    std::cout << " -V, --version       display version and exit" << std::endl;
-    std::cout << " -C, --citation      display phyx citation and exit" << std::endl;
+    std::cout << " -v, --verbose        make the output more verbose" << std::endl;
+    std::cout << " -o, --outf=FILE      output file, STOUT otherwise" << std::endl;
+    std::cout << " -h, --help           display this help and exit" << std::endl;
+    std::cout << " -V, --version        display version and exit" << std::endl;
+    std::cout << " -C, --citation       display phyx citation and exit" << std::endl;
     std::cout << std::endl;
     std::cout << "Report bugs to: <https://github.com/FePhyFoFum/phyx/issues>" << std::endl;
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;

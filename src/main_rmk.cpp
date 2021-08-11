@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Remove two-degree internal nodes ('knuckles') from a tree." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN." << std::endl;
     std::cout << "Output is written in newick format." << std::endl;

@@ -17,6 +17,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Sequence file concatenation." << std::endl;
     std::cout << "Can use wildcards e.g.:" << std::endl;
     std::cout << "  pxcat -s *.phy -o my_cat_file.fa" << std::endl;

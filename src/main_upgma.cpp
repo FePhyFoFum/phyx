@@ -16,6 +16,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Bare bones UPGMA tree generator" << std::endl;
     std::cout << "Currently only uses uncorrected p-distances." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;

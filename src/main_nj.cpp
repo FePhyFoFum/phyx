@@ -25,6 +25,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Basic neighbour-joining tree maker." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus inputs from a file or STDIN." << std::endl;
     std::cout << std::endl;

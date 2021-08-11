@@ -26,6 +26,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Combine a set of trees from one file into a tree from another." << std::endl;
     std::cout << "Pass in 2 trees with `t` and `a`." << std::endl;
     std::cout << std::endl;

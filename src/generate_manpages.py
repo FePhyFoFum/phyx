@@ -58,7 +58,7 @@ if __name__ == "__main__":
        
     n = 0
     print ("=================")
-    for i in os.listdir("."):
+    for i in sorted(os.listdir(".")):
         if i[:2] == "px":
             make_manpage(i)
             print ("=================")

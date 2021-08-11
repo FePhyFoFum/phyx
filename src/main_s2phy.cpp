@@ -17,6 +17,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Convert seqfiles from nexus, phylip, or fastq to phylip." << std::endl;
     std::cout << "Can read from STDIN or file." << std::endl;
     std::cout << std::endl;

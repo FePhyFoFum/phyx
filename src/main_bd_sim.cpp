@@ -20,6 +20,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Birth-death tree simulator." << std::endl;
     std::cout << std::endl;
     std::cout << "Usage: pxbdsim [OPTIONS]..." << std::endl;

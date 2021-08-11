@@ -23,6 +23,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Conduct Smith-Waterman analysis for all the seqs in a file." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Output is a list of the scores and distances (and the alignments if asked)." << std::endl;

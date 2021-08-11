@@ -16,6 +16,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "MCMC log file manipulator." << std::endl;
     std::cout << "Can combine and resample parameters or trees across files." << std::endl;
     std::cout << "Log files need not contain the same number of samples." << std::endl;

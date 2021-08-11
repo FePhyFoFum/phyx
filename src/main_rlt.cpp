@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Taxon relabelling for trees." << std::endl;
     std::cout << "Two ordered lists of taxa, -c (current) and -n (new) must be provided." << std::endl;
     std::cout << "Alternatively, a regex pattern (-p) and replacement (-r) text can be provided." << std::endl;

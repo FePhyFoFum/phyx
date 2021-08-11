@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Print sequence file summary." << std::endl;
     std::cout << "By default returns all properties. Alternatively choose 1 property." << std::endl;
     std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;

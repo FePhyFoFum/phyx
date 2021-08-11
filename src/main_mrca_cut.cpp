@@ -20,6 +20,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Extract subclade(s) from tree(s)." << std::endl;
     std::cout << "This will take a newick- or nexus-formatted tree from a file or STDIN," << std::endl;
     std::cout << "and an MRCA file with format:" << std::endl;

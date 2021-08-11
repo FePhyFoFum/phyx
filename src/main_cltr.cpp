@@ -20,6 +20,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "General tree cleaner." << std::endl;
     std::cout << "Removes annotations (node labels), 'knuckles' (2-degree nodes), and" << std::endl;
     std::cout << "root edges to generate a 'vanilla' newick representation." << std::endl;

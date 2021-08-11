@@ -22,6 +22,7 @@ std::string get_version_line ();
 bool reverse_it_or_not (std::vector<Sequence>& seqs, Sequence comp_seq);
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Reverse complement sequences." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;

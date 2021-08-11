@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Randomly sample polytomies to generate a binary tree." << std::endl;
     std::cout << "Currently only works with rooted trees (checked)" << std::endl;
     std::cout << "Output is written in newick format." << std::endl;

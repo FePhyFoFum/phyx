@@ -16,6 +16,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Sequence compositional homogeneity test." << std::endl;
     std::cout << "Chi-square test for equivalent character state counts across lineages." << std::endl;
     std::cout << "This will take fasta, phylip, and nexus formats from a file or STDIN." << std::endl;

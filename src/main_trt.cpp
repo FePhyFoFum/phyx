@@ -19,6 +19,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "This will trace a big tree given a taxon list and and produce newick." << std::endl;
     std::cout << "Data can be read from a file or STDIN." << std::endl;
     std::cout << std::endl;

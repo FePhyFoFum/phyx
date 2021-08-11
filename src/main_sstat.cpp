@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Calculates multinomial alignment test statistics." << std::endl;
     std::cout << "Currently only calculates the test statistic from Bollback (2002) MBE." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;

@@ -18,6 +18,7 @@ void print_help ();
 std::string get_version_line ();
 
 void print_help () {
+    std::cout << std::endl;
     std::cout << "Add information to a tree so that you can color the edges." << std::endl;
     std::cout << "This will take nexus and newick inputs from a file or STDIN." << std::endl;
     std::cout << "Results are written in nexus format so that it can be read by figtree." << std::endl;
