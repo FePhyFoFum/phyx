@@ -61,8 +61,9 @@ pxrr | rerooting and unrooting trees
 pxs2fa | convert an alignment to fasta format
 pxs2nex | convert an alignment to nexus format
 pxs2phy | convert an alignment to phylip format
-pxseqgen | Sequence simulation program
+pxseqgen | sequence simulation program
 pxssort | sequence sorter
+pxssplit | split alignment into N individual sequence files
 pxsstat | multinomial alignment test statistics
 pxstrec | a state reconstructor
 pxsw | smith waterman alignment

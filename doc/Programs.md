@@ -294,6 +294,13 @@ Sort sequences by id (`-b 1`; default), reverse id (`-b 2`), length (`-b 3`), or
 pxssort -s alignment_file -b 3
 ```
 
+* **pxssplit**: alignment splitter
+
+From an alignment file containing N sequences, write N alignments, each containing a single sequence.
+```
+pxssplit -s alignment_file
+```
+
 * **pxsstat**: multinomial alignment test statistics
 
 This program calculates multinomial alignment test statistics that can be used for assessing model adequacy. Currently limited to the test statistic of Bollback (2002) MBE, but more are coming.
@@ -386,6 +393,7 @@ pxvcf2fa -s vcf_file
 * **pxtrsq**: tree-seq; remove from tree and alignment taxa not found in both (JWB)
 * **pxgbdb**: a basic genbank database creator
 * **pxtdist**: tree distance calculator (JWB)
+* **pxuncat**: an alignment decomposer (opposite of pxcat) (JWB)
 
 # Programs in planning
 * **pxcoal**: gene trees in species trees; simulation and probabilities. (JWB)
