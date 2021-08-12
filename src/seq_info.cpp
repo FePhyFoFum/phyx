@@ -186,8 +186,10 @@ void SeqInfo::return_freq_table () {
     if (output_indiv_) {
         // need to take into account longest_tax_label_
         longest_tax_label_ = get_longest_label(taxon_labels_);
-        std::string pad = std::string(longest_tax_label_, ' ');
         // header
+        (*poos_) << "taxon";
+        std::string pad = std::string(longest_tax_label_ - 5, ' ');
+        
         (*poos_) << pad << " ";
         for (char seq_char : seq_chars_) {
             (*poos_) << std::right << std::setw(colWidth) << seq_char << " ";

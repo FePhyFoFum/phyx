@@ -209,8 +209,7 @@ def test_program(name):
             res = False
         print("indidivual stats ", end = '')
         cm = "./pxlssq -s TEST/test.fa -i"
-        # same here
-        t = 'A            C            G            T            -            ?        Nchar\nTaxonA         0.25          0.3         0.05          0.4            0            0           20\nTaxonB          0.2          0.4         0.35         0.05            0            0           20\nTaxonC         0.35         0.35          0.1          0.2            0            0           20\nTaxonD          0.1          0.3         0.25         0.35            0            0           20\nTaxonE          0.1          0.5         0.15         0.25            0            0           20\n'
+        t = 'taxon             A            C            G            T            -            ?        Nchar\nTaxonA         0.25          0.3         0.05          0.4            0            0           20\nTaxonB          0.2          0.4         0.35         0.05            0            0           20\nTaxonC         0.35         0.35          0.1          0.2            0            0           20\nTaxonD          0.1          0.3         0.25         0.35            0            0           20\nTaxonE          0.1          0.5         0.15         0.25            0            0           20\n'
         if not check_individual_results(cm, t):
             res = False
         print("binary data ", end = '')
