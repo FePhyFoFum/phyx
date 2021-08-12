@@ -227,6 +227,10 @@ RELABEL_SEQ_SRC = relabel.cpp main_rls.cpp
 RELABEL_SEQ_OBJ = relabel.o main_rls.o
 RELABEL_SEQ_DEP = relabel.d main_rls.d
 
+SEQ_SPLIT_SRC = main_ssplit.cpp
+SEQ_SPLIT_OBJ = main_ssplit.o
+SEQ_SPLIT_DEP = main_ssplit.d
+
 RESCALE_TREE_SRC = tscale.cpp main_tscale.cpp
 RESCALE_TREE_OBJ = tscale.o main_tscale.o
 RESCALE_TREE_DEP = tscale.d main_tscale.d
@@ -462,6 +466,11 @@ pxcomp: $(CPP_OBJS) $(SEQ_OBJS) $(COMPTEST_OBJ)
 pxvcf2fa: $(CPP_OBJS) $(SEQ_OBJS) $(VCF2FA_OBJ)
 	@echo 'building pxvcf2fa'
 	$(CXX) $(CXXFLAGS) -o "pxvcf2fa" $(OPT_FLAGS) $(VCF2FA_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
+	cat man/$@.1.in > man/$@.1
+
+pxssplit: $(CPP_OBJS) $(SEQ_OBJS) $(SEQ_SPLIT_OBJ)
+	@echo 'building pxssplit'
+	$(CXX) $(CXXFLAGS) -o "pxssplit" $(OPT_FLAGS) $(SEQ_SPLIT_OBJ) $(CPP_OBJS) $(SEQ_OBJS)
 	cat man/$@.1.in > man/$@.1
 
 

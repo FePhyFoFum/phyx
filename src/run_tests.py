@@ -581,7 +581,7 @@ def test_program(name):
 
 # this are skipped in the testing because they are preliminary, tests will
 # be added as they become more permanent.
-notest = ["pxnni"]
+notest = ["pxnni", "pxssplit"]
 # (for now) ignore tests that fail due to random numbers
 ignore = ["pxbdsim", "pxboot", "pxpoly"]
     
@@ -606,6 +606,7 @@ if __name__ == "__main__":
             if i in notest:
                 print(bcolors.WARNING + "skipping " + i + bcolors.ENDC)
                 skipped += 1
+                print("=================")
                 continue
             t = test_program(i)
             if t == True:
