@@ -138,6 +138,28 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(treef, outf);
     }
     
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
+    
+    if (fileset) {
+        fstr = new std::ifstream(treef);
+        pios = fstr;
+    } else {
+        pios = &std::cin;
+        if (!check_for_input_to_stream()) {
+            print_help();
+            exit(1);
+        }
+    }
+    if (outfileset) {
+        ofstr = new std::ofstream(outf);
+        poos = ofstr;
+    } else {
+        poos = &std::cout;
+    }
+    
     if (namesset) {
         std::vector<std::string> tokens2;
         std::string del2(",");
@@ -161,28 +183,6 @@ int main(int argc, char * argv[]) {
                 << std::endl;
         std::cerr << "Exiting." << std::endl;
         exit(0);
-    }
-
-    std::istream * pios = nullptr;
-    std::ostream * poos = nullptr;
-    std::ifstream * fstr = nullptr;
-    std::ofstream * ofstr = nullptr;
-    
-    if (fileset) {
-        fstr = new std::ifstream(treef);
-        pios = fstr;
-    } else {
-        pios = &std::cin;
-        if (!check_for_input_to_stream()) {
-            print_help();
-            exit(1);
-        }
-    }
-    if (outfileset) {
-        ofstr = new std::ofstream(outf);
-        poos = ofstr;
-    } else {
-        poos = &std::cout;
     }
     
     //read trees 
