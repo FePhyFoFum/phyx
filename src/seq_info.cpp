@@ -156,8 +156,8 @@ void SeqInfo::read_in_alignment () {
     if (file_ntax != 0) {
         if (file_ntax != static_cast<int>(seqs_.size())) {
             std::cerr << "Error: number of taxa declared in the file ("
-                << ") does not match the number read (" << seqs_.size()
-                << "). Exiting." << std::endl;
+                << file_ntax << ") does not match the number read ("
+                << seqs_.size() << "). Exiting." << std::endl;
             exit(1);
         }
     }
