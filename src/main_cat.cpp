@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstring>
 #include <getopt.h>
+#include <unistd.h>
 
 #include "sequence.h"
 #include "seq_reader.h"
@@ -140,8 +141,9 @@ int main(int argc, char * argv[]) {
     }
     
     if (!fileset) {
-        std::cerr << "Error: must specify 1 or more files to concatenate. Exiting." << std::endl;
-        exit(0);
+        sleep(1);
+        print_help();
+        exit(1);
     }
     if (!listf.empty()) {
         std::string line;
