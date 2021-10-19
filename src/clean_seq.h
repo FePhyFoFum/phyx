@@ -18,6 +18,7 @@ private:
     bool by_codon_;
     bool count_only_;
     bool verbose_;
+    bool remove_empty_;
     
     std::string badChars_;
     std::string alpha_name_;
@@ -39,7 +40,7 @@ private:
     void set_bad_chars ();
 
 public:
-    SequenceCleaner (std::istream* pios, double& prop_required,
+    SequenceCleaner (std::istream* pios, double& prop_required, const bool& remove_empty,
         const bool& by_taxon, const bool& by_codon, const bool& count_only,
         const bool& verbose);
     std::vector<Sequence> get_cleaned_seqs () const; // not used, but available

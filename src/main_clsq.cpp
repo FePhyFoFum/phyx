@@ -13,6 +13,7 @@
 
 
 // TODO: throw out stop_codons: "TAG", "TAA", "TGA"
+// TODO: read in partition file, edit and write out
 
 void print_help ();
 std::string get_version_line ();
@@ -28,6 +29,7 @@ void print_help () {
     std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
     std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
+    std::cout << " -e, --empty         remove columns that are completely empty (- or ?)" << std::endl;
     std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
     std::cout << " -c, --codon         examine sequences by codon rather than site" << std::endl;
     std::cout << "                       - requires all sequences be in frame and of correct length" << std::endl;
@@ -57,6 +59,7 @@ static struct option const long_options[] =
     {"seqf", required_argument, nullptr, 's'},
     {"outf", required_argument, nullptr, 'o'},
     {"prop", required_argument, nullptr, 'p'},
+    {"empty", no_argument, nullptr, 'e'},
     {"taxa", required_argument, nullptr, 't'},
     {"codon", required_argument, nullptr, 'c'},
     {"info", required_argument, nullptr, 'i'},
@@ -80,10 +83,11 @@ int main(int argc, char * argv[]) {
     bool by_taxon = false;
     bool by_codon = false;
     bool count_only = false;
+    bool remove_empty = false;
 
     while (true) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "s:o:p:atcivhVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "s:o:p:eatcivhVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -104,6 +108,9 @@ int main(int argc, char * argv[]) {
                             << std::endl;
                     exit(0);
                 }
+                break;
+            case 'e':
+                remove_empty = true;
                 break;
             case 't':
                 by_taxon = true;
@@ -158,7 +165,7 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    SequenceCleaner SC(pios, prop_required, by_taxon, by_codon, count_only, verbose);
+    SequenceCleaner SC(pios, prop_required, remove_empty, by_taxon, by_codon, count_only, verbose);
     
     // write sequences. currently only fasta format.
     if (!count_only) {

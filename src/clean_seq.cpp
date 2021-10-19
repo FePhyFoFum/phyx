@@ -11,10 +11,11 @@
 
 
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
-        const bool& by_taxon, const bool& by_codon, const bool& count_only,
-        const bool& verbose):num_taxa_(0u), num_char_(0u), num_retained_(0u),
-        missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon),
-        by_codon_(by_codon), count_only_(count_only), verbose_(verbose) {
+        const bool& remove_empty, const bool& by_taxon, const bool& by_codon,
+        const bool& count_only, const bool& verbose):num_taxa_(0u), num_char_(0u),
+        num_retained_(0u), missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon),
+        by_codon_(by_codon), count_only_(count_only), verbose_(verbose),
+        remove_empty_(remove_empty) {
     read_in_sequences(pios);
     count_missing();
     if (!count_only_) {
@@ -245,12 +246,18 @@ void SequenceCleaner::count_missing () {
     
     // get proportions
     for (unsigned int i = 0; i < num_char_; i++) {
-        missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i])
+        if (!remove_empty_) {
+            missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i])
                 / static_cast<double>(num_taxa_);
-        //std::cout << i << ". missing = " << missing_per_site_counts_[i] << "("
-        //        << missing_per_site_proportion_[i] << ")" << std::endl;
-        if (missing_per_site_proportion_[i] <= missing_allowed_) {
-            retained_sites_.push_back(i);
+            //std::cout << i << ". missing = " << missing_per_site_counts_[i] << "("
+            //        << missing_per_site_proportion_[i] << ")" << std::endl;
+            if (missing_per_site_proportion_[i] <= missing_allowed_) {
+                retained_sites_.push_back(i);
+            }
+        } else {
+            if (missing_per_site_counts_[i] != static_cast<int>(num_taxa_)) {
+                retained_sites_.push_back(i);
+            }
         }
     }
     
