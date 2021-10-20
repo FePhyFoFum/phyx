@@ -11,12 +11,22 @@
 
 
 SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
-        const bool& remove_empty, const bool& by_taxon, const bool& by_codon,
-        const bool& count_only, const bool& verbose):num_taxa_(0u), num_char_(0u),
-        num_retained_(0u), missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon),
-        by_codon_(by_codon), count_only_(count_only), verbose_(verbose),
-        remove_empty_(remove_empty) {
+        const bool& remove_empty, const int& min_chars, const bool& by_taxon,
+        const bool& by_codon, const bool& count_only, const bool& verbose):num_taxa_(0u),
+        num_char_(0u), num_retained_(0u), min_chars_per_site_(min_chars),
+        missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), by_codon_(by_codon),
+        count_only_(count_only), verbose_(verbose), remove_empty_(remove_empty) {
     read_in_sequences(pios);
+    if (min_chars_per_site_ != 0) {
+        min_chars_ = true;
+        if (min_chars_per_site_ > num_taxa_) {
+            std::cerr << "Error: minimum characters required (" << min_chars_per_site_
+                    << ") exceeds number of taxa (" << num_taxa_ << "). Exiting."
+                    << std::endl;
+            exit(0);
+        }
+        max_missing_ = num_taxa_ - min_chars_per_site_;
+    }
     count_missing();
     if (!count_only_) {
         generate_cleaned_sequences();
@@ -246,16 +256,20 @@ void SequenceCleaner::count_missing () {
     
     // get proportions
     for (unsigned int i = 0; i < num_char_; i++) {
-        if (!remove_empty_) {
+        if (min_chars_) {
+            if (static_cast<unsigned int>(missing_per_site_counts_[i]) <= max_missing_) {
+                retained_sites_.push_back(i);
+            }
+        } else if (remove_empty_) { // equivalent to min_chars_per_site_ == 1
+            if (missing_per_site_counts_[i] != static_cast<int>(num_taxa_)) {
+                retained_sites_.push_back(i);
+            }
+        } else {
             missing_per_site_proportion_[i] = static_cast<double>(missing_per_site_counts_[i])
                 / static_cast<double>(num_taxa_);
             //std::cout << i << ". missing = " << missing_per_site_counts_[i] << "("
             //        << missing_per_site_proportion_[i] << ")" << std::endl;
             if (missing_per_site_proportion_[i] <= missing_allowed_) {
-                retained_sites_.push_back(i);
-            }
-        } else {
-            if (missing_per_site_counts_[i] != static_cast<int>(num_taxa_)) {
                 retained_sites_.push_back(i);
             }
         }

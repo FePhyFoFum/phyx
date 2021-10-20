@@ -12,6 +12,8 @@ private:
     unsigned int num_taxa_;
     unsigned int num_char_;
     unsigned int num_retained_;
+    unsigned int min_chars_per_site_;
+    unsigned int max_missing_;
     double missing_allowed_;
     
     bool by_taxon_;
@@ -19,6 +21,7 @@ private:
     bool count_only_;
     bool verbose_;
     bool remove_empty_;
+    bool min_chars_;
     
     std::string badChars_;
     std::string alpha_name_;
@@ -41,7 +44,7 @@ private:
 
 public:
     SequenceCleaner (std::istream* pios, double& prop_required, const bool& remove_empty,
-        const bool& by_taxon, const bool& by_codon, const bool& count_only,
+        const int& min_chars, const bool& by_taxon, const bool& by_codon, const bool& count_only,
         const bool& verbose);
     std::vector<Sequence> get_cleaned_seqs () const; // not used, but available
     void write_seqs (std::ostream* poos);
