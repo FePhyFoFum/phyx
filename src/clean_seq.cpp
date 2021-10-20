@@ -15,7 +15,8 @@ SequenceCleaner::SequenceCleaner (std::istream* pios, double& prop_required,
         const bool& by_codon, const bool& count_only, const bool& verbose):num_taxa_(0u),
         num_char_(0u), num_retained_(0u), min_chars_per_site_(min_chars),
         missing_allowed_(1.0 - prop_required), by_taxon_(by_taxon), by_codon_(by_codon),
-        count_only_(count_only), verbose_(verbose), remove_empty_(remove_empty) {
+        count_only_(count_only), verbose_(verbose), remove_empty_(remove_empty),
+        min_chars_(false) {
     read_in_sequences(pios);
     if (min_chars_per_site_ != 0) {
         min_chars_ = true;
