@@ -427,10 +427,10 @@ bool is_prot_char (char& residue) {
 }
 
 
-// ignore ambiguity codes
+// ignore ambiguity codes. include N for seqs that use N instead of ? or -
 int count_dna_chars (const std::string& str) {
     int ndna = 0;
-    std::string dnaChars = "ACGT";
+    std::string dnaChars = "ACGTN";
     for (char dnaChar : dnaChars) {
         ndna += std::count(str.begin(), str.end(), dnaChar);
     }

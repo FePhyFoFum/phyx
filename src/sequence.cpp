@@ -69,6 +69,7 @@ void Sequence::set_alpha (seqAlpha s) {
 
 // figure out the sequence type.
 // not perfect: for _very_ short AA seqs it is possible all chars are valid nuc chars
+// also incorrect when only characters are A, C, G, T, and N. this has been fixed
 void Sequence::infer_alpha () {
     std::string str = seq_;
     
