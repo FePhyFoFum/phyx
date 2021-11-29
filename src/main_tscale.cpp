@@ -118,6 +118,23 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = nullptr;
     std::ofstream * ofstr = nullptr;
     
+    if (tfileset) {
+        fstr = new std::ifstream(treef);
+        pios = fstr;
+    } else {
+        pios = &std::cin;
+        if (!check_for_input_to_stream()) {
+            if (!heightset && !scaleset) {
+                print_help();
+                exit(1);
+            } else {
+                std::cerr << "Error: missing tree input. Exiting."
+                << std::endl;
+                exit(1);
+            }
+        }
+    }
+    
     if (heightset && scaleset) {
         std::cerr << "Error: supply only rootheight (-r) or scale (-s), not both. Exiting."
                 << std::endl;
@@ -129,16 +146,6 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    if (tfileset) {
-        fstr = new std::ifstream(treef);
-        pios = fstr;
-    } else {
-        pios = &std::cin;
-        if (!check_for_input_to_stream()) {
-            print_help();
-            exit(1);
-        }
-    }
     if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
