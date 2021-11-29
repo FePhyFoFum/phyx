@@ -70,6 +70,7 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     std::string lprefix = "t";
     char * outf = nullptr;
+    bool argspresent = false;
     
     // limit on number of terminals supported (exhaustive)
     unsigned int sim_limit_exh = 10;
@@ -87,25 +88,30 @@ int main(int argc, char * argv[]) {
         switch(c) {
             case 'n':
                 nt = string_to_int(optarg, "-n");
-                if (nt < 0) {
+                if (nt <= 0) {
                     std::cerr << "Error: ntax must be a positive integer. Exiting." << std::endl;
                     exit(0);
                 } else {
                     num_taxa = static_cast<unsigned int>(nt);
                 }
+                argspresent = true;
                 break;
             case 'r':
                 rooted = true;
+                argspresent = true;
                 break;
             case 'c':
                 count = true;
+                argspresent = true;
                 break;
             case 'l':
                 lprefix = strdup(optarg);
+                argspresent = true;
                 break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                argspresent = true;
                 break;
 //            case 'x':
 //                seed = string_to_int(optarg, "-x");
@@ -123,6 +129,11 @@ int main(int argc, char * argv[]) {
                 print_error(*argv);
                 exit(0);
         }
+    }
+    
+    if (!argspresent) {
+        print_help();
+        exit(1);
     }
     
     std::string rootstat = (rooted) ? "rooted" : "unrooted";
