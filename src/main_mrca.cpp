@@ -104,26 +104,11 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (fileset && outfileset) {
-        check_inout_streams_identical(treef, outf);
-    }
-    
-    if (!mrcaset) {
-        std::cout << "Must supply mrca file" << std::endl;
-        exit(0);
-    }
-    
     std::istream * pios = nullptr;
     std::ostream * poos = nullptr;
     std::ifstream * fstr = nullptr;
     std::ofstream * ofstr = nullptr;
     
-    if (outfileset) {
-        ofstr = new std::ofstream(outf, std::ios::app);
-        poos = ofstr;
-    } else {
-        poos = &std::cout;
-    }
     if (fileset) {
         fstr = new std::ifstream(treef);
         pios = fstr;
@@ -133,6 +118,21 @@ int main(int argc, char * argv[]) {
             print_help();
             exit(1);
         }
+    }
+    if (outfileset) {
+        ofstr = new std::ofstream(outf, std::ios::app);
+        poos = ofstr;
+    } else {
+        poos = &std::cout;
+    }
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    
+    if (!mrcaset) {
+        std::cout << "Must supply mrca file" << std::endl;
+        exit(0);
     }
     
     std::ifstream inmrca(mrcaf);
