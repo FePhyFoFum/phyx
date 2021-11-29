@@ -129,6 +129,16 @@ int main(int argc, char * argv[]) {
         poos = tfstr;
     } else {
         poos = &std::cin;
+        if (!check_for_input_to_stream()) {
+            // if both inputs missing: print help
+            if (!cfileset) {
+                print_help();
+                exit(1);
+            } else {
+                std::cerr << "Error: missing required tree input. Exiting." << std::endl;
+                exit(1);
+            }
+        }
     }
 
     if (cfileset) {
