@@ -101,6 +101,7 @@ int main(int argc, char * argv[]) {
     std::string incolids;
     std::string logtype;
     char * outf = nullptr;
+    bool argspresent = false;
     
     while (true) {
         int oi = -1;
@@ -131,6 +132,7 @@ int main(int argc, char * argv[]) {
                     }
                 }
                 logtype = "parameter";
+                argspresent = true;
                 break;
             case 't':
                 tfileset = true;
@@ -153,10 +155,12 @@ int main(int argc, char * argv[]) {
                     }
                 }
                 logtype = "tree";
+                argspresent = true;
                 break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                argspresent = true;
                 break;
             case 'b':
                 burnin = string_to_int(optarg, "-b");
@@ -164,6 +168,7 @@ int main(int argc, char * argv[]) {
                     std::cerr << "Error: burnin must be a positive integer. Exiting." << std::endl;
                     exit(0);
                 }
+                argspresent = true;
                 break;
             case 'n':
                 nthin = string_to_int(optarg, "-n");
@@ -171,36 +176,45 @@ int main(int argc, char * argv[]) {
                     std::cerr << "Error: nthin must be a >= 1. Exiting." << std::endl;
                     exit(0);
                 }
+                argspresent = true;
                 break;
             case 'r':
                 nrandom = string_to_int(optarg, "-r");
+                argspresent = true;
                 break;
             case 'i':
                 count = true;
+                argspresent = true;
                 break;
             case 's':
                 summarize = true;
+                argspresent = true;
                 break;
             case 'c':
                 get_columns = true;
+                argspresent = true;
                 break;
             case 'd':
                 delete_columns = true;
                 incolids = strdup(optarg);
                 parse_comma_list(incolids, col_indices);
                 sort(col_indices.begin(), col_indices.end());
+                argspresent = true;
                 break;
             case 'k':
                 keep_columns = true;
                 incolids = strdup(optarg);
                 parse_comma_list(incolids, col_indices);
                 sort(col_indices.begin(), col_indices.end());
+                argspresent = true;
                 break;
             case 'x':
                 seed = string_to_long_int(optarg, "-x");
+                argspresent = true;
                 break;
             case 'v':
                 verbose = true;
+                argspresent = true;
                 break;
             case 'h':
                 print_help();
@@ -215,6 +229,11 @@ int main(int argc, char * argv[]) {
                 print_error(*argv);
                 exit(0);
         }
+    }
+    
+    if (!argspresent) {
+        print_help();
+        exit(1);
     }
     
     std::ostream * poos = nullptr;
