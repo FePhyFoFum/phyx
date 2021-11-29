@@ -84,6 +84,7 @@ int main(int argc, char * argv[]) {
     bool showd = false;
     bool verbose = false;
     long int seed = -1;
+    bool argspresent = false;
     
     while (true) {
         int oi = -1;
@@ -95,10 +96,12 @@ int main(int argc, char * argv[]) {
             case 'e':
                 ext = string_to_int(optarg, "-e");
                 extantset = true;
+                argspresent = true;
                 break;
             case 't':
                 time = string_to_double(optarg, "-t");
                 timeset = true;
+                argspresent = true;
                 break;
             case 'b':
                 birth = string_to_double(optarg, "-b");
@@ -106,6 +109,7 @@ int main(int argc, char * argv[]) {
                     std::cerr << "Error: birth rate must be > 0. Exiting." << std::endl;
                     exit(0);
                 }
+                argspresent = true;
                 break;
             case 'd':
                 death = string_to_double(optarg, "-d");
@@ -113,22 +117,28 @@ int main(int argc, char * argv[]) {
                     std::cerr << "Error: death rate must be >= 0. Exiting." << std::endl;
                     exit(0);
                 }
+                argspresent = true;
                 break;
             case 'n':
                 nreps = string_to_int(optarg, "-n");
+                argspresent = true;
                 break;
             case 'v':
                 verbose = true;
+                argspresent = true;
                 break;
             case 'o':
                 outfileset = true;
                 outf = strdup(optarg);
+                argspresent = true;
                 break;
             case 'x':
                 seed = string_to_long_int(optarg, "-x");
+                argspresent = true;
                 break;
             case 's':
                 showd = true;
+                argspresent = true;
                 break;
             case 'h':
                 print_help();
@@ -143,6 +153,11 @@ int main(int argc, char * argv[]) {
                 print_error(*argv);
                 exit(0);
         }
+    }
+    
+    if (!argspresent) {
+        print_help();
+        exit(1);
     }
     
     if (!extantset && !timeset) {
