@@ -160,15 +160,6 @@ int main(int argc, char * argv[]) {
         }
     }
     
-    if (fileset && outfileset) {
-        check_inout_streams_identical(treef, outf);
-    }
-    
-    if (propcount > 1) {
-        std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
-        exit(0);
-    }
-
     std::istream * pios = nullptr;
     std::ostream * poos = nullptr;
     std::ifstream * fstr = nullptr;
@@ -190,6 +181,15 @@ int main(int argc, char * argv[]) {
             print_help();
             exit(1);
         }
+    }
+    
+    if (fileset && outfileset) {
+        check_inout_streams_identical(treef, outf);
+    }
+    
+    if (propcount > 1) {
+        std::cerr << "Error: specify 1 property only (or leave blank to show all properties). Exiting." << std::endl;
+        exit(0);
     }
 
     std::string retstring;

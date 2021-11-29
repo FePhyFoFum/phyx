@@ -124,12 +124,22 @@ int main(int argc, char * argv[]) {
     std::ifstream * fstr = nullptr;
     std::ifstream * afstr = nullptr;
     std::ofstream * ofstr = nullptr;
-
-    if (outfileset) {
-        ofstr = new std::ofstream(outf);
-        poos = ofstr;
+    
+    if (tfileset) {
+        fstr = new std::ifstream(treef);
+        pios = fstr;
     } else {
-        poos = &std::cout;
+        pios = &std::cin;
+        if (!check_for_input_to_stream()) {
+            // if both inputs missing: print help
+            if (!addfileset) {
+                print_help();
+                exit(1);
+            } else {
+                std::cerr << "Error: you need to set an tfile (-t). Exiting." << std::endl;
+            exit(1);
+            }
+        }
     }
     
     if (addfileset) {
@@ -140,15 +150,11 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    if (tfileset) {
-        fstr = new std::ifstream(treef);
-        pios = fstr;
+    if (outfileset) {
+        ofstr = new std::ofstream(outf);
+        poos = ofstr;
     } else {
-        pios = &std::cin;
-        if (!check_for_input_to_stream()) {
-            std::cerr << "Error: you need to set an tfile (-t). Exiting." << std::endl;
-            exit(1);
-        }
+        poos = &std::cout;
     }
     
     std::string retstring;
