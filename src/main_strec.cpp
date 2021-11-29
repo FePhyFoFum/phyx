@@ -80,7 +80,7 @@ static struct option const long_options[] =
     {nullptr, 0, nullptr, 0}
 };
 
-bool checkdata(Tree * intree, std::vector<Sequence> runseqs);
+//bool checkdata(Tree * intree, std::vector<Sequence> runseqs);
 bool checkdata(Tree * intree, std::vector<Sequence> runseqs) {
     //std::vector<std::string> ret; // not used
     std::set<std::string> seqnames;
@@ -134,6 +134,7 @@ int main(int argc, char * argv[]) {
     std::string periodstring;
     std::vector<std::string> ptokens;
     std::vector<double> period_times;
+    bool argspresent = false;
     
     while (true) {
         int oi = -1;
@@ -146,51 +147,63 @@ int main(int argc, char * argv[]) {
                 //datafileset = true;
                 dataf = strdup(optarg);
                 check_file_exists(dataf);
+                argspresent = true;
                 break;
             case 'z':
                 dataz = true;
                 datawide = true;
+                argspresent = true;
                 break;
             case 'w':
                 datawide = true;
+                argspresent = true;
                 break;
             case 't':
                 //treefileset = true;
                 treef = strdup(optarg);
                 check_file_exists(treef);
+                argspresent = true;
                 break;
             case 'c':
                 conffileset = true;
                 conff = strdup(optarg);
                 check_file_exists(conff);
+                argspresent = true;
                 break;
             case 'o':
                 outancfileset = true;
                 outanc = strdup(optarg);
+                argspresent = true;
                 break;
             case 'n':
                 outstochnumfileset = true;
                 outnum = strdup(optarg);
+                argspresent = true;
                 break;
             case 'm':
                 outstochtimefileset = true;
                 outtime = strdup(optarg);
+                argspresent = true;
                 break;
             case 'a':
                 outstochnumanyfileset = true;
                 outnumany = strdup(optarg);
+                argspresent = true;
                 break;
             case 'p':
                 periodsset = true;
                 periodstring = (strdup(optarg));
                 parse_comma_list(periodstring, period_times);
+                argspresent = true;
                 break;
             case 'l':
                 logfileset = true;
                 logf = strdup(optarg);
+                argspresent = true;
                 break;
             case 's':
                 silent = true;
+                argspresent = true;
                 break;
             case 'h':
                 print_help();
@@ -205,6 +218,11 @@ int main(int argc, char * argv[]) {
                 print_error(*argv);
                 exit(0);
         }
+    }
+    
+    if (!argspresent) {
+        print_help();
+        exit(1);
     }
     
     std::ofstream * logout = nullptr;
