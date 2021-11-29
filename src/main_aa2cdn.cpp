@@ -114,15 +114,6 @@ int main(int argc, char * argv[]) {
         check_inout_streams_identical(nucseqf, outf);
     }
     
-    if (!fileset) {
-        std::cerr << "Error: you must specify an input amino acid sequence file. Exiting." << std::endl;
-        exit(0);
-    }
-    if (!nucfileset) {
-        std::cerr << "Error: you must specify an input nucleotide sequence file. Exiting." << std::endl;
-        exit(0);
-    }
-    
     std::ostream * poos = nullptr;
     std::ofstream * ofstr = nullptr;
     std::ifstream * fstr = nullptr;
@@ -155,6 +146,15 @@ int main(int argc, char * argv[]) {
         poos = ofstr;
     } else {
         poos = &std::cout;
+    }
+    
+    if (!fileset) {
+        std::cerr << "Error: you must specify an input amino acid sequence file. Exiting." << std::endl;
+        exit(0);
+    }
+    if (!nucfileset) {
+        std::cerr << "Error: you must specify an input nucleotide sequence file. Exiting." << std::endl;
+        exit(0);
     }
     
     // use general purpose reader
