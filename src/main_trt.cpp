@@ -124,6 +124,27 @@ int main(int argc, char * argv[]) {
         }
     }
     
+    std::istream * pios = nullptr;
+    std::ostream * poos = nullptr;
+    std::ifstream * fstr = nullptr;
+    std::ofstream * ofstr = nullptr;
+    
+    if (fileset) {
+        fstr = new std::ifstream(treef);
+        pios = fstr;
+    } else {
+        pios = &std::cin;
+        if (!check_for_input_to_stream()) {
+            if (!namesset && !namefileset && !outfileset) {
+                print_help();
+                exit(1);
+            } else {std::cout << "Error: missing required tree input. Exiting."
+                    << std::endl;
+                exit(1);
+            }
+        }
+    }
+    
     if (fileset && outfileset) {
         check_inout_streams_identical(treef, outf);
     }
@@ -152,21 +173,6 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
 
-    std::istream * pios = nullptr;
-    std::ostream * poos = nullptr;
-    std::ifstream * fstr = nullptr;
-    std::ofstream * ofstr = nullptr;
-    
-    if (fileset) {
-        fstr = new std::ifstream(treef);
-        pios = fstr;
-    } else {
-        pios = &std::cin;
-        if (!check_for_input_to_stream()) {
-            print_help();
-            exit(1);
-        }
-    }
     if (outfileset) {
         ofstr = new std::ofstream(outf);
         poos = ofstr;
