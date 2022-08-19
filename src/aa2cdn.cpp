@@ -90,16 +90,27 @@ void AAtoCDN::generate_codon_alignment () {
         unsigned int ncodons = static_cast<unsigned int>(nucseq.length()) / 3u;
         unsigned int naachars = aalen - static_cast<unsigned int>(std::count(aaseq.begin(), aaseq.end(), '-'));
         if (ncodons != naachars) {
+            if (remove_last_) {
+                if (!(ncodons == naachars + 1)) {
+                    std::cerr << "Error: for taxon '" << aa_seqs_[i].get_id()
+                        << "' nucleotide alignment involves " << ncodons
+                        << " codons, but the protein length " << naachars
+                        << " is not " << ncodons
+                        << " - 1. Skipping." << std::endl;
+                    continue;
+                if (remove_last_) {
+                    aalen = ncodons - 1;
+                }
+                }
+            } else {
             std::cerr << "Error: for taxon '" << aa_seqs_[i].get_id()
                 << "' nucleotide alignment involves " << ncodons
                 << " codons, but protein alignment involves " << naachars
                 << " amino acids. Skipping." << std::endl;
             continue;
+            }
         }
         
-        if (remove_last_) {
-            aalen--;
-        }
         unsigned int nuccntr = 0;
         for (unsigned int j = 0; j < aalen; j++) {
             if (aaseq[j] == '-') {
