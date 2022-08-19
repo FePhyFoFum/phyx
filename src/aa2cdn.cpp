@@ -98,7 +98,11 @@ void AAtoCDN::generate_codon_alignment () {
         if (ncodons != naachars) {
             std::cerr << "Error: for taxon '" << aa_seqs_[i].get_id()
                 << "' nucleotide alignment involves " << ncodons
-                << " codons, but protein alignment involves " << naachars
+                << " codons";
+            if (remove_last_) {
+                std::cerr << " (after removing final codon)";
+            }
+            std::cerr << ", but protein alignment involves " << naachars
                 << " amino acids. Skipping." << std::endl;
             continue;
         }
