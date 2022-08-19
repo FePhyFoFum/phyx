@@ -46,8 +46,19 @@ def test_program(name):
     t = None
     print("TESTING", name)
     if name == "pxaa2cdn":
+        res = True
+        print("aa2cdn ", end = '')
         cm = "./pxaa2cdn -a TEST/AA.fa -n TEST/un_aln_nuc.fa"
         t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
+        if not check_individual_results(cm, t):
+            res = False
+        print("aa2cdn (remove last codon) ", end = '')
+        cm = "./pxaa2cdn -r -a TEST/AA.fa -n TEST/un_aln_nuc_with-stop.fa"
+        t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
+        if not check_individual_results(cm, t):
+            res = False
+        print_success(res)
+        return res
     elif name == "pxbdfit":
         res = True
         print("yule ", end = '')
