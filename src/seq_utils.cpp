@@ -471,6 +471,20 @@ bool is_codon_alignment (const std::vector<Sequence>& seqs) {
 }
 
 
+// looking for TAG, TGA, TAA, at least until alien DNA is decoded
+bool is_stop_terminated (std::string& seq) {
+    bool stop = false;
+    
+    if (ends_with(seq, "TAG")) {
+        stop = true;
+    } else if (ends_with(seq, "TGA")) {
+        stop = true;
+    } else if (ends_with(seq, "TAA")) {
+        stop = true;
+    }
+    return stop;
+}
+
 // these are not currently used
 /*
 void populate_codon_list (std::vector<std::string> * codon_list) {

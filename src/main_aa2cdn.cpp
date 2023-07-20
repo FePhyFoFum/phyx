@@ -26,7 +26,8 @@ void print_help () {
     std::cout << "Options:" << std::endl;
     std::cout << " -a, --aaseqf=FILE   input sequence file, STDIN otherwise" << std::endl;
     std::cout << " -n, --nucseqf=FILE  input sequence file, STDIN otherwise" << std::endl;
-    std::cout << " -r, --rmlastcdn     remove last codon (default: false)" << std::endl;
+    std::cout << " -r, --rmlastcdn     remove last codon from *all* nuc sequences (default: false)" << std::endl;
+    std::cout << " -s, --stopremove    remove stop codon from nuc sequences if present (default: false)" << std::endl;
     std::cout << " -o, --outf=FILE     output fasta file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -50,6 +51,7 @@ static struct option const long_options[] =
     {"nucseqf", required_argument, nullptr, 'n'},
     {"outf", required_argument, nullptr, 'o'},
     {"rmlastcdn", no_argument, nullptr, 'r'},
+    {"stopremove", no_argument, nullptr, 's'},
     {"help", no_argument, nullptr, 'h'},
     {"version", no_argument, nullptr, 'V'},
     {"citation", no_argument, nullptr, 'C'},
@@ -64,13 +66,15 @@ int main(int argc, char * argv[]) {
     bool outfileset = false;
     bool nucfileset = false;
     bool rm_last = false;
+    bool rm_stop = false;
     char * aaseqf = nullptr;
     char * nucseqf = nullptr;
     char * outf = nullptr;
 
+
     while (true) {
         int oi = -1;
-        int c = getopt_long(argc, argv, "a:o:n:rhVC", long_options, &oi);
+        int c = getopt_long(argc, argv, "a:o:n:rshVC", long_options, &oi);
         if (c == -1) {
             break;
         }
@@ -91,6 +95,9 @@ int main(int argc, char * argv[]) {
                 break;
             case 'r':
                 rm_last = true;
+                break;
+            case 's':
+                rm_stop = true;
                 break;
             case 'h':
                 print_help();
@@ -192,7 +199,12 @@ int main(int argc, char * argv[]) {
         exit(0);
     }
     
-    AAtoCDN A2C(nuc_seqs, aa_seqs, rm_last);
+    if (rm_last && rm_stop) {
+        std::cerr << "Error: you may set -r or -s, but not both. Exiting." << std::endl;
+        exit(0);
+    }
+    
+    AAtoCDN A2C(nuc_seqs, aa_seqs, rm_last, rm_stop);
     A2C.write_codon_alignment(poos);
     
     if (fileset) {

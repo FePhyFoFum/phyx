@@ -816,6 +816,24 @@ bool check_for_input_to_stream () {
 }
 
 
+// do strings statr/end with suffix?!?
+bool ends_with (const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
+
+bool starts_with (const std::string& str, const std::string& prefix) {
+    return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
+}
+
+
+void remove_last_N (std::string &str, const long unsigned int& n) {
+    if (str.length() < n) {
+        return;
+    }
+    str.erase(str.length() - n);
+}
+
 // not using right now
 // return elements in a *not* found in b
 std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b) {

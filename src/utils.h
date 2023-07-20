@@ -172,14 +172,18 @@ template<typename T> bool essentially_equal (T a, T b) {
     return equal;
 }
 
-
 bool all_equal (std::vector<double> vals);
 bool all_equal (std::vector<int> vals);
 bool all_equal (std::vector<unsigned int> vals);
 
-
 // a basic poll checker for stream inputs
 bool check_for_input_to_stream ();
+
+// string checks. this is kinda ridiculous, amirite?!?
+bool ends_with (const std::string& str, const std::string& suffix);
+bool starts_with (const std::string& str, const std::string& prefix);
+
+void remove_last_N(std::string &str, const long unsigned int& n);
 
 std::vector<std::string> get_complement (std::vector<std::string>& a, std::vector<std::string>& b);
 

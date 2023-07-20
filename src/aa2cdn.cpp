@@ -16,15 +16,23 @@ struct SequenceIDListCompare {
 
 
 AAtoCDN::AAtoCDN (std::vector<Sequence> nuc_seqs, std::vector<Sequence> aa_seqs,
-        const bool& remove_last):remove_last_(remove_last), nuc_seqs_(std::move(nuc_seqs)),
-        aa_seqs_(std::move(aa_seqs)) {
+        const bool& remove_last, const bool& remove_stop):remove_last_(remove_last),
+        remove_stop_(remove_stop), nuc_seqs_(std::move(nuc_seqs)), aa_seqs_(std::move(aa_seqs)) {
     // set up names
     nuc_names_ = collect_names(nuc_seqs_);
     aa_names_ = collect_names(aa_seqs_);
     
     sort(aa_seqs_.begin(), aa_seqs_.end(), SequenceIDListCompare);
     sort(nuc_seqs_.begin(), nuc_seqs_.end(), SequenceIDListCompare);
+    
+    // check (and purge) taxa that are only present in one file type
     check_names();
+    
+    //std::cout << "remove_stop_ = " << remove_stop_ << std::endl;
+    
+    if (remove_stop_) {
+        process_stop_codons();
+    }
     generate_codon_alignment();
 }
 
@@ -72,6 +80,21 @@ void AAtoCDN::check_names () {
     }
 }
 
+
+// if stop codons are detected...ELIMINATE them, deadpool-style...
+void AAtoCDN::process_stop_codons () {
+    // looking for TAG, TGA, TAA
+    std::string nucseq;
+    for (unsigned int i = 0; i < nuc_seqs_.size(); i++) {
+        nucseq = nuc_seqs_[i].get_sequence();
+        if (is_stop_terminated(nucseq)) {
+            remove_last_N(nucseq, 3);
+            nuc_seqs_[i].set_sequence(nucseq);
+        }
+    }
+    
+    
+}
 
 // at this point, alignments should be of the same size and order
 void AAtoCDN::generate_codon_alignment () {

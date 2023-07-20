@@ -30,6 +30,7 @@ bool is_prot_char (char& residue);
 int count_dna_chars (const std::string& str);
 bool is_aligned (const std::vector<Sequence>& seqs);
 bool is_codon_alignment (const std::vector<Sequence>& seqs);
+bool is_stop_terminated (std::string& seq);
 
 // not used
 /*
