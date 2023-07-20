@@ -52,8 +52,13 @@ def test_program(name):
         t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
         if not check_individual_results(cm, t):
             res = False
-        print("aa2cdn (remove last codon) ", end = '')
+        print("aa2cdn (remove last codon, all) ", end = '')
         cm = "./pxaa2cdn -r -a TEST/AA.fa -n TEST/un_aln_nuc_with-stop.fa"
+        t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
+        if not check_individual_results(cm, t):
+            res = False
+        print("aa2cdn (remove stop codon, mixed) ", end = '')
+        cm = "./pxaa2cdn -s -a TEST/AA.fa -n TEST/un_aln_nuc_mixed-stop.fa"
         t = '>Sequence1\nATG---AAA---AAG\n>Sequence2\nATG------------\n>Sequence3\nATGATGATGATGATG\n>Sequence5\nATGATGATGATGATG\n'
         if not check_individual_results(cm, t):
             res = False
