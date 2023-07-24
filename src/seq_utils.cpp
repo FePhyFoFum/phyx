@@ -475,11 +475,14 @@ bool is_codon_alignment (const std::vector<Sequence>& seqs) {
 bool is_stop_terminated (std::string& seq) {
     bool stop = false;
     
-    if (ends_with(seq, "TAG")) {
+    // convert to uppercase for weirdo Nat files :)
+    std::string tester = string_to_upper(seq);
+    
+    if (ends_with(tester, "TAG")) {
         stop = true;
-    } else if (ends_with(seq, "TGA")) {
+    } else if (ends_with(tester, "TGA")) {
         stop = true;
-    } else if (ends_with(seq, "TAA")) {
+    } else if (ends_with(tester, "TAA")) {
         stop = true;
     }
     return stop;
