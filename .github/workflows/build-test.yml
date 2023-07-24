@@ -26,6 +26,10 @@ jobs:
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |
+        # Ensure the script doesnt hang waiting for user input
+          export DEBIAN_FRONTEND=noninteractive
+        # Update system
+        sudo apt-get update
         sudo apt-get install -y \
         autotools-dev \
         automake \
