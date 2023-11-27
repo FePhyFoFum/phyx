@@ -153,7 +153,7 @@ If you want to install it so it is available anywhere in your system, do:
         make
         sudo make install
 
-5. Install nlopt. Get armadillo from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
+5. Install nlopt. Get nlopt from the `deps` directory or go to http://ab-initio.mit.edu/wiki/index.php/NLopt#Download_and_installation and download the latest (probably nlopt-2.4.2.tar.gz). Untar and browse in the terminal to that directory:
 
         ./configure --without-octave --without-matlab
         make

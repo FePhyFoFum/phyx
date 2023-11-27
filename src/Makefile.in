@@ -32,7 +32,12 @@ ifeq "$(HOMP)" "Y"
 endif
 
 ifneq "$(CXX)" "icc"
-    OPT_FLAGS += -ffast-math -ftree-vectorize
+	OPT_FLAGS += -ftree-vectorize
+    ifneq ($(filter @host_cpu@,i386 i486 i586 i686),)
+         OPT_FLAGS += -ffloat-store
+    else
+         OPT_FLAGS += -ffast-math
+    endif
 endif
 
 NLOPT_PROGRAMS :=
