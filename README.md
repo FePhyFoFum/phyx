@@ -98,7 +98,7 @@ Mac has become increasingly difficult to support at the command line with change
 
 1. Install the Homebrew package manager:
 
-        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 2. Install the Brewsci phyx package:
 
