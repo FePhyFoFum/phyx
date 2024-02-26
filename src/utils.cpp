@@ -454,7 +454,7 @@ void v_mean_variance (std::vector<double>& in, double& mn, double& varr) {
     mn = sum(in) / n;
     std::vector<double> diff(in.size());
     std::transform(in.begin(), in.end(), diff.begin(),
-        std::bind2nd(std::minus<double>(), mn));
+        std::bind(std::minus<double>(), std::placeholders::_1, mn));
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
     varr = sq_sum / n;
 }
@@ -465,7 +465,7 @@ double v_variance (std::vector<double>& in) {
     double meann = sum(in) / n;
     std::vector<double> diff(static_cast<size_t>(n));
     std::transform(in.begin(), in.end(), diff.begin(),
-        std::bind2nd(std::minus<double>(), meann));
+        std::bind(std::minus<double>(), std::placeholders::_1, meann));
     double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
     double var = sq_sum / n;
     return var;
@@ -540,7 +540,7 @@ std::vector<double> average_vectors_elementwise (std::vector<double>& vec1,
       );
     }
     std::vector<double> res = sum_vectors_elementwise(vec1, vec2);
-    std::transform(res.begin(), res.end(), res.begin(), std::bind1st(std::multiplies<double>(), 0.5));
+    std::transform(res.begin(), res.end(), res.begin(), std::bind(std::multiplies<double>(), 0.5, std::placeholders::_1));
     
     return res;
 }
