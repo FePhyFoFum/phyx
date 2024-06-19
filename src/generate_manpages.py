@@ -6,12 +6,14 @@ Requires:
 2) all programs to be compiled (i.e., present in the src dir)
 manpages will be written to man/px*.1.in
 
-Make sure to run this script from the src dir.
+Make sure to run this script from the src dir. Run as:
+
+python generate_manpages.py
 
 The idea here is that developers will make/regenerate these pages.
 When a user compiles a program, the manpage px*.1.in is copied to px*.1, and
 it is this copy that is installed with make install. (Likewise, when a user
-does make clean, man/px*.1 files are remove, and man/px*.1.in remain)
+does make clean, man/px*.1 files are removed, and man/px*.1.in remain)
 
 The rationale behind this is 1) users need not worry about having help2man,
 and 2) manpages are installed only for those programs that are actually compiled.

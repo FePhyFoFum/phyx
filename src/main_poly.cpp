@@ -38,8 +38,8 @@ void print_help () {
 }
 
 std::string get_version_line () {
-    std::string vl = "pxpoly 1.3\n";
-    vl += "Copyright (C) 2021-2021 FePhyFoFum\n";
+    std::string vl = "pxpoly 1.3.1\n";
+    vl += "Copyright (C) 2021-2024 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Joseph W. Brown";
     return vl;

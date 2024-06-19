@@ -55,8 +55,8 @@ void print_help () {
 }
 
 std::string get_version_line () {
-    std::string vl = "pxseqgen 1.3\n";
-    vl += "Copyright (C) 2015-2021 FePhyFoFum\n";
+    std::string vl = "pxseqgen 1.3.1\n";
+    vl += "Copyright (C) 2015-2024 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Joseph F. Walker, Joseph W. Brown, Stephen A. Smith (blackrim)";
     return vl;
