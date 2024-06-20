@@ -24,6 +24,7 @@ jobs:
       run: |
           # install dependencies
           brew install nlopt armadillo automake autoconf
+          # add paths (new brew install location)
           echo "LDFLAGS=-L$(brew --prefix)/lib" >> $GITHUB_ENV
           echo "CPPFLAGS=-I$(brew --prefix)/include" >> $GITHUB_ENV
     - name: Install apt dependencies
@@ -46,10 +47,7 @@ jobs:
     - name: autoconf
       run: autoreconf -fiv
     - name: configure
-      run: |
-        echo "PATH IN NEXT STEP:"
-        echo ${PATH}
-        ./configure
+      run: ./configure
     - name: make
       run: make -j
     - name: make check
