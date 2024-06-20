@@ -53,7 +53,10 @@ jobs:
     - name: autoconf
       run: autoreconf -fiv
     - name: configure
-      run: ./configure
+      run:
+        echo "PATH IN NEXT STEP:"
+        echo ${PATH}
+        ./configure
     - name: make
       run: make -j
     - name: make check
