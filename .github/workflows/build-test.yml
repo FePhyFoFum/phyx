@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install brew dependencies
       if: runner.os == 'macOS'
-      run:
+      run: |
           # install dependencies
           brew install nlopt armadillo automake autoconf
           # append $PATH
@@ -53,7 +53,7 @@ jobs:
     - name: autoconf
       run: autoreconf -fiv
     - name: configure
-      run:
+      run: |
         echo "PATH IN NEXT STEP:"
         echo ${PATH}
         ./configure
