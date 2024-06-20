@@ -23,6 +23,10 @@ jobs:
       if: runner.os == 'macOS'
       run:
           brew install nlopt armadillo automake autoconf
+    - name: Append PATH
+      if: runner.os == 'macOS'
+      run:
+          echo "/opt/homebrew/" >> $GITHUB_PATH
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |
