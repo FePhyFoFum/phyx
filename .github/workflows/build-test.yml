@@ -24,15 +24,8 @@ jobs:
       run: |
           # install dependencies
           brew install nlopt armadillo automake autoconf
-          # append $PATH
-          # examine the path before
-          echo "PATH BEFORE:"
-          echo ${PATH}
-          # add to the $PATH
-          echo "/opt/homebrew/" >> $GITHUB_PATH
-          # examine the path after
-          echo "PATH AFTER:"
-          echo ${PATH}
+          echo "LDFLAGS=-L$(brew --prefix)/lib" >> $GITHUB_ENV
+          echo "CPPFLAGS=-I$(brew --prefix)/include" >> $GITHUB_ENV
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |
