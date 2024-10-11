@@ -42,7 +42,8 @@ endif
 
 NLOPT_PROGRAMS :=
 ifeq "$(HNLOPT)" "Y"
-    NLOPT_PROGRAMS += pxbdfit pxcontrates pxstrec
+    #NLOPT_PROGRAMS += pxbdfit pxcontrates pxstrec
+	NLOPT_PROGRAMS += pxbdfit pxcontrates
 endif
 
 FFLAGS	= -O3
