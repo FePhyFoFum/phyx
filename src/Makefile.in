@@ -36,14 +36,13 @@ ifneq "$(CXX)" "icc"
     ifneq ($(filter @host_cpu@,i386 i486 i586 i686),)
          OPT_FLAGS += -ffloat-store
     else
-         OPT_FLAGS += -ffast-math
+         #OPT_FLAGS += -ffast-math
     endif
 endif
 
 NLOPT_PROGRAMS :=
 ifeq "$(HNLOPT)" "Y"
-    #NLOPT_PROGRAMS += pxbdfit pxcontrates pxstrec
-	NLOPT_PROGRAMS += pxbdfit pxcontrates
+    NLOPT_PROGRAMS += pxbdfit pxcontrates pxstrec
 endif
 
 FFLAGS	= -O3
