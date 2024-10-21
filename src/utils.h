@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <map>
 
 #include "superdouble.h"
 
@@ -144,6 +145,14 @@ template<typename T> void print_vector (std::vector<T>& vec) {
     std::cout << std::endl;
 }
 
+// this is used mostly for de-bugging
+template<typename map_key, typename map_val> void print_map (const std::map<map_key, map_val>& _map) {
+    for (const auto& elem : _map) {
+        std::cout << elem.first << " => " << elem.second << std::endl;
+    }
+    
+}
+        
 unsigned int calc_hamming_dist (const std::string& s1, const std::string& s2);
 
 double logn (double x, double base);
