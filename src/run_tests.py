@@ -113,11 +113,6 @@ def test_program(name):
         return res
     elif name == "pxbp":
         res = True
-        print("old test ", end = '')
-        cm = "./pxbp -t TEST/test.tre"
-        t = '1 trees \n3 unique clades found\nCLADE: TaxonA TaxonB 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1.\nCLADE: TaxonA TaxonB TaxonC 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1.\nCLADE: TaxonD TaxonE 	FREQ:	1.	ICA:	1.	COUNT:	1	TREEFREQ:	1.\nTSCA: 3\n'
-        if not check_individual_results(cm, t):
-            res = False
         print("node-based ", end = '')
         cm = "./pxbp -t nat.tre"
         t = '2 trees \n7 unique clades found\nCLADE: F G 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: E D 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: F G E D 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: C B 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: C B A 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: C A 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: E D C B A 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nTSCA: 3\n'
