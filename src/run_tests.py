@@ -114,12 +114,12 @@ def test_program(name):
     elif name == "pxbp":
         res = True
         print("node-based ", end = '')
-        cm = "./pxbp -t nat.tre"
+        cm = "./pxbp -t TEST/nat.tre"
         t = '2 trees \n7 unique clades found\nCLADE: F G 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: E D 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: F G E D 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: C B 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: C B A 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: C A 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: E D C B A 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nTSCA: 3\n'
         if not check_individual_results(cm, t):
             res = False
         print("edge-based ", end = '')
-        cm = "./pxbp -e -t nat.tre"
+        cm = "./pxbp -e -t TEST/nat.tre"
         t = '2 trees \n5 unique clades found\nCLADE: F G | E D C B A 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: E D | F G C B A 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: F G E D | C B A 	FREQ:	1.	ICA:	1.	COUNT:	2	TREEFREQ:	1.\nCLADE: C B | F G E D A 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nCLADE: C A | F G E D B 	FREQ:	0.5	ICA:	0	COUNT:	1	TREEFREQ:	0.5\nTSCA: 3\n'
         if not check_individual_results(cm, t):
             res = False
