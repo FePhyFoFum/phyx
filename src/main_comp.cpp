@@ -34,7 +34,7 @@ void print_help () {
     std::cout << "phyx home page: <https://github.com/FePhyFoFum/phyx>" << std::endl;
 }
 std::string get_version_line () {
-    std::string vl = "pxcomp 1.3.1\n";
+    std::string vl = "pxcomp 1.3.2\n";
     vl += "Copyright (C) 2016-2024 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Joseph W. Brown";
