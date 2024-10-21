@@ -35,7 +35,7 @@ void print_help () {
     std::cout << "                           create a *.pxbpmapped.tre file." << std::endl;
     std::cout << " -c, --cutoff        skip biparts that have support lower than this." << std::endl;
     std::cout << " -s, --suppress      don't print all the output (maybe you use this" << std::endl;
-    std::cout << "                           with the maptree feature" << std::endl;
+    std::cout << "                           with the maptree feature)" << std::endl;
     std::cout << " -o, --outf=FILE     output file, STOUT otherwise" << std::endl;
     std::cout << " -h, --help          display this help and exit" << std::endl;
     std::cout << " -V, --version       display version and exit" << std::endl;
@@ -170,13 +170,13 @@ int main(int argc, char * argv[]) {
     } else {
         poos = &std::cout;
     }
-
+    
     // map file
     if (mapfileset) {
         mfstr = new std::ifstream(mtreef);
         mpios = mfstr;
     }
-
+    
     //------READ TREES
     std::string retstring;
     int ft = test_tree_filetype_stream(*pios, retstring);
@@ -184,7 +184,7 @@ int main(int argc, char * argv[]) {
         std::cerr << "Error: this really only works with nexus or newick. Exiting." << std::endl;
         exit(0);
     }
-
+    
     std::vector<Tree *> trees;
     bool going = true;
     if (ft == 0) {
@@ -240,7 +240,7 @@ int main(int argc, char * argv[]) {
         } 
     }
     //----END READ MAP TREE
-
+    
     size_t numtrees = trees.size();
     if (numtrees == 0) {
         if (fileset) {
@@ -270,8 +270,9 @@ int main(int argc, char * argv[]) {
             }
         }
     }
+    
     copy(names.begin(), names.end(), inserter(names_s, names_s.begin()));
-
+    
     std::vector<std::vector<int> > biparts; // first part of the bipart
     std::vector<std::vector<int> > biparts2; // second part of the bipart
     std::vector<std::vector<int> > not_included; // the names that aren't in the tree
@@ -285,7 +286,9 @@ int main(int argc, char * argv[]) {
         }
         std::vector<std::string> rt_nms = trees[i]->getRoot()->get_leave_names();
         std::set<std::string> rt_nms_set;
+        
         copy(rt_nms.begin(), rt_nms.end(), inserter(rt_nms_set, rt_nms_set.begin()));
+        
         // get the ones that aren't in the tree at all
         std::vector<std::string> not_included_nms(rt_nms_set.size());
         std::vector<int> not_included_i;
@@ -336,9 +339,10 @@ int main(int argc, char * argv[]) {
                 nms_i2.push_back(name_index[k]);
             }
             sort(nms_i2.begin(), nms_i2.end());
+            
             // check to see if the bipart is new
             if (!edgewisealltaxa) {
-                // this is nodewise and we dont' assume we have all the taxa
+                // this is nodewise and we don't assume we have all the taxa
                 if (static_cast<int>(std::count(biparts.begin(), biparts.end(), nms_i)) == 0 && 
                     static_cast<int>(std::count(biparts2.begin(), biparts2.end(), nms_i2)) == 0) {
                     biparts.push_back(nms_i);
@@ -501,7 +505,7 @@ int main(int argc, char * argv[]) {
             std::cout << "==END UNIQUE TREES==" << std::endl;
             exit(0);
         }
-
+        
         // constructing the logical matrix
         // the logical matrix has each row as a bipart1 and each col as a name
         // there is a one if the bipart has the name
@@ -521,6 +525,10 @@ int main(int argc, char * argv[]) {
         double TSCA = 0;
         // get the conflicting bipartitions
         // initialize results vectors
+        
+        //std::cout << "this is the map" << std::endl;
+        //print_map(name_st_index);
+        
         for (unsigned int i = 0; i < biparts.size(); i++) {
             if (firsttree) {
                 if (matrix[0][i] != 1) {
@@ -529,14 +537,17 @@ int main(int argc, char * argv[]) {
             }
             auto sumc = static_cast<unsigned int>(sum_matrix_col(matrix, i));
             if (sumc != trees.size() && sumc > (smallest_proportion*trees.size())) {
+                
+                // *** this is where things are reported incorrectly ***
+                
                 std::vector<std::string> nms;
-                for (int k : biparts[i]) {
+                for (unsigned int k=0; k < biparts[i].size(); k++) {
                     nms.push_back(name_st_index[biparts[i][static_cast<size_t>(k)]]);
                 }
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
-                    for (int k : biparts2[i]) {
+                    for (unsigned int k=0; k < biparts2[i].size(); k++) {
                         nms_o.push_back(name_st_index[biparts2[i][static_cast<size_t>(k)]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
@@ -553,7 +564,7 @@ int main(int argc, char * argv[]) {
                         bool logitest = test_logical(logical_matrix[i], logical_matrix[j], edgewisealltaxa);
                         if (logitest) {
                             std::vector<std::string> nms2;
-                            for (int k : biparts[j]) {
+                            for (unsigned int k=0; k < biparts[j].size(); k++){
                                 nms2.push_back(name_st_index[biparts[j][static_cast<size_t>(k)]]);
                             }    
                             totalcount += bp_count[j];
@@ -562,7 +573,7 @@ int main(int argc, char * argv[]) {
                                 (*poos) << " \t " << get_string_vector(nms2);
                                 if (edgewisealltaxa) {
                                     std::vector<std::string> nms_o;
-                                    for (int k : biparts2[j]) {
+                                    for (unsigned int k=0; k < biparts2[j].size(); k++) {
                                         nms_o.push_back(name_st_index[biparts2[j][static_cast<size_t>(k)]]);
                                     }
                                     (*poos) << "| " << get_string_vector(nms_o);
@@ -601,13 +612,14 @@ int main(int argc, char * argv[]) {
             } else if (sumc == trees.size()) {
                 std::vector<std::string> nms;
                 nms.reserve(biparts[i].size());
-                for (int k : biparts[i]) {
-                    nms.push_back(name_st_index[k]);
+                for (unsigned int k=0; k < biparts[i].size(); k++) {
+                    nms.push_back(name_st_index[biparts[i][static_cast<size_t>(k)]]);
                 }
+                
                 (*poos) << "CLADE: " << get_string_vector(nms);
                 if (edgewisealltaxa) {
                     std::vector<std::string> nms_o;
-                    for (int k : biparts2[i]) {
+                    for (unsigned int k=0; k < biparts2[i].size(); k++) {
                         nms_o.push_back(name_st_index[biparts2[i][static_cast<size_t>(k)]]);
                     }
                     (*poos) << "| " << get_string_vector(nms_o);
@@ -670,7 +682,7 @@ int main(int argc, char * argv[]) {
         mofstr->close();
         delete mpoos;
     }
-
+    
     // shut things down
     if (fileset) {
         fstr->close();
