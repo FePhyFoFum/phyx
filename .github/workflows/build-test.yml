@@ -39,7 +39,7 @@ jobs:
         automake \
         libtool \
         liblapack-dev \
-        libatlas-cpp-0.6-dev \
+        libatlas-base-dev \
         libnlopt0 \
         libnlopt-dev \
         libnlopt-cxx-dev \
