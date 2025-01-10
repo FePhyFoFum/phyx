@@ -21,6 +21,7 @@ std::string get_version_line ();
 void print_help () {
     std::cout << std::endl;
     std::cout << "Clean alignments by removing positions/taxa with too much ambiguous data." << std::endl;
+    std::cout << "NOTE: proportion/count args are in terms of VALID states, not ambiguous states." << std::endl;
     std::cout << "This will take fasta, fastq, phylip, and nexus formats from a file or STDIN." << std::endl;
     std::cout << "Results are written in fasta format." << std::endl;
     std::cout << std::endl;
@@ -28,9 +29,9 @@ void print_help () {
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -s, --seqf=FILE     input sequence file, STDIN otherwise" << std::endl;
-    std::cout << " -p, --prop=DOUBLE   proportion required to be present, default=0.5" << std::endl;
+    std::cout << " -p, --prop=DOUBLE   proportion of valid character states required to be present, default=0.5" << std::endl;
     std::cout << " -e, --empty         remove columns that are completely empty (- or ?)" << std::endl;
-    std::cout << " -m, --min=INT       the minimum number of good characters required per site" << std::endl;
+    std::cout << " -m, --min=INT       the minimum number of valid character states required per site" << std::endl;
     std::cout << "                       - a min of 1 is equivalent to -e above" << std::endl;
     std::cout << " -t, --taxa          consider missing data per taxon (default: per site)" << std::endl;
     std::cout << " -c, --codon         examine sequences by codon rather than site" << std::endl;
@@ -88,7 +89,7 @@ int main(int argc, char * argv[]) {
     bool count_only = false;
     bool remove_empty = false;
     int min_chars = 0;
-
+    
     while (true) {
         int oi = -1;
         int c = getopt_long(argc, argv, "s:o:p:em:atcivhVC", long_options, &oi);
@@ -190,6 +191,6 @@ int main(int argc, char * argv[]) {
         fstr->close();
         delete pios;
     }
-
+    
     return EXIT_SUCCESS;
 }
