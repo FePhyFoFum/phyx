@@ -110,6 +110,8 @@ Second, and more insidiously, if any programs involving trees crash outright or 
 
 An [issue](https://github.com/FePhyFoFum/phyx/issues/138) has been made where discussion of this, er, issue, can be had.
 
+---
+
 # Installation instructions 
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
 
@@ -198,7 +200,7 @@ These instructions work for most ubuntu versions as well as debian.
 
 1. Install general dependencies:
 
-        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-cpp-0.6-dev libnlopt-cxx-dev
+        sudo apt-get install git autotools-dev autoconf automake cmake libtool liblapack-dev libatlas-base-dev libnlopt-cxx-dev
 
 2. Clone the phyx repo (if you haven't already):
 
