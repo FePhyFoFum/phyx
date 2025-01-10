@@ -4,7 +4,10 @@
 
 ---
 
-**_Note_** Phyx recently overwent an overhaul such that a simple `git pull && git make` will fail. Instead, see instructions [here](#problems-after-updating-git-pull).
+**_Notes_**
+
+1. Phyx recently overwent an overhaul such that a simple `git pull && git make` will fail. Instead, see instructions [here](#problems-after-updating-git-pull).
+2. If you are experiencing crashing or truncated results, please consider the illegal input characters described [here](#illegal-characters).
 
 ---
 
@@ -87,6 +90,25 @@ If you have been using phyx and things are not working after a recent pull, this
     make
     make check
     sudo make install
+
+## Illegal characters
+While we can make no claim that `phyx` is free of bugs :P, the vast majority of program crashes have been tracked back to problematic data. These fall into two categories.
+
+First, and most simply, `phyx` expects unix line-endings. If your input files originated, at at some point were processed, on Windows, then it is possible that Windows line-endings are present, and may impede results, especially when piping. Fortunately switching to unix line-endings is very easy. If you are on linux you can install `dos2unix` with the command:
+
+    sudo apt-get install dos2unix
+
+and then convert your file thusly:
+
+    dos2unix FILE
+
+Second, and more insidiously, if any programs involving trees crash outright or give truncated results, the first thing to consider is whether the taxon names contain characters that are deemed illegal by Nexus ("()[]{}/\,;:=*'"`+-<>";) or newick("()[]':;,") formats. These are prolematic because they seemingly indicate a comment, or the termination of a tree, etc. The way to correct this issue is to either:
+
+1. Remove these offending characters from the file (which may make things difficult when running analyses elswhere with other files that have not been processed in this way), or
+
+2. Put quotes around the troublesome names, as this is the expected way to incorporate such characters.
+
+An [issue](https://github.com/FePhyFoFum/phyx/issues/138) has been made where discussion of this, er, issue, can be had.
 
 # Installation instructions 
 phyx requires a few dependencies. Since installation of these dependencies differs on [Linux](#linux-install) vs. [Mac OSX](#mac-install), we've separated the instructions below. 
