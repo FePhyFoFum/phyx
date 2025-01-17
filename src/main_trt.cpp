@@ -42,7 +42,7 @@ void print_help () {
 
 std::string get_version_line () {
     std::string vl = "pxtrt 1.3.2\n";
-    vl += "Copyright (C) 2017-2024 FePhyFoFum\n";
+    vl += "Copyright (C) 2017-2025 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Stephen A. Smith (blackrim), Joseph W. Brown";
     return vl;

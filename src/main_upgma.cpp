@@ -36,7 +36,7 @@ void print_help () {
 
 std::string get_version_line () {
     std::string vl = "pxupgma 1.3.2\n";
-    vl += "Copyright (C) 2015-2024 FePhyFoFum\n";
+    vl += "Copyright (C) 2015-2025 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Joseph W. Brown, Joseph F. Walker";
     return vl;

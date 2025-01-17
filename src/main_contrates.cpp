@@ -44,7 +44,7 @@ void print_help () {
 
 std::string get_version_line () {
     std::string vl = "pxcontrates 1.3.2\n";
-    vl += "Copyright (C) 2013-2024 FePhyFoFum\n";
+    vl += "Copyright (C) 2013-2025 FePhyFoFum\n";
     vl += "License GPLv3\n";
     vl += "Written by Stephen A. Smith (blackrim)";
     return vl;
