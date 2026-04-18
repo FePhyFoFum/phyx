@@ -30,11 +30,11 @@ jobs:
     - name: Install brew dependencies
       if: runner.os == 'macOS'
       run: |
-          # install dependencies
-          brew install nlopt armadillo automake autoconf
-          # add paths (new brew install location)
-          echo "LDFLAGS=-L$(brew --prefix)/lib" >> $GITHUB_ENV
-          echo "CPPFLAGS=-I$(brew --prefix)/include" >> $GITHUB_ENV
+        # install dependencies
+        brew install nlopt armadillo automake autoconf
+        # add paths (new brew install location)
+        echo "LDFLAGS=-L$(brew --prefix)/lib" >> $GITHUB_ENV
+        echo "CPPFLAGS=-I$(brew --prefix)/include" >> $GITHUB_ENV
     - name: Install apt dependencies
       if: runner.os == 'Linux'
       run: |
