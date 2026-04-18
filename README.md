@@ -28,7 +28,7 @@ Still, there are a whack of programs, so it can be difficult to remember the nam
 
 Program | Short description
 :--- | :---
-pxaa2cdn | produce a codon alignment from and AA alignment and unaligned nucleotides
+pxaa2cdn | produce a codon alignment from an AA alignment and unaligned nucleotides
 pxbdfit | diversification model inference
 pxbdsim | a birth death simulator
 pxboot | sequence alignment resampling (bootstrap or jackknife)
