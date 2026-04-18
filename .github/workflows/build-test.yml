@@ -5,6 +5,12 @@ on:
     branches: master
     paths-ignore:
       - 'README.md'
+      - 'LICENCE'
+      - '.gitignore'
+      - 'deps/**'
+      - 'doc/**'
+      # might want to remove the following if we build tests into the example files?
+      - 'example_files/**'
   pull_request:
     branches: master
 
@@ -33,7 +39,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         # Ensure the script doesnt hang waiting for user input
-          export DEBIAN_FRONTEND=noninteractive
+        export DEBIAN_FRONTEND=noninteractive
         # Update system
         sudo apt-get update
         sudo apt-get install -y \
